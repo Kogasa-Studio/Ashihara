@@ -1,0 +1,25 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="All rights reserved"
+[[mods]]
+modId="ashihara"
+version="${file.jarVersion}"
+displayName="Ashihara"
+logoFile="koishi.png"
+credits="Author Kogasa Studio,everyone attending this test,and YAOYOROZUKAMI,and finally,Malay who gave me an important help when I was stucked generaating workspace."
+authors="Kogasastudio"
+description='''
+A mod which adds tons of japanese elements
+'''
+[[dependencies.ashihara]]
+    modId="forge"
+    mandatory=true
+    versionRange="[36,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.ashihara]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.5,1.17)"
+    ordering="NONE"
+    side="BOTH"

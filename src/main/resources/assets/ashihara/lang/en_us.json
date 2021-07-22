@@ -1,0 +1,16 @@
+{
+  "item.ashihara.koishi":"Koishi",
+  "item.ashihara.dirt_ball":"Dirt ball",
+  "item.ashihara.rice_seedling": "Rice seedling",
+  "item.ashihara.aqua": "AQUA",
+  "item.ashihara.rice_crop_item": "Rice crop",
+
+  "block.ashihara.water_field":"Water field",
+  "block.ashihara.dirt_depression": "Dirt depression",
+  "block.ashihara.rice_crop": "Rice crop",
+  "block.ashihara.cherry_log": "Cherry log",
+  "block.ashihara.cherry_blossom": "Cherry Blossom",
+  "block.ashihara.jinja_lantern": "Jinja Lantern",
+
+  "itemGroup.group_ashihara": "Ashihara"
+}

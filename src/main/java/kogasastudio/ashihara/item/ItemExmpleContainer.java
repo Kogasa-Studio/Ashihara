@@ -1,0 +1,14 @@
+package kogasastudio.ashihara.item;
+
+import net.minecraft.item.Item;
+
+public class ItemExmpleContainer
+{
+    //作用同kogasastudio.ashihara.block.BlockExampleContainer
+
+    public static final Item ITEM_KOISHI = ItemRegistryHandler.KOISHI.get();
+    public static final Item ITEM_RICE_SEEDLING = ItemRegistryHandler.RICE_SEEDLING.get();
+    public static final Item ITEM_MINATO_AQUA = ItemRegistryHandler.MINATO_AQUA.get();
+    public static final Item RICE_CROP = ItemRegistryHandler.RICE_CROP.get();
+    public static final Item DIRT_BALL = ItemRegistryHandler.DIRT_BALL.get();
+}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "oo",
+    "oo"
+  ],
+  "key":
+  {
+    "o":
+    {
+      "item": "ashihara:dirt_ball"
+    }
+  }
+}

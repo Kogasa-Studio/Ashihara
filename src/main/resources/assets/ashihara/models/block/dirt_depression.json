@@ -1,0 +1,23 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"texture_size": [96, 32],
+	"textures": {
+		"0": "ashihara:block/water_field",
+		"particle": "minecraft:block/dirt"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 10, 16],
+			"faces": {
+				"north": {"uv": [10.66667, 6, 16, 16], "texture": "#0"},
+				"east": {"uv": [10.66667, 6, 16, 16], "texture": "#0"},
+				"south": {"uv": [10.66667, 6, 16, 16], "texture": "#0"},
+				"west": {"uv": [10.66667, 6, 16, 16], "texture": "#0"},
+				"up": {"uv": [10.66667, 0, 16, 16], "texture": "#0"},
+				"down": {"uv": [10.66667, 0, 16, 16], "texture": "#0"}
+			}
+		}
+	]
+}
