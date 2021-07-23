@@ -14,8 +14,6 @@ import net.minecraft.world.server.ServerWorld;
 import java.util.Objects;
 import java.util.Random;
 
-import static kogasastudio.ashihara.Ashihara.ASHIHARA;
-
 public class ItemMinatoAqua extends Item
 {
     public ItemMinatoAqua()
@@ -23,7 +21,7 @@ public class ItemMinatoAqua extends Item
         super
         (
             new Properties()
-            .group(ASHIHARA)
+            .group(ItemGroup.MATERIALS)
             .food(new Food.Builder().hunger(8).build())
         );
     }

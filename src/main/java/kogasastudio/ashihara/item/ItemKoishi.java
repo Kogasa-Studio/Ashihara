@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
@@ -16,14 +17,13 @@ import net.minecraft.world.World;
 
 import java.util.Objects;
 
-import static kogasastudio.ashihara.Ashihara.ASHIHARA;
 import static kogasastudio.ashihara.block.BlockExampleContainer.BLOCK_WATER_FIELD;
 
 public class ItemKoishi extends Item
 {
     public ItemKoishi()
     {
-        super(new Properties().group(ASHIHARA));
+        super(new Properties().group(ItemGroup.MATERIALS));
     }
 
     @Override

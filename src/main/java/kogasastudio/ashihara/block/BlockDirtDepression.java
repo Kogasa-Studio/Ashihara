@@ -15,7 +15,6 @@ import net.minecraftforge.common.ToolType;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 public class BlockDirtDepression extends Block
 {
@@ -42,8 +41,7 @@ public class BlockDirtDepression extends Block
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
         List<ItemStack> list = new LinkedList<>();
-        Random rand = new Random();
-        list.add(new ItemStack(ItemExmpleContainer.DIRT_BALL, rand.nextInt(3) + 1));
+        list.add(new ItemStack(ItemExmpleContainer.DIRT_BALL, 2));
         return list;
     }
 }

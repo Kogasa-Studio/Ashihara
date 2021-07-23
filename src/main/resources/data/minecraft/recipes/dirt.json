@@ -11,5 +11,10 @@
     {
       "item": "ashihara:dirt_ball"
     }
+  },
+  "result":
+  {
+    "item": "minecraft:dirt",
+    "count": 1
   }
 }

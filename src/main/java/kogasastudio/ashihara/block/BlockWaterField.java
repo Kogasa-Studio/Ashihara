@@ -69,50 +69,16 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
                 {flag = true;break;}
             }
         }
-//        LOGGER.info("检测出口结果为 " + flag);
         return flag;
     }
 
-//    private int getHighestLevelAround(World worldIn, BlockPos pos)
-//    {
-//         /*
-//            首先获取四周的流动水集合，若集合不为空则遍历集合将其水位添加
-//            到数组中，对数组进行排序后返回数组中下标为0的成员，即为附近
-//            最高水位。若集合为空则获取四周的静止水集合，若不为空则返回最
-//            高水位8，若仍为空返回0.
-//         */
-//        List<BlockPos> list = getMarkedFluidPosAround(worldIn, pos, Fluids.FLOWING_WATER);
-//        if (list.isEmpty())
-//        {
-//            List<BlockPos> list_still = getMarkedFluidPosAround(worldIn, pos, Fluids.WATER);
-//            if (list_still.isEmpty()) {return 0;}
-//            else return 8;
-//        }
-//        else
-//        {
-//            int[] levels = new int[list.size()];
-//            byte b = 0;
-//            for (BlockPos target : list)
-//            {
-//                levels[b] = worldIn.getFluidState(target).get(LEVEL_1_8);
-//                b += 1;
-//            }
-//            Arrays.sort(levels);LOGGER.info("最高水位是" + levels[0] + ", 共有" + levels.length + "个可用数据");
-//            if (levels[0] > 5) {return levels[0];} else return 0;
-//        }
-//    }
-
     private void onScheduleTick(World worldIn, BlockPos pos, int time)
     {
-        //if (!worldIn.getPendingBlockTicks().isTickScheduled(pos, this))
         worldIn.getPendingBlockTicks().scheduleTick(pos, this, time);
-        //LOGGER.info("检测到进/排水需要！在22ticks后加入计划刻！ x: " + pos.getX() + "z: " + pos.getZ());
     }
 
-    /*------------------------方块特性结束------------------------*/
-
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) //不明所以地类似注册BS的东西
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) //注册BS
     {
         builder.add(ISLINKEDTOSOURCE, LEVEL);
     }
@@ -124,10 +90,10 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) //设置掉落物品为土球
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) //设置掉落物品为2土球
     {
         List<ItemStack> list = new LinkedList<>();
-        list.add(new ItemStack(ItemExmpleContainer.DIRT_BALL, 3));
+        list.add(new ItemStack(ItemExmpleContainer.DIRT_BALL, 2));
         return list;
     }
 
@@ -185,7 +151,6 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
     @Override
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) //那一大堆判定
     {
-        //TODO:水田不会朝某两个方向流水，整片水田有一块与出口相邻就会导致状态反复弹
         BlockState fromState = worldIn.getBlockState(fromPos);
         if (!fromState.matchesBlock(BlockExampleContainer.BLOCK_RICE_CROP))
         {
@@ -260,30 +225,18 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
         boolean hasWater = state.get(ISLINKEDTOSOURCE);
         boolean hasExit = hasExit(worldIn, pos);
         boolean watered = fourWaysFluidsIncludesWater(worldIn, pos); //用来进水
-//        LOGGER.info("bool状态：" + hasWater + hasExit + watered);
-//        String caseI = "无";
         int level = state.get(LEVEL);
         if (watered && hasWater && level < 8)
         {
             worldIn.setBlockState(pos, state.with(LEVEL, level + 1));
             onScheduleTick(worldIn, pos, 15 + level);
-//            caseI = " 进水";
         }
         else if (!watered && !hasWater && level >= 5 && hasExit) //用来排水
         {
             worldIn.setBlockState(pos, state.with(LEVEL, level - 1));
             onScheduleTick(worldIn, pos, 15 + level);
-//            caseI = "排水";
         }
 //        else if (!watered && hasWater && hasExit)
-//        {
-//            worldIn.setBlockState(pos, state.with(ISLINKEDTOSOURCE, false));
-//            onScheduleTick(worldIn, pos, 22);
-//        }
-//        if (worldIn.getFluidState(pos).getFluid() != Fluids.EMPTY)
-//        {
-//            worldIn.getPendingFluidTicks().scheduleTick(pos, worldIn.getFluidState(pos).getFluid(), worldIn.getFluidState(pos).getFluid().getTickRate(worldIn));
-//        }
         //用来延时状态反弹
         if (watered)
         {
@@ -296,7 +249,6 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
             if (w.matchesBlock(BlockExampleContainer.BLOCK_WATER_FIELD) && !w.get(ISLINKEDTOSOURCE))
             {worldIn.setBlockState(pos.west(), w.with(ISLINKEDTOSOURCE, true));/*LOGGER.info("wfucked x: " + pos.west().getX() + "z: " + pos.getZ());*/}
         }
-//        LOGGER.info("计划刻成功执行！执行内容：" + caseI);
     }
 
     @Override
@@ -332,7 +284,6 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
         }
         if (fourWaysFluidsIncludesWater(worldIn, pos) || hasExit(worldIn, pos))
         {onScheduleTick(worldIn, pos, 10);}
-//        LOGGER.info("现在附近最高的水位是" + level);
         return preState.with(ISLINKEDTOSOURCE, watered).with(LEVEL, level);
     }
 
@@ -373,7 +324,6 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
     @Override
     public Fluid pickupFluid(IWorld worldIn, BlockPos pos, BlockState state)
     {
-        //return state.get(LEVEL) == 8 ? Fluids.WATER : Fluids.EMPTY;
         return Fluids.EMPTY;
     }
 }
