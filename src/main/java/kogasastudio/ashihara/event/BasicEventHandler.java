@@ -45,7 +45,7 @@ public class BasicEventHandler
                 world.playSound(player, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 world.setBlockState(pos, BlockExampleContainer.BLOCK_DIRT_DEPRESSION.getDefaultState());
                 player.swingArm(event.getHand());
-                InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemExmpleContainer.DIRT_BALL));
+                InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY() + 0.5F, pos.getZ(), new ItemStack(ItemExmpleContainer.DIRT_BALL));
                 if(!player.abilities.isCreativeMode) {item.damageItem(1, player, (playerEntity) -> player.sendBreakAnimation(event.getHand()));}
             }
         }

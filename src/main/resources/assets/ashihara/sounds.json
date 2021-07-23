@@ -1,0 +1,14 @@
+{
+  "unthresh":
+  {
+    "subtitle": "unthresh",
+    "replace": "true",
+    "sounds":
+    [
+      {
+        "name": "ashihara:unthresh",
+        "stream": false
+      }
+    ]
+  }
+}

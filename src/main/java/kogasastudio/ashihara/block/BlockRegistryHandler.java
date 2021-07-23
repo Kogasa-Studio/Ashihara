@@ -16,4 +16,5 @@ public class BlockRegistryHandler
     public static final RegistryObject<Block> CHERRY_BLOSSOM = BLOCKS.register("cherry_blossom", BlockCherryBlossom::new);
     public static final RegistryObject<Block> BLOCK_JINJA_LANTERN = BLOCKS.register("jinja_lantern", BlockJinjaLantern::new);
     public static final RegistryObject<Block> BLOCK_DIRT_DEPRESSION = BLOCKS.register("dirt_depression", BlockDirtDepression::new);
+    public static final RegistryObject<Block> BLOCK_TETSUSENCHI = BLOCKS.register("tetsusenchi", BlockTetsusenchi::new);
 }

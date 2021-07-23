@@ -30,7 +30,7 @@ public class ItemRiceSeedling extends Item
         if (!item.isEmpty() && Objects.requireNonNull(player).canPlayerEdit(pos.offset(facing), facing, item))
         {
             BlockState state = worldIn.getBlockState(pos.up());
-            if (state.getBlock() == BlockExampleContainer.BLOCK_WATER_FIELD && worldIn.getBlockState(pos.up()).getBlock() == Blocks.AIR)
+            if (state.getBlock() == BlockExampleContainer.BLOCK_WATER_FIELD && worldIn.getBlockState(pos.up(2)).getBlock() == Blocks.AIR)
             {
                 worldIn.setBlockState(pos.up(2), BlockExampleContainer.BLOCK_RICE_CROP.getDefaultState());
                 if (!player.abilities.isCreativeMode) {item.shrink(1);}

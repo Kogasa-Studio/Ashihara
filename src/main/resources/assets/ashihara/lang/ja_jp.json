@@ -1,16 +1,19 @@
 {
-  "item.ashihara.koishi":"こいし",
-  "item.ashihara.dirt_ball":"土丸",
+  "item.ashihara.koishi": "こいし",
+  "item.ashihara.dirt_ball": "土丸",
   "item.ashihara.rice_seedling": "お苗",
   "item.ashihara.aqua": "湊あくあ",
-  "item.ashihara.rice_crop_item": "稻作",
+  "item.ashihara.rice_crop_item": "稲作",
+  "item.ashihara.unthreshed_rice": "もみ",
+  "item.ashihara.straw": "稲わら",
 
-  "block.ashihara.water_field":"水田",
+  "block.ashihara.water_field": "水田",
   "block.ashihara.dirt_depression": "漥",
-  "block.ashihara.rice_crop": "稻作",
+  "block.ashihara.rice_crop": "稲作",
   "block.ashihara.cherry_log": "桜木",
   "block.ashihara.cherry_blossom": "桜花",
   "block.ashihara.jinja_lantern": "行灯",
+  "block.ashihara.tetsusenchi": "鉄千齿",
 
   "itemGroup.group_ashihara": "葦原"
 }

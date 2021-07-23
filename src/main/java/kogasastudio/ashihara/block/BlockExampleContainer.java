@@ -14,4 +14,5 @@ public class BlockExampleContainer
     public static final Block BLOCK_CHERRY_BLOSSOM = BlockRegistryHandler.CHERRY_BLOSSOM.get();
     public static final Block BLOCK_JINJA_LANTERN = BlockRegistryHandler.BLOCK_JINJA_LANTERN.get();
     public static final Block BLOCK_DIRT_DEPRESSION = BlockRegistryHandler.BLOCK_DIRT_DEPRESSION.get();
+    public static final Block BLOCK_TETSUSENCHI = BlockRegistryHandler.BLOCK_TETSUSENCHI.get();
 }
