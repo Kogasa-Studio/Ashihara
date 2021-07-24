@@ -6,6 +6,8 @@
   "item.ashihara.rice_crop_item": "稲作",
   "item.ashihara.unthreshed_rice": "もみ",
   "item.ashihara.straw": "稲わら",
+  "item.ashihara.pestle": "杵",
+  "item.ashihara.rice": "米",
 
   "block.ashihara.water_field": "水田",
   "block.ashihara.dirt_depression": "漥",
@@ -15,6 +17,7 @@
   "block.ashihara.jinja_lantern": "行灯",
   "block.ashihara.tetsusenchi": "鉄千齿",
   "block.ashihara.cherry_sapling": "桜の苗木",
+  "block.ashihara.mortar": "臼",
 
   "itemGroup.group_ashihara": "葦原"
 }

@@ -2,6 +2,7 @@ package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.item.ItemExmpleContainer;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.sounds.SoundEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
@@ -75,7 +76,7 @@ public class BlockTetsusenchi extends Block
         if (item.getItem() == ItemExmpleContainer.RICE_CROP)
         {
             Random rand = new Random();
-            worldIn.playSound(player, pos, SoundEvents.BLOCK_GRASS_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            worldIn.playSound(player, pos, SoundEvents.UNTHRESH.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
             InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemExmpleContainer.STRAW));
             InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemExmpleContainer.UNTHRESHED_RICE, rand.nextInt(2) + 1));
             item.shrink(1);

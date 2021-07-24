@@ -13,4 +13,6 @@ public class ItemExmpleContainer
     public static final Item DIRT_BALL = ItemRegistryHandler.DIRT_BALL.get();
     public static final Item UNTHRESHED_RICE = ItemRegistryHandler.UNTHRESHED_RICE.get();
     public static final Item STRAW = ItemRegistryHandler.STRAW.get();
+    public static final Item PESTLE = ItemRegistryHandler.PESTLE.get();
+    public static final Item RICE = ItemRegistryHandler.RICE.get();
 }

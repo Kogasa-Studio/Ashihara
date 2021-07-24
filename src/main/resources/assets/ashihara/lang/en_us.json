@@ -6,6 +6,8 @@
   "item.ashihara.rice_crop_item": "Rice crop",
   "item.ashihara.unthreshed_rice": "Unthreshed rice",
   "item.ashihara.straw": "Straw",
+  "item.ashihara.pestle": "Pestle",
+  "item.ashihara.rice": "Rice",
 
   "block.ashihara.water_field":"Water field",
   "block.ashihara.dirt_depression": "Dirt depression",
@@ -15,6 +17,7 @@
   "block.ashihara.jinja_lantern": "Jinja Lantern",
   "block.ashihara.tetsusenchi": "Tetsusenchi",
   "block.ashihara.cherry_sapling": "Cherry sapling",
+  "block.ashihara.mortar": "Mortar",
 
   "itemGroup.group_ashihara": "Ashihara"
 }

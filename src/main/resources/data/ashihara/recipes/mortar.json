@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "# #",
+    "# #",
+    "#_#"
+  ],
+  "key":
+  {
+    "#": {"tag": "minecraft:planks"},
+    "_": {"tag": "minecraft:wooden_slabs"}
+  },
+  "result":
+  {
+    "item": "ashihara:mortar",
+    "count": 1
+  }
+}

@@ -1,12 +1,17 @@
 package kogasastudio.ashihara.event;
 
 import kogasastudio.ashihara.block.BlockExampleContainer;
+import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
+import kogasastudio.ashihara.client.particles.RiceParticle;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.world.biome.BiomeColors;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -27,6 +32,13 @@ public class ClientEventSubscribeHandler
         setRenderType(BlockExampleContainer.BLOCK_CHERRY_BLOSSOM, RenderType.getCutoutMipped(), event);
         setRenderType(BlockExampleContainer.BLOCK_CHERRY_SAPLING, RenderType.getCutoutMipped(), event);
         setRenderType(BlockExampleContainer.BLOCK_JINJA_LANTERN, RenderType.getCutoutMipped(), event);
+    }
+
+    @SubscribeEvent
+    public static void onParticleFactoryRegister(ParticleFactoryRegisterEvent event)
+    {
+        ParticleManager manager = Minecraft.getInstance().particles;
+        manager.registerFactory(ParticleRegistryHandler.RICE.get(), RiceParticle.RiceParticleFactory::new);
     }
 
 //    @SubscribeEvent

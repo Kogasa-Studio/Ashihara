@@ -9,6 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.loot.LootContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
@@ -62,7 +63,7 @@ public class BlockJinjaLantern extends Block
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
-        if(player.getHeldItem(handIn).isEmpty())
+        if(player.getHeldItem(handIn).getItem() == Items.AIR)
         {
             Random random = new Random();
             Boolean instantState = worldIn.getBlockState(pos).get(LIT);

@@ -1,7 +1,9 @@
 package kogasastudio.ashihara;
 
 import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.sounds.SoundEvents;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
@@ -24,5 +26,7 @@ public class Ashihara
     {
         ItemRegistryHandler.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
         BlockRegistryHandler.BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        SoundEvents.SOUNDS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        ParticleRegistryHandler.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 }

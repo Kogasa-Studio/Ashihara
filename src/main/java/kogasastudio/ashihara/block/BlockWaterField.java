@@ -236,7 +236,6 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
             worldIn.setBlockState(pos, state.with(LEVEL, level - 1));
             onScheduleTick(worldIn, pos, 15 + level);
         }
-//        else if (!watered && hasWater && hasExit)
         //用来延时状态反弹
         if (watered)
         {
