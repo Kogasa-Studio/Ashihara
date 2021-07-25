@@ -3,6 +3,7 @@ package kogasastudio.ashihara.event;
 import kogasastudio.ashihara.block.BlockExampleContainer;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.client.particles.RiceParticle;
+import kogasastudio.ashihara.client.particles.SakuraParticle;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleManager;
@@ -32,6 +33,7 @@ public class ClientEventSubscribeHandler
         setRenderType(BlockExampleContainer.BLOCK_CHERRY_BLOSSOM, RenderType.getCutoutMipped(), event);
         setRenderType(BlockExampleContainer.BLOCK_CHERRY_SAPLING, RenderType.getCutoutMipped(), event);
         setRenderType(BlockExampleContainer.BLOCK_JINJA_LANTERN, RenderType.getCutoutMipped(), event);
+        setRenderType(BlockExampleContainer.FALLEN_SAKURA, RenderType.getCutoutMipped(), event);
     }
 
     @SubscribeEvent
@@ -39,6 +41,7 @@ public class ClientEventSubscribeHandler
     {
         ParticleManager manager = Minecraft.getInstance().particles;
         manager.registerFactory(ParticleRegistryHandler.RICE.get(), RiceParticle.RiceParticleFactory::new);
+        manager.registerFactory(ParticleRegistryHandler.SAKURA.get(), SakuraParticle.SakuraParticleFactory::new);
     }
 
 //    @SubscribeEvent

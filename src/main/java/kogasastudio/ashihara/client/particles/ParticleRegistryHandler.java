@@ -11,4 +11,5 @@ public class ParticleRegistryHandler
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Ashihara.MODID);
 
     public static final RegistryObject<GenericParticleType> RICE = PARTICLE_TYPES.register("rice", GenericParticleType::new);
+    public static final RegistryObject<GenericParticleType> SAKURA = PARTICLE_TYPES.register("sakura", GenericParticleType::new);
 }

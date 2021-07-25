@@ -13,11 +13,13 @@ public class GenericParticleData implements IParticleData
 {
     private final Vector3d speed;
     private final float diameter;
+    private final ParticleType<?> type;
 
-    public GenericParticleData(Vector3d speed, float diameter)
+    public GenericParticleData(Vector3d speed, float diameter, ParticleType<?> type)
     {
         this.speed = speed;
         this.diameter = diameter;
+        this.type = type;
     }
 
     public static final IDeserializer<GenericParticleData> DESERIALIZER = new IDeserializer<GenericParticleData>()
@@ -33,7 +35,7 @@ public class GenericParticleData implements IParticleData
             double speedZ = reader.readDouble();
             reader.expect(' ');
             float diameter = reader.readFloat();
-            return new GenericParticleData(new Vector3d(speedX, speedY, speedZ), diameter);
+            return new GenericParticleData(new Vector3d(speedX, speedY, speedZ), diameter, particleTypeIn);
         }
 
         @Override
@@ -43,14 +45,14 @@ public class GenericParticleData implements IParticleData
             double speedY = buffer.readDouble();
             double speedZ = buffer.readDouble();
             float diameter = buffer.readFloat();
-            return new GenericParticleData(new Vector3d(speedX, speedY, speedZ), diameter);
+            return new GenericParticleData(new Vector3d(speedX, speedY, speedZ), diameter, particleTypeIn);
         }
     };
 
     @Override
     public ParticleType<?> getType()
     {
-        return ParticleRegistryHandler.RICE.get();
+        return type;
     }
 
     @Override

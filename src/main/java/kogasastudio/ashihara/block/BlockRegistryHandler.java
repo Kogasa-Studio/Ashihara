@@ -19,4 +19,5 @@ public class BlockRegistryHandler
     public static final RegistryObject<Block> BLOCK_TETSUSENCHI = BLOCKS.register("tetsusenchi", BlockTetsusenchi::new);
     public static final RegistryObject<Block> CHERRY_SAPLING = BLOCKS.register("cherry_sapling", BlockCherrySapling::new);
     public static final RegistryObject<Block> BLOCK_MORTAR = BLOCKS.register("mortar", BlockMortar::new);
+    public static final RegistryObject<Block> FALLEN_SAKURA = BLOCKS.register("fallen_sakura", BlockFallenSakura::new);
 }

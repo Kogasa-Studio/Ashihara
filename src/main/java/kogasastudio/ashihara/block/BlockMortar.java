@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.client.particles.GenericParticleData;
+import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.item.ItemExmpleContainer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -104,8 +105,9 @@ public class BlockMortar extends Block
                 worldIn.setBlockState(pos, state.with(PROCESS, process + 1));
                 for(byte b = 0; b < 12; b += 1)
                 {
-                    worldIn.addParticle(new GenericParticleData(new Vector3d(0,0,0), 0), (double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, rand.nextFloat() / 2.0F, 5.0E-5D, rand.nextFloat() / 2.0F);
+                    worldIn.addParticle(new GenericParticleData(new Vector3d(0,0,0), 0, ParticleRegistryHandler.RICE.get()), (double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, rand.nextFloat() / 2.0F, 5.0E-5D, rand.nextFloat() / 2.0F);
                 }
+                player.getCooldownTracker().setCooldown(item.getItem(), 8);
                 if (!player.isCreative()) {item.damageItem(1, player, (playerEntity) -> player.sendBreakAnimation(handIn));}
                 return ActionResultType.SUCCESS;
             } else return ActionResultType.PASS;

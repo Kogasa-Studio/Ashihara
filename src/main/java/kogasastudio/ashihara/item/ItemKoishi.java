@@ -1,6 +1,8 @@
 package kogasastudio.ashihara.item;
 
 import kogasastudio.ashihara.block.BlockWaterField;
+import kogasastudio.ashihara.client.particles.GenericParticleData;
+import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,9 +15,11 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import java.util.Objects;
+import java.util.Random;
 
 import static kogasastudio.ashihara.block.BlockExampleContainer.BLOCK_WATER_FIELD;
 
@@ -54,8 +58,16 @@ public class ItemKoishi extends Item
                 worldIn.setBlockState(pos, blockState.with(BlockWaterField.LEVEL, 6));
                 return ActionResultType.SUCCESS;
             }
-            else return ActionResultType.PASS;
+            else
+            {
+                Random rand = new Random();
+                for (int i = 0;i<8;i+=1)
+                {
+                    worldIn.addParticle(new GenericParticleData(new Vector3d(0,0,0), 0, ParticleRegistryHandler.SAKURA.get()), (double)pos.getX() + 0.5D, (double)pos.getY() + 2.1D, (double)pos.getZ() + 0.5D, rand.nextFloat() / 2.0F, 0, rand.nextFloat() / 2.0F);
+                }
+                return ActionResultType.SUCCESS;
+            }
         }
-        else return ActionResultType.FAIL;
+        else return ActionResultType.PASS;
     }
 }

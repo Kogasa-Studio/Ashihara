@@ -62,7 +62,7 @@ public class BlockRiceCrop extends CropsBlock
     {
         boolean flag = false;
         if (worldIn.getBlockState(pos.down()).getBlock().matchesBlock(BlockExampleContainer.BLOCK_WATER_FIELD))
-        {flag = !this.isMaxAge(state) && worldIn.getBlockState(pos.down()).get(LEVEL) > 1;}
+        {flag = !this.isMaxAge(state) && worldIn.getBlockState(pos.down()).get(LEVEL) > 5;}
         return flag;
     }
 

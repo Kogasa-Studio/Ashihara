@@ -8,6 +8,8 @@
   "item.ashihara.straw": "稻草",
   "item.ashihara.pestle": "捣杵",
   "item.ashihara.rice": "白米",
+  "item.ashihara.sakura": "樱花花片",
+  "item.ashihara.sakura_petal": "樱花瓣",
 
   "block.ashihara.water_field": "水田",
   "block.ashihara.dirt_depression": "土洼",
@@ -18,6 +20,7 @@
   "block.ashihara.tetsusenchi": "铁千齿",
   "block.ashihara.cherry_sapling": "樱树苗",
   "block.ashihara.mortar": "舂",
+  "block.ashihara.fallen_sakura": "落樱毯",
 
   "itemGroup.group_ashihara": "苇原"
 }

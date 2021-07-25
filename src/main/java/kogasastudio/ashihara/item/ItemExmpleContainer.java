@@ -15,4 +15,6 @@ public class ItemExmpleContainer
     public static final Item STRAW = ItemRegistryHandler.STRAW.get();
     public static final Item PESTLE = ItemRegistryHandler.PESTLE.get();
     public static final Item RICE = ItemRegistryHandler.RICE.get();
+    public static final Item SAKURA = ItemRegistryHandler.SAKURA.get();
+    public static final Item SAKURA_PETAL = ItemRegistryHandler.SAKURA_PETAL.get();
 }

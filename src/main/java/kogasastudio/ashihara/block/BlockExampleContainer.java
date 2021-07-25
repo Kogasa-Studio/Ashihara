@@ -17,4 +17,5 @@ public class BlockExampleContainer
     public static final Block BLOCK_TETSUSENCHI = BlockRegistryHandler.BLOCK_TETSUSENCHI.get();
     public static final Block BLOCK_CHERRY_SAPLING = BlockRegistryHandler.CHERRY_SAPLING.get();
     public static final Block BLOCK_MORTAR = BlockRegistryHandler.BLOCK_MORTAR.get();
+    public static final Block FALLEN_SAKURA = BlockRegistryHandler.FALLEN_SAKURA.get();
 }

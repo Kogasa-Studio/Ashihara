@@ -8,6 +8,8 @@
   "item.ashihara.straw": "Straw",
   "item.ashihara.pestle": "Pestle",
   "item.ashihara.rice": "Rice",
+  "item.ashihara.sakura": "Cherry flower",
+  "item.ashihara.sakura_petal": "Cherry flower petal",
 
   "block.ashihara.water_field":"Water field",
   "block.ashihara.dirt_depression": "Dirt depression",
@@ -18,6 +20,7 @@
   "block.ashihara.tetsusenchi": "Tetsusenchi",
   "block.ashihara.cherry_sapling": "Cherry sapling",
   "block.ashihara.mortar": "Mortar",
+  "block.ashihara.fallen_sakura": "Fallen cherry flowers",
 
   "itemGroup.group_ashihara": "Ashihara"
 }
