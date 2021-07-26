@@ -28,8 +28,8 @@ public class ClientEventSubscribeHandler
     @SubscribeEvent
     public static void onRenderTypeSetup(FMLClientSetupEvent event)
     {
-        setRenderType(BlockExampleContainer.BLOCK_WATER_FIELD, RenderType.getTranslucent(), event);
         setRenderType(BlockExampleContainer.BLOCK_RICE_CROP, RenderType.getCutoutMipped(), event);
+        setRenderType(BlockExampleContainer.BLOCK_IMMATURE_RICE, RenderType.getCutoutMipped(), event);
         setRenderType(BlockExampleContainer.BLOCK_CHERRY_BLOSSOM, RenderType.getCutoutMipped(), event);
         setRenderType(BlockExampleContainer.BLOCK_CHERRY_SAPLING, RenderType.getCutoutMipped(), event);
         setRenderType(BlockExampleContainer.BLOCK_JINJA_LANTERN, RenderType.getCutoutMipped(), event);

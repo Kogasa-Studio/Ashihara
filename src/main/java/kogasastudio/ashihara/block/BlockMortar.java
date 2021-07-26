@@ -3,6 +3,7 @@ package kogasastudio.ashihara.block;
 import kogasastudio.ashihara.client.particles.GenericParticleData;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.item.ItemExmpleContainer;
+import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
@@ -13,6 +14,7 @@ import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.loot.LootContext;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
@@ -30,6 +32,8 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 public class BlockMortar extends Block
@@ -45,6 +49,19 @@ public class BlockMortar extends Block
                 .notSolid()
         );
         this.setDefaultState(this.getStateContainer().getBaseState().with(LEVEL, 0).with(PROCESS, 0));
+    }
+
+    @Override
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
+    {
+        List<ItemStack> list = new LinkedList<>();
+        list.add(new ItemStack(ItemRegistryHandler.ITEM_MORTAR.get()));
+        if (state.get(LEVEL) != 0)
+        {
+            if (state.get(PROCESS) == 4) {list.add(new ItemStack(ItemExmpleContainer.RICE, state.get(LEVEL)));}
+            else {list.add(new ItemStack(ItemExmpleContainer.UNTHRESHED_RICE, state.get(LEVEL)));}
+        }
+        return list;
     }
 
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 4);
@@ -98,7 +115,7 @@ public class BlockMortar extends Block
         }
         else if (item.getItem() == ItemExmpleContainer.PESTLE)
         {
-            if (level != 0 && process != 4)
+            if (!player.getCooldownTracker().hasCooldown(item.getItem()) && (level != 0 && process != 4))
             {
                 Random rand = new Random();
                 worldIn.playSound(player, pos, SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);

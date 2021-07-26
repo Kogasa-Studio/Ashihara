@@ -7,14 +7,14 @@ import net.minecraft.potion.Effects;
 
 import static kogasastudio.ashihara.Ashihara.ASHIHARA;
 
-public class ItemSakura extends Item
+public class ItemCookedRice extends Item
 {
-    public ItemSakura()
+    public ItemCookedRice()
     {
         super
         (
             new Properties().group(ASHIHARA)
-            .food(new Food.Builder().hunger(1).effect(new EffectInstance(Effects.INSTANT_HEALTH, 1, 1), 1.0F).build())
+            .food(new Food.Builder().hunger(5).build())
         );
     }
 }

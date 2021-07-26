@@ -75,12 +75,17 @@ public class BlockTetsusenchi extends Block
         ItemStack item = player.getHeldItem(handIn);
         if (item.getItem() == ItemExmpleContainer.RICE_CROP)
         {
-            Random rand = new Random();
-            worldIn.playSound(player, pos, SoundEvents.UNTHRESH.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
-            InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemExmpleContainer.STRAW));
-            InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemExmpleContainer.UNTHRESHED_RICE, rand.nextInt(2) + 1));
-            item.shrink(1);
-            return ActionResultType.SUCCESS;
+            if (!player.getCooldownTracker().hasCooldown(item.getItem()))
+            {
+                Random rand = new Random();
+                worldIn.playSound(player, pos, SoundEvents.UNTHRESH.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+                InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemExmpleContainer.STRAW));
+                InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemExmpleContainer.UNTHRESHED_RICE, rand.nextInt(2) + 1));
+                player.getCooldownTracker().setCooldown(item.getItem(), 8);
+                item.shrink(1);
+                return ActionResultType.SUCCESS;
+            }
+            else return ActionResultType.PASS;
         }
         else return ActionResultType.PASS;
     }

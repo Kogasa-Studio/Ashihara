@@ -10,9 +10,12 @@
   "item.ashihara.rice": "Rice",
   "item.ashihara.sakura": "Cherry flower",
   "item.ashihara.sakura_petal": "Cherry flower petal",
+  "item.ashihara.cooked_rice": "Cooked rice",
+  "item.ashihara.sakuramochi": "Sakuramochi",
 
   "block.ashihara.water_field":"Water field",
   "block.ashihara.dirt_depression": "Dirt depression",
+  "block.ashihara.immature_rice": "Immature rice",
   "block.ashihara.rice_crop": "Rice crop",
   "block.ashihara.cherry_log": "Cherry log",
   "block.ashihara.cherry_blossom": "Cherry Blossom",

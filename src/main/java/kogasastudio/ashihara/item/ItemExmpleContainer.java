@@ -17,4 +17,6 @@ public class ItemExmpleContainer
     public static final Item RICE = ItemRegistryHandler.RICE.get();
     public static final Item SAKURA = ItemRegistryHandler.SAKURA.get();
     public static final Item SAKURA_PETAL = ItemRegistryHandler.SAKURA_PETAL.get();
+    public static final Item SAKURAMOCHI = ItemRegistryHandler.SAKURAMOCHI.get();
+    public static final Item COOKED_RICE = ItemRegistryHandler.COOKED_RICE.get();
 }

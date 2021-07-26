@@ -10,9 +10,12 @@
   "item.ashihara.rice": "白米",
   "item.ashihara.sakura": "樱花花片",
   "item.ashihara.sakura_petal": "樱花瓣",
+  "item.ashihara.cooked_rice": "熟米",
+  "item.ashihara.sakuramochi": "樱饼",
 
   "block.ashihara.water_field": "水田",
   "block.ashihara.dirt_depression": "土洼",
+  "block.ashihara.immature_rice": "水稻幼芽",
   "block.ashihara.rice_crop": "水稻作物",
   "block.ashihara.cherry_log": "樱木",
   "block.ashihara.cherry_blossom": "樱花",
