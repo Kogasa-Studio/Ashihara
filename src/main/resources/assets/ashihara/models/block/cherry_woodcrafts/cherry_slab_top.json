@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "ashihara:block/woodcrafts/cherry_planks",
+    "top": "ashihara:block/woodcrafts/cherry_planks",
+    "side": "ashihara:block/woodcrafts/cherry_planks"
+  }
+}

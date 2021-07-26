@@ -76,7 +76,7 @@ public class BlockCherryBlossom extends LeavesBlock
         BlockState blockstate = worldIn.getBlockState(blockpos);
         if (rand.nextInt(30) == 1 && (blockstate.allowsMovement(worldIn, blockpos, PathType.AIR)))
         {
-            worldIn.addParticle(new GenericParticleData(new Vector3d(0,0,0), 0, ParticleRegistryHandler.SAKURA.get()), (double)pos.getX() + 0.5, (double)pos.getY() - 0.1D, (double)pos.getZ() + 0.5, rand.nextFloat() / 20.0F, 0, rand.nextFloat() / 20.0F);
+            worldIn.addParticle(new GenericParticleData(new Vector3d(0,0,0), 0, ParticleRegistryHandler.SAKURA.get()), (double)pos.getX() + 0.5, (double)pos.getY() - 0.1D, (double)pos.getZ() + 0.5, rand.nextInt(25) / 2000.0F, 0, rand.nextInt(25) / 2000.0F);
         }
         if (worldIn.isRainingAt(pos.up()))
         {

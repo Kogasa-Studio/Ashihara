@@ -3,6 +3,11 @@
   {
     "age=0": {"model": "ashihara:block/rice_crop/immature_rice"},
     "age=1": {"model": "ashihara:block/rice_crop/immature_rice"},
-    "age=2": {"model": "ashihara:block/rice_crop/immature_rice_2"}
+    "age=2": {"model": "ashihara:block/rice_crop/immature_rice_2"},
+    "age=3": {"model": "ashihara:block/rice_crop/immature_rice_2"},
+    "age=4": {"model": "ashihara:block/rice_crop/immature_rice_2"},
+    "age=5": {"model": "ashihara:block/rice_crop/immature_rice_2"},
+    "age=6": {"model": "ashihara:block/rice_crop/immature_rice_2"},
+    "age=7": {"model": "ashihara:block/rice_crop/immature_rice_2"}
   }
 }

@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.event;
 
 import kogasastudio.ashihara.block.BlockExampleContainer;
+import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.client.particles.RiceParticle;
 import kogasastudio.ashihara.client.particles.SakuraParticle;
@@ -34,6 +35,7 @@ public class ClientEventSubscribeHandler
         setRenderType(BlockExampleContainer.BLOCK_CHERRY_SAPLING, RenderType.getCutoutMipped(), event);
         setRenderType(BlockExampleContainer.BLOCK_JINJA_LANTERN, RenderType.getCutoutMipped(), event);
         setRenderType(BlockExampleContainer.FALLEN_SAKURA, RenderType.getCutoutMipped(), event);
+        setRenderType(BlockRegistryHandler.POTTED_CHERRY_SAPLING.get(), RenderType.getCutoutMipped(), event);
     }
 
     @SubscribeEvent

@@ -83,7 +83,7 @@ public class BlockFallenSakura extends Block
     @Override
     public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
     {
-        return !worldIn.getBlockState(pos.down()).matchesBlock(Blocks.AIR);
+        return worldIn.getBlockState(pos.down()).isSolid() || worldIn.getBlockState(pos.down()).isSolidSide(worldIn, pos.down(), Direction.UP);
     }
 
     @Override

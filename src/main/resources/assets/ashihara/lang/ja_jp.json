@@ -17,13 +17,20 @@
   "block.ashihara.dirt_depression": "漥",
   "block.ashihara.immature_rice": "もやし",
   "block.ashihara.rice_crop": "稲作",
-  "block.ashihara.cherry_log": "桜木",
+  "block.ashihara.cherry_log": "桜の原木",
   "block.ashihara.cherry_blossom": "桜花",
   "block.ashihara.jinja_lantern": "行灯",
   "block.ashihara.tetsusenchi": "鉄千齿",
   "block.ashihara.cherry_sapling": "桜の苗木",
   "block.ashihara.mortar": "臼",
   "block.ashihara.fallen_sakura": "落れ桜",
+  "block.ashihara.cherry_planks": "桜木の板材",
+  "block.ashihara.cherry_stairs": "桜木の階段",
+  "block.ashihara.cherry_slab": "桜木のハーフブロック",
+  "block.ashihara.cherry_fence": "桜木のフェンス",
+  "block.ashihara.cherry_fence_gate": "桜木のフェンスゲート",
+  "block.ashihara.cherry_button": "桜木のボタン",
+  "block.ashihara.cherry_wood": "桜の木",
 
   "itemGroup.group_ashihara": "葦原"
 }

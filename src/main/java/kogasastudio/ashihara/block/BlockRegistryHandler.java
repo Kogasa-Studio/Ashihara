@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.block.woodcrafts.*;
 import net.minecraft.block.Block;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -21,4 +22,12 @@ public class BlockRegistryHandler
     public static final RegistryObject<Block> BLOCK_MORTAR = BLOCKS.register("mortar", BlockMortar::new);
     public static final RegistryObject<Block> FALLEN_SAKURA = BLOCKS.register("fallen_sakura", BlockFallenSakura::new);
     public static final RegistryObject<Block> BLOCK_IMMATURE_RICE = BLOCKS.register("immature_rice", BlockImmatureRiceCrop::new);
+    public static final RegistryObject<Block> CHERRY_PLANKS = BLOCKS.register("cherry_planks", BlockCherryPlanks::new);
+    public static final RegistryObject<Block> CHERRY_STAIRS = BLOCKS.register("cherry_stairs", BlockCherryStairs::new);
+    public static final RegistryObject<Block> CHERRY_FENCE = BLOCKS.register("cherry_fence", BlockCherryFence::new);
+    public static final RegistryObject<Block> CHERRY_FENCE_GATE = BLOCKS.register("cherry_fence_gate", BlockCherryFenceGate::new);
+    public static final RegistryObject<Block> POTTED_CHERRY_SAPLING = BLOCKS.register("potted_cherry_sapling", BlockPottedCherrySapling::new);
+    public static final RegistryObject<Block> CHERRY_BUTTON = BLOCKS.register("cherry_button", BlockCherryButton::new);
+    public static final RegistryObject<Block> CHERRY_SLAB = BLOCKS.register("cherry_slab", BlockCherrySlab::new);
+    public static final RegistryObject<Block> CHERRY_WOOD = BLOCKS.register("cherry_wood", BlockCherryWood::new);
 }

@@ -24,6 +24,13 @@
   "block.ashihara.cherry_sapling": "Cherry sapling",
   "block.ashihara.mortar": "Mortar",
   "block.ashihara.fallen_sakura": "Fallen cherry flowers",
+  "block.ashihara.cherry_planks": "Cherry planks",
+  "block.ashihara.cherry_stairs": "Cherry stairs",
+  "block.ashihara.cherry_slab": "Cherry slab",
+  "block.ashihara.cherry_fence": "Cherry fence",
+  "block.ashihara.cherry_fence_gate": "Cherry fence gate",
+  "block.ashihara.cherry_button": "Cherry button",
+  "block.ashihara.cherry_wood": "Cherry wood",
 
   "itemGroup.group_ashihara": "Ashihara"
 }

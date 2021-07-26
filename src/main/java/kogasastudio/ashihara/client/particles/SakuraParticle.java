@@ -14,7 +14,7 @@ public class SakuraParticle extends SpriteTexturedParticle
         this.motionY = 0;
         this.motionZ *= 0.9F;
         this.particleScale = 0.2F;
-        this.maxAge = 100;
+        this.maxAge = 200;
     }
 
     @Override

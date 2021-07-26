@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "ashihara:block/cherry_woodcrafts/cherry_slab"
+    },
+    "type=double": {
+      "model": "ashihara:block/cherry_woodcrafts/cherry_planks"
+    },
+    "type=top": {
+      "model": "ashihara:block/cherry_woodcrafts/cherry_slab_top"
+    }
+  }
+}
