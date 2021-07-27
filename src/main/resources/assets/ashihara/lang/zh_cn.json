@@ -31,6 +31,8 @@
   "block.ashihara.cherry_fence_gate": "樱木栅栏门",
   "block.ashihara.cherry_button": "樱木按钮",
   "block.ashihara.cherry_wood": "樱木",
+  "block.ashihara.lantern_long_white": "灯笼（白）",
+  "block.ashihara.lantern_long_red": "灯笼（红）",
 
   "itemGroup.group_ashihara": "苇原"
 }

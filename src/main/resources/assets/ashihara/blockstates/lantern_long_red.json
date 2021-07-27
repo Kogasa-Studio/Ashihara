@@ -1,0 +1,24 @@
+{
+  "variants":
+  {
+    "facing=east":
+    {
+      "model": "ashihara:block/lanterns/lantern_long_red",
+      "y": 270
+    },
+    "facing=north":
+    {
+      "model": "ashihara:block/lanterns/lantern_long_red",
+      "y": 180
+    },
+    "facing=south":
+    {
+      "model": "ashihara:block/lanterns/lantern_long_red"
+    },
+    "facing=west":
+    {
+      "model": "ashihara:block/lanterns/lantern_long_red",
+      "y": 90
+    }
+  }
+}

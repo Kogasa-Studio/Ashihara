@@ -36,6 +36,8 @@ public class ClientEventSubscribeHandler
         setRenderType(BlockExampleContainer.BLOCK_JINJA_LANTERN, RenderType.getCutoutMipped(), event);
         setRenderType(BlockExampleContainer.FALLEN_SAKURA, RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.POTTED_CHERRY_SAPLING.get(), RenderType.getCutoutMipped(), event);
+        setRenderType(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), RenderType.getCutoutMipped(), event);
+        setRenderType(BlockRegistryHandler.LANTERN_LONG_RED.get(), RenderType.getCutoutMipped(), event);
     }
 
     @SubscribeEvent

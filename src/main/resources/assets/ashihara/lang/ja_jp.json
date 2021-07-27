@@ -31,6 +31,8 @@
   "block.ashihara.cherry_fence_gate": "桜木のフェンスゲート",
   "block.ashihara.cherry_button": "桜木のボタン",
   "block.ashihara.cherry_wood": "桜の木",
+  "block.ashihara.lantern_long_white": "燈籠（白い）",
+  "block.ashihara.lantern_long_red": "燈籠（紅い）",
 
   "itemGroup.group_ashihara": "葦原"
 }

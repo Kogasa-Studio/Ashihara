@@ -1,0 +1,9 @@
+{
+  "parent": "ashihara:block/lanterns/lantern_long",
+  "textures":
+  {
+    "particle": "ashihara:block/lanterns/bodies/long_red",
+    "body": "ashihara:block/lanterns/bodies/long_red",
+    "icon": "ashihara:block/lanterns/icons/tomoe"
+  }
+}

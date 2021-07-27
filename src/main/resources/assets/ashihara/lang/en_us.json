@@ -31,6 +31,8 @@
   "block.ashihara.cherry_fence_gate": "Cherry fence gate",
   "block.ashihara.cherry_button": "Cherry button",
   "block.ashihara.cherry_wood": "Cherry wood",
+  "block.ashihara.lantern_long_white": "Lantern(white)",
+  "block.ashihara.lantern_long_red": "Lantern(red)",
 
   "itemGroup.group_ashihara": "Ashihara"
 }
