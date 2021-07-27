@@ -12,6 +12,8 @@
   "item.ashihara.sakura_petal": "Cherry flower petal",
   "item.ashihara.cooked_rice": "Cooked rice",
   "item.ashihara.sakuramochi": "Sakuramochi",
+  "item.ashihara.dirt_ball_don": "Dirt ball don",
+  "item.ashihara.chrysanthemum_flower": "Chrysanthemum flower",
 
   "block.ashihara.water_field":"Water field",
   "block.ashihara.dirt_depression": "Dirt depression",
@@ -33,6 +35,10 @@
   "block.ashihara.cherry_wood": "Cherry wood",
   "block.ashihara.lantern_long_white": "Lantern(white)",
   "block.ashihara.lantern_long_red": "Lantern(red)",
+  "block.ashihara.chrysanthemum": "Chrysanthemum",
 
-  "itemGroup.group_ashihara": "Ashihara"
+  "itemGroup.group_ashihara": "Ashihara",
+
+  "item.ashihara.dirt_ball_don.projectile": "§d§l§oA strong and weird felling grows inside your heart when you are looking at it",
+  "item.ashihara.dirt_ball_don.projectile_1": "§9§l§oI don't know why something like this exists"
 }

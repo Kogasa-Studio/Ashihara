@@ -3,9 +3,9 @@
 	"parent": "minecraft:block/block",
 	"texture_size": [8, 14],
 	"textures": {
-		"particle": "#body",
-		"body": "#body",
-		"icon": "#icon"
+		"particle": "texture",
+		"body": "texture",
+		"icon": "texture"
 	},
 	"elements": [
 		{
@@ -122,8 +122,8 @@
 		},
 		{
 			"name": "iconN",
-			"from": [4, 4, 3.999],
-			"to": [12, 12, 3.999],
+			"from": [4, 4, 3.99],
+			"to": [12, 12, 3.99],
 			"rotation": {"angle": 0, "axis": "y", "origin": [12, 12, 10.9]},
 			"faces": {
 				"north": {"uv": [0, 0, 16, 16], "texture": "#icon"},
@@ -136,8 +136,8 @@
 		},
 		{
 			"name": "iconS",
-			"from": [4, 4, 12.001],
-			"to": [12, 12, 12.001],
+			"from": [4, 4, 12.01],
+			"to": [12, 12, 12.01],
 			"rotation": {"angle": 0, "axis": "y", "origin": [12, 12, 18.9]},
 			"faces": {
 				"north": {"uv": [0, 0, 16, 16], "texture": "#icon"},

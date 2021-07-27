@@ -12,6 +12,8 @@
   "item.ashihara.sakura_petal": "桜の花びら",
   "item.ashihara.cooked_rice": "ご飯",
   "item.ashihara.sakuramochi": "桜餅",
+  "item.ashihara.dirt_ball_don": "土丸丼",
+  "item.ashihara.chrysanthemum_flower": "菊の花",
 
   "block.ashihara.water_field": "水田",
   "block.ashihara.dirt_depression": "漥",
@@ -33,6 +35,10 @@
   "block.ashihara.cherry_wood": "桜の木",
   "block.ashihara.lantern_long_white": "燈籠（白い）",
   "block.ashihara.lantern_long_red": "燈籠（紅い）",
+  "block.ashihara.chrysanthemum": "菊",
 
-  "itemGroup.group_ashihara": "葦原"
+  "itemGroup.group_ashihara": "葦原",
+
+  "item.ashihara.dirt_ball_don.projectile": "§d§l§o これ何...",
+  "item.ashihara.dirt_ball_don.projectile_1": "§9§l§o丼でしょか...ならばこちは食べるいいかなぁ..."
 }

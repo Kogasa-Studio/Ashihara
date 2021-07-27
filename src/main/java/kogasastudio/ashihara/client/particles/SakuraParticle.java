@@ -46,7 +46,8 @@ public class SakuraParticle extends SpriteTexturedParticle
             this.motionX *= 0.97F;
             this.motionY *= 0.999F;
             this.motionZ *= 0.97F;
-            if (this.onGround) {
+            if (this.onGround)
+            {
                 this.motionX *= 0.7F;
                 this.motionZ *= 0.7F;
             }

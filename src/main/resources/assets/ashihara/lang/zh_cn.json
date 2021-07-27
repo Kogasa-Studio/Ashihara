@@ -12,6 +12,8 @@
   "item.ashihara.sakura_petal": "樱花瓣",
   "item.ashihara.cooked_rice": "熟米",
   "item.ashihara.sakuramochi": "樱饼",
+  "item.ashihara.dirt_ball_don": "土球丼",
+  "item.ashihara.chrysanthemum_flower": "菊花",
 
   "block.ashihara.water_field": "水田",
   "block.ashihara.dirt_depression": "土洼",
@@ -33,6 +35,10 @@
   "block.ashihara.cherry_wood": "樱木",
   "block.ashihara.lantern_long_white": "灯笼（白）",
   "block.ashihara.lantern_long_red": "灯笼（红）",
+  "block.ashihara.chrysanthemum": "菊花丛",
 
-  "itemGroup.group_ashihara": "苇原"
+  "itemGroup.group_ashihara": "苇原",
+
+  "item.ashihara.dirt_ball_don.projectile": "§d§l§o这东西散发着一种不可思议的气场",
+  "item.ashihara.dirt_ball_don.projectile_1": "§9§l§o§m别把这事告诉4z（"
 }

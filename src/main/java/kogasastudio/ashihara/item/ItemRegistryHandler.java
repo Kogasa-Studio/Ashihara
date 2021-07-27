@@ -28,10 +28,12 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> STRAW = ITEMS.register("straw", ItemStraw::new);
     public static final RegistryObject<Item> RICE = ITEMS.register("rice", ItemRice::new);
     public static final RegistryObject<Item> COOKED_RICE = ITEMS.register("cooked_rice", ItemCookedRice::new);
+    public static final RegistryObject<Item> DIRT_BALL_DON = ITEMS.register("dirt_ball_don", ItemDirtBallDon::new);
     public static final RegistryObject<Item> SAKURA = ITEMS.register("sakura", ItemSakura::new);
     public static final RegistryObject<Item> SAKURA_PETAL = ITEMS.register("sakura_petal", ItemSakuraPetal::new);
     public static final RegistryObject<Item> SAKURAMOCHI = ITEMS.register("sakuramochi", ItemSakuramochi::new);
     public static final RegistryObject<Item> PESTLE = ITEMS.register("pestle", ItemPestle::new);
+    public static final RegistryObject<Item> CHRYSANTHEMUM_FLOWER = ITEMS.register("chrysanthemum_flower", ItemChrysanthemumFlower::new);
 
     //以下为方块
     //TODO: public static final RegistryObject<Item>  = ITEMS.register("", () -> new BlockItem(BlockRegistryHandler. .get(), new Item.Properties().group(ASHIHARA)));
@@ -53,4 +55,5 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> ITEM_JINJA_LANTERN = ITEMS.register("jinja_lantern", () -> new BlockItem(BlockRegistryHandler.BLOCK_JINJA_LANTERN.get(), new Item.Properties().group(ASHIHARA)));
     public static final RegistryObject<Item> LANTERN_LONG_WHITE = ITEMS.register("lantern_long_white", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), new Item.Properties().group(ASHIHARA)));
     public static final RegistryObject<Item> LANTERN_LONG_RED = ITEMS.register("lantern_long_red", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_RED.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> CHRYSANTHEMUM = ITEMS.register("chrysanthemum", () -> new BlockItem(BlockRegistryHandler.CHRYSANTHEMUM.get(), new Item.Properties().group(ASHIHARA)));
 }
