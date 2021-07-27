@@ -44,7 +44,14 @@ public class BlockHangingLanternLong extends BlockLantern
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
         List<ItemStack> list = new LinkedList<>();
-        list.add(new ItemStack(ItemRegistryHandler.ITEM_JINJA_LANTERN.get()));
+        if (state.matchesBlock(BlockRegistryHandler.LANTERN_LONG_WHITE.get()))
+        {
+            list.add(new ItemStack(ItemRegistryHandler.LANTERN_LONG_WHITE.get()));
+        }
+        else if (state.matchesBlock(BlockRegistryHandler.LANTERN_LONG_RED.get()))
+        {
+            list.add(new ItemStack(ItemRegistryHandler.LANTERN_LONG_RED.get()));
+        }
         return list;
     }
 
