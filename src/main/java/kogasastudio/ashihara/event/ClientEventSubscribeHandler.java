@@ -39,6 +39,7 @@ public class ClientEventSubscribeHandler
         setRenderType(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.LANTERN_LONG_RED.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.CHRYSANTHEMUM.get(), RenderType.getCutoutMipped(), event);
+        setRenderType(BlockRegistryHandler.BLOCK_REED.get(), RenderType.getCutoutMipped(), event);
     }
 
     @SubscribeEvent

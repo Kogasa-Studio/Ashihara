@@ -12,8 +12,10 @@ public class BlockReed extends DoublePlantBlock implements IForgeShearable
         super
         (
             Properties.create(Material.TALL_PLANTS)
+            .doesNotBlockMovement()
             .zeroHardnessAndResistance()
             .sound(SoundType.PLANT)
+            .notSolid()
         );
     }
 }
