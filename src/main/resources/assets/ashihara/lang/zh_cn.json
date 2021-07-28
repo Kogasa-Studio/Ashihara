@@ -36,9 +36,10 @@
   "block.ashihara.lantern_long_white": "灯笼（白）",
   "block.ashihara.lantern_long_red": "灯笼（红）",
   "block.ashihara.chrysanthemum": "菊花丛",
+  "block.ashihara.reed": "芦苇",
 
   "itemGroup.group_ashihara": "苇原",
 
-  "item.ashihara.dirt_ball_don.projectile": "§d§l§o这东西散发着一种不可思议的气场§9§l§o§m别把这事告诉4z（",
+  "item.ashihara.dirt_ball_don.projectile": "§d§l§o这东西散发着一种不可思议的气场",
   "item.ashihara.dirt_ball_don.projectile_1": "§9§l§o§m别把这事告诉4z（"
 }

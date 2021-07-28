@@ -1,0 +1,6 @@
+{
+  "parent": "ashihara:block/plant_3x",
+  "textures": {
+    "plant": "ashihara:block/reed_top"
+  }
+}

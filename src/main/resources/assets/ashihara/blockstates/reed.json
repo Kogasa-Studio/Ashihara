@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "ashihara:block/reed_bottom"
+    },
+    "half=upper": {
+      "model": "ashihara:block/reed_top"
+    }
+  }
+}
