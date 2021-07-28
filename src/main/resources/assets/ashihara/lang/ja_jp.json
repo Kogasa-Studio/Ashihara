@@ -14,6 +14,7 @@
   "item.ashihara.sakuramochi": "桜餅",
   "item.ashihara.dirt_ball_don": "土丸丼",
   "item.ashihara.chrysanthemum_flower": "菊の花",
+  "item.ashihara.sujikabuto": "§d筋兜",
 
   "block.ashihara.water_field": "水田",
   "block.ashihara.dirt_depression": "漥",
@@ -37,6 +38,7 @@
   "block.ashihara.lantern_long_red": "燈籠（紅い）",
   "block.ashihara.chrysanthemum": "菊",
   "block.ashihara.reed": "葦",
+  "block.ashihara.shorter_reed": "短葦",
 
   "itemGroup.group_ashihara": "葦原",
 

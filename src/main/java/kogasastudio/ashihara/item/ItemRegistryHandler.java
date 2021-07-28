@@ -34,6 +34,7 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> SAKURAMOCHI = ITEMS.register("sakuramochi", ItemSakuramochi::new);
     public static final RegistryObject<Item> PESTLE = ITEMS.register("pestle", ItemPestle::new);
     public static final RegistryObject<Item> CHRYSANTHEMUM_FLOWER = ITEMS.register("chrysanthemum_flower", ItemChrysanthemumFlower::new);
+    public static final RegistryObject<Item> SUJIKABUTO = ITEMS.register("sujikabuto", ItemSujikaButo::new);
 
     //以下为方块
     //TODO: public static final RegistryObject<Item>  = ITEMS.register("", () -> new BlockItem(BlockRegistryHandler. .get(), new Item.Properties().group(ASHIHARA)));
@@ -57,4 +58,5 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> LANTERN_LONG_RED = ITEMS.register("lantern_long_red", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_RED.get(), new Item.Properties().group(ASHIHARA)));
     public static final RegistryObject<Item> CHRYSANTHEMUM = ITEMS.register("chrysanthemum", () -> new BlockItem(BlockRegistryHandler.CHRYSANTHEMUM.get(), new Item.Properties().group(ASHIHARA)));
     public static final RegistryObject<Item> REED = ITEMS.register("reed", () -> new BlockItem(BlockRegistryHandler.BLOCK_REED.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> SHORTER_REED = ITEMS.register("shorter_reed", () -> new BlockItem(BlockRegistryHandler.BLOCK_SHORTER_REED.get(), new Item.Properties().group(ASHIHARA)));
 }

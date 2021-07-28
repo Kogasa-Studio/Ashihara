@@ -34,4 +34,5 @@ public class BlockRegistryHandler
     public static final RegistryObject<Block> LANTERN_LONG_RED = BLOCKS.register("lantern_long_red", BlockHangingLanternLong::new);
     public static final RegistryObject<Block> CHRYSANTHEMUM = BLOCKS.register("chrysanthemum", BlockChrysanthemumBush::new);
     public static final RegistryObject<Block> BLOCK_REED = BLOCKS.register("reed", BlockReed::new);
+    public static final RegistryObject<Block> BLOCK_SHORTER_REED = BLOCKS.register("shorter_reed", BlockShorterReed::new);
 }
