@@ -41,5 +41,6 @@ public class ItemDirtBallDon extends FoodBowled
     public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
     {
         tooltip.add((new TranslationTextComponent("item.ashihara.dirt_ball_don.projectile")));
+        tooltip.add((new TranslationTextComponent("item.ashihara.dirt_ball_don.projectile_1")));
     }
 }
