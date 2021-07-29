@@ -13,8 +13,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import kogasastudio.ashihara.world.WorldGenEventRegistryHandler;
 
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
 @Mod.EventBusSubscriber(modid = Ashihara.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class WorldGenerationEventHandler
 {
