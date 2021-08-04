@@ -43,13 +43,13 @@ public class SakuraParticle extends SpriteTexturedParticle
             this.prevPosZ = this.posZ;
             this.motionY -= 0.001D;
             this.move(this.motionX, this.motionY, this.motionZ);
-            this.motionX *= 0.97F;
+            this.motionX *= 0.7F;
             this.motionY *= 0.999F;
-            this.motionZ *= 0.97F;
+            this.motionZ *= 0.7F;
             if (this.onGround)
             {
-                this.motionX *= 0.7F;
-                this.motionZ *= 0.7F;
+                this.motionX *= 0.5F;
+                this.motionZ *= 0.5F;
             }
         }
     }

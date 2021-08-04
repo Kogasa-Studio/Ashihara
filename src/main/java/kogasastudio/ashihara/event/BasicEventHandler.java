@@ -40,7 +40,7 @@ public class BasicEventHandler
         if(world.getBlockState(pos.up()).getBlock() == Blocks.AIR)
         {
             //铲土洼
-            if(item.getItem() instanceof ShovelItem && (clickState.matchesBlock(Blocks.DIRT) || clickState.matchesBlock(Blocks.GRASS_PATH)))
+            if(item.getItem() instanceof ShovelItem && (clickState.matchesBlock(Blocks.DIRT) || (player.isSneaking() && clickState.matchesBlock(Blocks.GRASS_PATH))))
             {
                 world.playSound(player, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 world.setBlockState(pos, BlockExampleContainer.BLOCK_DIRT_DEPRESSION.getDefaultState());

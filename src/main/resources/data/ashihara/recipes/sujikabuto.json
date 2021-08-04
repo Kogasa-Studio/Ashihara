@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "AAA",
+    "YIY",
+    "ITI"
+  ],
+  "key":
+  {
+    "A":
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    "I":
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    "Y":
+    {
+      "item": "minecraft:string"
+    },
+    "T":
+    {
+      "item": "minecraft:leather"
+    }
+  },
+  "result":
+  {
+    "item": "ashihara:sujikabuto",
+    "count": 1
+  }
+}
