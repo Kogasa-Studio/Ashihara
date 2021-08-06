@@ -1,0 +1,13 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures":
+  {
+    "particle": "ashihara:block/tatami/tatami",
+    "north": "ashihara:block/tatami/tatami_side",
+    "south": "ashihara:block/tatami/tatami_side",
+    "east": "ashihara:block/tatami/tatami_side",
+    "west": "ashihara:block/tatami/tatami_side",
+    "up": "ashihara:block/tatami/tatami",
+    "down": "ashihara:block/tatami/tatami_bottom"
+  }
+}

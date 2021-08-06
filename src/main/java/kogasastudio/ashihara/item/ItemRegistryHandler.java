@@ -53,6 +53,7 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> ITEM_CHERRY_SAPLING = ITEMS.register("cherry_sapling", () -> new BlockItem(BlockRegistryHandler.CHERRY_SAPLING.get(), new Item.Properties().group(ASHIHARA)));
     public static final RegistryObject<Item> ITEM_TETSUSENCHI = ITEMS.register("tetsusenchi", () -> new BlockItem(BlockRegistryHandler.BLOCK_TETSUSENCHI.get(), new Item.Properties().group(ASHIHARA)));
     public static final RegistryObject<Item> ITEM_MORTAR = ITEMS.register("mortar", () -> new BlockItem(BlockRegistryHandler.BLOCK_MORTAR.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> TATAMI = ITEMS.register("tatami", () -> new BlockItem(BlockRegistryHandler.TATAMI.get(), new Item.Properties().group(ASHIHARA)));
     public static final RegistryObject<Item> ITEM_JINJA_LANTERN = ITEMS.register("jinja_lantern", () -> new BlockItem(BlockRegistryHandler.BLOCK_JINJA_LANTERN.get(), new Item.Properties().group(ASHIHARA)));
     public static final RegistryObject<Item> LANTERN_LONG_WHITE = ITEMS.register("lantern_long_white", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), new Item.Properties().group(ASHIHARA)));
     public static final RegistryObject<Item> LANTERN_LONG_RED = ITEMS.register("lantern_long_red", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_RED.get(), new Item.Properties().group(ASHIHARA)));

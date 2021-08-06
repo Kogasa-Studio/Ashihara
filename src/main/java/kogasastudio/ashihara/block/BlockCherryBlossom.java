@@ -26,11 +26,11 @@ public class BlockCherryBlossom extends LeavesBlock
         super
         (
             Properties.create(Material.LEAVES)
-            .hardnessAndResistance(0.2F)
+            .hardnessAndResistance(0.05F)
             .tickRandomly()
             .sound(SoundType.PLANT)
             .notSolid()
-            .setLightLevel((state) -> 15)
+            .setLightLevel((state) -> 5)
         );
         this.setDefaultState(this.stateContainer.getBaseState().with(DISTANCE, 7).with(PERSISTENT, Boolean.FALSE));
     }

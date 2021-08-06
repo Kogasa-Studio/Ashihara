@@ -1,24 +1,9 @@
 {
-  "variants":
-  {
-    "facing=east":
-    {
-      "model": "ashihara:block/jinja_lantern",
-      "y": 270
-    },
-    "facing=north":
-    {
-      "model": "ashihara:block/jinja_lantern",
-      "y": 180
-    },
-    "facing=south":
-    {
-      "model": "ashihara:block/jinja_lantern"
-    },
-    "facing=west":
-    {
-      "model": "ashihara:block/jinja_lantern",
-      "y": 90
-    }
-  }
+  "multipart":
+  [
+    {"when": {"facing": "east", "half": "lower"},"apply": {"model": "ashihara:block/jinja_lantern", "y": 270}},
+    {"when": {"facing": "north", "half": "lower"},"apply": {"model": "ashihara:block/jinja_lantern", "y": 180}},
+    {"when": {"facing": "south", "half": "lower"},"apply": {"model": "ashihara:block/jinja_lantern"}},
+    {"when": {"facing": "west", "half": "lower"},"apply": {"model": "ashihara:block/jinja_lantern", "y": 90}}
+  ]
 }

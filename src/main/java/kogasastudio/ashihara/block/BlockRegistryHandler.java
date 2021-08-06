@@ -30,6 +30,7 @@ public class BlockRegistryHandler
     public static final RegistryObject<Block> CHERRY_BUTTON = BLOCKS.register("cherry_button", BlockCherryButton::new);
     public static final RegistryObject<Block> CHERRY_SLAB = BLOCKS.register("cherry_slab", BlockCherrySlab::new);
     public static final RegistryObject<Block> CHERRY_WOOD = BLOCKS.register("cherry_wood", BlockCherryWood::new);
+    public static final RegistryObject<Block> TATAMI = BLOCKS.register("tatami", BlockTatami::new);
     public static final RegistryObject<Block> LANTERN_LONG_WHITE = BLOCKS.register("lantern_long_white", BlockHangingLanternLong::new);
     public static final RegistryObject<Block> LANTERN_LONG_RED = BLOCKS.register("lantern_long_red", BlockHangingLanternLong::new);
     public static final RegistryObject<Block> CHRYSANTHEMUM = BLOCKS.register("chrysanthemum", BlockChrysanthemumBush::new);
