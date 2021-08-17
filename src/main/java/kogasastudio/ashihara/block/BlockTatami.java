@@ -68,6 +68,9 @@ public class BlockTatami extends Block
     public static final BooleanProperty LOCKED = BooleanProperty.create("locked");
     public static final EnumProperty<Direction.Axis> AXIS = HORIZONTAL_AXIS;
 
+    //获取和更新bs，输入操作前的bs，返回操作后的bs
+    //获取8个方向相邻的方块对其判定，若判定结果为true则取消这一点上的边缘权重
+    //随后由multipart模型对其进行模型更新
     private BlockState updateState(BlockState state, World worldIn, BlockPos pos)
     {
         if (state.matchesBlock(BlockRegistryHandler.TATAMI.get()) && !state.get(LOCKED))
@@ -92,17 +95,19 @@ public class BlockTatami extends Block
         return state;
     }
 
+    //检查传入的方块是否是榻榻米且轴与判断源榻榻米方块相同
     private boolean check(BlockState state, BlockState newState)
     {return state.matchesBlock(BlockRegistryHandler.TATAMI.get()) && state.get(AXIS) == newState.get(AXIS);}
 
-    private BlockState setEdgeAll(BlockState state)
-    {
-        if (state.matchesBlock(BlockRegistryHandler.TATAMI.get()))
-        {
-            state = this.getDefaultState().with(LOCKED, true);
-        }
-        return state;
-    }
+//    目前没什么作用
+//    private BlockState setEdgeAll(BlockState state)
+//    {
+//        if (state.matchesBlock(BlockRegistryHandler.TATAMI.get()))
+//        {
+//            state = this.getDefaultState().with(LOCKED, true);
+//        }
+//        return state;
+//    }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
@@ -128,6 +133,7 @@ public class BlockTatami extends Block
         return updateState(this.getDefaultState(), worldIn, pos).with(AXIS, context.getPlacementHorizontalFacing().getAxis());
     }
 
+    //空手shift右键锁定，剪刀右键加中央边缘权重（剪开或合上）
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
@@ -158,12 +164,12 @@ public class BlockTatami extends Block
                 }
                 return ActionResultType.SUCCESS;
             }
-            else if (player.getHeldItem(handIn).getItem() instanceof ShearsItem && player.isSneaking())
-            {
-                worldIn.setBlockState(pos, setEdgeAll(state));
-                worldIn.playSound(player, pos, SoundEvents.BLOCK_BAMBOO_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                return ActionResultType.SUCCESS;
-            }
+//            else if (player.getHeldItem(handIn).getItem() instanceof ShearsItem && player.isSneaking())
+//            {
+//                worldIn.setBlockState(pos, setEdgeAll(state));
+//                worldIn.playSound(player, pos, SoundEvents.BLOCK_BAMBOO_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
+//                return ActionResultType.SUCCESS;
+//            }
             else return ActionResultType.PASS;
         }
         else return ActionResultType.PASS;

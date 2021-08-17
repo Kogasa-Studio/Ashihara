@@ -1,4 +1,4 @@
-package kogasastudio.ashihara.item;
+package kogasastudio.ashihara.item.foods;
 
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;

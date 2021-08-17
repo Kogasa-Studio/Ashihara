@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients":
+  [
+    {"item": "ashihara:cooked_rice"},
+    {"item": "minecraft:salmon"}
+  ],
+  "result":
+  {
+    "item": "ashihara:sushi_raw_fish",
+    "count": 4
+  }
+}

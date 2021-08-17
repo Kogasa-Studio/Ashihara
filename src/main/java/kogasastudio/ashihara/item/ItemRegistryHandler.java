@@ -2,6 +2,7 @@ package kogasastudio.ashihara.item;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.item.foods.*;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -35,6 +36,12 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> PESTLE = ITEMS.register("pestle", ItemPestle::new);
     public static final RegistryObject<Item> CHRYSANTHEMUM_FLOWER = ITEMS.register("chrysanthemum_flower", ItemChrysanthemumFlower::new);
     public static final RegistryObject<Item> SUJIKABUTO = ITEMS.register("sujikabuto", ItemSujikaButo::new);
+    public static final RegistryObject<Item> SUSHI_BASIC = ITEMS.register("sushi_basic", () -> new EasyFood(5));
+    public static final RegistryObject<Item> SUSHI_RAW_FISH = ITEMS.register("sushi_raw_fish", () -> new EasyFood(6));
+    public static final RegistryObject<Item> SUSHI_SAKURA = ITEMS.register("sushi_sakura", () -> new EasyFood(7));
+    public static final RegistryObject<Item> SUSHI_TAMAGO = ITEMS.register("sushi_tamago", () -> new EasyFood(6));
+    public static final RegistryObject<Item> ONIGIRI = ITEMS.register("onigiri", () -> new EasyFood(6));
+    public static final RegistryObject<Item> TAMAGO = ITEMS.register("tamago", () -> new EasyFood(1));
 
     //以下为方块
     //TODO: public static final RegistryObject<Item>  = ITEMS.register("", () -> new BlockItem(BlockRegistryHandler. .get(), new Item.Properties().group(ASHIHARA)));

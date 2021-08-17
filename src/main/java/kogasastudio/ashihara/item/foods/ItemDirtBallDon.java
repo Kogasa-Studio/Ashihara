@@ -1,6 +1,5 @@
-package kogasastudio.ashihara.item;
+package kogasastudio.ashihara.item.foods;
 
-import kogasastudio.ashihara.item.foods.FoodBowled;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Food;
 import net.minecraft.item.ItemStack;
