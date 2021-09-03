@@ -10,6 +10,7 @@ import net.minecraft.loot.LootContext;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
@@ -52,6 +53,10 @@ public class BlockRiceCrop extends CropsBlock
             }
         }
     }
+
+    @Override
+    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
+    {return worldIn.getBlockState(pos.down()).getBlock().matchesBlock(BlockExampleContainer.BLOCK_WATER_FIELD);}
 
     @Override
     protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos)

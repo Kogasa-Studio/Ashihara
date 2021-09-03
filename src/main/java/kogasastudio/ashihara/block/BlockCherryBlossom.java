@@ -2,12 +2,15 @@ package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.client.particles.GenericParticleData;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathType;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -32,25 +35,36 @@ public class BlockCherryBlossom extends LeavesBlock
             .notSolid()
             .setLightLevel((state) -> 5)
         );
-        this.setDefaultState(this.stateContainer.getBaseState().with(DISTANCE, 7).with(PERSISTENT, Boolean.FALSE));
+        this.setDefaultState(this.stateContainer.getBaseState().with(DISTANCE, 7).with(PERSISTENT, Boolean.FALSE).with(CANFALL, Boolean.FALSE));
     }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {builder.add(DISTANCE, PERSISTENT, CANFALL);}
+
+
+    public static final BooleanProperty CANFALL = BooleanProperty.create("canfall");
+
+    @Override
+    public boolean ticksRandomly(BlockState state) {return true;}
 
     @Override
     public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
     {
+        //原版代码
         if (!state.get(PERSISTENT) && state.get(DISTANCE) == 7)
         {
             spawnDrops(state, worldIn, pos);
             worldIn.removeBlock(pos, false);
         }
-        else if (random.nextInt(2) == 1)
+        //若樱花方块正下方50格以内有实心方块，且该方块上方为空气，则在该方块上方生成落樱毯
+        if (worldIn.isAirBlock(pos.down()))
         {
             BlockPos pos1 = pos;
             for (int j = 0; j < 50; j += 1)
             {
                 pos1 = pos1.down();
                 BlockState state1 = worldIn.getBlockState(pos1);
-                if (state1.isSolid() || state1.isSolidSide(worldIn, pos1, Direction.UP))
+                if (state1.isSolidSide(worldIn, pos1, Direction.UP))
                 {
                     if (worldIn.isAirBlock(pos1.up()))
                     {
