@@ -3,9 +3,9 @@ package kogasastudio.ashihara.block.woodcrafts;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
 import net.minecraft.block.StairsBlock;
 
-public class BlockCherryStairs extends StairsBlock
+public class SimpleStairsBlock extends StairsBlock
 {
-    public BlockCherryStairs()
+    public SimpleStairsBlock()
     {
         super
         (

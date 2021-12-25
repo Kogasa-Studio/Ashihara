@@ -6,6 +6,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.tags.ITag;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -89,33 +90,11 @@ public class EasyBlockActionHandler
     {
         boolean flag = false;
         FluidState fluid1 = worldIn.getFluidState(pos1);
-//        FluidState fluid = worldIn.getFluidState(pos);
-        //FluidState fluid2 = worldIn.getFluidState(pos2);
         if (fluid1.getFluid() == Fluids.WATER) {flag = true;}
         else if (fluid1.getFluid() == Fluids.FLOWING_WATER)
         {
             if (fluid1.get(LEVEL_1_8) == 8 && fluid1.get(FALLING)) {flag = true;}
         }
-//        else if (fluid.getFluid() == Fluids.FLOWING_WATER.getFlowingFluid())
-//        {
-//            if (fluid1.getFluid() == Fluids.FLOWING_WATER.getFlowingFluid())
-//            {
-//                if (worldIn.getBlockState(pos1).matchesBlock(Blocks.WATER))
-//                {
-//                    if (fluid1.get(LEVEL_1_8) > fluid.get(LEVEL_1_8)) {flag = true;LOGGER_MAIN.info("case1");}
-//                }
-//            }
-//        }
-//        else if (fluid.getFluid() == Fluids.EMPTY)
-//        {
-//            if (fluid1.getFluid() == Fluids.FLOWING_WATER.getFlowingFluid())
-//            {
-//                if (worldIn.getBlockState(pos1).matchesBlock(Blocks.WATER))
-//                {
-//                    if (fluid1.get(LEVEL_1_8) > 4) {flag = true;LOGGER_MAIN.info("case2");}
-//                }
-//            }
-//        }
         return flag;
     }
 
@@ -189,4 +168,20 @@ public class EasyBlockActionHandler
         return (state) -> state.get(LIT) ? lightValue : 1;
     }
 
+    /**
+     * 按照所给的方向判断贴图应该在ZP上旋转多少度才能在该方向上显示
+     * @param dir 方向
+     * @return 需要在ZP上旋转的度数
+     */
+    public static int getRotationByFacing(Direction dir)
+    {
+        switch (dir)
+        {
+            case NORTH:return 180;
+            case SOUTH:return 0;
+            case WEST:return 90;
+            case EAST:return -90;
+        }
+        return 0;
+    }
 }

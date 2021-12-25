@@ -4,8 +4,7 @@
 	"texture_size": [8, 14],
 	"textures": {
 		"particle": "texture",
-		"body": "texture",
-		"icon": "texture"
+		"body": "texture"
 	},
 	"elements": [
 		{
@@ -118,34 +117,6 @@
 				"west": {"uv": [2, 0, 14, 14.85714], "texture": "#body"},
 				"up": {"uv": [2, 0, 14, 1.14286], "rotation": 90, "texture": "#body"},
 				"down": {"uv": [2, 13.71429, 14, 14.85714], "rotation": 90, "texture": "#body"}
-			}
-		},
-		{
-			"name": "iconN",
-			"from": [4, 4, 3.99],
-			"to": [12, 12, 3.99],
-			"rotation": {"angle": 0, "axis": "y", "origin": [12, 12, 10.9]},
-			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#icon"},
-				"east": {"uv": [0, 0, 0, 0], "texture": "#icon"},
-				"south": {"uv": [0, 0, 16, 16], "texture": "#icon"},
-				"west": {"uv": [0, 0, 0, 0], "texture": "#icon"},
-				"up": {"uv": [0, 0, 0, 0], "texture": "#icon"},
-				"down": {"uv": [0, 0, 0, 0], "texture": "#icon"}
-			}
-		},
-		{
-			"name": "iconS",
-			"from": [4, 4, 12.01],
-			"to": [12, 12, 12.01],
-			"rotation": {"angle": 0, "axis": "y", "origin": [12, 12, 18.9]},
-			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#icon"},
-				"east": {"uv": [0, 0, 0, 0], "texture": "#icon"},
-				"south": {"uv": [0, 0, 16, 16], "texture": "#icon"},
-				"west": {"uv": [0, 0, 0, 0], "texture": "#icon"},
-				"up": {"uv": [0, 0, 0, 0], "texture": "#icon"},
-				"down": {"uv": [0, 0, 0, 0], "texture": "#icon"}
 			}
 		},
 		{

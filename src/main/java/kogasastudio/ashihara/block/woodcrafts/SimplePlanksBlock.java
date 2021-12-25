@@ -4,9 +4,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 
-public class BlockCherryPlanks extends Block
+public class SimplePlanksBlock extends Block
 {
-    public BlockCherryPlanks()
+    public SimplePlanksBlock()
     {
         super
         (

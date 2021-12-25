@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "ashihara:block/woodcrafts/red_planks",
+    "top": "ashihara:block/woodcrafts/red_planks",
+    "side": "ashihara:block/woodcrafts/red_planks"
+  }
+}

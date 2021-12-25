@@ -9,7 +9,6 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathType;
-import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -35,14 +34,11 @@ public class BlockCherryBlossom extends LeavesBlock
             .notSolid()
             .setLightLevel((state) -> 5)
         );
-        this.setDefaultState(this.stateContainer.getBaseState().with(DISTANCE, 7).with(PERSISTENT, Boolean.FALSE).with(CANFALL, Boolean.FALSE));
+        this.setDefaultState(this.stateContainer.getBaseState().with(DISTANCE, 7).with(PERSISTENT, Boolean.FALSE));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {builder.add(DISTANCE, PERSISTENT, CANFALL);}
-
-
-    public static final BooleanProperty CANFALL = BooleanProperty.create("canfall");
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {builder.add(DISTANCE, PERSISTENT);}
 
     @Override
     public boolean ticksRandomly(BlockState state) {return true;}
@@ -68,7 +64,7 @@ public class BlockCherryBlossom extends LeavesBlock
                 {
                     if (worldIn.isAirBlock(pos1.up()))
                     {
-                        worldIn.setBlockState(pos1.up(), BlockExampleContainer.FALLEN_SAKURA.getDefaultState());
+                        worldIn.setBlockState(pos1.up(), BlockRegistryHandler.FALLEN_SAKURA.get().getDefaultState());
                     }
                     break;
                 }

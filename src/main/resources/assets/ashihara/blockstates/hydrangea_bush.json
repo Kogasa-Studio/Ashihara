@@ -1,0 +1,13 @@
+{
+  "variants":
+  {
+    "bloomed=false":
+    {
+      "model": "ashihara:block/hydrangea_bush"
+    },
+    "bloomed=true":
+    {
+      "model": "ashihara:block/bloomed_hydrangea_bush"
+    }
+  }
+}

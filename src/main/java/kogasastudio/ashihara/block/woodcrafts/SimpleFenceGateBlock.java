@@ -4,9 +4,9 @@ import net.minecraft.block.FenceGateBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 
-public class BlockCherryFenceGate extends FenceGateBlock
+public class SimpleFenceGateBlock extends FenceGateBlock
 {
-    public BlockCherryFenceGate()
+    public SimpleFenceGateBlock()
     {
         super
         (

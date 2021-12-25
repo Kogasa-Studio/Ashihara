@@ -1,12 +1,12 @@
 package kogasastudio.ashihara.block.woodcrafts;
 
-import net.minecraft.block.FenceBlock;
+import net.minecraft.block.SlabBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 
-public class BlockCherryFence extends FenceBlock
+public class SimpleSlabBlock extends SlabBlock
 {
-    public BlockCherryFence()
+    public SimpleSlabBlock()
     {
         super
         (

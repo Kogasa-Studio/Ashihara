@@ -56,17 +56,17 @@ public class BlockRiceCrop extends CropsBlock
 
     @Override
     public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
-    {return worldIn.getBlockState(pos.down()).getBlock().matchesBlock(BlockExampleContainer.BLOCK_WATER_FIELD);}
+    {return worldIn.getBlockState(pos.down()).getBlock().matchesBlock(BlockRegistryHandler.BLOCK_WATER_FIELD.get());}
 
     @Override
     protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos)
-    {return state.getBlock().matchesBlock(BlockExampleContainer.BLOCK_WATER_FIELD);}
+    {return state.getBlock().matchesBlock(BlockRegistryHandler.BLOCK_WATER_FIELD.get());}
 
     @Override
     public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient)
     {
         boolean flag = false;
-        if (worldIn.getBlockState(pos.down()).getBlock().matchesBlock(BlockExampleContainer.BLOCK_WATER_FIELD))
+        if (worldIn.getBlockState(pos.down()).getBlock().matchesBlock(BlockRegistryHandler.BLOCK_WATER_FIELD.get()))
         {flag = !this.isMaxAge(state) && worldIn.getBlockState(pos.down()).get(LEVEL) > 5;}
         return flag;
     }

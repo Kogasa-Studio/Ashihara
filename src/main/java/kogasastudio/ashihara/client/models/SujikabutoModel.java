@@ -243,27 +243,7 @@ public class SujikabutoModel extends BipedModel<LivingEntity>
 		this.bipedHeadwear.addChild(yui);
 		this.bipedHeadwear.addChild(tatsumono);
 	}
-//
-//	@Override
-//	public void setRotationAngles(LivingEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch)
-//	{
-//		super.setRotationAngles(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-//	}
-//
-//	@Override
-//	public void render(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
-//		bo.render(matrixStack, buffer, packedLight, packedOverlay);
-//		mayubisashi.render(matrixStack, buffer, packedLight, packedOverlay);
-//		jikoro_1.render(matrixStack, buffer, packedLight, packedOverlay);
-//		jikoro_2.render(matrixStack, buffer, packedLight, packedOverlay);
-//		jikoro_3.render(matrixStack, buffer, packedLight, packedOverlay);
-//		fukigae.render(matrixStack, buffer, packedLight, packedOverlay);
-//		fukigae2.render(matrixStack, buffer, packedLight, packedOverlay);
-//		yui.render(matrixStack, buffer, packedLight, packedOverlay);
-//		tatsumono.render(matrixStack, buffer, packedLight, packedOverlay);
-//		bb_main.render(matrixStack, buffer, packedLight, packedOverlay);
-//	}
-//
+
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z)
 	{
 		modelRenderer.rotateAngleX = x;

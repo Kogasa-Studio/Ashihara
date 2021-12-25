@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.item;
 
-import kogasastudio.ashihara.block.BlockExampleContainer;
+import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.block.trees.CherryBlossomTree;
 import net.minecraft.block.trees.Tree;
 import net.minecraft.entity.player.PlayerEntity;
@@ -40,7 +40,7 @@ public class ItemMinatoAqua extends Item
         if (!item.isEmpty() && Objects.requireNonNull(playerIn).canPlayerEdit(pos.offset(direction), direction, item) && !world.isRemote())
         {
             ServerWorld worldIn = (ServerWorld)world;
-            tree.attemptGrowTree(worldIn, worldIn.getChunkProvider().getChunkGenerator(), pos, BlockExampleContainer.BLOCK_CHERRY_LOG.getDefaultState(), rand);
+            tree.attemptGrowTree(worldIn, worldIn.getChunkProvider().getChunkGenerator(), pos, BlockRegistryHandler.CHERRY_LOG.get().getDefaultState(), rand);
             return ActionResultType.SUCCESS;
         }
         else return ActionResultType.FAIL;

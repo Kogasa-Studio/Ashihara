@@ -1,16 +1,21 @@
 package kogasastudio.ashihara.block;
 
+import kogasastudio.ashihara.block.tileentities.MarkableLanternTE;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.loot.LootContext;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.Direction;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
@@ -21,6 +26,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -38,6 +44,19 @@ public class BlockHangingLanternLong extends BlockLantern
             .sound(SoundType.BAMBOO_SAPLING)
             .setLightLevel(getLightValueLit(15))
         );
+    }
+
+    @Override
+    public boolean hasTileEntity(BlockState state)
+    {
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world)
+    {
+        return new MarkableLanternTE();
     }
 
     @Override
@@ -86,5 +105,25 @@ public class BlockHangingLanternLong extends BlockLantern
     public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
     {
         return !this.isValidPosition(stateIn, worldIn, currentPos) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+    }
+
+    @Override
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    {
+        if(player.getHeldItem(handIn).getItem() == Items.AIR)
+        {
+            Random random = new Random();
+            Boolean instantState = worldIn.getBlockState(pos).get(LIT);
+            worldIn.playSound(player, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
+            worldIn.setBlockState(pos, state.with(LIT, !instantState));
+            return ActionResultType.SUCCESS;
+        }
+        else if (player.getHeldItem(handIn).getItem() == ItemRegistryHandler.KOISHI.get())
+        {
+            MarkableLanternTE te = (MarkableLanternTE) worldIn.getTileEntity(pos);
+            if (te != null) {te.nextIcon();return ActionResultType.SUCCESS;}
+            else return ActionResultType.PASS;
+        }
+        else return ActionResultType.PASS;
     }
 }

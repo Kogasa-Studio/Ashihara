@@ -4,9 +4,9 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.WoodButtonBlock;
 import net.minecraft.block.material.Material;
 
-public class BlockCherryButton extends WoodButtonBlock
+public class SimpleButtonBlock extends WoodButtonBlock
 {
-    public BlockCherryButton()
+    public SimpleButtonBlock()
     {
         super
         (

@@ -44,6 +44,8 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
     public static final BooleanProperty ISLINKEDTOSOURCE = BooleanProperty.create("haswaterinside");
     public static final IntegerProperty LEVEL = IntegerProperty.create("level",4,8);
 
+    private boolean matchesWaterField(BlockState state){return state.matchesBlock(BlockRegistryHandler.BLOCK_WATER_FIELD.get());}
+
     private boolean hasExit(World worldIn, BlockPos pos)
     {
         boolean flag = false;
@@ -152,7 +154,7 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) //那一大堆判定
     {
         BlockState fromState = worldIn.getBlockState(fromPos);
-        if (!fromState.matchesBlock(BlockExampleContainer.BLOCK_RICE_CROP))
+        if (!fromState.matchesBlock(BlockRegistryHandler.BLOCK_RICE_CROP.get()))
         {
             boolean watered = fourWaysFluidsIncludesWater(worldIn, pos);
             boolean hasExit = hasExit(worldIn, pos);
@@ -169,7 +171,7 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
                     onScheduleTick(worldIn, pos, 10);
                 }
             }
-            if (fromState.matchesBlock(BlockExampleContainer.BLOCK_WATER_FIELD))
+            if (matchesWaterField(fromState))
             {
                 int levelF = fromState.get(LEVEL);
                 boolean boolF = fromState.get(ISLINKEDTOSOURCE);
@@ -239,13 +241,13 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
         //用来延时状态反弹
         if (watered)
         {
-            if (n.matchesBlock(BlockExampleContainer.BLOCK_WATER_FIELD) && !n.get(ISLINKEDTOSOURCE))
+            if (matchesWaterField(n) && !n.get(ISLINKEDTOSOURCE))
             {worldIn.setBlockState(pos.north(), n.with(ISLINKEDTOSOURCE, true));/*LOGGER.info("nfucked x: " + pos.north().getX() + "z: " + pos.getZ());*/}
-            if (e.matchesBlock(BlockExampleContainer.BLOCK_WATER_FIELD) && !e.get(ISLINKEDTOSOURCE))
+            if (matchesWaterField(e) && !e.get(ISLINKEDTOSOURCE))
             {worldIn.setBlockState(pos.east(), e.with(ISLINKEDTOSOURCE, true));/*LOGGER.info("efucked x: " + pos.east().getX() + "z: " + pos.getZ());*/}
-            if (s.matchesBlock(BlockExampleContainer.BLOCK_WATER_FIELD) && !s.get(ISLINKEDTOSOURCE))
+            if (matchesWaterField(s) && !s.get(ISLINKEDTOSOURCE))
             {worldIn.setBlockState(pos.south(), s.with(ISLINKEDTOSOURCE, true));/*LOGGER.info("sfucked x: " + pos.south().getX() + "z: " + pos.getZ());*/}
-            if (w.matchesBlock(BlockExampleContainer.BLOCK_WATER_FIELD) && !w.get(ISLINKEDTOSOURCE))
+            if (matchesWaterField(w) && !w.get(ISLINKEDTOSOURCE))
             {worldIn.setBlockState(pos.west(), w.with(ISLINKEDTOSOURCE, true));/*LOGGER.info("wfucked x: " + pos.west().getX() + "z: " + pos.getZ());*/}
         }
     }
@@ -261,22 +263,22 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
         BlockState e = worldIn.getBlockState(pos.east());
         BlockState s = worldIn.getBlockState(pos.south());
         BlockState w = worldIn.getBlockState(pos.west());
-        if (n.matchesBlock(BlockExampleContainer.BLOCK_WATER_FIELD))
+        if (matchesWaterField(n))
         {
             if (n.get(ISLINKEDTOSOURCE)) {watered = true;}
             if (n.get(LEVEL) > level) {level = n.get(LEVEL);}
         }
-        if (e.matchesBlock(BlockExampleContainer.BLOCK_WATER_FIELD))
+        if (matchesWaterField(e))
         {
             if (e.get(ISLINKEDTOSOURCE)) {watered = true;}
             if (e.get(LEVEL) > level) {level = e.get(LEVEL);}
         }
-        if (s.matchesBlock(BlockExampleContainer.BLOCK_WATER_FIELD))
+        if (matchesWaterField(s))
         {
             if (s.get(ISLINKEDTOSOURCE)) {watered = true;}
             if (s.get(LEVEL) > level) {level = s.get(LEVEL);}
         }
-        if (w.matchesBlock(BlockExampleContainer.BLOCK_WATER_FIELD))
+        if (matchesWaterField(w))
         {
             if (w.get(ISLINKEDTOSOURCE)) {watered = true;}
             if (w.get(LEVEL) > level) {level = w.get(LEVEL);}

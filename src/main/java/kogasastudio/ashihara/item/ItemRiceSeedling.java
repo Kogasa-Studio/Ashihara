@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.item;
 
-import kogasastudio.ashihara.block.BlockExampleContainer;
+import kogasastudio.ashihara.block.BlockRegistryHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,9 +30,9 @@ public class ItemRiceSeedling extends Item
         if (!item.isEmpty() && Objects.requireNonNull(player).canPlayerEdit(pos.offset(facing), facing, item))
         {
             BlockState state = worldIn.getBlockState(pos.up());
-            if (state.getBlock() == BlockExampleContainer.BLOCK_WATER_FIELD && worldIn.getBlockState(pos.up(2)).getBlock() == Blocks.AIR)
+            if (state.matchesBlock(BlockRegistryHandler.BLOCK_WATER_FIELD.get()) && worldIn.getBlockState(pos.up(2)).getBlock() == Blocks.AIR)
             {
-                worldIn.setBlockState(pos.up(2), BlockExampleContainer.BLOCK_RICE_CROP.getDefaultState());
+                worldIn.setBlockState(pos.up(2), BlockRegistryHandler.BLOCK_RICE_CROP.get().getDefaultState());
                 if (!player.abilities.isCreativeMode) {item.shrink(1);}
                 return ActionResultType.SUCCESS;
             }

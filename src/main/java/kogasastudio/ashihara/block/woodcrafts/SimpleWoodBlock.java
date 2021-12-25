@@ -1,13 +1,13 @@
-package kogasastudio.ashihara.block;
+package kogasastudio.ashihara.block.woodcrafts;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 
-public class BlockCherryWood extends RotatedPillarBlock
+public class SimpleWoodBlock extends RotatedPillarBlock
 {
-    public BlockCherryWood()
+    public SimpleWoodBlock()
     {
         super
         (

@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.item;
 
-import kogasastudio.ashihara.block.BlockExampleContainer;
+import kogasastudio.ashihara.block.BlockRegistryHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -33,7 +33,7 @@ public class ItemUnthreshedRice extends Item
             BlockState state = worldIn.getBlockState(pos.up());
             if (state.getBlock() == Blocks.FARMLAND && worldIn.getBlockState(pos.up(2)).getBlock() == Blocks.AIR)
             {
-                worldIn.setBlockState(pos.up(2), BlockExampleContainer.BLOCK_IMMATURE_RICE.getDefaultState());
+                worldIn.setBlockState(pos.up(2), BlockRegistryHandler.BLOCK_IMMATURE_RICE.get().getDefaultState());
                 if (!player.isCreative()) {item.shrink(1);}
                 return ActionResultType.SUCCESS;
             }

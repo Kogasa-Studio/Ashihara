@@ -1,19 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
   "group": "wooden_fence",
-  "pattern": [
+  "pattern":
+  [
     "W#W",
     "W#W"
   ],
-  "key": {
-    "#": {
-      "item": "minecraft:stick"
-    },
-    "W": {
-      "item": "ashihara:cherry_planks"
-    }
+  "key":
+  {
+    "#": {"item": "minecraft:stick"},
+    "W": {"item": "ashihara:cherry_planks"}
   },
-  "result": {
+  "result":
+  {
     "item": "ashihara:cherry_fence",
     "count": 3
   }

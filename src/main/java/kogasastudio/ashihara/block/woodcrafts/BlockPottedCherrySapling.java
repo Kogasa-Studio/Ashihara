@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.block.woodcrafts;
 
-import kogasastudio.ashihara.block.BlockExampleContainer;
+import kogasastudio.ashihara.block.BlockRegistryHandler;
 import net.minecraft.block.FlowerPotBlock;
 import net.minecraft.block.material.Material;
 
@@ -10,7 +10,7 @@ public class BlockPottedCherrySapling extends FlowerPotBlock
     {
         super
         (
-            BlockExampleContainer.BLOCK_CHERRY_SAPLING,
+            BlockRegistryHandler.CHERRY_SAPLING.get(),
             Properties.create(Material.MISCELLANEOUS)
             .zeroHardnessAndResistance()
             .notSolid()

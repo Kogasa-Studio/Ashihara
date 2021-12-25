@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "ashihara:block/red_woodcrafts/red_slab"
+    },
+    "type=double": {
+      "model": "ashihara:block/red_woodcrafts/red_planks"
+    },
+    "type=top": {
+      "model": "ashihara:block/red_woodcrafts/red_slab_top"
+    }
+  }
+}

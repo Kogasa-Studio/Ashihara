@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.event;
 
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.block.BlockExampleContainer;
+import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.item.ItemExmpleContainer;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -43,7 +43,7 @@ public class BasicEventHandler
             if(item.getItem() instanceof ShovelItem && (clickState.matchesBlock(Blocks.DIRT) || (player.isSneaking() && clickState.matchesBlock(Blocks.GRASS_PATH))))
             {
                 world.playSound(player, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                world.setBlockState(pos, BlockExampleContainer.BLOCK_DIRT_DEPRESSION.getDefaultState());
+                world.setBlockState(pos, BlockRegistryHandler.BLOCK_DIRT_DEPRESSION.get().getDefaultState());
                 player.swingArm(event.getHand());
                 InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY() + 0.5F, pos.getZ(), new ItemStack(ItemExmpleContainer.DIRT_BALL));
                 if(!player.abilities.isCreativeMode) {item.damageItem(1, player, (playerEntity) -> player.sendBreakAnimation(event.getHand()));}
@@ -68,13 +68,13 @@ public class BasicEventHandler
             pos.down(),
             context.isInside()
         );
-        if (clickState.matchesBlock(BlockExampleContainer.BLOCK_DIRT_DEPRESSION))
+        if (clickState.matchesBlock(BlockRegistryHandler.BLOCK_DIRT_DEPRESSION.get()))
         {
             //相当于手动放置
             world.playSound(player, pos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, new Random().nextFloat() * 0.4F + 0.8F);
-            BlockState placement = BlockExampleContainer.BLOCK_WATER_FIELD.getStateForPlacement(new BlockItemUseContext(world, player, context.getHand(), context.getItem(), result));
+            BlockState placement = BlockRegistryHandler.BLOCK_WATER_FIELD.get().getStateForPlacement(new BlockItemUseContext(world, player, context.getHand(), context.getItem(), result));
             LOGGER_MAIN.info("在坐标 " + "x: " + result.getPos().getX() + ", y: " + result.getPos().getY() + ", z: " + result.getPos().getZ() + "进行检测");
-            world.setBlockState(pos, placement == null ? BlockExampleContainer.BLOCK_WATER_FIELD.getDefaultState() : placement, 1);
+            world.setBlockState(pos, placement == null ? BlockRegistryHandler.BLOCK_WATER_FIELD.get().getDefaultState() : placement, 1);
             if (player != null) {player.swingArm(context.getHand());}
             if (player != null && !player.abilities.isCreativeMode) {context.getItem().damageItem(1, player, (playerEntity) -> player.sendBreakAnimation(context.getHand()));}
         }

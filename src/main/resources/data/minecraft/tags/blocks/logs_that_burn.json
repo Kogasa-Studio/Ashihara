@@ -2,6 +2,7 @@
   "replace": false,
   "values":
      [
-        "#ashihara:cherry_logs"
+        "#ashihara:cherry_logs",
+       "ashihara:stripped_red_log"
      ]
 }

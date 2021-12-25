@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.item;
 
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.block.BlockHydrangeaBush;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.item.foods.*;
 import net.minecraft.item.BlockItem;
@@ -47,14 +48,6 @@ public class ItemRegistryHandler
     //TODO: public static final RegistryObject<Item>  = ITEMS.register("", () -> new BlockItem(BlockRegistryHandler. .get(), new Item.Properties().group(ASHIHARA)));
     public static final RegistryObject<Item> ITEM_DIRT_DEPRESSION = ITEMS.register("dirt_depression", () -> new BlockItem(BlockRegistryHandler.BLOCK_DIRT_DEPRESSION.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
     public static final RegistryObject<Item> ITEM_WATER_FIELD = ITEMS.register("water_field", () -> new BlockItem(BlockRegistryHandler.BLOCK_WATER_FIELD.get(), new Item.Properties().group(ItemGroup.BUILDING_BLOCKS)));
-    public static final RegistryObject<Item> ITEM_CHERRY_LOG = ITEMS.register("cherry_log", () -> new BlockItem(BlockRegistryHandler.CHERRY_LOG.get(), new Item.Properties().group(ASHIHARA)));
-    public static final RegistryObject<Item> ITEM_CHERRY_PLANKS = ITEMS.register("cherry_planks", () -> new BlockItem(BlockRegistryHandler.CHERRY_PLANKS.get(), new Item.Properties().group(ASHIHARA)));
-    public static final RegistryObject<Item> ITEM_CHERRY_WOOD = ITEMS.register("cherry_wood", () -> new BlockItem(BlockRegistryHandler.CHERRY_WOOD.get(), new Item.Properties().group(ASHIHARA)));
-    public static final RegistryObject<Item> ITEM_CHERRY_STAIRS = ITEMS.register("cherry_stairs", () -> new BlockItem(BlockRegistryHandler.CHERRY_STAIRS.get(), new Item.Properties().group(ASHIHARA)));
-    public static final RegistryObject<Item> ITEM_CHERRY_SLAB = ITEMS.register("cherry_slab", () -> new BlockItem(BlockRegistryHandler.CHERRY_SLAB.get(), new Item.Properties().group(ASHIHARA)));
-    public static final RegistryObject<Item> ITEM_CHERRY_FENCE = ITEMS.register("cherry_fence", () -> new BlockItem(BlockRegistryHandler.CHERRY_FENCE.get(), new Item.Properties().group(ASHIHARA)));
-    public static final RegistryObject<Item> ITEM_CHERRY_FENCE_GATE = ITEMS.register("cherry_fence_gate", () -> new BlockItem(BlockRegistryHandler.CHERRY_FENCE_GATE.get(), new Item.Properties().group(ASHIHARA)));
-    public static final RegistryObject<Item> ITEM_CHERRY_BUTTON = ITEMS.register("cherry_button", () -> new BlockItem(BlockRegistryHandler.CHERRY_BUTTON.get(), new Item.Properties().group(ASHIHARA)));
     public static final RegistryObject<Item> ITEM_CHERRY_BLOSSOM = ITEMS.register("cherry_blossom", () -> new BlockItem(BlockRegistryHandler.CHERRY_BLOSSOM.get(), new Item.Properties().group(ASHIHARA)));
     public static final RegistryObject<Item> ITEM_FALLEN_SAKURA = ITEMS.register("fallen_sakura", () -> new BlockItem(BlockRegistryHandler.FALLEN_SAKURA.get(), new Item.Properties().group(ASHIHARA)));
     public static final RegistryObject<Item> ITEM_CHERRY_SAPLING = ITEMS.register("cherry_sapling", () -> new BlockItem(BlockRegistryHandler.CHERRY_SAPLING.get(), new Item.Properties().group(ASHIHARA)));
@@ -67,4 +60,24 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> CHRYSANTHEMUM = ITEMS.register("chrysanthemum", () -> new BlockItem(BlockRegistryHandler.CHRYSANTHEMUM.get(), new Item.Properties().group(ASHIHARA)));
     public static final RegistryObject<Item> REED = ITEMS.register("reed", () -> new BlockItem(BlockRegistryHandler.BLOCK_REED.get(), new Item.Properties().group(ASHIHARA)));
     public static final RegistryObject<Item> SHORTER_REED = ITEMS.register("shorter_reed", () -> new BlockItem(BlockRegistryHandler.BLOCK_SHORTER_REED.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> MILL = ITEMS.register("mill", () -> new BlockItem(BlockRegistryHandler.MILL.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> STONE_LANTERN = ITEMS.register("stone_lantern", () -> new BlockItem(BlockRegistryHandler.STONE_LANTERN.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> HYDRANGEA_BUSH = ITEMS.register("hydrangea_bush", () -> new BlockItem(BlockRegistryHandler.HYDRANGEA_BUSH.get(), new Item.Properties().group(ASHIHARA)));
+
+    //木制品
+    public static final RegistryObject<Item> CHERRY_LOG = ITEMS.register("cherry_log", () -> new BlockItem(BlockRegistryHandler.CHERRY_LOG.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> CHERRY_WOOD = ITEMS.register("cherry_wood", () -> new BlockItem(BlockRegistryHandler.CHERRY_WOOD.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> CHERRY_PLANKS = ITEMS.register("cherry_planks", () -> new BlockItem(BlockRegistryHandler.CHERRY_PLANKS.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> CHERRY_STAIRS = ITEMS.register("cherry_stairs", () -> new BlockItem(BlockRegistryHandler.CHERRY_STAIRS.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> CHERRY_SLAB = ITEMS.register("cherry_slab", () -> new BlockItem(BlockRegistryHandler.CHERRY_SLAB.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> CHERRY_FENCE = ITEMS.register("cherry_fence", () -> new BlockItem(BlockRegistryHandler.CHERRY_FENCE.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> CHERRY_FENCE_GATE = ITEMS.register("cherry_fence_gate", () -> new BlockItem(BlockRegistryHandler.CHERRY_FENCE_GATE.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> CHERRY_BUTTON = ITEMS.register("cherry_button", () -> new BlockItem(BlockRegistryHandler.CHERRY_BUTTON.get(), new Item.Properties().group(ASHIHARA)));
+
+    public static final RegistryObject<Item> STRIPPED_RED_LOG = ITEMS.register("stripped_red_log", () -> new BlockItem(BlockRegistryHandler.STRIPPED_RED_LOG.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> RED_PLANKS = ITEMS.register("red_planks", () -> new BlockItem(BlockRegistryHandler.RED_PLANKS.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> RED_STAIRS = ITEMS.register("red_stairs", () -> new BlockItem(BlockRegistryHandler.RED_STAIRS.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> RED_SLAB = ITEMS.register("red_slab", () -> new BlockItem(BlockRegistryHandler.RED_SLAB.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> RED_FENCE = ITEMS.register("red_fence", () -> new BlockItem(BlockRegistryHandler.RED_FENCE.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> RED_FENCE_GATE = ITEMS.register("red_fence_gate", () -> new BlockItem(BlockRegistryHandler.RED_FENCE_GATE.get(), new Item.Properties().group(ASHIHARA)));
 }

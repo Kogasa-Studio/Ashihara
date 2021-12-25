@@ -1,0 +1,9 @@
+{
+  "multipart":
+  [
+    {"when": {"facing": "east"},"apply": {"model": "ashihara:block/mill", "y": 270}},
+    {"when": {"facing": "north"},"apply": {"model": "ashihara:block/mill", "y": 180}},
+    {"when": {"facing": "south"},"apply": {"model": "ashihara:block/mill"}},
+    {"when": {"facing": "west"},"apply": {"model": "ashihara:block/mill", "y": 90}}
+  ]
+}
