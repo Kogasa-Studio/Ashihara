@@ -22,6 +22,8 @@
   "item.ashihara.onigiri": "お握り",
   "item.ashihara.tamago": "魚卵",
   "item.ashihara.bloomed_hydrangea_bush": "紫陽花",
+  "item.ashihara.iron_ore_shatter": "鉄鉱石の砂利",
+  "item.ashihara.stone_shatter": "石の砂利",
 
   "block.ashihara.water_field": "水田",
   "block.ashihara.dirt_depression": "漥",
@@ -59,8 +61,10 @@
   "block.ashihara.red_fence_gate": "赤い木のフェンスゲート",
 
   "itemGroup.group_ashihara": "葦原",
+  "itemGroup.group_ash_materials": "葦原-材料",
 
   "gui.ashihara.mill": "石臼",
+  "gui.ashihara.mortar": "臼",
 
   "item.ashihara.dirt_ball_don.projectile": "§d§l§o これ何...",
   "item.ashihara.dirt_ball_don.projectile_1": "§9§l§o丼でしょか...ならばこちは食べるいいかなぁ..."

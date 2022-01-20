@@ -1,0 +1,13 @@
+{
+  "type": "ashihara:mortar",
+  "ingredients":
+  [
+    {"item": "ashihara:unthreshed_rice"}
+  ],
+  "result":
+  [
+    {"item": "ashihara:rice"}
+  ],
+  "sequence": [1, 1, 1, 1, 0],
+  "recipeType": 0
+}

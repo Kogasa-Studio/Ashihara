@@ -4,7 +4,6 @@ import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.block.BlockWaterField;
 import kogasastudio.ashihara.client.particles.GenericParticleData;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
-import kogasastudio.ashihara.interaction.recipe.MillRecipes;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,8 +21,6 @@ import net.minecraft.world.World;
 
 import java.util.Objects;
 import java.util.Random;
-
-import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
 
 public class ItemKoishi extends Item
 {
@@ -52,7 +49,6 @@ public class ItemKoishi extends Item
                 {
                     item.shrink(1);
                 }
-                LOGGER_MAIN.info(MillRecipes.RICE_TO_RICE_POWDER.toString());
                 return ActionResultType.SUCCESS;
             }
             else if (blockState.getBlock() == BlockRegistryHandler.BLOCK_WATER_FIELD.get())

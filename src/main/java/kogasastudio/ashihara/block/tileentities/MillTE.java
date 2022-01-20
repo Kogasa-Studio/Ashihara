@@ -10,47 +10,47 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.util.IIntArray;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 import javax.annotation.Nullable;
 
-import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
-import static kogasastudio.ashihara.interaction.recipe.MillRecipes.getRecipes;
+import java.util.Optional;
 
 public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, INamedContainerProvider
 {
     public MillTE() {super(TERegistryHandler.MILL_TE.get());}
 
-    public Inventory input = new Inventory(4);
+    public ItemStackHandler input = new ItemStackHandler(4);
     public Inventory output = new Inventory(4);
     public byte round; //现在已经转的圈数
     public byte roundTotal; //完成这个配方需要转的总圈数, 由所选配方决定
     public int roundProgress; //现在正在转的这一圈的进度
     public int roundTicks; //每转一圈所需要的时间, 由所选配方决定
+    public float exp; //转完配方可以得到的经验，由所选配方决定
     public boolean isWorking;
     private MillRecipe recipe;
     public IIntArray millData = new IIntArray()
     {
-        int a = 0;
-        int b = 0;
-        int c = 0;
-        int d = 0;
-
         public int get(int index)
         {
             switch (index)
             {
-                case 0:return a;
-                case 1:return b;
-                case 2:return c;
-                case 3:return d;
+                case 0:return round;
+                case 1:return roundTotal;
+                case 2:return roundProgress;
+                case 3:return roundTicks;
                 default:return 0;
             }
         }
@@ -59,49 +59,103 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
         {
             switch (index)
             {
-                case 0:a = value;break;
-                case 1:b = value;break;
-                case 2:c = value;break;
-                case 3:d = value;
+                case 0:round = (byte) value;break;
+                case 1:roundTotal = (byte) value;break;
+                case 2:roundProgress = value;break;
+                case 3:roundTicks = value;
             }
         }
 
         public int size () {return 4;}
     };
 
-    private boolean tryMatchRecipe(MillRecipe recipeIn)
+    private Optional<MillRecipe> tryMatchRecipe(RecipeWrapper wrapper)
     {
-        if(world.isRemote) return false;
-        return recipeIn.tryApply(input);
+        if(world == null) return Optional.empty();
+
+        return world.getRecipeManager().getRecipe(MillRecipe.TYPE, wrapper, world);
+    }
+
+    private boolean hasInput()
+    {
+        for (int i = 0; i < 4; i += 1) {if (!input.getStackInSlot(i).isEmpty()) return true;}
+        return false;
+    }
+
+    //检测当前匹配的配方其产出物是否能够填充进输出栏
+    private boolean canProduce(MillRecipe recipe)
+    {
+        boolean flag = false;
+        if (hasInput())
+        {
+            NonNullList<ItemStack> outputIn = recipe.getCraftingResult();//配方产物列表
+            if (this.output.isEmpty()) flag = true;
+            else
+            {
+                int availableSlotCount = 0;
+                int emptySlotCount = 0;
+                /*遍历给定产物的每一个物品并遍历当前输出栏的每一个格子
+                若格子为空，空格子数+1
+                若物品可以与格子中物品合并，有效格数+1 23 68 65
+                若对于产出的每一个物品，都至少有一个不重复的格子可用，
+                即空格子数+有效格子数大于给定产物的种数，则输出true*/
+                for (ItemStack stack : outputIn)
+                {
+                    for (int j = 0; j < 4; j += 1) {if (output.getStackInSlot(j).isEmpty()) {emptySlotCount += 1;}}
+                    for (int i = 0; i < 4; i += 1)
+                    {
+                        if (!output.getStackInSlot(i).isEmpty() && output.isItemValidForSlot(i, stack))
+                        {
+                            ItemStack stackInstant = output.getStackInSlot(i);
+                            if (stack.isItemEqual(stackInstant) && stack.getCount() + stackInstant.getCount() <= stackInstant.getMaxStackSize())
+                            {availableSlotCount += 1;break;}
+                        }
+                    }
+                }
+                if (availableSlotCount + emptySlotCount >= outputIn.size()) flag = true;
+            }
+        }
+        return flag;
     }
 
     private void applyRecipe(MillRecipe recipeIn)
     {
-        round = 0;
-        roundProgress = 0;
-        roundTotal = recipeIn.round;
-        roundTicks = recipeIn.roundTicks;
-        recipe = recipeIn;
-        isWorking = true;
+        this.round = 0;
+        this.roundProgress = 0;
+        this.roundTotal = recipeIn.round;
+        this.roundTicks = recipeIn.roundTicks;
+        this.exp = recipeIn.exp;
+        this.recipe = recipeIn;
+        this.isWorking = true;
+        this.sync();
         markDirty();
-        LOGGER_MAIN.info("recipe " + recipeIn.toString() + " applied");
     }
 
     //结束时调用, 将te重置并生成产出物
     private void finishReciping(MillRecipe recipeIn)
     {
-        round = 0;roundTotal = 0;roundProgress = 0;roundTicks = 0;isWorking = false;recipe = null;
-        millData.set(0, 0);
-        millData.set(1, 0);
-        millData.set(2, 0);
-        millData.set(3, 0);
+        this.round = 0;
+        this.roundTotal = 0;
+        this.roundProgress = 0;
+        this.roundTicks = 0;
+        this.isWorking = false;
         if (recipeIn != null)
         {
-            for (ItemStack stack : recipeIn.getPeeledOutput())
+            if (recipeIn.getCraftingResult() != null)
             {
-                output.addItem(stack);
+                for (ItemStack stack : this.recipe.getCraftingResult()) {output.addItem(stack);}
+            }
+            for (Ingredient ingredient : recipeIn.getIngredients())
+            {
+                for (int i = 0; i < this.input.getSlots(); i += 1)
+                {
+                    ItemStack stack = this.input.getStackInSlot(i);
+                    if (!stack.isEmpty() && ingredient.test(stack)) {stack.shrink(recipeIn.getCosts(ingredient));break;}
+                }
             }
         }
+        this.recipe = null;
+        this.sync();
         markDirty();
     }
 
@@ -111,48 +165,51 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
         return this.roundTicks != 0 ? 360 * this.roundProgress / this.roundTicks : 0;
     }
 
-    public Inventory getInput() {return input;}
+    public ItemStackHandler getInput()
+    {
+        return input;
+    }
     public Inventory getOutput() {return output;}
 
     @Override
     public void read(BlockState state, CompoundNBT nbt)
     {
-        round = nbt.getByte("round");
-        roundTotal = nbt.getByte("roundTotal");
-        roundProgress = nbt.getInt("roundProgress");
-        roundTicks = nbt.getInt("roundTicks");
-        input.read(nbt.getList("input", 10));
-        output.read(nbt.getList("output", 10));
+        this.round = nbt.getByte("round");
+        this.roundTotal = nbt.getByte("roundTotal");
+        this.roundProgress = nbt.getInt("roundProgress");
+        this.roundTicks = nbt.getInt("roundTicks");
+        this.input.deserializeNBT(nbt.getCompound("input"));
+        this.output.read(nbt.getList("output", 10));
         super.read(state, nbt);
     }
 
     @Override
     public CompoundNBT write(CompoundNBT compound)
     {
-        compound.putByte("round", round);
-        compound.putByte("roundTotal", roundTotal);
-        compound.putInt("roundProgress", roundProgress);
-        compound.putInt("roundTicks", roundTicks);
-        compound.put("input", input.write());
-        compound.put("output", output.write());
+        compound.putByte("round", this.round);
+        compound.putByte("roundTotal", this.roundTotal);
+        compound.putInt("roundProgress", this.roundProgress);
+        compound.putInt("roundTicks", this.roundTicks);
+        compound.put("input", this.input.serializeNBT());
+        compound.put("output", this.output.write());
         return super.write(compound);
     }
 
     @Override
     public void tick()
     {
+        if (this.world == null) return;
+
         if (!this.world.isRemote())
         {
-            if (!input.isEmpty())
+            if (hasInput())
             {
-                millData.set(0, round);
-                millData.set(1, roundTotal);
-                millData.set(2, roundProgress);
-                millData.set(3, roundTicks);
                 boolean matchAny = false;
-                for (MillRecipe recipeIn : getRecipes())
+                Optional<MillRecipe> recipeIn = tryMatchRecipe(new RecipeWrapper(input));
+                if (recipeIn.isPresent() && canProduce(recipeIn.get()))
                 {
-                    if (tryMatchRecipe(recipeIn)) {if (!(recipe == recipeIn)) {applyRecipe(recipeIn);}matchAny = true;break;}
+                    if (this.recipe == null || !this.recipe.equals(recipeIn.get())) applyRecipe(recipeIn.get());
+                    matchAny = true;
                 }
                 if (!matchAny) {finishReciping(null);}
                 if (isWorking)
@@ -162,12 +219,12 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
                     {
                         if (roundProgress == roundTicks) {roundProgress = 0; round += 1;}
                         else {roundProgress += 1;}
+                        this.sync();
                         markDirty();
                     }
                 }
             }
             else if (isWorking) finishReciping(null);
-            this.sync();
         }
     }
 
@@ -178,19 +235,26 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     @Override
     public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_)
     {
+        if (this.world == null) return null;
         return new MillContainer(p_createMenu_1_, p_createMenu_2_, this.world, this.pos, this.millData);
     }
 
     private void sync()
     {
+        if (this.world == null) return;
         CompoundNBT nbt = new CompoundNBT();
-        nbt.putByte("round", this.round);
-        nbt.putByte("roundTotal", this.roundTotal);
         nbt.putInt("roundProgress", this.roundProgress);
         nbt.putInt("roundTicks", this.roundTicks);
-        nbt.putBoolean("isWorking", this.isWorking);
         SUpdateTileEntityPacket p = new SUpdateTileEntityPacket(this.pos, 1, nbt);
         ((ServerWorld)this.world).getChunkProvider().chunkManager.getTrackingPlayers(new ChunkPos(this.pos), false)
         .forEach(k -> k.connection.sendPacket(p));
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
+    {
+        CompoundNBT nbt = pkt.getNbtCompound();
+        this.roundProgress = nbt.getInt("roundProgress");
+        this.roundTicks = nbt.getInt("roundTicks");
     }
 }

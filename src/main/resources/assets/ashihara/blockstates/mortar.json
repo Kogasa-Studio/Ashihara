@@ -5,13 +5,9 @@
     {"when": {"facing": "north"},"apply": {"model": "ashihara:block/mortar/mortar", "y": 180}},
     {"when": {"facing": "south"},"apply": {"model": "ashihara:block/mortar/mortar"}},
     {"when": {"facing": "west"},"apply": {"model": "ashihara:block/mortar/mortar", "y": 90}},
-    {"when": {"level": 1, "process": "0|1|2|3"},"apply": {"model": "ashihara:block/mortar/mortar_l1_u"}},
-    {"when": {"level": 2, "process": "0|1|2|3"},"apply": {"model": "ashihara:block/mortar/mortar_l2_u"}},
-    {"when": {"level": 3, "process": "0|1|2|3"},"apply": {"model": "ashihara:block/mortar/mortar_l3_u"}},
-    {"when": {"level": 4, "process": "0|1|2|3"},"apply": {"model": "ashihara:block/mortar/mortar_l4_u"}},
-    {"when": {"level": 1, "process": 4},"apply": {"model": "ashihara:block/mortar/mortar_l1_r"}},
-    {"when": {"level": 2, "process": 4},"apply": {"model": "ashihara:block/mortar/mortar_l2_r"}},
-    {"when": {"level": 3, "process": 4},"apply": {"model": "ashihara:block/mortar/mortar_l3_r"}},
-    {"when": {"level": 4, "process": 4},"apply": {"model": "ashihara:block/mortar/mortar_l4_r"}}
+    {"when": {"level": 1},"apply": {"model": "ashihara:block/mortar/mortar_l1_u"}},
+    {"when": {"level": 2},"apply": {"model": "ashihara:block/mortar/mortar_l2_u"}},
+    {"when": {"level": 3},"apply": {"model": "ashihara:block/mortar/mortar_l3_u"}},
+    {"when": {"level": 4},"apply": {"model": "ashihara:block/mortar/mortar_l4_u"}}
   ]
 }

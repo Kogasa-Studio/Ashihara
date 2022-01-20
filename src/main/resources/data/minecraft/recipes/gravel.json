@@ -5,10 +5,10 @@
     "oo",
     "oo"
   ],
-  "key": {"o": {"item": "ashihara:dirt_ball"}},
+  "key": {"o": {"item": "ashihara:stone_shatter"}},
   "result":
   {
-    "item": "minecraft:dirt",
-    "count": 1
+    "item": "minecraft:gravel",
+    "count": 2
   }
 }

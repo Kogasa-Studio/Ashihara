@@ -1,18 +1,273 @@
 package kogasastudio.ashihara.block.tileentities;
 
-import net.minecraft.tileentity.TileEntity;
+import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.client.particles.GenericParticleData;
+import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
+import kogasastudio.ashihara.interaction.recipe.MortarRecipe;
+import kogasastudio.ashihara.inventory.container.MortarContainer;
+import kogasastudio.ashihara.item.ItemKoishi;
+import kogasastudio.ashihara.item.ItemRegistryHandler;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.RecipeWrapper;
 
-public class MortarTE extends TileEntity
+import java.util.Optional;
+import java.util.Random;
+
+import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
+
+public class MortarTE extends AshiharaMachineTE implements INamedContainerProvider
 {
     public MortarTE() {super(TERegistryHandler.MORTAR_TE.get());}
 
+    public MortarInventory contents = new MortarInventory(4);
+    public int progress;
+    public int progressTotal;
+    public byte pointer;
+    public boolean isWorking;
     /**
-     * 这个byte的不同值决定舂的状态和其中该含有的物品。
-     * 0 -> 稻谷
-     * 1 -> 白米
-     * 3 -> 待打制的麻糬
-     * 4 -> 待揉的麻糬
-     * 5 -> 作成的麻糬
+     * 0: 手
+     * 1: 杵
+     * 2: 大槌
      */
-    public byte stat;
+    public byte nextStep = -1;
+    public MortarRecipe recipe;
+    public IIntArray mortarData = new IIntArray()
+    {
+        public int get(int index)
+        {
+            switch (index)
+            {
+                case 0 : return progress;
+                case 1 : return progressTotal;
+                case 2 : return nextStep;
+                default: return 0;
+            }
+        }
+
+        public void set(int index, int value)
+        {
+            switch (index)
+            {
+                case 0 : progress = value;break;
+                case 1 : progressTotal = value;
+                case 2 : nextStep = (byte) value;
+            }
+        }
+
+        public int size () {return 3;}
+    };
+
+    public int getContentsActualSize() {return this.contents.getActualSize();}
+
+    private static class MortarInventory extends ItemStackHandler
+    {
+        public MortarInventory(int numSlots) {super(numSlots);}
+
+        public boolean isEmpty()
+        {
+            for (ItemStack stack : this.stacks) {if (!stack.isEmpty()) return false;}
+            return true;
+        }
+
+        public int getActualSize()
+        {
+            int i = 0;
+            for (ItemStack stack : this.stacks) {if (!stack.isEmpty()) i += 0;}
+            return i;
+        }
+
+        public void clear() {this.stacks = NonNullList.withSize(this.getSlots(), ItemStack.EMPTY);}
+
+        @Override
+        protected int getStackLimit(int slot, ItemStack stack) {return 1;}
+    }
+
+    private void process(boolean isSauceProcess)
+    {
+        this.progress += isSauceProcess ? this.nextStep : 1;
+        if (this.progress >= this.progressTotal) {finishReciping(this.recipe);markDirty();return;}
+        if (!this.isWorking) this.isWorking = true;
+        if (!isSauceProcess)
+        {
+            this.pointer += 1;
+            this.nextStep = this.recipe.sequence[this.pointer];
+        }
+        markDirty();
+    }
+
+    private boolean isNextStepNeeded(ItemStack stack)
+    {
+        switch (this.nextStep)
+        {
+            case 0 : return stack.isEmpty();
+            case 1 : return stack.getItem().equals(ItemRegistryHandler.PESTLE.get());
+            case 2 : return stack.getItem() instanceof ItemKoishi;
+        }
+        return false;
+    }
+
+    private Optional<MortarRecipe> tryMatchRecipe(RecipeWrapper wrapper)
+    {
+        if(world == null) return Optional.empty();
+
+        return world.getRecipeManager().getRecipe(MortarRecipe.TYPE, wrapper, world);
+    }
+
+    //检查当前状态, 若内容物匹配配方则尝试启用配方
+    private void notifyStateChanged()
+    {
+        Optional<MortarRecipe> recipeIn = tryMatchRecipe(new RecipeWrapper(this.contents));
+        if (recipeIn.isPresent())
+        {
+            if (this.recipe == null || !this.recipe.equals(recipeIn.get())) applyRecipe(recipeIn.get());
+        }
+        else finishReciping(null);
+    }
+
+    private void applyRecipe(MortarRecipe recipeIn)
+    {
+        this.progress = 0;
+        this.pointer = 0;
+
+        this.progressTotal = recipeIn.progress;
+        this.nextStep = recipeIn.recipeType == 2 ? -1 : recipeIn.sequence[this.pointer];
+        this.recipe = recipeIn;
+        LOGGER_MAIN.info("recipe applied: " + recipeIn.getInfo());
+        markDirty();
+    }
+
+    private void finishReciping(MortarRecipe recipeIn)
+    {
+        this.progress = 0;
+        this.progressTotal = 0;
+        this.pointer = -1;
+        this.nextStep = -1;
+        this.isWorking = false;
+        this.recipe = null;
+        if (recipeIn != null)
+        {
+            this.contents.clear();
+            for (int i = 0; i < recipeIn.getOutput().size(); i += 1)
+            {
+                ItemStack stack = recipeIn.getOutput().get(i);
+                if (!stack.isEmpty()) this.contents.setStackInSlot(i, stack);
+            }
+        }
+        LOGGER_MAIN.info("recipe finished");
+        markDirty();
+    }
+
+    //若不在工作状态中空手右击则取出物品，持物品右击则尝试将物品放入舂
+    public boolean notifyInteraction(ItemStack stackIn, PlayerEntity playerIn, World worldIn, BlockPos posIn, PlayerEntity player)
+    {
+        LOGGER_MAIN.info("notified interaction");
+        if (!(this.recipe == null) && isNextStepNeeded(stackIn))
+        {
+            LOGGER_MAIN.info("start to progress");
+            Random rand = new Random();
+            worldIn.playSound(player, posIn, SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            for(int i = 0; i < 12; i += 1)
+            {
+                worldIn.addParticle
+                (
+                    new GenericParticleData(new Vector3d(0,0,0), 0, ParticleRegistryHandler.RICE.get()),
+                    (double)posIn.getX() + 0.5D, (double)posIn.getY() + 0.5D,
+                    (double)posIn.getZ() + 0.5D, rand.nextFloat() / 2.0F,
+                    5.0E-5D,
+                    rand.nextFloat() / 2.0F
+                );
+            }
+            player.getCooldownTracker().setCooldown(stackIn.getItem(), 8);
+            if (!player.isCreative())
+            {
+                stackIn.damageItem(1, player, (playerEntity) -> player.sendBreakAnimation(EquipmentSlotType.MAINHAND));
+            }
+            process(this.recipe.recipeType == 2);
+            LOGGER_MAIN.info("processed");
+            LOGGER_MAIN.info("{\n    te_progress: " + this.mortarData.get(0) + ";\n    te_nextStep: " + this.mortarData.get(2) + ";\n}");
+            return true;
+        }
+        if (!this.isWorking)
+        {
+            for (int i = 0; i < this.contents.getSlots(); i += 1)
+            {
+                ItemStack stack = this.contents.getStackInSlot(i);
+                if (!stack.isEmpty() && stackIn.isEmpty())
+                {
+                    this.contents.setStackInSlot(i, ItemStack.EMPTY);
+                    notifyStateChanged();
+                    markDirty();
+                    InventoryHelper.spawnItemStack(worldIn, posIn.getX(), posIn.getY() + 0.5F, posIn.getZ(), stack);
+                    LOGGER_MAIN.info("Content item extracted");
+                    LOGGER_MAIN.info("{\n    te_progress: " + this.mortarData.get(0) + ";\n    te_nextStep: " + this.mortarData.get(2) + ";\n}");
+                    return true;
+                }
+                else if (stack.isEmpty() && stackIn.getItem().equals(ItemRegistryHandler.UNTHRESHED_RICE.get()))
+                {
+                    this.contents.insertItem(i, new ItemStack(stackIn.getItem()), false);
+                    stackIn.shrink(1);
+                    worldIn.playSound(player, posIn, SoundEvents.BLOCK_SAND_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    notifyStateChanged();
+                    markDirty();
+                    LOGGER_MAIN.info("Content item inserted");
+                    LOGGER_MAIN.info("{\n    te_progress: " + this.mortarData.get(0) + ";\n    te_nextStep: " + this.mortarData.get(2) + ";\n}");
+                    return true;
+                }
+            }
+        }
+        LOGGER_MAIN.info("{\n    te_progress: " + this.mortarData.get(0) + ";\n    te_nextStep: " + this.mortarData.get(2) + ";\n}");
+        return false;
+    }
+
+    @Override
+    public CompoundNBT write(CompoundNBT compound)
+    {
+        compound.putInt("progress", this.progress);
+        compound.putInt("progressTotal", this.progressTotal);
+        compound.putByte("pointer", this.pointer);
+        compound.putByte("nextStep", this.nextStep);
+        compound.putBoolean("isWorking", this.isWorking);
+        compound.put("contents", this.contents.serializeNBT());
+        return super.write(compound);
+    }
+
+    @Override
+    public void read(BlockState state, CompoundNBT nbt)
+    {
+        this.progress = nbt.getInt("progress");
+        this.progressTotal = nbt.getInt("progressTotal");
+        this.pointer = nbt.getByte("pointer");
+        this.nextStep = nbt.getByte("nextStep");
+        this.isWorking = nbt.getBoolean("isWorking");
+        this.contents.deserializeNBT(nbt.getCompound("contents"));
+        super.read(state, nbt);
+    }
+
+    @Override
+    public ITextComponent getDisplayName()
+    {
+        return new TranslationTextComponent("gui." + Ashihara.MODID + ".mortar");
+    }
+
+    @Override
+    public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_)
+    {
+        if (this.world == null) return null;
+        return new MortarContainer(p_createMenu_1_, p_createMenu_2_, this.world, this.pos, this.mortarData);
+    }
 }

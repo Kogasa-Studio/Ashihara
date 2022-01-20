@@ -3,15 +3,13 @@ package kogasastudio.ashihara.inventory.container;
 import kogasastudio.ashihara.block.tileentities.MillTE;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class MillContainer extends Container
+public class MillContainer extends AshiharaCommonContainer
 {
     private final IIntArray millData;
     public MillContainer(int id, PlayerInventory inventory, World worldIn, BlockPos posIn, IIntArray millDataIn)
@@ -75,58 +73,6 @@ public class MillContainer extends Container
         slot.onTake(playerIn, newStack);
 
         return oldStack;
-    }
-
-    /**
-     * 批量添加格子
-     * @param inventory 已存储的物品数据
-     * @param index 起始格子
-     * @param x x
-     * @param y y
-     * @param amount 要连续添加格子的个数
-     * @param dx 格子之间的距离
-     * @return 加格子后最后一个格子对应的格子序号
-     */
-    private int addSlotRange(IInventory inventory, int index, int x, int y, int amount, int dx)
-    {
-        for (int i = 0; i < amount; i++)
-        {
-            addSlot(new Slot(inventory, index, x, y));
-            x += dx;
-            index += 1;
-        }
-        return index;
-    }
-
-    /**
-     * 批量分行添加格子
-     * @param inventory 已存储的物品数据
-     * @param index 起始格子
-     * @param x x
-     * @param y y
-     * @param horAmount 行数
-     * @param dx 横着数格子间的距离
-     * @param verAmount 列数
-     * @param dy 竖着数格子间的距离
-     */
-    private void addSlotBox(IInventory inventory, int index, int x, int y, int horAmount, int dx, int verAmount, int dy)
-    {
-        for (int j = 0; j < verAmount; j++)
-        {
-            index = addSlotRange(inventory, index, x, y, horAmount, dx);
-            y += dy;
-        }
-    }
-
-    //将玩家的整个物品栏添加进container
-    private void layoutPlayerInventorySlots(IInventory inventory, int leftCol, int topRow)
-    {
-        //背包
-        addSlotBox(inventory, 9, leftCol, topRow, 9, 18, 3, 18);
-
-        //快捷栏
-        topRow += 58;
-        addSlotRange(inventory, 0, leftCol, topRow, 9, 18);
     }
 
     public int getArrowWidth()

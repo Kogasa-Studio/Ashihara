@@ -6,7 +6,6 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.properties.DoubleBlockHalf;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -40,7 +39,7 @@ public class BlockStoneLantern extends BlockDoubleLantern
         if (stateIn.get(LIT) && stateIn.get(HALF) == DoubleBlockHalf.UPPER)
         {
             double d0 = (double)pos.getX() + 0.5D;
-            double d1 = (double)pos.getY() + 0.09375D;
+            double d1 = (double)pos.getY() + 0.125D;
             double d2 = (double)pos.getZ() + 0.5D;
             worldIn.addParticle(ParticleTypes.FLAME, d0, d1, d2, 0.0D, 0.0D, 0.0D);
         }

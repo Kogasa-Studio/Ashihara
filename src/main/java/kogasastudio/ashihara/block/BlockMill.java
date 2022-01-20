@@ -1,7 +1,6 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.block.tileentities.MillTE;
-import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -11,7 +10,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
@@ -19,6 +17,7 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -30,8 +29,6 @@ import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BlockMill extends Block
 {
@@ -54,8 +51,14 @@ public class BlockMill extends Block
     {
         if (te instanceof MillTE)
         {
-            InventoryHelper.dropInventoryItems(worldIn, pos, ((MillTE) te).input);
-            InventoryHelper.dropInventoryItems(worldIn, pos, ((MillTE) te).output);
+            NonNullList<ItemStack> stacks = NonNullList.create();
+            for (int i = 0; i < ((MillTE) te).getInput().getSlots(); i += 1)
+            {
+                ItemStack stack1 =((MillTE) te).getInput().getStackInSlot(i);
+                if (!stack.isEmpty()) stacks.add(stack1);
+            }
+            InventoryHelper.dropItems(worldIn, pos, stacks);
+            InventoryHelper.dropInventoryItems(worldIn, pos, ((MillTE) te).getOutput());
         }
         super.harvestBlock(worldIn, player, pos, state, te, stack);
     }
@@ -64,14 +67,6 @@ public class BlockMill extends Block
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
         return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
-    }
-
-    @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
-    {
-        ArrayList<ItemStack> list = new ArrayList<>();
-        list.add(new ItemStack(ItemRegistryHandler.MILL.get()));
-        return list;
     }
 
     @Override

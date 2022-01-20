@@ -5,7 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 
-import static kogasastudio.ashihara.Ashihara.ASHIHARA;
+import static kogasastudio.ashihara.Ashihara.MATERIALS;
 
 public class ItemSakura extends Item
 {
@@ -13,7 +13,7 @@ public class ItemSakura extends Item
     {
         super
         (
-            new Properties().group(ASHIHARA)
+            new Properties().group(MATERIALS)
             .food(new Food.Builder().hunger(1).effect(new EffectInstance(Effects.INSTANT_HEALTH, 1, 1), 1.0F).build())
         );
     }

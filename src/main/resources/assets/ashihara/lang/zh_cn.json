@@ -22,6 +22,8 @@
   "item.ashihara.onigiri": "饭团",
   "item.ashihara.tamago": "鱼子",
   "item.ashihara.bloomed_hydrangea_bush": "紫阳花",
+  "item.ashihara.iron_ore_shatter": "铁矿碎块",
+  "item.ashihara.stone_shatter": "碎石",
 
   "block.ashihara.water_field": "水田",
   "block.ashihara.dirt_depression": "土洼",
@@ -59,8 +61,10 @@
   "block.ashihara.red_fence_gate": "朱木栅栏门",
 
   "itemGroup.group_ashihara": "苇原",
+  "itemGroup.group_ash_materials": "苇原-材料",
 
   "gui.ashihara.mill": "石磨",
+  "gui.ashihara.mortar": "舂",
 
   "item.ashihara.dirt_ball_don.projectile": "§d§l§o这东西散发着一种不可思议的气场",
   "item.ashihara.dirt_ball_don.projectile_1": "§9§l§o§m别把这事告诉4z（"

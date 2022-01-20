@@ -3,6 +3,7 @@ package kogasastudio.ashihara.event;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.block.tileentities.TERegistryHandler;
 import kogasastudio.ashihara.client.gui.MillScreen;
+import kogasastudio.ashihara.client.gui.MortarScreen;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.client.particles.RiceParticle;
 import kogasastudio.ashihara.client.particles.SakuraParticle;
@@ -69,6 +70,7 @@ public class ClientEventSubscribeHandler
     public static void onScreenBind(FMLClientSetupEvent event)
     {
         event.enqueueWork(() -> ScreenManager.registerFactory(ContainerRegistryHandler.MILL_CONTAINER.get(), MillScreen::new));
+        event.enqueueWork(() -> ScreenManager.registerFactory(ContainerRegistryHandler.MORTAR_CONTAINER.get(), MortarScreen::new));
     }
 
 //    @SubscribeEvent

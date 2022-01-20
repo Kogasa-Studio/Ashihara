@@ -1,7 +1,6 @@
 package kogasastudio.ashihara.item;
 
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.block.BlockHydrangeaBush;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.item.foods.*;
 import net.minecraft.item.BlockItem;
@@ -12,6 +11,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import static kogasastudio.ashihara.Ashihara.ASHIHARA;
+import static kogasastudio.ashihara.Ashihara.MATERIALS;
 
 public class ItemRegistryHandler
 {
@@ -23,7 +23,6 @@ public class ItemRegistryHandler
     //以下为物品
     public static final RegistryObject<Item> KOISHI = ITEMS.register("koishi", ItemKoishi::new);
     public static final RegistryObject<Item> MINATO_AQUA = ITEMS.register("aqua", ItemMinatoAqua::new);
-    public static final RegistryObject<Item> DIRT_BALL = ITEMS.register("dirt_ball", ItemDirtBall::new);
     public static final RegistryObject<Item> RICE_SEEDLING = ITEMS.register("rice_seedling", ItemRiceSeedling::new);
     public static final RegistryObject<Item> RICE_CROP = ITEMS.register("rice_crop_item", ItemRiceCrop::new);
     public static final RegistryObject<Item> UNTHRESHED_RICE = ITEMS.register("unthreshed_rice", ItemUnthreshedRice::new);
@@ -31,11 +30,8 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> RICE = ITEMS.register("rice", ItemRice::new);
     public static final RegistryObject<Item> COOKED_RICE = ITEMS.register("cooked_rice", ItemCookedRice::new);
     public static final RegistryObject<Item> DIRT_BALL_DON = ITEMS.register("dirt_ball_don", ItemDirtBallDon::new);
-    public static final RegistryObject<Item> SAKURA = ITEMS.register("sakura", ItemSakura::new);
-    public static final RegistryObject<Item> SAKURA_PETAL = ITEMS.register("sakura_petal", ItemSakuraPetal::new);
     public static final RegistryObject<Item> SAKURAMOCHI = ITEMS.register("sakuramochi", ItemSakuramochi::new);
     public static final RegistryObject<Item> PESTLE = ITEMS.register("pestle", ItemPestle::new);
-    public static final RegistryObject<Item> CHRYSANTHEMUM_FLOWER = ITEMS.register("chrysanthemum_flower", ItemChrysanthemumFlower::new);
     public static final RegistryObject<Item> SUJIKABUTO = ITEMS.register("sujikabuto", ItemSujikaButo::new);
     public static final RegistryObject<Item> SUSHI_BASIC = ITEMS.register("sushi_basic", () -> new EasyFood(5));
     public static final RegistryObject<Item> SUSHI_RAW_FISH = ITEMS.register("sushi_raw_fish", () -> new EasyFood(6));
@@ -43,6 +39,14 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> SUSHI_TAMAGO = ITEMS.register("sushi_tamago", () -> new EasyFood(6));
     public static final RegistryObject<Item> ONIGIRI = ITEMS.register("onigiri", () -> new EasyFood(6));
     public static final RegistryObject<Item> TAMAGO = ITEMS.register("tamago", () -> new EasyFood(1));
+
+    //材料
+    public static final RegistryObject<Item> SAKURA = ITEMS.register("sakura", ItemSakura::new);
+    public static final RegistryObject<Item> SAKURA_PETAL = ITEMS.register("sakura_petal", ItemSakuraPetal::new);
+    public static final RegistryObject<Item> DIRT_BALL = ITEMS.register("dirt_ball", ItemDirtBall::new);
+    public static final RegistryObject<Item> CHRYSANTHEMUM_FLOWER = ITEMS.register("chrysanthemum_flower", ItemChrysanthemumFlower::new);
+    public static final RegistryObject<Item> IRON_ORE_SHATTER = ITEMS.register("iron_ore_shatter", () -> new Item(new Item.Properties().group(MATERIALS)));
+    public static final RegistryObject<Item> STONE_SHATTER = ITEMS.register("stone_shatter", () -> new Item(new Item.Properties().group(MATERIALS)));
 
     //以下为方块
     //TODO: public static final RegistryObject<Item>  = ITEMS.register("", () -> new BlockItem(BlockRegistryHandler. .get(), new Item.Properties().group(ASHIHARA)));

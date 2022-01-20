@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values":
+  [
+    "#ashihara:cereals",
+    "#ashihara:cereal_processed",
+    "#ashihara:sauce_materials",
+    "ashihara:unthreshed_rice"
+  ]
+}

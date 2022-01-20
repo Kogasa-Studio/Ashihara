@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block;
 
+import kogasastudio.ashihara.block.tileentities.MortarTE;
 import kogasastudio.ashihara.client.particles.GenericParticleData;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.item.ItemExmpleContainer;
@@ -10,14 +11,17 @@ import net.minecraft.block.HorizontalBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootContext;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
@@ -31,6 +35,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -43,12 +48,12 @@ public class BlockMortar extends Block
         super
         (
             Properties.create(Material.WOOD)
-                .hardnessAndResistance(3.0F)
-                .harvestTool(ToolType.AXE)
-                .sound(SoundType.WOOD)
-                .notSolid()
+            .hardnessAndResistance(3.0F)
+            .harvestTool(ToolType.AXE)
+            .sound(SoundType.WOOD)
+            .notSolid()
         );
-        this.setDefaultState(this.getStateContainer().getBaseState().with(LEVEL, 0).with(PROCESS, 0));
+        this.setDefaultState(this.getStateContainer().getBaseState().with(LEVEL, 0)/*.with(PROCESS, 0)*/);
     }
 
     @Override
@@ -56,16 +61,16 @@ public class BlockMortar extends Block
     {
         List<ItemStack> list = new LinkedList<>();
         list.add(new ItemStack(ItemRegistryHandler.ITEM_MORTAR.get()));
-        if (state.get(LEVEL) != 0)
-        {
-            if (state.get(PROCESS) == 4) {list.add(new ItemStack(ItemExmpleContainer.RICE, state.get(LEVEL)));}
-            else {list.add(new ItemStack(ItemExmpleContainer.UNTHRESHED_RICE, state.get(LEVEL)));}
-        }
+//        if (state.get(LEVEL) != 0)
+//        {
+//            if (state.get(PROCESS) == 4) {list.add(new ItemStack(ItemExmpleContainer.RICE, state.get(LEVEL)));}
+//            else {list.add(new ItemStack(ItemExmpleContainer.UNTHRESHED_RICE, state.get(LEVEL)));}
+//        }
         return list;
     }
 
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 4);
-    public static final IntegerProperty PROCESS = IntegerProperty.create("process", 0, 4);
+//    public static final IntegerProperty PROCESS = IntegerProperty.create("process", 0, 4);
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
 
     @Override
@@ -77,7 +82,7 @@ public class BlockMortar extends Block
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(LEVEL, PROCESS, FACING);
+        builder.add(LEVEL/*, PROCESS*/, FACING);
     }
 
     @Override
@@ -100,7 +105,24 @@ public class BlockMortar extends Block
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
-        int level = state.get(LEVEL);
+        if (!worldIn.isRemote() && handIn.equals(Hand.MAIN_HAND))
+        {
+            ItemStack stack = player.getHeldItem(handIn);
+            MortarTE te = (MortarTE) worldIn.getTileEntity(pos);
+            if (te == null) return ActionResultType.FAIL;
+            if (player.isSneaking() && stack.isEmpty())
+            {
+                NetworkHooks.openGui((ServerPlayerEntity) player, te, (PacketBuffer packerBuffer) -> packerBuffer.writeBlockPos(te.getPos()));
+                return ActionResultType.SUCCESS;
+            }
+            else if (te.notifyInteraction(stack, player, worldIn, pos, player))
+            {
+                worldIn.setBlockState(pos, state.with(LEVEL, te.getContentsActualSize()));
+                return ActionResultType.SUCCESS;
+            }
+        }
+        return ActionResultType.PASS;
+        /*int level = state.get(LEVEL);
         int process = state.get(PROCESS);
         ItemStack item = player.getHeldItem(handIn);
         if (item.getItem() == ItemExmpleContainer.UNTHRESHED_RICE)
@@ -138,6 +160,12 @@ public class BlockMortar extends Block
                 return ActionResultType.SUCCESS;
             } else return ActionResultType.PASS;
         }
-        else return ActionResultType.PASS;
+        else return ActionResultType.PASS;*/
     }
+
+    @Override
+    public boolean hasTileEntity(BlockState state) {return true;}
+
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {return new MortarTE();}
 }
