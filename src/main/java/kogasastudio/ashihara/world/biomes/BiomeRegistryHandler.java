@@ -11,6 +11,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import static kogasastudio.ashihara.world.biomes.AshiharaBiomes.JuniorCherryForest;
+import static kogasastudio.ashihara.world.biomes.AshiharaBiomes.SnowyCherryForest;
 
 @Mod.EventBusSubscriber(modid = Ashihara.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class BiomeRegistryHandler
@@ -18,8 +19,13 @@ public class BiomeRegistryHandler
     @SubscribeEvent
     public static void onRegister(RegistryEvent.Register<Biome> event)
     {
-        BiomeManager.addBiome(BiomeManager.BiomeType.WARM, new BiomeManager.BiomeEntry(RegistryKey.getOrCreateKey(Registry.BIOME_KEY, new ResourceLocation("ashihara:junior_cherry_forest")), 5));
+        addBiome(event, BiomeManager.BiomeType.WARM, "junior_cherry_forest", 5, JuniorCherryForest());
+        addBiome(event, BiomeManager.BiomeType.ICY, "snowy_cherry_forest", 15, SnowyCherryForest());
+    }
 
-        event.getRegistry().register(JuniorCherryForest());
+    private static void addBiome(RegistryEvent.Register<Biome> event, BiomeManager.BiomeType type, String id, int weight, Biome biome)
+    {
+        BiomeManager.addBiome(type, new BiomeManager.BiomeEntry(RegistryKey.getOrCreateKey(Registry.BIOME_KEY, new ResourceLocation(Ashihara.MODID, id)), weight));
+        event.getRegistry().register(biome);
     }
 }

@@ -1,0 +1,39 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions":
+          [
+            {
+              "function": "minecraft:copy_name",
+              "source": "block_entity"
+            },
+            {
+              "function": "minecraft:copy_nbt",
+              "source": "block_entity",
+              "ops":
+              [
+                {
+                  "source": "bucket.FluidName",
+                  "target": "BlockEntityTag.FluidName",
+                  "op": "replace"
+                },
+                {
+                  "source": "bucket.Amount",
+                  "target": "BlockEntityTag.Amount",
+                  "op": "replace"
+                }
+              ]
+            }
+          ],
+          "name": "ashihara:pail"
+        }
+      ],
+      "conditions": [{"condition": "minecraft:survives_explosion"}]
+    }
+  ]
+}

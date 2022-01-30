@@ -1,0 +1,14 @@
+{
+  "type": "ashihara:mortar",
+  "ingredients":
+  [
+    {"item": "minecraft:carrot"},
+    {"item": "minecraft:carrot"}
+  ],
+  "result":
+  [
+    {"item": "minecraft:bone_meal"}
+  ],
+  "sequence": [2, 0, 2, 0],
+  "recipeType": 1
+}

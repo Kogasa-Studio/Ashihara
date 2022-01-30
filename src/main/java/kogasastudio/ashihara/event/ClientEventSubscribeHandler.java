@@ -4,12 +4,16 @@ import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.block.tileentities.TERegistryHandler;
 import kogasastudio.ashihara.client.gui.MillScreen;
 import kogasastudio.ashihara.client.gui.MortarScreen;
+import kogasastudio.ashihara.client.models.baked.PailModel;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.client.particles.RiceParticle;
 import kogasastudio.ashihara.client.particles.SakuraParticle;
 import kogasastudio.ashihara.client.render.ter.MarkableLanternTER;
 import kogasastudio.ashihara.client.render.ter.MillTER;
+import kogasastudio.ashihara.client.render.ter.PailTER;
+import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.inventory.container.ContainerRegistryHandler;
+import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
@@ -17,13 +21,21 @@ import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 //import net.minecraft.world.biome.BiomeColors;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 //import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+
+import java.util.Map;
+import java.util.Objects;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientEventSubscribeHandler
@@ -33,6 +45,12 @@ public class ClientEventSubscribeHandler
         event.enqueueWork(() -> RenderTypeLookup.setRenderLayer(block, type));
     }
 
+    private static void setRenderType(Fluid fluid, RenderType type, FMLClientSetupEvent event)
+    {
+        event.enqueueWork(() -> RenderTypeLookup.setRenderLayer(fluid, type));
+    }
+
+    //设置渲染方式
     @SubscribeEvent
     public static void onRenderTypeSetup(FMLClientSetupEvent event)
     {
@@ -51,6 +69,7 @@ public class ClientEventSubscribeHandler
         setRenderType(BlockRegistryHandler.HYDRANGEA_BUSH.get(), RenderType.getCutoutMipped(), event);
     }
 
+    //注册粒子
     @SubscribeEvent
     public static void onParticleFactoryRegister(ParticleFactoryRegisterEvent event)
     {
@@ -59,13 +78,38 @@ public class ClientEventSubscribeHandler
         manager.registerFactory(ParticleRegistryHandler.SAKURA.get(), SakuraParticle.SakuraParticleFactory::new);
     }
 
+    //绑定TER
     @SubscribeEvent
-    public static void onTERbind(FMLClientSetupEvent event)
+    public static void onTERBind(FMLClientSetupEvent event)
     {
         event.enqueueWork(() -> ClientRegistry.bindTileEntityRenderer(TERegistryHandler.MARKABLE_LANTERN_TE.get(), MarkableLanternTER::new));
         event.enqueueWork(() -> ClientRegistry.bindTileEntityRenderer(TERegistryHandler.MILL_TE.get(), MillTER::new));
+        event.enqueueWork(() -> ClientRegistry.bindTileEntityRenderer(TERegistryHandler.PAIL_TE.get(), PailTER::new));
     }
 
+    /*
+    @SubscribeEvent
+    public static void onModelBaked(ModelBakeEvent event)
+    {
+        Map<ResourceLocation, IBakedModel> modelRegistry = event.getModelRegistry();
+        ModelResourceLocation location = new ModelResourceLocation
+        (Objects.requireNonNull(ItemRegistryHandler.PAIL.get().getRegistryName()), "inventory");
+        IBakedModel existingModel = modelRegistry.get(location);
+        if (existingModel == null)
+        {
+            throw new RuntimeException("Did not find Obsidian Hidden in registry");
+        } else if (existingModel instanceof PailModel)
+        {
+            throw new RuntimeException("Tried to replaceObsidian Hidden twice");
+        } else
+        {
+            PailModel model = new PailModel(existingModel);
+            event.getModelRegistry().put(location, model);
+        }
+    }
+    */
+
+    //绑定GUI
     @SubscribeEvent
     public static void onScreenBind(FMLClientSetupEvent event)
     {

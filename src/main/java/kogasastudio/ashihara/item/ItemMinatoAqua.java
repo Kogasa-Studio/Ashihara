@@ -37,12 +37,14 @@ public class ItemMinatoAqua extends Item
         Tree tree = new CherryBlossomTree();
         Random rand = context.getWorld().getRandom();
 
+        if (world.getBlockState(pos).matchesBlock(BlockRegistryHandler.PAIL.get())) return ActionResultType.SUCCESS;
+
         if (!item.isEmpty() && Objects.requireNonNull(playerIn).canPlayerEdit(pos.offset(direction), direction, item) && !world.isRemote())
         {
             ServerWorld worldIn = (ServerWorld)world;
             tree.attemptGrowTree(worldIn, worldIn.getChunkProvider().getChunkGenerator(), pos, BlockRegistryHandler.CHERRY_LOG.get().getDefaultState(), rand);
             return ActionResultType.SUCCESS;
         }
-        else return ActionResultType.FAIL;
+        else return ActionResultType.PASS;
     }
 }

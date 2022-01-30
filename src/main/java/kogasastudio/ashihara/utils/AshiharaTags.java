@@ -1,9 +1,12 @@
 package kogasastudio.ashihara.utils;
 
+import kogasastudio.ashihara.Ashihara;
 import net.minecraft.item.Item;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.registries.DeferredRegister;
 
 public class AshiharaTags
 {
@@ -14,6 +17,6 @@ public class AshiharaTags
 
     private static Tags.IOptionalNamedTag<Item> tag(String name)
     {
-        return ItemTags.createOptional(new ResourceLocation("ashihara", "items/" + name));
+        return ItemTags.createOptional(new ResourceLocation(Ashihara.MODID, name));
     }
 }

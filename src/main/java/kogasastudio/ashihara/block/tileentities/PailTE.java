@@ -1,0 +1,63 @@
+package kogasastudio.ashihara.block.tileentities;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
+
+import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+
+public class PailTE extends AshiharaMachineTE
+{
+    public PailTE()
+    {
+        super(TERegistryHandler.PAIL_TE.get());
+    }
+
+    LazyOptional<FluidTank> bucket = LazyOptional.of(this::createBucket);
+
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> cap)
+    {
+        if (!this.isRemoved() && cap.equals(FLUID_HANDLER_CAPABILITY)) {return this.bucket.cast();}
+        return super.getCapability(cap);
+    }
+
+    private FluidTank createBucket() {return new FluidTank(4000);}
+
+    public LazyOptional<FluidTank> getTank() {return this.bucket;}
+
+    @Override
+    public void read(BlockState state, CompoundNBT nbt)
+    {
+        super.read(state, nbt);
+        bucket.ifPresent(fluidTank -> fluidTank.readFromNBT(nbt.getCompound("bucket")));
+        if (this.world != null)
+        {
+            this.world.notifyBlockUpdate(this.pos, this.getBlockState(), this.getBlockState(), 3);
+        }
+    }
+
+    @Override
+    public CompoundNBT write(CompoundNBT compound)
+    {
+        super.write(compound);
+        bucket.ifPresent(fluidTank -> compound.put("bucket", fluidTank.writeToNBT(new CompoundNBT())));
+        return compound;
+    }
+
+    @Override
+    protected void invalidateCaps()
+    {
+        super.invalidateCaps();
+        this.bucket.invalidate();
+    }
+
+    @Override
+    protected void reviveCaps()
+    {
+        super.reviveCaps();
+        bucket = LazyOptional.of(this::createBucket);
+    }
+}

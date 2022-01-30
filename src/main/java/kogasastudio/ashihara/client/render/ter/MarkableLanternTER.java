@@ -14,6 +14,7 @@ import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
 
 import static kogasastudio.ashihara.block.BlockLantern.FACING;
+import static kogasastudio.ashihara.helper.RenderHelper.buildMatrix;
 import static kogasastudio.ashihara.utils.EasyBlockActionHandler.getRotationByFacing;
 
 public class MarkableLanternTER extends TileEntityRenderer<MarkableLanternTE>
@@ -21,17 +22,6 @@ public class MarkableLanternTER extends TileEntityRenderer<MarkableLanternTE>
     public MarkableLanternTER(TileEntityRendererDispatcher dispatcher){super(dispatcher);}
 
     private static final RenderType ICONS = RenderType.getEntityTranslucent(AshiharaAtlas.ICON_ATLAS);
-
-    private void buildMatrix(Matrix4f matrix, IVertexBuilder builder, float x, float y, float z, float u, float v, int overlay, int light)
-    {
-        builder.pos(matrix, x, y, z)
-                .color(255, 255, 255, 255)
-                .tex(u, v)
-                .overlay(overlay)
-                .lightmap(light)
-                .normal(0f, 1f, 0f)
-                .endVertex();
-    }
 
     @Override
     public void render(MarkableLanternTE tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn)

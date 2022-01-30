@@ -25,6 +25,12 @@
   "item.ashihara.iron_ore_shatter": "铁矿碎块",
   "item.ashihara.stone_shatter": "碎石",
 
+  "item.ashihara.wood_otsuchi": "木大槌",
+  "item.ashihara.iron_otsuchi": "鉄大槌",
+  "item.ashihara.diamond_otsuchi": "钻石大槌",
+
+  "item.ashihara.soy_milk_bucket": "豆浆桶",
+
   "block.ashihara.water_field": "水田",
   "block.ashihara.dirt_depression": "土洼",
   "block.ashihara.immature_rice": "水稻幼芽",
@@ -44,6 +50,7 @@
   "block.ashihara.mill": "石磨",
   "block.ashihara.stone_lantern": "石灯笼",
   "block.ashihara.hydrangea_bush": "紫阳花叶",
+  "block.ashihara.pail": "提桶",
 
   "block.ashihara.cherry_log": "樱木",
   "block.ashihara.cherry_planks": "樱木板",
@@ -60,6 +67,11 @@
   "block.ashihara.red_fence": "朱木栅栏",
   "block.ashihara.red_fence_gate": "朱木栅栏门",
 
+  "block.ashihara.soy_milk": "豆浆",
+
+  "fluid.ashihara.soy_milk": "豆浆",
+  "fluid.ashihara.soy_milk_flowing": "流动的豆浆",
+
   "itemGroup.group_ashihara": "苇原",
   "itemGroup.group_ash_materials": "苇原-材料",
 
@@ -67,5 +79,8 @@
   "gui.ashihara.mortar": "舂",
 
   "item.ashihara.dirt_ball_don.projectile": "§d§l§o这东西散发着一种不可思议的气场",
-  "item.ashihara.dirt_ball_don.projectile_1": "§9§l§o§m别把这事告诉4z（"
+  "item.ashihara.dirt_ball_don.projectile_1": "§9§l§o§m别把这事告诉4z（",
+  "tooltip.ashihara.pail_display": "§e§l提桶: §n",
+  "tooltip.ashihara.pail_empty_message": "    §7桶现在是空的",
+  "tooltip.ashihara.pail_fluid_existence": "    §b流体: "
 }

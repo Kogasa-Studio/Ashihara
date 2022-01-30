@@ -9,11 +9,7 @@
           "name": "ashihara:cherry_button"
         }
       ],
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ]
+      "conditions": [{"condition": "minecraft:survives_explosion"}]
     }
   ]
 }

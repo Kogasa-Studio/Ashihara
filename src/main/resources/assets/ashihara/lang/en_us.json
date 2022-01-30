@@ -25,6 +25,12 @@
   "item.ashihara.iron_ore_shatter": "Iron ore shatter",
   "item.ashihara.stone_shatter": "Stone shatter",
 
+  "item.ashihara.wood_otsuchi": "Wood otsuchi",
+  "item.ashihara.iron_otsuchi": "Iron otsuchi",
+  "item.ashihara.diamond_otsuchi": "Diamond otsuchi",
+
+  "item.ashihara.soy_milk_bucket": "Soy milk bucket",
+
   "block.ashihara.water_field":"Water field",
   "block.ashihara.dirt_depression": "Dirt depression",
   "block.ashihara.immature_rice": "Immature rice",
@@ -44,6 +50,7 @@
   "block.ashihara.mill": "Mill",
   "block.ashihara.stone_lantern": "Stone lantern",
   "block.ashihara.hydrangea_bush": "Hydrangea bush",
+  "block.ashihara.pail": "Pail",
 
   "block.ashihara.cherry_log": "Cherry log",
   "block.ashihara.cherry_planks": "Cherry planks",
@@ -60,6 +67,11 @@
   "block.ashihara.red_fence": "Red fence",
   "block.ashihara.red_fence_gate": "Red fence gate",
 
+  "block.ashihara.soy_milk": "Soy milk",
+
+  "fluid.ashihara.soy_milk": "Soy milk",
+  "fluid.ashihara.soy_milk_flowing": "Soy milk flowing",
+
   "itemGroup.group_ashihara": "Ashihara",
   "itemGroup.group_ash_materials": "Ashihara-Materials",
 
@@ -67,5 +79,8 @@
   "gui.ashihara.mortar": "Mortar",
 
   "item.ashihara.dirt_ball_don.projectile": "§d§l§oA strong and weird felling grows inside your heart while you are looking at it",
-  "item.ashihara.dirt_ball_don.projectile_1": "§9§l§oI don't know why something like this exists"
+  "item.ashihara.dirt_ball_don.projectile_1": "§9§l§oI don't know why something like this exists",
+  "tooltip.ashihara.pail_display": "§e§lPail: §n",
+  "tooltip.ashihara.pail_empty_message": "    §7The pail is empty now",
+  "tooltip.ashihara.pail_fluid_existence": "    §bFluid: "
 }

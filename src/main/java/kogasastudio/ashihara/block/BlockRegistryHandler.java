@@ -2,7 +2,10 @@ package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.woodcrafts.*;
+import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import net.minecraft.block.Block;
+import net.minecraft.block.FlowingFluidBlock;
+import net.minecraft.block.material.Material;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -30,6 +33,7 @@ public class BlockRegistryHandler {
     public static final RegistryObject<Block> MILL = BLOCKS.register("mill", BlockMill::new);
     public static final RegistryObject<Block> STONE_LANTERN = BLOCKS.register("stone_lantern", BlockStoneLantern::new);
     public static final RegistryObject<Block> HYDRANGEA_BUSH = BLOCKS.register("hydrangea_bush", () -> new BlockHydrangeaBush(false));
+    public static final RegistryObject<Block> PAIL = BLOCKS.register("pail", BlockPail::new);
 
     //木制品
     public static final RegistryObject<Block> CHERRY_LOG = BLOCKS.register("cherry_log", SimpleLogBlock::new);
@@ -47,4 +51,7 @@ public class BlockRegistryHandler {
     public static final RegistryObject<Block> RED_SLAB = BLOCKS.register("red_slab", SimpleSlabBlock::new);
     public static final RegistryObject<Block> RED_FENCE = BLOCKS.register("red_fence", SimpleFenceBlock::new);
     public static final RegistryObject<Block> RED_FENCE_GATE = BLOCKS.register("red_fence_gate", SimpleFenceGateBlock::new);
+
+    public static final RegistryObject<FlowingFluidBlock> SOY_MILK_BLOCK = BLOCKS.register("soy_milk", () ->
+        new FlowingFluidBlock(FluidRegistryHandler.SOY_MILK, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()));
 }

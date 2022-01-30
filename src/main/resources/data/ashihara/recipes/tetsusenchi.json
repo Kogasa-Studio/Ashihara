@@ -8,18 +8,9 @@
   ],
   "key":
   {
-    "A":
-    {
-      "item": "minecraft:iron_ingot"
-    },
-    "I":
-    {
-      "item": "minecraft:stick"
-    },
-    "O":
-    {
-      "item": "minecraft:oak_planks"
-    }
+    "A": {"item": "minecraft:iron_ingot"},
+    "I": {"item": "minecraft:stick"},
+    "O": {"item": "minecraft:oak_planks"}
   },
   "result":
   {

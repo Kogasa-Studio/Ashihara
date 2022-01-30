@@ -5,7 +5,7 @@ import kogasastudio.ashihara.client.particles.GenericParticleData;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.interaction.recipe.MortarRecipe;
 import kogasastudio.ashihara.inventory.container.MortarContainer;
-import kogasastudio.ashihara.item.ItemKoishi;
+import kogasastudio.ashihara.item.ItemOtsuchi;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,12 +16,14 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
@@ -29,23 +31,30 @@ import java.util.Optional;
 import java.util.Random;
 
 import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
+import static kogasastudio.ashihara.utils.AshiharaTags.MASHABLE;
 
 public class MortarTE extends AshiharaMachineTE implements INamedContainerProvider
 {
     public MortarTE() {super(TERegistryHandler.MORTAR_TE.get());}
 
     public MortarInventory contents = new MortarInventory(4);
+    public NonNullList<ItemStack> output = NonNullList.create();
+
     public int progress;
     public int progressTotal;
+
+    public byte recipeType;
     public byte pointer;
-    public boolean isWorking;
     /**
      * 0: 手
      * 1: 杵
      * 2: 大槌
      */
     public byte nextStep = -1;
-    public MortarRecipe recipe;
+
+    public byte[] sequence;
+    public boolean isWorking;
+
     public IIntArray mortarData = new IIntArray()
     {
         public int get(int index)
@@ -64,7 +73,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
             switch (index)
             {
                 case 0 : progress = value;break;
-                case 1 : progressTotal = value;
+                case 1 : progressTotal = value;break;
                 case 2 : nextStep = (byte) value;
             }
         }
@@ -74,7 +83,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
 
     public int getContentsActualSize() {return this.contents.getActualSize();}
 
-    private static class MortarInventory extends ItemStackHandler
+    public static class MortarInventory extends ItemStackHandler
     {
         public MortarInventory(int numSlots) {super(numSlots);}
 
@@ -87,7 +96,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
         public int getActualSize()
         {
             int i = 0;
-            for (ItemStack stack : this.stacks) {if (!stack.isEmpty()) i += 0;}
+            for (ItemStack stack : this.stacks) {if (!stack.isEmpty()) i += 1;}
             return i;
         }
 
@@ -95,17 +104,23 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
 
         @Override
         protected int getStackLimit(int slot, ItemStack stack) {return 1;}
+
+        @Override
+        public String toString()
+        {
+            return this.stacks.toString();
+        }
     }
 
     private void process(boolean isSauceProcess)
     {
         this.progress += isSauceProcess ? this.nextStep : 1;
-        if (this.progress >= this.progressTotal) {finishReciping(this.recipe);markDirty();return;}
+        if (this.progress >= this.progressTotal) {finishReciping();markDirty();return;}
         if (!this.isWorking) this.isWorking = true;
         if (!isSauceProcess)
         {
             this.pointer += 1;
-            this.nextStep = this.recipe.sequence[this.pointer];
+            this.nextStep = this.sequence[this.pointer];
         }
         markDirty();
     }
@@ -116,7 +131,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
         {
             case 0 : return stack.isEmpty();
             case 1 : return stack.getItem().equals(ItemRegistryHandler.PESTLE.get());
-            case 2 : return stack.getItem() instanceof ItemKoishi;
+            case 2 : return stack.getItem() instanceof ItemOtsuchi;
         }
         return false;
     }
@@ -129,14 +144,14 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
     }
 
     //检查当前状态, 若内容物匹配配方则尝试启用配方
-    private void notifyStateChanged()
+    public void notifyStateChanged()
     {
         Optional<MortarRecipe> recipeIn = tryMatchRecipe(new RecipeWrapper(this.contents));
         if (recipeIn.isPresent())
         {
-            if (this.recipe == null || !this.recipe.equals(recipeIn.get())) applyRecipe(recipeIn.get());
+            if (!this.isWorking) applyRecipe(recipeIn.get());
         }
-        else finishReciping(null);
+        else finishReciping();
     }
 
     private void applyRecipe(MortarRecipe recipeIn)
@@ -144,60 +159,71 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
         this.progress = 0;
         this.pointer = 0;
 
+        this.recipeType = recipeIn.recipeType;
         this.progressTotal = recipeIn.progress;
-        this.nextStep = recipeIn.recipeType == 2 ? -1 : recipeIn.sequence[this.pointer];
-        this.recipe = recipeIn;
+        this.sequence = recipeIn.sequence;
+        this.nextStep = recipeIn.recipeType == 2 ? -1 : this.sequence[this.pointer];
+        this.output.clear();
+        for (ItemStack stack : recipeIn.getOutput())
+        {
+            this.output.add(stack.copy());
+        }
         LOGGER_MAIN.info("recipe applied: " + recipeIn.getInfo());
         markDirty();
     }
 
-    private void finishReciping(MortarRecipe recipeIn)
+    private void finishReciping()
     {
         this.progress = 0;
         this.progressTotal = 0;
+        this.sequence = new byte[0];
+        this.recipeType = -1;
         this.pointer = -1;
         this.nextStep = -1;
-        this.isWorking = false;
-        this.recipe = null;
-        if (recipeIn != null)
+        if (this.isWorking)
         {
             this.contents.clear();
-            for (int i = 0; i < recipeIn.getOutput().size(); i += 1)
+            for (int i = 0; i < this.output.size(); i += 1)
             {
-                ItemStack stack = recipeIn.getOutput().get(i);
+                ItemStack stack = this.output.get(i);
                 if (!stack.isEmpty()) this.contents.setStackInSlot(i, stack);
             }
+            this.output.clear();
+            this.isWorking = false;
         }
         LOGGER_MAIN.info("recipe finished");
         markDirty();
     }
 
     //若不在工作状态中空手右击则取出物品，持物品右击则尝试将物品放入舂
-    public boolean notifyInteraction(ItemStack stackIn, PlayerEntity playerIn, World worldIn, BlockPos posIn, PlayerEntity player)
+    public boolean notifyInteraction(ItemStack stackIn, World worldIn, BlockPos posIn, PlayerEntity player)
     {
         LOGGER_MAIN.info("notified interaction");
-        if (!(this.recipe == null) && isNextStepNeeded(stackIn))
+        if (isNextStepNeeded(stackIn))
         {
             LOGGER_MAIN.info("start to progress");
-            Random rand = new Random();
             worldIn.playSound(player, posIn, SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            for(int i = 0; i < 12; i += 1)
+            if (worldIn.isRemote())
             {
-                worldIn.addParticle
-                (
-                    new GenericParticleData(new Vector3d(0,0,0), 0, ParticleRegistryHandler.RICE.get()),
-                    (double)posIn.getX() + 0.5D, (double)posIn.getY() + 0.5D,
-                    (double)posIn.getZ() + 0.5D, rand.nextFloat() / 2.0F,
-                    5.0E-5D,
-                    rand.nextFloat() / 2.0F
-                );
+                Random rand = worldIn.getRandom();
+                for(int i = 0; i < 12; i += 1)
+                {
+                    worldIn.addParticle
+                    (
+                        new GenericParticleData(new Vector3d(0,0,0), 0, ParticleRegistryHandler.RICE.get()),
+                        (double)posIn.getX() + 0.5D, (double)posIn.getY() + 0.5D,
+                        (double)posIn.getZ() + 0.5D, rand.nextFloat() / 2.0F,
+                        5.0E-5D,
+                        rand.nextFloat() / 2.0F
+                    );
+                }
             }
             player.getCooldownTracker().setCooldown(stackIn.getItem(), 8);
             if (!player.isCreative())
             {
                 stackIn.damageItem(1, player, (playerEntity) -> player.sendBreakAnimation(EquipmentSlotType.MAINHAND));
             }
-            process(this.recipe.recipeType == 2);
+            process(this.recipeType == 2);
             LOGGER_MAIN.info("processed");
             LOGGER_MAIN.info("{\n    te_progress: " + this.mortarData.get(0) + ";\n    te_nextStep: " + this.mortarData.get(2) + ";\n}");
             return true;
@@ -217,7 +243,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
                     LOGGER_MAIN.info("{\n    te_progress: " + this.mortarData.get(0) + ";\n    te_nextStep: " + this.mortarData.get(2) + ";\n}");
                     return true;
                 }
-                else if (stack.isEmpty() && stackIn.getItem().equals(ItemRegistryHandler.UNTHRESHED_RICE.get()))
+                else if (stack.isEmpty() && stackIn.getItem().isIn(MASHABLE))
                 {
                     this.contents.insertItem(i, new ItemStack(stackIn.getItem()), false);
                     stackIn.shrink(1);
@@ -237,25 +263,61 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
     @Override
     public CompoundNBT write(CompoundNBT compound)
     {
+        super.write(compound);
         compound.putInt("progress", this.progress);
         compound.putInt("progressTotal", this.progressTotal);
+
+        compound.putByte("recipeType", this.recipeType);
         compound.putByte("pointer", this.pointer);
         compound.putByte("nextStep", this.nextStep);
+
+        compound.putByteArray("sequence", this.sequence);
         compound.putBoolean("isWorking", this.isWorking);
+
         compound.put("contents", this.contents.serializeNBT());
-        return super.write(compound);
+
+        ListNBT outputIn = new ListNBT();
+        for (int i = 0; i < this.output.size(); i++)
+        {
+            if (!this.output.get(i).isEmpty())
+            {
+                CompoundNBT itemTag = new CompoundNBT();
+                itemTag.putInt("Slot", i);
+                outputIn.add(this.output.get(i).write(itemTag));
+            }
+        }
+        compound.put("output", outputIn);
+
+        return compound;
     }
 
     @Override
     public void read(BlockState state, CompoundNBT nbt)
     {
+        super.read(state, nbt);
         this.progress = nbt.getInt("progress");
         this.progressTotal = nbt.getInt("progressTotal");
+
+        this.recipeType = nbt.getByte("recipeType");
         this.pointer = nbt.getByte("pointer");
         this.nextStep = nbt.getByte("nextStep");
+
+        this.sequence = nbt.getByteArray("sequence");
         this.isWorking = nbt.getBoolean("isWorking");
+
         this.contents.deserializeNBT(nbt.getCompound("contents"));
-        super.read(state, nbt);
+
+        ListNBT outputIn = nbt.getList("output", Constants.NBT.TAG_COMPOUND);
+        for (int i = 0; i < outputIn.size(); i++)
+        {
+            CompoundNBT itemTags = outputIn.getCompound(i);
+            int slot = itemTags.getInt("Slot");
+
+            if (slot >= 0 && slot < this.output.size())
+            {
+                this.output.set(slot, ItemStack.read(itemTags));
+            }
+        }
     }
 
     @Override
@@ -268,6 +330,6 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
     public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_)
     {
         if (this.world == null) return null;
-        return new MortarContainer(p_createMenu_1_, p_createMenu_2_, this.world, this.pos, this.mortarData);
+        return new MortarContainer(p_createMenu_1_, p_createMenu_2_, this, this.mortarData);
     }
 }

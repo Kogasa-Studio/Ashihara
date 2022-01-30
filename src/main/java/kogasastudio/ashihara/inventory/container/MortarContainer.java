@@ -6,26 +6,48 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIntArray;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
+
+import static kogasastudio.ashihara.utils.AshiharaTags.MASHABLE;
 
 public class MortarContainer extends AshiharaCommonContainer
 {
     private final IIntArray mortarData;
-    private final World world;
-    private final BlockPos pos;
+    private final MortarTE te;
 
-    public MortarContainer(int id, PlayerInventory inv, World worldIn, BlockPos posIn, IIntArray mortarDataIn)
+    private static class MortarSlot extends SlotItemHandler
+    {
+        MortarSlot(IItemHandler inv, int index, int x, int y) {super(inv, index, x, y);}
+
+        @Override
+        public int getSlotStackLimit() {return 1;}
+
+        @Override
+        public boolean isItemValid(ItemStack stack) {return stack.getItem().isIn(MASHABLE);}
+    }
+
+    @Override
+    protected int addSlotRange(IItemHandler inventory, int index, int x, int y, int amount, int dx)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            addSlot(new MortarSlot(inventory, index, x, y));
+            x += dx;
+            index += 1;
+        }
+        return index;
+    }
+
+    public MortarContainer(int id, PlayerInventory inv, MortarTE teIn, IIntArray mortarDataIn)
     {
         super(ContainerRegistryHandler.MORTAR_CONTAINER.get(), id);
         assertIntArraySize(mortarDataIn, 3);
         this.mortarData = mortarDataIn;
-        this.world = worldIn;
-        this.pos = posIn;
+        this.te = teIn;
         trackIntArray(mortarDataIn);
         layoutPlayerInventorySlots(inv, 8, 121);
-        MortarTE te = (MortarTE) worldIn.getTileEntity(posIn);
-        if (te != null) addSlotBox(te.contents, 0, 80, 26, 1, 18, 4, 18);
+        if (teIn != null) addSlotBox(teIn.contents, 0, 80, 26, 1, 18, 4, 18);
     }
 
     @Override
@@ -37,23 +59,19 @@ public class MortarContainer extends AshiharaCommonContainer
     /**
      * 玩家在gui中shift点击时会调用的方法
      * @param playerIn 玩家
-     * @param index 玩家右键的物品栏的id
+     * @param index 玩家点击的物品栏的id
      * @return 玩家右键的物品
      */
     @Override
     public ItemStack transferStackInSlot(PlayerEntity playerIn, int index)
     {
-        //玩家右键的具体格子
+        //玩家点击的具体格子
         Slot slot = this.inventorySlots.get(index);
 
         if (slot == null || !slot.getHasStack()) {return ItemStack.EMPTY;}
 
-        ItemStack newStack;
-        //若点击的不是舂的内容物则只变更一个物品
-        if (index <= 36) {newStack = new ItemStack(slot.getStack().getItem());slot.getStack().shrink(1);}
-        else newStack = slot.getStack();
+        ItemStack newStack = slot.getStack();
         ItemStack oldStack = newStack.copy();
-
 
         boolean isMerged;
 
@@ -84,12 +102,19 @@ public class MortarContainer extends AshiharaCommonContainer
         return oldStack;
     }
 
+    @Override
+    public void detectAndSendChanges()
+    {
+        super.detectAndSendChanges();
+        te.notifyStateChanged();
+    }
+
     public int getArrowHeight()
     {
         int teProgress = this.mortarData.get(0);
         int teProgressTotal = this.mortarData.get(1);
-        float progress = teProgressTotal == 0 ? 0 : (float) teProgress / teProgressTotal;
-        return (int) progress * 81;
+        float progress = teProgressTotal == 0 ? 0f : (float) teProgress / (float) teProgressTotal;
+        return (int) (progress * 81);
     }
 
     public int getNextStep() {return this.mortarData.get(2);}

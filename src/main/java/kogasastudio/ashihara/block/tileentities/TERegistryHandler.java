@@ -32,4 +32,11 @@ public class TERegistryHandler
         MillTE::new,
         BlockRegistryHandler.MILL.get()
     ).build(null));
+
+    public static final RegistryObject<TileEntityType<PailTE>> PAIL_TE = TILE_ENTITIES.register("pail_tileentity",
+    () -> TileEntityType.Builder.create
+    (
+        PailTE::new,
+        BlockRegistryHandler.PAIL.get()
+    ).build(null));
 }

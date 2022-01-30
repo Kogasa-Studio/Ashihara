@@ -190,7 +190,7 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
                 if (levelT != levelF)
                 {
                     if (levelF > levelT) {worldIn.setBlockState(pos, state.with(LEVEL, levelF));}
-                    else if (levelF < levelT)
+                    else
                     {
                         if (watered)
                         {worldIn.setBlockState(fromPos, fromState.with(LEVEL, levelT));}
@@ -242,13 +242,13 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
         if (watered)
         {
             if (matchesWaterField(n) && !n.get(ISLINKEDTOSOURCE))
-            {worldIn.setBlockState(pos.north(), n.with(ISLINKEDTOSOURCE, true));/*LOGGER.info("nfucked x: " + pos.north().getX() + "z: " + pos.getZ());*/}
+            {worldIn.setBlockState(pos.north(), n.with(ISLINKEDTOSOURCE, true));}
             if (matchesWaterField(e) && !e.get(ISLINKEDTOSOURCE))
-            {worldIn.setBlockState(pos.east(), e.with(ISLINKEDTOSOURCE, true));/*LOGGER.info("efucked x: " + pos.east().getX() + "z: " + pos.getZ());*/}
+            {worldIn.setBlockState(pos.east(), e.with(ISLINKEDTOSOURCE, true));}
             if (matchesWaterField(s) && !s.get(ISLINKEDTOSOURCE))
-            {worldIn.setBlockState(pos.south(), s.with(ISLINKEDTOSOURCE, true));/*LOGGER.info("sfucked x: " + pos.south().getX() + "z: " + pos.getZ());*/}
+            {worldIn.setBlockState(pos.south(), s.with(ISLINKEDTOSOURCE, true));}
             if (matchesWaterField(w) && !w.get(ISLINKEDTOSOURCE))
-            {worldIn.setBlockState(pos.west(), w.with(ISLINKEDTOSOURCE, true));/*LOGGER.info("wfucked x: " + pos.west().getX() + "z: " + pos.getZ());*/}
+            {worldIn.setBlockState(pos.west(), w.with(ISLINKEDTOSOURCE, true));}
         }
     }
 

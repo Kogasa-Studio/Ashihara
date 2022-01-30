@@ -65,8 +65,8 @@ public class MortarScreen extends ContainerScreen<MortarContainer>
         super.tick();
         int progressIn = this.container.getArrowHeight();
         int stepStateCodeIn = this.container.getNextStep();
-        if (progressIn != this.progress) {LOGGER_MAIN.info("progress: " + container.getArrowHeight());this.progress = progressIn;}
-        if (stepStateCodeIn != this.stepStateCode) {LOGGER_MAIN.info("nextStep: " + container.getNextStep());this.stepStateCode = stepStateCodeIn;}
+        if (progressIn != this.progress) {LOGGER_MAIN.info("progress: " + progressIn);this.progress = progressIn;}
+        if (stepStateCodeIn != this.stepStateCode) {LOGGER_MAIN.info("nextStep: " + stepStateCodeIn);this.stepStateCode = stepStateCodeIn;}
     }
 
     @Override

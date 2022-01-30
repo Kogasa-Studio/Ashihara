@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 public class MillContainer extends AshiharaCommonContainer
 {
     private final IIntArray millData;
+
     public MillContainer(int id, PlayerInventory inventory, World worldIn, BlockPos posIn, IIntArray millDataIn)
     {
         super(ContainerRegistryHandler.MILL_CONTAINER.get(), id);
