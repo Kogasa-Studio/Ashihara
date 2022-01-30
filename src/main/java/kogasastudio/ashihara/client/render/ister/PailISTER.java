@@ -25,8 +25,7 @@ import static kogasastudio.ashihara.helper.RenderHelper.buildMatrix;
 public class PailISTER extends ItemStackTileEntityRenderer
 {
     @Override
-    public void func_239207_a_(ItemStack stack, ItemCameraTransforms.TransformType p_239207_2_, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay)
-    {
+    public void func_239207_a_(ItemStack stack, ItemCameraTransforms.TransformType p_239207_2_, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
         PailTE te = new PailTE();
         CompoundNBT nbt = stack.getChildTag("BlockEntityTag");
         if (nbt != null && !nbt.isEmpty()) te.read(BlockRegistryHandler.PAIL.get().getDefaultState(), nbt);
@@ -35,19 +34,19 @@ public class PailISTER extends ItemStackTileEntityRenderer
         IBakedModel model = itemRenderer.getItemModelWithOverrides(stack, null, null);
 
         IVertexBuilder builder = buffer.getBuffer(RenderType.getTranslucentNoCrumbling());
+        itemRenderer.renderModel(model, stack, combinedLight, combinedOverlay, matrixStack, builder);
 
         te.getTank().ifPresent
         (
             bucket ->
             {
-                if (!bucket.isEmpty())
-                {
+                if (!bucket.isEmpty()) {
                     FluidStack fluid = bucket.getFluid();
                     TextureAtlasSprite FLUID =
-                        Minecraft.getInstance()
-                        .getBlockRendererDispatcher()
-                        .getBlockModelShapes()
-                        .getTexture(fluid.getFluid().getDefaultState().getBlockState());
+                            Minecraft.getInstance()
+                                    .getBlockRendererDispatcher()
+                                    .getBlockModelShapes()
+                                    .getTexture(fluid.getFluid().getDefaultState().getBlockState());
                     int color = fluid.getFluid().getAttributes().getColor();
                     float height = ((float) fluid.getAmount() / bucket.getCapacity()) * 0.5f;
 
@@ -66,10 +65,5 @@ public class PailISTER extends ItemStackTileEntityRenderer
                 }
             }
         );
-
-        matrixStack.push();
-        itemRenderer.renderModel(model, stack, combinedLight, combinedOverlay, matrixStack, builder);
-        matrixStack.pop();
-        //itemRenderer.renderItem(stack, ItemCameraTransforms.TransformType.NONE, false, matrixStack, buffer, combinedLight, combinedOverlay, model.getBakedModel());
     }
 }
