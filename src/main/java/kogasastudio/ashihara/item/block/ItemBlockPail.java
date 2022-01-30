@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.item.block;
 
 import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.client.render.ister.PailISTER;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.BlockItem;
@@ -17,7 +18,7 @@ import static kogasastudio.ashihara.Ashihara.ASHIHARA;
 
 public class ItemBlockPail extends BlockItem
 {
-    public ItemBlockPail() {super(BlockRegistryHandler.PAIL.get(), new Properties().group(ASHIHARA));}
+    public ItemBlockPail() {super(BlockRegistryHandler.PAIL.get(), new Properties().group(ASHIHARA).setISTER(() -> PailISTER::new));}
 
     @Override
     public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)

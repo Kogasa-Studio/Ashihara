@@ -3,6 +3,7 @@ package kogasastudio.ashihara.client.render.ister;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.block.tileentities.PailTE;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -28,7 +29,7 @@ public class PailISTER extends ItemStackTileEntityRenderer
     {
         PailTE te = new PailTE();
         CompoundNBT nbt = stack.getChildTag("BlockEntityTag");
-        if (nbt != null && !nbt.isEmpty()) te.read(te.getBlockState(), nbt);
+        if (nbt != null && !nbt.isEmpty()) te.read(BlockRegistryHandler.PAIL.get().getDefaultState(), nbt);
 
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
         IBakedModel model = itemRenderer.getItemModelWithOverrides(stack, null, null);
@@ -46,7 +47,7 @@ public class PailISTER extends ItemStackTileEntityRenderer
                         Minecraft.getInstance()
                         .getBlockRendererDispatcher()
                         .getBlockModelShapes()
-                        .getTexture(fluid.getFluid().getDefaultState().getBlockState(), Objects.requireNonNull(te.getWorld()), te.getPos());
+                        .getTexture(fluid.getFluid().getDefaultState().getBlockState());
                     int color = fluid.getFluid().getAttributes().getColor();
                     float height = ((float) fluid.getAmount() / bucket.getCapacity()) * 0.5f;
 
@@ -60,11 +61,15 @@ public class PailISTER extends ItemStackTileEntityRenderer
                     buildMatrix(wtf, builder, 0.25f, 0.09375f + height, 0.75f, FLUID.getMinU(), FLUID.getMaxV(), combinedOverlay, color, 1.0f, combinedLight);
                     buildMatrix(wtf, builder, 0.75f, 0.09375f + height, 0.75f, FLUID.getMaxU(), FLUID.getMaxV(), combinedOverlay, color, 1.0f, combinedLight);
                     buildMatrix(wtf, builder, 0.75f, 0.09375f + height, 0.25f, FLUID.getMaxU(), FLUID.getMinV(), combinedOverlay, color, 1.0f, combinedLight);
+//                    Minecraft.getInstance().getRenderManager().getFontRenderer().drawString(matrixStack, "FUCK YOU", 0.0f, 0.0f, 0xFFFFFF);
                     matrixStack.pop();
                 }
             }
         );
 
-        itemRenderer.renderItem(stack, ItemCameraTransforms.TransformType.NONE, false, matrixStack, buffer, combinedLight, combinedOverlay, model.getBakedModel());
+        matrixStack.push();
+        itemRenderer.renderModel(model, stack, combinedLight, combinedOverlay, matrixStack, builder);
+        matrixStack.pop();
+        //itemRenderer.renderItem(stack, ItemCameraTransforms.TransformType.NONE, false, matrixStack, buffer, combinedLight, combinedOverlay, model.getBakedModel());
     }
 }

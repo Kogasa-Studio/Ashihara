@@ -87,7 +87,6 @@ public class ClientEventSubscribeHandler
         event.enqueueWork(() -> ClientRegistry.bindTileEntityRenderer(TERegistryHandler.PAIL_TE.get(), PailTER::new));
     }
 
-    /*
     @SubscribeEvent
     public static void onModelBaked(ModelBakeEvent event)
     {
@@ -107,7 +106,6 @@ public class ClientEventSubscribeHandler
             event.getModelRegistry().put(location, model);
         }
     }
-    */
 
     //绑定GUI
     @SubscribeEvent
