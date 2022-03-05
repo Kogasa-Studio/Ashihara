@@ -10,7 +10,11 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class BlockRegistryHandler {
+import java.util.HashMap;
+import java.util.Map;
+
+public class BlockRegistryHandler
+{
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Ashihara.MODID);
 
     public static final RegistryObject<Block> BLOCK_WATER_FIELD = BLOCKS.register("water_field", BlockWaterField::new);
@@ -34,24 +38,44 @@ public class BlockRegistryHandler {
     public static final RegistryObject<Block> STONE_LANTERN = BLOCKS.register("stone_lantern", BlockStoneLantern::new);
     public static final RegistryObject<Block> HYDRANGEA_BUSH = BLOCKS.register("hydrangea_bush", () -> new BlockHydrangeaBush(false));
     public static final RegistryObject<Block> PAIL = BLOCKS.register("pail", BlockPail::new);
+    public static final RegistryObject<Block> CANDLE = BLOCKS.register("candle", BlockCandle::new);
+    public static final RegistryObject<Block> TEA_TREE = BLOCKS.register("tea_tree", BlockTeaTree::new);
 
     //木制品
+    public static final Map<WoodCraftType, RegistryObject<Block>> CHERRY_WOODCRAFTS = registerAllWoodCraftsFor("cherry");
+
     public static final RegistryObject<Block> CHERRY_LOG = BLOCKS.register("cherry_log", SimpleLogBlock::new);
     public static final RegistryObject<Block> CHERRY_WOOD = BLOCKS.register("cherry_wood", SimpleWoodBlock::new);
-    public static final RegistryObject<Block> CHERRY_PLANKS = BLOCKS.register("cherry_planks", SimplePlanksBlock::new);
-    public static final RegistryObject<Block> CHERRY_STAIRS = BLOCKS.register("cherry_stairs", SimpleStairsBlock::new);
-    public static final RegistryObject<Block> CHERRY_SLAB = BLOCKS.register("cherry_slab", SimpleSlabBlock::new);
-    public static final RegistryObject<Block> CHERRY_FENCE = BLOCKS.register("cherry_fence", SimpleFenceBlock::new);
-    public static final RegistryObject<Block> CHERRY_FENCE_GATE = BLOCKS.register("cherry_fence_gate", SimpleFenceGateBlock::new);
     public static final RegistryObject<Block> CHERRY_BUTTON = BLOCKS.register("cherry_button", SimpleButtonBlock::new);
 
-    public static final RegistryObject<Block> STRIPPED_RED_LOG = BLOCKS.register("stripped_red_log", SimpleLogBlock::new);
-    public static final RegistryObject<Block> RED_PLANKS = BLOCKS.register("red_planks", SimplePlanksBlock::new);
-    public static final RegistryObject<Block> RED_STAIRS = BLOCKS.register("red_stairs", SimpleStairsBlock::new);
-    public static final RegistryObject<Block> RED_SLAB = BLOCKS.register("red_slab", SimpleSlabBlock::new);
-    public static final RegistryObject<Block> RED_FENCE = BLOCKS.register("red_fence", SimpleFenceBlock::new);
-    public static final RegistryObject<Block> RED_FENCE_GATE = BLOCKS.register("red_fence_gate", SimpleFenceGateBlock::new);
 
+    public static final Map<WoodCraftType, RegistryObject<Block>> RED_WOODCRAFTS = registerAllWoodCraftsFor("red");
+
+    public static final RegistryObject<Block> STRIPPED_RED_LOG = BLOCKS.register("stripped_red_log", SimpleLogBlock::new);
+
+    //流体
     public static final RegistryObject<FlowingFluidBlock> SOY_MILK_BLOCK = BLOCKS.register("soy_milk", () ->
         new FlowingFluidBlock(FluidRegistryHandler.SOY_MILK, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()));
+
+    private static Map<WoodCraftType, RegistryObject<Block>> registerAllWoodCraftsFor(String name)
+    {
+        Map<WoodCraftType, RegistryObject<Block>> map = new HashMap<>();
+
+        map.put(WoodCraftType.PLANKS, BLOCKS.register(name + "_planks", SimpleLogBlock::new));
+        map.put(WoodCraftType.STAIRS, BLOCKS.register(name + "_stairs", SimpleLogBlock::new));
+        map.put(WoodCraftType.SLAB, BLOCKS.register(name + "_slab", SimpleLogBlock::new));
+        map.put(WoodCraftType.FENCE, BLOCKS.register(name + "_fence", SimpleLogBlock::new));
+        map.put(WoodCraftType.FENCE_GATE, BLOCKS.register(name + "fence_gate", SimpleLogBlock::new));
+
+        return map;
+    }
+
+    public enum WoodCraftType
+    {
+        PLANKS,
+        STAIRS,
+        SLAB,
+        FENCE,
+        FENCE_GATE
+    }
 }

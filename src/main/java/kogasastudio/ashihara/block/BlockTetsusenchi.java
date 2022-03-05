@@ -1,6 +1,5 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.item.ItemExmpleContainer;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.sounds.SoundEvents;
 import net.minecraft.block.Block;
@@ -73,14 +72,14 @@ public class BlockTetsusenchi extends Block
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
         ItemStack item = player.getHeldItem(handIn);
-        if (item.getItem() == ItemExmpleContainer.RICE_CROP)
+        if (item.getItem() == ItemRegistryHandler.RICE_CROP.get())
         {
             if (!player.getCooldownTracker().hasCooldown(item.getItem()))
             {
                 Random rand = new Random();
                 worldIn.playSound(player, pos, SoundEvents.UNTHRESH.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
-                InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemExmpleContainer.STRAW));
-                InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemExmpleContainer.UNTHRESHED_RICE, rand.nextInt(2) + 1));
+                InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemRegistryHandler.STRAW.get()));
+                InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemRegistryHandler.UNTHRESHED_RICE.get(), rand.nextInt(2) + 1));
                 player.getCooldownTracker().setCooldown(item.getItem(), 8);
                 item.shrink(1);
                 return ActionResultType.SUCCESS;

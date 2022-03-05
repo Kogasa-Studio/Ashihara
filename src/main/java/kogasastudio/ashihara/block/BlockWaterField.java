@@ -1,14 +1,11 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.item.ItemExmpleContainer;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
@@ -44,7 +41,7 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
     public static final BooleanProperty ISLINKEDTOSOURCE = BooleanProperty.create("haswaterinside");
     public static final IntegerProperty LEVEL = IntegerProperty.create("level",4,8);
 
-    private boolean matchesWaterField(BlockState state){return state.matchesBlock(BlockRegistryHandler.BLOCK_WATER_FIELD.get());}
+    private boolean matchesWaterField(BlockState state) {return state.matchesBlock(BlockRegistryHandler.BLOCK_WATER_FIELD.get());}
 
     private boolean hasExit(World worldIn, BlockPos pos)
     {
@@ -89,14 +86,6 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) //碰撞箱的设定
     {
         return Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
-    }
-
-    @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) //设置掉落物品为2土球
-    {
-        List<ItemStack> list = new LinkedList<>();
-        list.add(new ItemStack(ItemExmpleContainer.DIRT_BALL, 2));
-        return list;
     }
 
     @Override

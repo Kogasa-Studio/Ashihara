@@ -1,0 +1,15 @@
+{
+  "multipart":
+  [
+    {"when": {"axis": "x", "bloomed": "true"}, "apply": {"model": "ashihara:block/tea_tree/tea_blooms", "y": 90}},
+    {"when": {"axis": "x", "age": "0"}, "apply": {"model": "ashihara:block/tea_tree/tea_tree_age0", "y": 90}},
+    {"when": {"axis": "x", "age": "1"}, "apply": {"model": "ashihara:block/tea_tree/tea_tree_age1", "y": 90}},
+    {"when": {"axis": "x", "age": "2|3"}, "apply": {"model": "ashihara:block/tea_tree/tea_tree_age2", "y": 90}},
+    {"when": {"axis": "x", "age": "4"}, "apply": {"model": "ashihara:block/tea_tree/tea_tree_fully_grown", "y": 90}},
+    {"when": {"axis": "z", "bloomed": "true"}, "apply": {"model": "ashihara:block/tea_tree/tea_blooms"}},
+    {"when": {"axis": "z", "age": "0"}, "apply": {"model": "ashihara:block/tea_tree/tea_tree_age0"}},
+    {"when": {"axis": "z", "age": "1"}, "apply": {"model": "ashihara:block/tea_tree/tea_tree_age1"}},
+    {"when": {"axis": "z", "age": "2|3"}, "apply": {"model": "ashihara:block/tea_tree/tea_tree_age2"}},
+    {"when": {"axis": "z", "age": "4"}, "apply": {"model": "ashihara:block/tea_tree/tea_tree_fully_grown"}}
+  ]
+}

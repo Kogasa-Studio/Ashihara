@@ -43,8 +43,8 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
     public int progress;
     public int progressTotal;
 
-    public byte recipeType;
-    public byte pointer;
+    public byte recipeType = -1;
+    public byte pointer = -1;
     /**
      * 0: 手
      * 1: 杵
@@ -52,7 +52,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
      */
     public byte nextStep = -1;
 
-    public byte[] sequence;
+    public byte[] sequence = new byte[0];
     public boolean isWorking;
 
     public IIntArray mortarData = new IIntArray()
@@ -263,7 +263,6 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
     @Override
     public CompoundNBT write(CompoundNBT compound)
     {
-        super.write(compound);
         compound.putInt("progress", this.progress);
         compound.putInt("progressTotal", this.progressTotal);
 
@@ -287,6 +286,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
             }
         }
         compound.put("output", outputIn);
+        super.write(compound);
 
         return compound;
     }

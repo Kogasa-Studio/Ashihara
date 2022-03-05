@@ -46,5 +46,6 @@ public class PailModel implements IBakedModel
     public ItemOverrideList getOverrides() {return this.existingModel.getOverrides();}
 
     @Override
-    public IBakedModel handlePerspective(ItemCameraTransforms.TransformType cameraTransformType, MatrixStack mat) {return this;}
+    public IBakedModel handlePerspective(ItemCameraTransforms.TransformType cameraTransformType, MatrixStack mat)
+    {return existingModel.handlePerspective(cameraTransformType, mat);}
 }

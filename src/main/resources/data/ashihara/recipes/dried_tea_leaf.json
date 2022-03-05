@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {"item": "ashihara:tea_leaf"},
+  "result": "ashihara:dried_tea_leaf",
+  "experience": 0.35,
+  "cookingtime": 200
+}

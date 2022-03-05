@@ -8,6 +8,7 @@ import kogasastudio.ashihara.client.models.baked.PailModel;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.client.particles.RiceParticle;
 import kogasastudio.ashihara.client.particles.SakuraParticle;
+import kogasastudio.ashihara.client.render.ter.CandleTER;
 import kogasastudio.ashihara.client.render.ter.MarkableLanternTER;
 import kogasastudio.ashihara.client.render.ter.MillTER;
 import kogasastudio.ashihara.client.render.ter.PailTER;
@@ -67,6 +68,7 @@ public class ClientEventSubscribeHandler
         setRenderType(BlockRegistryHandler.BLOCK_REED.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.BLOCK_SHORTER_REED.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.HYDRANGEA_BUSH.get(), RenderType.getCutoutMipped(), event);
+        setRenderType(BlockRegistryHandler.TEA_TREE.get(), RenderType.getCutoutMipped(), event);
     }
 
     //注册粒子
@@ -85,6 +87,7 @@ public class ClientEventSubscribeHandler
         event.enqueueWork(() -> ClientRegistry.bindTileEntityRenderer(TERegistryHandler.MARKABLE_LANTERN_TE.get(), MarkableLanternTER::new));
         event.enqueueWork(() -> ClientRegistry.bindTileEntityRenderer(TERegistryHandler.MILL_TE.get(), MillTER::new));
         event.enqueueWork(() -> ClientRegistry.bindTileEntityRenderer(TERegistryHandler.PAIL_TE.get(), PailTER::new));
+        event.enqueueWork(() -> ClientRegistry.bindTileEntityRenderer(TERegistryHandler.CANDLE_TE.get(), CandleTER::new));
     }
 
     @SubscribeEvent

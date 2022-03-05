@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.item.ItemExmpleContainer;
+import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -41,7 +41,7 @@ public class BlockDirtDepression extends Block
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
         List<ItemStack> list = new LinkedList<>();
-        list.add(new ItemStack(ItemExmpleContainer.DIRT_BALL, 2));
+        list.add(new ItemStack(ItemRegistryHandler.DIRT_BALL.get(), 2));
         return list;
     }
 }

@@ -9,8 +9,8 @@ public class SimpleStairsBlock extends StairsBlock
     {
         super
         (
-            BlockRegistryHandler.CHERRY_PLANKS.get().getDefaultState(),
-            Properties.from(BlockRegistryHandler.CHERRY_PLANKS.get())
+            BlockRegistryHandler.CHERRY_WOODCRAFTS.get(BlockRegistryHandler.WoodCraftType.PLANKS).get().getDefaultState(),
+            Properties.from(BlockRegistryHandler.CHERRY_WOODCRAFTS.get(BlockRegistryHandler.WoodCraftType.PLANKS).get())
         );
     }
 }

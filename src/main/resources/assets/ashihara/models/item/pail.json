@@ -1,5 +1,6 @@
 {
   "parent": "builtin/entity",
+  "texture_size": [32, 32],
   "textures": {"particle": "ashihara:block/pail"},
   "display":
   {
@@ -17,9 +18,9 @@
     },
     "thirdperson_righthand":
     {
-      "rotation": [ 75, 45, 0 ],
-      "translation": [ 0, 2.5, 0],
-      "scale": [ 0.375, 0.375, 0.375 ]
+      "rotation": [ 75, 0, 0 ],
+      "translation": [ 0.0, -3.5, -2],
+      "scale": [ 0.5, 0.5, 0.5 ]
     },
     "firstperson_righthand":
     {
@@ -29,9 +30,9 @@
     },
     "thirdperson_lefthand":
     {
-      "rotation": [ 75, 45, 0 ],
-      "translation": [ 0, 2.5, 0],
-      "scale": [ 0.375, 0.375, 0.375 ]
+      "rotation": [ 67, 0, 0 ],
+      "translation": [ 0.0, -3.5, -2],
+      "scale": [ 0.5, 0.5, 0.5 ]
     },
     "firstperson_lefthand":
     {
