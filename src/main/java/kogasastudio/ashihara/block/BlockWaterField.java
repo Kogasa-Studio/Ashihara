@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.item.ItemExmpleContainer;
+import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.fluid.Fluid;
@@ -44,7 +44,7 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
     public static final BooleanProperty ISLINKEDTOSOURCE = BooleanProperty.create("haswaterinside");
     public static final IntegerProperty LEVEL = IntegerProperty.create("level",4,8);
 
-    private boolean matchesWaterField(BlockState state){return state.matchesBlock(BlockRegistryHandler.BLOCK_WATER_FIELD.get());}
+    private boolean matchesWaterField(BlockState state) {return state.matchesBlock(BlockRegistryHandler.BLOCK_WATER_FIELD.get());}
 
     private boolean hasExit(World worldIn, BlockPos pos)
     {
@@ -95,7 +95,7 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) //设置掉落物品为2土球
     {
         List<ItemStack> list = new LinkedList<>();
-        list.add(new ItemStack(ItemExmpleContainer.DIRT_BALL, 2));
+        list.add(new ItemStack(ItemRegistryHandler.DIRT_BALL.get(), 2));
         return list;
     }
 

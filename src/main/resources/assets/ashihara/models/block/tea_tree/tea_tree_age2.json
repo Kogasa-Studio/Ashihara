@@ -1,0 +1,4 @@
+{
+  "parent": "ashihara:block/tea_tree/tea_tree",
+  "textures": {"leaves": "ashihara:block/tea_tree/tea_tree"}
+}

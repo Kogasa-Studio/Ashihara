@@ -39,4 +39,11 @@ public class TERegistryHandler
         PailTE::new,
         BlockRegistryHandler.PAIL.get()
     ).build(null));
+
+    public static final RegistryObject<TileEntityType<CandleTE>> CANDLE_TE = TILE_ENTITIES.register("candle_tileentity",
+    () -> TileEntityType.Builder.create
+    (
+        CandleTE::new,
+        BlockRegistryHandler.CANDLE.get()
+    ).build(null));
 }

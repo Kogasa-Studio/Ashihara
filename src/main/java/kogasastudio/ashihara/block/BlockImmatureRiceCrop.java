@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.item.ItemExmpleContainer;
+import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CropsBlock;
 import net.minecraft.block.SoundType;
@@ -30,7 +30,7 @@ public class BlockImmatureRiceCrop extends CropsBlock
     @Override
     protected IItemProvider getSeedsItem()
     {
-        return ItemExmpleContainer.UNTHRESHED_RICE;
+        return ItemRegistryHandler.UNTHRESHED_RICE.get();
     }
 
     @Override
@@ -45,12 +45,12 @@ public class BlockImmatureRiceCrop extends CropsBlock
         List<ItemStack> list = new LinkedList<>();
         if (this.getAge(state) == 2)
         {
-            list.add(new ItemStack(ItemExmpleContainer.ITEM_RICE_SEEDLING));
+            list.add(new ItemStack(ItemRegistryHandler.RICE_SEEDLING.get()));
             return list;
         }
         else if (this.getAge(state) <= 1)
         {
-            list.add(new ItemStack(ItemExmpleContainer.UNTHRESHED_RICE));
+            list.add(new ItemStack(ItemRegistryHandler.UNTHRESHED_RICE.get()));
             return list;
         }
         else return Collections.emptyList();

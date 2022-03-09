@@ -19,7 +19,8 @@ import java.util.Random;
 
 public class BlockLantern extends Block
 {
-    public BlockLantern(Properties properties) {
+    public BlockLantern(Properties properties)
+    {
         super(properties);
         this.setDefaultState(this.stateContainer.getBaseState().with(LIT, Boolean.FALSE).with(FACING, Direction.NORTH));
     }
@@ -38,7 +39,7 @@ public class BlockLantern extends Block
     {
         if(player.getHeldItem(handIn).getItem() == Items.AIR)
         {
-            Random random = new Random();
+            Random random = worldIn.getRandom();
             Boolean instantState = worldIn.getBlockState(pos).get(LIT);
             worldIn.playSound(player, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
             worldIn.setBlockState(pos, state.with(LIT, !instantState));

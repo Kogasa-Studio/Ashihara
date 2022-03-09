@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.item.ItemExmpleContainer;
+import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CropsBlock;
 import net.minecraft.block.SoundType;
@@ -72,7 +72,7 @@ public class BlockRiceCrop extends CropsBlock
     }
 
     @Override
-    protected IItemProvider getSeedsItem() {return ItemExmpleContainer.ITEM_RICE_SEEDLING;}
+    protected IItemProvider getSeedsItem() {return ItemRegistryHandler.RICE_SEEDLING.get();}
 
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
@@ -81,12 +81,12 @@ public class BlockRiceCrop extends CropsBlock
         Random rand = new Random();
         if (this.getAge(state) == this.getMaxAge())
         {
-            list.add(new ItemStack(ItemExmpleContainer.RICE_CROP, rand.nextInt(3) + 1));
+            list.add(new ItemStack(ItemRegistryHandler.RICE_CROP.get(), rand.nextInt(3) + 1));
             return list;
         }
         else if (this.getAge(state) <= 2)
         {
-            list.add(new ItemStack(ItemExmpleContainer.ITEM_RICE_SEEDLING));
+            list.add(new ItemStack(ItemRegistryHandler.RICE_SEEDLING.get()));
             return list;
         }
         else return Collections.emptyList();

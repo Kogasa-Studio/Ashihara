@@ -24,6 +24,17 @@
   "item.ashihara.bloomed_hydrangea_bush": "紫阳花",
   "item.ashihara.iron_ore_shatter": "铁矿碎块",
   "item.ashihara.stone_shatter": "碎石",
+  "item.ashihara.flour": "面粉",
+  "item.ashihara.soy_bean": "大豆",
+  "item.ashihara.cucumber": "黄瓜",
+  "item.ashihara.tomato": "番茄",
+  "item.ashihara.cotton": "棉花",
+  "item.ashihara.sweet_potato": "山芋",
+  "item.ashihara.tea_leaf": "茶叶",
+  "item.ashihara.dried_tea_leaf": "干茶叶",
+  "item.ashihara.macha_powder": "抹茶粉",
+  "item.ashihara.tea_flower": "茶花",
+  "item.ashihara.tea_seeds": "茶种子",
 
   "item.ashihara.wood_otsuchi": "木大槌",
   "item.ashihara.iron_otsuchi": "鉄大槌",
@@ -51,6 +62,8 @@
   "block.ashihara.stone_lantern": "石灯笼",
   "block.ashihara.hydrangea_bush": "紫阳花叶",
   "block.ashihara.pail": "提桶",
+  "block.ashihara.candle": "蜡烛",
+  "block.ashihara.tea_tree": "茶树",
 
   "block.ashihara.cherry_log": "樱木",
   "block.ashihara.cherry_planks": "樱木板",
@@ -66,6 +79,7 @@
   "block.ashihara.red_slab": "朱木台阶",
   "block.ashihara.red_fence": "朱木栅栏",
   "block.ashihara.red_fence_gate": "朱木栅栏门",
+  "block.ashihara.advanced_red_fence": "朱木勾栏",
 
   "block.ashihara.soy_milk": "豆浆",
 

@@ -1,0 +1,145 @@
+{
+  "type": "minecraft:block",
+  "pools":
+  [
+    {
+      "rolls": 1.0,
+      "entries":
+      [
+        {
+          "type": "minecraft:alternatives",
+          "children":
+          [
+            {
+              "type": "minecraft:item",
+              "conditions":
+              [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "ashihara:tea_tree",
+                  "properties":
+                  {
+                    "age": "4"
+                  }
+                }
+              ],
+              "name": "ashihara:tea_leaf"
+            },
+            {
+              "type": "minecraft:item",
+              "name": "ashihara:tea_seeds"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "entries":
+      [
+        {
+          "type": "minecraft:item",
+          "functions":
+          [
+            {
+              "function": "minecraft:apply_bonus",
+              "enchantment": "minecraft:fortune",
+              "formula": "minecraft:binomial_with_bonus_count",
+              "parameters":
+              {
+                "extra": 2,
+                "probability": 0.5714286
+              }
+            }
+          ],
+          "name": "ashihara:tea_seeds"
+        }
+      ],
+      "conditions":
+      [
+        {
+          "condition": "minecraft:block_state_property",
+          "block": "ashihara:tea_tree",
+          "properties":
+          {
+            "age": "4"
+          }
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "entries":
+      [
+        {
+          "type": "minecraft:item",
+          "functions":
+          [
+            {
+              "function": "minecraft:apply_bonus",
+              "enchantment": "minecraft:fortune",
+              "formula": "minecraft:binomial_with_bonus_count",
+              "parameters":
+              {
+                "extra": 4,
+                "probability": 0.5714286
+              }
+            }
+          ],
+          "name": "ashihara:tea_leaf"
+        }
+      ],
+      "conditions":
+      [
+        {
+          "condition": "minecraft:block_state_property",
+          "block": "ashihara:tea_tree",
+          "properties":
+          {
+            "age": "4"
+          }
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "entries":
+      [
+        {
+          "type": "minecraft:item",
+          "functions":
+          [
+            {
+              "function": "minecraft:apply_bonus",
+              "enchantment": "minecraft:fortune",
+              "formula": "minecraft:binomial_with_bonus_count",
+              "parameters":
+              {
+                "extra": 3,
+                "probability": 0.5714286
+              }
+            }
+          ],
+          "name": "ashihara:tea_flower"
+        }
+      ],
+      "conditions":
+      [
+        {
+          "condition": "minecraft:block_state_property",
+          "block": "ashihara:tea_tree",
+          "properties":
+          {
+            "bloomed": "true"
+          }
+        }
+      ]
+    }
+  ],
+  "functions":
+  [
+    {
+      "function": "minecraft:explosion_decay"
+    }
+  ]
+}

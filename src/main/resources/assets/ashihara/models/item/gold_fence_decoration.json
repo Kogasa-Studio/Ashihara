@@ -1,0 +1,18 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"0": "ashihara:block/gold_fence_decoration",
+		"particle": "ashihara:block/gold_fence_decoration"
+	},
+	"elements": [
+		{
+			"from": [3.5, -0.95, 6.5],
+			"to": [12.5, -0.95, 9.5],
+			"faces": {
+				"up": {"uv": [0, 0, 9, 3], "texture": "#0"},
+				"down": {"uv": [0, 0, 9, 3], "texture": "#0"}
+			}
+		}
+	]
+}

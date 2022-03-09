@@ -110,9 +110,8 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
     @Override
     public IRecipeSerializer<?> getSerializer() {return SERIALIZER;}
 
-    private static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<MillRecipe>
+    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<MillRecipe>
     {
-        Serializer() {this.setRegistryName(new ResourceLocation(Ashihara.MODID, "mill"));}
 
         @Override
         public MillRecipe read(ResourceLocation recipeId, JsonObject json)

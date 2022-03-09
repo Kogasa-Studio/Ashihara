@@ -11,7 +11,6 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
@@ -24,8 +23,6 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
 
 public class MortarRecipe implements IRecipe<RecipeWrapper>
 {
@@ -104,9 +101,8 @@ public class MortarRecipe implements IRecipe<RecipeWrapper>
 
     @Override
     public ResourceLocation getId() {return this.id;}
-    private static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<MortarRecipe>
+    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<MortarRecipe>
     {
-        Serializer() {this.setRegistryName(new ResourceLocation(Ashihara.MODID, "mortar"));}
 
         @Override
         public MortarRecipe read(ResourceLocation recipeId, JsonObject json)

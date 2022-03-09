@@ -2,7 +2,7 @@ package kogasastudio.ashihara.event;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
-import kogasastudio.ashihara.item.ItemExmpleContainer;
+import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
@@ -45,7 +45,7 @@ public class BasicEventHandler
                 world.playSound(player, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 world.setBlockState(pos, BlockRegistryHandler.BLOCK_DIRT_DEPRESSION.get().getDefaultState());
                 player.swingArm(event.getHand());
-                InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY() + 0.5F, pos.getZ(), new ItemStack(ItemExmpleContainer.DIRT_BALL));
+                InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY() + 0.5F, pos.getZ(), new ItemStack(ItemRegistryHandler.DIRT_BALL.get()));
                 if(!player.abilities.isCreativeMode) {item.damageItem(1, player, (playerEntity) -> player.sendBreakAnimation(event.getHand()));}
             }
         }
