@@ -1,0 +1,59 @@
+{
+  "type": "minecraft:block",
+  "pools":
+  [
+    {
+      "rolls": 1,
+      "entries":
+      [
+        {
+          "type": "minecraft:alternatives",
+          "children":
+          [
+            {
+              "type": "minecraft:item",
+              "functions":
+              [
+                {
+                  "function": "minecraft:set_count",
+                  "count": 2
+                },
+                {"function": "minecraft:explosion_decay"}
+              ],
+              "name": "ashihara:dirt_ball"
+            }
+          ]
+        }
+      ],
+      "conditions":
+      [
+        {
+          "condition": "minecraft:inverted",
+          "term":
+          {
+            "condition": "minecraft:alternative",
+            "terms":
+            [
+              {
+                "condition": "minecraft:match_tool",
+                "predicate":
+                {
+                  "enchantments":
+                  [
+                    {
+                      "enchantment": "minecraft:silk_touch",
+                      "levels":
+                      {
+                        "min": 1
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
