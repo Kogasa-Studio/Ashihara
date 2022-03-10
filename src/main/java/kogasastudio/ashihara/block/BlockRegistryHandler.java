@@ -55,6 +55,7 @@ public class BlockRegistryHandler {
     public static final RegistryObject<Block> RED_FENCE_GATE = BLOCKS.register("red_fence_gate", SimpleFenceGateBlock::new);
 
     public static final RegistryObject<Block> RED_ADVANCED_FENCE = BLOCKS.register("advanced_red_fence", BlockAdvancedFence::new);
+    public static final RegistryObject<Block> GOLD_FENCE_DECORATION = BLOCKS.register("gold_fence_decoration", BlockFenceDecoration::new);
 
     public static final RegistryObject<FlowingFluidBlock> SOY_MILK_BLOCK = BLOCKS.register("soy_milk", () ->
         new FlowingFluidBlock(FluidRegistryHandler.SOY_MILK, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()));

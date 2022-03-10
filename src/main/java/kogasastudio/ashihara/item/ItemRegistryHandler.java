@@ -97,30 +97,22 @@ public class ItemRegistryHandler
     //木制品
     public static final RegistryObject<Item> CHERRY_LOG = ITEMS.register("cherry_log", () -> new BlockItem(BlockRegistryHandler.CHERRY_LOG.get(), new Item.Properties().group(ASHIHARA)));
     public static final RegistryObject<Item> CHERRY_WOOD = ITEMS.register("cherry_wood", () -> new BlockItem(BlockRegistryHandler.CHERRY_WOOD.get(), new Item.Properties().group(ASHIHARA)));
-
-    public static final Map<BlockRegistryHandler.WoodCraftType, RegistryObject<Item>> CHERRY_WOODCRAFTS = syncWoodCraftItems(BlockRegistryHandler.CHERRY_WOODCRAFTS, ASHIHARA, "cherry");
-
+    public static final RegistryObject<Item> CHERRY_PLANKS = ITEMS.register("cherry_planks", () -> new BlockItem(BlockRegistryHandler.CHERRY_PLANKS.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> CHERRY_STAIRS = ITEMS.register("cherry_stairs", () -> new BlockItem(BlockRegistryHandler.CHERRY_STAIRS.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> CHERRY_SLAB = ITEMS.register("cherry_slab", () -> new BlockItem(BlockRegistryHandler.CHERRY_SLAB.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> CHERRY_FENCE = ITEMS.register("cherry_fence", () -> new BlockItem(BlockRegistryHandler.CHERRY_FENCE.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> CHERRY_FENCE_GATE = ITEMS.register("cherry_fence_gate", () -> new BlockItem(BlockRegistryHandler.CHERRY_FENCE_GATE.get(), new Item.Properties().group(ASHIHARA)));
     public static final RegistryObject<Item> CHERRY_BUTTON = ITEMS.register("cherry_button", () -> new BlockItem(BlockRegistryHandler.CHERRY_BUTTON.get(), new Item.Properties().group(ASHIHARA)));
 
     public static final RegistryObject<Item> STRIPPED_RED_LOG = ITEMS.register("stripped_red_log", () -> new BlockItem(BlockRegistryHandler.STRIPPED_RED_LOG.get(), new Item.Properties().group(ASHIHARA)));
-
-    public static final Map<BlockRegistryHandler.WoodCraftType, RegistryObject<Item>> RED_WOODCRAFTS = syncWoodCraftItems(BlockRegistryHandler.RED_WOODCRAFTS, ASHIHARA, "red");
-
+    public static final RegistryObject<Item> RED_PLANKS = ITEMS.register("red_planks", () -> new BlockItem(BlockRegistryHandler.RED_PLANKS.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> RED_STAIRS = ITEMS.register("red_stairs", () -> new BlockItem(BlockRegistryHandler.RED_STAIRS.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> RED_SLAB = ITEMS.register("red_slab", () -> new BlockItem(BlockRegistryHandler.RED_SLAB.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> RED_FENCE = ITEMS.register("red_fence", () -> new BlockItem(BlockRegistryHandler.RED_FENCE.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> RED_FENCE_GATE = ITEMS.register("red_fence_gate", () -> new BlockItem(BlockRegistryHandler.RED_FENCE_GATE.get(), new Item.Properties().group(ASHIHARA)));
+    
     public static final RegistryObject<Item> RED_ADVANCED_FENCE = ITEMS.register("advanced_red_fence", () -> new BlockItem(BlockRegistryHandler.RED_ADVANCED_FENCE.get(), new Item.Properties().group(ASHIHARA)));
 
     //桶
     public static final RegistryObject<Item> SOY_MILK_BUCKET = ITEMS.register("soy_milk_bucket", () -> new BucketItem(FluidRegistryHandler.SOY_MILK, new Item.Properties().group(ItemGroup.MISC)));
-
-    private static Map<BlockRegistryHandler.WoodCraftType, RegistryObject<Item>> syncWoodCraftItems(Map<BlockRegistryHandler.WoodCraftType, RegistryObject<Block>> map, ItemGroup group, String name)
-    {
-        Map<BlockRegistryHandler.WoodCraftType, RegistryObject<Item>> items = new HashMap<>();
-
-        items.put(BlockRegistryHandler.WoodCraftType.PLANKS, ITEMS.register(name + "_planks", () -> new BlockItem(map.get(BlockRegistryHandler.WoodCraftType.PLANKS).get(), new Item.Properties().group(group))));
-        items.put(BlockRegistryHandler.WoodCraftType.STAIRS, ITEMS.register(name + "_stairs", () -> new BlockItem(map.get(BlockRegistryHandler.WoodCraftType.STAIRS).get(), new Item.Properties().group(group))));
-        items.put(BlockRegistryHandler.WoodCraftType.SLAB, ITEMS.register(name + "_slab", () -> new BlockItem(map.get(BlockRegistryHandler.WoodCraftType.SLAB).get(), new Item.Properties().group(group))));
-        items.put(BlockRegistryHandler.WoodCraftType.FENCE, ITEMS.register(name + "_fence", () -> new BlockItem(map.get(BlockRegistryHandler.WoodCraftType.FENCE).get(), new Item.Properties().group(group))));
-        items.put(BlockRegistryHandler.WoodCraftType.FENCE_GATE, ITEMS.register(name + "_fence_gate", () -> new BlockItem(map.get(BlockRegistryHandler.WoodCraftType.FENCE_GATE).get(), new Item.Properties().group(group))));
-
-        return items;
-    }
 }

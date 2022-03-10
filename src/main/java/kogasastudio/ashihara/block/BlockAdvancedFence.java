@@ -4,19 +4,24 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.Items;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
+
+import static kogasastudio.ashihara.block.BlockFenceDecoration.AXIS;
+import static kogasastudio.ashihara.block.BlockFenceDecoration.ORB;
 
 public class BlockAdvancedFence extends Block
 {
@@ -203,6 +208,30 @@ public class BlockAdvancedFence extends Block
     }
 
     @Override
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    {
+        if (player.getHeldItem(handIn).getItem().equals(Items.GOLD_INGOT))
+        {
+            if (hit.getFace().equals(Direction.UP) && worldIn.getBlockState(pos.up()).isAir())
+            {
+                BlockState deco = BlockRegistryHandler.GOLD_FENCE_DECORATION.get().getDefaultState();
+
+//                if (state.get(COLUMN).equals(ColumnType.CORE))
+                if (state.get(NORTH) && state.get(SOUTH)) deco = deco.with(AXIS, Direction.Axis.Z);
+                else if (state.get(EAST) && state.get(WEST)) deco = deco.with(AXIS, Direction.Axis.X);
+                else deco = deco.with(ORB, true);
+
+                worldIn.setBlockState(pos.up(), deco);
+                worldIn.playSound(player, pos, SoundEvents.BLOCK_LANTERN_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                if (!player.isCreative()) player.getHeldItem(handIn).shrink(1);
+
+                return ActionResultType.SUCCESS;
+            }
+        }
+        return ActionResultType.PASS;
+    }
+
+    @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
     {
         VoxelShape part_N_DOWN = makeCuboidShape(6.5d, 6.0d, 0.0d, 9.5d, 9.0, 8.0d);
@@ -239,9 +268,9 @@ public class BlockAdvancedFence extends Block
 
         return column;
     }
-    //TODO: 和出头的联动，形状
+    //TODO: 和出头的联动
 
-    private enum ColumnType implements IStringSerializable
+    public enum ColumnType implements IStringSerializable
     {
         CORE("core"),
         MID("mid"),

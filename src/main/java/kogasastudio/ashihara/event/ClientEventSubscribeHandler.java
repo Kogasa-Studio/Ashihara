@@ -69,6 +69,7 @@ public class ClientEventSubscribeHandler
         setRenderType(BlockRegistryHandler.BLOCK_SHORTER_REED.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.HYDRANGEA_BUSH.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.TEA_TREE.get(), RenderType.getCutoutMipped(), event);
+        setRenderType(BlockRegistryHandler.GOLD_FENCE_DECORATION.get(), RenderType.getCutoutMipped(), event);
     }
 
     //注册粒子
