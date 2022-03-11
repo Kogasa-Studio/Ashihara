@@ -16,6 +16,7 @@ public class AshiharaTags
     public static final Tags.IOptionalNamedTag<Item> SAUCE_MATERIALS = tag("sauce_materials");
 
     public static final Tags.IOptionalNamedTag<Block> ADVANCED_FENCES = tagBlock("advanced_fences");
+    public static final Tags.IOptionalNamedTag<Block> FENCE_EXPANSIONS = tagBlock("fence_expansions");
 
     private static Tags.IOptionalNamedTag<Item> tag(String name)
     {

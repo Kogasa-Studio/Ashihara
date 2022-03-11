@@ -1,11 +1,13 @@
 package kogasastudio.ashihara.block;
 
+import kogasastudio.ashihara.utils.WoodTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.EnumProperty;
@@ -22,10 +24,11 @@ import net.minecraftforge.common.ToolType;
 
 import static kogasastudio.ashihara.block.BlockFenceDecoration.AXIS;
 import static kogasastudio.ashihara.block.BlockFenceDecoration.ORB;
+import static kogasastudio.ashihara.block.BlockFenceExpansion.FACING;
 
-public class BlockAdvancedFence extends Block
+public class BlockAdvancedFence extends Block implements IVariable<WoodTypes>
 {
-    public BlockAdvancedFence()
+    public BlockAdvancedFence(WoodTypes typeIn)
     {
         super
         (
@@ -35,7 +38,10 @@ public class BlockAdvancedFence extends Block
             .sound(SoundType.WOOD)
         );
         this.setDefaultState(this.getStateContainer().getBaseState().with(COLUMN, ColumnType.CORE));
+        type = typeIn;
     }
+
+    public static WoodTypes type;
 
     public static final BooleanProperty NORTH = BooleanProperty.create("north");
     public static final BooleanProperty SOUTH = BooleanProperty.create("south");
@@ -44,9 +50,29 @@ public class BlockAdvancedFence extends Block
     public static final EnumProperty<ColumnType> COLUMN = EnumProperty.create("column", ColumnType.class);
 
     @Override
+    public WoodTypes getType() {return type;}
+
+    @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(NORTH).add(SOUTH).add(WEST).add(EAST).add(COLUMN);
+    }
+
+    private boolean canConnect(World world, BlockPos pos, Direction direction)
+    {
+        BlockState state = world.getBlockState(pos);
+        BlockState fromState = world.getBlockState(pos.offset(direction));
+
+        boolean expanded = false;
+        if (state.getBlock() instanceof BlockAdvancedFence && fromState.getBlock() instanceof BlockFenceExpansion)
+        {
+            if (((BlockFenceExpansion) fromState.getBlock()).getType().equals(((BlockAdvancedFence) state.getBlock()).getType()))
+            {
+                expanded = fromState.get(FACING).equals(direction);
+            }
+        }
+
+        return fromState.isSolidSide(world, pos.offset(direction), direction.getOpposite()) || expanded;
     }
 
     @Override
@@ -57,10 +83,15 @@ public class BlockAdvancedFence extends Block
         BlockState w = worldIn.getBlockState(pos.west());
         BlockState e = worldIn.getBlockState(pos.east());
 
-        boolean nS = n.isSolidSide(worldIn, pos.north(), Direction.SOUTH) || n.matchesBlock(state.getBlock());
-        boolean sS = s.isSolidSide(worldIn, pos.south(), Direction.NORTH) || s.matchesBlock(state.getBlock());
-        boolean wS = w.isSolidSide(worldIn, pos.west(), Direction.EAST) || w.matchesBlock(state.getBlock());
-        boolean eS = e.isSolidSide(worldIn, pos.east(), Direction.WEST) || e.matchesBlock(state.getBlock());
+        boolean nC = n.matchesBlock(state.getBlock());
+        boolean sC = s.matchesBlock(state.getBlock());
+        boolean wC = w.matchesBlock(state.getBlock());
+        boolean eC = e.matchesBlock(state.getBlock());
+
+        boolean nS = canConnect(worldIn, pos, Direction.NORTH) || nC;
+        boolean sS = canConnect(worldIn, pos, Direction.SOUTH) || sC;
+        boolean wS = canConnect(worldIn, pos, Direction.WEST) || wC;
+        boolean eS = canConnect(worldIn, pos, Direction.EAST) || eC;
 
         int connected = 0;
         connected += nS ? 0 : 1;
@@ -210,20 +241,34 @@ public class BlockAdvancedFence extends Block
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
-        if (player.getHeldItem(handIn).getItem().equals(Items.GOLD_INGOT))
+        ItemStack stack = player.getHeldItem(handIn);
+        if (stack.getItem().equals(Items.GOLD_INGOT))
         {
             if (hit.getFace().equals(Direction.UP) && worldIn.getBlockState(pos.up()).isAir())
             {
                 BlockState deco = BlockRegistryHandler.GOLD_FENCE_DECORATION.get().getDefaultState();
 
-//                if (state.get(COLUMN).equals(ColumnType.CORE))
-                if (state.get(NORTH) && state.get(SOUTH)) deco = deco.with(AXIS, Direction.Axis.Z);
+                if (state.get(COLUMN).equals(ColumnType.CORE)) deco = deco.with(ORB, true);
+                else if (state.get(NORTH) && state.get(SOUTH)) deco = deco.with(AXIS, Direction.Axis.Z);
                 else if (state.get(EAST) && state.get(WEST)) deco = deco.with(AXIS, Direction.Axis.X);
-                else deco = deco.with(ORB, true);
 
                 worldIn.setBlockState(pos.up(), deco);
                 worldIn.playSound(player, pos, SoundEvents.BLOCK_LANTERN_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 if (!player.isCreative()) player.getHeldItem(handIn).shrink(1);
+
+                return ActionResultType.SUCCESS;
+            }
+        }
+        else if (state.get(COLUMN).equals(ColumnType.CORE) && stack.getItem().equals(Items.STICK) && (player.isCreative() || stack.getCount() >= 2))
+        {
+            Direction direction = hit.getFace();
+            if (direction.getAxis().isHorizontal() && worldIn.getBlockState(pos.offset(direction)).isAir())
+            {
+                BlockState exp = BlockRegistryHandler.RED_FENCE_EXPANSION.get().getDefaultState();
+
+                worldIn.setBlockState(pos.offset(direction), exp.with(FACING, direction));
+                worldIn.playSound(player, pos, SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                if (!player.isCreative()) player.getHeldItem(handIn).shrink(2);
 
                 return ActionResultType.SUCCESS;
             }

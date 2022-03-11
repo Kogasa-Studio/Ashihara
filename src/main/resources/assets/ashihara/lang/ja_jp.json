@@ -73,14 +73,16 @@
   "block.ashihara.cherry_fence_gate": "桜木のフェンスゲート",
   "block.ashihara.cherry_button": "桜木のボタン",
   "block.ashihara.cherry_wood": "桜の木",
-  "block.ashihara.stripped_red_log": "赤い木の丸太",
-  "block.ashihara.red_planks": "赤い木の板材",
-  "block.ashihara.red_stairs": "赤い木の階段",
-  "block.ashihara.red_slab": "赤い木のハーフブロック",
-  "block.ashihara.red_fence": "赤い木のフェンス",
-  "block.ashihara.red_fence_gate": "赤い木のフェンスゲート",
+  "block.ashihara.stripped_red_log": "朱木の丸太",
+  "block.ashihara.red_planks": "朱木の板材",
+  "block.ashihara.red_stairs": "朱木の階段",
+  "block.ashihara.red_slab": "朱木のハーフブロック",
+  "block.ashihara.red_fence": "朱木のフェンス",
+  "block.ashihara.red_fence_gate": "朱木のフェンスゲート",
   "block.ashihara.advanced_red_fence": "朱木勾欄",
+
   "block.ashihara.gold_fence_decoration": "金の釘隱",
+  "block.ashihara.red_fence_expansion": "朱木勾欄の出会",
 
   "block.ashihara.soy_milk": "豆乳",
 
