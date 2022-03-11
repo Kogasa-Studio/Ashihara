@@ -34,14 +34,6 @@ public class BlockJinjaLantern extends BlockDoubleLantern
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
-    {
-        List<ItemStack> list = new LinkedList<>();
-        list.add(new ItemStack(ItemRegistryHandler.ITEM_JINJA_LANTERN.get()));
-        return list;
-    }
-
-    @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
     {
         VoxelShape UPPER_X = Block.makeCuboidShape(1.8D, 0.0D, 12.9D, 14.2D, 13.1D, 3.2D);

@@ -8,9 +8,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.loot.LootContext;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
@@ -27,8 +25,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 
 import static kogasastudio.ashihara.utils.EasyBlockActionHandler.getLightValueLit;
@@ -57,21 +53,6 @@ public class BlockHangingLanternLong extends BlockLantern
     public TileEntity createTileEntity(BlockState state, IBlockReader world)
     {
         return new MarkableLanternTE();
-    }
-
-    @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
-    {
-        List<ItemStack> list = new LinkedList<>();
-        if (state.matchesBlock(BlockRegistryHandler.LANTERN_LONG_WHITE.get()))
-        {
-            list.add(new ItemStack(ItemRegistryHandler.LANTERN_LONG_WHITE.get()));
-        }
-        else if (state.matchesBlock(BlockRegistryHandler.LANTERN_LONG_RED.get()))
-        {
-            list.add(new ItemStack(ItemRegistryHandler.LANTERN_LONG_RED.get()));
-        }
-        return list;
     }
 
     @Override
@@ -112,7 +93,7 @@ public class BlockHangingLanternLong extends BlockLantern
     {
         if(player.getHeldItem(handIn).getItem() == Items.AIR)
         {
-            Random random = new Random();
+            Random random = worldIn.getRandom();
             Boolean instantState = worldIn.getBlockState(pos).get(LIT);
             worldIn.playSound(player, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
             worldIn.setBlockState(pos, state.with(LIT, !instantState));

@@ -11,7 +11,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.*;
@@ -23,8 +22,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 
 public class BlockTetsusenchi extends Block
@@ -61,14 +58,6 @@ public class BlockTetsusenchi extends Block
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
-    {
-        List<ItemStack> list = new LinkedList<>();
-        list.add(new ItemStack(ItemRegistryHandler.ITEM_TETSUSENCHI.get()));
-        return list;
-    }
-
-    @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
         ItemStack item = player.getHeldItem(handIn);
@@ -76,10 +65,10 @@ public class BlockTetsusenchi extends Block
         {
             if (!player.getCooldownTracker().hasCooldown(item.getItem()))
             {
-                Random rand = new Random();
+                Random rand = worldIn.getRandom();
                 worldIn.playSound(player, pos, SoundEvents.UNTHRESH.get(), SoundCategory.BLOCKS, 1.0F, 1.0F);
                 InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemRegistryHandler.STRAW.get()));
-                InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemRegistryHandler.UNTHRESHED_RICE.get(), rand.nextInt(2) + 1));
+                InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemRegistryHandler.PADDY.get(), rand.nextInt(2) + 1));
                 player.getCooldownTracker().setCooldown(item.getItem(), 8);
                 item.shrink(1);
                 return ActionResultType.SUCCESS;

@@ -1,7 +1,7 @@
 {
   "type": "ashihara:mill",
   "group": "test_group",
-  "ingredients": [{"item": "ashihara:unthreshed_rice"}],
+  "ingredients": [{"item": "ashihara:paddy"}],
   "costs": [1],
   "result":
   [

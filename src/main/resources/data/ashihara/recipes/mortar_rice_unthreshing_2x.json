@@ -2,8 +2,8 @@
   "type": "ashihara:mortar",
   "ingredients":
   [
-    {"item": "ashihara:unthreshed_rice"},
-    {"item": "ashihara:unthreshed_rice"}
+    {"item": "ashihara:paddy"},
+    {"item": "ashihara:paddy"}
   ],
   "result":
   [

@@ -5,8 +5,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.CropsBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
@@ -14,9 +12,6 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 
 import static kogasastudio.ashihara.block.BlockWaterField.LEVEL;
@@ -73,24 +68,6 @@ public class BlockRiceCrop extends CropsBlock
 
     @Override
     protected IItemProvider getSeedsItem() {return ItemRegistryHandler.RICE_SEEDLING.get();}
-
-    @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
-    {
-        List<ItemStack> list = new LinkedList<>();
-        Random rand = new Random();
-        if (this.getAge(state) == this.getMaxAge())
-        {
-            list.add(new ItemStack(ItemRegistryHandler.RICE_CROP.get(), rand.nextInt(3) + 1));
-            return list;
-        }
-        else if (this.getAge(state) <= 2)
-        {
-            list.add(new ItemStack(ItemRegistryHandler.RICE_SEEDLING.get()));
-            return list;
-        }
-        else return Collections.emptyList();
-    }
 
     @Override
     public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, BlockState state)

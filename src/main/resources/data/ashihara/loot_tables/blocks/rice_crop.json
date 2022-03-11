@@ -1,0 +1,79 @@
+{
+  "type": "minecraft:block",
+  "pools":
+  [
+    {
+      "rolls": 1.0,
+      "entries":
+      [
+        {
+          "type": "minecraft:item",
+          "name": "ashihara:rice_seedling"
+        }
+      ],
+      "conditions":
+      [
+        {
+          "condition": "minecraft:block_state_property",
+          "block": "ashihara:rice_crop",
+          "properties": {"age": "0"}
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "entries":
+      [
+        {
+          "type": "minecraft:item",
+          "name": "ashihara:rice_seedling"
+        }
+      ],
+      "conditions":
+      [
+        {
+          "condition": "minecraft:block_state_property",
+          "block": "ashihara:rice_crop",
+          "properties": {"age": "1"}
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "entries":
+      [
+        {
+          "type": "minecraft:item",
+          "functions":
+          [
+            {
+              "function": "minecraft:apply_bonus",
+              "enchantment": "minecraft:fortune",
+              "formula": "minecraft:binomial_with_bonus_count",
+              "parameters":
+              {
+                "extra": 3,
+                "probability": 0.5714286
+              }
+            }
+          ],
+          "name": "ashihara:rice_crop_item"
+        }
+      ],
+      "conditions":
+      [
+        {
+          "condition": "minecraft:block_state_property",
+          "block": "ashihara:rice_crop",
+          "properties": {"age": "7"}
+        }
+      ]
+    }
+  ],
+  "functions":
+  [
+    {
+      "function": "minecraft:explosion_decay"
+    }
+  ]
+}

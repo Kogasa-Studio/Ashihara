@@ -313,7 +313,6 @@ public class BlockAdvancedFence extends Block implements IVariable<WoodTypes>
 
         return column;
     }
-    //TODO: 和出头的联动
 
     public enum ColumnType implements IStringSerializable
     {

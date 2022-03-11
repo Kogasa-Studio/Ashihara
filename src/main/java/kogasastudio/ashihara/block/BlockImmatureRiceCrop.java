@@ -30,7 +30,7 @@ public class BlockImmatureRiceCrop extends CropsBlock
     @Override
     protected IItemProvider getSeedsItem()
     {
-        return ItemRegistryHandler.UNTHRESHED_RICE.get();
+        return ItemRegistryHandler.PADDY.get();
     }
 
     @Override
@@ -50,7 +50,7 @@ public class BlockImmatureRiceCrop extends CropsBlock
         }
         else if (this.getAge(state) <= 1)
         {
-            list.add(new ItemStack(ItemRegistryHandler.UNTHRESHED_RICE.get()));
+            list.add(new ItemStack(ItemRegistryHandler.PADDY.get()));
             return list;
         }
         else return Collections.emptyList();

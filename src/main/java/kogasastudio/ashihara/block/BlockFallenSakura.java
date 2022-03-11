@@ -32,7 +32,7 @@ public class BlockFallenSakura extends Block
     @Override
     public boolean isReplaceable(BlockState state, BlockItemUseContext useContext)
     {
-        return !(useContext.getItem().getItem() == ItemRegistryHandler.ITEM_FALLEN_SAKURA.get());
+        return useContext.getItem().getItem() != ItemRegistryHandler.FALLEN_SAKURA.get();
     }
 
     @Override

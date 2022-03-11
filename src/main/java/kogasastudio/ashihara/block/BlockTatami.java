@@ -2,7 +2,6 @@ package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.client.particles.GenericParticleData;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
-import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -10,9 +9,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShearsItem;
-import net.minecraft.loot.LootContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
@@ -21,9 +18,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-
-import java.util.LinkedList;
-import java.util.List;
 
 import static net.minecraft.state.properties.BlockStateProperties.HORIZONTAL_AXIS;
 
@@ -173,13 +167,5 @@ public class BlockTatami extends Block
             else return ActionResultType.PASS;
         }
         else return ActionResultType.PASS;
-    }
-
-    @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
-    {
-        List<ItemStack> list = new LinkedList<>();
-        list.add(new ItemStack(ItemRegistryHandler.TATAMI.get()));
-        return list;
     }
 }
