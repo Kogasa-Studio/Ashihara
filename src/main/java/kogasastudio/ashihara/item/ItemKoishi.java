@@ -11,16 +11,20 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import java.util.Objects;
 import java.util.Random;
+import java.util.UUID;
 
 public class ItemKoishi extends Item
 {
@@ -37,6 +41,7 @@ public class ItemKoishi extends Item
         BlockPos pos = context.getPos();
         Direction facing = context.getFace();
         World worldIn = context.getWorld();
+        TileEntity te = worldIn.getTileEntity(pos);
 
         if (!item.isEmpty() && Objects.requireNonNull(player).canPlayerEdit(pos.offset(facing), facing, item))
         {
@@ -55,6 +60,12 @@ public class ItemKoishi extends Item
             {
                 worldIn.playSound(player, pos, SoundEvents.BLOCK_BAMBOO_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 worldIn.setBlockState(pos, blockState.with(BlockWaterField.LEVEL, 6));
+                return ActionResultType.SUCCESS;
+            }
+            else if (te != null && !worldIn.isRemote())
+            {
+                CompoundNBT nbt = te.serializeNBT();
+                player.sendMessage(new TranslationTextComponent(nbt.toString()), UUID.randomUUID());
                 return ActionResultType.SUCCESS;
             }
             else
