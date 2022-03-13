@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 public class MillContainer extends AshiharaCommonContainer
 {
     private final IIntArray millData;
+    private final MillTE te;
 
     public MillContainer(int id, PlayerInventory inventory, World worldIn, BlockPos posIn, IIntArray millDataIn)
     {
@@ -20,13 +21,16 @@ public class MillContainer extends AshiharaCommonContainer
         this.millData = millDataIn;
         trackIntArray(millDataIn);
         layoutPlayerInventorySlots(inventory, 8, 120);
-        MillTE te = (MillTE) worldIn.getTileEntity(posIn);
-        if (te != null)
+        MillTE teIn = (MillTE) worldIn.getTileEntity(posIn);
+        this.te = teIn;
+        if (teIn != null)
         {
             addSlotBox(te.getInput(), 0, 55, 39, 2, 18, 2, 18);
             addSlotBox(te.getOutput(), 0, 130, 39, 2, 18, 2, 18);
         }
     }
+
+    public MillTE getTE() {return this.te;}
 
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {return true;}

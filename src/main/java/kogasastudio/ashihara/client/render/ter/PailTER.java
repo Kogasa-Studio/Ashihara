@@ -51,6 +51,8 @@ public class PailTER extends TileEntityRenderer<PailTE>
                     buildMatrix(wtf, builder, 0.25f, 0.09375f + height, 0.75f, FLUID.getMinU(), FLUID.getMaxV(), combinedOverlayIn, color, 1.0f, combinedLightIn);
                     buildMatrix(wtf, builder, 0.75f, 0.09375f + height, 0.75f, FLUID.getMaxU(), FLUID.getMaxV(), combinedOverlayIn, color, 1.0f, combinedLightIn);
                     buildMatrix(wtf, builder, 0.75f, 0.09375f + height, 0.25f, FLUID.getMaxU(), FLUID.getMinV(), combinedOverlayIn, color, 1.0f, combinedLightIn);
+
+                    GlStateManager.disableBlend();
                     matrixStackIn.pop();
                 }
             }

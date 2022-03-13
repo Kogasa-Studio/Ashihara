@@ -21,6 +21,9 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
@@ -28,7 +31,9 @@ import javax.annotation.Nullable;
 
 import java.util.Optional;
 
-public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, INamedContainerProvider
+import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+
+public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, INamedContainerProvider, IFluidHandler
 {
     public MillTE() {super(TERegistryHandler.MILL_TE.get());}
 
@@ -41,6 +46,7 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     public float exp; //转完配方可以得到的经验，由所选配方决定
     public boolean isWorking;
     private MillRecipe recipe;
+    public LazyOptional<FluidTank> tank = LazyOptional.of(this::createTank);
     public IIntArray millData = new IIntArray()
     {
         public int get(int index)
@@ -172,6 +178,33 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     public Inventory getOutput() {return output;}
 
     @Override
+    public FluidTank createTank() {return new FluidTank(4000);}
+
+    @Override
+    public LazyOptional<FluidTank> getTank() {return this.tank;}
+
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> cap)
+    {
+        if (!this.isRemoved() && cap.equals(FLUID_HANDLER_CAPABILITY)) {return this.tank.cast();}
+        return super.getCapability(cap);
+    }
+
+    @Override
+    protected void invalidateCaps()
+    {
+        super.invalidateCaps();
+        this.tank.invalidate();
+    }
+
+    @Override
+    protected void reviveCaps()
+    {
+        super.reviveCaps();
+        tank = LazyOptional.of(this::createTank);
+    }
+
+    @Override
     public void read(BlockState state, CompoundNBT nbt)
     {
         this.round = nbt.getByte("round");
@@ -180,6 +213,7 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
         this.roundTicks = nbt.getInt("roundTicks");
         this.input.deserializeNBT(nbt.getCompound("input"));
         this.output.read(nbt.getList("output", 10));
+        this.tank.ifPresent(fluidTank -> fluidTank.readFromNBT(nbt.getCompound("tank")));
         super.read(state, nbt);
     }
 
@@ -192,6 +226,7 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
         compound.putInt("roundTicks", this.roundTicks);
         compound.put("input", this.input.serializeNBT());
         compound.put("output", this.output.write());
+        this.tank.ifPresent(fluidTank -> compound.put("tank", fluidTank.writeToNBT(new CompoundNBT())));
         return super.write(compound);
     }
 

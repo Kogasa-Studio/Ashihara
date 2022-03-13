@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.block.tileentities.MillTE;
+import kogasastudio.ashihara.helper.FluidHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -26,6 +27,7 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
@@ -80,12 +82,26 @@ public class BlockMill extends Block
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
-        if (!worldIn.isRemote && handIn == Hand.MAIN_HAND)
+        ItemStack stack = player.getHeldItem(handIn);
+        MillTE te = (MillTE) worldIn.getTileEntity(pos);
+
+        if (te != null)
         {
-            MillTE mill = (MillTE) worldIn.getTileEntity(pos);
-            NetworkHooks.openGui((ServerPlayerEntity) player, mill, (PacketBuffer packerBuffer) -> packerBuffer.writeBlockPos(mill.getPos()));
+            FluidTank tank = te.getTank().orElse(new FluidTank(0));
+            if (!stack.isEmpty() && FluidHelper.notifyFluidTankInteraction(player, handIn, stack, tank))
+            {
+                player.inventory.markDirty();
+                worldIn.notifyBlockUpdate(pos, state, state, 3);
+                return ActionResultType.SUCCESS;
+            }
+            else if (!worldIn.isRemote && handIn == Hand.MAIN_HAND)
+            {
+                NetworkHooks.openGui((ServerPlayerEntity) player, te, (PacketBuffer packerBuffer) -> packerBuffer.writeBlockPos(te.getPos()));
+                return ActionResultType.SUCCESS;
+            }
         }
-        return ActionResultType.SUCCESS;
+
+        return ActionResultType.PASS;
     }
 
     @Override

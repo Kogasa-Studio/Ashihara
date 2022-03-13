@@ -8,14 +8,14 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
-public class PailTE extends AshiharaMachineTE
+public class PailTE extends AshiharaMachineTE implements IFluidHandler
 {
     public PailTE()
     {
         super(TERegistryHandler.PAIL_TE.get());
     }
 
-    LazyOptional<FluidTank> bucket = LazyOptional.of(this::createBucket);
+    LazyOptional<FluidTank> bucket = LazyOptional.of(this::createTank);
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap)
@@ -24,8 +24,10 @@ public class PailTE extends AshiharaMachineTE
         return super.getCapability(cap);
     }
 
-    private FluidTank createBucket() {return new FluidTank(4000);}
+    @Override
+    public FluidTank createTank() {return new FluidTank(4000);}
 
+    @Override
     public LazyOptional<FluidTank> getTank() {return this.bucket;}
 
     @Override
@@ -58,6 +60,6 @@ public class PailTE extends AshiharaMachineTE
     protected void reviveCaps()
     {
         super.reviveCaps();
-        bucket = LazyOptional.of(this::createBucket);
+        bucket = LazyOptional.of(this::createTank);
     }
 }
