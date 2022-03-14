@@ -10,6 +10,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fluids.FluidStack;
 
+import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
+
 public class MillScreen extends ContainerScreen<MillContainer>
 {
     private static final ResourceLocation GUI = new ResourceLocation("ashihara:textures/gui/mill.png");
@@ -53,10 +55,20 @@ public class MillScreen extends ContainerScreen<MillContainer>
                     int capacity = tank.getCapacity();
                     FluidStack fluid = tank.getFluid();
                     int fluidAmount = fluid.getAmount();
-                    int displayHeight = (fluidAmount / capacity) * 64;
+                    int displayHeight = (int) (((float) fluidAmount / (float) capacity) * 64);
 
-                    Tessellator tessellator = Tessellator.getInstance();
-                    RenderHelper.renderFluidStackInGUI(fluid, 16, displayHeight, 16f, 13f, tessellator);
+                    /*LOGGER_MAIN.info
+                    (
+                        "\n{\n    capacity: " + capacity
+                        + ";\n    fluidName: " + fluid.getDisplayName()
+                        + ";\n    fluidAmount: " + fluidAmount
+                        + ";\n    displayHeight: " + displayHeight
+                        + ";\n    x: " + (i + 16)
+                        + ";\n    y: " + (j + 13)
+                        + ";\n}"
+                    );*/
+
+                    RenderHelper.renderFluidStackInGUI(fluid, 16, displayHeight, i + 16, j + 13);
                 }
             }
         );

@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.helper;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -8,7 +9,9 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraftforge.fluids.FluidStack;
 
+import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
 import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION_TEX_COLOR;
+import static net.minecraft.inventory.container.PlayerContainer.LOCATION_BLOCKS_TEXTURE;
 
 public class RenderHelper
 {
@@ -57,13 +60,15 @@ public class RenderHelper
         .endVertex();
     }
 
-    public static void renderFluidStackInGUI(FluidStack fluid, int width, int height, float x, float y, Tessellator tessellator)
+    public static void renderFluidStackInGUI(FluidStack fluid, int width, int height, float x, float y)
     {
+        RenderSystem.enableBlend();
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+
         TextureAtlasSprite FLUID =
             Minecraft.getInstance()
-            .getBlockRendererDispatcher()
-            .getBlockModelShapes()
-            .getTexture(fluid.getFluid().getDefaultState().getBlockState());
+            .getAtlasSpriteGetter(LOCATION_BLOCKS_TEXTURE)
+            .apply(fluid.getFluid().getAttributes().getStillTexture());
 
         int color = fluid.getFluid().getAttributes().getColor();
 
@@ -75,19 +80,40 @@ public class RenderHelper
         float u0 = FLUID.getMinU();
         float v0 = FLUID.getMinV();
 
+        LOGGER_MAIN.info
+        (
+            "\n{\n    hFloors: " + hFloors
+            + ";\n    wFloors: " + wFloors
+            + ";\n    extraHeight: " + extraHeight
+            + ";\n    extraWidth: " + extraWidth
+            + ";\n    fluidAtlas: " + FLUID.getName().toString()
+            + ";\n}"
+        );
+
+        Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder builder = tessellator.getBuffer();
 
         for (int i = hFloors; i >= 0; i --)
         {
+            LOGGER_MAIN.info("Start rendering by height;\n{");
+            LOGGER_MAIN.info("    i: " + i + ";");
             float yStart = y + (i * 16);
             float yOffset = i == 0 ? extraHeight : 16;
             float v1 = i == 0 ? FLUID.getMaxV() - (16 - extraHeight) : FLUID.getMaxV();
+            LOGGER_MAIN.info("    yStart: " + yStart + ";");
+            LOGGER_MAIN.info("    yOffset: " + yOffset + ";");
+            LOGGER_MAIN.info("    v1: " + v1 + ";");
 
             for (int j = wFloors; j >= 0; j --)
             {
+                LOGGER_MAIN.info("    Start rendering by width;\n    {");
+                LOGGER_MAIN.info("        j: " + j + ";");
                 float xStart = x + (wFloors - j) * 16;
                 float xOffset = i == 0 ? extraWidth : 16;
                 float u1 = i == 0 ? FLUID.getMaxU() - (16 - extraWidth) : FLUID.getMaxU();
+                LOGGER_MAIN.info("        xStart: " + xStart + ";");
+                LOGGER_MAIN.info("        xOffset: " + xOffset + ";");
+                LOGGER_MAIN.info("        u1: " + u1 + ";");
 
                 builder.begin(7, POSITION_TEX_COLOR);
                 buildMatrix(builder, xStart, yStart, u0, v0, 0.0f, color, 1.0f);
@@ -95,7 +121,12 @@ public class RenderHelper
                 buildMatrix(builder, xStart + xOffset, yStart - yOffset, u1, v1, 0.0f, color, 1.0f);
                 buildMatrix(builder, xStart + xOffset, yStart, u1, v0, 0.0f, color, 1.0f);
                 tessellator.draw();
+                LOGGER_MAIN.info("    Width rendering finished\n    }");
             }
+            LOGGER_MAIN.info("Height rendering finished\n}");
         }
+
+        RenderSystem.disableBlend();
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
     }
 }
