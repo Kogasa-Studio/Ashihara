@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraftforge.fluids.FluidStack;
+import org.lwjgl.opengl.GL11;
 
 import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
 import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION_TEX_COLOR;
@@ -48,27 +49,28 @@ public class RenderHelper
         .endVertex();
     }
 
-    public static void buildMatrix(IVertexBuilder builder, float x, float y, float z, float u, float v, int RGBA, float alpha)
+    public static void buildMatrix(Matrix4f matrix, IVertexBuilder builder, float x, float y, float z, float u, float v, int RGBA, float alpha)
     {
         float red = ((RGBA >> 16) & 0xFF) / 255f;
         float green = ((RGBA >> 8) & 0xFF) / 255f;
         float blue = ((RGBA) & 0xFF) / 255f;
 
-        builder.pos(x, y, z)
+        builder.pos(matrix, x, y, z)
         .tex(u, v)
         .color(red, green, blue, alpha)
         .endVertex();
     }
 
-    public static void renderFluidStackInGUI(FluidStack fluid, int width, int height, float x, float y)
+    public static void renderFluidStackInGUI(Matrix4f matrix, FluidStack fluid, int width, int height, float x, float y)
     {
         RenderSystem.enableBlend();
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         TextureAtlasSprite FLUID =
             Minecraft.getInstance()
             .getAtlasSpriteGetter(LOCATION_BLOCKS_TEXTURE)
             .apply(fluid.getFluid().getAttributes().getStillTexture());
+
+        Minecraft.getInstance().getTextureManager().bindTexture(LOCATION_BLOCKS_TEXTURE);
 
         int color = fluid.getFluid().getAttributes().getColor();
 
@@ -95,38 +97,44 @@ public class RenderHelper
 
         for (int i = hFloors; i >= 0; i --)
         {
-            LOGGER_MAIN.info("Start rendering by height;\n{");
+            if (i == 0 && extraHeight == 0) break;
+            LOGGER_MAIN.info("Start rendering by height;");
             LOGGER_MAIN.info("    i: " + i + ";");
             float yStart = y + (i * 16);
             float yOffset = i == 0 ? extraHeight : 16;
-            float v1 = i == 0 ? FLUID.getMaxV() - (16 - extraHeight) : FLUID.getMaxV();
+            float v1 = i == 0 ? FLUID.getMinV() + ((FLUID.getMaxV() - v0) * ((float) extraHeight / 16f)) : FLUID.getMaxV();
             LOGGER_MAIN.info("    yStart: " + yStart + ";");
             LOGGER_MAIN.info("    yOffset: " + yOffset + ";");
+            LOGGER_MAIN.info("    v0: " + v0 + ";");
             LOGGER_MAIN.info("    v1: " + v1 + ";");
 
             for (int j = wFloors; j >= 0; j --)
             {
-                LOGGER_MAIN.info("    Start rendering by width;\n    {");
+                if (j == 0 && extraWidth == 0) break;
+                LOGGER_MAIN.info("    Start rendering by width;");
                 LOGGER_MAIN.info("        j: " + j + ";");
                 float xStart = x + (wFloors - j) * 16;
                 float xOffset = i == 0 ? extraWidth : 16;
-                float u1 = i == 0 ? FLUID.getMaxU() - (16 - extraWidth) : FLUID.getMaxU();
+                float u1 = i == 0 ? FLUID.getMinU() + ((FLUID.getMaxU() - v0) * ((float) extraWidth / 16f)) : FLUID.getMaxU();
                 LOGGER_MAIN.info("        xStart: " + xStart + ";");
                 LOGGER_MAIN.info("        xOffset: " + xOffset + ";");
+                LOGGER_MAIN.info("        u0: " + u0 + ";");
                 LOGGER_MAIN.info("        u1: " + u1 + ";");
 
-                builder.begin(7, POSITION_TEX_COLOR);
-                buildMatrix(builder, xStart, yStart, u0, v0, 0.0f, color, 1.0f);
-                buildMatrix(builder, xStart, yStart - yOffset, u0, v1, 0.0f, color, 1.0f);
-                buildMatrix(builder, xStart + xOffset, yStart - yOffset, u1, v1, 0.0f, color, 1.0f);
-                buildMatrix(builder, xStart + xOffset, yStart, u1, v0, 0.0f, color, 1.0f);
+                builder.begin(GL11.GL_QUADS, POSITION_TEX_COLOR);
+                buildMatrix(matrix, builder, xStart, yStart, 0.0f, u0, v0, color, 1.0f);
+                LOGGER_MAIN.info("            rendered quad{x: " + xStart + ", y: " + yStart + ", u: " + u0 + ", v: " + v0 + ";}");
+                buildMatrix(matrix, builder, xStart, yStart - yOffset, 0.0f, u0, v1, color, 1.0f);
+                LOGGER_MAIN.info("            rendered quad{x: " + xStart + ", y: " + (yStart - yOffset) + ", u: " + u0 + ", v: " + v1 + ";}");
+                buildMatrix(matrix, builder, xStart + xOffset, yStart - yOffset, 0.0f, u1, v1, color, 1.0f);
+                LOGGER_MAIN.info("            rendered quad{x: " + (xStart + xOffset) + ", y: " + (yStart - yOffset) + ", u: " + u1 + ", v: " + v1 + ";}");
+                buildMatrix(matrix, builder, xStart + xOffset, yStart, 0.0f, u1, v0, color, 1.0f);
+                LOGGER_MAIN.info("            rendered quad{x: " + (xStart + xOffset) + ", y: " + yStart + ", u: " + u1 + ", v: " + v0 + ";}");
                 tessellator.draw();
-                LOGGER_MAIN.info("    Width rendering finished\n    }");
+                LOGGER_MAIN.info("    Width rendering finished;");
             }
-            LOGGER_MAIN.info("Height rendering finished\n}");
+            LOGGER_MAIN.info("Height rendering finished;");
         }
-
         RenderSystem.disableBlend();
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

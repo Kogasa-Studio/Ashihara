@@ -52,6 +52,7 @@ public class MillScreen extends ContainerScreen<MillContainer>
             {
                 if (!tank.isEmpty())
                 {
+                    matrixStack.push();
                     int capacity = tank.getCapacity();
                     FluidStack fluid = tank.getFluid();
                     int fluidAmount = fluid.getAmount();
@@ -68,7 +69,7 @@ public class MillScreen extends ContainerScreen<MillContainer>
                         + ";\n}"
                     );*/
 
-                    RenderHelper.renderFluidStackInGUI(fluid, 16, displayHeight, i + 16, j + 13);
+                    RenderHelper.renderFluidStackInGUI(matrixStack.getLast().getMatrix(), fluid, 16, displayHeight, i + 16, j + 13);
                 }
             }
         );
