@@ -157,16 +157,9 @@ public class BlockPail extends Block
             }
             return ActionResultType.SUCCESS;
         }
-        if (stack.getItem().equals(MINATO_AQUA.get()))
+        if (stack.getItem().equals(MINATO_AQUA.get()) && !worldIn.isRemote())
         {
-            if ((bucket.getFluidAmount() + 1000) <= bucket.getCapacity())
-            {
-                bucket.fill(new FluidStack(WATER, 1000), IFluidHandler.FluidAction.EXECUTE);
-            }
-            else
-            {
-                if (!worldIn.isRemote()) player.sendMessage(new TranslationTextComponent("Debu!"), UUID.randomUUID());
-            }
+            player.sendMessage(new TranslationTextComponent("Debu!"), UUID.randomUUID());
             return ActionResultType.SUCCESS;
         }
 

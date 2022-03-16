@@ -9,6 +9,7 @@ import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
+import net.minecraft.util.ColorHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
@@ -28,7 +29,7 @@ public class FluidRegistryHandler
     public static final RegistryObject<FlowingFluid> SOY_MILK = FLUIDS.register("soy_milk", () -> new ForgeFlowingFluid.Source(FluidRegistryHandler.SOY_MILK_PROP));
     public static final RegistryObject<FlowingFluid> SOY_MILK_FLOWING = FLUIDS.register("soy_milk_flowing", () -> new ForgeFlowingFluid.Flowing(FluidRegistryHandler.SOY_MILK_PROP));
 
-    public static ForgeFlowingFluid.Properties SOY_MILK_PROP = getBasicFluidProp(SOY_MILK, SOY_MILK_FLOWING, 0xFFFDE1, BlockRegistryHandler.SOY_MILK_BLOCK, ItemRegistryHandler.SOY_MILK_BUCKET);
+    public static ForgeFlowingFluid.Properties SOY_MILK_PROP = getBasicFluidProp(SOY_MILK, SOY_MILK_FLOWING, ColorHelper.PackedColor.packColor(255, 255, 253, 225), BlockRegistryHandler.SOY_MILK_BLOCK, ItemRegistryHandler.SOY_MILK_BUCKET);
 
     private static ForgeFlowingFluid.Properties getBasicFluidProp(RegistryObject<FlowingFluid> source, RegistryObject<FlowingFluid> flowing, int color, Supplier<? extends FlowingFluidBlock> block, Supplier<? extends Item> bucket)
     {

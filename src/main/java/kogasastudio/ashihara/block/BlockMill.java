@@ -99,6 +99,7 @@ public class BlockMill extends Block
                 NetworkHooks.openGui((ServerPlayerEntity) player, te, (PacketBuffer packerBuffer) -> packerBuffer.writeBlockPos(te.getPos()));
                 return ActionResultType.SUCCESS;
             }
+            else return ActionResultType.SUCCESS;
         }
 
         return ActionResultType.PASS;
