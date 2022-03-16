@@ -69,7 +69,7 @@ public class MillScreen extends ContainerScreen<MillContainer>
                         + ";\n}"
                     );*/
 
-                    RenderHelper.renderFluidStackInGUI(matrixStack.getLast().getMatrix(), fluid, 16, displayHeight, i + 17, j + 93);
+                    RenderHelper.renderFluidStackInGUI(matrixStack.getLast().getMatrix(), fluid, 16, displayHeight, i + 17, j + 77);
                 }
             }
         );

@@ -92,7 +92,7 @@ public class RenderHelper
         for (int i = hFloors; i >= 0; i --)
         {
             if (i == 0 && extraHeight == 0) break;
-            float yStart = y - (i * 16);
+            float yStart = y - ((hFloors - i) * 16);
             float yOffset = i == 0 ? (float) extraHeight : 16;
             float v1 = i == 0 ? FLUID.getMinV() + ((FLUID.getMaxV() - v0) * ((float) extraHeight / 16f)) : FLUID.getMaxV();
 
@@ -100,14 +100,14 @@ public class RenderHelper
             {
                 if (j == 0 && extraWidth == 0) break;
                 float xStart = x + (wFloors - j) * 16;
-                float xOffset = i == 0 ? (float) extraWidth : 16;
-                float u1 = i == 0 ? FLUID.getMinU() + ((FLUID.getMaxU() - u0) * ((float) extraWidth / 16f)) : FLUID.getMaxU();
+                float xOffset = j == 0 ? (float) extraWidth : 16;
+                float u1 = j == 0 ? FLUID.getMinU() + ((FLUID.getMaxU() - u0) * ((float) extraWidth / 16f)) : FLUID.getMaxU();
 
                 builder.begin(GL11.GL_QUADS, POSITION_COLOR_TEX);
                 buildMatrix(matrix, builder, xStart, yStart - yOffset, 0.0f, u0, v0, color);
-                buildMatrix(matrix, builder, xStart, yStart, 0.0f, u0, FLUID.getMaxV(), color);
-                buildMatrix(matrix, builder, xStart + xOffset, yStart, 0.0f, FLUID.getMaxU(), FLUID.getMaxV(), color);
-                buildMatrix(matrix, builder, xStart + xOffset, yStart - yOffset, 0.0f, FLUID.getMaxU(), v0, color);
+                buildMatrix(matrix, builder, xStart, yStart, 0.0f, u0, v1, color);
+                buildMatrix(matrix, builder, xStart + xOffset, yStart, 0.0f, u1, v1, color);
+                buildMatrix(matrix, builder, xStart + xOffset, yStart - yOffset, 0.0f, u1, v0, color);
                 tessellator.draw();
             }
         }
