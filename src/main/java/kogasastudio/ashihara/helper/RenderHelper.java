@@ -1,18 +1,26 @@
 package kogasastudio.ashihara.helper;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ColorHelper;
 import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
-import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
+import java.util.ArrayList;
+import java.util.List;
+
 import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION_COLOR_TEX;
 import static net.minecraft.inventory.container.PlayerContainer.LOCATION_BLOCKS_TEXTURE;
 
@@ -64,20 +72,73 @@ public class RenderHelper
         .endVertex();
     }
 
+    /**
+     * 渲染tooltip
+     * @param gui 目标Screen
+     * @param matrix 渲染矩阵
+     * @param mouseX 鼠标所指x
+     * @param mouseY 鼠标所指y
+     * @param x 鼠标悬停在上会渲染渲染tooltip的区域的起始x
+     * @param y 鼠标悬停在上会渲染渲染tooltip的区域的起始y
+     * @param weight 区域宽度
+     * @param height 区域高度
+     * @param list 渲染文本列表
+     */
+    public static void drawTooltip(Screen gui, MatrixStack matrix, int mouseX, int mouseY, int x, int y, int weight, int height, List<ITextComponent> list)
+    {
+        if ((x <= mouseX && mouseX <= x + weight) && (y <= mouseY && mouseY <= y + height))
+        {
+            gui.func_243308_b(matrix, list, mouseX, mouseY);
+        }
+    }
+
+    public static void drawFluidToolTip(Screen gui, MatrixStack matrix, int mouseX, int mouseY, int x, int y, int weight, int height, FluidStack stack, int Capacity)
+    {
+        if (!stack.isEmpty())
+        {
+            ArrayList<ITextComponent> list = new ArrayList<>();
+            list.add(new TranslationTextComponent("tooltip.ashihara.fluid_existence"));
+            list.add(new StringTextComponent
+            (
+            "    " + I18n.format(stack.getTranslationKey())
+                + ": " + stack.getAmount()
+                + (Capacity > 0 ? (" mB / " + Capacity + " mB") : " mB")
+            ));
+            drawTooltip(gui, matrix, mouseX, mouseY, x, y, weight, height, list);
+        }
+    }
+
+    /**
+     * 在GUI中渲染流体
+     * @param matrix 渲染矩阵
+     * @param fluid 需要渲染的流体（FluidStack）
+     * @param width 需要渲染的流体宽度
+     * @param height 需要渲染的流体高度
+     * @param x x（绝对）
+     * @param y y（绝对）
+     */
     public static void renderFluidStackInGUI(Matrix4f matrix, FluidStack fluid, int width, int height, float x, float y)
     {
+        //正常渲染透明度
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
+        //获取sprite
         TextureAtlasSprite FLUID =
             Minecraft.getInstance()
             .getAtlasSpriteGetter(LOCATION_BLOCKS_TEXTURE)
             .apply(fluid.getFluid().getAttributes().getStillTexture());
 
+        //绑atlas
         Minecraft.getInstance().getTextureManager().bindTexture(LOCATION_BLOCKS_TEXTURE);
 
         int color = fluid.getFluid().getAttributes().getColor();
 
+        /*
+         * 获取横向和纵向层数
+         * 每16像素为1层，通过将给定渲染长宽不加类型转换除16来获取层数
+         * 通过取余获取数值大小在16以下的额外数值
+         */
         int wFloors = width / 16;
         int extraWidth = wFloors == 0 ? width : width % 16;
         int hFloors = height / 16;
@@ -89,13 +150,25 @@ public class RenderHelper
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder builder = tessellator.getBuffer();
 
+        /*
+         * 渲染循环
+         * 该循环通过两个嵌套循环完成
+         * 外层循环处理 y 和 v 的变更（高度层），内层处理 x 和 u 的变更（宽度层），渲染主代码存于内层
+         * 渲染逻辑是 [先从最下面的高度层开始，向右渲染此高度层含的所有宽度层并渲染额外宽度层]
+         * [第一层（高）渲染完毕后渲染第二层，依此类推渲染所有高度层和额外高度层，以达成渲染任意长宽的流体矩形的目的]
+         * 对于层，若层数为0（渲染数值小于16），则直接将渲染数值设为额外层数值。
+         */
         for (int i = hFloors; i >= 0; i --)
         {
+            //i为流程控制码，若i=0则代表高度层已全部渲染完毕，此时若额外层高度为0（渲染高度参数本来就是16的整数倍）则跳出
             if (i == 0 && extraHeight == 0) break;
             float yStart = y - ((hFloors - i) * 16);
+            //获取本层/额外层的高度，若高度层渲染完毕则设为额外层高度
             float yOffset = i == 0 ? (float) extraHeight : 16;
+            //获取v1
             float v1 = i == 0 ? FLUID.getMinV() + ((FLUID.getMaxV() - v0) * ((float) extraHeight / 16f)) : FLUID.getMaxV();
 
+            //x层以此类推
             for (int j = wFloors; j >= 0; j --)
             {
                 if (j == 0 && extraWidth == 0) break;
@@ -103,6 +176,7 @@ public class RenderHelper
                 float xOffset = j == 0 ? (float) extraWidth : 16;
                 float u1 = j == 0 ? FLUID.getMinU() + ((FLUID.getMaxU() - u0) * ((float) extraWidth / 16f)) : FLUID.getMaxU();
 
+                //渲染主代码
                 builder.begin(GL11.GL_QUADS, POSITION_COLOR_TEX);
                 buildMatrix(matrix, builder, xStart, yStart - yOffset, 0.0f, u0, v0, color);
                 buildMatrix(matrix, builder, xStart, yStart, 0.0f, u0, v1, color);
