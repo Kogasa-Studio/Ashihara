@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.block.tileentities.MortarTE;
+import kogasastudio.ashihara.helper.FluidHelper;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -29,6 +30,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import java.util.*;
@@ -93,11 +95,19 @@ public class BlockMortar extends Block
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
-        if (!worldIn.isRemote() && handIn.equals(Hand.MAIN_HAND))
+        ItemStack stack = player.getHeldItem(handIn);
+        MortarTE te = (MortarTE) worldIn.getTileEntity(pos);
+        if (te == null) return ActionResultType.FAIL;
+
+        FluidTank tank = te.getTank().orElse(new FluidTank(0));
+        if (!stack.isEmpty() && FluidHelper.notifyFluidTankInteraction(player, handIn, stack, tank))
         {
-            ItemStack stack = player.getHeldItem(handIn);
-            MortarTE te = (MortarTE) worldIn.getTileEntity(pos);
-            if (te == null) return ActionResultType.FAIL;
+            player.inventory.markDirty();
+            worldIn.notifyBlockUpdate(pos, state, state, 3);
+            return ActionResultType.SUCCESS;
+        }
+        else if (!worldIn.isRemote() && handIn.equals(Hand.MAIN_HAND))
+        {
             if (player.isSneaking() && stack.isEmpty())
             {
                 NetworkHooks.openGui((ServerPlayerEntity) player, te, (PacketBuffer packerBuffer) -> packerBuffer.writeBlockPos(te.getPos()));

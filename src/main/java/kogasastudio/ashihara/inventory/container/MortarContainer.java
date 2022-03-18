@@ -9,6 +9,7 @@ import net.minecraft.util.IIntArray;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
+import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
 import static kogasastudio.ashihara.utils.AshiharaTags.MASHABLE;
 
 public class MortarContainer extends AshiharaCommonContainer
@@ -47,7 +48,11 @@ public class MortarContainer extends AshiharaCommonContainer
         this.te = teIn;
         trackIntArray(mortarDataIn);
         layoutPlayerInventorySlots(inv, 8, 121);
-        if (teIn != null) addSlotBox(teIn.contents, 0, 80, 26, 1, 18, 4, 18);
+        if (teIn != null)
+        {
+            addSlotBox(teIn.contents, 0, 80, 26, 1, 18, 4, 18);
+            addSlot(new SlotItemHandler(teIn.fluidIO, 0, 21, 85));
+        }
     }
 
     @Override
@@ -107,6 +112,7 @@ public class MortarContainer extends AshiharaCommonContainer
     {
         super.detectAndSendChanges();
         te.notifyStateChanged();
+        LOGGER_MAIN.info("DEEEEEEEEEEEEEEEEEEEEEEBU");
     }
 
     public int getArrowHeight()
@@ -118,4 +124,6 @@ public class MortarContainer extends AshiharaCommonContainer
     }
 
     public int getNextStep() {return this.mortarData.get(2);}
+
+    public MortarTE getTE() {return this.te;}
 }

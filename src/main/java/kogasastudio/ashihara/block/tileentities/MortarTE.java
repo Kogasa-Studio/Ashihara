@@ -23,7 +23,10 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
@@ -32,12 +35,15 @@ import java.util.Random;
 
 import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
 import static kogasastudio.ashihara.utils.AshiharaTags.MASHABLE;
+import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
-public class MortarTE extends AshiharaMachineTE implements INamedContainerProvider
+public class MortarTE extends AshiharaMachineTE implements INamedContainerProvider, IFluidHandler
 {
     public MortarTE() {super(TERegistryHandler.MORTAR_TE.get());}
 
     public MortarInventory contents = new MortarInventory(4);
+    public MortarInventory fluidIO = new MortarInventory(1);
+    public LazyOptional<FluidTank> tank = LazyOptional.of(this::createTank);
     public NonNullList<ItemStack> output = NonNullList.create();
 
     public int progress;
@@ -82,6 +88,33 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
     };
 
     public int getContentsActualSize() {return this.contents.getActualSize();}
+
+    @Override
+    public FluidTank createTank() {return new FluidTank(4000);}
+
+    @Override
+    public LazyOptional<FluidTank> getTank() {return this.tank;}
+
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> cap)
+    {
+        if (!this.isRemoved() && cap.equals(FLUID_HANDLER_CAPABILITY)) {return this.tank.cast();}
+        return super.getCapability(cap);
+    }
+
+    @Override
+    protected void invalidateCaps()
+    {
+        super.invalidateCaps();
+        this.tank.invalidate();
+    }
+
+    @Override
+    protected void reviveCaps()
+    {
+        super.reviveCaps();
+        tank = LazyOptional.of(this::createTank);
+    }
 
     public static class MortarInventory extends ItemStackHandler
     {
@@ -274,6 +307,9 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
         compound.putBoolean("isWorking", this.isWorking);
 
         compound.put("contents", this.contents.serializeNBT());
+        compound.put("fluidIO", this.fluidIO.serializeNBT());
+
+        this.tank.ifPresent(fluidTank -> compound.put("tank", fluidTank.writeToNBT(new CompoundNBT())));
 
         ListNBT outputIn = new ListNBT();
         for (int i = 0; i < this.output.size(); i++)
@@ -306,6 +342,9 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
         this.isWorking = nbt.getBoolean("isWorking");
 
         this.contents.deserializeNBT(nbt.getCompound("contents"));
+        this.fluidIO.deserializeNBT(nbt.getCompound("fluidIO"));
+
+        this.tank.ifPresent(fluidTank -> fluidTank.readFromNBT(nbt.getCompound("tank")));
 
         ListNBT outputIn = nbt.getList("output", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < outputIn.size(); i++)

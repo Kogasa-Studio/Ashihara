@@ -67,18 +67,6 @@ public class MillScreen extends ContainerScreen<MillContainer>
                     FluidStack fluid = tank.getFluid();
                     int fluidAmount = fluid.getAmount();
                     int displayHeight = (int) (((float) fluidAmount / (float) capacity) * 64);
-
-                    /*LOGGER_MAIN.info
-                    (
-                        "\n{\n    capacity: " + capacity
-                        + ";\n    fluidName: " + fluid.getDisplayName()
-                        + ";\n    fluidAmount: " + fluidAmount
-                        + ";\n    displayHeight: " + displayHeight
-                        + ";\n    x: " + (i + 16)
-                        + ";\n    y: " + (j + 13)
-                        + ";\n}"
-                    );*/
-
                     RenderHelper.renderFluidStackInGUI(matrixStack.getLast().getMatrix(), fluid, 16, displayHeight, i + 17, j + 77);
                 }
             }
