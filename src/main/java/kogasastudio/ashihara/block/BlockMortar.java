@@ -100,7 +100,7 @@ public class BlockMortar extends Block
         if (te == null) return ActionResultType.FAIL;
 
         FluidTank tank = te.getTank().orElse(new FluidTank(0));
-        if (!stack.isEmpty() && FluidHelper.notifyFluidTankInteraction(player, handIn, stack, tank))
+        if (!stack.isEmpty() && FluidHelper.notifyFluidTankInteraction(player, handIn, stack, tank, worldIn, pos))
         {
             player.inventory.markDirty();
             worldIn.notifyBlockUpdate(pos, state, state, 3);

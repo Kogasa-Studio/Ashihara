@@ -9,7 +9,6 @@ import net.minecraft.util.IIntArray;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
-import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
 import static kogasastudio.ashihara.utils.AshiharaTags.MASHABLE;
 
 public class MortarContainer extends AshiharaCommonContainer
@@ -112,7 +111,6 @@ public class MortarContainer extends AshiharaCommonContainer
     {
         super.detectAndSendChanges();
         te.notifyStateChanged();
-        LOGGER_MAIN.info("DEEEEEEEEEEEEEEEEEEEEEEBU");
     }
 
     public int getArrowHeight()

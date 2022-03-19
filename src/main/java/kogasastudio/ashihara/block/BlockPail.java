@@ -127,7 +127,7 @@ public class BlockPail extends Block
         if (te == null) return ActionResultType.FAIL;
 
         FluidTank bucket = te.getTank().orElse(new FluidTank(0));
-        if (!stack.isEmpty() && FluidHelper.notifyFluidTankInteraction(player, handIn, stack, bucket))
+        if (!stack.isEmpty() && FluidHelper.notifyFluidTankInteraction(player, handIn, stack, bucket, worldIn, pos))
         {
             player.inventory.markDirty();
             worldIn.notifyBlockUpdate(pos, state, state, 3);

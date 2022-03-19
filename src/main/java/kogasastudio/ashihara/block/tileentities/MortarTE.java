@@ -3,6 +3,7 @@ package kogasastudio.ashihara.block.tileentities;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.client.particles.GenericParticleData;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
+import kogasastudio.ashihara.helper.FluidHelper;
 import kogasastudio.ashihara.interaction.recipe.MortarRecipe;
 import kogasastudio.ashihara.inventory.container.MortarContainer;
 import kogasastudio.ashihara.item.ItemOtsuchi;
@@ -185,6 +186,9 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
             if (!this.isWorking) applyRecipe(recipeIn.get());
         }
         else finishReciping();
+        ItemStack stack = this.fluidIO.getStackInSlot(0);
+        if (FluidHelper.notifyFluidTankInteraction(this.fluidIO, 0, stack, this.tank.orElse(new FluidTank(0)), this.world, this.pos))
+            this.markDirty();
     }
 
     private void applyRecipe(MortarRecipe recipeIn)
