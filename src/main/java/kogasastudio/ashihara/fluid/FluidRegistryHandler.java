@@ -19,6 +19,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Supplier;
 
+import static net.minecraft.util.SoundEvents.ITEM_BUCKET_EMPTY;
+import static net.minecraft.util.SoundEvents.ITEM_BUCKET_FILL;
+
 public class FluidRegistryHandler
 {
     public static final ResourceLocation TEXTURE_WATER_STILL = new ResourceLocation(Ashihara.MODID, "fluid/milky_liquid_still");
@@ -34,7 +37,7 @@ public class FluidRegistryHandler
     private static ForgeFlowingFluid.Properties getBasicFluidProp(RegistryObject<FlowingFluid> source, RegistryObject<FlowingFluid> flowing, int color, Supplier<? extends FlowingFluidBlock> block, Supplier<? extends Item> bucket)
     {
         return new ForgeFlowingFluid.Properties(source, flowing,
-            FluidAttributes.builder(TEXTURE_WATER_STILL, TEXTURE_WATER_FLOW)
+            FluidAttributes.builder(TEXTURE_WATER_STILL, TEXTURE_WATER_FLOW).sound(ITEM_BUCKET_FILL, ITEM_BUCKET_EMPTY)
             .color(color).viscosity(1000))
             .block(block).bucket(bucket).slopeFindDistance(3).explosionResistance(100F);
     }

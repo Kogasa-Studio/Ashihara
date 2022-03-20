@@ -74,6 +74,7 @@ public class FluidHelper
             {
                 if (!fluidTank.isEmpty())
                 {
+                    SoundEvent event = fluidTank.getFluid().getFluid().getAttributes().getFillSound();
                     int filled = handler.fill(fluidTank.getFluid(), player.isCreative() ? SIMULATE : EXECUTE);
                     ItemStack container = handler.getContainer();
                     if (filled > 0) {
@@ -93,7 +94,6 @@ public class FluidHelper
                         fluidTank.drain(filled, EXECUTE);
                         if (world != null)
                         {
-                            SoundEvent event = fluidTank.getFluid().getFluid().getAttributes().getFillSound();
                             world.playSound(player, pos, event, BLOCKS, 1.0f, 1.0f);
                         }
                         return true;
@@ -178,6 +178,7 @@ public class FluidHelper
             {
                 if (!fluidTank.isEmpty())
                 {
+                    SoundEvent event = fluidTank.getFluid().getFluid().getAttributes().getFillSound();
                     int filled = handler.fill(fluidTank.getFluid(), EXECUTE);
                     ItemStack container = handler.getContainer();
                     if (filled > 0)
@@ -194,7 +195,6 @@ public class FluidHelper
                         }
                         if (world != null)
                         {
-                            SoundEvent event = fluidTank.getFluid().getFluid().getAttributes().getFillSound();
                             world.playSound(null, pos, event, BLOCKS, 1.0f, 1.0f);
                         }
                         fluidTank.drain(filled, EXECUTE);
