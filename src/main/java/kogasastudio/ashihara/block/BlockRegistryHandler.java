@@ -4,9 +4,11 @@ import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.trees.CherryBlossomTree;
 import kogasastudio.ashihara.block.woodcrafts.*;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
+import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.utils.WoodTypes;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.util.IItemProvider;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -37,6 +39,9 @@ public class BlockRegistryHandler {
     public static final RegistryObject<Block> PAIL = BLOCKS.register("pail", BlockPail::new);
     public static final RegistryObject<Block> CANDLE = BLOCKS.register("candle", BlockCandle::new);
     public static final RegistryObject<Block> TEA_TREE = BLOCKS.register("tea_tree", BlockTeaTree::new);
+
+    //作物
+    public static final RegistryObject<Block> SOY_BEANS = BLOCKS.register("soy_beans", () -> new AbstractCropAge7() {@Override protected IItemProvider getSeedsItem() {return ItemRegistryHandler.SOY_BEAN.get();}});
 
     //木制品
     public static final RegistryObject<Block> CHERRY_LOG = BLOCKS.register("cherry_log", SimpleLogBlock::new);

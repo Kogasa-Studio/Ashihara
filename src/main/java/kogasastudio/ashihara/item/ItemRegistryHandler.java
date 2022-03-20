@@ -59,7 +59,7 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> IRON_ORE_SHATTER = ITEMS.register("iron_ore_shatter", () -> new Item(new Item.Properties().group(MATERIALS)));
     public static final RegistryObject<Item> STONE_SHATTER = ITEMS.register("stone_shatter", () -> new Item(new Item.Properties().group(MATERIALS)));
     public static final RegistryObject<Item> FLOUR = ITEMS.register("flour", () -> new Item(new Item.Properties().group(MATERIALS)));
-    public static final RegistryObject<Item> SOY_BEAN = ITEMS.register("soy_bean", () -> new Item(new Item.Properties().group(MATERIALS)));
+    public static final RegistryObject<Item> SOY_BEAN = ITEMS.register("soy_bean", () -> new BlockNamedItem(BlockRegistryHandler.SOY_BEANS.get(), new Item.Properties().group(MATERIALS)));
     public static final RegistryObject<Item> COTTON = ITEMS.register("cotton", () -> new Item(new Item.Properties().group(MATERIALS)));
     public static final RegistryObject<Item> TEA_LEAF = ITEMS.register("tea_leaf", () -> new Item(new Item.Properties().group(MATERIALS)));
     public static final RegistryObject<Item> DRIED_TEA_LEAF = ITEMS.register("dried_tea_leaf", () -> new Item(new Item.Properties().group(MATERIALS)));
@@ -86,7 +86,6 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> MILL = ITEMS.register("mill", () -> new BlockItem(BlockRegistryHandler.MILL.get(), new Item.Properties().group(ASHIHARA)));
     public static final RegistryObject<Item> STONE_LANTERN = ITEMS.register("stone_lantern", () -> new BlockItem(BlockRegistryHandler.STONE_LANTERN.get(), new Item.Properties().group(ASHIHARA)));
     public static final RegistryObject<Item> HYDRANGEA_BUSH = ITEMS.register("hydrangea_bush", () -> new BlockItem(BlockRegistryHandler.HYDRANGEA_BUSH.get(), new Item.Properties().group(ASHIHARA)));
-    public static final RegistryObject<Item> TEA_TREE = ITEMS.register("tea_tree", () -> new BlockItem(BlockRegistryHandler.TEA_TREE.get(), new Item.Properties()));
     public static final RegistryObject<Item> PAIL = ITEMS.register("pail", ItemBlockPail::new);
     public static final RegistryObject<Item> CANDLE = ITEMS.register("candle", ItemBlockCandle::new);
 

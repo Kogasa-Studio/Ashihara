@@ -71,6 +71,7 @@ public class ClientEventSubscribeHandler
         setRenderType(BlockRegistryHandler.TEA_TREE.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.GOLD_FENCE_DECORATION.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.RED_FENCE_EXPANSION.get(), RenderType.getCutoutMipped(), event);
+        setRenderType(BlockRegistryHandler.SOY_BEANS.get(), RenderType.getCutoutMipped(), event);
 
         setRenderType(FluidRegistryHandler.SOY_MILK.get(), RenderType.getTranslucent(), event);
         setRenderType(FluidRegistryHandler.SOY_MILK_FLOWING.get(), RenderType.getTranslucent(), event);
