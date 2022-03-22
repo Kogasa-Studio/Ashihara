@@ -37,10 +37,13 @@ public class MillScreen extends ContainerScreen<MillContainer>
         super.renderHoveredTooltip(matrixStack, x, y);
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
-        FluidTank tank = this.container.getTE().getTank().orElse(new FluidTank(0));
+        FluidTank tankIn = this.container.getTE().getTank().orElse(new FluidTank(0));
+        FluidTank tankOut = this.container.getTE().tankOut.orElse(new FluidTank(0));
 
         RenderHelper.drawFluidToolTip
-        (this, matrixStack, x, y, i + 17, j + 13, 16, 64, tank.getFluid(), tank.getCapacity());
+        (this, matrixStack, x, y, i + 17, j + 13, 16, 64, tankIn.getFluid(), tankIn.getCapacity());
+        RenderHelper.drawFluidToolTip
+        (this, matrixStack, x, y, i + 54, j + 99, 64, 6, tankOut.getFluid(), tankOut.getCapacity());
     }
 
     @Override
@@ -68,6 +71,24 @@ public class MillScreen extends ContainerScreen<MillContainer>
                     int fluidAmount = fluid.getAmount();
                     int displayHeight = (int) (((float) fluidAmount / (float) capacity) * 64);
                     RenderHelper.renderFluidStackInGUI(matrixStack.getLast().getMatrix(), fluid, 16, displayHeight, i + 17, j + 77);
+                    matrixStack.pop();
+                }
+            }
+        );
+
+        this.container.getTE().tankOut.ifPresent
+        (
+            tank ->
+            {
+                if (!tank.isEmpty())
+                {
+                    matrixStack.push();
+                    int capacity = tank.getCapacity();
+                    FluidStack fluid = tank.getFluid();
+                    int fluidAmount = fluid.getAmount();
+                    int displayWidth = (int) (((float) fluidAmount / (float) capacity) * 64);
+                    RenderHelper.renderFluidStackInGUI(matrixStack.getLast().getMatrix(), fluid, displayWidth, 6, i + 54, j + 105);
+                    matrixStack.pop();
                 }
             }
         );

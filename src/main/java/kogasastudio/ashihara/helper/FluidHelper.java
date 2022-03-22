@@ -1,6 +1,5 @@
 package kogasastudio.ashihara.helper;
 
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
@@ -99,7 +98,9 @@ public class FluidHelper
                         return true;
                     }
                 }
-            } else {
+            }
+            else
+            {
                 fluidTank.fill(fluidInItem, SIMULATE);
                 int remainder = fluidTank.getFluidAmount();
                 int storedAmount = fluidInItem.getAmount();
@@ -153,9 +154,10 @@ public class FluidHelper
         return false;
     }
 
-    public static boolean notifyFluidTankInteraction(ItemStackHandler itemHandler, int slotID, ItemStack stackIn, FluidTank fluidTank, World world, BlockPos pos)
+    public static boolean notifyFluidTankInteraction(ItemStackHandler itemHandler, int in, int out, ItemStack stackIn, FluidTank fluidTank, World world, BlockPos pos)
     {
         ItemStack stack = stackIn.copy();
+        ItemStack outStack = itemHandler.getStackInSlot(out);
         stack.setCount(1);
         Optional<IFluidHandlerItem> fluidHandlerItem = FluidUtil.getFluidHandler(stack).resolve();
         if (fluidHandlerItem.isPresent())
@@ -174,8 +176,9 @@ public class FluidHelper
                 // second tank but just asking to drain a specific amount
                 fluidInItem = handler.drain(new FluidStack(fluidTank.getFluid(), Integer.MAX_VALUE), SIMULATE);
             }
-            if (fluidInItem.isEmpty())
+            if (fluidInItem.isEmpty()) //抽取流体
             {
+                if (!outStack.isEmpty()) return false;
                 if (!fluidTank.isEmpty())
                 {
                     SoundEvent event = fluidTank.getFluid().getFluid().getAttributes().getFillSound();
@@ -183,16 +186,17 @@ public class FluidHelper
                     ItemStack container = handler.getContainer();
                     if (filled > 0)
                     {
-                        if (stackIn.getCount() == 1)
-                        {
-                            itemHandler.setStackInSlot(slotID, container);
-                        }
-                        else
-                        {
-                            if (world != null)
-                            {world.addEntity(new ItemEntity(world, (double) pos.getX() + 0.5d, (double) pos.getY() + 0.5d, pos.getZ() + 0.5d, container));}
-                            stackIn.shrink(1);
-                        }
+                        stackIn.shrink(1);
+                        itemHandler.setStackInSlot(out, container);
+//                        if (stackIn.getCount() == 1)
+//                        {
+//                        }
+//                        else
+//                        {
+//                            if (world != null)
+//                            {world.addEntity(new ItemEntity(world, (double) pos.getX() + 0.5d, (double) pos.getY() + 0.5d, pos.getZ() + 0.5d, container));}
+//                            stackIn.shrink(1);
+//                        }
                         if (world != null)
                         {
                             world.playSound(null, pos, event, BLOCKS, 1.0f, 1.0f);
@@ -201,47 +205,61 @@ public class FluidHelper
                         return true;
                     }
                 }
-            } else {
+            }
+            else //添加流体
+            {
                 fluidTank.fill(fluidInItem, SIMULATE);
                 int remainder = fluidTank.getFluidAmount();
                 int storedAmount = fluidInItem.getAmount();
                 int capacity = fluidTank.getCapacity();
 
                 int filledAmount = Math.min(capacity - remainder, storedAmount);
-                boolean filled = false;
+//                boolean filled = false;
+                boolean outEmpty = outStack.isEmpty();
+                boolean canOutStack =
+                    storedAmount == filledAmount && handler.getContainer().isItemEqual(outStack) && outStack.getCount() + 1 <= outStack.getMaxStackSize();
+                if (!(outEmpty || canOutStack)) return false;
                 FluidStack drained = handler.drain(new FluidStack(fluidInItem, filledAmount), EXECUTE);
                 if (!drained.isEmpty())
                 {
                     ItemStack container = handler.getContainer();
-                    if (!container.isEmpty())
+                    stackIn.shrink(1);
+                    if (outEmpty)
                     {
-                        if (stackIn.getCount() == 1)
-                        {
-                            itemHandler.setStackInSlot(slotID, container);
-                            filled = true;
-                        }
-                        else if (world != null)
-                        {
-                            {world.addEntity(new ItemEntity(world, (double) pos.getX() + 0.5d, (double) pos.getY() + 0.5d, pos.getZ() + 0.5d, container));}
-                            stackIn.shrink(1);
-                            filled = true;
-                        }
+                        itemHandler.setStackInSlot(out, container);
                     }
                     else
                     {
-                        stackIn.shrink(1);
-                        filled = true;
+                        itemHandler.setStackInSlot(out, new ItemStack(container.getItem(), outStack.getCount() + 1));
                     }
-                    if (filled)
+//                    filled = true;
+//                    if (!container.isEmpty())
+//                    {
+//                        if (stackIn.getCount() == 1)
+//                        {
+//                        }
+//                        else if (world != null)
+//                        {
+//                            {world.addEntity(new ItemEntity(world, (double) pos.getX() + 0.5d, (double) pos.getY() + 0.5d, pos.getZ() + 0.5d, container));}
+//                            stackIn.shrink(1);
+//                            filled = true;
+//                        }
+//                    }
+//                    else
+//                    {
+//                        stackIn.shrink(1);
+//                        filled = true;
+//                    }
+                    if (world != null)
                     {
-                        if (world != null)
-                        {
-                            SoundEvent event = drained.getFluid().getAttributes().getEmptySound();
-                            world.playSound(null, pos, event, BLOCKS, 1.0f, 1.0f);
-                        }
-                        fluidTank.fill(drained, EXECUTE);
-                        return true;
+                        SoundEvent event = drained.getFluid().getAttributes().getEmptySound();
+                        world.playSound(null, pos, event, BLOCKS, 1.0f, 1.0f);
                     }
+                    fluidTank.fill(drained, EXECUTE);
+                    return true;
+//                    if (filled)
+//                    {
+//                    }
                 }
             }
         }

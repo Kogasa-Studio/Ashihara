@@ -5,6 +5,7 @@ import kogasastudio.ashihara.client.particles.GenericParticleData;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.helper.FluidHelper;
 import kogasastudio.ashihara.interaction.recipe.MortarRecipe;
+import kogasastudio.ashihara.inventory.container.GenericItemStackHandler;
 import kogasastudio.ashihara.inventory.container.MortarContainer;
 import kogasastudio.ashihara.item.ItemOtsuchi;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
@@ -28,7 +29,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 import java.util.Optional;
@@ -43,7 +43,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
     public MortarTE() {super(TERegistryHandler.MORTAR_TE.get());}
 
     public MortarInventory contents = new MortarInventory(4);
-    public MortarInventory fluidIO = new MortarInventory(1);
+    public GenericItemStackHandler fluidIO = new GenericItemStackHandler(2);
     public LazyOptional<FluidTank> tank = LazyOptional.of(this::createTank);
     public NonNullList<ItemStack> output = NonNullList.create();
 
@@ -117,33 +117,12 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
         tank = LazyOptional.of(this::createTank);
     }
 
-    public static class MortarInventory extends ItemStackHandler
+    public static class MortarInventory extends GenericItemStackHandler
     {
         public MortarInventory(int numSlots) {super(numSlots);}
 
-        public boolean isEmpty()
-        {
-            for (ItemStack stack : this.stacks) {if (!stack.isEmpty()) return false;}
-            return true;
-        }
-
-        public int getActualSize()
-        {
-            int i = 0;
-            for (ItemStack stack : this.stacks) {if (!stack.isEmpty()) i += 1;}
-            return i;
-        }
-
-        public void clear() {this.stacks = NonNullList.withSize(this.getSlots(), ItemStack.EMPTY);}
-
         @Override
         protected int getStackLimit(int slot, ItemStack stack) {return 1;}
-
-        @Override
-        public String toString()
-        {
-            return this.stacks.toString();
-        }
     }
 
     private void process(boolean isSauceProcess)
@@ -187,8 +166,11 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
         }
         else finishReciping();
         ItemStack stack = this.fluidIO.getStackInSlot(0);
-        if (FluidHelper.notifyFluidTankInteraction(this.fluidIO, 0, stack, this.tank.orElse(new FluidTank(0)), this.world, this.pos))
+        if (FluidHelper.notifyFluidTankInteraction(this.fluidIO, 0, 1, stack, this.tank.orElse(new FluidTank(0)), this.world, this.pos))
+        {
             this.markDirty();
+            if (this.world != null) this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
+        }
     }
 
     private void applyRecipe(MortarRecipe recipeIn)

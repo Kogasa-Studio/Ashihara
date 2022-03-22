@@ -62,10 +62,10 @@ public class ItemKoishi extends Item
                 worldIn.setBlockState(pos, blockState.with(BlockWaterField.LEVEL, 6));
                 return ActionResultType.SUCCESS;
             }
-            else if (te != null && !worldIn.isRemote())
+            else if (te != null)
             {
                 CompoundNBT nbt = te.serializeNBT();
-                player.sendMessage(new TranslationTextComponent(nbt.toString()), UUID.randomUUID());
+                player.sendMessage(new TranslationTextComponent((worldIn.isRemote() ? "client: " : "server: ") + nbt.toString()), UUID.randomUUID());
                 return ActionResultType.SUCCESS;
             }
             else

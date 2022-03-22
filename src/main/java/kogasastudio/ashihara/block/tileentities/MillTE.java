@@ -1,7 +1,9 @@
 package kogasastudio.ashihara.block.tileentities;
 
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.helper.FluidHelper;
 import kogasastudio.ashihara.interaction.recipe.MillRecipe;
+import kogasastudio.ashihara.inventory.container.GenericItemStackHandler;
 import kogasastudio.ashihara.inventory.container.MillContainer;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -37,8 +39,9 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
 {
     public MillTE() {super(TERegistryHandler.MILL_TE.get());}
 
-    public ItemStackHandler input = new ItemStackHandler(4);
+    public GenericItemStackHandler input = new GenericItemStackHandler(4);
     public Inventory output = new Inventory(4);
+    public GenericItemStackHandler fluidIO = new GenericItemStackHandler(3);
     public byte round; //现在已经转的圈数
     public byte roundTotal; //完成这个配方需要转的总圈数, 由所选配方决定
     public int roundProgress; //现在正在转的这一圈的进度
@@ -46,7 +49,8 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     public float exp; //转完配方可以得到的经验，由所选配方决定
     public boolean isWorking;
     private MillRecipe recipe;
-    public LazyOptional<FluidTank> tank = LazyOptional.of(this::createTank);
+    public LazyOptional<FluidTank> tankIn = LazyOptional.of(this::createTank);
+    public LazyOptional<FluidTank> tankOut = LazyOptional.of(() -> new FluidTank(4000));
     public IIntArray millData = new IIntArray()
     {
         public int get(int index)
@@ -181,12 +185,12 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     public FluidTank createTank() {return new FluidTank(4000);}
 
     @Override
-    public LazyOptional<FluidTank> getTank() {return this.tank;}
+    public LazyOptional<FluidTank> getTank() {return this.tankIn;}
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap)
     {
-        if (!this.isRemoved() && cap.equals(FLUID_HANDLER_CAPABILITY)) {return this.tank.cast();}
+        if (!this.isRemoved() && cap.equals(FLUID_HANDLER_CAPABILITY)) {return this.tankIn.cast();}
         return super.getCapability(cap);
     }
 
@@ -194,14 +198,16 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     protected void invalidateCaps()
     {
         super.invalidateCaps();
-        this.tank.invalidate();
+        this.tankIn.invalidate();
+        this.tankOut.invalidate();
     }
 
     @Override
     protected void reviveCaps()
     {
         super.reviveCaps();
-        tank = LazyOptional.of(this::createTank);
+        this.tankIn = LazyOptional.of(this::createTank);
+        this.tankOut = LazyOptional.of(() -> new FluidTank(4000));
     }
 
     @Override
@@ -212,8 +218,10 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
         this.roundProgress = nbt.getInt("roundProgress");
         this.roundTicks = nbt.getInt("roundTicks");
         this.input.deserializeNBT(nbt.getCompound("input"));
+        this.fluidIO.deserializeNBT(nbt.getCompound("fluidIO"));
         this.output.read(nbt.getList("output", 10));
-        this.tank.ifPresent(fluidTank -> fluidTank.readFromNBT(nbt.getCompound("tank")));
+        this.tankIn.ifPresent(fluidTank -> fluidTank.readFromNBT(nbt.getCompound("tankIn")));
+        this.tankOut.ifPresent(fluidTank -> fluidTank.readFromNBT(nbt.getCompound("tankOut")));
         super.read(state, nbt);
     }
 
@@ -225,8 +233,10 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
         compound.putInt("roundProgress", this.roundProgress);
         compound.putInt("roundTicks", this.roundTicks);
         compound.put("input", this.input.serializeNBT());
+        compound.put("fluidIO", this.fluidIO.serializeNBT());
         compound.put("output", this.output.write());
-        this.tank.ifPresent(fluidTank -> compound.put("tank", fluidTank.writeToNBT(new CompoundNBT())));
+        this.tankIn.ifPresent(fluidTank -> compound.put("tankIn", fluidTank.writeToNBT(new CompoundNBT())));
+        this.tankOut.ifPresent(fluidTank -> compound.put("tankOut", fluidTank.writeToNBT(new CompoundNBT())));
         return super.write(compound);
     }
 
@@ -234,6 +244,18 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     public void tick()
     {
         if (this.world == null) return;
+
+        ItemStack stackIn = this.fluidIO.getStackInSlot(0);
+        ItemStack stackOut = this.fluidIO.getStackInSlot(1);
+        if
+        (
+            FluidHelper.notifyFluidTankInteraction(this.fluidIO, 0, 2, stackIn, this.tankIn.orElse(new FluidTank(0)), this.world, this.pos)
+         || FluidHelper.notifyFluidTankInteraction(this.fluidIO, 1, 2, stackOut, this.tankOut.orElse(new FluidTank(0)), this.world, this.pos)
+        )
+        {
+            this.markDirty();
+            if (this.world != null) this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
+        }
 
         if (!this.world.isRemote())
         {

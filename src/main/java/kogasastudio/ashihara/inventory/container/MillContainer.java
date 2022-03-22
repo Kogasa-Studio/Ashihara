@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.items.SlotItemHandler;
 
 public class MillContainer extends AshiharaCommonContainer
 {
@@ -27,6 +28,9 @@ public class MillContainer extends AshiharaCommonContainer
         {
             addSlotBox(te.getInput(), 0, 55, 39, 2, 18, 2, 18);
             addSlotBox(te.getOutput(), 0, 130, 39, 2, 18, 2, 18);
+            addSlot(new SlotItemHandler(te.fluidIO, 0, 17, 83));
+            addSlot(new SlotItemHandler(te.fluidIO, 1, 122, 90));
+            addSlot(new SlotItemHandler(te.fluidIO, 2, 152, 98));
         }
     }
 
@@ -53,21 +57,23 @@ public class MillContainer extends AshiharaCommonContainer
 
         boolean isMerged;
 
-        // 0~8: 玩家背包, 9~35: 快捷栏, 36~39: 输入槽, 40~43: 输出槽
+        // 0~8: 快捷栏, 9~35: 玩家背包, 36~39: 输入槽, 40~43: 输出槽, 44~46: 流体互动槽
         if (index < 9)
         {
             isMerged = mergeItemStack(newStack, 36, 40, false)
-            ||mergeItemStack(newStack, 9, 36, false);
+            || mergeItemStack(newStack, 44, 47, false)
+            || mergeItemStack(newStack, 9, 36, false);
         }
         else if (index < 36)
         {
             isMerged = mergeItemStack(newStack, 36, 40, false)
+            || mergeItemStack(newStack, 44, 47, false)
             || mergeItemStack(newStack, 0, 9, true);
         }
         else
         {
-            isMerged = mergeItemStack(newStack, 27, 36, true)
-            || mergeItemStack(newStack, 0, 27, false);
+            isMerged = mergeItemStack(newStack, 0, 9, true)
+            || mergeItemStack(newStack, 9, 36, false);
         }
 
         if (!isMerged){return ItemStack.EMPTY;}

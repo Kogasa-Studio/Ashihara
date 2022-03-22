@@ -51,6 +51,7 @@ public class MortarContainer extends AshiharaCommonContainer
         {
             addSlotBox(teIn.contents, 0, 80, 26, 1, 18, 4, 18);
             addSlot(new SlotItemHandler(teIn.fluidIO, 0, 21, 85));
+            addSlot(new SlotItemHandler(teIn.fluidIO, 1, 148, 85));
         }
     }
 
