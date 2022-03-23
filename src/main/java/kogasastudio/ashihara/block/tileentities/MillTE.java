@@ -25,6 +25,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
@@ -93,20 +94,22 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     }
 
     //检测当前匹配的配方其产出物是否能够填充进输出栏
-    private boolean canProduce(MillRecipe recipe)
+    private boolean canProduce(MillRecipe recipeIn)
     {
-        boolean flag = false;
+        boolean flag0 = false;
+        boolean flag1 = true;
+        boolean flag2 = true;
         if (hasInput())
         {
-            NonNullList<ItemStack> outputIn = recipe.getCraftingResult();//配方产物列表
-            if (this.output.isEmpty()) flag = true;
+            NonNullList<ItemStack> outputIn = recipeIn.getCraftingResult();//配方产物列表
+            if (this.output.isEmpty()) flag0 = true;
             else
             {
                 int availableSlotCount = 0;
                 int emptySlotCount = 0;
                 /*遍历给定产物的每一个物品并遍历当前输出栏的每一个格子
                 若格子为空，空格子数+1
-                若物品可以与格子中物品合并，有效格数+1 23 68 65
+                若物品可以与格子中物品合并，有效格数+1
                 若对于产出的每一个物品，都至少有一个不重复的格子可用，
                 即空格子数+有效格子数大于给定产物的种数，则输出true*/
                 for (ItemStack stack : outputIn)
@@ -122,10 +125,18 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
                         }
                     }
                 }
-                if (availableSlotCount + emptySlotCount >= outputIn.size()) flag = true;
+                if (availableSlotCount + emptySlotCount >= outputIn.size()) flag0 = true;
             }
         }
-        return flag;
+        if (!recipeIn.getInputFluid().isEmpty())
+        {
+            flag1 = FluidHelper.canFluidExtractFromTank(recipeIn.getInputFluid(), this.tankIn);
+        }
+        if (!recipeIn.getOutputFluid().isEmpty())
+        {
+            flag2 = FluidHelper.canFluidAddToTank(recipeIn.getOutputFluid(), this.tankOut);
+        }
+        return flag0 && flag1 && flag2;
     }
 
     private void applyRecipe(MillRecipe recipeIn)
@@ -163,6 +174,21 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
                     if (!stack.isEmpty() && ingredient.test(stack)) {stack.shrink(recipeIn.getCosts(ingredient));break;}
                 }
             }
+            if (!recipeIn.getInputFluid().isEmpty())
+            {
+                FluidTank tank = this.tankIn.orElse(new FluidTank(0));
+                FluidStack fluid = recipeIn.getInputFluid();
+                FluidStack fluidInTank = tank.getFluid();
+                if (fluid.isFluidEqual(fluidInTank)) fluidInTank.setAmount(Math.min(0, fluidInTank.getAmount() - fluid.getAmount()));
+            }
+            if (!recipeIn.getOutputFluid().isEmpty())
+            {
+                FluidTank tank = this.tankOut.orElse(new FluidTank(0));
+                FluidStack fluid = recipeIn.getInputFluid();
+                FluidStack fluidInTank = tank.getFluid();
+                if (fluid.isFluidEqual(fluidInTank)) fluidInTank.setAmount(Math.min(fluid.getAmount() + fluidInTank.getAmount(), tank.getCapacity()));
+            }
+            if (this.world != null) this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
         }
         this.recipe = null;
         this.sync();
@@ -245,12 +271,10 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     {
         if (this.world == null) return;
 
-        ItemStack stackIn = this.fluidIO.getStackInSlot(0);
-        ItemStack stackOut = this.fluidIO.getStackInSlot(1);
         if
         (
-            FluidHelper.notifyFluidTankInteraction(this.fluidIO, 0, 2, stackIn, this.tankIn.orElse(new FluidTank(0)), this.world, this.pos)
-         || FluidHelper.notifyFluidTankInteraction(this.fluidIO, 1, 2, stackOut, this.tankOut.orElse(new FluidTank(0)), this.world, this.pos)
+            FluidHelper.notifyFluidTankInteraction(this.fluidIO, 0, 2, this.tankIn.orElse(new FluidTank(0)), this.world, this.pos)
+         || FluidHelper.notifyFluidTankInteraction(this.fluidIO, 1, 2, this.tankOut.orElse(new FluidTank(0)), this.world, this.pos)
         )
         {
             this.markDirty();

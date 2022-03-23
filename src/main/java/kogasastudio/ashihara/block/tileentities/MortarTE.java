@@ -165,8 +165,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
             if (!this.isWorking) applyRecipe(recipeIn.get());
         }
         else finishReciping();
-        ItemStack stack = this.fluidIO.getStackInSlot(0);
-        if (FluidHelper.notifyFluidTankInteraction(this.fluidIO, 0, 1, stack, this.tank.orElse(new FluidTank(0)), this.world, this.pos))
+        if (FluidHelper.notifyFluidTankInteraction(this.fluidIO, 0, 1, this.tank.orElse(new FluidTank(0)), this.world, this.pos))
         {
             this.markDirty();
             if (this.world != null) this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);

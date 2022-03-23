@@ -8,6 +8,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -46,6 +47,35 @@ public class FluidHelper
             return itemStack1;
         }
         return itemStack;
+    }
+
+    /**
+     * 判断特定流体是否能被添加进FluidTank
+     * @param fluidIn 待加入的流体
+     * @param tank 待接收的tank
+     * @return 接收可行性
+     */
+    public static boolean canFluidAddToTank(FluidStack fluidIn, FluidTank tank)
+    {
+        return fluidIn.isFluidEqual(tank.getFluid()) && fluidIn.getAmount() + tank.getFluid().getAmount() <= tank.getCapacity();
+    }
+
+    public static boolean canFluidAddToTank(FluidStack fluidIn, LazyOptional<FluidTank> tank)
+    {
+        return canFluidAddToTank(fluidIn, tank.orElse(new FluidTank(0)));
+    }
+
+    /**
+     * 与上方方法类似，判断是否能从fluidTank中抽取特定流体
+     */
+    public static boolean canFluidExtractFromTank(FluidStack fluidIn, FluidTank tank)
+    {
+        return fluidIn.isFluidEqual(tank.getFluid()) && tank.getFluid().getAmount() >= fluidIn.getAmount();
+    }
+
+    public static boolean canFluidExtractFromTank(FluidStack fluidIn, LazyOptional<FluidTank> tank)
+    {
+        return canFluidExtractFromTank(fluidIn, tank.orElse(new FluidTank(0)));
     }
 
     public static boolean notifyFluidTankInteraction(PlayerEntity player, Hand hand, ItemStack stackIn, FluidTank fluidTank, World world, BlockPos pos)
@@ -154,8 +184,9 @@ public class FluidHelper
         return false;
     }
 
-    public static boolean notifyFluidTankInteraction(ItemStackHandler itemHandler, int in, int out, ItemStack stackIn, FluidTank fluidTank, World world, BlockPos pos)
+    public static boolean notifyFluidTankInteraction(ItemStackHandler itemHandler, int in, int out, FluidTank fluidTank, World world, BlockPos pos)
     {
+        ItemStack stackIn = itemHandler.getStackInSlot(in);
         ItemStack stack = stackIn.copy();
         ItemStack outStack = itemHandler.getStackInSlot(out);
         stack.setCount(1);
@@ -188,15 +219,6 @@ public class FluidHelper
                     {
                         stackIn.shrink(1);
                         itemHandler.setStackInSlot(out, container);
-//                        if (stackIn.getCount() == 1)
-//                        {
-//                        }
-//                        else
-//                        {
-//                            if (world != null)
-//                            {world.addEntity(new ItemEntity(world, (double) pos.getX() + 0.5d, (double) pos.getY() + 0.5d, pos.getZ() + 0.5d, container));}
-//                            stackIn.shrink(1);
-//                        }
                         if (world != null)
                         {
                             world.playSound(null, pos, event, BLOCKS, 1.0f, 1.0f);
@@ -214,7 +236,6 @@ public class FluidHelper
                 int capacity = fluidTank.getCapacity();
 
                 int filledAmount = Math.min(capacity - remainder, storedAmount);
-//                boolean filled = false;
                 boolean outEmpty = outStack.isEmpty();
                 boolean canOutStack =
                     storedAmount == filledAmount && handler.getContainer().isItemEqual(outStack) && outStack.getCount() + 1 <= outStack.getMaxStackSize();
@@ -232,24 +253,6 @@ public class FluidHelper
                     {
                         itemHandler.setStackInSlot(out, new ItemStack(container.getItem(), outStack.getCount() + 1));
                     }
-//                    filled = true;
-//                    if (!container.isEmpty())
-//                    {
-//                        if (stackIn.getCount() == 1)
-//                        {
-//                        }
-//                        else if (world != null)
-//                        {
-//                            {world.addEntity(new ItemEntity(world, (double) pos.getX() + 0.5d, (double) pos.getY() + 0.5d, pos.getZ() + 0.5d, container));}
-//                            stackIn.shrink(1);
-//                            filled = true;
-//                        }
-//                    }
-//                    else
-//                    {
-//                        stackIn.shrink(1);
-//                        filled = true;
-//                    }
                     if (world != null)
                     {
                         SoundEvent event = drained.getFluid().getAttributes().getEmptySound();
@@ -257,9 +260,6 @@ public class FluidHelper
                     }
                     fluidTank.fill(drained, EXECUTE);
                     return true;
-//                    if (filled)
-//                    {
-//                    }
                 }
             }
         }

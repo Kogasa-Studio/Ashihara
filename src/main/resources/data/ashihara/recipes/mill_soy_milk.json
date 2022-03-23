@@ -1,0 +1,25 @@
+{
+  "type": "ashihara:mill",
+  "group": "test_group",
+  "ingredients":
+  [
+    {"item": "ashihara:soy_bean"}
+  ],
+  "costs": [2],
+  "fluids":
+  {
+    "input":
+    {
+      "fluid": "minecraft:water",
+      "amount": 100
+    },
+    "output":
+    {
+      "fluid": "ashihara:soy_milk",
+      "amount": 100
+    }
+  },
+  "rounds": 1,
+  "roundTicks": 20,
+  "experience": 20.0
+}

@@ -1,8 +1,6 @@
 package kogasastudio.ashihara.interaction.recipe;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
+import com.google.gson.*;
 import kogasastudio.ashihara.Ashihara;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -17,6 +15,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 import net.minecraftforge.common.util.RecipeMatcher;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -34,13 +33,26 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
     private final Map<Ingredient, Byte> inputCosts;
     private final NonNullList<ItemStack> output;
 
+    private final FluidStack inputFluid;
+    private final FluidStack outputFluid;
+
     public ResourceLocation id;
     public String group;
     public byte round;
     public int roundTicks;
     public float exp;
 
-    public MillRecipe(ResourceLocation recipeId, String groupId, NonNullList<Ingredient> inputIn, Map<Ingredient, Byte> inputCostsIn, NonNullList<ItemStack> outputIn, byte roundIn, int roundTicksIn, float expIn)
+    public MillRecipe
+    (
+        ResourceLocation recipeId,
+        String groupId,
+        NonNullList<Ingredient> inputIn,
+        Map<Ingredient, Byte> inputCostsIn,
+        NonNullList<ItemStack> outputIn,
+        FluidStack inFluid,
+        FluidStack outFluid,
+        byte roundIn, int roundTicksIn, float expIn
+    )
     {
         this.id = recipeId;
         this.group = groupId;
@@ -48,10 +60,16 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
         this.input = inputIn;
         this.inputCosts = inputCostsIn;
         this.output = outputIn;
+        this.inputFluid = inFluid;
+        this.outputFluid = outFluid;
         this.round = roundIn;
         this.roundTicks = roundTicksIn;
         this.exp = expIn;
     }
+
+    public FluidStack getInputFluid() {return this.inputFluid.copy();}
+
+    public FluidStack getOutputFluid() {return this.outputFluid.copy();}
 
     public byte getCosts(Ingredient ingredient)
     {
@@ -92,7 +110,7 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
 
     //这个没啥用
     @Override
-    public ItemStack getCraftingResult(RecipeWrapper inv) {return this.output.get(0);}
+    public ItemStack getCraftingResult(RecipeWrapper inv) {return this.output.get(0).copy();}
 
     //这个也没啥用
     @Override
@@ -123,12 +141,36 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
             else
             {
                 final Map<Ingredient, Byte> costsIn = serializeCosts(inputIn, JSONUtils.getJsonArray(json, "costs"));
-                final NonNullList<ItemStack> outputIn = readOutput(JSONUtils.getJsonArray(json, "result"));
+                final NonNullList<ItemStack> outputIn = readOutput(JSONUtils.getJsonArray(json, "result", null));
                 final byte roundIn = JSONUtils.getByte(json, "rounds", (byte) 1);
                 final int roundTicksIn = JSONUtils.getInt(json, "roundTicks", 100);
                 final float expIn = JSONUtils.getFloat(json, "experience", 20.0f);
-                return new MillRecipe(recipeId, groupIn, inputIn, costsIn, outputIn, roundIn, roundTicksIn, expIn);
+                if (json.has("fluids"))
+                {
+                    JsonElement fluids = json.get("fluids");
+                    JsonObject in = fluids.getAsJsonObject().has("input") ? fluids.getAsJsonObject().get("input").getAsJsonObject() : null;
+                    JsonObject out = fluids.getAsJsonObject().has("output") ? fluids.getAsJsonObject().get("output").getAsJsonObject() : null;
+                    if (!(in != null || out != null)) {throw new JsonParseException("Fluid ingredient announced but is content empty!");}
+                    FluidStack inFluid = readFluid(in);
+                    FluidStack outFluid = readFluid(out);
+                    return new MillRecipe(recipeId, groupIn, inputIn, costsIn, outputIn, inFluid, outFluid, roundIn, roundTicksIn, expIn);
+                }
+                else return new MillRecipe(recipeId, groupIn, inputIn, costsIn, outputIn, FluidStack.EMPTY, FluidStack.EMPTY, roundIn, roundTicksIn, expIn);
             }
+        }
+
+        private static FluidStack readFluid(JsonObject object)
+        {
+            if (object == null) return FluidStack.EMPTY;
+
+            String fluid = JSONUtils.getString(object, "fluid");
+            int amount = JSONUtils.getInt(object, "amount");
+
+            CompoundNBT nbt = new CompoundNBT();
+            nbt.putString("FluidName", fluid);
+            nbt.putInt("Amount", amount);
+
+            return FluidStack.loadFluidStackFromNBT(nbt);
         }
 
         private static NonNullList<Ingredient> readIngredients(JsonArray ingredientArray)
@@ -161,10 +203,13 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
         {
             NonNullList<ItemStack> nonnulllist = NonNullList.create();
 
-            for (int i = 0; i < itemStackArray.size(); ++i)
+            if (itemStackArray != null)
             {
-                ItemStack stack = CraftingHelper.getItemStack(itemStackArray.get(i).getAsJsonObject(), true);
-                if (!stack.isEmpty()) {nonnulllist.add(stack);}
+                for (int i = 0; i < itemStackArray.size(); ++i)
+                {
+                    ItemStack stack = CraftingHelper.getItemStack(itemStackArray.get(i).getAsJsonObject(), true);
+                    if (!stack.isEmpty()) {nonnulllist.add(stack);}
+                }
             }
 
             return nonnulllist;
@@ -186,10 +231,13 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
             CompoundNBT nbt = buffer.readCompoundTag();
             if (nbt != null) ItemStackHelper.loadAllItems(nbt, outputItemsIn);
 
+            FluidStack inFluid = FluidStack.readFromPacket(buffer);
+            FluidStack outFluid = FluidStack.readFromPacket(buffer);
+
             byte roundIn = buffer.readByte();
             int roundTicksIn = buffer.readVarInt();
             float expIn = buffer.readFloat();
-            return new MillRecipe(recipeId, groupIn, inputItemsIn, costsIn, outputItemsIn, roundIn, roundTicksIn, expIn);
+            return new MillRecipe(recipeId, groupIn, inputItemsIn, costsIn, outputItemsIn, inFluid, outFluid, roundIn, roundTicksIn, expIn);
         }
 
         @Override
@@ -207,6 +255,9 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
             }
             CompoundNBT nbt = buffer.readCompoundTag();
             if (nbt != null) ItemStackHelper.saveAllItems(nbt, recipe.output);
+
+            recipe.inputFluid.writeToPacket(buffer);
+            recipe.outputFluid.writeToPacket(buffer);
 
             buffer.writeByte(recipe.round);
             buffer.writeVarInt(recipe.roundTicks);
