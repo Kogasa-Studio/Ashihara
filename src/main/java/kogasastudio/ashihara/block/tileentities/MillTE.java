@@ -52,7 +52,7 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     public boolean isWorking;
     private MillRecipe recipe;
     public LazyOptional<FluidTank> tankIn = LazyOptional.of(this::createTank);
-    public LazyOptional<FluidTank> tankOut = LazyOptional.of(() -> new FluidTank(4000));
+    public LazyOptional<FluidTank> tankOut = LazyOptional.of(this::createTank);
     public IIntArray millData = new IIntArray()
     {
         public int get(int index)
@@ -233,6 +233,9 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     public FluidTank createTank() {return new FluidTank(4000);}
 
     @Override
+    public FluidTank createTank(int capacity) {return new FluidTank(capacity);}
+
+    @Override
     public LazyOptional<FluidTank> getTank() {return this.tankIn;}
 
     @Override
@@ -255,7 +258,7 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     {
         super.reviveCaps();
         this.tankIn = LazyOptional.of(this::createTank);
-        this.tankOut = LazyOptional.of(() -> new FluidTank(4000));
+        this.tankOut = LazyOptional.of(this::createTank);
     }
 
     @Override

@@ -8,6 +8,7 @@ import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.utils.WoodTypes;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IItemProvider;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -44,7 +45,8 @@ public class BlockRegistryHandler {
     public static final RegistryObject<Block> SOY_BEANS = BLOCKS.register("soy_beans", () -> new AbstractCropAge7() {@Override protected IItemProvider getSeedsItem() {return ItemRegistryHandler.SOY_BEAN.get();}});
 
     //木制品
-    public static final RegistryObject<Block> CHERRY_LOG = BLOCKS.register("cherry_log", SimpleLogBlock::new);
+    public static final RegistryObject<Block> CHERRY_LOG = BLOCKS.register("cherry_log", () -> new StrippableLogBlock() {@Override public Block getStrippedBlock() {return STRIPPED_CHERRY_LOG.get();}});
+    public static final RegistryObject<Block> STRIPPED_CHERRY_LOG = BLOCKS.register("stripped_cherry_log", SimpleLogBlock::new);
     public static final RegistryObject<Block> CHERRY_WOOD = BLOCKS.register("cherry_wood", SimpleWoodBlock::new);
     public static final RegistryObject<Block> CHERRY_PLANKS = BLOCKS.register("cherry_planks", SimplePlanksBlock::new);
     public static final RegistryObject<Block> CHERRY_STAIRS = BLOCKS.register("cherry_stairs", SimpleStairsBlock::new);

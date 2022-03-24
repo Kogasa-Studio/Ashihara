@@ -7,5 +7,7 @@ public interface IFluidHandler
 {
     FluidTank createTank();
 
+    default FluidTank createTank(int capacity) {return this.createTank();}
+
     LazyOptional<FluidTank> getTank();
 }
