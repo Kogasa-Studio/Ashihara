@@ -324,8 +324,7 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     {
         if (this.world == null) return;
         CompoundNBT nbt = new CompoundNBT();
-        nbt.putInt("roundProgress", this.roundProgress);
-        nbt.putInt("roundTicks", this.roundTicks);
+        nbt = this.write(nbt);
         SUpdateTileEntityPacket p = new SUpdateTileEntityPacket(this.pos, 1, nbt);
         ((ServerWorld)this.world).getChunkProvider().chunkManager.getTrackingPlayers(new ChunkPos(this.pos), false)
         .forEach(k -> k.connection.sendPacket(p));
@@ -335,7 +334,8 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
     {
         CompoundNBT nbt = pkt.getNbtCompound();
-        this.roundProgress = nbt.getInt("roundProgress");
-        this.roundTicks = nbt.getInt("roundTicks");
+        World world = this.world;
+        if (this.world != null)
+            this.read(world.getBlockState(pos), nbt);
     }
 }
