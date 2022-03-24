@@ -35,6 +35,7 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
 public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, INamedContainerProvider, IFluidHandler
 {
@@ -176,17 +177,38 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
             }
             if (!recipeIn.getInputFluid().isEmpty())
             {
-                FluidTank tank = this.tankIn.orElse(new FluidTank(0));
-                FluidStack fluid = recipeIn.getInputFluid();
-                FluidStack fluidInTank = tank.getFluid();
-                if (fluid.isFluidEqual(fluidInTank)) fluidInTank.setAmount(Math.min(0, fluidInTank.getAmount() - fluid.getAmount()));
+                this.tankIn.ifPresent
+                (
+                    tank ->
+                    {
+                        FluidStack fluid = recipeIn.getInputFluid();
+                        FluidStack fluidInTank = tank.getFluid();
+                        if (fluid.isFluidEqual(fluidInTank))
+                        {
+                            fluidInTank.setAmount(Math.max(0, fluidInTank.getAmount() - fluid.getAmount()));
+                            tank.setFluid(fluidInTank);
+                            markDirty();
+                        }
+                    }
+                );
             }
             if (!recipeIn.getOutputFluid().isEmpty())
             {
-                FluidTank tank = this.tankOut.orElse(new FluidTank(0));
-                FluidStack fluid = recipeIn.getInputFluid();
-                FluidStack fluidInTank = tank.getFluid();
-                if (fluid.isFluidEqual(fluidInTank)) fluidInTank.setAmount(Math.min(fluid.getAmount() + fluidInTank.getAmount(), tank.getCapacity()));
+                this.tankOut.ifPresent
+                (
+                    tank ->
+                    {
+                        FluidStack fluid = recipeIn.getOutputFluid();
+                        FluidStack fluidInTank = tank.getFluid();
+                        if (tank.isEmpty()) tank.fill(fluid, EXECUTE);
+                        else if (fluid.isFluidEqual(fluidInTank))
+                        {
+                            fluidInTank.setAmount(Math.min(fluid.getAmount() + fluidInTank.getAmount(), tank.getCapacity()));
+                            tank.setFluid(fluidInTank);
+                            markDirty();
+                        }
+                    }
+                );
             }
             if (this.world != null) this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
         }
@@ -326,6 +348,8 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
         CompoundNBT nbt = new CompoundNBT();
         nbt.putInt("roundProgress", this.roundProgress);
         nbt.putInt("roundTicks", this.roundTicks);
+        this.tankIn.ifPresent(tank -> nbt.put("tankIn", tank.writeToNBT(new CompoundNBT())));
+        this.tankOut.ifPresent(tank -> nbt.put("tankOut", tank.writeToNBT(new CompoundNBT())));
         SUpdateTileEntityPacket p = new SUpdateTileEntityPacket(this.pos, 1, nbt);
         ((ServerWorld)this.world).getChunkProvider().chunkManager.getTrackingPlayers(new ChunkPos(this.pos), false)
         .forEach(k -> k.connection.sendPacket(p));
@@ -337,5 +361,7 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
         CompoundNBT nbt = pkt.getNbtCompound();
         this.roundProgress = nbt.getInt("roundProgress");
         this.roundTicks = nbt.getInt("roundTicks");
+        this.tankIn.ifPresent(tank -> tank.readFromNBT(nbt.getCompound("tankIn")));
+        this.tankOut.ifPresent(tank -> tank.readFromNBT(nbt.getCompound("tankOut")));
     }
 }

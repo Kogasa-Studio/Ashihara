@@ -57,7 +57,7 @@ public class FluidHelper
      */
     public static boolean canFluidAddToTank(FluidStack fluidIn, FluidTank tank)
     {
-        return fluidIn.isFluidEqual(tank.getFluid()) && fluidIn.getAmount() + tank.getFluid().getAmount() <= tank.getCapacity();
+        return (tank.isEmpty() || fluidIn.isFluidEqual(tank.getFluid())) && fluidIn.getAmount() + tank.getFluid().getAmount() <= tank.getCapacity();
     }
 
     public static boolean canFluidAddToTank(FluidStack fluidIn, LazyOptional<FluidTank> tank)

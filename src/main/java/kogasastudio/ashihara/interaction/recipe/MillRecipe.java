@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static net.minecraft.item.ItemStack.EMPTY;
+
 public class MillRecipe implements IRecipe<RecipeWrapper>
 {
     public static IRecipeType<MillRecipe> TYPE = IRecipeType.register(Ashihara.MODID + ":mill");
@@ -201,15 +203,14 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
 
         private static NonNullList<ItemStack> readOutput(JsonArray itemStackArray)
         {
+            if (itemStackArray == null) return NonNullList.withSize(1, EMPTY);
+
             NonNullList<ItemStack> nonnulllist = NonNullList.create();
 
-            if (itemStackArray != null)
+            for (int i = 0; i < itemStackArray.size(); ++i)
             {
-                for (int i = 0; i < itemStackArray.size(); ++i)
-                {
-                    ItemStack stack = CraftingHelper.getItemStack(itemStackArray.get(i).getAsJsonObject(), true);
-                    if (!stack.isEmpty()) {nonnulllist.add(stack);}
-                }
+                ItemStack stack = CraftingHelper.getItemStack(itemStackArray.get(i).getAsJsonObject(), true);
+                if (!stack.isEmpty()) {nonnulllist.add(stack);}
             }
 
             return nonnulllist;
@@ -221,7 +222,7 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
             String groupIn = buffer.readString(32767);
             Map<Ingredient, Byte> costsIn = new HashMap<>(4);
             NonNullList<Ingredient> inputItemsIn = NonNullList.withSize(4, Ingredient.EMPTY);
-            NonNullList<ItemStack> outputItemsIn = NonNullList.withSize(4, ItemStack.EMPTY);
+            NonNullList<ItemStack> outputItemsIn = NonNullList.withSize(4, EMPTY);
 
             for (int j = 0; j < inputItemsIn.size(); ++j)
             {
