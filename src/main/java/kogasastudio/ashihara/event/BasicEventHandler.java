@@ -73,7 +73,6 @@ public class BasicEventHandler
             //相当于手动放置
             world.playSound(player, pos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, new Random().nextFloat() * 0.4F + 0.8F);
             BlockState placement = BlockRegistryHandler.BLOCK_WATER_FIELD.get().getStateForPlacement(new BlockItemUseContext(world, player, context.getHand(), context.getItem(), result));
-            LOGGER_MAIN.info("在坐标 " + "x: " + result.getPos().getX() + ", y: " + result.getPos().getY() + ", z: " + result.getPos().getZ() + "进行检测");
             world.setBlockState(pos, placement == null ? BlockRegistryHandler.BLOCK_WATER_FIELD.get().getDefaultState() : placement, 1);
             if (player != null) {player.swingArm(context.getHand());}
             if (player != null && !player.abilities.isCreativeMode) {context.getItem().damageItem(1, player, (playerEntity) -> player.sendBreakAnimation(context.getHand()));}
