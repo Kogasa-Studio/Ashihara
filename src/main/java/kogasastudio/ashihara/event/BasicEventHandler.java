@@ -23,8 +23,6 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.Random;
 
-import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
-
 @Mod.EventBusSubscriber(modid = Ashihara.MODID)
 public class BasicEventHandler
 {

@@ -209,17 +209,14 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
             this.output.clear();
             this.isWorking = false;
         }
-        LOGGER_MAIN.info("recipe finished");
         markDirty();
     }
 
     //若不在工作状态中空手右击则取出物品，持物品右击则尝试将物品放入舂
     public boolean notifyInteraction(ItemStack stackIn, World worldIn, BlockPos posIn, PlayerEntity player)
     {
-        LOGGER_MAIN.info("notified interaction");
         if (isNextStepNeeded(stackIn))
         {
-            LOGGER_MAIN.info("start to progress");
             worldIn.playSound(player, posIn, SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
             if (worldIn.isRemote())
             {
@@ -242,8 +239,6 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
                 stackIn.damageItem(1, player, (playerEntity) -> player.sendBreakAnimation(EquipmentSlotType.MAINHAND));
             }
             process(this.recipeType == 2);
-            LOGGER_MAIN.info("processed");
-            LOGGER_MAIN.info("{\n    te_progress: " + this.mortarData.get(0) + ";\n    te_nextStep: " + this.mortarData.get(2) + ";\n}");
             return true;
         }
         if (!this.isWorking)
@@ -257,8 +252,6 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
                     notifyStateChanged();
                     markDirty();
                     InventoryHelper.spawnItemStack(worldIn, posIn.getX(), posIn.getY() + 0.5F, posIn.getZ(), stack);
-                    LOGGER_MAIN.info("Content item extracted");
-                    LOGGER_MAIN.info("{\n    te_progress: " + this.mortarData.get(0) + ";\n    te_nextStep: " + this.mortarData.get(2) + ";\n}");
                     return true;
                 }
                 else if (stack.isEmpty() && stackIn.getItem().isIn(MASHABLE))
@@ -268,13 +261,10 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
                     worldIn.playSound(player, posIn, SoundEvents.BLOCK_SAND_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     notifyStateChanged();
                     markDirty();
-                    LOGGER_MAIN.info("Content item inserted");
-                    LOGGER_MAIN.info("{\n    te_progress: " + this.mortarData.get(0) + ";\n    te_nextStep: " + this.mortarData.get(2) + ";\n}");
                     return true;
                 }
             }
         }
-        LOGGER_MAIN.info("{\n    te_progress: " + this.mortarData.get(0) + ";\n    te_nextStep: " + this.mortarData.get(2) + ";\n}");
         return false;
     }
 
