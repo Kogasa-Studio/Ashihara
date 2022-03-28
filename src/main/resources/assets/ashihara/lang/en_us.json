@@ -41,6 +41,7 @@
   "item.ashihara.diamond_otsuchi": "Diamond otsuchi",
 
   "item.ashihara.soy_milk_bucket": "Soy milk bucket",
+  "item.ashihara.oil_bucket": "Oil bucket",
 
   "block.ashihara.water_field":"Water field",
   "block.ashihara.dirt_depression": "Dirt depression",
@@ -87,9 +88,12 @@
   "block.ashihara.red_fence_expansion": "Red fence expansion",
 
   "block.ashihara.soy_milk": "Soy milk",
+  "block.ashihara.oil": "Oil",
 
   "fluid.ashihara.soy_milk": "Soy milk",
-  "fluid.ashihara.soy_milk_flowing": "Soy milk flowing",
+  "fluid.ashihara.soy_milk_flowing": "Flowing soy milk",
+  "fluid.ashihara.oil": "Oil",
+  "fluid.ashihara.oil_flowing": "Flowing oil",
 
   "itemGroup.group_ashihara": "Ashihara",
   "itemGroup.group_ash_materials": "Ashihara-Materials",

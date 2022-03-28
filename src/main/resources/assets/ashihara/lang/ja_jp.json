@@ -40,7 +40,8 @@
   "item.ashihara.iron_otsuchi": "鉄の大槌",
   "item.ashihara.diamond_otsuchi": "鑽石の大槌",
 
-  "item.ashihara.soy_milk_bucket": "豆乳のバケツ",
+  "item.ashihara.soy_milk_bucket": "豆乳の樽",
+  "item.ashihara.oil_bucket": "油の樽",
 
   "block.ashihara.water_field": "水田",
   "block.ashihara.dirt_depression": "漥",
@@ -87,9 +88,12 @@
   "block.ashihara.red_fence_expansion": "朱木勾欄の出会",
 
   "block.ashihara.soy_milk": "豆乳",
+  "block.ashihara.oil": "油",
 
   "fluid.ashihara.soy_milk": "豆乳",
   "fluid.ashihara.soy_milk_flowing": "流れ豆乳",
+  "fluid.ashihara.oil": "油",
+  "fluid.ashihara.oil_flowing": "流れ油",
 
   "itemGroup.group_ashihara": "葦原",
   "itemGroup.group_ash_materials": "葦原-材料",

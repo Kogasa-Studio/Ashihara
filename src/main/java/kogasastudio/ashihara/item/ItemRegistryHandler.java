@@ -111,4 +111,5 @@ public class ItemRegistryHandler
 
     //桶
     public static final RegistryObject<Item> SOY_MILK_BUCKET = ITEMS.register("soy_milk_bucket", () -> new BucketItem(FluidRegistryHandler.SOY_MILK, new Item.Properties().group(ItemGroup.MISC)));
+    public static final RegistryObject<Item> OIL_BUCKET = ITEMS.register("oil_bucket", () -> new BucketItem(FluidRegistryHandler.OIL, new Item.Properties().group(ItemGroup.MISC)));
 }

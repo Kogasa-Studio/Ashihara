@@ -75,6 +75,8 @@ public class ClientEventSubscribeHandler
 
         setRenderType(FluidRegistryHandler.SOY_MILK.get(), RenderType.getTranslucent(), event);
         setRenderType(FluidRegistryHandler.SOY_MILK_FLOWING.get(), RenderType.getTranslucent(), event);
+        setRenderType(FluidRegistryHandler.OIL.get(), RenderType.getTranslucent(), event);
+        setRenderType(FluidRegistryHandler.OIL_FLOWING.get(), RenderType.getTranslucent(), event);
     }
 
     //注册粒子

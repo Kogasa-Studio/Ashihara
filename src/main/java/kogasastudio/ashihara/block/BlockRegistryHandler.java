@@ -68,4 +68,6 @@ public class BlockRegistryHandler {
 
     public static final RegistryObject<FlowingFluidBlock> SOY_MILK_BLOCK = BLOCKS.register("soy_milk", () ->
         new FlowingFluidBlock(FluidRegistryHandler.SOY_MILK, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()));
+    public static final RegistryObject<FlowingFluidBlock> OIL_BLOCK = BLOCKS.register("oil", () ->
+        new FlowingFluidBlock(FluidRegistryHandler.OIL, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()));
 }
