@@ -5,6 +5,7 @@ import kogasastudio.ashihara.block.tileentities.TERegistryHandler;
 import kogasastudio.ashihara.client.gui.MillScreen;
 import kogasastudio.ashihara.client.gui.MortarScreen;
 import kogasastudio.ashihara.client.models.baked.PailModel;
+import kogasastudio.ashihara.client.particles.MapleLeafParticle;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.client.particles.RiceParticle;
 import kogasastudio.ashihara.client.particles.SakuraParticle;
@@ -58,9 +59,11 @@ public class ClientEventSubscribeHandler
         setRenderType(BlockRegistryHandler.BLOCK_RICE_CROP.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.BLOCK_IMMATURE_RICE.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.CHERRY_BLOSSOM.get(), RenderType.getCutoutMipped(), event);
+        setRenderType(BlockRegistryHandler.MAPLE_LEAVES_RED.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.CHERRY_SAPLING.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.BLOCK_JINJA_LANTERN.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.FALLEN_SAKURA.get(), RenderType.getCutoutMipped(), event);
+        setRenderType(BlockRegistryHandler.FALLEN_MAPLE_LEAVES_RED.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.POTTED_CHERRY_SAPLING.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.LANTERN_LONG_RED.get(), RenderType.getCutoutMipped(), event);
@@ -87,6 +90,7 @@ public class ClientEventSubscribeHandler
         ParticleManager manager = Minecraft.getInstance().particles;
         manager.registerFactory(ParticleRegistryHandler.RICE.get(), RiceParticle.RiceParticleFactory::new);
         manager.registerFactory(ParticleRegistryHandler.SAKURA.get(), SakuraParticle.SakuraParticleFactory::new);
+        manager.registerFactory(ParticleRegistryHandler.MAPLE_LEAF.get(), MapleLeafParticle.MapleLeafParticleFactory::new);
     }
 
     //绑定TER

@@ -38,7 +38,7 @@
                   ]
                 }
               ],
-              "name": "ashihara:cherry_blossom"
+              "name": "ashihara:maple_leaves_red"
             },
             {
               "type": "minecraft:item",
@@ -58,26 +58,6 @@
                 }
               ],
               "name": "ashihara:cherry_sapling"
-            },
-            {
-              "type": "minecraft:item",
-              "conditions":
-              [
-                {"condition": "minecraft:survives_explosion"}
-              ],
-              "functions":
-              [
-                {
-                  "function": "minecraft:set_count",
-                  "count":
-                  {
-                    "min": 1.0,
-                    "max": 3.0,
-                    "type": "minecraft:uniform"
-                  }
-                }
-              ],
-              "name": "ashihara:sakura"
             }
           ]
         }

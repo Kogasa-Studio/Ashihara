@@ -1,0 +1,4 @@
+{
+	"parent": "ashihara:block/fallen_leaves",
+	"textures": {"leaves": "ashihara:block/maple_leaves_red"}
+}

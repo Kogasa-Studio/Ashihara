@@ -5,9 +5,9 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class SakuraParticle extends SpriteTexturedParticle
+public class MapleLeafParticle extends SpriteTexturedParticle
 {
-    protected SakuraParticle(ClientWorld world, double x, double y, double z)
+    protected MapleLeafParticle(ClientWorld world, double x, double y, double z)
     {
         super(world, x, y, z, 0.0D, 0.0D, 0.0D);
         this.motionX *= 0.9F;
@@ -55,20 +55,20 @@ public class SakuraParticle extends SpriteTexturedParticle
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class SakuraParticleFactory implements IParticleFactory<GenericParticleData>
+    public static class MapleLeafParticleFactory implements IParticleFactory<GenericParticleData>
     {
         private final IAnimatedSprite spriteSet;
 
-        public SakuraParticleFactory(IAnimatedSprite spriteSet) {
+        public MapleLeafParticleFactory(IAnimatedSprite spriteSet) {
             this.spriteSet = spriteSet;
         }
 
         @Override
         public Particle makeParticle(GenericParticleData typeIn, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
         {
-            SakuraParticle sakuraParticle = new SakuraParticle(worldIn, x, y, z);
-            sakuraParticle.selectSpriteRandomly(this.spriteSet);
-            return sakuraParticle;
+            MapleLeafParticle maple = new MapleLeafParticle(worldIn, x, y, z);
+            maple.selectSpriteRandomly(this.spriteSet);
+            return maple;
         }
     }
 }

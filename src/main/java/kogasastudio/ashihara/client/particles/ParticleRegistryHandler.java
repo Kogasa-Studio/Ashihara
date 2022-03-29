@@ -12,4 +12,5 @@ public class ParticleRegistryHandler
 
     public static final RegistryObject<GenericParticleType> RICE = PARTICLE_TYPES.register("rice", GenericParticleType::new);
     public static final RegistryObject<GenericParticleType> SAKURA = PARTICLE_TYPES.register("sakura", GenericParticleType::new);
+    public static final RegistryObject<GenericParticleType> MAPLE_LEAF = PARTICLE_TYPES.register("maple_leaf", GenericParticleType::new);
 }

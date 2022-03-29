@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.client.particles.GenericParticleData;
-import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
+import kogasastudio.ashihara.client.particles.GenericParticleType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
@@ -21,9 +21,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
 
-public class BlockCherryBlossom extends LeavesBlock
+import static net.minecraft.block.Blocks.AIR;
+
+public class AbstractFallingLeavesBlock extends LeavesBlock
 {
-    public BlockCherryBlossom()
+    public AbstractFallingLeavesBlock()
     {
         super
         (
@@ -32,10 +34,27 @@ public class BlockCherryBlossom extends LeavesBlock
             .tickRandomly()
             .sound(SoundType.PLANT)
             .notSolid()
-            .setLightLevel((state) -> 5)
         );
         this.setDefaultState(this.stateContainer.getBaseState().with(DISTANCE, 7).with(PERSISTENT, Boolean.FALSE));
     }
+
+    public AbstractFallingLeavesBlock(int light)
+    {
+        super
+        (
+            Properties.create(Material.LEAVES)
+            .hardnessAndResistance(0.05F)
+            .tickRandomly()
+            .sound(SoundType.PLANT)
+            .notSolid()
+            .setLightLevel((state) -> light)
+        );
+        this.setDefaultState(this.stateContainer.getBaseState().with(DISTANCE, 7).with(PERSISTENT, Boolean.FALSE));
+    }
+
+    protected Block getFallenBlock() {return AIR;}
+
+    protected GenericParticleType getParticle() {return null;}
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {builder.add(DISTANCE, PERSISTENT);}
@@ -53,7 +72,7 @@ public class BlockCherryBlossom extends LeavesBlock
             worldIn.removeBlock(pos, false);
         }
         //若樱花方块正下方50格以内有实心方块，且该方块上方为空气，则在该方块上方生成落樱毯
-        if (worldIn.isAirBlock(pos.down()))
+        if (!this.getFallenBlock().matchesBlock(AIR) && worldIn.isAirBlock(pos.down()))
         {
             BlockPos pos1 = pos;
             for (int j = 0; j < 50; j += 1)
@@ -64,7 +83,7 @@ public class BlockCherryBlossom extends LeavesBlock
                 {
                     if (worldIn.isAirBlock(pos1.up()))
                     {
-                        worldIn.setBlockState(pos1.up(), BlockRegistryHandler.FALLEN_SAKURA.get().getDefaultState());
+                        worldIn.setBlockState(pos1.up(), this.getFallenBlock().getDefaultState());
                     }
                     break;
                 }
@@ -84,9 +103,9 @@ public class BlockCherryBlossom extends LeavesBlock
     {
         BlockPos blockpos = pos.down();
         BlockState blockstate = worldIn.getBlockState(blockpos);
-        if (rand.nextInt(30) == 1 && (blockstate.allowsMovement(worldIn, blockpos, PathType.AIR)))
+        if (this.getParticle() != null && rand.nextInt(30) == 1 && (blockstate.allowsMovement(worldIn, blockpos, PathType.AIR)))
         {
-            worldIn.addParticle(new GenericParticleData(new Vector3d(0,0,0), 0, ParticleRegistryHandler.SAKURA.get()), (double)pos.getX() + 0.5, (double)pos.getY() - 0.1D, (double)pos.getZ() + 0.5, rand.nextInt(10) / 200.0F, 0, rand.nextInt(10) / 200.0F);
+            worldIn.addParticle(new GenericParticleData(new Vector3d(0,0,0), 0, this.getParticle()), (double)pos.getX() + 0.5, (double)pos.getY() - 0.1D, (double)pos.getZ() + 0.5, rand.nextInt(10) / 200.0F, 0, rand.nextInt(10) / 200.0F);
         }
         if (worldIn.isRainingAt(pos.up()))
         {

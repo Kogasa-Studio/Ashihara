@@ -15,9 +15,9 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 
-public class BlockFallenSakura extends Block
+public class AbstractFallenLeavesBlock extends Block
 {
-    public BlockFallenSakura()
+    public AbstractFallenLeavesBlock()
     {
         super
         (
