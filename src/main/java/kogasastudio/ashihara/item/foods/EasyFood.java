@@ -3,7 +3,7 @@ package kogasastudio.ashihara.item.foods;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 
-import static kogasastudio.ashihara.Ashihara.ASHIHARA;
+import static kogasastudio.ashihara.Ashihara.MATERIALS;
 
 public class EasyFood extends Item
 {
@@ -11,7 +11,7 @@ public class EasyFood extends Item
     {
         super
         (
-            new Item.Properties().group(ASHIHARA)
+            new Item.Properties().group(MATERIALS)
             .food(new Food.Builder().hunger(hunger).build())
         );
     }

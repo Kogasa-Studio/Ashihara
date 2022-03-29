@@ -37,7 +37,7 @@ public class FluidRegistryHandler
     public static final RegistryObject<FlowingFluid> OIL_FLOWING = FLUIDS.register("oil_flowing", () -> new ForgeFlowingFluid.Flowing(FluidRegistryHandler.OIL_PROP));
 
     public static ForgeFlowingFluid.Properties SOY_MILK_PROP = getBasicFluidProp(SOY_MILK, SOY_MILK_FLOWING, ColorHelper.PackedColor.packColor(255, 255, 253, 225), BlockRegistryHandler.SOY_MILK_BLOCK, ItemRegistryHandler.SOY_MILK_BUCKET, TEXTURE_MILK_STILL, TEXTURE_MILK_FLOW);
-    public static ForgeFlowingFluid.Properties OIL_PROP = getBasicFluidProp(OIL, OIL_FLOWING, ColorHelper.PackedColor.packColor(168, 246, 223, 12), BlockRegistryHandler.OIL_BLOCK, ItemRegistryHandler.OIL_BUCKET);
+    public static ForgeFlowingFluid.Properties OIL_PROP = getBasicFluidProp(OIL, OIL_FLOWING, ColorHelper.PackedColor.packColor(255, 246, 223, 12), BlockRegistryHandler.OIL_BLOCK, ItemRegistryHandler.OIL_BUCKET);
     //oil 168 244 233 132
 
     private static ForgeFlowingFluid.Properties getBasicFluidProp(RegistryObject<FlowingFluid> source, RegistryObject<FlowingFluid> flowing, int color, Supplier<? extends FlowingFluidBlock> block, Supplier<? extends Item> bucket, ResourceLocation STILL, ResourceLocation FLOWING)

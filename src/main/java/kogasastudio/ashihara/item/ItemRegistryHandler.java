@@ -44,7 +44,7 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> TAMAGO = ITEMS.register("tamago", () -> new EasyFood(1));
     public static final RegistryObject<Item> CUCUMBER = ITEMS.register("cucumber", () -> new EasyFood(2));
     public static final RegistryObject<Item> TOMATO = ITEMS.register("tomato", () -> new EasyFood(2));
-    public static final RegistryObject<Item> SWEET_POTATO = ITEMS.register("sweet_potato", () -> new EasyFood(2));
+    public static final RegistryObject<Item> SWEET_POTATO = ITEMS.register("sweet_potato", () -> new BlockNamedItem(BlockRegistryHandler.SWEET_POTATOES.get(), new Item.Properties().group(ItemGroup.MATERIALS).food(new Food.Builder().hunger(2).build())));
 
     //工具
     public static final RegistryObject<Item> WOOD_OTSUCHI = ITEMS.register("wood_otsuchi", () -> new ItemOtsuchi(ItemTier.WOOD, 16, -3.4d));
