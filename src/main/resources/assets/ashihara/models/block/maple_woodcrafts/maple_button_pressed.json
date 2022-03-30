@@ -1,0 +1,4 @@
+{
+  "parent": "minecraft:block/button_pressed",
+  "textures": {"texture": "ashihara:block/woodcrafts/maple_planks"}
+}

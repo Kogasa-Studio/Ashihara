@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures":
+  {
+    "bottom": "ashihara:block/woodcrafts/maple_planks",
+    "top": "ashihara:block/woodcrafts/maple_planks",
+    "side": "ashihara:block/woodcrafts/maple_planks"
+  }
+}

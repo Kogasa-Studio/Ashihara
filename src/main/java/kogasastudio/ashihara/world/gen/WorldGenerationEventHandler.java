@@ -28,10 +28,12 @@ public class WorldGenerationEventHandler
         if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.PLAINS))
         {
             settings.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.PLAIN_CHERRY_TREES);
+            settings.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.PLAIN_RED_MAPLE_TREES);
         }
-//        if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.HILLS))
-//        {
-//            settings.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.PLAIN_CHERRY_TREES);
-//        }
+        if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.HILLS))
+        {
+            settings.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.PLAIN_CHERRY_TREES);
+            settings.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.PLAIN_RED_MAPLE_TREES);
+        }
     }
 }

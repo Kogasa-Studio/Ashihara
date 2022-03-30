@@ -19,6 +19,11 @@ public class AbstractFallenLeavesBlock extends Block
 {
     public AbstractFallenLeavesBlock()
     {
+        this(false);
+    }
+
+    public AbstractFallenLeavesBlock(boolean flammableIn)
+    {
         super
         (
             Properties.create(Material.PLANTS)
@@ -27,7 +32,10 @@ public class AbstractFallenLeavesBlock extends Block
             .notSolid()
             .doesNotBlockMovement()
         );
+        this.flammable = flammableIn;
     }
+
+    private final boolean flammable;
 
     @Override
     public boolean isReplaceable(BlockState state, BlockItemUseContext useContext)
@@ -52,4 +60,13 @@ public class AbstractFallenLeavesBlock extends Block
     {
         return Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D);
     }
+
+    @Override
+    public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {return this.flammable ? 60 : 0;}
+
+    @Override
+    public int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {return this.flammable ? 60 : 0;}
+
+    @Override
+    public boolean isFlammable(BlockState state, IBlockReader world, BlockPos pos, Direction face) {return this.flammable;}
 }

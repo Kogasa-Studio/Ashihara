@@ -52,6 +52,7 @@
   "block.ashihara.jinja_lantern": "Jinja Lantern",
   "block.ashihara.tetsusenchi": "Tetsusenchi",
   "block.ashihara.cherry_sapling": "Cherry sapling",
+  "block.ashihara.red_maple_sapling": "Red maple sapling",
   "block.ashihara.mortar": "Mortar",
   "block.ashihara.fallen_sakura": "Fallen cherry flowers",
   "block.ashihara.fallen_maple_leaves_red": "Fallen red maple leaves",
@@ -79,6 +80,17 @@
   "block.ashihara.cherry_fence_gate": "Cherry fence gate",
   "block.ashihara.cherry_button": "Cherry button",
   "block.ashihara.cherry_wood": "Cherry wood",
+
+  "block.ashihara.maple_log": "Maple log",
+  "block.ashihara.stripped_maple_log": "Stripped Maple log",
+  "block.ashihara.maple_planks": "Maple planks",
+  "block.ashihara.maple_stairs": "Maple stairs",
+  "block.ashihara.maple_slab": "Maple slab",
+  "block.ashihara.maple_fence": "Maple fence",
+  "block.ashihara.maple_fence_gate": "Maple fence gate",
+  "block.ashihara.maple_button": "Maple button",
+  "block.ashihara.maple_wood": "Maple wood",
+
   "block.ashihara.stripped_red_log": "Red log",
   "block.ashihara.red_planks": "Red planks",
   "block.ashihara.red_stairs": "Red stairs",
@@ -99,7 +111,8 @@
   "fluid.ashihara.oil_flowing": "Flowing oil",
 
   "itemGroup.group_ashihara": "Ashihara",
-  "itemGroup.group_ash_materials": "Ashihara-Materials",
+  "itemGroup.group_ash_materials": "Ashihara-materials",
+  "itemGroup.group_ash_building_blocks": "Ashihara-building blocks",
 
   "gui.ashihara.mill": "Mill",
   "gui.ashihara.mortar": "Mortar",

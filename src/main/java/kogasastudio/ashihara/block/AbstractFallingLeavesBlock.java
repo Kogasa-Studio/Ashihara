@@ -27,18 +27,10 @@ public class AbstractFallingLeavesBlock extends LeavesBlock
 {
     public AbstractFallingLeavesBlock()
     {
-        super
-        (
-            Properties.create(Material.LEAVES)
-            .hardnessAndResistance(0.05F)
-            .tickRandomly()
-            .sound(SoundType.PLANT)
-            .notSolid()
-        );
-        this.setDefaultState(this.stateContainer.getBaseState().with(DISTANCE, 7).with(PERSISTENT, Boolean.FALSE));
+        this(0, true);
     }
 
-    public AbstractFallingLeavesBlock(int light)
+    public AbstractFallingLeavesBlock(int light, boolean flammableIn)
     {
         super
         (
@@ -50,7 +42,10 @@ public class AbstractFallingLeavesBlock extends LeavesBlock
             .setLightLevel((state) -> light)
         );
         this.setDefaultState(this.stateContainer.getBaseState().with(DISTANCE, 7).with(PERSISTENT, Boolean.FALSE));
+        this.flammable = flammableIn;
     }
+
+    private final boolean flammable;
 
     protected Block getFallenBlock() {return AIR;}
 
@@ -121,4 +116,13 @@ public class AbstractFallingLeavesBlock extends LeavesBlock
             }
         }
     }
+
+    @Override
+    public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {return this.flammable ? 60 : 0;}
+
+    @Override
+    public int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {return this.flammable ? 30 : 0;}
+
+    @Override
+    public boolean isFlammable(BlockState state, IBlockReader world, BlockPos pos, Direction face) {return this.flammable;}
 }

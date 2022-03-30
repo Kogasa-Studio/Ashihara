@@ -13,14 +13,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
-import static kogasastudio.ashihara.Ashihara.ASHIHARA;
+import static kogasastudio.ashihara.Ashihara.BUILDING_BLOCKS;
 import static kogasastudio.ashihara.block.BlockRegistryHandler.CANDLE;
 import static kogasastudio.ashihara.block.tileentities.TERegistryHandler.CANDLE_TE;
 import static net.minecraft.block.Blocks.AIR;
 
 public class ItemBlockCandle extends BlockItem
 {
-    public ItemBlockCandle() {super(CANDLE.get(), new Properties().group(ASHIHARA));}
+    public ItemBlockCandle() {super(CANDLE.get(), new Properties().group(BUILDING_BLOCKS));}
 
     @Override
     public ActionResultType tryPlace(BlockItemUseContext context)

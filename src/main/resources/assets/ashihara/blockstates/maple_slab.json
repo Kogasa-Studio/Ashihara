@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "type=bottom": {"model": "ashihara:block/maple_woodcrafts/maple_slab"},
+    "type=double": {"model": "ashihara:block/maple_woodcrafts/maple_planks"},
+    "type=top": {"model": "ashihara:block/maple_woodcrafts/maple_slab_top"}
+  }
+}

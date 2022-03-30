@@ -32,6 +32,11 @@ public class Ashihara
         @Override
         public ItemStack createIcon() {return new ItemStack(ItemRegistryHandler.SAKURA.get());}
     };
+    public static final ItemGroup BUILDING_BLOCKS = new ItemGroup("group_ash_building_blocks")
+    {
+        @Override
+        public ItemStack createIcon() {return new ItemStack(ItemRegistryHandler.JINJA_LANTERN.get());}
+    };
 
     public Ashihara()
     {
