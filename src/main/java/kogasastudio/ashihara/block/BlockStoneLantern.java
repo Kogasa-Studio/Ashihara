@@ -2,11 +2,22 @@ package kogasastudio.ashihara.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.DoubleBlockHalf;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
@@ -18,6 +29,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.Random;
 
 import static kogasastudio.ashihara.utils.EasyBlockActionHandler.getLightValueLit;
+import static net.minecraft.item.Items.GLASS_PANE;
 
 public class BlockStoneLantern extends BlockDoubleLantern
 {
@@ -30,6 +42,16 @@ public class BlockStoneLantern extends BlockDoubleLantern
             .sound(SoundType.STONE)
             .setLightLevel(getLightValueLit(15))
         );
+        this.setDefaultState(this.getDefaultState().with(SEALED, false));
+    }
+
+    public static final BooleanProperty SEALED = BooleanProperty.create("sealed");
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    {
+        super.fillStateContainer(builder);
+        builder.add(SEALED);
     }
 
     @Override
@@ -43,6 +65,67 @@ public class BlockStoneLantern extends BlockDoubleLantern
             double d2 = (double)pos.getZ() + 0.5D;
             worldIn.addParticle(ParticleTypes.FLAME, d0, d1, d2, 0.0D, 0.0D, 0.0D);
         }
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+    {
+        DoubleBlockHalf doubleblockhalf = state.get(HALF);
+        if (doubleblockhalf == DoubleBlockHalf.UPPER)
+        {
+            BlockPos blockpos = pos.down();
+            BlockState blockstate = worldIn.getBlockState(blockpos);
+            if (blockstate.getBlock() != state.getBlock() || blockstate.get(HALF) != DoubleBlockHalf.LOWER)
+            {
+                worldIn.setBlockState(pos, state.get(WATERLOGGED) ? Blocks.WATER.getDefaultState() : Blocks.AIR.getDefaultState(), 35);
+            }
+            else if (state.get(LIT) && state.get(WATERLOGGED) && !state.get(SEALED))
+            {
+                worldIn.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                worldIn.setBlockState(pos, state.with(LIT, false));
+            }
+        }
+        else if (doubleblockhalf == DoubleBlockHalf.LOWER)
+        {
+            BlockPos blockpos = pos.up();
+            BlockState blockstate = worldIn.getBlockState(blockpos);
+            if (blockstate.getBlock() != state.getBlock() || blockstate.get(HALF) != DoubleBlockHalf.UPPER)
+            {
+                worldIn.setBlockState(pos, state.get(WATERLOGGED) ? Blocks.WATER.getDefaultState() : Blocks.AIR.getDefaultState(), 35);
+            }
+        }
+    }
+
+    @Override
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    {
+        if (player.getHeldItem(handIn).getItem() == Items.AIR && state.get(HALF) == DoubleBlockHalf.UPPER)
+        {
+            if (player.isSneaking() && state.get(SEALED))
+            {
+                worldIn.playSound(player, pos, SoundEvents.BLOCK_GLASS_HIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                worldIn.setBlockState(pos, state.with(SEALED, false));
+                if (!player.isCreative()) player.setHeldItem(handIn, new ItemStack(GLASS_PANE));
+                return ActionResultType.SUCCESS;
+            }
+            else if (!state.get(WATERLOGGED) || state.get(SEALED))
+            {
+                Random random = worldIn.getRandom();
+                Boolean instantState = worldIn.getBlockState(pos).get(LIT);
+                worldIn.playSound(player, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
+                worldIn.setBlockState(pos, state.with(LIT, !instantState));
+                return ActionResultType.SUCCESS;
+            }
+            else return ActionResultType.PASS;
+        }
+        else if (player.getHeldItem(handIn).getItem().equals(GLASS_PANE) && state.get(HALF).equals(DoubleBlockHalf.UPPER) && !state.get(SEALED))
+        {
+            worldIn.playSound(player, pos, SoundEvents.BLOCK_GLASS_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            worldIn.setBlockState(pos, state.with(SEALED, true));
+            if (!player.isCreative()) player.getHeldItem(handIn).shrink(1);
+            return ActionResultType.SUCCESS;
+        }
+        else return ActionResultType.PASS;
     }
 
     @Override

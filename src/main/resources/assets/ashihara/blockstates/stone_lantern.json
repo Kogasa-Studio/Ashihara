@@ -1,9 +1,7 @@
 {
   "multipart":
   [
-    {"when": {"facing": "east", "half": "lower"},"apply": {"model": "ashihara:block/stone_lantern", "y": 270}},
-    {"when": {"facing": "north", "half": "lower"},"apply": {"model": "ashihara:block/stone_lantern", "y": 180}},
-    {"when": {"facing": "south", "half": "lower"},"apply": {"model": "ashihara:block/stone_lantern"}},
-    {"when": {"facing": "west", "half": "lower"},"apply": {"model": "ashihara:block/stone_lantern", "y": 90}}
+    {"when": {"sealed": "true"}, "apply": {"model": "ashihara:block/stone_lantern_glass"}},
+    {"when": {"half": "lower"},"apply": {"model": "ashihara:block/stone_lantern"}}
   ]
 }

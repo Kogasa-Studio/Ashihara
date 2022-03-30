@@ -21,8 +21,6 @@ import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.Random;
-
 @Mod.EventBusSubscriber(modid = Ashihara.MODID)
 public class BasicEventHandler
 {
@@ -69,7 +67,7 @@ public class BasicEventHandler
         if (clickState.matchesBlock(BlockRegistryHandler.BLOCK_DIRT_DEPRESSION.get()))
         {
             //相当于手动放置
-            world.playSound(player, pos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, new Random().nextFloat() * 0.4F + 0.8F);
+            world.playSound(player, pos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, world.getRandom().nextFloat() * 0.4F + 0.8F);
             BlockState placement = BlockRegistryHandler.BLOCK_WATER_FIELD.get().getStateForPlacement(new BlockItemUseContext(world, player, context.getHand(), context.getItem(), result));
             world.setBlockState(pos, placement == null ? BlockRegistryHandler.BLOCK_WATER_FIELD.get().getDefaultState() : placement, 1);
             if (player != null) {player.swingArm(context.getHand());}

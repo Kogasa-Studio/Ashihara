@@ -70,7 +70,7 @@ public class ItemKoishi extends Item
             }
             else
             {
-                Random rand = new Random();
+                Random rand = context.getWorld().getRandom();
                 for (int i = 0;i<8;i+=1)
                 {
                     worldIn.addParticle(new GenericParticleData(new Vector3d(0,0,0), 0, ParticleRegistryHandler.SAKURA.get()), (double)pos.getX() + 0.5D, (double)pos.getY() + 2.1D, (double)pos.getZ() + 0.5D, rand.nextFloat() / 2.0F, 0, rand.nextFloat() / 2.0F);

@@ -1,9 +1,7 @@
 {
   "multipart":
   [
-    {"when": {"facing": "east", "half": "lower"},"apply": {"model": "ashihara:block/jinja_lantern", "y": 270}},
-    {"when": {"facing": "north", "half": "lower"},"apply": {"model": "ashihara:block/jinja_lantern", "y": 180}},
-    {"when": {"facing": "south", "half": "lower"},"apply": {"model": "ashihara:block/jinja_lantern"}},
-    {"when": {"facing": "west", "half": "lower"},"apply": {"model": "ashihara:block/jinja_lantern", "y": 90}}
+    {"when": {"axis": "x", "half": "lower"},"apply": {"model": "ashihara:block/jinja_lantern", "y": 90}},
+    {"when": {"axis": "z", "half": "lower"},"apply": {"model": "ashihara:block/jinja_lantern"}}
   ]
 }
