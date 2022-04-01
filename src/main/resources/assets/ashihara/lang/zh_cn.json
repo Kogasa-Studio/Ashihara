@@ -29,7 +29,8 @@
   "item.ashihara.cucumber": "黄瓜",
   "item.ashihara.tomato": "番茄",
   "item.ashihara.cotton": "棉花",
-  "item.ashihara.sweet_potato": "山芋",
+  "item.ashihara.roasted_sweet_potato": "烤红薯",
+  "item.ashihara.sweet_potato": "红薯",
   "item.ashihara.tea_leaf": "茶叶",
   "item.ashihara.dried_tea_leaf": "干茶叶",
   "item.ashihara.macha_powder": "抹茶粉",
@@ -69,7 +70,7 @@
   "block.ashihara.candle": "蜡烛",
   "block.ashihara.tea_tree": "茶树",
   "block.ashihara.soy_beans": "大豆作物",
-  "block.ashihara.sweet_potatoes": "山芋作物",
+  "block.ashihara.sweet_potatoes": "红薯作物",
 
   "block.ashihara.cherry_log": "樱木原木",
   "block.ashihara.stripped_cherry_log": "去皮樱木",
