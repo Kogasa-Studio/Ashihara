@@ -5,7 +5,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.CropsBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -13,7 +12,6 @@ import net.minecraft.world.IBlockReader;
 
 public class AbstractCropAge7 extends CropsBlock
 {
-
     public AbstractCropAge7()
     {
         super
@@ -24,6 +22,11 @@ public class AbstractCropAge7 extends CropsBlock
             .zeroHardnessAndResistance()
             .sound(SoundType.CROP)
         );
+    }
+
+    protected AbstractCropAge7(Properties properties)
+    {
+        super(properties);
     }
 
     private static final VoxelShape[] SHAPES = new VoxelShape[]
