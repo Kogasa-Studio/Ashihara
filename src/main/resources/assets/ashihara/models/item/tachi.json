@@ -1,0 +1,27 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "item/generated",
+	"textures": {"layer0": "ashihara:item/tachi"},
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [0, 90, 50],
+			"translation": [0, 5.75, 3],
+			"scale": [1.25, 1.25, 0.5]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [50, -90, 0],
+			"translation": [0, 4.25, 2.5],
+			"scale": [1, 1, 0.5]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 90, 0],
+			"translation": [1.13, 6.75, 1.13],
+			"scale": [1, 1.5, 0.5]
+		},
+		"firstperson_lefthand": {
+			"rotation": [47, -36, 51],
+			"translation": [-3.5, 4.75, 3.5],
+			"scale": [1, 1, 0.5]
+		}
+	}
+}

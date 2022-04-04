@@ -48,6 +48,8 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> ROASTED_SWEET_POTATO = ITEMS.register("roasted_sweet_potato", () -> new EasyFood(5));
 
     //工具
+    public static final RegistryObject<Item> TACHI = ITEMS.register("tachi", () -> new SwordItem(ItemTier.DIAMOND, 15, 4.0f, new Item.Properties().group(ASHIHARA)));
+
     public static final RegistryObject<Item> WOOD_OTSUCHI = ITEMS.register("wood_otsuchi", () -> new ItemOtsuchi(ItemTier.WOOD, 16, -3.4d));
     public static final RegistryObject<Item> IRON_OTSUCHI = ITEMS.register("iron_otsuchi", () -> new ItemOtsuchi(ItemTier.IRON, 16, -3.5d));
     public static final RegistryObject<Item> DIAMOND_OTSUCHI = ITEMS.register("diamond_otsuchi", () -> new ItemOtsuchi(ItemTier.DIAMOND, 16, -3.55d));
