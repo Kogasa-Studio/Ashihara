@@ -48,9 +48,9 @@ public class BlockRegistryHandler {
     public static final RegistryObject<Block> TEA_TREE = BLOCKS.register("tea_tree", BlockTeaTree::new);
 
     //作物
-    public static final RegistryObject<Block> SOY_BEANS = BLOCKS.register("soy_beans", () -> new AbstractCropAge7Pickable(7, 4) {@Override protected IItemProvider getSeedsItem() {return ItemRegistryHandler.SOY_BEAN.get();}});
+    public static final RegistryObject<Block> SOY_BEANS = BLOCKS.register("soy_beans", () -> new AbstractCropAge7Pickable(7, 3) {@Override protected IItemProvider getSeedsItem() {return ItemRegistryHandler.SOY_BEAN.get();}});
     public static final RegistryObject<Block> SWEET_POTATOES = BLOCKS.register("sweet_potatoes", () -> new AbstractCropAge7() {@Override protected IItemProvider getSeedsItem() {return ItemRegistryHandler.SWEET_POTATO.get();}});
-    public static final RegistryObject<Block> CUCUMBERS = BLOCKS.register("cucumbers", () -> new BlockCucumberCrop() {@Override protected IItemProvider getSeedsItem() {return ItemRegistryHandler.SWEET_POTATO.get();}});
+    public static final RegistryObject<Block> CUCUMBERS = BLOCKS.register("cucumbers", () -> new BlockCucumberCrop() {@Override protected IItemProvider getSeedsItem() {return ItemRegistryHandler.CUCUMBER.get();}});
 
     //木制品
     public static final RegistryObject<Block> CHERRY_LOG = BLOCKS.register("cherry_log", () -> new StrippableLogBlock() {@Override public Block getStrippedBlock() {return STRIPPED_CHERRY_LOG.get();}});

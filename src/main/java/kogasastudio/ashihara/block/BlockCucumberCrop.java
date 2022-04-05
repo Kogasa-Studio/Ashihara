@@ -34,6 +34,9 @@ public class BlockCucumberCrop extends AbstractCropAge7
     }
 
     @Override
+    public boolean ticksRandomly(BlockState state) {return true;}
+
+    @Override
     public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient)
     {
         int age = state.get(AGE);
@@ -77,7 +80,7 @@ public class BlockCucumberCrop extends AbstractCropAge7
         BlockState downState = worldIn.getBlockState(pos.down());
         boolean isUpper = downState.matchesBlock(BlockRegistryHandler.CUCUMBERS.get());
 
-        if (isUpper && state.get(AGE) > 4) return;
+        if ((isUpper && state.get(AGE) > 4) || (!isUpper && worldIn.getBlockState(pos.up()).isAir())) return;
         if (worldIn.getLightSubtracted(pos, 0) >= 9)
         {
             int age = this.getAge(state);
