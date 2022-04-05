@@ -1,0 +1,4 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {"crop": "ashihara:block/crops/cucumbers_2_full"}
+}

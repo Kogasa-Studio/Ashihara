@@ -42,9 +42,9 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> SUSHI_TAMAGO = ITEMS.register("sushi_tamago", () -> new EasyFood(6));
     public static final RegistryObject<Item> ONIGIRI = ITEMS.register("onigiri", () -> new EasyFood(6));
     public static final RegistryObject<Item> TAMAGO = ITEMS.register("tamago", () -> new EasyFood(1));
-    public static final RegistryObject<Item> CUCUMBER = ITEMS.register("cucumber", () -> new EasyFood(2));
+    public static final RegistryObject<Item> CUCUMBER = ITEMS.register("cucumber",() -> new BlockNamedItem(BlockRegistryHandler.CUCUMBERS.get(), new Item.Properties().group(MATERIALS).food(new Food.Builder().hunger(2).build())));
     public static final RegistryObject<Item> TOMATO = ITEMS.register("tomato", () -> new EasyFood(2));
-    public static final RegistryObject<Item> SWEET_POTATO = ITEMS.register("sweet_potato", () -> new BlockNamedItem(BlockRegistryHandler.SWEET_POTATOES.get(), new Item.Properties().group(ItemGroup.MATERIALS).food(new Food.Builder().hunger(2).build())));
+    public static final RegistryObject<Item> SWEET_POTATO = ITEMS.register("sweet_potato", () -> new BlockNamedItem(BlockRegistryHandler.SWEET_POTATOES.get(), new Item.Properties().group(MATERIALS).food(new Food.Builder().hunger(2).build())));
     public static final RegistryObject<Item> ROASTED_SWEET_POTATO = ITEMS.register("roasted_sweet_potato", () -> new EasyFood(5));
 
     //工具
