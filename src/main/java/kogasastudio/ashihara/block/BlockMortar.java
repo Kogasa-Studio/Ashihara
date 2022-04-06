@@ -108,36 +108,34 @@ public class BlockMortar extends Block
         }
         else if (!worldIn.isRemote() && handIn.equals(Hand.MAIN_HAND))
         {
-            if (player.isSneaking() && stack.isEmpty())
-            {
-                NetworkHooks.openGui((ServerPlayerEntity) player, te, (PacketBuffer packerBuffer) -> packerBuffer.writeBlockPos(te.getPos()));
-                return ActionResultType.SUCCESS;
-            }
-            else if (te.notifyInteraction(stack, worldIn, pos, player))
-            {
-                worldIn.setBlockState(pos, state.with(LEVEL, te.getContentsActualSize()));
-                return ActionResultType.SUCCESS;
-            }
-
             if (stack.getItem().equals(ItemRegistryHandler.KOISHI.get()))
             {
                 player.sendMessage
                 (
                     new TranslationTextComponent
                     (
-                    "\n{\n    te_contents: " + te.contents.toString()
-                    + ";\n    te_contained_output: " + te.output.toString()
-                    + ";\n    te_progress: " + te.progress
-                    + ";\n    te_progress_total: " + te.progressTotal
-                    + ";\n    te_pointer: " + te.pointer
-                    + ";\n    te_recipeType: " + te.recipeType
-                    + ";\n    te_sequence: " + Arrays.toString(te.sequence)
-                    + ";\n    te_next_step: " + te.nextStep
-                    + ";\n    te_working_statement_code: " + te.isWorking
+                        "\n{\n    te_contents: " + te.contents.toString()
+                        + ";\n    te_contained_output: " + te.output.toString()
+                        + ";\n    te_progress: " + te.progress
+                        + ";\n    te_progress_total: " + te.progressTotal
+                        + ";\n    te_pointer: " + te.pointer
+                        + ";\n    te_recipeType: " + te.recipeType
+                        + ";\n    te_sequence: " + Arrays.toString(te.sequence)
+                        + ";\n    te_next_step: " + te.nextStep
+                        + ";\n    te_working_statement_code: " + te.isWorking
                     ),
                     UUID.randomUUID()
                 );
             }
+            if (te.notifyInteraction(stack, worldIn, pos, player))
+            {
+                worldIn.setBlockState(pos, state.with(LEVEL, te.getContentsActualSize()));
+            }
+            else
+            {
+                NetworkHooks.openGui((ServerPlayerEntity) player, te, (PacketBuffer packerBuffer) -> packerBuffer.writeBlockPos(te.getPos()));
+            }
+            return ActionResultType.SUCCESS;
         }
         return ActionResultType.PASS;
     }

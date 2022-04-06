@@ -9,10 +9,7 @@ import kogasastudio.ashihara.client.particles.MapleLeafParticle;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.client.particles.RiceParticle;
 import kogasastudio.ashihara.client.particles.SakuraParticle;
-import kogasastudio.ashihara.client.render.ter.CandleTER;
-import kogasastudio.ashihara.client.render.ter.MarkableLanternTER;
-import kogasastudio.ashihara.client.render.ter.MillTER;
-import kogasastudio.ashihara.client.render.ter.PailTER;
+import kogasastudio.ashihara.client.render.ter.*;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.inventory.container.ContainerRegistryHandler;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
@@ -105,6 +102,7 @@ public class ClientEventSubscribeHandler
         event.enqueueWork(() -> ClientRegistry.bindTileEntityRenderer(TERegistryHandler.MILL_TE.get(), MillTER::new));
         event.enqueueWork(() -> ClientRegistry.bindTileEntityRenderer(TERegistryHandler.PAIL_TE.get(), PailTER::new));
         event.enqueueWork(() -> ClientRegistry.bindTileEntityRenderer(TERegistryHandler.CANDLE_TE.get(), CandleTER::new));
+        event.enqueueWork(() -> ClientRegistry.bindTileEntityRenderer(TERegistryHandler.MORTAR_TE.get(), MortarTER::new));
     }
 
     @SubscribeEvent

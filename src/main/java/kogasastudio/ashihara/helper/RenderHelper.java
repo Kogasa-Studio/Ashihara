@@ -4,17 +4,22 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import kogasastudio.ashihara.block.tileentities.IFluidHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ColorHelper;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
@@ -185,7 +190,67 @@ public class RenderHelper
                 tessellator.draw();
             }
         }
-
         RenderSystem.disableBlend();
+    }
+
+    public static void renderLeveledFluidStack
+    (
+        FluidStack fluidIn, MatrixStack stackIn, IRenderTypeBuffer bufferIn,
+        int combinedLightIn, int combinedOverlayIn,
+        float xStart, float heightIn, float zStart,
+        float xEnd, float zEnd,
+        World worldIn, BlockPos posIn
+    )
+    {
+        IVertexBuilder builder = bufferIn.getBuffer(RenderType.getTranslucentNoCrumbling());
+
+        TextureAtlasSprite FLUID = (worldIn != null && posIn != null)
+            ? Minecraft.getInstance()
+            .getBlockRendererDispatcher()
+            .getBlockModelShapes()
+            .getTexture(fluidIn.getFluid().getDefaultState().getBlockState(), worldIn, posIn)
+            : Minecraft.getInstance()
+            .getAtlasSpriteGetter(LOCATION_BLOCKS_TEXTURE)
+            .apply(fluidIn.getFluid().getAttributes().getStillTexture());
+
+        int color = fluidIn.getFluid().getAttributes().getColor();
+
+        stackIn.push();
+        GlStateManager.enableBlend();
+
+        stackIn.translate(0.0f, heightIn, 0.0f);
+        Matrix4f wtf = stackIn.getLast().getMatrix();
+        //主渲染
+        buildMatrix(wtf, builder, xStart, 0, zStart, FLUID.getMinU(), FLUID.getMinV(), combinedOverlayIn, color, 1.0f, combinedLightIn);
+        buildMatrix(wtf, builder, xStart, 0, zEnd, FLUID.getMinU(), FLUID.getMaxV(), combinedOverlayIn, color, 1.0f, combinedLightIn);
+        buildMatrix(wtf, builder, xEnd, 0, zEnd, FLUID.getMaxU(), FLUID.getMaxV(), combinedOverlayIn, color, 1.0f, combinedLightIn);
+        buildMatrix(wtf, builder, xEnd, 0, zStart, FLUID.getMaxU(), FLUID.getMinV(), combinedOverlayIn, color, 1.0f, combinedLightIn);
+
+        GlStateManager.disableBlend();
+        stackIn.pop();
+    }
+
+    public static void renderLeveledFluidStack
+    (
+        IFluidHandler teIn, MatrixStack stackIn, IRenderTypeBuffer bufferIn,
+        int combinedLightIn, int combinedOverlayIn,
+        float xStart, float minHeight, float zStart,
+        float xEnd, float maxHeight, float zEnd,
+        World worldIn, BlockPos posIn
+    )
+    {
+        teIn.getTank().ifPresent
+        (
+            bucket ->
+            {
+                if (!bucket.isEmpty())
+                {
+                    FluidStack fluid = bucket.getFluid();
+                    float height = minHeight + ((float) fluid.getAmount() / bucket.getCapacity()) * maxHeight;
+
+                    renderLeveledFluidStack(fluid, stackIn, bufferIn, combinedLightIn, combinedOverlayIn, xStart, height, zStart, xEnd, zEnd, worldIn, posIn);
+                }
+            }
+        );
     }
 }
