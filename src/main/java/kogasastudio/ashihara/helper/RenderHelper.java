@@ -246,7 +246,7 @@ public class RenderHelper
                 if (!bucket.isEmpty())
                 {
                     FluidStack fluid = bucket.getFluid();
-                    float height = minHeight + ((float) fluid.getAmount() / bucket.getCapacity()) * maxHeight;
+                    float height = minHeight + ((float) fluid.getAmount() / bucket.getCapacity()) * (maxHeight - minHeight);
 
                     renderLeveledFluidStack(fluid, stackIn, bufferIn, combinedLightIn, combinedOverlayIn, xStart, height, zStart, xEnd, zEnd, worldIn, posIn);
                 }

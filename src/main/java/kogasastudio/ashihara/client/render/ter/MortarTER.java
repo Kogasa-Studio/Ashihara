@@ -19,7 +19,7 @@ public class MortarTER extends TileEntityRenderer<MortarTE>
             tileEntityIn, matrixStackIn, bufferIn,
             combinedLightIn, combinedOverlayIn,
             0.1875f, 0.1875f, 0.1875f,
-            0.8125f, 0.6875f, 0.8125f,
+            0.8125f, 0.625f, 0.8125f,
             tileEntityIn.getWorld(), tileEntityIn.getPos()
         );
     }

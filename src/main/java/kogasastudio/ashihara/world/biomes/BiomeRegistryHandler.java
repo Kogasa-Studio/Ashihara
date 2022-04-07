@@ -10,8 +10,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import static kogasastudio.ashihara.world.biomes.AshiharaBiomes.JuniorCherryForest;
-import static kogasastudio.ashihara.world.biomes.AshiharaBiomes.SnowyCherryForest;
+import static kogasastudio.ashihara.world.biomes.AshiharaBiomes.*;
 
 @Mod.EventBusSubscriber(modid = Ashihara.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class BiomeRegistryHandler
@@ -20,6 +19,7 @@ public class BiomeRegistryHandler
     public static void onRegister(RegistryEvent.Register<Biome> event)
     {
         addBiome(event, BiomeManager.BiomeType.WARM, "junior_cherry_forest", 5, JuniorCherryForest());
+        addBiome(event, BiomeManager.BiomeType.COOL, "red_maple_forest", 12, RedMapleForest());
         addBiome(event, BiomeManager.BiomeType.ICY, "snowy_cherry_forest", 15, SnowyCherryForest());
     }
 

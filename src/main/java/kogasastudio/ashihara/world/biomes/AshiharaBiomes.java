@@ -71,6 +71,46 @@ public class AshiharaBiomes
         );
     }
 
+    public static Biome RedMapleForest()
+    {
+        BiomeGenerationSettings.Builder builder = makeDefaultBuilder();
+        builder.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.FOREST_RED_MAPLE_TREES);
+        DefaultBiomeFeatures.withForestGrass(builder);
+        DefaultBiomeFeatures.withAllForestFlowerGeneration(builder);
+
+        return
+        (
+            new Biome.Builder()
+            .precipitation(Biome.RainType.RAIN)
+            .category(Biome.Category.FOREST)
+            .depth(0.1F)
+            .scale(0.2F)
+            .temperature(0.6F)
+            .downfall(0.8F)
+            .setEffects
+            (
+                new BiomeAmbience.Builder()
+                .setWaterColor(0x00BBC6)
+                .setWaterFogColor(0x00AA93)
+                .setFogColor(0xC7EA7A)
+                .withGrassColor(0xA1E013)
+                .withSkyColor(getSkyColorWithTemperatureModifier(0.9F))
+                .setMoodSound(MoodSoundAmbience.DEFAULT_CAVE)
+                .build()
+            )
+            .withMobSpawnSettings
+            (
+                getStandardMobSpawnBuilder()
+                .withSpawner(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.RABBIT, 10, 2, 3))
+                .withSpawner(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.FOX, 5, 1, 3))
+                .build()
+            )
+            .withGenerationSettings(builder.build())
+            .build()
+            .setRegistryName("ashihara:red_maple_forest")
+        );
+    }
+
     public static Biome SnowyCherryForest()
     {
         BiomeGenerationSettings.Builder builder = makeDefaultBuilder();
