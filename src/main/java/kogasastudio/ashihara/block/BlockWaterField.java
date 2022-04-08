@@ -26,6 +26,7 @@ import net.minecraftforge.common.ToolType;
 import java.util.*;
 
 import static kogasastudio.ashihara.utils.EasyBlockActionHandler.*;
+import static net.minecraft.fluid.Fluids.WATER;
 
 public class BlockWaterField extends Block implements ILiquidContainer, IBucketPickupHandler
 {
@@ -157,6 +158,7 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
         if (!fromState.matchesBlock(BlockRegistryHandler.BLOCK_RICE_CROP.get()))
         {
             boolean watered = fourWaysFluidsIncludesWater(worldIn, pos);
+            if (worldIn.getFluidState(pos.up()).getFluid().equals(WATER)) watered = true;
             boolean hasExit = hasExit(worldIn, pos);
             int levelT = state.get(LEVEL);
             boolean boolT = state.get(ISLINKEDTOSOURCE);
@@ -263,25 +265,33 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
         BlockState e = worldIn.getBlockState(pos.east());
         BlockState s = worldIn.getBlockState(pos.south());
         BlockState w = worldIn.getBlockState(pos.west());
-        if (matchesWaterField(n))
+        if (fourWaysFluidsIncludesWater(worldIn, pos))
         {
-            if (n.get(ISLINKEDTOSOURCE)) {watered = true;}
-            if (n.get(LEVEL) > level) {level = n.get(LEVEL);}
+            watered = true;
+            level = 8;
         }
-        if (matchesWaterField(e))
+        else
         {
-            if (e.get(ISLINKEDTOSOURCE)) {watered = true;}
-            if (e.get(LEVEL) > level) {level = e.get(LEVEL);}
-        }
-        if (matchesWaterField(s))
-        {
-            if (s.get(ISLINKEDTOSOURCE)) {watered = true;}
-            if (s.get(LEVEL) > level) {level = s.get(LEVEL);}
-        }
-        if (matchesWaterField(w))
-        {
-            if (w.get(ISLINKEDTOSOURCE)) {watered = true;}
-            if (w.get(LEVEL) > level) {level = w.get(LEVEL);}
+            if (matchesWaterField(n))
+            {
+                if (n.get(ISLINKEDTOSOURCE)) {watered = true;}
+                if (n.get(LEVEL) > level) {level = n.get(LEVEL);}
+            }
+            if (matchesWaterField(e))
+            {
+                if (e.get(ISLINKEDTOSOURCE)) {watered = true;}
+                if (e.get(LEVEL) > level) {level = e.get(LEVEL);}
+            }
+            if (matchesWaterField(s))
+            {
+                if (s.get(ISLINKEDTOSOURCE)) {watered = true;}
+                if (s.get(LEVEL) > level) {level = s.get(LEVEL);}
+            }
+            if (matchesWaterField(w))
+            {
+                if (w.get(ISLINKEDTOSOURCE)) {watered = true;}
+                if (w.get(LEVEL) > level) {level = w.get(LEVEL);}
+            }
         }
         if (fourWaysFluidsIncludesWater(worldIn, pos) || hasExit(worldIn, pos))
         {onScheduleTick(worldIn, pos, 10);}
@@ -297,7 +307,7 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
         }
         else if (state.get(LEVEL) == 8)
         {
-            return Fluids.WATER.getStillFluidState(false);
+            return WATER.getStillFluidState(false);
         }
         else return Fluids.EMPTY.getDefaultState();
     }
@@ -305,13 +315,13 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
     @Override
     public boolean canContainFluid(IBlockReader worldIn, BlockPos pos, BlockState state, Fluid fluidIn)
     {
-        return state.get(LEVEL) < 8 && (fluidIn == Fluids.FLOWING_WATER || fluidIn == Fluids.WATER);
+        return state.get(LEVEL) < 8 && (fluidIn == Fluids.FLOWING_WATER || fluidIn == WATER);
     }
 
     @Override
     public boolean receiveFluid(IWorld worldIn, BlockPos pos, BlockState state, FluidState fluidStateIn)
     {
-        if (fluidStateIn.getFluid() == Fluids.FLOWING_WATER || fluidStateIn.getFluid() == Fluids.WATER)
+        if (fluidStateIn.getFluid() == Fluids.FLOWING_WATER || fluidStateIn.getFluid() == WATER)
         {
             if (!worldIn.isRemote())
             {
