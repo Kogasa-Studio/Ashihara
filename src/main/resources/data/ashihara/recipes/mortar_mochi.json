@@ -1,0 +1,14 @@
+{
+  "type": "ashihara:mortar",
+  "ingredients":
+  [
+    {"item": "ashihara:rice_powder"},
+    {"item": "ashihara:rice_powder"}
+  ],
+  "result":
+  [
+    {"item": "ashihara:mochi"}
+  ],
+  "sequence": [2, 0, 2, 0, 2, 0, 2, 0],
+  "recipeType": 1
+}

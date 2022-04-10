@@ -46,6 +46,7 @@ public class BlockRegistryHandler {
     public static final RegistryObject<Block> PAIL = BLOCKS.register("pail", BlockPail::new);
     public static final RegistryObject<Block> CANDLE = BLOCKS.register("candle", BlockCandle::new);
     public static final RegistryObject<Block> TEA_TREE = BLOCKS.register("tea_tree", BlockTeaTree::new);
+    public static final RegistryObject<Block> MEAL_TABLE = BLOCKS.register("meal_table", BlockMealTable::new);
 
     //作物
     public static final RegistryObject<Block> SOY_BEANS = BLOCKS.register("soy_beans", () -> new AbstractCropAge7Pickable(7, 3) {@Override protected IItemProvider getSeedsItem() {return ItemRegistryHandler.SOY_BEAN.get();}});

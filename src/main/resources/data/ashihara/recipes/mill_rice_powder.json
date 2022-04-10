@@ -1,0 +1,19 @@
+{
+  "type": "ashihara:mill",
+  "group": "test_group",
+  "ingredients":
+  [
+    {"item": "ashihara:rice"}
+  ],
+  "costs": [1],
+  "result":
+  [
+    {
+      "item": "ashihara:rice_powder",
+      "count": 1
+    }
+  ],
+  "rounds": 3,
+  "roundTicks": 100,
+  "experience": 20.0
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients":
+  [
+    {"item": "ashihara:mochi"},
+    {"item": "ashihara:bamboo_material"},
+    {"item": "ashihara:soy_bean"},
+    {"item": "minecraft:sugar"}
+  ],
+  "result": {"item": "ashihara:mitarashi", "count": 1}
+}

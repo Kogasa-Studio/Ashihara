@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients":
+  [
+    {"item": "ashihara:mochi"},
+    {"item": "ashihara:bamboo_material"},
+    {"item": "ashihara:sakura"},
+    {"item": "ashihara:macha_powder"}
+  ],
+  "result": {"item": "ashihara:dango_hanamie", "count": 1}
+}

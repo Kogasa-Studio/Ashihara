@@ -2,24 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients":
   [
-    {
-      "item": "ashihara:sakura_petal"
-    },
-    {
-      "item": "ashihara:sakura_petal"
-    },
-    {
-      "item": "ashihara:sakura_petal"
-    },
-    {
-      "item": "ashihara:sakura_petal"
-    },
-    {
-      "item": "ashihara:sakura_petal"
-    }
+    {"item": "ashihara:sakura_petal"},
+    {"item": "ashihara:sakura_petal"},
+    {"item": "ashihara:sakura_petal"},
+    {"item": "ashihara:sakura_petal"},
+    {"item": "ashihara:sakura_petal"}
   ],
-  "result": {
-    "item": "ashihara:sakura",
-    "count": 1
-  }
+  "result": {"item": "ashihara:sakura", "count": 1}
 }

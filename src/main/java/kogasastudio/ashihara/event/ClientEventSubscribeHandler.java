@@ -77,6 +77,7 @@ public class ClientEventSubscribeHandler
         setRenderType(BlockRegistryHandler.SOY_BEANS.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.SWEET_POTATOES.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.CUCUMBERS.get(), RenderType.getCutoutMipped(), event);
+        setRenderType(BlockRegistryHandler.MEAL_TABLE.get(), RenderType.getCutoutMipped(), event);
 
         setRenderType(FluidRegistryHandler.SOY_MILK.get(), RenderType.getTranslucent(), event);
         setRenderType(FluidRegistryHandler.SOY_MILK_FLOWING.get(), RenderType.getTranslucent(), event);

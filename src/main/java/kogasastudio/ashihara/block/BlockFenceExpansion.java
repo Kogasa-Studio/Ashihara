@@ -92,8 +92,8 @@ public class BlockFenceExpansion extends Block implements IVariable<WoodTypes>
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
     {
-        VoxelShape n_down = makeCuboidShape(6.5d, 6.0d, 8.0d, 9.5d, 9.0d, 16.0d);
-        VoxelShape n_up = makeCuboidShape(6.5d, 12.0d, 8.0d, 9.5d, 15.0d, 16.0d);
+        VoxelShape n_down =  makeCuboidShape(6.5d, 6.0d, 8.0d, 9.5d, 9.0d, 16.0d);
+        VoxelShape n_up =  makeCuboidShape(6.5d, 12.0d, 8.0d, 9.5d, 15.0d, 16.0d);
         VoxelShape w_down = makeCuboidShape(8.0d, 6.0d, 6.5d, 16.0d, 9.0d, 9.5d);
         VoxelShape w_up = makeCuboidShape(8.0d, 12.0d, 6.5d, 16.0d, 15.0d, 9.5d);
         VoxelShape s_down = makeCuboidShape(6.5d, 6.0d, 0.0d, 9.5d, 9.0d, 8.0d);

@@ -6,7 +6,7 @@ modId="ashihara"
 version="${file.jarVersion}"
 displayName="Ashihara"
 logoFile="ashihara.png"
-credits="Author Kogasa Studio,everyone attending this test,and YAOYOROZUKAMI,and finally,Malay who gave me an important help when I was stucked generaating workspace."
+credits="Author Kogasa Studio, everyone attending this test, Syameimaru zheng, 3TUSK, Zomb_076, Morning, MalayP, and YAOYOROZUKAMI"
 authors="Kogasastudio"
 description='''
 A mod which adds tons of japanese elements

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients":
+  [
+    {"item": "ashihara:mochi"},
+    {"item": "ashihara:bamboo_material"}
+  ],
+  "result": {"item": "ashihara:dango", "count": 1}
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "OOO",
+    "I I"
+  ],
+  "key":
+  {
+    "O": {"tag": "minecraft:planks"},
+    "I": {"item": "minecraft:stick"}
+  },
+  "result":
+  {
+    "item": "ashihara:meal_table",
+    "count": 1
+  }
+}
