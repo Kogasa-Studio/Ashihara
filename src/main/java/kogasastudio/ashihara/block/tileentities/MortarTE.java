@@ -50,6 +50,11 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
     public int progress;
     public int progressTotal;
 
+    /**
+     * 0: 脱谷
+     * 1: 打麻糬
+     * 2: 制酱
+     */
     public byte recipeType = -1;
     public byte pointer = -1;
     /**
@@ -217,21 +222,8 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
     {
         if (isNextStepNeeded(stackIn))
         {
-            worldIn.playSound(player, posIn, SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            Random rand = worldIn.getRandom();
-            for(int i = 0; i < 12; i += 1)
-            {
-                worldIn.addParticle
-                (
-                    new GenericParticleData(new Vector3d(0,0,0), 0, ParticleRegistryHandler.RICE.get()),
-                    (double)posIn.getX() + 0.5D, (double)posIn.getY() + 0.5D,
-                    (double)posIn.getZ() + 0.5D, rand.nextFloat() / 2.0F,
-                    5.0E-5D,
-                    rand.nextFloat() / 2.0F
-                );
-            }
             player.getCooldownTracker().setCooldown(stackIn.getItem(), 8);
-            if (!player.isCreative())
+            if (!stackIn.isEmpty() && !player.isCreative())
             {
                 stackIn.damageItem(1, player, (playerEntity) -> player.sendBreakAnimation(EquipmentSlotType.MAINHAND));
             }
@@ -254,8 +246,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
                 else if (stack.isEmpty() && stackIn.getItem().isIn(MASHABLE))
                 {
                     this.contents.insertItem(i, new ItemStack(stackIn.getItem()), false);
-                    stackIn.shrink(1);
-                    worldIn.playSound(player, posIn, SoundEvents.BLOCK_SAND_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    if (!player.isCreative()) stackIn.shrink(1);
                     notifyStateChanged();
                     markDirty();
                     return true;

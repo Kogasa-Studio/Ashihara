@@ -1,7 +1,10 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.block.tileentities.MortarTE;
+import kogasastudio.ashihara.client.particles.GenericParticleData;
+import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.helper.FluidHelper;
+import kogasastudio.ashihara.item.ItemOtsuchi;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -18,14 +21,13 @@ import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
@@ -34,6 +36,9 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import java.util.*;
+
+import static kogasastudio.ashihara.utils.AshiharaTags.CEREALS;
+import static kogasastudio.ashihara.utils.AshiharaTags.CEREAL_PROCESSED;
 
 public class BlockMortar extends Block
 {
@@ -107,7 +112,7 @@ public class BlockMortar extends Block
             worldIn.notifyBlockUpdate(pos, state, state, 3);
             return ActionResultType.SUCCESS;
         }
-        else if (!worldIn.isRemote() && handIn.equals(Hand.MAIN_HAND))
+        else if (handIn.equals(Hand.MAIN_HAND))
         {
             if (stack.getItem().equals(ItemRegistryHandler.KOISHI.get()))
             {
@@ -130,9 +135,41 @@ public class BlockMortar extends Block
             }
             if (te.notifyInteraction(stack, worldIn, pos, player))
             {
+                boolean isPowder = stack.getItem().isIn(CEREALS) || stack.getItem().isIn(CEREAL_PROCESSED);
+                boolean isTool = stack.getItem().equals(ItemRegistryHandler.PESTLE.get()) || stack.getItem() instanceof ItemOtsuchi;
+                if (!te.isWorking && !isTool)
+                {
+                    if (isPowder)
+                    {
+                        worldIn.playSound(player, pos, SoundEvents.BLOCK_SAND_PLACE, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                    }
+                    else
+                    {
+                        worldIn.playSound(player, pos, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                    }
+                }
+                else if (isTool)
+                {
+                    worldIn.playSound(player, pos, SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    if (te.recipeType == 0)
+                    {
+                        Random rand = worldIn.getRandom();
+                        for (int i = 0; i < 12; i += 1)
+                        {
+                            worldIn.addParticle
+                            (
+                                new GenericParticleData(new Vector3d(0, 0, 0), 0, ParticleRegistryHandler.RICE.get()),
+                                (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D,
+                                (double) pos.getZ() + 0.5D, rand.nextFloat() / 2.0F,
+                                5.0E-5D,
+                                rand.nextFloat() / 2.0F
+                            );
+                        }
+                    }
+                }
                 worldIn.notifyBlockUpdate(pos, state, state, 3);
             }
-            else
+            else if (!worldIn.isRemote())
             {
                 NetworkHooks.openGui((ServerPlayerEntity) player, te, (PacketBuffer packerBuffer) -> packerBuffer.writeBlockPos(te.getPos()));
             }

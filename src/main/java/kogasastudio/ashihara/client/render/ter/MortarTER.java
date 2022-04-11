@@ -52,7 +52,7 @@ public class MortarTER extends TileEntityRenderer<MortarTE>
         );
 
         NonNullList<ItemStack> list = NonNullList.create();
-        for (int i = tileEntityIn.contents.getSlots(); i >= 0; i -= 1)
+        for (int i = 0; i < tileEntityIn.contents.getSlots(); i += 1)
         {
             list.add(i, tileEntityIn.contents.getStackInSlot(i));
         }
@@ -92,7 +92,7 @@ public class MortarTER extends TileEntityRenderer<MortarTE>
                     matrixStackIn.translate(XTP(8.0f), renderHeight, XTP(8.0f));
                     matrixStackIn.scale(0.6f, 0.6f, 0.6f);
                     matrixStackIn.rotate(isXAxis ? Vector3f.ZP.rotationDegrees(90.0f) : Vector3f.XP.rotationDegrees(90.0f));
-                    matrixStackIn.rotate(Vector3f.YP.rotationDegrees(tileEntityIn.getBlockState().get(FACING).getHorizontalAngle() + 90.0f));
+                    matrixStackIn.rotate(Vector3f.YP.rotationDegrees(tileEntityIn.getBlockState().get(FACING).getHorizontalAngle()));
 
                     ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
                     renderer.renderItem(stack, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
