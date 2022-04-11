@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block.tileentities;
 
+import kogasastudio.ashihara.helper.RenderHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;
@@ -18,26 +19,13 @@ public class MarkableLanternTE extends AshiharaMachineTE
     private static final ArrayList<ResourceLocation> textures = new ArrayList<>
             (Minecraft.getInstance().getResourceManager().getAllResourceLocations("textures/icons/", s -> s.endsWith(".png")));
     //获取处理过的可用来渲染的rl
-    private static final ArrayList<ResourceLocation> cookedTextures = cook();
+    private static final ArrayList<ResourceLocation> cookedTextures = RenderHelper.cookTextureRLs(textures);
     //当前纹章在列表中的下标
     private int pointer = 0;
 
     public ResourceLocation getIcon()
     {
         return cookedTextures.get(pointer);
-    }
-
-    //去掉头和尾巴就可以吃了
-    private static ArrayList<ResourceLocation> cook()
-    {
-        ArrayList<ResourceLocation> cooked = new ArrayList<>();
-        for (ResourceLocation location : textures)
-        {
-            //这里还是用幻数
-            String path = location.getPath().substring(9, location.getPath().length() - 4);
-            cooked.add(new ResourceLocation(location.getNamespace(), path));
-        }
-        return cooked;
     }
 
     //用来循环更改纹章

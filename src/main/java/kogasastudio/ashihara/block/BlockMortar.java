@@ -84,12 +84,13 @@ public class BlockMortar extends Block
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
     {
-        VoxelShape shape1 = Block.makeCuboidShape(2,0,0,14,16,3);
-        VoxelShape shape2 = Block.makeCuboidShape(0,0,2,3,16,14);
-        VoxelShape shape3 = Block.makeCuboidShape(2,0,13,14,16,16);
-        VoxelShape shape4 = Block.makeCuboidShape(13,0,2,16,16,14);
-        VoxelShape shape5 = Block.makeCuboidShape(3,0,3,13,3,13);
-        return VoxelShapes.or(shape1, shape2, shape3, shape4, shape5);
+        VoxelShape bottom_1 = makeCuboidShape(3.0d,0.0d,3.0d,13.0d,2.0d,13.0d);
+        VoxelShape bottom_2 = makeCuboidShape(2.0d,2.0d,2.0d,14.0d,4.0d,14.0d);
+        VoxelShape n = makeCuboidShape(1.5d,4.0d,1.5d,14.5d,16.0d,3.5d);
+        VoxelShape e = makeCuboidShape(12.5d,4.0d,3.5d,14.5d,16.0d,12.5d);
+        VoxelShape s = makeCuboidShape(1.5d,4.0d,12.5d,14.5d,16.0d,14.5d);
+        VoxelShape w = makeCuboidShape(1.5d, 4.0d, 3.5d, 3.5d, 16.0d, 12.5d);
+        return VoxelShapes.or(bottom_1, bottom_2, n, e, s, w);
     }
 
     @Override
@@ -129,7 +130,7 @@ public class BlockMortar extends Block
             }
             if (te.notifyInteraction(stack, worldIn, pos, player))
             {
-                worldIn.setBlockState(pos, state.with(LEVEL, te.getContentsActualSize()));
+                worldIn.notifyBlockUpdate(pos, state, state, 3);
             }
             else
             {

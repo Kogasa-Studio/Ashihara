@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ColorHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
@@ -24,17 +25,73 @@ import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
 import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION_COLOR_TEX;
 import static net.minecraft.inventory.container.PlayerContainer.LOCATION_BLOCKS_TEXTURE;
 
 public class RenderHelper
 {
+    /**
+     * 将像素坐标转换为方块内坐标
+     * @param pixels 像素坐标数值, 如5, 13
+     * @return 方块内坐标数值, 如0.625,  0.25
+     */
+    public static float XTP(float pixels) {return pixels / 16f;}
+
+    /**
+     * 将方块内坐标转换为像素坐标
+     */
+    public static double PTX(double pos) {return pos * 16d;}
+
+    /**
+     * 将世界内坐标转换为方块内坐标
+     */
+    public static double ATP(double absolutePos) {return absolutePos - Math.abs(absolutePos);}
+
+    /**
+     * 将世界内坐标转换为像素坐标
+     */
+    public static double ATX(double absolutePos) {return PTX(ATP(absolutePos));}
+
     //贴图半透明部分渲染黑色
     public static void buildMatrix(Matrix4f matrix, IVertexBuilder builder, float x, float y, float z, float u, float v, int overlay, int light)
     {
-        buildMatrix(matrix, builder, x, y, z, u, v, overlay, 0x000000, 1.0f, light);
+        buildMatrix(matrix, builder, x, y, z, u, v, overlay, 0xffffff, 1.0f, light);
+    }
+
+    /**
+     * 将给定列表中的RL统一变换为ashihara:xxx形式
+     * 去掉头和尾巴就可以吃了
+     * @param textures 需进行操作的列表(textures/xxx/xxx.png 形式)
+     * @return 操作过的列表(ashihara:xxx/xxx形式)
+     */
+    public static ArrayList<ResourceLocation> cookTextureRLs(List<ResourceLocation> textures)
+    {
+        ArrayList<ResourceLocation> cooked = new ArrayList<>();
+        for (ResourceLocation location : textures)
+        {
+            //这里还是用幻数
+            String path = location.getPath().substring(9, location.getPath().length() - 4);
+            cooked.add(new ResourceLocation(location.getNamespace(), path));
+        }
+        return cooked;
+    }
+
+    public static Map<String, ResourceLocation> cookTextureRLsToMap(List<ResourceLocation> textures)
+    {
+        Map<String, ResourceLocation> cooked = new HashMap<>();
+        for (ResourceLocation location : textures)
+        {
+            //这里还是用幻数
+            String path = location.getPath().substring(9, location.getPath().length() - 4);
+            String name = path.substring(path.lastIndexOf("/") + 1);
+            cooked.put(name, new ResourceLocation(location.getNamespace(), path));
+        }
+        return cooked;
     }
 
     /**
@@ -64,6 +121,9 @@ public class RenderHelper
         .endVertex();
     }
 
+    /**
+     * 通过RGBA色值渲染顶点
+     */
     public static void buildMatrix(Matrix4f matrix, IVertexBuilder builder, float x, float y, float z, float u, float v, int RGBA)
     {
         int red = ColorHelper.PackedColor.getRed(RGBA);

@@ -218,20 +218,17 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
         if (isNextStepNeeded(stackIn))
         {
             worldIn.playSound(player, posIn, SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            if (worldIn.isRemote())
+            Random rand = worldIn.getRandom();
+            for(int i = 0; i < 12; i += 1)
             {
-                Random rand = worldIn.getRandom();
-                for(int i = 0; i < 12; i += 1)
-                {
-                    worldIn.addParticle
-                    (
-                        new GenericParticleData(new Vector3d(0,0,0), 0, ParticleRegistryHandler.RICE.get()),
-                        (double)posIn.getX() + 0.5D, (double)posIn.getY() + 0.5D,
-                        (double)posIn.getZ() + 0.5D, rand.nextFloat() / 2.0F,
-                        5.0E-5D,
-                        rand.nextFloat() / 2.0F
-                    );
-                }
+                worldIn.addParticle
+                (
+                    new GenericParticleData(new Vector3d(0,0,0), 0, ParticleRegistryHandler.RICE.get()),
+                    (double)posIn.getX() + 0.5D, (double)posIn.getY() + 0.5D,
+                    (double)posIn.getZ() + 0.5D, rand.nextFloat() / 2.0F,
+                    5.0E-5D,
+                    rand.nextFloat() / 2.0F
+                );
             }
             player.getCooldownTracker().setCooldown(stackIn.getItem(), 8);
             if (!player.isCreative())
