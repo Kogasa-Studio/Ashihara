@@ -65,32 +65,6 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
     public byte[] sequence = new byte[0];
     public boolean isWorking;
 
-    public IIntArray mortarData = new IIntArray()
-    {
-        public int get(int index)
-        {
-            switch (index)
-            {
-                case 0 : return progress;
-                case 1 : return progressTotal;
-                case 2 : return nextStep;
-                default: return 0;
-            }
-        }
-
-        public void set(int index, int value)
-        {
-            switch (index)
-            {
-                case 0 : progress = value;break;
-                case 1 : progressTotal = value;break;
-                case 2 : nextStep = (byte) value;
-            }
-        }
-
-        public int size () {return 3;}
-    };
-
     public int getContentsActualSize() {return this.contents.getActualSize();}
 
     @Override
@@ -285,6 +259,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
     @Override
     public CompoundNBT write(CompoundNBT compound)
     {
+        super.write(compound);
         compound.putInt("progress", this.progress);
         compound.putInt("progressTotal", this.progressTotal);
 
@@ -312,7 +287,6 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
             }
         }
         compound.put("output", outputIn);
-        super.write(compound);
 
         return compound;
     }
@@ -360,6 +334,6 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
     public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_)
     {
         if (this.world == null) return null;
-        return new MortarContainer(p_createMenu_1_, p_createMenu_2_, this, this.mortarData);
+        return new MortarContainer(p_createMenu_1_, p_createMenu_2_, this);
     }
 }

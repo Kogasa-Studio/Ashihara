@@ -1,13 +1,9 @@
 {
-  "multipart":
-  [
-    {"when": {"facing": "east"},"apply": {"model": "ashihara:block/mortar/mortar", "y": 270}},
-    {"when": {"facing": "north"},"apply": {"model": "ashihara:block/mortar/mortar", "y": 180}},
-    {"when": {"facing": "south"},"apply": {"model": "ashihara:block/mortar/mortar"}},
-    {"when": {"facing": "west"},"apply": {"model": "ashihara:block/mortar/mortar", "y": 90}},
-    {"when": {"level": 1},"apply": {"model": "ashihara:block/mortar/mortar_l1_u"}},
-    {"when": {"level": 2},"apply": {"model": "ashihara:block/mortar/mortar_l2_u"}},
-    {"when": {"level": 3},"apply": {"model": "ashihara:block/mortar/mortar_l3_u"}},
-    {"when": {"level": 4},"apply": {"model": "ashihara:block/mortar/mortar_l4_u"}}
-  ]
+  "variants":
+  {
+    "facing=east": {"model": "ashihara:block/mortar/mortar", "y": 270},
+    "facing=north": {"model": "ashihara:block/mortar/mortar", "y": 180},
+    "facing=south": {"model": "ashihara:block/mortar/mortar"},
+    "facing=west": {"model": "ashihara:block/mortar/mortar", "y": 90}
+  }
 }

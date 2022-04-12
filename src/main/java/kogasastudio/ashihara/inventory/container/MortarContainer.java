@@ -5,7 +5,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIntArray;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -13,7 +12,6 @@ import static kogasastudio.ashihara.utils.AshiharaTags.MASHABLE;
 
 public class MortarContainer extends AshiharaCommonContainer
 {
-    private final IIntArray mortarData;
     private final MortarTE te;
 
     private static class MortarSlot extends SlotItemHandler
@@ -39,13 +37,10 @@ public class MortarContainer extends AshiharaCommonContainer
         return index;
     }
 
-    public MortarContainer(int id, PlayerInventory inv, MortarTE teIn, IIntArray mortarDataIn)
+    public MortarContainer(int id, PlayerInventory inv, MortarTE teIn)
     {
         super(ContainerRegistryHandler.MORTAR_CONTAINER.get(), id);
-        assertIntArraySize(mortarDataIn, 3);
-        this.mortarData = mortarDataIn;
         this.te = teIn;
-        trackIntArray(mortarDataIn);
         layoutPlayerInventorySlots(inv, 8, 121);
         if (teIn != null)
         {
@@ -116,13 +111,13 @@ public class MortarContainer extends AshiharaCommonContainer
 
     public int getArrowHeight()
     {
-        int teProgress = this.mortarData.get(0);
-        int teProgressTotal = this.mortarData.get(1);
+        int teProgress = this.te.progress;
+        int teProgressTotal = this.te.progressTotal;
         float progress = teProgressTotal == 0 ? 0f : (float) teProgress / (float) teProgressTotal;
         return (int) (progress * 81);
     }
 
-    public int getNextStep() {return this.mortarData.get(2);}
+    public int getNextStep() {return this.te.nextStep;}
 
     public MortarTE getTE() {return this.te;}
 }

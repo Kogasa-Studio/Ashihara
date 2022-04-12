@@ -10,8 +10,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
-import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
-
 public class MortarScreen extends ContainerScreen<MortarContainer>
 {
     private enum MortarToolTypes
@@ -59,7 +57,6 @@ public class MortarScreen extends ContainerScreen<MortarContainer>
         super(container, inv, title);
         this.progress = container.getArrowHeight();
         this.stepStateCode = container.getNextStep();
-
     }
 
     @Override
@@ -68,8 +65,8 @@ public class MortarScreen extends ContainerScreen<MortarContainer>
         super.tick();
         int progressIn = this.container.getArrowHeight();
         int stepStateCodeIn = this.container.getNextStep();
-        if (progressIn != this.progress) {LOGGER_MAIN.info("progress: " + progressIn);this.progress = progressIn;}
-        if (stepStateCodeIn != this.stepStateCode) {LOGGER_MAIN.info("nextStep: " + stepStateCodeIn);this.stepStateCode = stepStateCodeIn;}
+        if (progressIn != this.progress) {this.progress = progressIn;}
+        if (stepStateCodeIn != this.stepStateCode) {this.stepStateCode = stepStateCodeIn;}
     }
 
     @Override

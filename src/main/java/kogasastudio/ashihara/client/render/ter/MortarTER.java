@@ -47,7 +47,7 @@ public class MortarTER extends TileEntityRenderer<MortarTE>
             tileEntityIn, matrixStackIn, bufferIn,
             combinedLightIn, combinedOverlayIn,
             XTP(3.5f), XTP(4.0f), XTP(3.5f),
-            XTP(12.5f), XTP(10.0f), XTP(12.5f),
+            XTP(12.5f), XTP(12.0f), XTP(12.5f),
             tileEntityIn.getWorld(), tileEntityIn.getPos()
         );
 
@@ -57,12 +57,12 @@ public class MortarTER extends TileEntityRenderer<MortarTE>
             list.add(i, tileEntityIn.contents.getStackInSlot(i));
         }
 
-        float renderHeight = XTP(3.5f);
+        float renderHeight = XTP(4.0f);
         for (ItemStack stack : list)
         {
             if (!stack.isEmpty())
             {
-                renderHeight += XTP(2.25f);
+                renderHeight += XTP(2.0f);
                 //以Quad方式渲染谷物或产物
                 if (stack.getItem().isIn(AshiharaTags.CEREALS) || stack.getItem().isIn(AshiharaTags.CEREAL_PROCESSED))
                 {

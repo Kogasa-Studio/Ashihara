@@ -20,5 +20,5 @@ public class ContainerRegistryHandler
 
     public static final RegistryObject<ContainerType<MortarContainer>> MORTAR_CONTAINER
     = CONTAINER_TYPES.register("mortar_container",
-    () -> IForgeContainerType.create(((windowId, inv, data) -> new MortarContainer(windowId, inv, (MortarTE) Minecraft.getInstance().world.getTileEntity(data.readBlockPos()), new MortarTE().mortarData))));
+    () -> IForgeContainerType.create(((windowId, inv, data) -> new MortarContainer(windowId, inv, (MortarTE) Minecraft.getInstance().world.getTileEntity(data.readBlockPos())))));
 }

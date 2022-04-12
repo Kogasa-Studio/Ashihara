@@ -18,7 +18,6 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
@@ -52,10 +51,8 @@ public class BlockMortar extends Block
             .sound(SoundType.WOOD)
             .notSolid()
         );
-        this.setDefaultState(this.getStateContainer().getBaseState().with(LEVEL, 0));
     }
 
-    public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 4);
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
 
     @Override
@@ -67,7 +64,7 @@ public class BlockMortar extends Block
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(LEVEL, FACING);
+        builder.add(FACING);
     }
 
     @Override
@@ -133,7 +130,7 @@ public class BlockMortar extends Block
                     UUID.randomUUID()
                 );
             }
-            if (te.notifyInteraction(stack, worldIn, pos, player))
+            if (!player.isSneaking() && te.notifyInteraction(stack, worldIn, pos, player))
             {
                 boolean isPowder = stack.getItem().isIn(CEREALS) || stack.getItem().isIn(CEREAL_PROCESSED);
                 boolean isTool = stack.getItem().equals(ItemRegistryHandler.PESTLE.get()) || stack.getItem() instanceof ItemOtsuchi;
@@ -142,10 +139,6 @@ public class BlockMortar extends Block
                     if (isPowder)
                     {
                         worldIn.playSound(player, pos, SoundEvents.BLOCK_SAND_PLACE, SoundCategory.BLOCKS, 1.0f, 1.0f);
-                    }
-                    else
-                    {
-                        worldIn.playSound(player, pos, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, SoundCategory.BLOCKS, 1.0f, 1.0f);
                     }
                 }
                 else if (isTool)
@@ -166,6 +159,10 @@ public class BlockMortar extends Block
                             );
                         }
                     }
+                }
+                else
+                {
+                    worldIn.playSound(player, pos, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, SoundCategory.BLOCKS, 1.0f, 1.0f);
                 }
                 worldIn.notifyBlockUpdate(pos, state, state, 3);
             }
