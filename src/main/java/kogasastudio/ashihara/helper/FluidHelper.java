@@ -13,6 +13,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -188,12 +189,15 @@ public class FluidHelper
     {
         ItemStack stackIn = itemHandler.getStackInSlot(in);
         ItemStack stack = stackIn.copy();
+        ItemStack simStack = stackIn.copy();
         ItemStack outStack = itemHandler.getStackInSlot(out);
         stack.setCount(1);
         Optional<IFluidHandlerItem> fluidHandlerItem = FluidUtil.getFluidHandler(stack).resolve();
+        Optional<IFluidHandlerItem> simItem = FluidUtil.getFluidHandler(simStack).resolve();
         if (fluidHandlerItem.isPresent())
         {
             IFluidHandlerItem handler = fluidHandlerItem.get();
+            IFluidHandlerItem sim = simItem.orElse(new FluidHandlerItemStack(handler.getContainer(), handler.getTankCapacity(handler.getTanks())));
             FluidStack fluidInItem;
             if (fluidTank.isEmpty())
             {
@@ -230,15 +234,16 @@ public class FluidHelper
             }
             else //添加流体
             {
-                fluidTank.fill(fluidInItem, SIMULATE);
+//                fluidTank.fill(fluidInItem, SIMULATE);
                 int remainder = fluidTank.getFluidAmount();
                 int storedAmount = fluidInItem.getAmount();
                 int capacity = fluidTank.getCapacity();
 
                 int filledAmount = Math.min(capacity - remainder, storedAmount);
+                sim.drain(new FluidStack(fluidInItem, filledAmount), EXECUTE);
                 boolean outEmpty = outStack.isEmpty();
                 boolean canOutStack =
-                    storedAmount == filledAmount && handler.getContainer().isItemEqual(outStack) && outStack.getCount() + 1 <= outStack.getMaxStackSize();
+                    storedAmount == filledAmount && sim.getContainer().isItemEqual(outStack) && outStack.getCount() + 1 <= outStack.getMaxStackSize();
                 if (!(outEmpty || canOutStack)) return false;
                 FluidStack drained = handler.drain(new FluidStack(fluidInItem, filledAmount), EXECUTE);
                 if (!drained.isEmpty())
