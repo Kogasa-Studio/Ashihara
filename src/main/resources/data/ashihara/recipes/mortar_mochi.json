@@ -9,6 +9,11 @@
   [
     {"item": "ashihara:mochi"}
   ],
+  "fluid":
+  {
+    "fluid": "minecraft:water",
+    "amount": 1000
+  },
   "sequence": [2, 0, 2, 0, 2, 0, 2, 0],
   "recipeType": 1
 }

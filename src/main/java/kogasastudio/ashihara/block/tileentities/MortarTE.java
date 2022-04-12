@@ -1,8 +1,6 @@
 package kogasastudio.ashihara.block.tileentities;
 
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.client.particles.GenericParticleData;
-import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.helper.FluidHelper;
 import kogasastudio.ashihara.interaction.recipe.MortarRecipe;
 import kogasastudio.ashihara.inventory.container.GenericItemStackHandler;
@@ -21,18 +19,17 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 import java.util.Optional;
-import java.util.Random;
 
 import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
 import static kogasastudio.ashihara.utils.AshiharaTags.MASHABLE;
@@ -46,6 +43,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
     public GenericItemStackHandler fluidIO = new GenericItemStackHandler(2);
     public LazyOptional<FluidTank> tank = LazyOptional.of(this::createTank);
     public NonNullList<ItemStack> output = NonNullList.create();
+    public FluidStack fluidCost = FluidStack.EMPTY;
 
     public int progress;
     public int progressTotal;
@@ -133,7 +131,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
     private void process(boolean isSauceProcess)
     {
         this.progress += isSauceProcess ? this.nextStep : 1;
-        if (this.progress >= this.progressTotal) {finishReciping();markDirty();return;}
+        if (this.progress >= this.progressTotal) {finishReciping(true);markDirty();return;}
         if (!this.isWorking) this.isWorking = true;
         if (!isSauceProcess)
         {
@@ -167,9 +165,14 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
         Optional<MortarRecipe> recipeIn = tryMatchRecipe(new RecipeWrapper(this.contents));
         if (recipeIn.isPresent())
         {
-            if (!this.isWorking) applyRecipe(recipeIn.get());
+            boolean flag = false;
+            if (!recipeIn.get().getFluidCost().isEmpty())
+            {
+                 flag = FluidHelper.canFluidExtractFromTank(recipeIn.get().getFluidCost(), this.tank);
+            }
+            if (!this.isWorking && flag) applyRecipe(recipeIn.get());
         }
-        else finishReciping();
+        else finishReciping(false);
         if (FluidHelper.notifyFluidTankInteraction(this.fluidIO, 0, 1, this.tank.orElse(new FluidTank(0)), this.world, this.pos))
         {
             this.markDirty();
@@ -185,6 +188,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
         this.recipeType = recipeIn.recipeType;
         this.progressTotal = recipeIn.progress;
         this.sequence = recipeIn.sequence;
+        this.fluidCost = recipeIn.getFluidCost();
         this.nextStep = recipeIn.recipeType == 2 ? -1 : this.sequence[this.pointer];
         this.output.clear();
         for (ItemStack stack : recipeIn.getOutput())
@@ -195,7 +199,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
         markDirty();
     }
 
-    private void finishReciping()
+    private void finishReciping(boolean produce)
     {
         this.progress = 0;
         this.progressTotal = 0;
@@ -203,18 +207,40 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
         this.recipeType = -1;
         this.pointer = -1;
         this.nextStep = -1;
-        if (this.isWorking)
+        if (produce)
         {
-            this.contents.clear();
-            for (int i = 0; i < this.output.size(); i += 1)
-            {
-                ItemStack stack = this.output.get(i);
-                if (!stack.isEmpty()) this.contents.setStackInSlot(i, stack);
-            }
-            this.output.clear();
-            this.isWorking = false;
+            this.produce();
         }
+        this.fluidCost = FluidStack.EMPTY;
+        this.output.clear();
+        this.isWorking = false;
         markDirty();
+    }
+
+    private void produce()
+    {
+        this.contents.clear();
+        for (int i = 0; i < this.output.size(); i += 1)
+        {
+            ItemStack stack = this.output.get(i);
+            if (!stack.isEmpty()) this.contents.setStackInSlot(i, stack);
+        }
+        if (!this.fluidCost.isEmpty())
+        {
+            this.tank.ifPresent
+            (
+                tank ->
+                {
+                    FluidStack fluidInTank = tank.getFluid();
+                    if (this.fluidCost.isFluidEqual(fluidInTank))
+                    {
+                        fluidInTank.setAmount(Math.max(0, fluidInTank.getAmount() - this.fluidCost.getAmount()));
+                        tank.setFluid(fluidInTank);
+                        markDirty();
+                    }
+                }
+            );
+        }
     }
 
     //若不在工作状态中空手右击则取出物品，持物品右击则尝试将物品放入舂
@@ -270,6 +296,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
         compound.putBoolean("isWorking", this.isWorking);
 
         compound.put("contents", this.contents.serializeNBT());
+        compound.put("fluidCost", this.fluidCost.writeToNBT(new CompoundNBT()));
         compound.put("fluidIO", this.fluidIO.serializeNBT());
 
         this.tank.ifPresent(fluidTank -> compound.put("tank", fluidTank.writeToNBT(new CompoundNBT())));
@@ -305,6 +332,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
         this.isWorking = nbt.getBoolean("isWorking");
 
         this.contents.deserializeNBT(nbt.getCompound("contents"));
+        this.fluidCost = FluidStack.loadFluidStackFromNBT(nbt.getCompound("fluidCost"));
         this.fluidIO.deserializeNBT(nbt.getCompound("fluidIO"));
 
         this.tank.ifPresent(fluidTank -> fluidTank.readFromNBT(nbt.getCompound("tank")));
