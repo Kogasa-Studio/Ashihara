@@ -8,16 +8,16 @@
 	"elements": [
 		{
 			"name": "s",
-			"from": [1, 16, 15],
-			"to": [15, 16.05, 16],
+			"from": [0, 16, 15],
+			"to": [16, 16.05, 16],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 16.025, 15.5]},
 			"faces": {
 				"north": {"uv": [0, 0, 1, 1], "texture": "#0"},
 				"east": {"uv": [0, 0, 1, 1], "texture": "#0"},
 				"south": {"uv": [0, 0, 1, 1], "texture": "#0"},
 				"west": {"uv": [0, 0, 1, 1], "texture": "#0"},
-				"up": {"uv": [0, 0, 16, 1], "texture": "#0"},
-				"down": {"uv": [0, 0, 16, 1], "texture": "#0"}
+				"up": {"uv": [0, 1, 16, 2], "texture": "#0"},
+				"down": {"uv": [0, 1, 16, 2], "texture": "#0"}
 			}
 		}
 	]

@@ -34,14 +34,8 @@ public class BlockTatami extends Block
         this.setDefaultState
         (
             getStateContainer().getBaseState()
-            .with(N, false)
-            .with(E, false)
-            .with(S, false)
-            .with(W, false)
-            .with(WN, false)
-            .with(EN, false)
-            .with(WS, false)
-            .with(ES, false)
+            .with(LEFT, false)
+            .with(RIGHT, false)
             .with(XCUT, false)
             .with(ZCUT, false)
             .with(LOCKED, false)
@@ -49,14 +43,8 @@ public class BlockTatami extends Block
         );
     }
 
-    public static final BooleanProperty N = BooleanProperty.create("n");
-    public static final BooleanProperty E = BooleanProperty.create("e");
-    public static final BooleanProperty S = BooleanProperty.create("s");
-    public static final BooleanProperty W = BooleanProperty.create("w");
-    public static final BooleanProperty WN = BooleanProperty.create("wn");
-    public static final BooleanProperty EN = BooleanProperty.create("en");
-    public static final BooleanProperty WS = BooleanProperty.create("ws");
-    public static final BooleanProperty ES = BooleanProperty.create("es");
+    public static final BooleanProperty LEFT = BooleanProperty.create("left");
+    public static final BooleanProperty RIGHT = BooleanProperty.create("right");
     public static final BooleanProperty XCUT = BooleanProperty.create("xcut");
     public static final BooleanProperty ZCUT = BooleanProperty.create("zcut");
     public static final BooleanProperty LOCKED = BooleanProperty.create("locked");
@@ -70,21 +58,14 @@ public class BlockTatami extends Block
         if (state.matchesBlock(BlockRegistryHandler.TATAMI.get()) && !state.get(LOCKED))
         {
             BlockState n = worldIn.getBlockState(pos.north());
-            BlockState e = worldIn.getBlockState(pos.east());
             BlockState s = worldIn.getBlockState(pos.south());
+            BlockState e = worldIn.getBlockState(pos.east());
             BlockState w = worldIn.getBlockState(pos.west());
-            BlockState wn = worldIn.getBlockState(pos.north().west());
-            BlockState en = worldIn.getBlockState(pos.north().east());
-            BlockState ws = worldIn.getBlockState(pos.south().west());
-            BlockState es = worldIn.getBlockState(pos.south().east());
-            state = state.with(N, check(n, state))
-            .with(E, check(e, state))
-            .with(S, check(s, state))
-            .with(W, check(w, state))
-            .with(WN, check(wn, state))
-            .with(EN, check(en, state))
-            .with(WS, check(ws, state))
-            .with(ES, check(es, state));
+
+            boolean isX = state.get(AXIS).equals(Direction.Axis.X);
+
+            state = state.with(LEFT, check(isX ? n : e, state))
+            .with(RIGHT, check(isX ? s : w, state));
         }
         return state;
     }
@@ -93,20 +74,10 @@ public class BlockTatami extends Block
     private boolean check(BlockState state, BlockState newState)
     {return state.matchesBlock(BlockRegistryHandler.TATAMI.get()) && state.get(AXIS) == newState.get(AXIS);}
 
-//    目前没什么作用
-//    private BlockState setEdgeAll(BlockState state)
-//    {
-//        if (state.matchesBlock(BlockRegistryHandler.TATAMI.get()))
-//        {
-//            state = this.getDefaultState().with(LOCKED, true);
-//        }
-//        return state;
-//    }
-
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(N,S,E,W,WN,EN,WS,ES,XCUT,ZCUT,LOCKED,AXIS);
+        builder.add(LEFT, RIGHT, XCUT, ZCUT, LOCKED, AXIS);
     }
 
     @Override
@@ -158,12 +129,6 @@ public class BlockTatami extends Block
                 }
                 return ActionResultType.SUCCESS;
             }
-//            else if (player.getHeldItem(handIn).getItem() instanceof ShearsItem && player.isSneaking())
-//            {
-//                worldIn.setBlockState(pos, setEdgeAll(state));
-//                worldIn.playSound(player, pos, SoundEvents.BLOCK_BAMBOO_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
-//                return ActionResultType.SUCCESS;
-//            }
             else return ActionResultType.PASS;
         }
         else return ActionResultType.PASS;

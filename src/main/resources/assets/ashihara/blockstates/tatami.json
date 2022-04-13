@@ -3,15 +3,11 @@
   [
     {"when": {"axis": "z"},"apply": {"model": "ashihara:block/tatami/tatami"}},
     {"when": {"axis": "x"},"apply": {"model": "ashihara:block/tatami/tatami", "y": 270}},
-    {"when": {"n": false},"apply": {"model": "ashihara:block/tatami/edges/n"}},
-    {"when": {"e": false},"apply": {"model": "ashihara:block/tatami/edges/e"}},
-    {"when": {"s": false},"apply": {"model": "ashihara:block/tatami/edges/s"}},
-    {"when": {"w": false},"apply": {"model": "ashihara:block/tatami/edges/w"}},
+    {"when": {"axis": "x","left": false},"apply": {"model": "ashihara:block/tatami/edges/n"}},
+    {"when": {"axis": "x","right": false},"apply": {"model": "ashihara:block/tatami/edges/s"}},
+    {"when": {"axis": "z","left": false},"apply": {"model": "ashihara:block/tatami/edges/e"}},
+    {"when": {"axis": "z","right": false},"apply": {"model": "ashihara:block/tatami/edges/w"}},
     {"when": {"xcut": true},"apply": {"model": "ashihara:block/tatami/edges/xcut"}},
-    {"when": {"zcut": true},"apply": {"model": "ashihara:block/tatami/edges/zcut"}},
-    {"when": {"OR": [{"wn": false},{"w": false},{"n": false}]},"apply": {"model": "ashihara:block/tatami/corners/wn"}},
-    {"when": {"OR": [{"en": false},{"e": false},{"n": false}]},"apply": {"model": "ashihara:block/tatami/corners/en"}},
-    {"when": {"OR": [{"ws": false},{"w": false},{"s": false}]},"apply": {"model": "ashihara:block/tatami/corners/ws"}},
-    {"when": {"OR": [{"es": false},{"e": false},{"s": false}]},"apply": {"model": "ashihara:block/tatami/corners/es"}}
+    {"when": {"zcut": true},"apply": {"model": "ashihara:block/tatami/edges/zcut"}}
   ]
 }
