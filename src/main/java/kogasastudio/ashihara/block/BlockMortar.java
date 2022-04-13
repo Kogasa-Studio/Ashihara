@@ -106,6 +106,7 @@ public class BlockMortar extends Block
         if (!stack.isEmpty() && FluidHelper.notifyFluidTankInteraction(player, handIn, stack, tank, worldIn, pos))
         {
             player.inventory.markDirty();
+            te.notifyStateChanged();
             worldIn.notifyBlockUpdate(pos, state, state, 3);
             return ActionResultType.SUCCESS;
         }

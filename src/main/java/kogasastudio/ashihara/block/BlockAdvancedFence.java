@@ -82,6 +82,7 @@ public class BlockAdvancedFence extends Block implements IVariable<WoodTypes>
         BlockState s = worldIn.getBlockState(pos.south());
         BlockState w = worldIn.getBlockState(pos.west());
         BlockState e = worldIn.getBlockState(pos.east());
+        BlockState up = worldIn.getBlockState(pos.up());
 
         boolean nC = n.matchesBlock(state.getBlock());
         boolean sC = s.matchesBlock(state.getBlock());
@@ -104,6 +105,9 @@ public class BlockAdvancedFence extends Block implements IVariable<WoodTypes>
         if
         (
             (worldIn.getBlockState(pos.up()).isSolidSide(worldIn, pos.up(), Direction.DOWN))
+            || (up.getBlock() instanceof BlockAdvancedFence
+                && ((BlockAdvancedFence) up.getBlock()).getType().equals(((BlockAdvancedFence) state.getBlock()).getType()))
+            || (up.getBlock().matchesBlock(BlockRegistryHandler.GOLD_FENCE_DECORATION.get()) && up.get(ORB))
             || (connected != 2)
             || ((nS && (wS || eS)) || (sS && (wS || eS)))
         )

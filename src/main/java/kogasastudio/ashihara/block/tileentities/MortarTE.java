@@ -31,7 +31,6 @@ import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 import java.util.Optional;
 
-import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
 import static kogasastudio.ashihara.utils.AshiharaTags.MASHABLE;
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
@@ -64,8 +63,6 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
 
     public byte[] sequence = new byte[0];
     public boolean isWorking;
-
-    public int getContentsActualSize() {return this.contents.getActualSize();}
 
     @Override
     public FluidTank createTank() {return new FluidTank(4000);}
@@ -146,7 +143,11 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
             }
             if (!this.isWorking && flag) applyRecipe(recipeIn.get());
         }
-        else finishReciping(false);
+        else
+        {
+            finishReciping(false);
+            if (this.world != null) this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
+        }
         if (FluidHelper.notifyFluidTankInteraction(this.fluidIO, 0, 1, this.tank.orElse(new FluidTank(0)), this.world, this.pos))
         {
             this.markDirty();
@@ -169,7 +170,6 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
         {
             this.output.add(stack.copy());
         }
-        LOGGER_MAIN.info("recipe applied: " + recipeIn.getInfo());
         markDirty();
     }
 
@@ -294,7 +294,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
     @Override
     public void read(BlockState state, CompoundNBT nbt)
     {
-        super.read(state, nbt);
+        this.output = NonNullList.create();
         this.progress = nbt.getInt("progress");
         this.progressTotal = nbt.getInt("progressTotal");
 
@@ -317,11 +317,12 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
             CompoundNBT itemTags = outputIn.getCompound(i);
             int slot = itemTags.getInt("Slot");
 
-            if (slot >= 0 && slot < this.output.size())
+            if (slot >= 0)
             {
-                this.output.set(slot, ItemStack.read(itemTags));
+                this.output.add(slot, ItemStack.read(itemTags));
             }
         }
+        super.read(state, nbt);
     }
 
     @Override
