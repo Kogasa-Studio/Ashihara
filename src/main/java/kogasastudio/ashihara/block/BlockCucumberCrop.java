@@ -103,7 +103,7 @@ public class BlockCucumberCrop extends AbstractCropAge7
                     worldIn.setBlockState(pos.up(), this.withAge(0));
                     net.minecraftforge.common.ForgeHooks.onCropsGrowPost(worldIn, pos.up(), this.withAge(0));
                 }
-                else if (onCropsGrowPre(worldIn, pos, state, random.nextInt((int)(25.0F / f) + 1) == 0))
+                else if (age < validAge && onCropsGrowPre(worldIn, pos, state, random.nextInt((int)(25.0F / f) + 1) == 0))
                 {
                     worldIn.setBlockState(pos, this.withAge(age + (!isUpper && age == 4 ? 2 : 1)), 2);
                     net.minecraftforge.common.ForgeHooks.onCropsGrowPost(worldIn, pos, state);
