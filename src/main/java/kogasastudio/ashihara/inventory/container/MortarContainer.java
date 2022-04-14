@@ -75,15 +75,17 @@ public class MortarContainer extends AshiharaCommonContainer
 
         boolean isMerged;
 
-        // 0~8: 快捷栏, 9~35: 玩家背包, 36~39: 内容槽
+        // 0~8: 快捷栏, 9~35: 玩家背包, 36~39: 内容槽, 40~41: 流体互动槽
         if (index < 9)
         {
             isMerged = mergeItemStack(newStack, 36, 40, false)
-            ||mergeItemStack(newStack, 9, 36, false);
+            || mergeItemStack(newStack, 40, 42, false)
+            || mergeItemStack(newStack, 9, 36, false);
         }
         else if (index < 36)
         {
             isMerged = mergeItemStack(newStack, 36, 40, false)
+            || mergeItemStack(newStack, 40, 42, false)
             || mergeItemStack(newStack, 0, 9, true);
         }
         else

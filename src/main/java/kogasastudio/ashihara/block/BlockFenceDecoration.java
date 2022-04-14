@@ -6,6 +6,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
@@ -87,4 +89,7 @@ public class BlockFenceDecoration extends Block
         if (state.get(ORB)) return orb;
         else return state.get(AXIS).equals(Direction.Axis.X) ? x : z;
     }
+
+    @Override
+    public ItemStack getItem(IBlockReader worldIn, BlockPos pos, BlockState state) {return new ItemStack(Items.GOLD_INGOT);}
 }

@@ -62,9 +62,16 @@ public class BlockCucumberCrop extends AbstractCropAge7
         BlockState downState = worldIn.getBlockState(pos.down());
         int age = this.getAge(state);
         boolean isUpper = downState.matchesBlock(BlockRegistryHandler.CUCUMBERS.get());
+
+        if (isUpper && this.getAge(state) >= 5)
+        {
+            worldIn.setBlockState(pos, this.withAge(5));
+            return;
+        }
+
         boolean canGrowUp = !isUpper && worldIn.getBlockState(pos.up()).isAir() && age > 5;
 
-        int i = this.getAge(state) + this.getBonemealAgeIncrease(worldIn);
+        int i = this.getAge(state) + (isUpper ? 1 : this.getBonemealAgeIncrease(worldIn));
         if (!isUpper && i == 5) i += 1;
         int j = this.getMaxAge();
 
@@ -80,7 +87,7 @@ public class BlockCucumberCrop extends AbstractCropAge7
         BlockState downState = worldIn.getBlockState(pos.down());
         boolean isUpper = downState.matchesBlock(BlockRegistryHandler.CUCUMBERS.get());
 
-        if ((isUpper && state.get(AGE) > 4) || (!isUpper && worldIn.getBlockState(pos.up()).isAir())) return;
+        if ((isUpper && state.get(AGE) > 4) || (!isUpper && state.get(AGE) > 6 && !worldIn.getBlockState(pos.up()).isAir())) return;
         if (worldIn.getLightSubtracted(pos, 0) >= 9)
         {
             int age = this.getAge(state);

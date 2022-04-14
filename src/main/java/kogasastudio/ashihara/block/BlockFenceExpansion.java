@@ -128,4 +128,7 @@ public class BlockFenceExpansion extends Block implements IVariable<WoodTypes>
         @Override
         public String getString() {return this.name;}
     }
+
+    @Override
+    public ItemStack getItem(IBlockReader worldIn, BlockPos pos, BlockState state) {return new ItemStack(Items.STICK);}
 }
