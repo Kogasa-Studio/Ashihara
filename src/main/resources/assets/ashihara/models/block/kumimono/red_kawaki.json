@@ -1,0 +1,48 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "ashihara:block/woodcrafts/red_kumimono",
+		"particle": "ashihara:block/woodcrafts/red_kumimono"
+	},
+	"elements": [
+		{
+			"from": [5, 7.99508, 11.75452],
+			"to": [11, 15.99508, 16],
+			"faces": {
+				"north": {"uv": [6, 4, 9, 8], "texture": "#0"},
+				"east": {"uv": [0, 0, 2.12274, 4], "texture": "#0"},
+				"south": {"uv": [6, 4, 9, 8], "texture": "#0"},
+				"west": {"uv": [6.25, 0, 8.37274, 4], "texture": "#0"},
+				"up": {"uv": [0, 0.5, 2.12274, 3.5], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [0, 0.5, 2.12274, 3.5], "rotation": 90, "texture": "#0"}
+			}
+		},
+		{
+			"from": [5, 11, 4.5],
+			"to": [11, 15.99508, 11.75453],
+			"faces": {
+				"north": {"uv": [6, 4, 9, 6.5], "texture": "#0"},
+				"east": {"uv": [1, 0, 4.62726, 2.5], "texture": "#0"},
+				"south": {"uv": [6, 4, 9, 6.5], "texture": "#0"},
+				"west": {"uv": [2.5, 0, 6.12726, 2.5], "texture": "#0"},
+				"up": {"uv": [2.25, 3.5, 5.87726, 0.5], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [2.25, 0.5, 5.87726, 3.5], "rotation": 90, "texture": "#0"}
+			}
+		},
+		{
+			"from": [5.005, 8.9913, 5.5984],
+			"to": [10.995, 13.75667, 13.45064],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [8, 12.75667, 10.0984]},
+			"faces": {
+				"north": {"uv": [6, 4.25, 8.995, 6.63268], "texture": "#0"},
+				"east": {"uv": [1, 0, 4.92612, 2.38268], "texture": "#0"},
+				"south": {"uv": [6, 4.25, 8.995, 6.63268], "texture": "#0"},
+				"west": {"uv": [1, 0, 4.92612, 2.38268], "texture": "#0"},
+				"up": {"uv": [1, 0.5, 4.92612, 3.495], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [1, 0.5, 4.92612, 3.495], "rotation": 90, "texture": "#0"}
+			}
+		}
+	]
+}

@@ -1,0 +1,73 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "ashihara:block/woodcrafts/red_kumimono",
+		"particle": "ashihara:block/woodcrafts/red_kumimono"
+	},
+	"elements": [
+		{
+			"from": [2, 2, 2],
+			"to": [14, 10, 14],
+			"faces": {
+				"north": {"uv": [0, 4, 6, 8], "texture": "#0"},
+				"east": {"uv": [0, 4, 6, 8], "texture": "#0"},
+				"south": {"uv": [0, 4, 6, 8], "texture": "#0"},
+				"west": {"uv": [0, 4, 6, 8], "texture": "#0"},
+				"up": {"uv": [0, 8, 6, 14], "texture": "#0"},
+				"down": {"uv": [0, 8, 6, 14], "texture": "#0"}
+			}
+		},
+		{
+			"from": [3, 1, 3],
+			"to": [13, 2, 13],
+			"faces": {
+				"north": {"uv": [0.5, 7.25, 5.5, 7.75], "texture": "#0"},
+				"east": {"uv": [0.5, 7.25, 5.5, 7.75], "texture": "#0"},
+				"south": {"uv": [0.5, 7.25, 5.5, 7.75], "texture": "#0"},
+				"west": {"uv": [0.5, 7.25, 5.5, 7.75], "texture": "#0"},
+				"up": {"uv": [0.5, 8.5, 5.5, 13.5], "texture": "#0"},
+				"down": {"uv": [0.5, 8.5, 5.5, 13.5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [3.5, 0, 3.5],
+			"to": [12.5, 1, 12.5],
+			"faces": {
+				"north": {"uv": [0.75, 7.25, 5.25, 7.75], "texture": "#0"},
+				"east": {"uv": [0.75, 7.25, 5.25, 7.75], "texture": "#0"},
+				"south": {"uv": [0.75, 7.25, 5.25, 7.75], "texture": "#0"},
+				"west": {"uv": [0.75, 7.25, 5.25, 7.75], "texture": "#0"},
+				"up": {"uv": [0.75, 8.75, 5.25, 13.25], "texture": "#0"},
+				"down": {"uv": [0.75, 8.75, 5.25, 13.25], "texture": "#0"}
+			}
+		},
+		{
+			"from": [5, 8, 0],
+			"to": [11, 16, 16],
+			"faces": {
+				"north": {"uv": [6, 4, 9, 8], "texture": "#0"},
+				"east": {"uv": [0, 0, 8, 4], "texture": "#0"},
+				"south": {"uv": [6, 4, 9, 8], "texture": "#0"},
+				"west": {"uv": [0, 0, 8, 4], "texture": "#0"},
+				"up": {"uv": [0, 0.5, 8, 3.5], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [0, 0.5, 8, 3.5], "rotation": 90, "texture": "#0"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "group",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0, 1, 2]
+		},
+		{
+			"name": "red_kawaki_long_z",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [3]
+		}
+	]
+}

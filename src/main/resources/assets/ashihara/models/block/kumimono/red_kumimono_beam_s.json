@@ -1,0 +1,23 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "ashihara:block/woodcrafts/red_kumimono",
+		"particle": "ashihara:block/woodcrafts/red_kumimono"
+	},
+	"elements": [
+		{
+			"from": [5, 8, 8],
+			"to": [11, 16, 16],
+			"faces": {
+				"north": {"uv": [6, 4, 9, 8], "texture": "#0"},
+				"east": {"uv": [4, 0, 8, 4], "texture": "#0"},
+				"south": {"uv": [6, 4, 9, 8], "texture": "#0"},
+				"west": {"uv": [4, 0, 8, 4], "texture": "#0"},
+				"up": {"uv": [4, 0.5, 8, 3.5], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [4, 0.5, 8, 3.5], "rotation": 90, "texture": "#0"}
+			}
+		}
+	]
+}

@@ -140,6 +140,8 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> MAPLE_BUTTON = ITEMS.register("maple_button", () -> new BlockItem(BlockRegistryHandler.MAPLE_BUTTON.get(), new Item.Properties().group(BUILDING_BLOCKS)));
     
     public static final RegistryObject<Item> RED_ADVANCED_FENCE = ITEMS.register("advanced_red_fence", () -> new BlockItem(BlockRegistryHandler.RED_ADVANCED_FENCE.get(), new Item.Properties().group(BUILDING_BLOCKS)));
+    public static final RegistryObject<Item> RED_KUMINONO = ITEMS.register("red_kumimono", () -> new BlockItem(BlockRegistryHandler.RED_KUMIMONO.get(), new Item.Properties().group(BUILDING_BLOCKS)));
+    public static final RegistryObject<Item> RED_KAWAKI = ITEMS.register("red_kawaki", () -> new BlockItem(BlockRegistryHandler.RED_KAWAKI.get(), new Item.Properties().group(BUILDING_BLOCKS)));
 
     //桶
     public static final RegistryObject<Item> SOY_MILK_BUCKET = ITEMS.register("soy_milk_bucket", () -> new BucketItem(FluidRegistryHandler.SOY_MILK, new Item.Properties().group(ItemGroup.MISC)));

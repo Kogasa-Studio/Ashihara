@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.block.woodcrafts.BlockKumimono;
 import kogasastudio.ashihara.block.trees.CherryBlossomTree;
 import kogasastudio.ashihara.block.trees.RedMapleTree;
 import kogasastudio.ashihara.block.woodcrafts.*;
@@ -84,6 +85,8 @@ public class BlockRegistryHandler {
     public static final RegistryObject<Block> RED_ADVANCED_FENCE = BLOCKS.register("advanced_red_fence", () -> new BlockAdvancedFence(WoodTypes.RED));
     public static final RegistryObject<Block> GOLD_FENCE_DECORATION = BLOCKS.register("gold_fence_decoration", BlockFenceDecoration::new);
     public static final RegistryObject<Block> RED_FENCE_EXPANSION = BLOCKS.register("red_fence_expansion", () -> new BlockFenceExpansion(WoodTypes.RED));
+    public static final RegistryObject<Block> RED_KUMIMONO = BLOCKS.register("red_kumimono", BlockKumimono::new);
+    public static final RegistryObject<Block> RED_KAWAKI = BLOCKS.register("red_kawaki", BlockKawaki::new);
 
     public static final RegistryObject<FlowingFluidBlock> SOY_MILK_BLOCK = BLOCKS.register("soy_milk", () ->
         new FlowingFluidBlock(FluidRegistryHandler.SOY_MILK, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()));
