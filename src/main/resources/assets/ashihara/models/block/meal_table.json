@@ -147,13 +147,22 @@
 		},
 		{
 			"name": "1",
-			"from": [3, 0, 3],
-			"to": [13, 5, 13],
+			"from": [8, 0, 1],
+			"to": [8, 5, 15],
+			"rotation": {"angle": 45, "axis": "y", "origin": [8, 2.5, 8]},
 			"faces": {
-				"north": {"uv": [0, 8.5, 5, 11], "texture": "#0"},
-				"east": {"uv": [0, 8.5, 5, 11], "texture": "#0"},
-				"south": {"uv": [0, 8.5, 5, 11], "texture": "#0"},
-				"west": {"uv": [0, 8.5, 5, 11], "texture": "#0"}
+				"east": {"uv": [0, 8.5, 7, 11], "texture": "#0"},
+				"west": {"uv": [0, 8.5, 7, 11], "texture": "#0"}
+			}
+		},
+		{
+			"name": "2",
+			"from": [1, 0, 8],
+			"to": [15, 5, 8],
+			"rotation": {"angle": 45, "axis": "y", "origin": [8, 2.5, 8]},
+			"faces": {
+				"north": {"uv": [0, 8.5, 7, 11], "texture": "#0"},
+				"south": {"uv": [0, 8.5, 7, 11], "texture": "#0"}
 			}
 		}
 	],
@@ -180,7 +189,7 @@
 			"name": "legs",
 			"origin": [8, 8, 8],
 			"color": 0,
-			"children": [9, 10]
+			"children": [9, 10, 11]
 		}
 	]
 }
