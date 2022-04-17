@@ -4,12 +4,12 @@
   [
     "# #",
     "# #",
-    "#_#"
+    "___"
   ],
   "key":
   {
-    "#": {"tag": "minecraft:planks"},
-    "_": {"tag": "minecraft:wooden_slabs"}
+    "#": {"tag": "forge:stripped_logs"},
+    "_": {"tag": "minecraft:planks"}
   },
   "result":
   {

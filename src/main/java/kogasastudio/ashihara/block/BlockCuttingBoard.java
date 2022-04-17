@@ -1,0 +1,48 @@
+package kogasastudio.ashihara.block;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.EnumProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
+
+public class BlockCuttingBoard extends Block
+{
+    public BlockCuttingBoard()
+    {
+        super
+        (
+            Properties.create(Material.WOOD)
+            .sound(SoundType.WOOD)
+            .hardnessAndResistance(0.4F)
+        );
+    }
+
+    public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {builder.add(AXIS);}
+
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context)
+    {
+        return this.getDefaultState().with(AXIS, context.getPlacementHorizontalFacing().getAxis());
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+    {
+        VoxelShape x = makeCuboidShape(2.0d, 0.0d, 1.0d, 14.0d, 1.0d, 15.0d);
+        VoxelShape z = makeCuboidShape(1.0d, 0.0d, 2.0d, 15.0d, 1.0d, 14.0d);
+
+        return state.get(AXIS).equals(Direction.Axis.X) ? x : z;
+    }
+}

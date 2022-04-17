@@ -48,6 +48,7 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> TOMATO = ITEMS.register("tomato", () -> new EasyFood(2));
     public static final RegistryObject<Item> SWEET_POTATO = ITEMS.register("sweet_potato", () -> new BlockNamedItem(BlockRegistryHandler.SWEET_POTATOES.get(), new Item.Properties().group(MATERIALS).food(new Food.Builder().hunger(2).build())));
     public static final RegistryObject<Item> ROASTED_SWEET_POTATO = ITEMS.register("roasted_sweet_potato", () -> new EasyFood(5));
+    public static final RegistryObject<Item> TOFU = ITEMS.register("tofu", () -> new EasyFood(4));
     public static final RegistryObject<Item> MOCHI = ITEMS.register("mochi", () -> new EasyFood(3));
     public static final RegistryObject<Item> DAIFUKU = ITEMS.register("daifuku", () -> new EasyFood(5));
     public static final RegistryObject<Item> DANGO = ITEMS.register("dango", () -> new EasyFood(6));
@@ -68,9 +69,13 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> DIRT_BALL = ITEMS.register("dirt_ball", () -> new Item(new Item.Properties().group(MATERIALS).food(new Food.Builder().hunger(2).effect(new EffectInstance(Effects.NAUSEA, 400, 2), 1.0F).build())));
     public static final RegistryObject<Item> CHRYSANTHEMUM_FLOWER = ITEMS.register("chrysanthemum_flower", AshiharaMaterial::new);
     public static final RegistryObject<Item> IRON_ORE_SHATTER = ITEMS.register("iron_ore_shatter", AshiharaMaterial::new);
+    public static final RegistryObject<Item> GOLD_ORE_SHATTER = ITEMS.register("gold_ore_shatter", AshiharaMaterial::new);
     public static final RegistryObject<Item> STONE_SHATTER = ITEMS.register("stone_shatter", AshiharaMaterial::new);
+    public static final RegistryObject<Item> COAL_POWDER = ITEMS.register("coal_powder", AshiharaMaterial::new);
+    public static final RegistryObject<Item> SALT = ITEMS.register("salt", AshiharaMaterial::new);
     public static final RegistryObject<Item> FLOUR = ITEMS.register("flour", AshiharaMaterial::new);
     public static final RegistryObject<Item> RICE_POWDER = ITEMS.register("rice_powder", AshiharaMaterial::new);
+    public static final RegistryObject<Item> BEAN_POWDER = ITEMS.register("bean_powder", AshiharaMaterial::new);
     public static final RegistryObject<Item> SOY_BEAN = ITEMS.register("soy_bean", () -> new BlockNamedItem(BlockRegistryHandler.SOY_BEANS.get(), new Item.Properties().group(MATERIALS)));
     public static final RegistryObject<Item> COTTON = ITEMS.register("cotton", AshiharaMaterial::new);
     public static final RegistryObject<Item> TEA_LEAF = ITEMS.register("tea_leaf", AshiharaMaterial::new);
@@ -80,6 +85,8 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> TEA_SEED = ITEMS.register("tea_seeds", () -> new BlockNamedItem(BlockRegistryHandler.TEA_TREE.get(), (new Item.Properties()).group(MATERIALS)));
     public static final RegistryObject<Item> DRIED_BAMBOO = ITEMS.register("dried_bamboo", AshiharaMaterial::new);
     public static final RegistryObject<Item> BAMBOO_MATERIAL = ITEMS.register("bamboo_material", AshiharaMaterial::new);
+    public static final RegistryObject<Item> BAMBOO_STICK = ITEMS.register("bamboo_stick", AshiharaMaterial::new);
+    public static final RegistryObject<Item> BAMBOO_STRIPS = ITEMS.register("bamboo_strips", AshiharaMaterial::new);
 
     //以下为方块
     //TODO: public static final RegistryObject<Item>  = ITEMS.register("", () -> new BlockItem(BlockRegistryHandler. .get(), new Item.Properties().group(ASHIHARA)));
@@ -96,6 +103,7 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> HYDRANGEA_BUSH = ITEMS.register("hydrangea_bush", () -> new BlockItem(BlockRegistryHandler.HYDRANGEA_BUSH.get(), new Item.Properties().group(ASHIHARA)));
     public static final RegistryObject<Item> PAIL = ITEMS.register("pail", ItemBlockPail::new);
     public static final RegistryObject<Item> MEAL_TABLE = ITEMS.register("meal_table", () -> new BlockItem(BlockRegistryHandler.MEAL_TABLE.get(), new Item.Properties().group(ASHIHARA)));
+    public static final RegistryObject<Item> CUTTING_BOARD = ITEMS.register("cutting_board", () -> new BlockItem(BlockRegistryHandler.CUTTING_BOARD.get(), new Item.Properties().group(ASHIHARA)));
 
     //建筑方块
     public static final RegistryObject<Item> CHERRY_BLOSSOM = ITEMS.register("cherry_blossom", () -> new BlockItem(BlockRegistryHandler.CHERRY_BLOSSOM.get(), new Item.Properties().group(BUILDING_BLOCKS)));

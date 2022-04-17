@@ -1,0 +1,7 @@
+{
+  "variants":
+  {
+    "axis=x": {"model": "ashihara:block/cutting_board", "y": 90},
+    "axis=z": {"model": "ashihara:block/cutting_board"}
+  }
+}

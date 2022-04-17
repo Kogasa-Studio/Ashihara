@@ -1,0 +1,4 @@
+{
+  "parent": "item/handheld",
+  "textures": {"handheld": "ashihara:item/bamboo_stick"}
+}

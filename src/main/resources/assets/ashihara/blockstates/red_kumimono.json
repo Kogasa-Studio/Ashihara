@@ -2,11 +2,9 @@
   "multipart":
   [
     {"apply": {"model": "ashihara:block/kumimono/kumimono"}},
-    {"when": {"north": "true", "south": "true"}, "apply": {"model": "ashihara:block/kumimono/red_kawaki_long_z"}},
-    {"when": {"east": "true", "west": "true"}, "apply": {"model": "ashihara:block/kumimono/red_kawaki_long_z", "y": 180}},
-    {"when": {"north": "true", "south": "false"}, "apply": {"model": "ashihara:block/kumimono/red_kumimono_beam_n"}},
-    {"when": {"east": "true", "west": "false"}, "apply": {"model": "ashihara:block/kumimono/red_kumimono_beam_n", "y": 90}},
-    {"when": {"south": "true", "north": "false"}, "apply": {"model": "ashihara:block/kumimono/red_kumimono_beam_s"}},
-    {"when": {"west": "true", "east": "false"}, "apply": {"model": "ashihara:block/kumimono/red_kumimono_beam_s", "y": 90}}
+    {"when": {"north": "true"}, "apply": {"model": "ashihara:block/kumimono/red_kumimono_beam_n"}},
+    {"when": {"east": "true"}, "apply": {"model": "ashihara:block/kumimono/red_kumimono_beam_n", "y": 90}},
+    {"when": {"south": "true"}, "apply": {"model": "ashihara:block/kumimono/red_kumimono_beam_s"}},
+    {"when": {"west": "true"}, "apply": {"model": "ashihara:block/kumimono/red_kumimono_beam_s", "y": 90}}
   ]
 }

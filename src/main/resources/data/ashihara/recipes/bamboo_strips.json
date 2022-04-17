@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "M ",
+    " M"
+  ],
+  "key":
+  {
+    "M": {"item": "ashihara:bamboo_material"}
+  },
+  "result":
+  {
+    "item": "ashihara:bamboo_strips",
+    "count": 2
+  }
+}
