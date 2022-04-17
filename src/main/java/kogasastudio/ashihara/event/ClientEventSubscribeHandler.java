@@ -104,6 +104,7 @@ public class ClientEventSubscribeHandler
         event.enqueueWork(() -> ClientRegistry.bindTileEntityRenderer(TERegistryHandler.PAIL_TE.get(), PailTER::new));
         event.enqueueWork(() -> ClientRegistry.bindTileEntityRenderer(TERegistryHandler.CANDLE_TE.get(), CandleTER::new));
         event.enqueueWork(() -> ClientRegistry.bindTileEntityRenderer(TERegistryHandler.MORTAR_TE.get(), MortarTER::new));
+        event.enqueueWork(() -> ClientRegistry.bindTileEntityRenderer(TERegistryHandler.CUTTING_BOARD_TE.get(), CuttingBoardTER::new));
     }
 
     @SubscribeEvent

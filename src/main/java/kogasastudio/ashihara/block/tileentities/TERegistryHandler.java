@@ -46,4 +46,11 @@ public class TERegistryHandler
         CandleTE::new,
         BlockRegistryHandler.CANDLE.get()
     ).build(null));
+
+    public static final RegistryObject<TileEntityType<CuttingBoardTE>> CUTTING_BOARD_TE = TILE_ENTITIES.register("cutting_board_tileentity",
+    () -> TileEntityType.Builder.create
+    (
+        CuttingBoardTE::new,
+        BlockRegistryHandler.CUTTING_BOARD.get()
+    ).build(null));
 }

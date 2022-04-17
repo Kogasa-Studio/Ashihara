@@ -86,12 +86,10 @@ public class MortarTER extends TileEntityRenderer<MortarTE>
                 }
                 else
                 {
-                    boolean isXAxis = tileEntityIn.getBlockState().get(FACING).getAxis().equals(Direction.Axis.X);
-
                     matrixStackIn.push();
                     matrixStackIn.translate(XTP(8.0f), renderHeight, XTP(8.0f));
                     matrixStackIn.scale(0.6f, 0.6f, 0.6f);
-                    matrixStackIn.rotate(isXAxis ? Vector3f.ZP.rotationDegrees(90.0f) : Vector3f.XP.rotationDegrees(90.0f));
+                    matrixStackIn.rotate( Vector3f.XP.rotationDegrees(90.0f));
                     matrixStackIn.rotate(Vector3f.YP.rotationDegrees(tileEntityIn.getBlockState().get(FACING).getHorizontalAngle()));
 
                     ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
