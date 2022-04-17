@@ -81,13 +81,13 @@ public class BlockKawaki extends Block
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
     {
-        VoxelShape n = makeCuboidShape(5.0d, 8.0d, 4.5d, 11.0d, 16.0d, 16.0d);
-        VoxelShape e = makeCuboidShape(0.0d, 8.0d, 5.0d, 11.5d, 16.0d, 11.0d);
-        VoxelShape s = makeCuboidShape(5.0d, 8.0d, 0.0d, 11.0d, 16.0d, 11.5d);
-        VoxelShape w = makeCuboidShape(4.5d, 8.0d, 5.0d, 16.0d, 16.0d, 11.0d);
+        VoxelShape n = makeCuboidShape(5.0d, 6.0d, 4.5d, 11.0d, 16.0d, 16.0d);
+        VoxelShape e = makeCuboidShape(0.0d, 6.0d, 5.0d, 11.5d, 16.0d, 11.0d);
+        VoxelShape s = makeCuboidShape(5.0d, 6.0d, 0.0d, 11.0d, 16.0d, 11.5d);
+        VoxelShape w = makeCuboidShape(4.5d, 6.0d, 5.0d, 16.0d, 16.0d, 11.0d);
 
-        VoxelShape long_X = makeCuboidShape(0.0d, 8.0d, 5.0d, 16.0d, 16.0d, 11.0d);
-        VoxelShape long_Z = makeCuboidShape(5.0d, 8.0d, 0.0d, 11.0d, 16.0d, 16.0d);
+        VoxelShape long_X = makeCuboidShape(0.0d, 6.0d, 5.0d, 16.0d, 16.0d, 11.0d);
+        VoxelShape long_Z = makeCuboidShape(5.0d, 6.0d, 0.0d, 11.0d, 16.0d, 16.0d);
 
         if (state.get(ISLONG))
         {

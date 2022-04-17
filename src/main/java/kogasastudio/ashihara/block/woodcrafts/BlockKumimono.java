@@ -140,11 +140,11 @@ public class BlockKumimono extends Block
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
     {
-        VoxelShape body = makeCuboidShape(2.0d, 0.0d, 2.0d, 14.0d, 10.0d, 14.0d);
-        VoxelShape beam_n = makeCuboidShape(5.0d, 8.0d, 0.0d, 11.0d, 16.0d, 8.0d);
-        VoxelShape beam_e = makeCuboidShape(8.0d, 8.0d, 5.0d, 16.0d, 16.0d, 11.0d);
-        VoxelShape beam_s = makeCuboidShape(5.0d, 8.0d, 8.0d, 11.0d, 16.0d, 16.0d);
-        VoxelShape beam_w = makeCuboidShape(0.0d, 8.0d, 5.0d, 8.0d, 16.0d, 11.0d);
+        VoxelShape body = makeCuboidShape(2.5d, 0.0d, 2.5d, 11.0d, 10.0d, 11.0d);
+        VoxelShape beam_n = makeCuboidShape(5.0d, 6.0d, 0.0d, 11.0d, 16.0d, 12.0d);
+        VoxelShape beam_e = makeCuboidShape(4.0d, 6.0d, 5.0d, 16.0d, 16.0d, 11.0d);
+        VoxelShape beam_s = makeCuboidShape(5.0d, 6.0d, 4.0d, 11.0d, 16.0d, 16.0d);
+        VoxelShape beam_w = makeCuboidShape(0.0d, 6.0d, 5.0d, 12.0d, 16.0d, 11.0d);
 
         if (state.get(BEAM_N)) body = VoxelShapes.or(body, beam_n);
         if (state.get(BEAM_E)) body = VoxelShapes.or(body, beam_e);
