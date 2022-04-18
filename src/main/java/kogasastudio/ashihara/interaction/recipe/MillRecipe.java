@@ -132,7 +132,6 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<MillRecipe>
     {
-
         @Override
         public MillRecipe read(ResourceLocation recipeId, JsonObject json)
         {
