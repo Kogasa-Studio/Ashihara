@@ -28,7 +28,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
 
-import static kogasastudio.ashihara.utils.EasyBlockActionHandler.getLightValueLit;
+import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 import static net.minecraft.item.Items.GLASS_PANE;
 
 public class BlockStoneLantern extends BlockDoubleLantern

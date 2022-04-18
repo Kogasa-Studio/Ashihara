@@ -122,7 +122,6 @@ public class MortarRecipe implements IRecipe<RecipeWrapper>
                 final NonNullList<ItemStack> outputIn = readOutput(JSONUtils.getJsonArray(json, "result"));
                 final byte recipeTypeIn = JSONUtils.getByte(json, "recipeType", (byte) 1);
                 final byte[] sequenceIn = readSequence(JSONUtils.getJsonArray(json, "sequence"));
-//                final int progressIn = JSONUtils.getInt(json, "progress", 100);
                 if (recipeTypeIn != 2 && sequenceIn.length < 1) {throw new JsonParseException("No sequence provided!");}
                 else
                 {

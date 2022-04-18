@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.utils.WoodTypes;
+import kogasastudio.ashihara.utils.AshiharaWoodTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -26,9 +26,9 @@ import static kogasastudio.ashihara.block.BlockFenceDecoration.AXIS;
 import static kogasastudio.ashihara.block.BlockFenceDecoration.ORB;
 import static kogasastudio.ashihara.block.BlockFenceExpansion.FACING;
 
-public class BlockAdvancedFence extends Block implements IVariable<WoodTypes>
+public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodTypes>
 {
-    public BlockAdvancedFence(WoodTypes typeIn)
+    public BlockAdvancedFence(AshiharaWoodTypes typeIn)
     {
         super
         (
@@ -41,7 +41,7 @@ public class BlockAdvancedFence extends Block implements IVariable<WoodTypes>
         type = typeIn;
     }
 
-    public static WoodTypes type;
+    public static AshiharaWoodTypes type;
 
     public static final BooleanProperty NORTH = BooleanProperty.create("north");
     public static final BooleanProperty SOUTH = BooleanProperty.create("south");
@@ -50,7 +50,7 @@ public class BlockAdvancedFence extends Block implements IVariable<WoodTypes>
     public static final EnumProperty<ColumnType> COLUMN = EnumProperty.create("column", ColumnType.class);
 
     @Override
-    public WoodTypes getType() {return type;}
+    public AshiharaWoodTypes getType() {return type;}
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)

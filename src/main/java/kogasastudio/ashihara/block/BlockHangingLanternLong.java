@@ -27,7 +27,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import static kogasastudio.ashihara.utils.EasyBlockActionHandler.getLightValueLit;
+import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 
 public class BlockHangingLanternLong extends BlockLantern
 {

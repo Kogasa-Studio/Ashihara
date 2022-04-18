@@ -15,7 +15,7 @@ import net.minecraft.util.math.vector.Vector3f;
 
 import static kogasastudio.ashihara.block.BlockLantern.FACING;
 import static kogasastudio.ashihara.helper.RenderHelper.buildMatrix;
-import static kogasastudio.ashihara.utils.EasyBlockActionHandler.getRotationByFacing;
+import static kogasastudio.ashihara.helper.BlockActionHelper.getRotationByFacing;
 
 public class MarkableLanternTER extends TileEntityRenderer<MarkableLanternTE>
 {

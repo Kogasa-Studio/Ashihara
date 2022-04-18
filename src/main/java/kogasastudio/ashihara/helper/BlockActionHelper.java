@@ -1,4 +1,4 @@
-package kogasastudio.ashihara.utils;
+package kogasastudio.ashihara.helper;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -21,7 +21,7 @@ import static net.minecraft.state.properties.BlockStateProperties.*;
  * 这是一个为了方便提供各种方块操作的类
  * 非常的屎山，如果血压升高请立即关闭该类的浏览页面
  */
-public class EasyBlockActionHandler
+public class BlockActionHelper
 {
     /**
      * 在给定的世界检测处在给定的坐标的方块是否与给定的方块相邻

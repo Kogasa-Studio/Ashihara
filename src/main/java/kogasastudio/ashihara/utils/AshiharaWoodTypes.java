@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.utils;
 
-public enum WoodTypes
+public enum AshiharaWoodTypes
 {
     RED,
     DARK,

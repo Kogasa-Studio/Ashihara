@@ -25,7 +25,7 @@ import net.minecraftforge.common.ToolType;
 
 import java.util.*;
 
-import static kogasastudio.ashihara.utils.EasyBlockActionHandler.*;
+import static kogasastudio.ashihara.helper.BlockActionHelper.*;
 import static net.minecraft.fluid.Fluids.WATER;
 
 public class BlockWaterField extends Block implements ILiquidContainer, IBucketPickupHandler

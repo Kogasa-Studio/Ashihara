@@ -28,7 +28,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.Random;
 
 import static kogasastudio.ashihara.block.tileentities.TERegistryHandler.CANDLE_TE;
-import static kogasastudio.ashihara.utils.EasyBlockActionHandler.getLightValueLit;
+import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 
 public class BlockCandle extends Block
 {

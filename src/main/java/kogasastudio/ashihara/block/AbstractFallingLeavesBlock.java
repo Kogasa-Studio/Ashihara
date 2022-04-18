@@ -66,7 +66,7 @@ public class AbstractFallingLeavesBlock extends LeavesBlock
             spawnDrops(state, worldIn, pos);
             worldIn.removeBlock(pos, false);
         }
-        //若樱花方块正下方50格以内有实心方块，且该方块上方为空气，则在该方块上方生成落樱毯
+        //若樱花方块正下方50格以内有实心方块，且该方块上方为空气，则在该方块上方生成落樱毯R
         if (!this.getFallenBlock().matchesBlock(AIR) && worldIn.isAirBlock(pos.down()))
         {
             BlockPos pos1 = pos;

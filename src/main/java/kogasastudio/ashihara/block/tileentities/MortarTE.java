@@ -136,7 +136,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
         Optional<MortarRecipe> recipeIn = tryMatchRecipe(new RecipeWrapper(this.contents));
         if (recipeIn.isPresent())
         {
-            boolean flag = false;
+            boolean flag = true;
             if (!recipeIn.get().getFluidCost().isEmpty())
             {
                  flag = FluidHelper.canFluidExtractFromTank(recipeIn.get().getFluidCost(), this.tank);

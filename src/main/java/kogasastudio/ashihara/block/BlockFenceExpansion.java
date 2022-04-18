@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.utils.WoodTypes;
+import kogasastudio.ashihara.utils.AshiharaWoodTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -25,9 +25,9 @@ import net.minecraft.world.World;
 
 import static kogasastudio.ashihara.utils.AshiharaTags.ADVANCED_FENCES;
 
-public class BlockFenceExpansion extends Block implements IVariable<WoodTypes>
+public class BlockFenceExpansion extends Block implements IVariable<AshiharaWoodTypes>
 {
-    public BlockFenceExpansion(WoodTypes typeIn)
+    public BlockFenceExpansion(AshiharaWoodTypes typeIn)
     {
         super
         (
@@ -38,13 +38,13 @@ public class BlockFenceExpansion extends Block implements IVariable<WoodTypes>
         type = typeIn;
     }
 
-    public static WoodTypes type;
+    public static AshiharaWoodTypes type;
 
     public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
     public static final EnumProperty<DecorationTypes> DECORATION = EnumProperty.create("decoration", DecorationTypes.class);
 
     @Override
-    public WoodTypes getType() {return type;}
+    public AshiharaWoodTypes getType() {return type;}
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)

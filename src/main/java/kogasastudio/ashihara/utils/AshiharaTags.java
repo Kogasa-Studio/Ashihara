@@ -10,6 +10,9 @@ import net.minecraftforge.common.Tags;
 
 public class AshiharaTags
 {
+    public static final Tags.IOptionalNamedTag<Item> AXE = tagForge("axe");
+    public static final Tags.IOptionalNamedTag<Item> KNIFE = tagForge("knife");
+
     public static final Tags.IOptionalNamedTag<Item> MASHABLE = tag("mashable");
     public static final Tags.IOptionalNamedTag<Item> CEREALS = tag("cereals");
     public static final Tags.IOptionalNamedTag<Item> CEREAL_PROCESSED = tag("cereal_processed");
@@ -23,8 +26,18 @@ public class AshiharaTags
         return ItemTags.createOptional(new ResourceLocation(Ashihara.MODID, name));
     }
 
+    private static Tags.IOptionalNamedTag<Item> tagForge(String name)
+    {
+        return ItemTags.createOptional(new ResourceLocation("forge", name));
+    }
+
     private static Tags.IOptionalNamedTag<Block> tagBlock(String name)
     {
         return BlockTags.createOptional(new ResourceLocation(Ashihara.MODID, name));
+    }
+
+    private static Tags.IOptionalNamedTag<Block> tagForgeBlock(String name)
+    {
+        return BlockTags.createOptional(new ResourceLocation("forge", name));
     }
 }

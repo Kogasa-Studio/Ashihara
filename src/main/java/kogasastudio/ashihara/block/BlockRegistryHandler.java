@@ -9,7 +9,7 @@ import kogasastudio.ashihara.client.particles.GenericParticleType;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
-import kogasastudio.ashihara.utils.WoodTypes;
+import kogasastudio.ashihara.utils.AshiharaWoodTypes;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.IItemProvider;
@@ -83,9 +83,9 @@ public class BlockRegistryHandler {
     public static final RegistryObject<Block> MAPLE_FENCE_GATE = BLOCKS.register("maple_fence_gate", SimpleFenceGateBlock::new);
     public static final RegistryObject<Block> MAPLE_BUTTON = BLOCKS.register("maple_button", SimpleButtonBlock::new);
 
-    public static final RegistryObject<Block> RED_ADVANCED_FENCE = BLOCKS.register("advanced_red_fence", () -> new BlockAdvancedFence(WoodTypes.RED));
+    public static final RegistryObject<Block> RED_ADVANCED_FENCE = BLOCKS.register("advanced_red_fence", () -> new BlockAdvancedFence(AshiharaWoodTypes.RED));
     public static final RegistryObject<Block> GOLD_FENCE_DECORATION = BLOCKS.register("gold_fence_decoration", BlockFenceDecoration::new);
-    public static final RegistryObject<Block> RED_FENCE_EXPANSION = BLOCKS.register("red_fence_expansion", () -> new BlockFenceExpansion(WoodTypes.RED));
+    public static final RegistryObject<Block> RED_FENCE_EXPANSION = BLOCKS.register("red_fence_expansion", () -> new BlockFenceExpansion(AshiharaWoodTypes.RED));
     public static final RegistryObject<Block> RED_KUMIMONO = BLOCKS.register("red_kumimono", BlockKumimono::new);
     public static final RegistryObject<Block> RED_KAWAKI = BLOCKS.register("red_kawaki", BlockKawaki::new);
 

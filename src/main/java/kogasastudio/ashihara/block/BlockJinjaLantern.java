@@ -11,7 +11,7 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 
-import static kogasastudio.ashihara.utils.EasyBlockActionHandler.getLightValueLit;
+import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 
 public class BlockJinjaLantern extends BlockDoubleLantern
 {
