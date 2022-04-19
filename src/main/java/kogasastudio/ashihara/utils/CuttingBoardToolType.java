@@ -1,6 +1,5 @@
 package kogasastudio.ashihara.utils;
 
-import com.google.gson.JsonObject;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.ITag;

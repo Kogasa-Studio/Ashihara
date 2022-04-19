@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.BlockNamedItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.vector.Vector3f;
@@ -28,16 +29,24 @@ public class CuttingBoardTER extends TileEntityRenderer<CuttingBoardTE>
         {
             matrixStackIn.push();
             boolean isXAxis = tileEntityIn.getBlockState().get(AXIS).equals(Direction.Axis.X);
-            boolean isBlock = stack.getItem() instanceof BlockItem;
+            boolean isBlock = stack.getItem() instanceof BlockItem && !(stack.getItem() instanceof BlockNamedItem);
 
-            float tHeight = isBlock ? 5.0f : 1.0f;
+            float tHeight = isBlock ? 3.0f : 1.0f;
             matrixStackIn.translate(XTP(8.0f), XTP(tHeight), XTP(8.0f));
             matrixStackIn.scale(0.5f, 0.5f, 0.5f);
-            matrixStackIn.rotate(Vector3f.XP.rotationDegrees(90.0f));
-            matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(isXAxis ? 270 : 0));
+            if (!isBlock)
+            {
+                matrixStackIn.rotate(Vector3f.XP.rotationDegrees(90.0f));
+                matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(isXAxis ? 270 : 0));
+            }
+            else matrixStackIn.rotate(Vector3f.YP.rotationDegrees(isXAxis ? 270 : 0));
 
             ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
-            renderer.renderItem(stack, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
+            for (int i = 0; i < stack.getCount(); i += 1)
+            {
+                if (i != 0 ) matrixStackIn.translate(XTP(0.0f), XTP(isBlock ? 8.0f : 0.0f), XTP(isBlock ? 0.0f : -1.2f));
+                renderer.renderItem(stack, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
+            }
             matrixStackIn.pop();
         }
     }

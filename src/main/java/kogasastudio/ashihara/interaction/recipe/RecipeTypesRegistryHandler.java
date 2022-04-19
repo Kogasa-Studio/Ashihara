@@ -13,4 +13,5 @@ public class RecipeTypesRegistryHandler
 
     public static final RegistryObject<IRecipeSerializer<MillRecipe>> MILL = RECIPES.register("mill", MillRecipe.Serializer::new);
     public static final RegistryObject<IRecipeSerializer<MortarRecipe>> MORTAR = RECIPES.register("mortar", MortarRecipe.Serializer::new);
+    public static final RegistryObject<IRecipeSerializer<CuttingBoardRecipe>> CUTTING_BOARD = RECIPES.register("cutting", CuttingBoardRecipe.Serializer::new);
 }
