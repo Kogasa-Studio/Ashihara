@@ -20,7 +20,7 @@ import net.minecraftforge.items.wrapper.RecipeWrapper;
 import java.util.Optional;
 import java.util.Random;
 
-import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
+//import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
 
 public class CuttingBoardTE extends AshiharaMachineTE
 {
@@ -56,9 +56,9 @@ public class CuttingBoardTE extends AshiharaMachineTE
                     (double) this.pos.getX() + 0.5D,
                     (double) this.pos.getY() + 0.7D,
                     (double) this.pos.getZ() + 0.5D,
-                    ((double) random.nextFloat() - 0.5D) * 0.15D,
-                    ((double) random.nextFloat() - 0.5D) * 0.15D,
-                    ((double) random.nextFloat() - 0.5D) * 0.15D
+                    ((double) random.nextFloat() - 0.5D) * 0.2D,
+                    ((double) random.nextFloat() - 0.5D) * 0.2D,
+                    ((double) random.nextFloat() - 0.5D) * 0.2D
                 );
             }
         }
