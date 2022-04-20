@@ -4,5 +4,5 @@ public enum AshiharaWoodTypes
 {
     RED,
     DARK,
-    OAK
+    SPRUCE
 }

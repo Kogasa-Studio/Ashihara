@@ -112,6 +112,11 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> FALLEN_MAPLE_LEAVES_RED = ITEMS.register("fallen_maple_leaves_red", () -> new BlockItem(BlockRegistryHandler.FALLEN_MAPLE_LEAVES_RED.get(), new Item.Properties().group(BUILDING_BLOCKS)));
     public static final RegistryObject<Item> TATAMI = ITEMS.register("tatami", () -> new BlockItem(BlockRegistryHandler.TATAMI.get(), new Item.Properties().group(ASHIHARA)));
 
+    public static final RegistryObject<Item> RED_ADVANCED_FENCE = ITEMS.register("advanced_red_fence", () -> new BlockItem(BlockRegistryHandler.RED_ADVANCED_FENCE.get(), new Item.Properties().group(BUILDING_BLOCKS)));
+    public static final RegistryObject<Item> SPRUCE_ADVANCED_FENCE = ITEMS.register("advanced_spruce_fence", () -> new BlockItem(BlockRegistryHandler.SPRUCE_ADVANCED_FENCE.get(), new Item.Properties().group(BUILDING_BLOCKS)));
+    public static final RegistryObject<Item> RED_KUMINONO = ITEMS.register("red_kumimono", () -> new BlockItem(BlockRegistryHandler.RED_KUMIMONO.get(), new Item.Properties().group(BUILDING_BLOCKS)));
+    public static final RegistryObject<Item> RED_KAWAKI = ITEMS.register("red_kawaki", () -> new BlockItem(BlockRegistryHandler.RED_KAWAKI.get(), new Item.Properties().group(BUILDING_BLOCKS)));
+
     //灯具
     public static final RegistryObject<Item> LANTERN_LONG_WHITE = ITEMS.register("lantern_long_white", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), new Item.Properties().group(ASHIHARA)));
     public static final RegistryObject<Item> LANTERN_LONG_RED = ITEMS.register("lantern_long_red", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_RED.get(), new Item.Properties().group(ASHIHARA)));
@@ -146,10 +151,6 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> MAPLE_FENCE = ITEMS.register("maple_fence", () -> new BlockItem(BlockRegistryHandler.MAPLE_FENCE.get(), new Item.Properties().group(BUILDING_BLOCKS)));
     public static final RegistryObject<Item> MAPLE_FENCE_GATE = ITEMS.register("maple_fence_gate", () -> new BlockItem(BlockRegistryHandler.MAPLE_FENCE_GATE.get(), new Item.Properties().group(BUILDING_BLOCKS)));
     public static final RegistryObject<Item> MAPLE_BUTTON = ITEMS.register("maple_button", () -> new BlockItem(BlockRegistryHandler.MAPLE_BUTTON.get(), new Item.Properties().group(BUILDING_BLOCKS)));
-    
-    public static final RegistryObject<Item> RED_ADVANCED_FENCE = ITEMS.register("advanced_red_fence", () -> new BlockItem(BlockRegistryHandler.RED_ADVANCED_FENCE.get(), new Item.Properties().group(BUILDING_BLOCKS)));
-    public static final RegistryObject<Item> RED_KUMINONO = ITEMS.register("red_kumimono", () -> new BlockItem(BlockRegistryHandler.RED_KUMIMONO.get(), new Item.Properties().group(BUILDING_BLOCKS)));
-    public static final RegistryObject<Item> RED_KAWAKI = ITEMS.register("red_kawaki", () -> new BlockItem(BlockRegistryHandler.RED_KAWAKI.get(), new Item.Properties().group(BUILDING_BLOCKS)));
 
     //桶
     public static final RegistryObject<Item> SOY_MILK_BUCKET = ITEMS.register("soy_milk_bucket", () -> new BucketItem(FluidRegistryHandler.SOY_MILK, new Item.Properties().group(ItemGroup.MISC)));

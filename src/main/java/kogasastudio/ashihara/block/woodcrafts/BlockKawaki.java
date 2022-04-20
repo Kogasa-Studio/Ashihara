@@ -1,6 +1,8 @@
 package kogasastudio.ashihara.block.woodcrafts;
 
-import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.block.IVariable;
+import kogasastudio.ashihara.helper.BlockActionHelper;
+import kogasastudio.ashihara.utils.AshiharaWoodTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -20,9 +22,10 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-public class BlockKawaki extends Block
+public class BlockKawaki extends Block implements IVariable<AshiharaWoodTypes>
 {
-    public BlockKawaki()
+    private static AshiharaWoodTypes type;
+    public BlockKawaki(AshiharaWoodTypes typeIn)
     {
         super
         (
@@ -30,6 +33,7 @@ public class BlockKawaki extends Block
             .hardnessAndResistance(0.5F)
             .sound(SoundType.WOOD)
         );
+        type = typeIn;
     }
 
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -44,10 +48,18 @@ public class BlockKawaki extends Block
         World worldIn = context.getWorld();
         BlockPos posIn = context.getPos();
         Direction facingIn = context.getPlacementHorizontalFacing();
+        BlockState state = worldIn.getBlockState(posIn);
+        BlockState facingState = worldIn.getBlockState(posIn.offset(facingIn.getOpposite()));
 
         return this.getDefaultState()
         .with(FACING, facingIn.getOpposite())
-        .with(ISLONG, (worldIn.getBlockState(posIn.offset(facingIn.getOpposite())).getBlock().equals(BlockRegistryHandler.RED_KAWAKI.get())));
+        .with(ISLONG, (canConnect(this.getDefaultState(), facingState)
+            || facingState.isSolidSide(worldIn, posIn.offset(state.get(FACING)), state.get(FACING).getOpposite())));
+    }
+
+    private boolean canConnect(BlockState state, BlockState toCheck)
+    {
+        return BlockActionHelper.typeMatches(state, toCheck) && (toCheck.getBlock() instanceof BlockKawaki || toCheck.getBlock() instanceof BlockKumimono);
     }
 
     @Override
@@ -55,8 +67,7 @@ public class BlockKawaki extends Block
     {
         BlockState expandedState = worldIn.getBlockState(pos.offset(state.get(FACING)));
         boolean shouldBeLong = expandedState.isSolidSide(worldIn, pos.offset(state.get(FACING)), state.get(FACING).getOpposite())
-        || expandedState.matchesBlock(BlockRegistryHandler.RED_KAWAKI.get())
-        || expandedState.matchesBlock(BlockRegistryHandler.RED_KUMIMONO.get());
+        || canConnect(state, expandedState);
         if (state.get(ISLONG) != shouldBeLong)
         {
             worldIn.setBlockState(pos, state.with(ISLONG, shouldBeLong));
@@ -106,4 +117,7 @@ public class BlockKawaki extends Block
             }
         }
     }
+
+    @Override
+    public AshiharaWoodTypes getType() {return type;}
 }

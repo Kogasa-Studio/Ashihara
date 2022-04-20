@@ -83,11 +83,13 @@ public class BlockRegistryHandler {
     public static final RegistryObject<Block> MAPLE_FENCE_GATE = BLOCKS.register("maple_fence_gate", SimpleFenceGateBlock::new);
     public static final RegistryObject<Block> MAPLE_BUTTON = BLOCKS.register("maple_button", SimpleButtonBlock::new);
 
-    public static final RegistryObject<Block> RED_ADVANCED_FENCE = BLOCKS.register("advanced_red_fence", () -> new BlockAdvancedFence(AshiharaWoodTypes.RED));
-    public static final RegistryObject<Block> GOLD_FENCE_DECORATION = BLOCKS.register("gold_fence_decoration", BlockFenceDecoration::new);
+    public static final RegistryObject<Block> RED_ADVANCED_FENCE = BLOCKS.register("advanced_red_fence", () -> new BlockAdvancedFence(AshiharaWoodTypes.RED) {@Override protected Block getExpansion() {return RED_FENCE_EXPANSION.get();}});
     public static final RegistryObject<Block> RED_FENCE_EXPANSION = BLOCKS.register("red_fence_expansion", () -> new BlockFenceExpansion(AshiharaWoodTypes.RED));
-    public static final RegistryObject<Block> RED_KUMIMONO = BLOCKS.register("red_kumimono", BlockKumimono::new);
-    public static final RegistryObject<Block> RED_KAWAKI = BLOCKS.register("red_kawaki", BlockKawaki::new);
+    public static final RegistryObject<Block> SPRUCE_ADVANCED_FENCE = BLOCKS.register("advanced_spruce_fence", () -> new BlockAdvancedFence(AshiharaWoodTypes.SPRUCE) {@Override protected Block getExpansion() {return SPRUCE_FENCE_EXPANSION.get();}});
+    public static final RegistryObject<Block> SPRUCE_FENCE_EXPANSION = BLOCKS.register("spruce_fence_expansion", () -> new BlockFenceExpansion(AshiharaWoodTypes.SPRUCE));
+    public static final RegistryObject<Block> GOLD_FENCE_DECORATION = BLOCKS.register("gold_fence_decoration", BlockFenceDecoration::new);
+    public static final RegistryObject<Block> RED_KUMIMONO = BLOCKS.register("red_kumimono", () -> new BlockKumimono(AshiharaWoodTypes.RED));
+    public static final RegistryObject<Block> RED_KAWAKI = BLOCKS.register("red_kawaki", () -> new BlockKawaki(AshiharaWoodTypes.RED));
 
     public static final RegistryObject<FlowingFluidBlock> SOY_MILK_BLOCK = BLOCKS.register("soy_milk", () ->
         new FlowingFluidBlock(FluidRegistryHandler.SOY_MILK, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()));

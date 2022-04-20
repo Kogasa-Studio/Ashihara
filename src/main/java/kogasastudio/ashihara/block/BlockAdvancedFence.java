@@ -3,6 +3,7 @@ package kogasastudio.ashihara.block;
 import kogasastudio.ashihara.utils.AshiharaWoodTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
@@ -74,6 +75,8 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
 
         return fromState.isSolidSide(world, pos.offset(direction), direction.getOpposite()) || expanded;
     }
+
+    protected Block getExpansion() {return Blocks.AIR;}
 
     @Override
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
@@ -265,10 +268,11 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
         }
         else if (state.get(COLUMN).equals(ColumnType.CORE) && stack.getItem().equals(Items.STICK) && (player.isCreative() || stack.getCount() >= 2))
         {
+            if (!(this.getExpansion() instanceof BlockFenceExpansion)) return ActionResultType.PASS;
             Direction direction = hit.getFace();
             if (direction.getAxis().isHorizontal() && worldIn.getBlockState(pos.offset(direction)).isAir())
             {
-                BlockState exp = BlockRegistryHandler.RED_FENCE_EXPANSION.get().getDefaultState();
+                BlockState exp = this.getExpansion().getDefaultState();
 
                 worldIn.setBlockState(pos.offset(direction), exp.with(FACING, direction));
                 worldIn.playSound(player, pos, SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);

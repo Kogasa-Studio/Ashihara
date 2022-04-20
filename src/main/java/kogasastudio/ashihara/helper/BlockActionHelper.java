@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.helper;
 
+import kogasastudio.ashihara.block.IVariable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
@@ -183,5 +184,21 @@ public class BlockActionHelper
             case EAST:return -90;
         }
         return 0;
+    }
+
+    public static boolean typeMatches(BlockState state, BlockState toBeChecked)
+    {
+        return state.getBlock() instanceof IVariable<?> && toBeChecked.getBlock() instanceof IVariable<?>
+        && ((IVariable<?>) state.getBlock()).getType().equals(((IVariable<?>) toBeChecked.getBlock()).getType());
+    }
+
+    public static boolean typeAndClassMatches(BlockState state, BlockState toBeChecked, Class<?>... clazzes)
+    {
+        if (!typeMatches(state, toBeChecked)) return false;
+        for (Class<?> clazz : clazzes)
+        {
+            if (!(toBeChecked.getBlock().getClass().equals(clazz))) return false;
+        }
+        return true;
     }
 }
