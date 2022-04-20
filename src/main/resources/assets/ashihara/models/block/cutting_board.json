@@ -8,14 +8,50 @@
 	"elements": [
 		{
 			"from": [1, 0, 2],
+			"to": [13, 1, 14],
+			"faces": {
+				"north": {"uv": [2, 12, 14, 13], "texture": "#0"},
+				"east": {"uv": [1, 12, 13, 13], "texture": "#0"},
+				"south": {"uv": [2, 12, 14, 13], "texture": "#0"},
+				"west": {"uv": [1, 12, 13, 13], "texture": "#0"},
+				"up": {"uv": [2, 0, 14, 12], "rotation": 180, "texture": "#0"},
+				"down": {"uv": [2, 0, 14, 12], "rotation": 180, "texture": "#0"}
+			}
+		},
+		{
+			"from": [13, 0, 2],
+			"to": [14, 1, 6.5],
+			"faces": {
+				"north": {"uv": [2, 12, 3, 13], "texture": "#0"},
+				"east": {"uv": [1, 12, 5, 13], "texture": "#0"},
+				"south": {"uv": [2, 12, 3, 13], "texture": "#0"},
+				"west": {"uv": [1, 12, 5, 13], "texture": "#0"},
+				"up": {"uv": [1, 8.5, 2, 13], "rotation": 180, "texture": "#0"},
+				"down": {"uv": [1, 8.5, 2, 13], "texture": "#0"}
+			}
+		},
+		{
+			"from": [14, 0, 2],
 			"to": [15, 1, 14],
 			"faces": {
-				"north": {"uv": [0, 12, 14, 13], "texture": "#0"},
-				"east": {"uv": [1, 12, 13, 13], "texture": "#0"},
-				"south": {"uv": [0, 12, 14, 13], "texture": "#0"},
-				"west": {"uv": [1, 12, 13, 13], "texture": "#0"},
-				"up": {"uv": [0, 0, 14, 12], "texture": "#0"},
-				"down": {"uv": [0, 0, 14, 12], "texture": "#0"}
+				"north": {"uv": [0, 12, 1, 13], "texture": "#0"},
+				"east": {"uv": [1, 12, 5, 13], "texture": "#0"},
+				"south": {"uv": [0, 12, 1, 13], "texture": "#0"},
+				"west": {"uv": [1, 12, 5, 13], "texture": "#0"},
+				"up": {"uv": [0, 0, 1, 12], "rotation": 180, "texture": "#0"},
+				"down": {"uv": [0, 0, 1, 12], "texture": "#0"}
+			}
+		},
+		{
+			"from": [13, 0, 9.5],
+			"to": [14, 1, 14],
+			"faces": {
+				"north": {"uv": [2, 12, 3, 13], "texture": "#0"},
+				"east": {"uv": [1, 12, 5, 13], "texture": "#0"},
+				"south": {"uv": [2, 12, 3, 13], "texture": "#0"},
+				"west": {"uv": [1, 12, 5, 13], "texture": "#0"},
+				"up": {"uv": [1, 0, 2, 4.5], "rotation": 180, "texture": "#0"},
+				"down": {"uv": [1, 0, 2, 4.5], "texture": "#0"}
 			}
 		}
 	]

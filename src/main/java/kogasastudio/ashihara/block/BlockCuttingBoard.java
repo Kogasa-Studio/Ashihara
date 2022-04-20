@@ -34,15 +34,15 @@ public class BlockCuttingBoard extends Block
         );
     }
 
-    public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {builder.add(AXIS);}
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {builder.add(FACING);}
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        return this.getDefaultState().with(AXIS, context.getPlacementHorizontalFacing().getAxis());
+        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
     }
 
     @Override
@@ -61,7 +61,7 @@ public class BlockCuttingBoard extends Block
         VoxelShape x = makeCuboidShape(2.0d, 0.0d, 1.0d, 14.0d, 1.0d, 15.0d);
         VoxelShape z = makeCuboidShape(1.0d, 0.0d, 2.0d, 15.0d, 1.0d, 14.0d);
 
-        return state.get(AXIS).equals(Direction.Axis.X) ? x : z;
+        return state.get(FACING).getAxis().equals(Direction.Axis.X) ? x : z;
     }
 
     @Override
