@@ -48,13 +48,12 @@ public class BlockKawaki extends Block implements IVariable<AshiharaWoodTypes>
         World worldIn = context.getWorld();
         BlockPos posIn = context.getPos();
         Direction facingIn = context.getPlacementHorizontalFacing();
-        BlockState state = worldIn.getBlockState(posIn);
         BlockState facingState = worldIn.getBlockState(posIn.offset(facingIn.getOpposite()));
 
         return this.getDefaultState()
         .with(FACING, facingIn.getOpposite())
-        .with(ISLONG, (canConnect(this.getDefaultState(), facingState)
-            || facingState.isSolidSide(worldIn, posIn.offset(state.get(FACING)), state.get(FACING).getOpposite())));
+        .with(ISLONG, facingState.isSolidSide(worldIn, posIn.offset(facingIn), facingIn.getOpposite())
+            || canConnect(this.getDefaultState(), facingState));
     }
 
     private boolean canConnect(BlockState state, BlockState toCheck)

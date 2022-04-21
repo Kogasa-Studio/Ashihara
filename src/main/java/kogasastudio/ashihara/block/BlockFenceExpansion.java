@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block;
 
+import kogasastudio.ashihara.helper.BlockActionHelper;
 import kogasastudio.ashihara.utils.AshiharaWoodTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -22,8 +23,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-
-import static kogasastudio.ashihara.utils.AshiharaTags.ADVANCED_FENCES;
 
 public class BlockFenceExpansion extends Block implements IVariable<AshiharaWoodTypes>
 {
@@ -55,7 +54,8 @@ public class BlockFenceExpansion extends Block implements IVariable<AshiharaWood
     @Override
     public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
     {
-        return worldIn.getBlockState(pos.offset(state.get(FACING).getOpposite())).getBlock().isIn(ADVANCED_FENCES);
+        BlockState connectedState = worldIn.getBlockState(pos.offset(state.get(FACING).getOpposite()));
+        return BlockActionHelper.typeMatches(state, connectedState) && connectedState.getBlock() instanceof BlockAdvancedFence;
     }
 
     @Override
