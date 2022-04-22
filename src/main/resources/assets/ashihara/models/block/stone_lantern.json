@@ -1,6 +1,6 @@
 {
 	"credit": "Made with Blockbench",
-	"parent": "minecraft:block/block",
+	"parent": "ashihara:block/double_block",
 	"texture_size": [32, 32],
 	"textures": {
 		"0": "ashihara:block/lantern_stone",

@@ -1,6 +1,6 @@
 {
 	"credit": "Made with Blockbench",
-	"parent": "minecraft:block/block",
+	"parent": "ashihara:block/double_block",
 	"ambientocclusion": false,
 	"texture_size": [8, 8],
 	"textures": {
