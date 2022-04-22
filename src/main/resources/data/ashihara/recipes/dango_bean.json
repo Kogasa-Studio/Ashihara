@@ -3,7 +3,7 @@
   "ingredients":
   [
     {"item": "ashihara:mochi"},
-    {"item": "ashihara:bamboo_material"},
+    {"item": "ashihara:bamboo_stick"},
     {"item": "ashihara:soy_bean"}
   ],
   "result": {"item": "ashihara:dango_bean", "count": 1}

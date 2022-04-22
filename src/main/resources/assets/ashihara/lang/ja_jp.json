@@ -144,7 +144,7 @@
   "item.ashihara.dirt_ball_don.projectile": "§d§l§o これ何...",
   "item.ashihara.dirt_ball_don.projectile_1": "§9§l§o丼でしょか...ならばこちは食べるいいかなぁ...",
   "tooltip.ashihara.pail_display": "§e§l樽: §n",
-  "tooltip.ashihara.pail_empty_message": "    §7樽が空です",
-  "tooltip.ashihara.pail_fluid_existence": "    §b液体: ",
+  "tooltip.ashihara.pail_empty_message": "    §7樽はまだ空です",
+  "tooltip.ashihara.pail_fluid_existence": "    §7液体: ",
   "tooltip.ashihara.fluid_existence": "液体: "
 }

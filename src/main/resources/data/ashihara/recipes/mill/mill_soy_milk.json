@@ -3,7 +3,7 @@
   "group": "test_group",
   "ingredients":
   [
-    {"item": "ashihara:soy_bean"}
+    {"item": "ashihara:bean_powder"}
   ],
   "costs": [2],
   "fluids":

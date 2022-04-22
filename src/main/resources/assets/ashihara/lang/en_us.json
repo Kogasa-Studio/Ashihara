@@ -145,6 +145,6 @@
   "item.ashihara.dirt_ball_don.projectile_1": "§9§l§oI don't know why something like this exists",
   "tooltip.ashihara.pail_display": "§e§lPail: §n",
   "tooltip.ashihara.pail_empty_message": "    §7The pail is empty now",
-  "tooltip.ashihara.pail_fluid_existence": "    §bFluid: ",
+  "tooltip.ashihara.pail_fluid_existence": "    §7Fluid: ",
   "tooltip.ashihara.fluid_existence": "Fluid: "
 }

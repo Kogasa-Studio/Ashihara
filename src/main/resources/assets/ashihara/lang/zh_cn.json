@@ -145,6 +145,6 @@
   "item.ashihara.dirt_ball_don.projectile_1": "§9§l§o§m别把这事告诉4z（",
   "tooltip.ashihara.pail_display": "§e§l提桶: §n",
   "tooltip.ashihara.pail_empty_message": "    §7桶现在是空的",
-  "tooltip.ashihara.pail_fluid_existence": "    §b流体: ",
+  "tooltip.ashihara.pail_fluid_existence": "    §7流体: ",
   "tooltip.ashihara.fluid_existence": "流体: "
 }
