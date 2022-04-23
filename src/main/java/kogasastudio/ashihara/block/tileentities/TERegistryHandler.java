@@ -23,7 +23,7 @@ public class TERegistryHandler
     () -> TileEntityType.Builder.create
     (
         MortarTE::new,
-        BlockRegistryHandler.BLOCK_MORTAR.get()
+        BlockRegistryHandler.MORTAR.get()
     ).build(null));
 
     public static final RegistryObject<TileEntityType<MillTE>> MILL_TE = TILE_ENTITIES.register("mill_tileentity",

@@ -20,35 +20,38 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class BlockRegistryHandler {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Ashihara.MODID);
 
-    public static final RegistryObject<Block> BLOCK_WATER_FIELD = BLOCKS.register("water_field", BlockWaterField::new);
-    public static final RegistryObject<Block> BLOCK_RICE_CROP = BLOCKS.register("rice_crop", BlockRiceCrop::new);
-    public static final RegistryObject<Block> CHERRY_BLOSSOM = BLOCKS.register("cherry_blossom", () -> new AbstractFallingLeavesBlock(5, false) {@Override protected Block getFallenBlock() {return FALLEN_SAKURA.get();}@Override protected GenericParticleType getParticle() {return ParticleRegistryHandler.SAKURA.get();}});
-    public static final RegistryObject<Block> MAPLE_LEAVES_RED = BLOCKS.register("maple_leaves_red", () -> new AbstractFallingLeavesBlock() {@Override protected Block getFallenBlock() {return FALLEN_MAPLE_LEAVES_RED.get();}@Override protected GenericParticleType getParticle() {return ParticleRegistryHandler.MAPLE_LEAF.get();}});
-    public static final RegistryObject<Block> BLOCK_JINJA_LANTERN = BLOCKS.register("jinja_lantern", BlockJinjaLantern::new);
-    public static final RegistryObject<Block> BLOCK_DIRT_DEPRESSION = BLOCKS.register("dirt_depression", BlockDirtDepression::new);
-    public static final RegistryObject<Block> BLOCK_TETSUSENCHI = BLOCKS.register("tetsusenchi", BlockTetsusenchi::new);
+    public static final RegistryObject<Block> WATER_FIELD = BLOCKS.register("water_field", BlockWaterField::new);
+    public static final RegistryObject<Block> RICE_CROP = BLOCKS.register("rice_crop", BlockRiceCrop::new);
+    public static final RegistryObject<Block> DIRT_DEPRESSION = BLOCKS.register("dirt_depression", BlockDirtDepression::new);
+    public static final RegistryObject<Block> TETSUSENCHI = BLOCKS.register("tetsusenchi", BlockTetsusenchi::new);
     public static final RegistryObject<Block> CHERRY_SAPLING = BLOCKS.register("cherry_sapling", () -> new SaplingBlock(new CherryBlossomTree(), AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.PLANT)));
     public static final RegistryObject<Block> RED_MAPLE_SAPLING = BLOCKS.register("red_maple_sapling", () -> new SaplingBlock(new RedMapleTree(), AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.PLANT)));
-    public static final RegistryObject<Block> BLOCK_MORTAR = BLOCKS.register("mortar", BlockMortar::new);
-    public static final RegistryObject<Block> FALLEN_SAKURA = BLOCKS.register("fallen_sakura", AbstractFallenLeavesBlock::new);
-    public static final RegistryObject<Block> FALLEN_MAPLE_LEAVES_RED = BLOCKS.register("fallen_maple_leaves_red", AbstractFallenLeavesBlock::new);
-    public static final RegistryObject<Block> BLOCK_IMMATURE_RICE = BLOCKS.register("immature_rice", BlockImmatureRiceCrop::new);
+    public static final RegistryObject<Block> MORTAR = BLOCKS.register("mortar", BlockMortar::new);
+    public static final RegistryObject<Block> IMMATURE_RICE = BLOCKS.register("immature_rice", BlockImmatureRiceCrop::new);
     public static final RegistryObject<Block> POTTED_CHERRY_SAPLING = BLOCKS.register("potted_cherry_sapling", () -> new FlowerPotBlock(BlockRegistryHandler.CHERRY_SAPLING.get(), AbstractBlock.Properties.create(Material.MISCELLANEOUS).zeroHardnessAndResistance().notSolid()));
     public static final RegistryObject<Block> POTTED_RED_MAPLE_SAPLING = BLOCKS.register("potted_red_maple_sapling", () -> new FlowerPotBlock(BlockRegistryHandler.RED_MAPLE_SAPLING.get(), AbstractBlock.Properties.create(Material.MISCELLANEOUS).zeroHardnessAndResistance().notSolid()));
-    public static final RegistryObject<Block> TATAMI = BLOCKS.register("tatami", BlockTatami::new);
-    public static final RegistryObject<Block> LANTERN_LONG_WHITE = BLOCKS.register("lantern_long_white", BlockHangingLanternLong::new);
-    public static final RegistryObject<Block> LANTERN_LONG_RED = BLOCKS.register("lantern_long_red", BlockHangingLanternLong::new);
     public static final RegistryObject<Block> CHRYSANTHEMUM = BLOCKS.register("chrysanthemum", BlockChrysanthemumBush::new);
-    public static final RegistryObject<Block> BLOCK_REED = BLOCKS.register("reed", BlockReed::new);
-    public static final RegistryObject<Block> BLOCK_SHORTER_REED = BLOCKS.register("shorter_reed", BlockShorterReed::new);
+    public static final RegistryObject<Block> REED = BLOCKS.register("reed", BlockReed::new);
+    public static final RegistryObject<Block> SHORTER_REED = BLOCKS.register("shorter_reed", BlockShorterReed::new);
     public static final RegistryObject<Block> MILL = BLOCKS.register("mill", BlockMill::new);
-    public static final RegistryObject<Block> STONE_LANTERN = BLOCKS.register("stone_lantern", BlockStoneLantern::new);
     public static final RegistryObject<Block> HYDRANGEA_BUSH = BLOCKS.register("hydrangea_bush", () -> new BlockHydrangeaBush(false));
     public static final RegistryObject<Block> PAIL = BLOCKS.register("pail", BlockPail::new);
-    public static final RegistryObject<Block> CANDLE = BLOCKS.register("candle", BlockCandle::new);
     public static final RegistryObject<Block> TEA_TREE = BLOCKS.register("tea_tree", BlockTeaTree::new);
     public static final RegistryObject<Block> MEAL_TABLE = BLOCKS.register("meal_table", BlockMealTable::new);
     public static final RegistryObject<Block> CUTTING_BOARD = BLOCKS.register("cutting_board", BlockCuttingBoard::new);
+
+    //建筑
+    public static final RegistryObject<Block> CHERRY_BLOSSOM = BLOCKS.register("cherry_blossom", () -> new AbstractFallingLeavesBlock(5, false) {@Override protected Block getFallenBlock() {return FALLEN_SAKURA.get();}@Override protected GenericParticleType getParticle() {return ParticleRegistryHandler.SAKURA.get();}});
+    public static final RegistryObject<Block> MAPLE_LEAVES_RED = BLOCKS.register("maple_leaves_red", () -> new AbstractFallingLeavesBlock() {@Override protected Block getFallenBlock() {return FALLEN_MAPLE_LEAVES_RED.get();}@Override protected GenericParticleType getParticle() {return ParticleRegistryHandler.MAPLE_LEAF.get();}});
+    public static final RegistryObject<Block> FALLEN_SAKURA = BLOCKS.register("fallen_sakura", AbstractFallenLeavesBlock::new);
+    public static final RegistryObject<Block> FALLEN_MAPLE_LEAVES_RED = BLOCKS.register("fallen_maple_leaves_red", AbstractFallenLeavesBlock::new);
+    public static final RegistryObject<Block> JINJA_LANTERN = BLOCKS.register("jinja_lantern", BlockJinjaLantern::new);
+    public static final RegistryObject<Block> STONE_LANTERN = BLOCKS.register("stone_lantern", BlockStoneLantern::new);
+    public static final RegistryObject<Block> LANTERN_LONG_WHITE = BLOCKS.register("lantern_long_white", BlockHangingLanternLong::new);
+    public static final RegistryObject<Block> LANTERN_LONG_RED = BLOCKS.register("lantern_long_red", BlockHangingLanternLong::new);
+    public static final RegistryObject<Block> CANDLE = BLOCKS.register("candle", BlockCandle::new);
+    public static final RegistryObject<Block> TATAMI = BLOCKS.register("tatami", BlockTatami::new);
+    public static final RegistryObject<Block> OAK_SHOUJI_BEAM_MUD = BLOCKS.register("oak_shouji_beam_mud", BlockShoujiBeam::new);
 
     //作物
     public static final RegistryObject<Block> SOY_BEANS = BLOCKS.register("soy_beans", () -> new AbstractCropAge7Pickable(7, 3) {@Override protected IItemProvider getSeedsItem() {return ItemRegistryHandler.SOY_BEAN.get();}});

@@ -45,7 +45,7 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
     public static final BooleanProperty ISLINKEDTOSOURCE = BooleanProperty.create("haswaterinside");
     public static final IntegerProperty LEVEL = IntegerProperty.create("level",4,8);
 
-    private boolean matchesWaterField(BlockState state) {return state.matchesBlock(BlockRegistryHandler.BLOCK_WATER_FIELD.get());}
+    private boolean matchesWaterField(BlockState state) {return state.matchesBlock(BlockRegistryHandler.WATER_FIELD.get());}
 
     private boolean hasExit(World worldIn, BlockPos pos)
     {
@@ -155,7 +155,7 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) //那一大堆判定
     {
         BlockState fromState = worldIn.getBlockState(fromPos);
-        if (!fromState.matchesBlock(BlockRegistryHandler.BLOCK_RICE_CROP.get()))
+        if (!fromState.matchesBlock(BlockRegistryHandler.RICE_CROP.get()))
         {
             boolean watered = fourWaysFluidsIncludesWater(worldIn, pos);
             if (worldIn.getFluidState(pos.up()).getFluid().equals(WATER)) watered = true;

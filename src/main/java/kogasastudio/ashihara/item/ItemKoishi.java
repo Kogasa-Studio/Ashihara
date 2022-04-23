@@ -56,7 +56,7 @@ public class ItemKoishi extends Item
                 }
                 return ActionResultType.SUCCESS;
             }
-            else if (blockState.getBlock() == BlockRegistryHandler.BLOCK_WATER_FIELD.get())
+            else if (blockState.getBlock() == BlockRegistryHandler.WATER_FIELD.get())
             {
                 worldIn.playSound(player, pos, SoundEvents.BLOCK_BAMBOO_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 worldIn.setBlockState(pos, blockState.with(BlockWaterField.LEVEL, 6));

@@ -53,13 +53,13 @@ public class ClientEventSubscribeHandler
     @SubscribeEvent
     public static void onRenderTypeSetup(FMLClientSetupEvent event)
     {
-        setRenderType(BlockRegistryHandler.BLOCK_RICE_CROP.get(), RenderType.getCutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.BLOCK_IMMATURE_RICE.get(), RenderType.getCutoutMipped(), event);
+        setRenderType(BlockRegistryHandler.RICE_CROP.get(), RenderType.getCutoutMipped(), event);
+        setRenderType(BlockRegistryHandler.IMMATURE_RICE.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.CHERRY_BLOSSOM.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.MAPLE_LEAVES_RED.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.CHERRY_SAPLING.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.RED_MAPLE_SAPLING.get(), RenderType.getCutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.BLOCK_JINJA_LANTERN.get(), RenderType.getCutoutMipped(), event);
+        setRenderType(BlockRegistryHandler.JINJA_LANTERN.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.STONE_LANTERN.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.FALLEN_SAKURA.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.FALLEN_MAPLE_LEAVES_RED.get(), RenderType.getCutoutMipped(), event);
@@ -68,8 +68,8 @@ public class ClientEventSubscribeHandler
         setRenderType(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.LANTERN_LONG_RED.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.CHRYSANTHEMUM.get(), RenderType.getCutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.BLOCK_REED.get(), RenderType.getCutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.BLOCK_SHORTER_REED.get(), RenderType.getCutoutMipped(), event);
+        setRenderType(BlockRegistryHandler.REED.get(), RenderType.getCutoutMipped(), event);
+        setRenderType(BlockRegistryHandler.SHORTER_REED.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.HYDRANGEA_BUSH.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.TEA_TREE.get(), RenderType.getCutoutMipped(), event);
         setRenderType(BlockRegistryHandler.GOLD_FENCE_DECORATION.get(), RenderType.getCutoutMipped(), event);
@@ -142,7 +142,7 @@ public class ClientEventSubscribeHandler
 //        event.getBlockColors().register
 //                (
 //                    (state, reader, pos, tintIndex) ->
-//                    pos != null && reader != null ? BiomeColors.getWaterColor(reader, pos) : -1, BlockExampleContainer.BLOCK_WATER_FIELD
+//                    pos != null && reader != null ? BiomeColors.getWaterColor(reader, pos) : -1, BlockExampleContainer.WATER_FIELD
 //                );
 //    }
 }
