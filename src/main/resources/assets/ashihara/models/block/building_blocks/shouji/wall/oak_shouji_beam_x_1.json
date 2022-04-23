@@ -1,0 +1,23 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"0": "ashihara:block/woodcrafts/oak_fence",
+		"particle": "ashihara:block/woodcrafts/oak_fence"
+	},
+	"elements": [
+		{
+			"from": [0, 12, 6],
+			"to": [16, 16, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 2, 8]},
+			"faces": {
+				"north": {"uv": [6, 0, 10, 16], "rotation": 90, "texture": "#0"},
+				"east": {"uv": [10, 0, 14, 4], "texture": "#0"},
+				"south": {"uv": [6, 0, 10, 16], "rotation": 90, "texture": "#0"},
+				"west": {"uv": [10, 0, 14, 4], "texture": "#0"},
+				"up": {"uv": [6, 0, 10, 16], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [6, 0, 10, 16], "rotation": 270, "texture": "#0"}
+			}
+		}
+	]
+}
