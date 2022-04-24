@@ -2,6 +2,7 @@
   "multipart":
   [
     {"when": {"sealed": "true"}, "apply": {"model": "ashihara:block/stone_lantern_glass"}},
-    {"when": {"half": "lower"},"apply": {"model": "ashihara:block/stone_lantern"}}
+    {"when": {"half": "lower", "mossy": "false"},"apply": {"model": "ashihara:block/stone_lantern"}},
+    {"when": {"half": "lower", "mossy": "true"},"apply": {"model": "ashihara:block/mossy_stone_lantern"}}
   ]
 }

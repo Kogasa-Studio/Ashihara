@@ -42,16 +42,17 @@ public class BlockStoneLantern extends BlockDoubleLantern
             .sound(SoundType.STONE)
             .setLightLevel(getLightValueLit(15))
         );
-        this.setDefaultState(this.getDefaultState().with(SEALED, false));
+        this.setDefaultState(this.getDefaultState().with(SEALED, false).with(MOSSY, false));
     }
 
     public static final BooleanProperty SEALED = BooleanProperty.create("sealed");
+    public static final BooleanProperty MOSSY = BooleanProperty.create("mossy");
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
         super.fillStateContainer(builder);
-        builder.add(SEALED);
+        builder.add(SEALED, MOSSY);
     }
 
     @Override
@@ -140,5 +141,19 @@ public class BlockStoneLantern extends BlockDoubleLantern
         VoxelShape UPPER = VoxelShapes.or(v3, v4, v5);
         if (state.get(HALF) == DoubleBlockHalf.LOWER) {return LOWER;}
         else {return UPPER;}
+    }
+
+    @Override
+    public void fillWithRain(World worldIn, BlockPos pos)
+    {
+        BlockState state = worldIn.getBlockState(pos);
+        if (!state.matchesBlock(BlockRegistryHandler.STONE_LANTERN.get())) return;
+        Random random = worldIn.getRandom();
+        if (random.nextInt(10) <= 5)
+        {
+            BlockPos offset = state.get(HALF).equals(DoubleBlockHalf.LOWER) ? pos.up() : pos.down();
+            worldIn.setBlockState(pos, worldIn.getBlockState(pos).with(MOSSY, true));
+            worldIn.setBlockState(offset, worldIn.getBlockState(offset).with(MOSSY, true));
+        }
     }
 }

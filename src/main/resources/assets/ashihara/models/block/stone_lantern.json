@@ -3,8 +3,8 @@
 	"parent": "ashihara:block/double_block",
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "ashihara:block/lantern_stone",
-		"particle": "ashihara:block/lantern_stone"
+		"0": "ashihara:block/stone_lantern",
+		"particle": "ashihara:block/stone_lantern"
 	},
 	"elements": [
 		{
