@@ -1,5 +1,5 @@
 {
-	"parent": "ashihara:block/advanced_fence/part_expansion",
+	"parent": "ashihara:block/building_blocks/advanced_fence/part_expansion",
 	"textures":
 	{
 		"wood": "ashihara:block/woodcrafts/red_expansion",

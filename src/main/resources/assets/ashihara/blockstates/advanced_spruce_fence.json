@@ -1,12 +1,12 @@
 {
   "multipart":
   [
-    {"when": {"column": "core"}, "apply": {"model": "ashihara:block/advanced_fence/advanced_spruce_fence/arf_column_core"}},
-    {"when": {"column": "mid"}, "apply": {"model": "ashihara:block/advanced_fence/advanced_spruce_fence/arf_column_mid"}},
-    {"when": {"column": "short"}, "apply": {"model": "ashihara:block/advanced_fence/advanced_spruce_fence/arf_column_short"}},
-    {"when": {"north": "true"}, "apply": {"model": "ashihara:block/advanced_fence/advanced_spruce_fence/arf_part"}},
-    {"when": {"east": "true"}, "apply": {"model": "ashihara:block/advanced_fence/advanced_spruce_fence/arf_part", "y": 90}},
-    {"when": {"south": "true"}, "apply": {"model": "ashihara:block/advanced_fence/advanced_spruce_fence/arf_part", "y": 180}},
-    {"when": {"west": "true"}, "apply": {"model": "ashihara:block/advanced_fence/advanced_spruce_fence/arf_part", "y": 270}}
+    {"when": {"column": "core"}, "apply": {"model": "ashihara:block/building_blocks/advanced_fence/advanced_spruce_fence/arf_column_core"}},
+    {"when": {"column": "mid"}, "apply": {"model": "ashihara:block/building_blocks/advanced_fence/advanced_spruce_fence/arf_column_mid"}},
+    {"when": {"column": "short"}, "apply": {"model": "ashihara:block/building_blocks/advanced_fence/advanced_spruce_fence/arf_column_short"}},
+    {"when": {"north": "true"}, "apply": {"model": "ashihara:block/building_blocks/advanced_fence/advanced_spruce_fence/arf_part"}},
+    {"when": {"east": "true"}, "apply": {"model": "ashihara:block/building_blocks/advanced_fence/advanced_spruce_fence/arf_part", "y": 90}},
+    {"when": {"south": "true"}, "apply": {"model": "ashihara:block/building_blocks/advanced_fence/advanced_spruce_fence/arf_part", "y": 180}},
+    {"when": {"west": "true"}, "apply": {"model": "ashihara:block/building_blocks/advanced_fence/advanced_spruce_fence/arf_part", "y": 270}}
   ]
 }

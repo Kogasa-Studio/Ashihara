@@ -1,8 +1,8 @@
 {
   "multipart":
   [
-    {"when": {"orb": "true"}, "apply": {"model": "ashihara:block/advanced_fence/decoration/gold_fence_orb"}},
-    {"when": {"orb": "false", "axis": "x"}, "apply": {"model": "ashihara:block/advanced_fence/decoration/gold_fence_decoration"}},
-    {"when": {"orb": "false", "axis": "z"}, "apply": {"model": "ashihara:block/advanced_fence/decoration/gold_fence_decoration", "y": 90}}
+    {"when": {"orb": "true"}, "apply": {"model": "ashihara:block/building_blocks/advanced_fence/decoration/gold_fence_orb"}},
+    {"when": {"orb": "false", "axis": "x"}, "apply": {"model": "ashihara:block/building_blocks/advanced_fence/decoration/gold_fence_decoration"}},
+    {"when": {"orb": "false", "axis": "z"}, "apply": {"model": "ashihara:block/building_blocks/advanced_fence/decoration/gold_fence_decoration", "y": 90}}
   ]
 }

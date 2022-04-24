@@ -51,6 +51,8 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> TOFU = ITEMS.register("tofu", () -> new EasyFood(4));
     public static final RegistryObject<Item> MOCHI = ITEMS.register("mochi", () -> new EasyFood(3));
     public static final RegistryObject<Item> DAIFUKU = ITEMS.register("daifuku", () -> new EasyFood(5));
+    public static final RegistryObject<Item> DAIFUKU_SAKURA = ITEMS.register("daifuku_sakura", () -> new EasyFood(5));
+    public static final RegistryObject<Item> DAIFUKU_KUSA = ITEMS.register("daifuku_kusa", () -> new EasyFood(5));
     public static final RegistryObject<Item> DANGO = ITEMS.register("dango", () -> new EasyFood(6));
     public static final RegistryObject<Item> DANGO_HANAMIE = ITEMS.register("dango_hanamie", () -> new EasyFood(6));
     public static final RegistryObject<Item> DANGO_BEAN = ITEMS.register("dango_bean", () -> new EasyFood(6));

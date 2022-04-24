@@ -1,24 +1,9 @@
 {
   "variants":
   {
-    "facing=east":
-    {
-      "model": "ashihara:block/lanterns/lantern_long_white",
-      "y": 270
-    },
-    "facing=north":
-    {
-      "model": "ashihara:block/lanterns/lantern_long_white",
-      "y": 180
-    },
-    "facing=south":
-    {
-      "model": "ashihara:block/lanterns/lantern_long_white"
-    },
-    "facing=west":
-    {
-      "model": "ashihara:block/lanterns/lantern_long_white",
-      "y": 90
-    }
+    "facing=east": {"model": "ashihara:block/building_blocks/lanterns/lantern_long_white", "y": 270},
+    "facing=north": {"model": "ashihara:block/building_blocks/lanterns/lantern_long_white", "y": 180},
+    "facing=south": {"model": "ashihara:block/building_blocks/lanterns/lantern_long_white"},
+    "facing=west": {"model": "ashihara:block/building_blocks/lanterns/lantern_long_white", "y": 90}
   }
 }

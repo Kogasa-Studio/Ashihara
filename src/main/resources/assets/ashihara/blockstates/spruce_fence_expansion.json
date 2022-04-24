@@ -1,13 +1,13 @@
 {
   "multipart":
   [
-    {"when": {"facing": "north"}, "apply": {"model": "ashihara:block/advanced_fence/advanced_spruce_fence/arf_part_expansion"}},
-    {"when": {"facing": "east"}, "apply": {"model": "ashihara:block/advanced_fence/advanced_spruce_fence/arf_part_expansion", "y": 90}},
-    {"when": {"facing": "south"}, "apply": {"model": "ashihara:block/advanced_fence/advanced_spruce_fence/arf_part_expansion","y": 180}},
-    {"when": {"facing": "west"}, "apply": {"model": "ashihara:block/advanced_fence/advanced_spruce_fence/arf_part_expansion", "y": 270}},
-    {"when": {"facing": "north", "decoration": "gold"}, "apply": {"model": "ashihara:block/advanced_fence/gold_expansion_decoration"}},
-    {"when": {"facing": "east", "decoration": "gold"}, "apply": {"model": "ashihara:block/advanced_fence/gold_expansion_decoration", "y": 90}},
-    {"when": {"facing": "south", "decoration": "gold"}, "apply": {"model": "ashihara:block/advanced_fence/gold_expansion_decoration","y": 180}},
-    {"when": {"facing": "west", "decoration": "gold"}, "apply": {"model": "ashihara:block/advanced_fence/gold_expansion_decoration", "y": 270}}
+    {"when": {"facing": "north"}, "apply": {"model": "ashihara:block/building_blocks/advanced_fence/advanced_spruce_fence/arf_part_expansion"}},
+    {"when": {"facing": "east"}, "apply": {"model": "ashihara:block/building_blocks/advanced_fence/advanced_spruce_fence/arf_part_expansion", "y": 90}},
+    {"when": {"facing": "south"}, "apply": {"model": "ashihara:block/building_blocks/advanced_fence/advanced_spruce_fence/arf_part_expansion","y": 180}},
+    {"when": {"facing": "west"}, "apply": {"model": "ashihara:block/building_blocks/advanced_fence/advanced_spruce_fence/arf_part_expansion", "y": 270}},
+    {"when": {"facing": "north", "decoration": "gold"}, "apply": {"model": "ashihara:block/building_blocks/advanced_fence/gold_expansion_decoration"}},
+    {"when": {"facing": "east", "decoration": "gold"}, "apply": {"model": "ashihara:block/building_blocks/advanced_fence/gold_expansion_decoration", "y": 90}},
+    {"when": {"facing": "south", "decoration": "gold"}, "apply": {"model": "ashihara:block/building_blocks/advanced_fence/gold_expansion_decoration","y": 180}},
+    {"when": {"facing": "west", "decoration": "gold"}, "apply": {"model": "ashihara:block/building_blocks/advanced_fence/gold_expansion_decoration", "y": 270}}
   ]
 }

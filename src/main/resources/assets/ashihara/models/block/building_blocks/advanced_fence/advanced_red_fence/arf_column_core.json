@@ -1,5 +1,5 @@
 {
-	"parent": "ashihara:block/advanced_fence/part",
+	"parent": "ashihara:block/building_blocks/advanced_fence/column_core",
 	"textures":
 	{
 		"wood": "ashihara:block/woodcrafts/red_fence",

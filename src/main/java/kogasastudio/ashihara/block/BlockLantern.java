@@ -49,7 +49,7 @@ public class BlockLantern extends Block
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) //不明所以地类似注册BS的东西
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(LIT, FACING);
     }
