@@ -53,4 +53,11 @@ public class TERegistryHandler
         CuttingBoardTE::new,
         BlockRegistryHandler.CUTTING_BOARD.get()
     ).build(null));
+
+    public static final RegistryObject<TileEntityType<MealTableTE>> MEAL_TABLE_TE = TILE_ENTITIES.register("meal_table_tileentity",
+    () -> TileEntityType.Builder.create
+    (
+        MealTableTE::new,
+        BlockRegistryHandler.MEAL_TABLE.get()
+    ).build(null));
 }

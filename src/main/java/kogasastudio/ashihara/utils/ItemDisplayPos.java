@@ -4,6 +4,7 @@ import kogasastudio.ashihara.item.IHasCustomModel;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -14,10 +15,11 @@ import static kogasastudio.ashihara.helper.RenderHelper.XTP;
 public class ItemDisplayPos
 {
     public final ItemStackHandler handler;
-    public final int slot;
+    public int slot;
 
     private float[] pos = new float[3];
     private int range = 16;
+    private Direction facing = Direction.NORTH;
 
     public ItemDisplayPos(ItemStackHandler handlerIn, int slotIn)
     {
@@ -35,6 +37,8 @@ public class ItemDisplayPos
 
     public float[] getTranslation() {return this.pos;}
 
+    public Direction getFacing() {return this.facing;}
+
     public float[] getPos(BlockPos posIn)
     {
         float[] pos = new float[3];
@@ -46,15 +50,25 @@ public class ItemDisplayPos
 
     public float getScale() {return XTP(this.range);}
 
-    public CompoundNBT deserializeNBT(CompoundNBT compound)
+    public CompoundNBT serializeNBT(CompoundNBT compound)
     {
-        CompoundNBT items = new CompoundNBT();
         compound.putInt("slotID", this.slot);
         compound.putInt("range", this.range);
+        compound.putString("facing", this.facing.getString());
         compound.putFloat("x", this.pos[0]);
         compound.putFloat("y", this.pos[1]);
         compound.putFloat("z", this.pos[2]);
 
         return compound;
+    }
+
+    public void deserializeNBT(CompoundNBT compound)
+    {
+        this.slot = compound.getInt("slotID");
+        this.range = compound.getInt("range");
+        this.facing = Direction.valueOf(compound.getString("facing"));
+        this.pos[0] = compound.getFloat("x");
+        this.pos[1] = compound.getFloat("y");
+        this.pos[2] = compound.getFloat("z");
     }
 }
