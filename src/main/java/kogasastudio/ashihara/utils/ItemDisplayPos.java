@@ -10,6 +10,8 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
+import java.util.Arrays;
+
 import static kogasastudio.ashihara.helper.RenderHelper.XTP;
 
 public class ItemDisplayPos
@@ -17,14 +19,28 @@ public class ItemDisplayPos
     public final ItemStackHandler handler;
     public int slot;
 
-    private float[] pos = new float[3];
-    private int range = 16;
-    private Direction facing = Direction.NORTH;
+    private int range;
+    private Direction facing;
+    private float[] pos;
 
-    public ItemDisplayPos(ItemStackHandler handlerIn, int slotIn)
+    public ItemDisplayPos(ItemStackHandler handlerIn, int slotIn, int rangeIn, Direction facingIn, float[] posIn)
     {
         this.handler = handlerIn;
         this.slot = slotIn;
+        this.range = rangeIn;
+        this.facing = facingIn;
+        if (posIn.length != 3) posIn = Arrays.copyOfRange(posIn, 0, 2);
+        this.pos = posIn;
+    }
+
+    public ItemDisplayPos(ItemStackHandler handlerIn, int slotIn, int rangeIn, Direction facingIn)
+    {
+        this(handlerIn, slotIn, rangeIn, facingIn, new float[] {0.0f, 0.0f, 0.0f});
+    }
+
+    public ItemDisplayPos(ItemStackHandler handlerIn, int slotIn)
+    {
+        this(handlerIn, slotIn, 16, Direction.NORTH, new float[] {0.0f, 0.0f, 0.0f});
     }
 
     public ItemStack getDisplayStack() {return this.handler.getStackInSlot(this.slot).copy();}
@@ -70,5 +86,10 @@ public class ItemDisplayPos
         this.pos[0] = compound.getFloat("x");
         this.pos[1] = compound.getFloat("y");
         this.pos[2] = compound.getFloat("z");
+    }
+
+    public void applyPos(float[] posIn)
+    {
+        this.pos = posIn;
     }
 }
