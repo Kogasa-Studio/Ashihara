@@ -1,11 +1,18 @@
 package kogasastudio.ashihara.utils;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import kogasastudio.ashihara.item.IHasCustomModel;
-import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.BlockNamedItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
@@ -19,11 +26,11 @@ public class ItemDisplayPos
     public final ItemStackHandler handler;
     public int slot;
 
-    private int range;
+    private float range;
     private Direction facing;
     private float[] pos;
 
-    public ItemDisplayPos(ItemStackHandler handlerIn, int slotIn, int rangeIn, Direction facingIn, float[] posIn)
+    public ItemDisplayPos(ItemStackHandler handlerIn, int slotIn, float rangeIn, Direction facingIn, float[] posIn)
     {
         this.handler = handlerIn;
         this.slot = slotIn;
@@ -51,6 +58,40 @@ public class ItemDisplayPos
         return this.getDisplayStack().getItem() instanceof IHasCustomModel ? (IHasCustomModel) this.getDisplayStack().getItem() : null;
     }
 
+    public boolean hasCustomModel() {return this.getItemCustomModel() != null;}
+
+    public void render(MatrixStack stackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn)
+    {
+        stackIn.push();
+        if (this.getItemCustomModel() != null) this.getItemCustomModel().render(stackIn, bufferIn, combinedLightIn, combinedOverlayIn, this.getDisplayStack().getCount());
+        else if (!this.getDisplayStack().isEmpty())
+        {
+            float[] translation = this.getTranslation();
+            float scale = this.getScale();
+            ItemStack stack = this.getDisplayStack();
+            Direction facing = this.getFacing();
+            boolean isBlock = stack.getItem() instanceof BlockItem && !(stack.getItem() instanceof BlockNamedItem);
+
+//            float tHeight = isBlock ? 3.0f : 1.5f;
+            stackIn.translate(XTP(translation[0]), XTP(translation[1]), XTP(translation[2]));
+            stackIn.scale(scale, scale, scale);
+            if (!isBlock)
+            {
+                stackIn.rotate(Vector3f.XP.rotationDegrees(90.0f));
+                stackIn.rotate(Vector3f.ZP.rotationDegrees(facing.getHorizontalAngle()));
+            }
+            else stackIn.rotate(Vector3f.YP.rotationDegrees(facing.getHorizontalAngle()));
+
+            ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
+            for (int i = 0; i < stack.getCount(); i += 1)
+            {
+                if (i != 0 ) stackIn.translate(XTP(0.0f), XTP(isBlock ? (1.0f / scale) * 4.0f : 0.0f), XTP(isBlock ? 0.0f : -1.2f));
+                renderer.renderItem(stack, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, stackIn, bufferIn);
+            }
+        }
+        stackIn.pop();
+    }
+
     public float[] getTranslation() {return this.pos;}
 
     public Direction getFacing() {return this.facing;}
@@ -69,8 +110,8 @@ public class ItemDisplayPos
     public CompoundNBT serializeNBT(CompoundNBT compound)
     {
         compound.putInt("slotID", this.slot);
-        compound.putInt("range", this.range);
         compound.putString("facing", this.facing.getString());
+        compound.putFloat("range", this.range);
         compound.putFloat("x", this.pos[0]);
         compound.putFloat("y", this.pos[1]);
         compound.putFloat("z", this.pos[2]);
@@ -88,8 +129,5 @@ public class ItemDisplayPos
         this.pos[2] = compound.getFloat("z");
     }
 
-    public void applyPos(float[] posIn)
-    {
-        this.pos = posIn;
-    }
+    public void applyPos(float[] posIn) {this.pos = posIn;}
 }

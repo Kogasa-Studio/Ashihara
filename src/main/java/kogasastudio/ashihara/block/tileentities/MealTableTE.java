@@ -60,14 +60,17 @@ public class MealTableTE extends AshiharaMachineTE
 
         if (!stack.isEmpty())
         {
+            boolean stateChanged = false;
             for (int i = 0; i < this.content.getSlots(); i += 1)
             {
                 ItemStack contained = this.content.getStackInSlot(i);
                 if (contained.isItemEqual(stack) && contained.getCount() < contained.getMaxStackSize())
                 {
                     stack.shrink(this.content.insertItem(i, stack, false).getCount());
+                    stateChanged = true;
                 }
             }
+            if (stateChanged) this.notifyStateChanged();
         }
     }
 
