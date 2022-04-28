@@ -4,6 +4,7 @@ import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.block.tileentities.TERegistryHandler;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
+import kogasastudio.ashihara.interaction.loot.GLMRegistryHandler;
 import kogasastudio.ashihara.interaction.recipe.RecipeTypesRegistryHandler;
 import kogasastudio.ashihara.inventory.container.ContainerRegistryHandler;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
@@ -50,5 +51,6 @@ public class Ashihara
         ContainerRegistryHandler.CONTAINER_TYPES.register(bus);
         RecipeTypesRegistryHandler.RECIPES.register(bus);
         FluidRegistryHandler.FLUIDS.register(bus);
+        GLMRegistryHandler.MODIFIERS.register(bus);
     }
 }

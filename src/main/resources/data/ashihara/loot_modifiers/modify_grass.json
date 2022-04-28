@@ -1,0 +1,17 @@
+{
+  "type": "ashihara:add_random_stacks",
+  "conditions":
+  [
+    {"condition": "minecraft:random_chance", "chance": 0.2},
+    {"condition": "block_state_property", "block": "minecraft:grass"}
+  ],
+  "roll": 1,
+  "items":
+  [
+    {"item": "ashihara:cucumber"},
+    {"item": "ashihara:sweet_potato"},
+    {"item": "ashihara:paddy"},
+    {"item": "ashihara:tomato"},
+    {"item": "ashihara:soy_bean"}
+  ]
+}
