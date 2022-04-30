@@ -33,16 +33,10 @@ public class BlockActionHelper
      */
     public static boolean fourWaysNeighborsIncludes(World worldIn, BlockPos pos, Block block)
     {
-        boolean flag = false;
-        if
-        (
-                worldIn.getBlockState(pos.north()).getBlock().matchesBlock(block)
-                || worldIn.getBlockState(pos.east()).getBlock().matchesBlock(block)
-                || worldIn.getBlockState(pos.south()).getBlock().matchesBlock(block)
-                || worldIn.getBlockState(pos.west()).getBlock().matchesBlock(block)
-        )
-        {flag = true;}
-        return flag;
+        return worldIn.getBlockState(pos.north()).getBlock().matchesBlock(block)
+            || worldIn.getBlockState(pos.east()).getBlock().matchesBlock(block)
+            || worldIn.getBlockState(pos.south()).getBlock().matchesBlock(block)
+            || worldIn.getBlockState(pos.west()).getBlock().matchesBlock(block);
     }
 
     /**
@@ -54,16 +48,10 @@ public class BlockActionHelper
      */
     public static boolean fourWaysBlocksTagged(World worldIn, BlockPos pos, ITag<Block> tag)
     {
-        boolean flag = false;
-        if
-        (
-                worldIn.getBlockState(pos.north()).isIn(tag)
-                || worldIn.getBlockState(pos.east()).isIn(tag)
-                || worldIn.getBlockState(pos.south()).isIn(tag)
-                || worldIn.getBlockState(pos.west()).isIn(tag)
-        )
-        {flag = true;}
-        return flag;
+        return worldIn.getBlockState(pos.north()).isIn(tag)
+            || worldIn.getBlockState(pos.east()).isIn(tag)
+            || worldIn.getBlockState(pos.south()).isIn(tag)
+            || worldIn.getBlockState(pos.west()).isIn(tag);
     }
 
     /**
@@ -75,16 +63,10 @@ public class BlockActionHelper
      */
     public static boolean fourWaysFluidsTagged(World worldIn, BlockPos pos, ITag<Fluid> fluidTag)
     {
-        boolean flag = false;
-        if
-        (
-                worldIn.getBlockState(pos.north()).getFluidState().isTagged(fluidTag)
-                || worldIn.getBlockState(pos.east()).getFluidState().isTagged(fluidTag)
-                || worldIn.getBlockState(pos.south()).getFluidState().isTagged(fluidTag)
-                || worldIn.getBlockState(pos.west()).getFluidState().isTagged(fluidTag)
-        )
-        {flag = true;}
-        return flag;
+        return worldIn.getBlockState(pos.north()).getFluidState().isTagged(fluidTag)
+            || worldIn.getBlockState(pos.east()).getFluidState().isTagged(fluidTag)
+            || worldIn.getBlockState(pos.south()).getFluidState().isTagged(fluidTag)
+            || worldIn.getBlockState(pos.west()).getFluidState().isTagged(fluidTag);
     }
 
     private static boolean watered(World worldIn, BlockPos pos1)
@@ -101,18 +83,12 @@ public class BlockActionHelper
 
     public static boolean fourWaysFluidsIncludesWater(World worldIn, BlockPos pos)
     {
-        boolean flag = false;
-        if
-        (
-            watered(worldIn, pos.north())
+        //        LOGGER_MAIN.info("检测了水源，水源状态： " + flag + "， 坐标：x：" + pos.getX() + "，z：" + pos.getZ());
+        return watered(worldIn, pos.north())
             || watered(worldIn, pos.east())
             || watered(worldIn, pos.south())
             || watered(worldIn, pos.west())
-            || watered(worldIn, pos.up())
-        )
-        {flag = true;}
-//        LOGGER_MAIN.info("检测了水源，水源状态： " + flag + "， 坐标：x：" + pos.getX() + "，z：" + pos.getZ());
-        return flag;
+            || watered(worldIn, pos.up());
     }
 
     /**
@@ -190,15 +166,5 @@ public class BlockActionHelper
     {
         return state.getBlock() instanceof IVariable<?> && toBeChecked.getBlock() instanceof IVariable<?>
         && ((IVariable<?>) state.getBlock()).getType().equals(((IVariable<?>) toBeChecked.getBlock()).getType());
-    }
-
-    public static boolean typeAndClassMatches(BlockState state, BlockState toBeChecked, Class<?>... clazzes)
-    {
-        if (!typeMatches(state, toBeChecked)) return false;
-        for (Class<?> clazz : clazzes)
-        {
-            if (!(toBeChecked.getBlock().getClass().equals(clazz))) return false;
-        }
-        return true;
     }
 }

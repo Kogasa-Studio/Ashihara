@@ -1,23 +1,8 @@
 {
-	"credit": "Made with Blockbench",
-	"parent": "minecraft:block/block",
-	"texture_size": [32, 32],
-	"textures": {
-		"0": "ashihara:block/woodcrafts/red_kumimono",
-		"particle": "ashihara:block/woodcrafts/red_kumimono"
-	},
-	"elements": [
-		{
-			"from": [5, 6, 0],
-			"to": [11, 16, 16],
-			"faces": {
-				"north": {"uv": [5.5, 5, 8.5, 10], "texture": "#0"},
-				"east": {"uv": [0, 0, 8, 5], "texture": "#0"},
-				"south": {"uv": [5.5, 5, 8.5, 10], "texture": "#0"},
-				"west": {"uv": [0, 0, 8, 5], "texture": "#0"},
-				"up": {"uv": [0, 1, 8, 4], "rotation": 90, "texture": "#0"},
-				"down": {"uv": [0, 1, 8, 4], "rotation": 90, "texture": "#0"}
-			}
-		}
-	]
+  "parent": "ashihara:block/building_blocks/kumimono/kawaki_long_z",
+  "textures":
+  {
+    "wood": "ashihara:block/woodcrafts/red_kumimono",
+    "part": "ashihara:block/woodcrafts/stripped_red_log"
+  }
 }

@@ -1,5 +1,5 @@
 {
-  "parent": "ashihara:block/building_blocks/kumimono/kawaki",
+  "parent": "ashihara:block/building_blocks/kumimono/kumimono",
   "textures":
   {
     "wood": "ashihara:block/woodcrafts/red_kumimono",

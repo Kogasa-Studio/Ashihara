@@ -1,7 +1,7 @@
 {
   "multipart":
   [
-    {"apply": {"model": "ashihara:block/building_blocks/kumimono/kumimono"}},
+    {"apply": {"model": "ashihara:block/building_blocks/kumimono/red_kumimono"}},
     {"when": {"north": "true"}, "apply": {"model": "ashihara:block/building_blocks/kumimono/red_kumimono_beam_n"}},
     {"when": {"east": "true"}, "apply": {"model": "ashihara:block/building_blocks/kumimono/red_kumimono_beam_n", "y": 90}},
     {"when": {"south": "true"}, "apply": {"model": "ashihara:block/building_blocks/kumimono/red_kumimono_beam_s"}},
