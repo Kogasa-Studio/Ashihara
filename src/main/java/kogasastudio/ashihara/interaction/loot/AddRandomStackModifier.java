@@ -21,7 +21,7 @@ import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
 import static net.minecraft.item.ItemStack.EMPTY;
 
 /**
- * 添加一个从给定的物品列表中随机抽取
+ * 添加一个从给定的物品列表中随机抽取指定数量项物品作为战利品表增量的LootModifier
  */
 public class AddRandomStackModifier extends LootModifier
 {
