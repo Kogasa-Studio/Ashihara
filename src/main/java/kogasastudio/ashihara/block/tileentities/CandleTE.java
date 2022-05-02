@@ -49,6 +49,7 @@ public class CandleTE extends AshiharaMachineTE
             posList.clear();
             markDirty();
             worldIn.removeBlock(posIn, false);
+            worldIn.notifyBlockUpdate(posIn, state, state, 3);
             return worldIn.isRemote() ? 0 : i;
         }
         else
