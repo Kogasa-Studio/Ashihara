@@ -75,6 +75,7 @@ public class BlockRegistryHandler {
     public static final RegistryObject<Block> RED_SLAB = BLOCKS.register("red_slab", SimpleSlabBlock::new);
     public static final RegistryObject<Block> RED_FENCE = BLOCKS.register("red_fence", SimpleFenceBlock::new);
     public static final RegistryObject<Block> RED_FENCE_GATE = BLOCKS.register("red_fence_gate", SimpleFenceGateBlock::new);
+    public static final RegistryObject<Block> RED_BUTTON = BLOCKS.register("red_button", SimpleButtonBlock::new);
 
     public static final RegistryObject<Block> MAPLE_LOG = BLOCKS.register("maple_log", () -> new StrippableLogBlock() {@Override public Block getStrippedBlock() {return STRIPPED_MAPLE_LOG.get();}});
     public static final RegistryObject<Block> STRIPPED_MAPLE_LOG = BLOCKS.register("stripped_maple_log", SimpleLogBlock::new);

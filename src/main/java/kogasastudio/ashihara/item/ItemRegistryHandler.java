@@ -143,6 +143,7 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> RED_SLAB = ITEMS.register("red_slab", () -> new BlockItem(BlockRegistryHandler.RED_SLAB.get(), new Item.Properties().group(BUILDING_BLOCKS)));
     public static final RegistryObject<Item> RED_FENCE = ITEMS.register("red_fence", () -> new BlockItem(BlockRegistryHandler.RED_FENCE.get(), new Item.Properties().group(BUILDING_BLOCKS)));
     public static final RegistryObject<Item> RED_FENCE_GATE = ITEMS.register("red_fence_gate", () -> new BlockItem(BlockRegistryHandler.RED_FENCE_GATE.get(), new Item.Properties().group(BUILDING_BLOCKS)));
+    public static final RegistryObject<Item> RED_BUTTON = ITEMS.register("red_button", () -> new BlockItem(BlockRegistryHandler.RED_BUTTON.get(), new Item.Properties().group(BUILDING_BLOCKS)));
 
     public static final RegistryObject<Item> MAPLE_LOG = ITEMS.register("maple_log", () -> new BlockItem(BlockRegistryHandler.MAPLE_LOG.get(), new Item.Properties().group(BUILDING_BLOCKS)));
     public static final RegistryObject<Item> STRIPPED_MAPLE_LOG = ITEMS.register("stripped_maple_log", () -> new BlockItem(BlockRegistryHandler.STRIPPED_MAPLE_LOG.get(), new Item.Properties().group(BUILDING_BLOCKS)));
