@@ -27,18 +27,20 @@ import static kogasastudio.ashihara.block.BlockFenceDecoration.AXIS;
 import static kogasastudio.ashihara.block.BlockFenceDecoration.ORB;
 import static kogasastudio.ashihara.block.BlockFenceExpansion.FACING;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodTypes>
 {
     public BlockAdvancedFence(AshiharaWoodTypes typeIn)
     {
         super
         (
-            Properties.create(Material.WOOD)
-            .hardnessAndResistance(0.5F)
+            Properties.of(Material.WOOD)
+            .strength(0.5F)
             .harvestTool(ToolType.AXE)
             .sound(SoundType.WOOD)
         );
-        this.setDefaultState(this.getStateContainer().getBaseState().with(COLUMN, ColumnType.CORE));
+        this.registerDefaultState(this.getStateDefinition().any().setValue(COLUMN, ColumnType.CORE));
         type = typeIn;
     }
 
@@ -54,7 +56,7 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
     public AshiharaWoodTypes getType() {return type;}
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(NORTH).add(SOUTH).add(WEST).add(EAST).add(COLUMN);
     }
@@ -62,18 +64,18 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
     private boolean canConnect(World world, BlockPos pos, Direction direction)
     {
         BlockState state = world.getBlockState(pos);
-        BlockState fromState = world.getBlockState(pos.offset(direction));
+        BlockState fromState = world.getBlockState(pos.relative(direction));
 
         boolean expanded = false;
         if (state.getBlock() instanceof BlockAdvancedFence && fromState.getBlock() instanceof BlockFenceExpansion)
         {
             if (((BlockFenceExpansion) fromState.getBlock()).getType().equals(((BlockAdvancedFence) state.getBlock()).getType()))
             {
-                expanded = fromState.get(FACING).equals(direction);
+                expanded = fromState.getValue(FACING).equals(direction);
             }
         }
 
-        return fromState.isSolidSide(world, pos.offset(direction), direction.getOpposite()) || expanded;
+        return fromState.isFaceSturdy(world, pos.relative(direction), direction.getOpposite()) || expanded;
     }
 
     protected Block getExpansion() {return Blocks.AIR;}
@@ -85,12 +87,12 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
         BlockState s = worldIn.getBlockState(pos.south());
         BlockState w = worldIn.getBlockState(pos.west());
         BlockState e = worldIn.getBlockState(pos.east());
-        BlockState up = worldIn.getBlockState(pos.up());
+        BlockState up = worldIn.getBlockState(pos.above());
 
-        boolean nC = n.matchesBlock(state.getBlock());
-        boolean sC = s.matchesBlock(state.getBlock());
-        boolean wC = w.matchesBlock(state.getBlock());
-        boolean eC = e.matchesBlock(state.getBlock());
+        boolean nC = n.is(state.getBlock());
+        boolean sC = s.is(state.getBlock());
+        boolean wC = w.is(state.getBlock());
+        boolean eC = e.is(state.getBlock());
 
         boolean nS = canConnect(worldIn, pos, Direction.NORTH) || nC;
         boolean sS = canConnect(worldIn, pos, Direction.SOUTH) || sC;
@@ -103,93 +105,93 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
         connected += wS ? 0 : 1;
         connected += eS ? 0 : 1;
 
-        BlockState init = this.getDefaultState();
+        BlockState init = this.defaultBlockState();
 
         if
         (
-            (worldIn.getBlockState(pos.up()).isSolidSide(worldIn, pos.up(), Direction.DOWN))
+            (worldIn.getBlockState(pos.above()).isFaceSturdy(worldIn, pos.above(), Direction.DOWN))
             || (up.getBlock() instanceof BlockAdvancedFence
                 && ((BlockAdvancedFence) up.getBlock()).getType().equals(((BlockAdvancedFence) state.getBlock()).getType()))
-            || (up.getBlock().matchesBlock(BlockRegistryHandler.GOLD_FENCE_DECORATION.get()) && up.get(ORB))
+            || (up.getBlock().is(BlockRegistryHandler.GOLD_FENCE_DECORATION.get()) && up.getValue(ORB))
             || (connected != 2)
             || ((nS && (wS || eS)) || (sS && (wS || eS)))
         )
         {
-            init = init.with(COLUMN, ColumnType.CORE);
+            init = init.setValue(COLUMN, ColumnType.CORE);
         }
         else if
         (
             (
-                (n.matchesBlock(state.getBlock()) && (n.get(COLUMN).equals(ColumnType.CORE) || n.get(COLUMN).equals(ColumnType.MID)))
-                && (s.matchesBlock(state.getBlock()) && (s.get(COLUMN).equals(ColumnType.CORE) || s.get(COLUMN).equals(ColumnType.MID)))
+                (n.is(state.getBlock()) && (n.getValue(COLUMN).equals(ColumnType.CORE) || n.getValue(COLUMN).equals(ColumnType.MID)))
+                && (s.is(state.getBlock()) && (s.getValue(COLUMN).equals(ColumnType.CORE) || s.getValue(COLUMN).equals(ColumnType.MID)))
             ) ||
             (
-                (w.matchesBlock(state.getBlock()) && (w.get(COLUMN).equals(ColumnType.CORE) || w.get(COLUMN).equals(ColumnType.MID)))
-                && (e.matchesBlock(state.getBlock()) && (e.get(COLUMN).equals(ColumnType.CORE) || e.get(COLUMN).equals(ColumnType.MID)))
+                (w.is(state.getBlock()) && (w.getValue(COLUMN).equals(ColumnType.CORE) || w.getValue(COLUMN).equals(ColumnType.MID)))
+                && (e.is(state.getBlock()) && (e.getValue(COLUMN).equals(ColumnType.CORE) || e.getValue(COLUMN).equals(ColumnType.MID)))
             )
         )
         {
-            init = init.with(COLUMN, ColumnType.SHORT);
+            init = init.setValue(COLUMN, ColumnType.SHORT);
         }
         else if
         (
             (
-                (n.matchesBlock(state.getBlock()) && n.get(COLUMN).equals(ColumnType.SHORT))
-                && (s.matchesBlock(state.getBlock()) && s.get(COLUMN).equals(ColumnType.SHORT))
+                (n.is(state.getBlock()) && n.getValue(COLUMN).equals(ColumnType.SHORT))
+                && (s.is(state.getBlock()) && s.getValue(COLUMN).equals(ColumnType.SHORT))
             ) ||
             (
-                (w.matchesBlock(state.getBlock()) && w.get(COLUMN).equals(ColumnType.SHORT))
-                && (e.matchesBlock(state.getBlock()) && e.get(COLUMN).equals(ColumnType.SHORT))
+                (w.is(state.getBlock()) && w.getValue(COLUMN).equals(ColumnType.SHORT))
+                && (e.is(state.getBlock()) && e.getValue(COLUMN).equals(ColumnType.SHORT))
             ) ||
             (
-                (n.matchesBlock(state.getBlock()) && n.get(COLUMN).equals(ColumnType.SHORT))
-                && (s.matchesBlock(state.getBlock()) && s.get(COLUMN).equals(ColumnType.MID))
+                (n.is(state.getBlock()) && n.getValue(COLUMN).equals(ColumnType.SHORT))
+                && (s.is(state.getBlock()) && s.getValue(COLUMN).equals(ColumnType.MID))
             ) ||
             (
-                (n.matchesBlock(state.getBlock()) && n.get(COLUMN).equals(ColumnType.MID))
-                && (s.matchesBlock(state.getBlock()) && s.get(COLUMN).equals(ColumnType.SHORT))
+                (n.is(state.getBlock()) && n.getValue(COLUMN).equals(ColumnType.MID))
+                && (s.is(state.getBlock()) && s.getValue(COLUMN).equals(ColumnType.SHORT))
             ) ||
             (
-                (w.matchesBlock(state.getBlock()) && w.get(COLUMN).equals(ColumnType.SHORT))
-                && (e.matchesBlock(state.getBlock()) && e.get(COLUMN).equals(ColumnType.MID))
+                (w.is(state.getBlock()) && w.getValue(COLUMN).equals(ColumnType.SHORT))
+                && (e.is(state.getBlock()) && e.getValue(COLUMN).equals(ColumnType.MID))
             ) ||
             (
-                (w.matchesBlock(state.getBlock()) && w.get(COLUMN).equals(ColumnType.MID))
-                && (e.matchesBlock(state.getBlock()) && e.get(COLUMN).equals(ColumnType.SHORT))
+                (w.is(state.getBlock()) && w.getValue(COLUMN).equals(ColumnType.MID))
+                && (e.is(state.getBlock()) && e.getValue(COLUMN).equals(ColumnType.SHORT))
             )
         )
         {
-            init = init.with(COLUMN, ColumnType.MID);
+            init = init.setValue(COLUMN, ColumnType.MID);
         }
-        else init = init.with(COLUMN, ColumnType.MID);
+        else init = init.setValue(COLUMN, ColumnType.MID);
 
-        init = init.with(NORTH, nS).with(SOUTH, sS).with(WEST, wS).with(EAST, eS);
+        init = init.setValue(NORTH, nS).setValue(SOUTH, sS).setValue(WEST, wS).setValue(EAST, eS);
 
-        worldIn.setBlockState(pos, init);
+        worldIn.setBlockAndUpdate(pos, init);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        World worldIn = context.getWorld();
-        BlockPos pos = context.getPos();
+        World worldIn = context.getLevel();
+        BlockPos pos = context.getClickedPos();
 
-        BlockState init = this.getDefaultState();
+        BlockState init = this.defaultBlockState();
 
         BlockState n = worldIn.getBlockState(pos.north());
         BlockState s = worldIn.getBlockState(pos.south());
         BlockState w = worldIn.getBlockState(pos.west());
         BlockState e = worldIn.getBlockState(pos.east());
 
-        boolean nC = n.matchesBlock(init.getBlock());
-        boolean sC = s.matchesBlock(init.getBlock());
-        boolean wC = w.matchesBlock(init.getBlock());
-        boolean eC = e.matchesBlock(init.getBlock());
+        boolean nC = n.is(init.getBlock());
+        boolean sC = s.is(init.getBlock());
+        boolean wC = w.is(init.getBlock());
+        boolean eC = e.is(init.getBlock());
 
-        boolean nS = n.isSolidSide(worldIn, pos.north(), Direction.SOUTH) || nC;
-        boolean sS = s.isSolidSide(worldIn, pos.south(), Direction.NORTH) || sC;
-        boolean wS = w.isSolidSide(worldIn, pos.west(), Direction.EAST) || wC;
-        boolean eS = e.isSolidSide(worldIn, pos.east(), Direction.WEST) || eC;
+        boolean nS = n.isFaceSturdy(worldIn, pos.north(), Direction.SOUTH) || nC;
+        boolean sS = s.isFaceSturdy(worldIn, pos.south(), Direction.NORTH) || sC;
+        boolean wS = w.isFaceSturdy(worldIn, pos.west(), Direction.EAST) || wC;
+        boolean eS = e.isFaceSturdy(worldIn, pos.east(), Direction.WEST) || eC;
 
         int connected = 0;
         connected += nS ? 0 : 1;
@@ -199,22 +201,22 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
 
         if
         (
-            (worldIn.getBlockState(pos.up()).isSolidSide(worldIn, pos.up(), Direction.DOWN))
+            (worldIn.getBlockState(pos.above()).isFaceSturdy(worldIn, pos.above(), Direction.DOWN))
             || (connected != 2)
             || ((nS && (wS || eS)) || (sS && (wS || eS)))
         )
         {
-            init = init.with(COLUMN, ColumnType.CORE);
+            init = init.setValue(COLUMN, ColumnType.CORE);
         }
         else if
         (
             (
-                (nC && (n.get(COLUMN).equals(ColumnType.CORE)))
-                && (sC && (s.get(COLUMN).equals(ColumnType.CORE)))
+                (nC && (n.getValue(COLUMN).equals(ColumnType.CORE)))
+                && (sC && (s.getValue(COLUMN).equals(ColumnType.CORE)))
             ) ||
             (
-                (wC && (w.get(COLUMN).equals(ColumnType.CORE)))
-                && (eC && (e.get(COLUMN).equals(ColumnType.CORE)))
+                (wC && (w.getValue(COLUMN).equals(ColumnType.CORE)))
+                && (eC && (e.getValue(COLUMN).equals(ColumnType.CORE)))
             )
         )
         {
@@ -226,57 +228,57 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
             if
             (
                 (
-                    (nF.matchesBlock(init.getBlock()) && (nF.get(COLUMN).equals(ColumnType.CORE) || nF.get(COLUMN).equals(ColumnType.MID)))
-                    && (sF.matchesBlock(init.getBlock()) && (sF.get(COLUMN).equals(ColumnType.CORE) || sF.get(COLUMN).equals(ColumnType.MID)))
+                    (nF.is(init.getBlock()) && (nF.getValue(COLUMN).equals(ColumnType.CORE) || nF.getValue(COLUMN).equals(ColumnType.MID)))
+                    && (sF.is(init.getBlock()) && (sF.getValue(COLUMN).equals(ColumnType.CORE) || sF.getValue(COLUMN).equals(ColumnType.MID)))
                 ) ||
                 (
-                    (wF.matchesBlock(init.getBlock()) && (wF.get(COLUMN).equals(ColumnType.CORE) || wF.get(COLUMN).equals(ColumnType.MID)))
-                    && (eF.matchesBlock(init.getBlock()) && (eF.get(COLUMN).equals(ColumnType.CORE) || eF.get(COLUMN).equals(ColumnType.MID)))
+                    (wF.is(init.getBlock()) && (wF.getValue(COLUMN).equals(ColumnType.CORE) || wF.getValue(COLUMN).equals(ColumnType.MID)))
+                    && (eF.is(init.getBlock()) && (eF.getValue(COLUMN).equals(ColumnType.CORE) || eF.getValue(COLUMN).equals(ColumnType.MID)))
                 )
             )
             {
-                init = init.with(COLUMN, ColumnType.MID);
+                init = init.setValue(COLUMN, ColumnType.MID);
             }
         }
-        else init = init.with(COLUMN, ColumnType.CORE);
+        else init = init.setValue(COLUMN, ColumnType.CORE);
 
-        init = init.with(NORTH, nS).with(SOUTH, sS).with(WEST, wS).with(EAST, eS);
+        init = init.setValue(NORTH, nS).setValue(SOUTH, sS).setValue(WEST, wS).setValue(EAST, eS);
 
         return init;
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
-        ItemStack stack = player.getHeldItem(handIn);
+        ItemStack stack = player.getItemInHand(handIn);
         if (stack.getItem().equals(Items.GOLD_INGOT))
         {
-            if (hit.getFace().equals(Direction.UP) && worldIn.getBlockState(pos.up()).isAir())
+            if (hit.getDirection().equals(Direction.UP) && worldIn.getBlockState(pos.above()).isAir())
             {
-                BlockState deco = BlockRegistryHandler.GOLD_FENCE_DECORATION.get().getDefaultState();
+                BlockState deco = BlockRegistryHandler.GOLD_FENCE_DECORATION.get().defaultBlockState();
 
-                if (state.get(COLUMN).equals(ColumnType.CORE)) deco = deco.with(ORB, true);
-                else if (state.get(NORTH) && state.get(SOUTH)) deco = deco.with(AXIS, Direction.Axis.Z);
-                else if (state.get(EAST) && state.get(WEST)) deco = deco.with(AXIS, Direction.Axis.X);
+                if (state.getValue(COLUMN).equals(ColumnType.CORE)) deco = deco.setValue(ORB, true);
+                else if (state.getValue(NORTH) && state.getValue(SOUTH)) deco = deco.setValue(AXIS, Direction.Axis.Z);
+                else if (state.getValue(EAST) && state.getValue(WEST)) deco = deco.setValue(AXIS, Direction.Axis.X);
 
-                worldIn.setBlockState(pos.up(), deco);
-                worldIn.playSound(player, pos, SoundEvents.BLOCK_LANTERN_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                if (!player.isCreative()) player.getHeldItem(handIn).shrink(1);
+                worldIn.setBlockAndUpdate(pos.above(), deco);
+                worldIn.playSound(player, pos, SoundEvents.LANTERN_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                if (!player.isCreative()) player.getItemInHand(handIn).shrink(1);
 
                 return ActionResultType.SUCCESS;
             }
         }
-        else if (state.get(COLUMN).equals(ColumnType.CORE) && stack.getItem().equals(Items.STICK) && (player.isCreative() || stack.getCount() >= 2))
+        else if (state.getValue(COLUMN).equals(ColumnType.CORE) && stack.getItem().equals(Items.STICK) && (player.isCreative() || stack.getCount() >= 2))
         {
             if (!(this.getExpansion() instanceof BlockFenceExpansion)) return ActionResultType.PASS;
-            Direction direction = hit.getFace();
-            if (direction.getAxis().isHorizontal() && worldIn.getBlockState(pos.offset(direction)).isAir())
+            Direction direction = hit.getDirection();
+            if (direction.getAxis().isHorizontal() && worldIn.getBlockState(pos.relative(direction)).isAir())
             {
-                BlockState exp = this.getExpansion().getDefaultState();
+                BlockState exp = this.getExpansion().defaultBlockState();
 
-                worldIn.setBlockState(pos.offset(direction), exp.with(FACING, direction));
-                worldIn.playSound(player, pos, SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                if (!player.isCreative()) player.getHeldItem(handIn).shrink(2);
+                worldIn.setBlockAndUpdate(pos.relative(direction), exp.setValue(FACING, direction));
+                worldIn.playSound(player, pos, SoundEvents.WOOD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                if (!player.isCreative()) player.getItemInHand(handIn).shrink(2);
 
                 return ActionResultType.SUCCESS;
             }
@@ -287,37 +289,37 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
     {
-        VoxelShape part_N_DOWN = makeCuboidShape(6.5d, 6.0d, 0.0d, 9.5d, 9.0, 8.0d);
-        VoxelShape part_N_UP = makeCuboidShape(6.5d, 12.0d, 0.0d, 9.5d, 15.0, 8.0d);
-        VoxelShape part_W_DOWN = makeCuboidShape(0.0d, 6.0d, 6.5d, 8.0d, 9.0, 9.5d);
-        VoxelShape part_W_UP = makeCuboidShape(0.0d, 12.0d, 6.5d, 8.0d, 15.0, 9.5d);
-        VoxelShape part_S_DOWN = makeCuboidShape(6.5d, 6.0d, 8.0d, 9.5d, 9.0, 16.0d);
-        VoxelShape part_S_UP = makeCuboidShape(6.5d, 12.0d, 8.0d, 9.5d, 15.0, 16.0d);
-        VoxelShape part_E_DOWN = makeCuboidShape(8.0d, 6.0d, 6.5d, 16.0d, 9.0, 9.5d);
-        VoxelShape part_E_UP = makeCuboidShape(8.0d, 12.0d, 6.5d, 16.0d, 15.0, 9.5d);
+        VoxelShape part_N_DOWN = box(6.5d, 6.0d, 0.0d, 9.5d, 9.0, 8.0d);
+        VoxelShape part_N_UP = box(6.5d, 12.0d, 0.0d, 9.5d, 15.0, 8.0d);
+        VoxelShape part_W_DOWN = box(0.0d, 6.0d, 6.5d, 8.0d, 9.0, 9.5d);
+        VoxelShape part_W_UP = box(0.0d, 12.0d, 6.5d, 8.0d, 15.0, 9.5d);
+        VoxelShape part_S_DOWN = box(6.5d, 6.0d, 8.0d, 9.5d, 9.0, 16.0d);
+        VoxelShape part_S_UP = box(6.5d, 12.0d, 8.0d, 9.5d, 15.0, 16.0d);
+        VoxelShape part_E_DOWN = box(8.0d, 6.0d, 6.5d, 16.0d, 9.0, 9.5d);
+        VoxelShape part_E_UP = box(8.0d, 12.0d, 6.5d, 16.0d, 15.0, 9.5d);
 
         VoxelShape part_N = VoxelShapes.or(part_N_UP, part_N_DOWN);
         VoxelShape part_S = VoxelShapes.or(part_S_UP, part_S_DOWN);
         VoxelShape part_W = VoxelShapes.or(part_W_UP, part_W_DOWN);
         VoxelShape part_E = VoxelShapes.or(part_E_UP, part_E_DOWN);
 
-        VoxelShape column_core = makeCuboidShape(6.0d, 0.0d, 6.0d, 10.0d, 16.0d, 10.0d);
-        VoxelShape column_mid = makeCuboidShape(6.0d, 0.0d, 6.0d, 10.0d, 13.5d, 10.0d);
-        VoxelShape column_short = makeCuboidShape(6.0d, 0.0d, 6.0d, 10.0d, 7.5d, 10.0d);
+        VoxelShape column_core = box(6.0d, 0.0d, 6.0d, 10.0d, 16.0d, 10.0d);
+        VoxelShape column_mid = box(6.0d, 0.0d, 6.0d, 10.0d, 13.5d, 10.0d);
+        VoxelShape column_short = box(6.0d, 0.0d, 6.0d, 10.0d, 7.5d, 10.0d);
 
         VoxelShape column;
 
-        switch (state.get(COLUMN))
+        switch (state.getValue(COLUMN))
         {
             case MID: column = column_mid;break;
             case SHORT: column = column_short;break;
             default: column = column_core;
         }
 
-        if (state.get(NORTH)) column = VoxelShapes.or(column, part_N);
-        if (state.get(SOUTH)) column = VoxelShapes.or(column, part_S);
-        if (state.get(WEST)) column = VoxelShapes.or(column, part_W);
-        if (state.get(EAST)) column = VoxelShapes.or(column, part_E);
+        if (state.getValue(NORTH)) column = VoxelShapes.or(column, part_N);
+        if (state.getValue(SOUTH)) column = VoxelShapes.or(column, part_S);
+        if (state.getValue(WEST)) column = VoxelShapes.or(column, part_W);
+        if (state.getValue(EAST)) column = VoxelShapes.or(column, part_E);
 
         return column;
     }
@@ -345,6 +347,6 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
         }
 
         @Override
-        public String getString() {return this.name;}
+        public String getSerializedName() {return this.name;}
     }
 }

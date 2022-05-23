@@ -10,11 +10,11 @@ public class SakuraParticle extends SpriteTexturedParticle
     protected SakuraParticle(ClientWorld world, double x, double y, double z)
     {
         super(world, x, y, z, 0.0D, 0.0D, 0.0D);
-        this.motionX *= 0.9F;
-        this.motionY = 0;
-        this.motionZ *= 0.9F;
-        this.particleScale = 0.2F;
-        this.maxAge = 200;
+        this.xd *= 0.9F;
+        this.yd = 0;
+        this.zd *= 0.9F;
+        this.quadSize = 0.2F;
+        this.lifetime = 200;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class SakuraParticle extends SpriteTexturedParticle
     }
 
     @Override
-    public float getScale(float scaleFactor)
+    public float getQuadSize(float scaleFactor)
     {
         return 0.2F;
     }
@@ -32,24 +32,24 @@ public class SakuraParticle extends SpriteTexturedParticle
     @Override
     public void tick()
     {
-        if (this.age++ >= this.maxAge)
+        if (this.age++ >= this.lifetime)
         {
-            this.setExpired();
+            this.remove();
         }
         else
         {
-            this.prevPosX = this.posX;
-            this.prevPosY = this.posY;
-            this.prevPosZ = this.posZ;
-            this.motionY -= 0.001D;
-            this.move(this.motionX, this.motionY, this.motionZ);
-            this.motionX *= 0.7F;
-            this.motionY *= 0.999F;
-            this.motionZ *= 0.7F;
+            this.xo = this.x;
+            this.yo = this.y;
+            this.zo = this.z;
+            this.yd -= 0.001D;
+            this.move(this.xd, this.yd, this.zd);
+            this.xd *= 0.7F;
+            this.yd *= 0.999F;
+            this.zd *= 0.7F;
             if (this.onGround)
             {
-                this.motionX *= 0.5F;
-                this.motionZ *= 0.5F;
+                this.xd *= 0.5F;
+                this.zd *= 0.5F;
             }
         }
     }
@@ -64,10 +64,10 @@ public class SakuraParticle extends SpriteTexturedParticle
         }
 
         @Override
-        public Particle makeParticle(GenericParticleData typeIn, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
+        public Particle createParticle(GenericParticleData typeIn, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
         {
             SakuraParticle sakuraParticle = new SakuraParticle(worldIn, x, y, z);
-            sakuraParticle.selectSpriteRandomly(this.spriteSet);
+            sakuraParticle.pickSprite(this.spriteSet);
             return sakuraParticle;
         }
     }

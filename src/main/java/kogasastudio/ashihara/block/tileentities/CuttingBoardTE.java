@@ -32,30 +32,30 @@ public class CuttingBoardTE extends AshiharaMachineTE
 
     public Optional<CuttingBoardRecipe> tryMatchRecipe(RecipeWrapper wrapper)
     {
-        if(this.world == null) return Optional.empty();
+        if(this.level == null) return Optional.empty();
 
-        return this.world.getRecipeManager().getRecipe(CuttingBoardRecipe.TYPE, wrapper, this.world);
+        return this.level.getRecipeManager().getRecipeFor(CuttingBoardRecipe.TYPE, wrapper, this.level);
     }
 
     public void cut(CuttingBoardRecipe recipe)
     {
-        if (this.world == null) return;
-        SoundEvent event = SoundEvents.ITEM_AXE_STRIP;
-        this.world.playSound(null, this.pos, event, SoundCategory.BLOCKS, 1.0f, 1.0f);
-        if (this.world.isRemote())
+        if (this.level == null) return;
+        SoundEvent event = SoundEvents.AXE_STRIP;
+        this.level.playSound(null, this.worldPosition, event, SoundCategory.BLOCKS, 1.0f, 1.0f);
+        if (this.level.isClientSide())
         {
-            Random random = this.world.getRandom();
+            Random random = this.level.getRandom();
             IParticleData data = this.content.getItem() instanceof BlockItem
-            ? new BlockParticleData(ParticleTypes.BLOCK, ((BlockItem) this.content.getItem()).getBlock().getDefaultState())
+            ? new BlockParticleData(ParticleTypes.BLOCK, ((BlockItem) this.content.getItem()).getBlock().defaultBlockState())
             : new ItemParticleData(ParticleTypes.ITEM, this.content);
             for (int i = 0; i < 10; i += 1)
             {
-                this.world.addParticle
+                this.level.addParticle
                 (
                     data,
-                    (double) this.pos.getX() + 0.5D,
-                    (double) this.pos.getY() + 0.7D,
-                    (double) this.pos.getZ() + 0.5D,
+                    (double) this.worldPosition.getX() + 0.5D,
+                    (double) this.worldPosition.getY() + 0.7D,
+                    (double) this.worldPosition.getZ() + 0.5D,
                     ((double) random.nextFloat() - 0.5D) * 0.2D,
                     ((double) random.nextFloat() - 0.5D) * 0.2D,
                     ((double) random.nextFloat() - 0.5D) * 0.2D
@@ -67,26 +67,26 @@ public class CuttingBoardTE extends AshiharaMachineTE
             for (ItemStack stack : recipe.getOutput())
             {
                 ItemEntity entity = new ItemEntity
-                (this.world, this.pos.getX() + 0.5d, this.pos.getY() + 0.5d, this.pos.getZ() + 0.5d, stack.copy());
-                entity.setDefaultPickupDelay();
-                this.world.addEntity(entity);
+                (this.level, this.worldPosition.getX() + 0.5d, this.worldPosition.getY() + 0.5d, this.worldPosition.getZ() + 0.5d, stack.copy());
+                entity.setDefaultPickUpDelay();
+                this.level.addFreshEntity(entity);
             }
         }
         this.content = ItemStack.EMPTY;
-        markDirty();
+        setChanged();
     }
 
     public boolean handleInteraction(PlayerEntity playerIn, Hand handIn, World worldIn, BlockPos posIn)
     {
-        ItemStack stack = playerIn.getHeldItem(handIn);
+        ItemStack stack = playerIn.getItemInHand(handIn);
         if (!this.content.isEmpty())
         {
             if (stack.isEmpty())
             {
-                playerIn.setHeldItem(handIn, this.content);
+                playerIn.setItemInHand(handIn, this.content);
                 this.content = ItemStack.EMPTY;
-                worldIn.playSound(playerIn, posIn, SoundEvents.ENTITY_ITEM_FRAME_REMOVE_ITEM, SoundCategory.BLOCKS, 1.0f, 1.0f);
-                markDirty();
+                worldIn.playSound(playerIn, posIn, SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                setChanged();
                 return true;
             }
             else
@@ -104,7 +104,7 @@ public class CuttingBoardTE extends AshiharaMachineTE
                 if (recipe.isPresent() && recipe.get().getTool().toolMatches(stack))
                 {
                     this.cut(recipe.get());
-                    if (!playerIn.isCreative()) stack.damageItem(1, playerIn, player -> player.sendBreakAnimation(handIn));
+                    if (!playerIn.isCreative()) stack.hurtAndBreak(1, playerIn, player -> player.broadcastBreakEvent(handIn));
                     return true;
                 }
             }
@@ -112,25 +112,25 @@ public class CuttingBoardTE extends AshiharaMachineTE
         else
         {
             this.content = stack.split(Math.min(stack.getCount(), 4));
-            worldIn.playSound(playerIn, posIn, SoundEvents.ENTITY_ITEM_FRAME_ADD_ITEM, SoundCategory.BLOCKS, 1.0f, 1.0f);
-            markDirty();
+            worldIn.playSound(playerIn, posIn, SoundEvents.ITEM_FRAME_ADD_ITEM, SoundCategory.BLOCKS, 1.0f, 1.0f);
+            setChanged();
             return true;
         }
         return false;
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt)
+    public void load(BlockState state, CompoundNBT nbt)
     {
-        super.read(state, nbt);
-        this.content = ItemStack.read(nbt.getCompound("content"));
+        super.load(state, nbt);
+        this.content = ItemStack.of(nbt.getCompound("content"));
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound)
+    public CompoundNBT save(CompoundNBT compound)
     {
-        compound.put("content", this.content.write(new CompoundNBT()));
-        super.write(compound);
+        compound.put("content", this.content.save(new CompoundNBT()));
+        super.save(compound);
         return compound;
     }
 }

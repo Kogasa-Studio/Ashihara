@@ -16,16 +16,18 @@ import java.util.List;
 
 import static kogasastudio.ashihara.Ashihara.ASHIHARA;
 
+import net.minecraft.item.Item.Properties;
+
 public class ItemBlockPail extends BlockItem
 {
-    public ItemBlockPail() {super(BlockRegistryHandler.PAIL.get(), new Properties().group(ASHIHARA).setISTER(() -> PailISTER::new));}
+    public ItemBlockPail() {super(BlockRegistryHandler.PAIL.get(), new Properties().tab(ASHIHARA).setISTER(() -> PailISTER::new));}
 
     @Override
-    public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+    public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
     {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
         TranslationTextComponent component = new TranslationTextComponent(new TranslationTextComponent("tooltip.ashihara.pail_empty_message").getString());
-        CompoundNBT nbt = stack.getChildTag("BlockEntityTag");
+        CompoundNBT nbt = stack.getTagElement("BlockEntityTag");
         if (nbt != null && !nbt.isEmpty() && !nbt.getCompound("bucket").getString("FluidName").equals("minecraft:empty"))
         {
             CompoundNBT bucket = nbt.getCompound("bucket");
@@ -33,10 +35,10 @@ public class ItemBlockPail extends BlockItem
             String nameSpace = rl.getNamespace();
             String fluidName = rl.getPath();
             String data = "block." + nameSpace + "." + fluidName;
-            String name = I18n.format(data);
+            String name = I18n.get(data);
             component = new TranslationTextComponent(new TranslationTextComponent("tooltip.ashihara.pail_fluid_existence").getString());
-            component.appendString(name);
-            component.appendString("§b: §a" + bucket.getInt("Amount") + " §6mB §7/ §64000mB");
+            component.append(name);
+            component.append("§b: §a" + bucket.getInt("Amount") + " §6mB §7/ §64000mB");
         }
 
         tooltip.add(new TranslationTextComponent("tooltip.ashihara.pail_display"));

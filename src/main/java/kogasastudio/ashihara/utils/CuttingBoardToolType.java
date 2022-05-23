@@ -28,7 +28,7 @@ public class CuttingBoardToolType
 
     public String getName() {return this.name;}
 
-    public boolean toolMatches(ItemStack stack) {return stack.getItem().isIn(this.tool);}
+    public boolean toolMatches(ItemStack stack) {return stack.getItem().is(this.tool);}
 
     public static CuttingBoardToolType nameMatches(String nameIn) {return INSTANCES.get(nameIn) != null ? INSTANCES.get(nameIn) : NONE;}
 

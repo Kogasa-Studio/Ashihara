@@ -16,13 +16,13 @@ import static kogasastudio.ashihara.helper.MathHelper.simplifyDouble;
 public class CandleTE extends AshiharaMachineTE
 {
     private final NonNullList<double[]> posList = NonNullList.create();
-    private final BlockState state = BlockRegistryHandler.CANDLE.get().getDefaultState();
+    private final BlockState state = BlockRegistryHandler.CANDLE.get().defaultBlockState();
 
     public CandleTE() {super(TERegistryHandler.CANDLE_TE.get());}
 
     public boolean addCurrentCandle(double x, double y, double z)
     {
-        if (this.world == null || this.world.isRemote() || posList.size() >= 4) return false;
+        if (this.level == null || this.level.isClientSide() || posList.size() >= 4) return false;
 
         double[] serialized = new double[]
         {
@@ -31,8 +31,8 @@ public class CandleTE extends AshiharaMachineTE
             simplifyDouble(y, 2)
         };
         posList.add(serialized);
-        this.world.notifyBlockUpdate(this.pos, state, state, 3);
-        markDirty();
+        this.level.sendBlockUpdated(this.worldPosition, state, state, 3);
+        setChanged();
         return true;
     }
 
@@ -47,39 +47,39 @@ public class CandleTE extends AshiharaMachineTE
         {
             int i = posList.size();
             posList.clear();
-            markDirty();
+            setChanged();
             worldIn.removeBlock(posIn, false);
-            worldIn.notifyBlockUpdate(posIn, state, state, 3);
-            return worldIn.isRemote() ? 0 : i;
+            worldIn.sendBlockUpdated(posIn, state, state, 3);
+            return worldIn.isClientSide() ? 0 : i;
         }
         else
         {
             int pointer = posList.size() - 1;
             posList.remove(pointer);
-            worldIn.notifyBlockUpdate(posIn, state, state, 3);
-            markDirty();
-            return worldIn.isRemote() ? 0 : 1;
+            worldIn.sendBlockUpdated(posIn, state, state, 3);
+            setChanged();
+            return worldIn.isClientSide() ? 0 : 1;
         }
     }
 
     public void init()
     {
-        if (this.world == null) return;
+        if (this.level == null) return;
         this.posList.clear();
         this.addCurrentCandle(0.5d, 0.0d, 0.5d);
     }
 
     public void init(double x, double z)
     {
-        if (this.world == null) return;
+        if (this.level == null) return;
         this.posList.clear();
-        this.addCurrentCandle(x, z, this.world.getRandom());
+        this.addCurrentCandle(x, z, this.level.getRandom());
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt)
+    public void load(BlockState state, CompoundNBT nbt)
     {
-        super.read(state, nbt);
+        super.load(state, nbt);
         ListNBT poses = nbt.getList("posList", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < poses.size(); i += 1)
         {
@@ -92,9 +92,9 @@ public class CandleTE extends AshiharaMachineTE
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound)
+    public CompoundNBT save(CompoundNBT compound)
     {
-        super.write(compound);
+        super.save(compound);
         ListNBT nbt = new ListNBT();
         for (double[] d : this.posList)
         {

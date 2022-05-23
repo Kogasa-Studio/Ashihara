@@ -76,7 +76,7 @@ public class MortarRecipe implements IRecipe<RecipeWrapper>
 
         for (int j = 0; j < 4; ++j)
         {
-            ItemStack itemstack = inv.getStackInSlot(j);
+            ItemStack itemstack = inv.getItem(j);
             if (!itemstack.isEmpty()) {inputs.add(itemstack);}
         }
         return RecipeMatcher.findMatches(inputs, this.input) != null;
@@ -89,13 +89,13 @@ public class MortarRecipe implements IRecipe<RecipeWrapper>
     public IRecipeType<?> getType() {return TYPE;}
 
     @Override
-    public ItemStack getCraftingResult(RecipeWrapper inv) {return this.output.get(0);}
+    public ItemStack assemble(RecipeWrapper inv) {return this.output.get(0);}
 
     @Override
-    public boolean canFit(int width, int height) {return width * height >= this.input.size();}
+    public boolean canCraftInDimensions(int width, int height) {return width * height >= this.input.size();}
 
     @Override
-    public ItemStack getRecipeOutput() {return this.output.get(0).copy();}
+    public ItemStack getResultItem() {return this.output.get(0).copy();}
 
     @Override
     public NonNullList<Ingredient> getIngredients() {return this.input;}
@@ -111,21 +111,21 @@ public class MortarRecipe implements IRecipe<RecipeWrapper>
     {
 
         @Override
-        public MortarRecipe read(ResourceLocation recipeId, JsonObject json)
+        public MortarRecipe fromJson(ResourceLocation recipeId, JsonObject json)
         {
-            final String groupIn = JSONUtils.getString(json, "group", "");
-            final NonNullList<Ingredient> inputIn = readIngredients(JSONUtils.getJsonArray(json, "ingredients"));
+            final String groupIn = JSONUtils.getAsString(json, "group", "");
+            final NonNullList<Ingredient> inputIn = readIngredients(JSONUtils.getAsJsonArray(json, "ingredients"));
             if (inputIn.isEmpty()) {throw new JsonParseException("No ingredients for mortar recipe");}
             else if (inputIn.size() > 4) {throw new JsonParseException("Too many ingredients for mortar recipe! The max is 4");}
             else
             {
-                final NonNullList<ItemStack> outputIn = readOutput(JSONUtils.getJsonArray(json, "result"));
-                final byte recipeTypeIn = JSONUtils.getByte(json, "recipeType", (byte) 1);
-                final byte[] sequenceIn = readSequence(JSONUtils.getJsonArray(json, "sequence"));
+                final NonNullList<ItemStack> outputIn = readOutput(JSONUtils.getAsJsonArray(json, "result"));
+                final byte recipeTypeIn = JSONUtils.getAsByte(json, "recipeType", (byte) 1);
+                final byte[] sequenceIn = readSequence(JSONUtils.getAsJsonArray(json, "sequence"));
                 if (recipeTypeIn != 2 && sequenceIn.length < 1) {throw new JsonParseException("No sequence provided!");}
                 else
                 {
-                    final int progressIn = recipeTypeIn == 2 ? JSONUtils.getInt(json, "progress", 1) : sequenceIn.length;
+                    final int progressIn = recipeTypeIn == 2 ? JSONUtils.getAsInt(json, "progress", 1) : sequenceIn.length;
                     if (json.has("fluid"))
                     {
                         JsonObject fluid = json.get("fluid").getAsJsonObject();
@@ -143,8 +143,8 @@ public class MortarRecipe implements IRecipe<RecipeWrapper>
 
             for (int i = 0; i < ingredientArray.size(); ++i)
             {
-                Ingredient ingredient = Ingredient.deserialize(ingredientArray.get(i));
-                if (!ingredient.hasNoMatchingItems()) {nonnulllist.add(ingredient);}
+                Ingredient ingredient = Ingredient.fromJson(ingredientArray.get(i));
+                if (!ingredient.isEmpty()) {nonnulllist.add(ingredient);}
             }
 
             return nonnulllist;
@@ -180,8 +180,8 @@ public class MortarRecipe implements IRecipe<RecipeWrapper>
         {
             if (object == null) return FluidStack.EMPTY;
 
-            String fluid = JSONUtils.getString(object, "fluid");
-            int amount = JSONUtils.getInt(object, "amount");
+            String fluid = JSONUtils.getAsString(object, "fluid");
+            int amount = JSONUtils.getAsInt(object, "amount");
 
             CompoundNBT nbt = new CompoundNBT();
             nbt.putString("FluidName", fluid);
@@ -191,16 +191,16 @@ public class MortarRecipe implements IRecipe<RecipeWrapper>
         }
 
         @Override
-        public MortarRecipe read(ResourceLocation recipeId, PacketBuffer buffer)
+        public MortarRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer)
         {
-            String groupIn = buffer.readString(32767);
+            String groupIn = buffer.readUtf(32767);
             NonNullList<Ingredient> inputItemsIn = NonNullList.withSize(4, Ingredient.EMPTY);
             NonNullList<ItemStack> outputItemsIn = NonNullList.withSize(4, ItemStack.EMPTY);
 
             FluidStack fluidCost = FluidStack.readFromPacket(buffer);
 
-            for (int j = 0; j < inputItemsIn.size(); ++j) {inputItemsIn.set(j, Ingredient.read(buffer));}
-            CompoundNBT nbt = buffer.readCompoundTag();
+            for (int j = 0; j < inputItemsIn.size(); ++j) {inputItemsIn.set(j, Ingredient.fromNetwork(buffer));}
+            CompoundNBT nbt = buffer.readNbt();
             if (nbt != null) ItemStackHelper.loadAllItems(nbt, outputItemsIn);
 
             int progressIn = buffer.readVarInt();
@@ -211,12 +211,12 @@ public class MortarRecipe implements IRecipe<RecipeWrapper>
         }
 
         @Override
-        public void write(PacketBuffer buffer, MortarRecipe recipe)
+        public void toNetwork(PacketBuffer buffer, MortarRecipe recipe)
         {
-            buffer.writeString(recipe.group);
+            buffer.writeUtf(recipe.group);
 
-            for (Ingredient ingredient : recipe.input) {ingredient.write(buffer);}
-            CompoundNBT nbt = buffer.readCompoundTag();
+            for (Ingredient ingredient : recipe.input) {ingredient.toNetwork(buffer);}
+            CompoundNBT nbt = buffer.readNbt();
             if (nbt != null) ItemStackHelper.saveAllItems(nbt, recipe.output);
 
             recipe.fluidCost.writeToPacket(buffer);

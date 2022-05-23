@@ -10,10 +10,10 @@ import java.util.function.Supplier;
 public enum AshiharaItemTiers implements IItemTier
 {
     STEEL(4, 1200, 7.0F, 5.0F, 10, 1.5f,
-            () -> Ingredient.fromItems(ItemRegistryHandler.RICE.get())),
+            () -> Ingredient.of(ItemRegistryHandler.RICE.get())),
 
     TAMA(2, 105, 4.0F, 1.0F, 20, 10.0f,
-                  () -> Ingredient.fromItems(ItemRegistryHandler.RICE.get()));
+                  () -> Ingredient.of(ItemRegistryHandler.RICE.get()));
 
     private final int harvestLevel;
     private final int maxUses;
@@ -35,20 +35,20 @@ public enum AshiharaItemTiers implements IItemTier
     }
 
     @Override
-    public int getMaxUses() {return 0;}
+    public int getUses() {return 0;}
 
     @Override
-    public float getEfficiency() {return 0;}
+    public float getSpeed() {return 0;}
 
     @Override
-    public float getAttackDamage() {return 0;}
+    public float getAttackDamageBonus() {return 0;}
 
     @Override
-    public int getHarvestLevel() {return 0;}
+    public int getLevel() {return 0;}
 
     @Override
-    public int getEnchantability() {return 0;}
+    public int getEnchantmentValue() {return 0;}
 
     @Override
-    public Ingredient getRepairMaterial() {return null;}
+    public Ingredient getRepairIngredient() {return null;}
 }

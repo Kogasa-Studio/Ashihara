@@ -13,22 +13,24 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockImmatureRiceCrop extends CropsBlock
 {
     public BlockImmatureRiceCrop()
     {
         super
         (
-            Properties.create(Material.PLANTS)
-            .doesNotBlockMovement()
-            .tickRandomly()
-            .zeroHardnessAndResistance()
+            Properties.of(Material.PLANT)
+            .noCollission()
+            .randomTicks()
+            .instabreak()
             .sound(SoundType.CROP)
         );
     }
 
     @Override
-    protected IItemProvider getSeedsItem()
+    protected IItemProvider getBaseSeedId()
     {
         return ItemRegistryHandler.PADDY.get();
     }

@@ -31,20 +31,20 @@ public class PailTE extends AshiharaMachineTE implements IFluidHandler
     public LazyOptional<FluidTank> getTank() {return this.bucket;}
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt)
+    public void load(BlockState state, CompoundNBT nbt)
     {
-        super.read(state, nbt);
+        super.load(state, nbt);
         bucket.ifPresent(fluidTank -> fluidTank.readFromNBT(nbt.getCompound("bucket")));
-        if (this.world != null)
+        if (this.level != null)
         {
-            this.world.notifyBlockUpdate(this.pos, this.getBlockState(), this.getBlockState(), 3);
+            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
         }
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound)
+    public CompoundNBT save(CompoundNBT compound)
     {
-        super.write(compound);
+        super.save(compound);
         bucket.ifPresent(fluidTank -> compound.put("bucket", fluidTank.writeToNBT(new CompoundNBT())));
         return compound;
     }

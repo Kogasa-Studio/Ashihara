@@ -15,8 +15,8 @@ public class BlockShorterReed extends BlockReed
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
     {
-        VoxelShape SHAPE1 = Block.makeCuboidShape(0,0,0,16,16,16);
-        VoxelShape SHAPE2 = Block.makeCuboidShape(0,0,0,16,8,16);
-        return state.get(HALF) == DoubleBlockHalf.UPPER ? SHAPE2 : SHAPE1;
+        VoxelShape SHAPE1 = Block.box(0,0,0,16,16,16);
+        VoxelShape SHAPE2 = Block.box(0,0,0,16,8,16);
+        return state.getValue(HALF) == DoubleBlockHalf.UPPER ? SHAPE2 : SHAPE1;
     }
 }

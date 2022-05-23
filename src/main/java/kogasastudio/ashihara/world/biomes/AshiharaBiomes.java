@@ -16,18 +16,18 @@ public class AshiharaBiomes
         //抄原版用来装饰群系
         BiomeGenerationSettings.Builder BiomegenerationSettings
         = (new BiomeGenerationSettings.Builder()
-        .withSurfaceBuilder(ConfiguredSurfaceBuilders.GRASS)
-        .withCarver(GenerationStage.Carving.AIR, ConfiguredCarvers.CAVE));
-        DefaultBiomeFeatures.withStrongholdAndMineshaft(BiomegenerationSettings);
-        DefaultBiomeFeatures.withCavesAndCanyons(BiomegenerationSettings);
-        DefaultBiomeFeatures.withLavaAndWaterLakes(BiomegenerationSettings);
-        DefaultBiomeFeatures.withMonsterRoom(BiomegenerationSettings);
-        DefaultBiomeFeatures.withCommonOverworldBlocks(BiomegenerationSettings);
-        DefaultBiomeFeatures.withOverworldOres(BiomegenerationSettings);
-        DefaultBiomeFeatures.withDisks(BiomegenerationSettings);
+        .surfaceBuilder(ConfiguredSurfaceBuilders.GRASS)
+        .addCarver(GenerationStage.Carving.AIR, ConfiguredCarvers.CAVE));
+        DefaultBiomeFeatures.addDefaultOverworldLandStructures(BiomegenerationSettings);
+        DefaultBiomeFeatures.addDefaultCarvers(BiomegenerationSettings);
+        DefaultBiomeFeatures.addDefaultLakes(BiomegenerationSettings);
+        DefaultBiomeFeatures.addDefaultMonsterRoom(BiomegenerationSettings);
+        DefaultBiomeFeatures.addDefaultUndergroundVariety(BiomegenerationSettings);
+        DefaultBiomeFeatures.addDefaultOres(BiomegenerationSettings);
+        DefaultBiomeFeatures.addDefaultSoftDisks(BiomegenerationSettings);
 //        DefaultBiomeFeatures.withForestGrass(BiomegenerationSettings);
-        DefaultBiomeFeatures.withNormalMushroomGeneration(BiomegenerationSettings);
-        DefaultBiomeFeatures.withLavaAndWaterSprings(BiomegenerationSettings);
+        DefaultBiomeFeatures.addDefaultMushrooms(BiomegenerationSettings);
+        DefaultBiomeFeatures.addDefaultSprings(BiomegenerationSettings);
         return BiomegenerationSettings;
     }
 
@@ -35,37 +35,37 @@ public class AshiharaBiomes
     {
         BiomeGenerationSettings.Builder builder = makeDefaultBuilder();
         //添加樱花树
-        builder.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.FOREST_CHERRY_TREES);
-        DefaultBiomeFeatures.withForestGrass(builder);
-        DefaultBiomeFeatures.withAllForestFlowerGeneration(builder);
+        builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.FOREST_CHERRY_TREES);
+        DefaultBiomeFeatures.addForestGrass(builder);
+        DefaultBiomeFeatures.addForestFlowers(builder);
 
         return
         (
             new Biome.Builder()
             .precipitation(Biome.RainType.RAIN)
-            .category(Biome.Category.FOREST)
+            .biomeCategory(Biome.Category.FOREST)
             .depth(0.1F)
             .scale(2.0F)
             .temperature(0.7F)
             .downfall(0.8F)
-            .setEffects
+            .specialEffects
             (
                 new BiomeAmbience.Builder()
-                .setWaterColor(0x48A7D6)
-                .setWaterFogColor(0x282E84)
-                .setFogColor(0xC0D8FF)
-                .withGrassColor(0x59BA82)
-                .withSkyColor(getSkyColorWithTemperatureModifier(0.7F))
-                .setMoodSound(MoodSoundAmbience.DEFAULT_CAVE)
+                .waterColor(0x48A7D6)
+                .waterFogColor(0x282E84)
+                .fogColor(0xC0D8FF)
+                .grassColorOverride(0x59BA82)
+                .skyColor(getSkyColorWithTemperatureModifier(0.7F))
+                .ambientMoodSound(MoodSoundAmbience.LEGACY_CAVE_SETTINGS)
                 .build()
             )
-            .withMobSpawnSettings
+            .mobSpawnSettings
             (
                 getStandardMobSpawnBuilder()
-                .withSpawner(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.RABBIT, 4, 2, 3))
+                .addSpawn(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.RABBIT, 4, 2, 3))
                 .build()
             )
-            .withGenerationSettings(builder.build())
+            .generationSettings(builder.build())
             .build()
             .setRegistryName("ashihara:junior_cherry_forest")
         );
@@ -74,38 +74,38 @@ public class AshiharaBiomes
     public static Biome RedMapleForest()
     {
         BiomeGenerationSettings.Builder builder = makeDefaultBuilder();
-        builder.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.FOREST_RED_MAPLE_TREES);
-        DefaultBiomeFeatures.withForestGrass(builder);
-        DefaultBiomeFeatures.withAllForestFlowerGeneration(builder);
+        builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.FOREST_RED_MAPLE_TREES);
+        DefaultBiomeFeatures.addForestGrass(builder);
+        DefaultBiomeFeatures.addForestFlowers(builder);
 
         return
         (
             new Biome.Builder()
             .precipitation(Biome.RainType.RAIN)
-            .category(Biome.Category.FOREST)
+            .biomeCategory(Biome.Category.FOREST)
             .depth(0.1F)
             .scale(0.2F)
             .temperature(0.6F)
             .downfall(0.8F)
-            .setEffects
+            .specialEffects
             (
                 new BiomeAmbience.Builder()
-                .setWaterColor(0x00BBC6)
-                .setWaterFogColor(0x00AA93)
-                .setFogColor(0xC7EA7A)
-                .withGrassColor(0xA1E013)
-                .withSkyColor(getSkyColorWithTemperatureModifier(0.9F))
-                .setMoodSound(MoodSoundAmbience.DEFAULT_CAVE)
+                .waterColor(0x00BBC6)
+                .waterFogColor(0x00AA93)
+                .fogColor(0xC7EA7A)
+                .grassColorOverride(0xA1E013)
+                .skyColor(getSkyColorWithTemperatureModifier(0.9F))
+                .ambientMoodSound(MoodSoundAmbience.LEGACY_CAVE_SETTINGS)
                 .build()
             )
-            .withMobSpawnSettings
+            .mobSpawnSettings
             (
                 getStandardMobSpawnBuilder()
-                .withSpawner(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.RABBIT, 10, 2, 3))
-                .withSpawner(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.FOX, 5, 1, 3))
+                .addSpawn(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.RABBIT, 10, 2, 3))
+                .addSpawn(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.FOX, 5, 1, 3))
                 .build()
             )
-            .withGenerationSettings(builder.build())
+            .generationSettings(builder.build())
             .build()
             .setRegistryName("ashihara:red_maple_forest")
         );
@@ -114,41 +114,41 @@ public class AshiharaBiomes
     public static Biome SnowyCherryForest()
     {
         BiomeGenerationSettings.Builder builder = makeDefaultBuilder();
-        DefaultBiomeFeatures.withBadlandsGrass(builder);
-        DefaultBiomeFeatures.withFrozenTopLayer(builder);
+        DefaultBiomeFeatures.addDefaultGrass(builder);
+        DefaultBiomeFeatures.addSurfaceFreezing(builder);
 
         //添加樱花树
-        builder.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.FOREST_CHERRY_TREES);
+        builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.FOREST_CHERRY_TREES);
 
         return
         (
             new Biome.Builder()
             .precipitation(Biome.RainType.SNOW)
-            .category(Biome.Category.FOREST)
+            .biomeCategory(Biome.Category.FOREST)
             .depth(0.1F)
             .scale(0.35F)
             .temperature(0.1F)
             .downfall(0.8F)
-            .setEffects
+            .specialEffects
             (
                 new BiomeAmbience.Builder()
-                .setWaterColor(0x48A7D6)
-                .setWaterFogColor(0x282E84)
-                .setFogColor(0xC0D8FF)
-                .withGrassColor(0x59BA82)
-                .withSkyColor(getSkyColorWithTemperatureModifier(0.1F))
-                .setMoodSound(MoodSoundAmbience.DEFAULT_CAVE)
+                .waterColor(0x48A7D6)
+                .waterFogColor(0x282E84)
+                .fogColor(0xC0D8FF)
+                .grassColorOverride(0x59BA82)
+                .skyColor(getSkyColorWithTemperatureModifier(0.1F))
+                .ambientMoodSound(MoodSoundAmbience.LEGACY_CAVE_SETTINGS)
                 .build()
             )
-            .withMobSpawnSettings
+            .mobSpawnSettings
             (
                 getStandardMobSpawnBuilder()
-                .withSpawner(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.RABBIT, 4, 2, 3))
-                .withSpawner(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.WOLF, 2, 2, 5))
-                .withSpawner(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.FOX, 3, 1, 4))
+                .addSpawn(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.RABBIT, 4, 2, 3))
+                .addSpawn(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.WOLF, 2, 2, 5))
+                .addSpawn(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.FOX, 3, 1, 4))
                 .build()
             )
-            .withGenerationSettings(builder.build())
+            .generationSettings(builder.build())
             .build()
             .setRegistryName("ashihara:snowy_cherry_forest")
         );
@@ -159,14 +159,14 @@ public class AshiharaBiomes
     {
         float lvt_1_1_ = temperature / 3.0F;
         lvt_1_1_ = MathHelper.clamp(lvt_1_1_, -1.0F, 1.0F);
-        return MathHelper.hsvToRGB(0.62222224F - lvt_1_1_ * 0.05F, 0.5F + lvt_1_1_ * 0.1F, 1.0F);
+        return MathHelper.hsvToRgb(0.62222224F - lvt_1_1_ * 0.05F, 0.5F + lvt_1_1_ * 0.1F, 1.0F);
     }
 
     private static MobSpawnInfo.Builder getStandardMobSpawnBuilder()
     {
         MobSpawnInfo.Builder mobspawninfo$builder = new MobSpawnInfo.Builder();
-        DefaultBiomeFeatures.withPassiveMobs(mobspawninfo$builder);
-        DefaultBiomeFeatures.withBatsAndHostiles(mobspawninfo$builder);
+        DefaultBiomeFeatures.farmAnimals(mobspawninfo$builder);
+        DefaultBiomeFeatures.commonSpawns(mobspawninfo$builder);
         return mobspawninfo$builder;
     }
 }

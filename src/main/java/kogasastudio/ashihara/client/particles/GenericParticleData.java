@@ -9,6 +9,8 @@ import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.Locale;
 
+import net.minecraft.particles.IParticleData.IDeserializer;
+
 public class GenericParticleData implements IParticleData
 {
     private final Vector3d speed;
@@ -25,7 +27,7 @@ public class GenericParticleData implements IParticleData
     public static final IDeserializer<GenericParticleData> DESERIALIZER = new IDeserializer<GenericParticleData>()
     {
         @Override
-        public GenericParticleData deserialize(ParticleType<GenericParticleData> particleTypeIn, StringReader reader) throws CommandSyntaxException
+        public GenericParticleData fromCommand(ParticleType<GenericParticleData> particleTypeIn, StringReader reader) throws CommandSyntaxException
         {
             reader.expect(' ');
             double speedX = reader.readDouble();
@@ -39,7 +41,7 @@ public class GenericParticleData implements IParticleData
         }
 
         @Override
-        public GenericParticleData read(ParticleType<GenericParticleData> particleTypeIn, PacketBuffer buffer)
+        public GenericParticleData fromNetwork(ParticleType<GenericParticleData> particleTypeIn, PacketBuffer buffer)
         {
             double speedX = buffer.readDouble();
             double speedY = buffer.readDouble();
@@ -56,7 +58,7 @@ public class GenericParticleData implements IParticleData
     }
 
     @Override
-    public void write(PacketBuffer buffer)
+    public void writeToNetwork(PacketBuffer buffer)
     {
         buffer.writeDouble(this.speed.x);
         buffer.writeDouble(this.speed.y);
@@ -65,9 +67,9 @@ public class GenericParticleData implements IParticleData
     }
 
     @Override
-    public String getParameters()
+    public String writeToString()
     {
         return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f",
-        this.getType().getRegistryName(), diameter, speed.getX(), speed.getY(), speed.getZ());
+        this.getType().getRegistryName(), diameter, speed.x(), speed.y(), speed.z());
     }
 }

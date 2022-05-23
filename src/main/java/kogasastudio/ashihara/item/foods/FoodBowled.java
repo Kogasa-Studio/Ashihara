@@ -7,14 +7,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.world.World;
 
+import net.minecraft.item.Item.Properties;
+
 public class FoodBowled extends Item
 {
-    public FoodBowled(Properties properties) {super(properties.maxStackSize(1));}
+    public FoodBowled(Properties properties) {super(properties.stacksTo(1));}
 
     @Override
-    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving)
+    public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving)
     {
-        ItemStack itemstack = super.onItemUseFinish(stack, worldIn, entityLiving);
-        return entityLiving instanceof PlayerEntity && ((PlayerEntity)entityLiving).abilities.isCreativeMode ? itemstack : new ItemStack(Items.BOWL);
+        ItemStack itemstack = super.finishUsingItem(stack, worldIn, entityLiving);
+        return entityLiving instanceof PlayerEntity && ((PlayerEntity)entityLiving).abilities.instabuild ? itemstack : new ItemStack(Items.BOWL);
     }
 }

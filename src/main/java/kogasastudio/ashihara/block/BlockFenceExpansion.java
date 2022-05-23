@@ -24,14 +24,16 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockFenceExpansion extends Block implements IVariable<AshiharaWoodTypes>
 {
     public BlockFenceExpansion(AshiharaWoodTypes typeIn)
     {
         super
         (
-            Properties.create(Material.WOOD)
-            .hardnessAndResistance(0.2F)
+            Properties.of(Material.WOOD)
+            .strength(0.2F)
             .sound(SoundType.WOOD)
         );
         type = typeIn;
@@ -46,42 +48,42 @@ public class BlockFenceExpansion extends Block implements IVariable<AshiharaWood
     public AshiharaWoodTypes getType() {return type;}
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(FACING, DECORATION);
     }
 
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
+    public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos)
     {
-        BlockState connectedState = worldIn.getBlockState(pos.offset(state.get(FACING).getOpposite()));
+        BlockState connectedState = worldIn.getBlockState(pos.relative(state.getValue(FACING).getOpposite()));
         return BlockActionHelper.typeMatches(state, connectedState) && connectedState.getBlock() instanceof BlockAdvancedFence;
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
     {
-        return !this.isValidPosition(stateIn, worldIn, currentPos) ? Blocks.AIR.getDefaultState()
-                : super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+        return !this.canSurvive(stateIn, worldIn, currentPos) ? Blocks.AIR.defaultBlockState()
+                : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
-        ItemStack stack = player.getHeldItem(handIn);
+        ItemStack stack = player.getItemInHand(handIn);
 
-        if (state.get(DECORATION).equals(DecorationTypes.NONE) && stack.getItem().equals(Items.GOLD_INGOT))
+        if (state.getValue(DECORATION).equals(DecorationTypes.NONE) && stack.getItem().equals(Items.GOLD_INGOT))
         {
-            worldIn.setBlockState(pos, state.with(DECORATION, DecorationTypes.GOLD));
-            worldIn.playSound(player, pos, SoundEvents.BLOCK_LANTERN_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            if (!player.isCreative()) player.getHeldItem(handIn).shrink(1);
+            worldIn.setBlockAndUpdate(pos, state.setValue(DECORATION, DecorationTypes.GOLD));
+            worldIn.playSound(player, pos, SoundEvents.LANTERN_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            if (!player.isCreative()) player.getItemInHand(handIn).shrink(1);
 
             return ActionResultType.SUCCESS;
         }
-        else if (!state.get(DECORATION).equals(DecorationTypes.NONE) && stack.isEmpty())
+        else if (!state.getValue(DECORATION).equals(DecorationTypes.NONE) && stack.isEmpty())
         {
-            player.setHeldItem(handIn, new ItemStack(Items.GOLD_INGOT));
-            worldIn.setBlockState(pos, state.with(DECORATION, DecorationTypes.NONE));
+            player.setItemInHand(handIn, new ItemStack(Items.GOLD_INGOT));
+            worldIn.setBlockAndUpdate(pos, state.setValue(DECORATION, DecorationTypes.NONE));
 
             return ActionResultType.SUCCESS;
         }
@@ -92,21 +94,21 @@ public class BlockFenceExpansion extends Block implements IVariable<AshiharaWood
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
     {
-        VoxelShape n_down =  makeCuboidShape(6.5d, 6.0d, 8.0d, 9.5d, 9.0d, 16.0d);
-        VoxelShape n_up =  makeCuboidShape(6.5d, 12.0d, 8.0d, 9.5d, 15.0d, 16.0d);
-        VoxelShape w_down = makeCuboidShape(8.0d, 6.0d, 6.5d, 16.0d, 9.0d, 9.5d);
-        VoxelShape w_up = makeCuboidShape(8.0d, 12.0d, 6.5d, 16.0d, 15.0d, 9.5d);
-        VoxelShape s_down = makeCuboidShape(6.5d, 6.0d, 0.0d, 9.5d, 9.0d, 8.0d);
-        VoxelShape s_up = makeCuboidShape(6.5d, 12.0d, 0.0d, 9.5d, 15.0d, 8.0d);
-        VoxelShape e_down = makeCuboidShape(0.0d, 6.0d, 6.5d, 8.0d, 9.0d, 9.5d);
-        VoxelShape e_up = makeCuboidShape(0.0d, 12.0d, 6.5d, 8.0d, 15.0d, 9.5d);
+        VoxelShape n_down =  box(6.5d, 6.0d, 8.0d, 9.5d, 9.0d, 16.0d);
+        VoxelShape n_up =  box(6.5d, 12.0d, 8.0d, 9.5d, 15.0d, 16.0d);
+        VoxelShape w_down = box(8.0d, 6.0d, 6.5d, 16.0d, 9.0d, 9.5d);
+        VoxelShape w_up = box(8.0d, 12.0d, 6.5d, 16.0d, 15.0d, 9.5d);
+        VoxelShape s_down = box(6.5d, 6.0d, 0.0d, 9.5d, 9.0d, 8.0d);
+        VoxelShape s_up = box(6.5d, 12.0d, 0.0d, 9.5d, 15.0d, 8.0d);
+        VoxelShape e_down = box(0.0d, 6.0d, 6.5d, 8.0d, 9.0d, 9.5d);
+        VoxelShape e_up = box(0.0d, 12.0d, 6.5d, 8.0d, 15.0d, 9.5d);
 
         VoxelShape n = VoxelShapes.or(n_up, n_down);
         VoxelShape w = VoxelShapes.or(w_up, w_down);
         VoxelShape s = VoxelShapes.or(s_up, s_down);
         VoxelShape e = VoxelShapes.or(e_up, e_down);
 
-        switch (state.get(FACING))
+        switch (state.getValue(FACING))
         {
             case EAST: return e;
             case SOUTH: return s;
@@ -126,9 +128,9 @@ public class BlockFenceExpansion extends Block implements IVariable<AshiharaWood
         DecorationTypes(String name) {this.name = name;}
 
         @Override
-        public String getString() {return this.name;}
+        public String getSerializedName() {return this.name;}
     }
 
     @Override
-    public ItemStack getItem(IBlockReader worldIn, BlockPos pos, BlockState state) {return new ItemStack(Items.STICK);}
+    public ItemStack getCloneItemStack(IBlockReader worldIn, BlockPos pos, BlockState state) {return new ItemStack(Items.STICK);}
 }

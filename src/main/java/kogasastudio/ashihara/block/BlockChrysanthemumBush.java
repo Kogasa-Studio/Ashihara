@@ -15,29 +15,31 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IForgeShearable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockChrysanthemumBush extends BushBlock implements IForgeShearable
 {
     public BlockChrysanthemumBush()
     {
         super
         (
-            Properties.create(Material.PLANTS)
-            .doesNotBlockMovement()
-            .zeroHardnessAndResistance()
-            .sound(SoundType.PLANT)
+            Properties.of(Material.PLANT)
+            .noCollission()
+            .instabreak()
+            .sound(SoundType.GRASS)
         );
     }
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
     {
-        return makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 6.0D, 14.0D);
+        return box(2.0D, 0.0D, 2.0D, 14.0D, 6.0D, 14.0D);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public long getPositionRandom(BlockState state, BlockPos pos)
+    public long getSeed(BlockState state, BlockPos pos)
     {
-        return MathHelper.getCoordinateRandom(pos.getX(), pos.getY(), pos.getZ());
+        return MathHelper.getSeed(pos.getX(), pos.getY(), pos.getZ());
     }
 }

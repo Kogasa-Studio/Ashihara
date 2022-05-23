@@ -110,15 +110,15 @@ public class FluidHelper
                     if (filled > 0) {
                         if (stackIn.getCount() == 1)
                         {
-                            player.setHeldItem(hand, container);
+                            player.setItemInHand(hand, container);
                         }
-                        else if (stackIn.getCount() > 1 && player.addItemStackToInventory(container))
+                        else if (stackIn.getCount() > 1 && player.addItem(container))
                         {
                             stackIn.shrink(1);
                         }
                         else
                         {
-                            player.dropItem(container, false, true);
+                            player.drop(container, false, true);
                             stackIn.shrink(1);
                         }
                         fluidTank.drain(filled, EXECUTE);
@@ -151,10 +151,10 @@ public class FluidHelper
                     {
                         if (stackIn.getCount() == 1)
                         {
-                            player.setHeldItem(hand, container);
+                            player.setItemInHand(hand, container);
                             filled = true;
                         }
-                        else if (player.addItemStackToInventory(container))
+                        else if (player.addItem(container))
                         {
                             stackIn.shrink(1);
                             filled = true;
@@ -165,7 +165,7 @@ public class FluidHelper
                         stackIn.shrink(1);
                         if (stackIn.isEmpty())
                         {
-                            player.setHeldItem(hand, ItemStack.EMPTY);
+                            player.setItemInHand(hand, ItemStack.EMPTY);
                         }
                         filled = true;
                     }
@@ -243,7 +243,7 @@ public class FluidHelper
                 sim.drain(new FluidStack(fluidInItem, filledAmount), EXECUTE);
                 boolean outEmpty = outStack.isEmpty();
                 boolean canOutStack =
-                    storedAmount == filledAmount && sim.getContainer().isItemEqual(outStack) && outStack.getCount() + 1 <= outStack.getMaxStackSize();
+                    storedAmount == filledAmount && sim.getContainer().sameItem(outStack) && outStack.getCount() + 1 <= outStack.getMaxStackSize();
                 if (!(outEmpty || canOutStack)) return false;
                 FluidStack drained = handler.drain(new FluidStack(fluidInItem, filledAmount), EXECUTE);
                 if (!drained.isEmpty())

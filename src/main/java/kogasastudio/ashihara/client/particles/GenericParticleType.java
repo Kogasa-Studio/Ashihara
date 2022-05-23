@@ -11,7 +11,7 @@ public class GenericParticleType extends ParticleType<GenericParticleData>
     public GenericParticleType() {super(false, DESERIALIZER);}
 
     @Override
-    public Codec<GenericParticleData> func_230522_e_()
+    public Codec<GenericParticleData> codec()
     {
         return Codec.unit(new GenericParticleData(new Vector3d(0, 0, 0), 0, null));
     }

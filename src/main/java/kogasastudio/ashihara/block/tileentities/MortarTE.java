@@ -102,14 +102,14 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
     private void process(boolean isSauceProcess)
     {
         this.progress += isSauceProcess ? this.nextStep : 1;
-        if (this.progress >= this.progressTotal) {finishReciping(true);markDirty();return;}
+        if (this.progress >= this.progressTotal) {finishReciping(true);setChanged();return;}
         if (!this.isWorking) this.isWorking = true;
         if (!isSauceProcess)
         {
             this.pointer += 1;
             this.nextStep = this.sequence[this.pointer];
         }
-        markDirty();
+        setChanged();
     }
 
     private boolean isNextStepNeeded(ItemStack stack)
@@ -125,9 +125,9 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
 
     private Optional<MortarRecipe> tryMatchRecipe(RecipeWrapper wrapper)
     {
-        if(world == null) return Optional.empty();
+        if(level == null) return Optional.empty();
 
-        return world.getRecipeManager().getRecipe(MortarRecipe.TYPE, wrapper, world);
+        return level.getRecipeManager().getRecipeFor(MortarRecipe.TYPE, wrapper, level);
     }
 
     //检查当前状态, 若内容物匹配配方则尝试启用配方
@@ -146,12 +146,12 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
         else
         {
             finishReciping(false);
-            if (this.world != null) this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
+            if (this.level != null) this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition), this.level.getBlockState(this.worldPosition), 3);
         }
-        if (FluidHelper.notifyFluidTankInteraction(this.fluidIO, 0, 1, this.tank.orElse(new FluidTank(0)), this.world, this.pos))
+        if (FluidHelper.notifyFluidTankInteraction(this.fluidIO, 0, 1, this.tank.orElse(new FluidTank(0)), this.level, this.worldPosition))
         {
-            this.markDirty();
-            if (this.world != null) this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
+            this.setChanged();
+            if (this.level != null) this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition), this.level.getBlockState(this.worldPosition), 3);
         }
     }
 
@@ -170,7 +170,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
         {
             this.output.add(stack.copy());
         }
-        markDirty();
+        setChanged();
     }
 
     private void finishReciping(boolean produce)
@@ -188,7 +188,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
         this.fluidCost = FluidStack.EMPTY;
         this.output.clear();
         this.isWorking = false;
-        markDirty();
+        setChanged();
     }
 
     private void produce()
@@ -210,7 +210,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
                     {
                         fluidInTank.setAmount(Math.max(0, fluidInTank.getAmount() - this.fluidCost.getAmount()));
                         tank.setFluid(fluidInTank);
-                        markDirty();
+                        setChanged();
                     }
                 }
             );
@@ -222,10 +222,10 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
     {
         if (isNextStepNeeded(stackIn))
         {
-            player.getCooldownTracker().setCooldown(stackIn.getItem(), 8);
+            player.getCooldowns().addCooldown(stackIn.getItem(), 8);
             if (!stackIn.isEmpty() && !player.isCreative())
             {
-                stackIn.damageItem(1, player, (playerEntity) -> player.sendBreakAnimation(EquipmentSlotType.MAINHAND));
+                stackIn.hurtAndBreak(1, player, (playerEntity) -> player.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
             }
             process(this.recipeType == 2);
             return true;
@@ -239,16 +239,16 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
                 {
                     this.contents.setStackInSlot(i, ItemStack.EMPTY);
                     notifyStateChanged();
-                    markDirty();
-                    InventoryHelper.spawnItemStack(worldIn, posIn.getX(), posIn.getY() + 0.5F, posIn.getZ(), stack);
+                    setChanged();
+                    InventoryHelper.dropItemStack(worldIn, posIn.getX(), posIn.getY() + 0.5F, posIn.getZ(), stack);
                     return true;
                 }
-                else if (stack.isEmpty() && stackIn.getItem().isIn(MASHABLE))
+                else if (stack.isEmpty() && stackIn.getItem().is(MASHABLE))
                 {
                     this.contents.insertItem(i, new ItemStack(stackIn.getItem()), false);
                     if (!player.isCreative()) stackIn.shrink(1);
                     notifyStateChanged();
-                    markDirty();
+                    setChanged();
                     return true;
                 }
             }
@@ -257,9 +257,9 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound)
+    public CompoundNBT save(CompoundNBT compound)
     {
-        super.write(compound);
+        super.save(compound);
         compound.putInt("progress", this.progress);
         compound.putInt("progressTotal", this.progressTotal);
 
@@ -283,7 +283,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
             {
                 CompoundNBT itemTag = new CompoundNBT();
                 itemTag.putInt("Slot", i);
-                outputIn.add(this.output.get(i).write(itemTag));
+                outputIn.add(this.output.get(i).save(itemTag));
             }
         }
         compound.put("output", outputIn);
@@ -292,7 +292,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt)
+    public void load(BlockState state, CompoundNBT nbt)
     {
         this.output = NonNullList.create();
         this.progress = nbt.getInt("progress");
@@ -319,10 +319,10 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
 
             if (slot >= 0)
             {
-                this.output.add(slot, ItemStack.read(itemTags));
+                this.output.add(slot, ItemStack.of(itemTags));
             }
         }
-        super.read(state, nbt);
+        super.load(state, nbt);
     }
 
     @Override
@@ -334,7 +334,7 @@ public class MortarTE extends AshiharaMachineTE implements INamedContainerProvid
     @Override
     public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_)
     {
-        if (this.world == null) return null;
+        if (this.level == null) return null;
         return new MortarContainer(p_createMenu_1_, p_createMenu_2_, this);
     }
 }

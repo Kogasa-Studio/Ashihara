@@ -78,14 +78,14 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
             }
         }
 
-        public int size () {return 4;}
+        public int getCount () {return 4;}
     };
 
     private Optional<MillRecipe> tryMatchRecipe(RecipeWrapper wrapper)
     {
-        if(world == null) return Optional.empty();
+        if(level == null) return Optional.empty();
 
-        return world.getRecipeManager().getRecipe(MillRecipe.TYPE, wrapper, world);
+        return level.getRecipeManager().getRecipeFor(MillRecipe.TYPE, wrapper, level);
     }
 
     private boolean hasInput()
@@ -115,13 +115,13 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
                 即空格子数+有效格子数大于给定产物的种数，则输出true*/
                 for (ItemStack stack : outputIn)
                 {
-                    for (int j = 0; j < 4; j += 1) {if (output.getStackInSlot(j).isEmpty()) {emptySlotCount += 1;}}
+                    for (int j = 0; j < 4; j += 1) {if (output.getItem(j).isEmpty()) {emptySlotCount += 1;}}
                     for (int i = 0; i < 4; i += 1)
                     {
-                        if (!output.getStackInSlot(i).isEmpty() && output.isItemValidForSlot(i, stack))
+                        if (!output.getItem(i).isEmpty() && output.canPlaceItem(i, stack))
                         {
-                            ItemStack stackInstant = output.getStackInSlot(i);
-                            if (stack.isItemEqual(stackInstant) && stack.getCount() + stackInstant.getCount() <= stackInstant.getMaxStackSize())
+                            ItemStack stackInstant = output.getItem(i);
+                            if (stack.sameItem(stackInstant) && stack.getCount() + stackInstant.getCount() <= stackInstant.getMaxStackSize())
                             {availableSlotCount += 1;break;}
                         }
                     }
@@ -150,7 +150,7 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
         this.recipe = recipeIn;
         this.isWorking = true;
         this.sync();
-        markDirty();
+        setChanged();
     }
 
     //结束时调用, 将te重置并生成产出物
@@ -187,7 +187,7 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
                         {
                             fluidInTank.setAmount(Math.max(0, fluidInTank.getAmount() - fluid.getAmount()));
                             tank.setFluid(fluidInTank);
-                            markDirty();
+                            setChanged();
                         }
                     }
                 );
@@ -205,16 +205,16 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
                         {
                             fluidInTank.setAmount(Math.min(fluid.getAmount() + fluidInTank.getAmount(), tank.getCapacity()));
                             tank.setFluid(fluidInTank);
-                            markDirty();
+                            setChanged();
                         }
                     }
                 );
             }
-            if (this.world != null) this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
+            if (this.level != null) this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition), this.level.getBlockState(this.worldPosition), 3);
         }
         this.recipe = null;
         this.sync();
-        markDirty();
+        setChanged();
     }
 
     //获取磨石的旋转角度（角度制）
@@ -262,7 +262,7 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt)
+    public void load(BlockState state, CompoundNBT nbt)
     {
         this.round = nbt.getByte("round");
         this.roundTotal = nbt.getByte("roundTotal");
@@ -270,14 +270,14 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
         this.roundTicks = nbt.getInt("roundTicks");
         this.input.deserializeNBT(nbt.getCompound("input"));
         this.fluidIO.deserializeNBT(nbt.getCompound("fluidIO"));
-        this.output.read(nbt.getList("output", 10));
+        this.output.fromTag(nbt.getList("output", 10));
         this.tankIn.ifPresent(fluidTank -> fluidTank.readFromNBT(nbt.getCompound("tankIn")));
         this.tankOut.ifPresent(fluidTank -> fluidTank.readFromNBT(nbt.getCompound("tankOut")));
-        super.read(state, nbt);
+        super.load(state, nbt);
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound)
+    public CompoundNBT save(CompoundNBT compound)
     {
         compound.putByte("round", this.round);
         compound.putByte("roundTotal", this.roundTotal);
@@ -285,28 +285,28 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
         compound.putInt("roundTicks", this.roundTicks);
         compound.put("input", this.input.serializeNBT());
         compound.put("fluidIO", this.fluidIO.serializeNBT());
-        compound.put("output", this.output.write());
+        compound.put("output", this.output.createTag());
         this.tankIn.ifPresent(fluidTank -> compound.put("tankIn", fluidTank.writeToNBT(new CompoundNBT())));
         this.tankOut.ifPresent(fluidTank -> compound.put("tankOut", fluidTank.writeToNBT(new CompoundNBT())));
-        return super.write(compound);
+        return super.save(compound);
     }
 
     @Override
     public void tick()
     {
-        if (this.world == null) return;
+        if (this.level == null) return;
 
         if
         (
-            FluidHelper.notifyFluidTankInteraction(this.fluidIO, 0, 2, this.tankIn.orElse(new FluidTank(0)), this.world, this.pos)
-         || FluidHelper.notifyFluidTankInteraction(this.fluidIO, 1, 2, this.tankOut.orElse(new FluidTank(0)), this.world, this.pos)
+            FluidHelper.notifyFluidTankInteraction(this.fluidIO, 0, 2, this.tankIn.orElse(new FluidTank(0)), this.level, this.worldPosition)
+         || FluidHelper.notifyFluidTankInteraction(this.fluidIO, 1, 2, this.tankOut.orElse(new FluidTank(0)), this.level, this.worldPosition)
         )
         {
-            this.markDirty();
-            if (this.world != null) this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
+            this.setChanged();
+            if (this.level != null) this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition), this.level.getBlockState(this.worldPosition), 3);
         }
 
-        if (!this.world.isRemote())
+        if (!this.level.isClientSide())
         {
             if (hasInput())
             {
@@ -326,7 +326,7 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
                         if (roundProgress == roundTicks) {roundProgress = 0; round += 1;}
                         else {roundProgress += 1;}
                         this.sync();
-                        markDirty();
+                        setChanged();
                     }
                 }
             }
@@ -341,27 +341,27 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     @Override
     public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_)
     {
-        if (this.world == null) return null;
-        return new MillContainer(p_createMenu_1_, p_createMenu_2_, this.world, this.pos, this.millData);
+        if (this.level == null) return null;
+        return new MillContainer(p_createMenu_1_, p_createMenu_2_, this.level, this.worldPosition, this.millData);
     }
 
     private void sync()
     {
-        if (this.world == null) return;
+        if (this.level == null) return;
         CompoundNBT nbt = new CompoundNBT();
         nbt.putInt("roundProgress", this.roundProgress);
         nbt.putInt("roundTicks", this.roundTicks);
         this.tankIn.ifPresent(tank -> nbt.put("tankIn", tank.writeToNBT(new CompoundNBT())));
         this.tankOut.ifPresent(tank -> nbt.put("tankOut", tank.writeToNBT(new CompoundNBT())));
-        SUpdateTileEntityPacket p = new SUpdateTileEntityPacket(this.pos, 1, nbt);
-        ((ServerWorld)this.world).getChunkProvider().chunkManager.getTrackingPlayers(new ChunkPos(this.pos), false)
-        .forEach(k -> k.connection.sendPacket(p));
+        SUpdateTileEntityPacket p = new SUpdateTileEntityPacket(this.worldPosition, 1, nbt);
+        ((ServerWorld)this.level).getChunkSource().chunkMap.getPlayers(new ChunkPos(this.worldPosition), false)
+        .forEach(k -> k.connection.send(p));
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
     {
-        CompoundNBT nbt = pkt.getNbtCompound();
+        CompoundNBT nbt = pkt.getTag();
         this.roundProgress = nbt.getInt("roundProgress");
         this.roundTicks = nbt.getInt("roundTicks");
         this.tankIn.ifPresent(tank -> tank.readFromNBT(nbt.getCompound("tankIn")));

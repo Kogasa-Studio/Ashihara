@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.ColorHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -31,7 +32,6 @@ import java.util.Map;
 
 import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
 import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION_COLOR_TEX;
-import static net.minecraft.inventory.container.PlayerContainer.LOCATION_BLOCKS_TEXTURE;
 
 public class RenderHelper
 {
@@ -112,11 +112,11 @@ public class RenderHelper
         float green = ((RGBA >> 8) & 0xFF) / 255f;
         float blue = ((RGBA) & 0xFF) / 255f;
 
-        builder.pos(matrix, x, y, z)
+        builder.vertex(matrix, x, y, z)
         .color(red, green, blue, alpha)
-        .tex(u, v)
-        .overlay(overlay)
-        .lightmap(light)
+        .uv(u, v)
+        .overlayCoords(overlay)
+        .uv2(light)
         .normal(0f, 1f, 0f)
         .endVertex();
     }
@@ -126,14 +126,14 @@ public class RenderHelper
      */
     public static void buildMatrix(Matrix4f matrix, IVertexBuilder builder, float x, float y, float z, float u, float v, int RGBA)
     {
-        int red = ColorHelper.PackedColor.getRed(RGBA);
-        int green = ColorHelper.PackedColor.getGreen(RGBA);
-        int blue = ColorHelper.PackedColor.getBlue(RGBA);
-        int alpha = ColorHelper.PackedColor.getAlpha(RGBA);
+        int red = ColorHelper.PackedColor.red(RGBA);
+        int green = ColorHelper.PackedColor.green(RGBA);
+        int blue = ColorHelper.PackedColor.blue(RGBA);
+        int alpha = ColorHelper.PackedColor.alpha(RGBA);
 
-        builder.pos(matrix, x, y, z)
+        builder.vertex(matrix, x, y, z)
         .color(red, green, blue, alpha)
-        .tex(u, v)
+        .uv(u, v)
         .endVertex();
     }
 
@@ -153,7 +153,7 @@ public class RenderHelper
     {
         if ((x <= mouseX && mouseX <= x + weight) && (y <= mouseY && mouseY <= y + height))
         {
-            gui.func_243308_b(matrix, list, mouseX, mouseY);
+            gui.renderComponentTooltip(matrix, list, mouseX, mouseY);
         }
     }
 
@@ -165,7 +165,7 @@ public class RenderHelper
             list.add(new TranslationTextComponent("tooltip.ashihara.fluid_existence"));
             list.add(new StringTextComponent
             (
-            "    " + I18n.format(stack.getTranslationKey())
+            "    " + I18n.get(stack.getTranslationKey())
                 + ": " + stack.getAmount()
                 + (Capacity > 0 ? (" mB / " + Capacity + " mB") : " mB")
             ));
@@ -191,11 +191,11 @@ public class RenderHelper
         //获取sprite
         TextureAtlasSprite FLUID =
             Minecraft.getInstance()
-            .getAtlasSpriteGetter(LOCATION_BLOCKS_TEXTURE)
+            .getTextureAtlas(PlayerContainer.BLOCK_ATLAS)
             .apply(fluid.getFluid().getAttributes().getStillTexture());
 
         //绑atlas
-        Minecraft.getInstance().getTextureManager().bindTexture(LOCATION_BLOCKS_TEXTURE);
+        Minecraft.getInstance().getTextureManager().bind(PlayerContainer.BLOCK_ATLAS);
 
         int color = fluid.getFluid().getAttributes().getColor();
 
@@ -209,11 +209,11 @@ public class RenderHelper
         int hFloors = height / 16;
         int extraHeight = hFloors == 0 ? height : height % 16;
 
-        float u0 = FLUID.getMinU();
-        float v0 = FLUID.getMinV();
+        float u0 = FLUID.getU0();
+        float v0 = FLUID.getV0();
 
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder builder = tessellator.getBuffer();
+        BufferBuilder builder = tessellator.getBuilder();
 
         /*
          * 渲染循环
@@ -231,7 +231,7 @@ public class RenderHelper
             //获取本层/额外层的高度，若高度层渲染完毕则设为额外层高度
             float yOffset = i == 0 ? (float) extraHeight : 16;
             //获取v1
-            float v1 = i == 0 ? FLUID.getMinV() + ((FLUID.getMaxV() - v0) * ((float) extraHeight / 16f)) : FLUID.getMaxV();
+            float v1 = i == 0 ? FLUID.getV0() + ((FLUID.getV1() - v0) * ((float) extraHeight / 16f)) : FLUID.getV1();
 
             //x层以此类推
             for (int j = wFloors; j >= 0; j --)
@@ -239,7 +239,7 @@ public class RenderHelper
                 if (j == 0 && extraWidth == 0) break;
                 float xStart = x + (wFloors - j) * 16;
                 float xOffset = j == 0 ? (float) extraWidth : 16;
-                float u1 = j == 0 ? FLUID.getMinU() + ((FLUID.getMaxU() - u0) * ((float) extraWidth / 16f)) : FLUID.getMaxU();
+                float u1 = j == 0 ? FLUID.getU0() + ((FLUID.getU1() - u0) * ((float) extraWidth / 16f)) : FLUID.getU1();
 
                 //渲染主代码
                 builder.begin(GL11.GL_QUADS, POSITION_COLOR_TEX);
@@ -247,7 +247,7 @@ public class RenderHelper
                 buildMatrix(matrix, builder, xStart, yStart, 0.0f, u0, v1, color);
                 buildMatrix(matrix, builder, xStart + xOffset, yStart, 0.0f, u1, v1, color);
                 buildMatrix(matrix, builder, xStart + xOffset, yStart - yOffset, 0.0f, u1, v0, color);
-                tessellator.draw();
+                tessellator.end();
             }
         }
         RenderSystem.disableBlend();
@@ -262,32 +262,32 @@ public class RenderHelper
         World worldIn, BlockPos posIn
     )
     {
-        IVertexBuilder builder = bufferIn.getBuffer(RenderType.getTranslucentNoCrumbling());
+        IVertexBuilder builder = bufferIn.getBuffer(RenderType.translucentNoCrumbling());
 
         TextureAtlasSprite FLUID = (worldIn != null && posIn != null)
             ? Minecraft.getInstance()
-            .getBlockRendererDispatcher()
-            .getBlockModelShapes()
-            .getTexture(fluidIn.getFluid().getDefaultState().getBlockState(), worldIn, posIn)
+            .getBlockRenderer()
+            .getBlockModelShaper()
+            .getTexture(fluidIn.getFluid().defaultFluidState().createLegacyBlock(), worldIn, posIn)
             : Minecraft.getInstance()
-            .getAtlasSpriteGetter(LOCATION_BLOCKS_TEXTURE)
+            .getTextureAtlas(PlayerContainer.BLOCK_ATLAS)
             .apply(fluidIn.getFluid().getAttributes().getStillTexture());
 
         int color = fluidIn.getFluid().getAttributes().getColor();
 
-        stackIn.push();
-        GlStateManager.enableBlend();
+        stackIn.pushPose();
+        GlStateManager._enableBlend();
 
         stackIn.translate(0.0f, heightIn, 0.0f);
-        Matrix4f wtf = stackIn.getLast().getMatrix();
+        Matrix4f wtf = stackIn.last().pose();
         //主渲染
-        buildMatrix(wtf, builder, xStart, 0, zStart, FLUID.getMinU(), FLUID.getMinV(), combinedOverlayIn, color, 1.0f, combinedLightIn);
-        buildMatrix(wtf, builder, xStart, 0, zEnd, FLUID.getMinU(), FLUID.getMaxV(), combinedOverlayIn, color, 1.0f, combinedLightIn);
-        buildMatrix(wtf, builder, xEnd, 0, zEnd, FLUID.getMaxU(), FLUID.getMaxV(), combinedOverlayIn, color, 1.0f, combinedLightIn);
-        buildMatrix(wtf, builder, xEnd, 0, zStart, FLUID.getMaxU(), FLUID.getMinV(), combinedOverlayIn, color, 1.0f, combinedLightIn);
+        buildMatrix(wtf, builder, xStart, 0, zStart, FLUID.getU0(), FLUID.getV0(), combinedOverlayIn, color, 1.0f, combinedLightIn);
+        buildMatrix(wtf, builder, xStart, 0, zEnd, FLUID.getU0(), FLUID.getV1(), combinedOverlayIn, color, 1.0f, combinedLightIn);
+        buildMatrix(wtf, builder, xEnd, 0, zEnd, FLUID.getU1(), FLUID.getV1(), combinedOverlayIn, color, 1.0f, combinedLightIn);
+        buildMatrix(wtf, builder, xEnd, 0, zStart, FLUID.getU1(), FLUID.getV0(), combinedOverlayIn, color, 1.0f, combinedLightIn);
 
-        GlStateManager.disableBlend();
-        stackIn.pop();
+        GlStateManager._disableBlend();
+        stackIn.popPose();
     }
 
     public static void renderLeveledFluidStack

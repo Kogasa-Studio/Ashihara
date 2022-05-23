@@ -32,16 +32,18 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockMill extends Block
 {
     public BlockMill()
     {
         super
         (
-            Properties.create(Material.ROCK)
-            .hardnessAndResistance(2.0F, 6.0F)
+            Properties.of(Material.STONE)
+            .strength(2.0F, 6.0F)
             .harvestTool(ToolType.PICKAXE)
-            .setRequiresTool()
+            .requiresCorrectToolForDrops()
             .sound(SoundType.STONE)
         );
     }
@@ -49,7 +51,7 @@ public class BlockMill extends Block
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     @Override
-    public void harvestBlock(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, TileEntity te, ItemStack stack)
+    public void playerDestroy(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, TileEntity te, ItemStack stack)
     {
         if (te instanceof MillTE)
         {
@@ -59,44 +61,44 @@ public class BlockMill extends Block
                 ItemStack stack1 =((MillTE) te).getInput().getStackInSlot(i);
                 if (!stack.isEmpty()) stacks.add(stack1);
             }
-            InventoryHelper.dropItems(worldIn, pos, stacks);
-            InventoryHelper.dropInventoryItems(worldIn, pos, ((MillTE) te).getOutput());
+            InventoryHelper.dropContents(worldIn, pos, stacks);
+            InventoryHelper.dropContents(worldIn, pos, ((MillTE) te).getOutput());
         }
-        super.harvestBlock(worldIn, player, pos, state, te, stack);
+        super.playerDestroy(worldIn, player, pos, state, te, stack);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing());
+        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
     }
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
     {
-        VoxelShape shape1 = Block.makeCuboidShape(2, 0, 2, 14, 5, 14);
-        VoxelShape shape2 = Block.makeCuboidShape(4, 5, 4, 12, 10, 12);
+        VoxelShape shape1 = Block.box(2, 0, 2, 14, 5, 14);
+        VoxelShape shape2 = Block.box(4, 5, 4, 12, 10, 12);
         return VoxelShapes.or(shape1, shape2);
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
-        ItemStack stack = player.getHeldItem(handIn);
-        MillTE te = (MillTE) worldIn.getTileEntity(pos);
+        ItemStack stack = player.getItemInHand(handIn);
+        MillTE te = (MillTE) worldIn.getBlockEntity(pos);
 
         if (te != null)
         {
             FluidTank tank = te.getTank().orElse(new FluidTank(0));
             if (!stack.isEmpty() && FluidHelper.notifyFluidTankInteraction(player, handIn, stack, tank, worldIn, pos))
             {
-                player.inventory.markDirty();
-                worldIn.notifyBlockUpdate(pos, state, state, 3);
+                player.inventory.setChanged();
+                worldIn.sendBlockUpdated(pos, state, state, 3);
                 return ActionResultType.SUCCESS;
             }
-            else if (!worldIn.isRemote && handIn == Hand.MAIN_HAND)
+            else if (!worldIn.isClientSide && handIn == Hand.MAIN_HAND)
             {
-                NetworkHooks.openGui((ServerPlayerEntity) player, te, (PacketBuffer packerBuffer) -> packerBuffer.writeBlockPos(te.getPos()));
+                NetworkHooks.openGui((ServerPlayerEntity) player, te, (PacketBuffer packerBuffer) -> packerBuffer.writeBlockPos(te.getBlockPos()));
                 return ActionResultType.SUCCESS;
             }
             else return ActionResultType.SUCCESS;
@@ -106,7 +108,7 @@ public class BlockMill extends Block
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {builder.add(FACING);}
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {builder.add(FACING);}
 
     @Override
     public boolean hasTileEntity(BlockState state) {return true;}

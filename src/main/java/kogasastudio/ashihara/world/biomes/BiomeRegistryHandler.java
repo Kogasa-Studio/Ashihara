@@ -25,7 +25,7 @@ public class BiomeRegistryHandler
 
     private static void addBiome(RegistryEvent.Register<Biome> event, BiomeManager.BiomeType type, String id, int weight, Biome biome)
     {
-        BiomeManager.addBiome(type, new BiomeManager.BiomeEntry(RegistryKey.getOrCreateKey(Registry.BIOME_KEY, new ResourceLocation(Ashihara.MODID, id)), weight));
+        BiomeManager.addBiome(type, new BiomeManager.BiomeEntry(RegistryKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(Ashihara.MODID, id)), weight));
         event.getRegistry().register(biome);
     }
 }

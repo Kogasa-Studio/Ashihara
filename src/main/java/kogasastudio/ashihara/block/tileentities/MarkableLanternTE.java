@@ -17,7 +17,7 @@ public class MarkableLanternTE extends AshiharaMachineTE
 
     //获取所有纹章的rl列表
     private static final ArrayList<ResourceLocation> textures = new ArrayList<>
-            (Minecraft.getInstance().getResourceManager().getAllResourceLocations("textures/icons/", s -> s.endsWith(".png")));
+            (Minecraft.getInstance().getResourceManager().listResources("textures/icons/", s -> s.endsWith(".png")));
     //获取处理过的可用来渲染的rl
     private static final ArrayList<ResourceLocation> cookedTextures = RenderHelper.cookTextureRLs(textures);
     //当前纹章在列表中的下标
@@ -32,35 +32,35 @@ public class MarkableLanternTE extends AshiharaMachineTE
     public void nextIcon()
     {
         if (pointer == cookedTextures.size() - 1) pointer = 0; else pointer += 1;
-        markDirty();
+        setChanged();
     }
 
     //数据同步保存
     @Override
-    public void read(BlockState state, CompoundNBT nbt)
+    public void load(BlockState state, CompoundNBT nbt)
     {
         pointer = nbt.getInt("pointer");
-        super.read(state, nbt);
+        super.load(state, nbt);
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound)
+    public CompoundNBT save(CompoundNBT compound)
     {
         compound.putInt("pointer", pointer);
-        return super.write(compound);
+        return super.save(compound);
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {return this.write(new CompoundNBT());}
+    public CompoundNBT getUpdateTag() {return this.save(new CompoundNBT());}
 
     @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT tag) {this.read(state, tag);}
+    public void handleUpdateTag(BlockState state, CompoundNBT tag) {this.load(state, tag);}
 
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket()
-    {return new SUpdateTileEntityPacket(this.pos, -1, this.write(new CompoundNBT()));}
+    {return new SUpdateTileEntityPacket(this.worldPosition, -1, this.save(new CompoundNBT()));}
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {this.read(this.getBlockState(), pkt.getNbtCompound());}
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {this.load(this.getBlockState(), pkt.getTag());}
 }

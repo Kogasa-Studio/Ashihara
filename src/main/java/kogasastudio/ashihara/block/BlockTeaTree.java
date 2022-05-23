@@ -31,19 +31,21 @@ import static net.minecraft.state.properties.BlockStateProperties.HORIZONTAL_AXI
 import static net.minecraftforge.common.ForgeHooks.onCropsGrowPost;
 import static net.minecraftforge.common.ForgeHooks.onCropsGrowPre;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockTeaTree extends BushBlock implements IGrowable
 {
     public BlockTeaTree()
     {
         super
         (
-            Properties.create(Material.PLANTS)
-            .doesNotBlockMovement()
-            .tickRandomly()
-            .hardnessAndResistance(0.2F)
+            Properties.of(Material.PLANT)
+            .noCollission()
+            .randomTicks()
+            .strength(0.2F)
             .sound(SoundType.SWEET_BERRY_BUSH)
         );
-        this.setDefaultState(this.getStateContainer().getBaseState().with(AGE, 0).with(BLOOMED, false));
+        this.registerDefaultState(this.getStateDefinition().any().setValue(AGE, 0).setValue(BLOOMED, false));
     }
 
     public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 4);
@@ -51,97 +53,97 @@ public class BlockTeaTree extends BushBlock implements IGrowable
     public static final EnumProperty<Direction.Axis> AXIS = HORIZONTAL_AXIS;
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {builder.add(AGE, BLOOMED, AXIS);}
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {builder.add(AGE, BLOOMED, AXIS);}
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
     {
-        VoxelShape age_0 = makeCuboidShape(6.0d, 0.0d, 6.0d, 10.0d, 4.0d, 10.0d);
-        VoxelShape age_1 = makeCuboidShape(4.0d, 0.0d, 4.0d, 12.0d, 11.0d, 12.0d);
-        VoxelShape stem_x = makeCuboidShape(3.0d, 0.0d, 2.0d, 13.0d, 5.0d, 14.0d);
-        VoxelShape stem_z = makeCuboidShape(2.0d, 0.0d, 3.0d, 14.0d, 5.0d, 13.0d);
-        VoxelShape leaves_x = makeCuboidShape(2.0d, 5.0d, 1.0d, 14.0d, 13.0d, 15.0d);
-        VoxelShape leaves_z = makeCuboidShape(1.0d, 5.0d, 2.0d, 15.0d, 13.0d, 14.0d);
+        VoxelShape age_0 = box(6.0d, 0.0d, 6.0d, 10.0d, 4.0d, 10.0d);
+        VoxelShape age_1 = box(4.0d, 0.0d, 4.0d, 12.0d, 11.0d, 12.0d);
+        VoxelShape stem_x = box(3.0d, 0.0d, 2.0d, 13.0d, 5.0d, 14.0d);
+        VoxelShape stem_z = box(2.0d, 0.0d, 3.0d, 14.0d, 5.0d, 13.0d);
+        VoxelShape leaves_x = box(2.0d, 5.0d, 1.0d, 14.0d, 13.0d, 15.0d);
+        VoxelShape leaves_z = box(1.0d, 5.0d, 2.0d, 15.0d, 13.0d, 14.0d);
 
-        int age = state.get(AGE);
+        int age = state.getValue(AGE);
         if (age == 0) return age_0;
         if (age == 1) return age_1;
-        if (state.get(AXIS).equals(Direction.Axis.X)) return VoxelShapes.or(stem_x, leaves_x);
-        if (state.get(AXIS).equals(Direction.Axis.Z)) return VoxelShapes.or(stem_z, leaves_z);
+        if (state.getValue(AXIS).equals(Direction.Axis.X)) return VoxelShapes.or(stem_x, leaves_x);
+        if (state.getValue(AXIS).equals(Direction.Axis.Z)) return VoxelShapes.or(stem_z, leaves_z);
         return VoxelShapes.empty();
     }
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        return this.getDefaultState().with(AXIS, context.getPlacementHorizontalFacing().getAxis());
+        return this.defaultBlockState().setValue(AXIS, context.getHorizontalDirection().getAxis());
     }
 
     @Override
-    public boolean ticksRandomly(BlockState state) {return state.get(AGE) < 4;}
+    public boolean isRandomlyTicking(BlockState state) {return state.getValue(AGE) < 4;}
 
     //抄浆果丛实现减缓移动
     @Override
-    public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn)
+    public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn)
     {
-        if (state.get(AGE) > 1 && entityIn instanceof LivingEntity && entityIn.getType() != EntityType.FOX && entityIn.getType() != EntityType.BEE)
+        if (state.getValue(AGE) > 1 && entityIn instanceof LivingEntity && entityIn.getType() != EntityType.FOX && entityIn.getType() != EntityType.BEE)
         {
-            entityIn.setMotionMultiplier(state, new Vector3d(0.8F, 1.0D, 0.8F));
+            entityIn.makeStuckInBlock(state, new Vector3d(0.8F, 1.0D, 0.8F));
         }
     }
 
     @Override
     public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
     {
-        int age = state.get(AGE);
-        if (age < 4 && worldIn.getLightSubtracted(pos.up(), 0) >= 9 && onCropsGrowPre(worldIn, pos, state,random.nextInt(7) == 0))
+        int age = state.getValue(AGE);
+        if (age < 4 && worldIn.getRawBrightness(pos.above(), 0) >= 9 && onCropsGrowPre(worldIn, pos, state,random.nextInt(7) == 0))
         {
-            if (age == 2) state = state.with(BLOOMED, true);
-            else if (age == 3) state = state.with(BLOOMED, false);
-            worldIn.setBlockState(pos, state.with(AGE, age + 1));
+            if (age == 2) state = state.setValue(BLOOMED, true);
+            else if (age == 3) state = state.setValue(BLOOMED, false);
+            worldIn.setBlockAndUpdate(pos, state.setValue(AGE, age + 1));
             onCropsGrowPost(worldIn, pos, state);
         }
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
-        int age = state.get(AGE);
-        ItemStack stack = player.getHeldItem(handIn);
+        int age = state.getValue(AGE);
+        ItemStack stack = player.getItemInHand(handIn);
         if (age < 4 && stack.getItem().equals(BONE_MEAL)) return ActionResultType.PASS;
-        if (state.get(BLOOMED))
+        if (state.getValue(BLOOMED))
         {
-            spawnAsEntity(worldIn, pos, new ItemStack(TEA_FLOWER.get(), 1 + worldIn.rand.nextInt(2)));
-            worldIn.playSound(player, pos, SoundEvents.ITEM_SWEET_BERRIES_PICK_FROM_BUSH, SoundCategory.BLOCKS, 1.0F, 0.8F + worldIn.rand.nextFloat() * 0.4F);
-            worldIn.setBlockState(pos, state.with(BLOOMED, false));
+            popResource(worldIn, pos, new ItemStack(TEA_FLOWER.get(), 1 + worldIn.random.nextInt(2)));
+            worldIn.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundCategory.BLOCKS, 1.0F, 0.8F + worldIn.random.nextFloat() * 0.4F);
+            worldIn.setBlockAndUpdate(pos, state.setValue(BLOOMED, false));
             return ActionResultType.SUCCESS;
         }
         if (age == 4)
         {
-            spawnAsEntity(worldIn, pos, new ItemStack(TEA_LEAF.get(), 1 + worldIn.rand.nextInt(3)));
-            spawnAsEntity(worldIn, pos, new ItemStack(TEA_SEED.get(), 1 + worldIn.rand.nextInt(2)));
-            worldIn.playSound(player, pos, SoundEvents.ITEM_SWEET_BERRIES_PICK_FROM_BUSH, SoundCategory.BLOCKS, 1.0F, 0.8F + worldIn.rand.nextFloat() * 0.4F);
-            worldIn.setBlockState(pos, state.with(AGE, 2));
+            popResource(worldIn, pos, new ItemStack(TEA_LEAF.get(), 1 + worldIn.random.nextInt(3)));
+            popResource(worldIn, pos, new ItemStack(TEA_SEED.get(), 1 + worldIn.random.nextInt(2)));
+            worldIn.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundCategory.BLOCKS, 1.0F, 0.8F + worldIn.random.nextFloat() * 0.4F);
+            worldIn.setBlockAndUpdate(pos, state.setValue(AGE, 2));
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.PASS;
     }
 
     @Override
-    public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient)
+    public boolean isValidBonemealTarget(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient)
     {
-        return state.get(AGE) < 4;
+        return state.getValue(AGE) < 4;
     }
 
     @Override
-    public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, BlockState state)
+    public boolean isBonemealSuccess(World worldIn, Random rand, BlockPos pos, BlockState state)
     {
-        return state.get(AGE) < 4;
+        return state.getValue(AGE) < 4;
     }
 
     @Override
-    public void grow(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state)
+    public void performBonemeal(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state)
     {
-        worldIn.setBlockState(pos, state.with(AGE, state.get(AGE) + 1));
+        worldIn.setBlockAndUpdate(pos, state.setValue(AGE, state.getValue(AGE) + 1));
     }
 }

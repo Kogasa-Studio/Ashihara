@@ -33,7 +33,7 @@ public class MortarTER extends TileEntityRenderer<MortarTE>
     public MortarTER(TileEntityRendererDispatcher rendererDispatcherIn) {super(rendererDispatcherIn);}
 
     private static final ArrayList<ResourceLocation> textures = new ArrayList<>
-            (Minecraft.getInstance().getResourceManager().getAllResourceLocations("textures/assistants/", s -> s.endsWith(".png")));
+            (Minecraft.getInstance().getResourceManager().listResources("textures/assistants/", s -> s.endsWith(".png")));
     private static final Map<String, ResourceLocation> cookedTextures = RenderHelper.cookTextureRLsToMap(textures);
 
     private static final String CEREALS = "cereals_level";
@@ -48,7 +48,7 @@ public class MortarTER extends TileEntityRenderer<MortarTE>
             combinedLightIn, combinedOverlayIn,
             XTP(3.5f), XTP(4.0f), XTP(3.5f),
             XTP(12.5f), XTP(12.0f), XTP(12.5f),
-            tileEntityIn.getWorld(), tileEntityIn.getPos()
+            tileEntityIn.getLevel(), tileEntityIn.getBlockPos()
         );
 
         NonNullList<ItemStack> list = NonNullList.create();
@@ -64,21 +64,21 @@ public class MortarTER extends TileEntityRenderer<MortarTE>
             {
                 renderHeight += XTP(2.0f);
                 //以Quad方式渲染谷物或产物
-                if (stack.getItem().isIn(AshiharaTags.CEREALS) || stack.getItem().isIn(AshiharaTags.CEREAL_PROCESSED))
+                if (stack.getItem().is(AshiharaTags.CEREALS) || stack.getItem().is(AshiharaTags.CEREAL_PROCESSED))
                 {
-                    String key = stack.getItem().isIn(AshiharaTags.CEREAL_PROCESSED) ? PROCESSED : CEREALS;
+                    String key = stack.getItem().is(AshiharaTags.CEREAL_PROCESSED) ? PROCESSED : CEREALS;
 
-                    RenderType ASSISTANCE = RenderType.getEntityCutout(AshiharaAtlas.ASSISTANCE_ATLAS);
+                    RenderType ASSISTANCE = RenderType.entityCutout(AshiharaAtlas.ASSISTANCE_ATLAS);
                     IVertexBuilder builder = bufferIn.getBuffer(ASSISTANCE);
-                    TextureAtlasSprite level = Minecraft.getInstance().getAtlasSpriteGetter(AshiharaAtlas.ASSISTANCE_ATLAS).apply(cookedTextures.get(key));
+                    TextureAtlasSprite level = Minecraft.getInstance().getTextureAtlas(AshiharaAtlas.ASSISTANCE_ATLAS).apply(cookedTextures.get(key));
 
-                    float u0 = level.getMinU(); float u1 = level.getMaxU();
-                    float v0 = level.getMinV(); float v1 = level.getMaxV();
+                    float u0 = level.getU0(); float u1 = level.getU1();
+                    float v0 = level.getV0(); float v1 = level.getV1();
 
                     //主渲染
-                    matrixStackIn.push();
+                    matrixStackIn.pushPose();
                     matrixStackIn.translate(0.0f, renderHeight, 0.0f);
-                    Matrix4f wtf = matrixStackIn.getLast().getMatrix();
+                    Matrix4f wtf = matrixStackIn.last().pose();
                     buildMatrix(wtf, builder, XTP(3.5f), 0.0f, XTP(3.5f), u0, v0, combinedOverlayIn, combinedLightIn);
                     buildMatrix(wtf, builder, XTP(3.5f), 0.0f, XTP(12.5f), u0, v1, combinedOverlayIn, combinedLightIn);
                     buildMatrix(wtf, builder, XTP(12.5f), 0.0f, XTP(12.5f), u1, v1, combinedOverlayIn, combinedLightIn);
@@ -86,16 +86,16 @@ public class MortarTER extends TileEntityRenderer<MortarTE>
                 }
                 else
                 {
-                    matrixStackIn.push();
+                    matrixStackIn.pushPose();
                     matrixStackIn.translate(XTP(8.0f), renderHeight, XTP(8.0f));
                     matrixStackIn.scale(0.6f, 0.6f, 0.6f);
-                    matrixStackIn.rotate( Vector3f.XP.rotationDegrees(90.0f));
-                    matrixStackIn.rotate(Vector3f.YP.rotationDegrees(tileEntityIn.getBlockState().get(FACING).getHorizontalAngle()));
+                    matrixStackIn.mulPose( Vector3f.XP.rotationDegrees(90.0f));
+                    matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(tileEntityIn.getBlockState().getValue(FACING).toYRot()));
 
                     ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
-                    renderer.renderItem(stack, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
+                    renderer.renderStatic(stack, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
                 }
-                matrixStackIn.pop();
+                matrixStackIn.popPose();
             }
         }
     }

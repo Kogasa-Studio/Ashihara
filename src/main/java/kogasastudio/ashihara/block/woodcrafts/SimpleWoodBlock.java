@@ -9,14 +9,16 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class SimpleWoodBlock extends RotatedPillarBlock
 {
     public SimpleWoodBlock()
     {
         super
         (
-            Properties.create(Material.WOOD)
-            .hardnessAndResistance(0.2F, 0.3F)
+            Properties.of(Material.WOOD)
+            .strength(0.2F, 0.3F)
             .sound(SoundType.WOOD)
         );
     }

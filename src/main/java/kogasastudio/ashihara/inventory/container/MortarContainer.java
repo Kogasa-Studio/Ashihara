@@ -19,10 +19,10 @@ public class MortarContainer extends AshiharaCommonContainer
         MortarSlot(IItemHandler inv, int index, int x, int y) {super(inv, index, x, y);}
 
         @Override
-        public int getSlotStackLimit() {return 1;}
+        public int getMaxStackSize() {return 1;}
 
         @Override
-        public boolean isItemValid(ItemStack stack) {return stack.getItem().isIn(MASHABLE);}
+        public boolean mayPlace(ItemStack stack) {return stack.getItem().is(MASHABLE);}
     }
 
     @Override
@@ -51,7 +51,7 @@ public class MortarContainer extends AshiharaCommonContainer
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn)
+    public boolean stillValid(PlayerEntity playerIn)
     {
         return true;
     }
@@ -63,14 +63,14 @@ public class MortarContainer extends AshiharaCommonContainer
      * @return 玩家右键的物品
      */
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index)
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index)
     {
         //玩家点击的具体格子
-        Slot slot = this.inventorySlots.get(index);
+        Slot slot = this.slots.get(index);
 
-        if (slot == null || !slot.getHasStack()) {return ItemStack.EMPTY;}
+        if (slot == null || !slot.hasItem()) {return ItemStack.EMPTY;}
 
-        ItemStack newStack = slot.getStack();
+        ItemStack newStack = slot.getItem();
         ItemStack oldStack = newStack.copy();
 
         boolean isMerged;
@@ -78,26 +78,26 @@ public class MortarContainer extends AshiharaCommonContainer
         // 0~8: 快捷栏, 9~35: 玩家背包, 36~39: 内容槽, 40~41: 流体互动槽
         if (index < 9)
         {
-            isMerged = mergeItemStack(newStack, 36, 40, false)
-            || mergeItemStack(newStack, 40, 42, false)
-            || mergeItemStack(newStack, 9, 36, false);
+            isMerged = moveItemStackTo(newStack, 36, 40, false)
+            || moveItemStackTo(newStack, 40, 42, false)
+            || moveItemStackTo(newStack, 9, 36, false);
         }
         else if (index < 36)
         {
-            isMerged = mergeItemStack(newStack, 36, 40, false)
-            || mergeItemStack(newStack, 40, 42, false)
-            || mergeItemStack(newStack, 0, 9, true);
+            isMerged = moveItemStackTo(newStack, 36, 40, false)
+            || moveItemStackTo(newStack, 40, 42, false)
+            || moveItemStackTo(newStack, 0, 9, true);
         }
         else
         {
-            isMerged = mergeItemStack(newStack, 0, 9, true)
-            || mergeItemStack(newStack, 9, 36, false);
+            isMerged = moveItemStackTo(newStack, 0, 9, true)
+            || moveItemStackTo(newStack, 9, 36, false);
         }
 
         if (!isMerged){return ItemStack.EMPTY;}
 
-        if (newStack.getCount() == 0) {slot.putStack(ItemStack.EMPTY);}
-        else {slot.onSlotChanged();}
+        if (newStack.getCount() == 0) {slot.set(ItemStack.EMPTY);}
+        else {slot.setChanged();}
 
         slot.onTake(playerIn, newStack);
 
@@ -105,9 +105,9 @@ public class MortarContainer extends AshiharaCommonContainer
     }
 
     @Override
-    public void detectAndSendChanges()
+    public void broadcastChanges()
     {
-        super.detectAndSendChanges();
+        super.broadcastChanges();
         te.notifyStateChanged();
     }
 

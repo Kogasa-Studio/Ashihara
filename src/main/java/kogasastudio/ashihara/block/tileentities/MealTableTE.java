@@ -51,12 +51,12 @@ public class MealTableTE extends AshiharaMachineTE
         {
             posMap.get(i).applyPos(list[i]);
         }
-        markDirty();
+        setChanged();
     }
 
     public void handleInteraction(PlayerEntity playerIn, Hand handIn)
     {
-        ItemStack stack = playerIn.getHeldItem(handIn);
+        ItemStack stack = playerIn.getItemInHand(handIn);
 
         if (!stack.isEmpty())
         {
@@ -64,7 +64,7 @@ public class MealTableTE extends AshiharaMachineTE
             for (int i = 0; i < this.content.getSlots(); i += 1)
             {
                 ItemStack contained = this.content.getStackInSlot(i);
-                if (contained.isItemEqual(stack) && contained.getCount() < contained.getMaxStackSize())
+                if (contained.sameItem(stack) && contained.getCount() < contained.getMaxStackSize())
                 {
                     stack.shrink(this.content.insertItem(i, stack, false).getCount());
                     stateChanged = true;

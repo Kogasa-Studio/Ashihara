@@ -15,6 +15,8 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class AbstractFallenLeavesBlock extends Block
 {
     public AbstractFallenLeavesBlock()
@@ -26,11 +28,11 @@ public class AbstractFallenLeavesBlock extends Block
     {
         super
         (
-            Properties.create(Material.PLANTS)
-            .hardnessAndResistance(0.1F)
-            .sound(SoundType.PLANT)
-            .notSolid()
-            .doesNotBlockMovement()
+            Properties.of(Material.PLANT)
+            .strength(0.1F)
+            .sound(SoundType.GRASS)
+            .noOcclusion()
+            .noCollission()
         );
         this.flammable = flammableIn;
     }
@@ -38,27 +40,27 @@ public class AbstractFallenLeavesBlock extends Block
     private final boolean flammable;
 
     @Override
-    public boolean isReplaceable(BlockState state, BlockItemUseContext useContext)
+    public boolean canBeReplaced(BlockState state, BlockItemUseContext useContext)
     {
-        return useContext.getItem().getItem() != ItemRegistryHandler.FALLEN_SAKURA.get();
+        return useContext.getItemInHand().getItem() != ItemRegistryHandler.FALLEN_SAKURA.get();
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
     {
-        return !stateIn.isValidPosition(worldIn, currentPos) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+        return !stateIn.canSurvive(worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
+    public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos)
     {
-        return worldIn.getBlockState(pos.down()).isSolid() || worldIn.getBlockState(pos.down()).isSolidSide(worldIn, pos.down(), Direction.UP);
+        return worldIn.getBlockState(pos.below()).canOcclude() || worldIn.getBlockState(pos.below()).isFaceSturdy(worldIn, pos.below(), Direction.UP);
     }
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
     {
-        return Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D);
+        return Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D);
     }
 
     @Override

@@ -4,14 +4,16 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.WoodButtonBlock;
 import net.minecraft.block.material.Material;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class SimpleButtonBlock extends WoodButtonBlock
 {
     public SimpleButtonBlock()
     {
         super
         (
-            Properties.create(Material.MISCELLANEOUS)
-            .hardnessAndResistance(0.5F)
+            Properties.of(Material.DECORATION)
+            .strength(0.5F)
             .sound(SoundType.WOOD)
         );
     }

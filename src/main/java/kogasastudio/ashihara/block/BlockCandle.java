@@ -36,13 +36,13 @@ public class BlockCandle extends Block
     {
         super
         (
-            AbstractBlock.Properties.create(Material.SNOW)
-            .hardnessAndResistance(0.05F)
+            AbstractBlock.Properties.of(Material.TOP_SNOW)
+            .strength(0.05F)
             .sound(SoundType.SNOW)
-            .setLightLevel(getLightValueLit(15))
-            .notSolid()
+            .lightLevel(getLightValueLit(15))
+            .noOcclusion()
         );
-        this.setDefaultState(this.getStateContainer().getBaseState().with(LIT, false).with(MULTIPLE, false));
+        this.registerDefaultState(this.getStateDefinition().any().setValue(LIT, false).setValue(MULTIPLE, false));
     }
 
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
@@ -50,15 +50,15 @@ public class BlockCandle extends Block
 
     private CandleTE checkCandle(IBlockReader worldIn, BlockPos pos)
     {
-        TileEntity te = worldIn.getTileEntity(pos);
+        TileEntity te = worldIn.getBlockEntity(pos);
         if (te != null && te.getType().equals(CANDLE_TE.get())) return (CandleTE) te;
         else return null;
     }
 
     @Override
-    public void harvestBlock(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, TileEntity te, ItemStack stack)
+    public void playerDestroy(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, TileEntity te, ItemStack stack)
     {
-        if (state.get(MULTIPLE) && te instanceof CandleTE)
+        if (state.getValue(MULTIPLE) && te instanceof CandleTE)
         {
             CandleTE candle = (CandleTE) te;
             int amount = candle.pickCandle(true, worldIn, pos);
@@ -66,35 +66,35 @@ public class BlockCandle extends Block
 
             ItemStack candleItem = new ItemStack(ItemRegistryHandler.CANDLE.get(), amount);
             ItemEntity entity = new ItemEntity(worldIn, (double) pos.getX() + 0.5d, (double) pos.getY() + 0.5d, pos.getZ() + 0.5d, candleItem);
-            entity.setDefaultPickupDelay();
-            worldIn.addEntity(entity);
+            entity.setDefaultPickUpDelay();
+            worldIn.addFreshEntity(entity);
         }
-        super.harvestBlock(worldIn, player, pos, state, te, stack);
+        super.playerDestroy(worldIn, player, pos, state, te, stack);
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(LIT, MULTIPLE);
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
-        if(player.getHeldItem(handIn).isEmpty())
+        if(player.getItemInHand(handIn).isEmpty())
         {
             CandleTE te = checkCandle(worldIn, pos);
-            if (player.isSneaking() && te != null)
+            if (player.isShiftKeyDown() && te != null)
             {
                 int amount = te.pickCandle(false, worldIn, pos);
                 if (amount == 0) return ActionResultType.PASS;
-                player.setHeldItem(handIn, new ItemStack(ItemRegistryHandler.CANDLE.get(), amount));
+                player.setItemInHand(handIn, new ItemStack(ItemRegistryHandler.CANDLE.get(), amount));
                 return ActionResultType.SUCCESS;
             }
             Random random = worldIn.getRandom();
-            Boolean instantState = worldIn.getBlockState(pos).get(LIT);
-            worldIn.playSound(player, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
-            worldIn.setBlockState(pos, state.with(LIT, !instantState));
+            Boolean instantState = worldIn.getBlockState(pos).getValue(LIT);
+            worldIn.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
+            worldIn.setBlockAndUpdate(pos, state.setValue(LIT, !instantState));
             return ActionResultType.SUCCESS;
         }
         else return ActionResultType.PASS;
@@ -104,10 +104,10 @@ public class BlockCandle extends Block
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
     {
-        if (stateIn.get(LIT))
+        if (stateIn.getValue(LIT))
         {
             CandleTE te = checkCandle(worldIn, pos);
-            if (stateIn.get(MULTIPLE) && te != null)
+            if (stateIn.getValue(MULTIPLE) && te != null)
             {
                 for (double[] d : te.getPosList())
                 {
@@ -128,20 +128,20 @@ public class BlockCandle extends Block
     }
 
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
+    public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos)
     {
-        return worldIn.getBlockState(pos.down()).getBlock() != Blocks.AIR;
+        return worldIn.getBlockState(pos.below()).getBlock() != Blocks.AIR;
     }
 
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
     {
-        return !this.isValidPosition(stateIn, worldIn, currentPos) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+        return !this.canSurvive(stateIn, worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
     {
-        if (state.get(MULTIPLE))
+        if (state.getValue(MULTIPLE))
         {
             CandleTE te = checkCandle(worldIn, pos);
             if (te != null)
@@ -149,16 +149,16 @@ public class BlockCandle extends Block
                 VoxelShape shape = VoxelShapes.empty();
                 for (double[] d : te.getPosList())
                 {
-                    shape = VoxelShapes.or(shape, makeCuboidShape(16 * d[0] - 1.3d, 0d, 16 * d[1] - 1.3d, 16 * d[0] + 1.3d, 16 * d[2] + 14d, 16 * d[1] + 1.3d));
+                    shape = VoxelShapes.or(shape, box(16 * d[0] - 1.3d, 0d, 16 * d[1] - 1.3d, 16 * d[0] + 1.3d, 16 * d[2] + 14d, 16 * d[1] + 1.3d));
                 }
                 return shape;
             }
         }
-        return makeCuboidShape(6.7d, 0.0d, 6.7d, 9.3d, 14.0d, 9.3d);
+        return box(6.7d, 0.0d, 6.7d, 9.3d, 14.0d, 9.3d);
     }
 
     @Override
-    public boolean hasTileEntity(BlockState state) {return state.get(MULTIPLE);}
+    public boolean hasTileEntity(BlockState state) {return state.getValue(MULTIPLE);}
 
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {return new CandleTE();}

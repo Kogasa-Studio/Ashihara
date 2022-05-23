@@ -31,7 +31,7 @@ public class PailTER extends TileEntityRenderer<PailTE>
             combinedLightIn, combinedOverlayIn,
             0.25f, 0.09375f, 0.25f,
             0.75f, 0.5f, 0.75f,
-            tileEntityIn.getWorld(), tileEntityIn.getPos()
+            tileEntityIn.getLevel(), tileEntityIn.getBlockPos()
         );
     }
 }

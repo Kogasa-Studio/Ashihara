@@ -10,28 +10,30 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockMealTable extends Block
 {
     public BlockMealTable()
     {
         super
         (
-            Properties.create(Material.WOOD)
+            Properties.of(Material.WOOD)
             .sound(SoundType.BAMBOO)
-            .hardnessAndResistance(0.5f)
+            .strength(0.5f)
         );
     }
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
     {
-        VoxelShape base = makeCuboidShape(3.0d, 0.0d, 3.0d, 13.0d, 4.5d, 13.0d);
-        VoxelShape plate_base = makeCuboidShape(2.5d, 4.5d, 2.5d, 13.5d, 5.0d, 13.5d);
-        VoxelShape plate = makeCuboidShape(2.0, 5.0, 2.0, 14.0, 6.0, 14.0);
-        VoxelShape edge_n = makeCuboidShape(1.0, 5.0, 1.0, 15.0, 7.0, 2.0);
-        VoxelShape edge_e = makeCuboidShape(14.0, 5.0, 2.0, 15.0, 7.0, 14.0);
-        VoxelShape edge_s = makeCuboidShape(1.0, 5.0, 14.0, 15.0, 7.0, 15.0);
-        VoxelShape edge_w = makeCuboidShape(2.0, 5.0, 1.0, 14.0, 7.0, 2.0);
+        VoxelShape base = box(3.0d, 0.0d, 3.0d, 13.0d, 4.5d, 13.0d);
+        VoxelShape plate_base = box(2.5d, 4.5d, 2.5d, 13.5d, 5.0d, 13.5d);
+        VoxelShape plate = box(2.0, 5.0, 2.0, 14.0, 6.0, 14.0);
+        VoxelShape edge_n = box(1.0, 5.0, 1.0, 15.0, 7.0, 2.0);
+        VoxelShape edge_e = box(14.0, 5.0, 2.0, 15.0, 7.0, 14.0);
+        VoxelShape edge_s = box(1.0, 5.0, 14.0, 15.0, 7.0, 15.0);
+        VoxelShape edge_w = box(2.0, 5.0, 1.0, 14.0, 7.0, 2.0);
 
         return VoxelShapes.or(base, plate_base, plate, edge_n, edge_e, edge_s, edge_w);
     }

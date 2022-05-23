@@ -20,16 +20,18 @@ import static kogasastudio.ashihara.item.ItemRegistryHandler.*;
 import static net.minecraft.item.Items.AIR;
 import static net.minecraft.item.Items.BONE_MEAL;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class AbstractCropAge7Pickable extends AbstractCropAge7
 {
     public AbstractCropAge7Pickable(int max, int turn)
     {
         super
         (
-            Properties.create(Material.PLANTS)
-            .doesNotBlockMovement()
-            .tickRandomly()
-            .hardnessAndResistance(0.2F)
+            Properties.of(Material.PLANT)
+            .noCollission()
+            .randomTicks()
+            .strength(0.2F)
             .sound(SoundType.CROP)
         );
         this.ageAvailable = max;
@@ -40,24 +42,24 @@ public class AbstractCropAge7Pickable extends AbstractCropAge7
     protected final int ageTurnIn;
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
-        int age = state.get(AGE);
-        ItemStack stack = player.getHeldItem(handIn);
+        int age = state.getValue(AGE);
+        ItemStack stack = player.getItemInHand(handIn);
         if (age < this.ageAvailable && stack.getItem().equals(BONE_MEAL)) return ActionResultType.PASS;
         if (age == this.ageAvailable)
         {
-            if (!worldIn.isRemote())
+            if (!worldIn.isClientSide())
             {
                 for (ItemStack stack1 : getDrops(state, (ServerWorld) worldIn, pos, null))
                 {
-                    spawnAsEntity(worldIn, pos, stack1);
+                    popResource(worldIn, pos, stack1);
                 }
             }
-            worldIn.playSound(player, pos, SoundEvents.ITEM_SWEET_BERRIES_PICK_FROM_BUSH, SoundCategory.BLOCKS, 1.0F, 0.8F + worldIn.rand.nextFloat() * 0.4F);
-            worldIn.setBlockState(pos, state.with(AGE, this.ageTurnIn));
+            worldIn.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundCategory.BLOCKS, 1.0F, 0.8F + worldIn.random.nextFloat() * 0.4F);
+            worldIn.setBlockAndUpdate(pos, state.setValue(AGE, this.ageTurnIn));
             return ActionResultType.SUCCESS;
         }
-        return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
+        return super.use(state, worldIn, pos, player, handIn, hit);
     }
 }

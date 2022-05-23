@@ -17,26 +17,28 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockDirtDepression extends Block implements IWaterLoggable
 {
     public BlockDirtDepression()
     {
         super
         (
-            Properties.create(Material.EARTH)
-            .hardnessAndResistance(0.5F)
+            Properties.of(Material.DIRT)
+            .strength(0.5F)
             .harvestTool(ToolType.SHOVEL)
             .harvestLevel(2)
-            .sound(SoundType.GROUND)
-            .notSolid()
+            .sound(SoundType.GRAVEL)
+            .noOcclusion()
         );
-        this.setDefaultState(this.getStateContainer().getBaseState().with(WATERLOGGED, false));
+        this.registerDefaultState(this.getStateDefinition().any().setValue(WATERLOGGED, false));
     }
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(WATERLOGGED);
     }
@@ -44,18 +46,18 @@ public class BlockDirtDepression extends Block implements IWaterLoggable
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) //碰撞箱的设定
     {
-        return Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D);
+        return Block.box(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D);
     }
 
     @Override
     public FluidState getFluidState(BlockState state)
     {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        return this.getDefaultState().with(WATERLOGGED, context.getWorld().getFluidState(context.getPos()).getFluid().equals(Fluids.WATER));
+        return this.defaultBlockState().setValue(WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType().equals(Fluids.WATER));
     }
 }

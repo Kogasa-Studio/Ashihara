@@ -64,8 +64,8 @@ public class AddRandomStackModifier extends LootModifier
         public AddRandomStackModifier read(ResourceLocation location, JsonObject object, ILootCondition[] conditions)
         {
             NonNullList<ItemStack> list = NonNullList.create();
-            JsonArray stacks = JSONUtils.getJsonArray(object, "items", null);
-            int rolls = JSONUtils.getInt(object, "roll", 1);
+            JsonArray stacks = JSONUtils.getAsJsonArray(object, "items", null);
+            int rolls = JSONUtils.getAsInt(object, "roll", 1);
             if (stacks == null) list = NonNullList.withSize(1, EMPTY);
             else
             {
