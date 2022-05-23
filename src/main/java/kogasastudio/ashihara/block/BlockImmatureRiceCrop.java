@@ -1,27 +1,26 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.item.ItemRegistryHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CropsBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.util.IItemProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.storage.loot.LootContext;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.minecraft.block.AbstractBlock.Properties;
-
-public class BlockImmatureRiceCrop extends CropsBlock
+public class BlockImmatureRiceCrop extends CropBlock
 {
     public BlockImmatureRiceCrop()
     {
         super
         (
-            Properties.of(Material.PLANT)
+            BlockBehaviour.Properties.of(Material.PLANT)
             .noCollission()
             .randomTicks()
             .instabreak()
@@ -30,7 +29,7 @@ public class BlockImmatureRiceCrop extends CropsBlock
     }
 
     @Override
-    protected IItemProvider getBaseSeedId()
+    protected ItemLike getBaseSeedId()
     {
         return ItemRegistryHandler.PADDY.get();
     }
@@ -55,6 +54,8 @@ public class BlockImmatureRiceCrop extends CropsBlock
             list.add(new ItemStack(ItemRegistryHandler.PADDY.get()));
             return list;
         }
-        else return Collections.emptyList();
+        else {
+            return Collections.emptyList();
+        }
     }
 }

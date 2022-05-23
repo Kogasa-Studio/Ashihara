@@ -3,7 +3,7 @@ package kogasastudio.ashihara.utils;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.LazyValue;
+import net.minecraftforge.common.util.Lazy;
 
 import java.util.function.Supplier;
 
@@ -21,7 +21,7 @@ public enum AshiharaItemTiers implements IItemTier
     private final float attackDamage;
     private final int enchantability;
     private final float akatsuibility;
-    private final LazyValue<Ingredient> repairMaterial;
+    private final Lazy<Ingredient> repairMaterial;
 
     AshiharaItemTiers(int levelIn, int durIn, float effIn, float dmgIn, int ectIn, float akaIn, Supplier<Ingredient> mtrIn)
     {
@@ -31,7 +31,7 @@ public enum AshiharaItemTiers implements IItemTier
         this.attackDamage = dmgIn;
         this.enchantability = ectIn;
         this.akatsuibility = akaIn;
-        this.repairMaterial = new LazyValue<>(mtrIn);
+        this.repairMaterial = new Lazy<>(mtrIn);
     }
 
     @Override

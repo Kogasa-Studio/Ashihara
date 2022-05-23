@@ -1,19 +1,19 @@
 package kogasastudio.ashihara.block.tileentities;
 
 import kogasastudio.ashihara.helper.RenderHelper;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 public class MarkableLanternTE extends AshiharaMachineTE
 {
-    public MarkableLanternTE() {super(TERegistryHandler.MARKABLE_LANTERN_TE.get());}
+    public MarkableLanternTE(BlockPos pos, BlockState state) {
+        super(TERegistryHandler.MARKABLE_LANTERN_TE.get(), pos, state);
+    }
 
     //获取所有纹章的rl列表
     private static final ArrayList<ResourceLocation> textures = new ArrayList<>
@@ -35,32 +35,15 @@ public class MarkableLanternTE extends AshiharaMachineTE
         setChanged();
     }
 
-    //数据同步保存
     @Override
-    public void load(BlockState state, CompoundNBT nbt)
-    {
+    public void load(CompoundTag nbt) {
         pointer = nbt.getInt("pointer");
-        super.load(state, nbt);
+        super.load(nbt);
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound)
-    {
+    protected void saveAdditional(CompoundTag compound) {
         compound.putInt("pointer", pointer);
-        return super.save(compound);
+        super.saveAdditional(compound);
     }
-
-    @Override
-    public CompoundNBT getUpdateTag() {return this.save(new CompoundNBT());}
-
-    @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT tag) {this.load(state, tag);}
-
-    @Nullable
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket()
-    {return new SUpdateTileEntityPacket(this.worldPosition, -1, this.save(new CompoundNBT()));}
-
-    @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {this.load(this.getBlockState(), pkt.getTag());}
 }

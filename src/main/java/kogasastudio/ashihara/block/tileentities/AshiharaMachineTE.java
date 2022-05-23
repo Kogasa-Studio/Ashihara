@@ -1,29 +1,23 @@
 package kogasastudio.ashihara.block.tileentities;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.Nullable;
+public class AshiharaMachineTE extends BlockEntity {
 
-public class AshiharaMachineTE extends TileEntity
-{
-    public AshiharaMachineTE(TileEntityType<?> type) {super(type);}
-
-    @Override
-    public CompoundNBT getUpdateTag() {return this.save(new CompoundNBT());}
+    public AshiharaMachineTE(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
+    }
 
     @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT tag) {this.load(state, tag);}
+    public CompoundTag getUpdateTag() {
+        var result = new CompoundTag();
+        this.saveAdditional(result);
+        return result;
+    }
 
-    @Nullable
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket()
-    {return new SUpdateTileEntityPacket(this.worldPosition, -1, this.save(new CompoundNBT()));}
-
-    @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {this.load(this.getBlockState(), pkt.getTag());}
+    // todo handleUpdateTag / getPacket / handlePacket 是默认实现，所以删了
 }

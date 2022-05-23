@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.world.gen;
 
 import kogasastudio.ashihara.Ashihara;
-import net.minecraft.util.RegistryKey;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraftforge.common.BiomeDictionary;
@@ -20,7 +20,7 @@ public class WorldGenerationEventHandler
     public static void onTreesGenerate(BiomeLoadingEvent event)
     {
         BiomeGenerationSettingsBuilder settings = event.getGeneration();
-        RegistryKey<Biome> biome = RegistryKey.create(ForgeRegistries.Keys.BIOMES, event.getName());
+        ResourceKey<Biome> biome = ResourceKey.create(ForgeRegistries.Keys.BIOMES, event.getName());
 //        if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.FOREST))
 //        {
 //            settings.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.FOREST_CHERRY_TREES);

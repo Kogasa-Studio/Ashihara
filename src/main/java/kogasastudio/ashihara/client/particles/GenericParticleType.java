@@ -1,8 +1,8 @@
 package kogasastudio.ashihara.client.particles;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.world.phys.Vec3;
 
 import static kogasastudio.ashihara.client.particles.GenericParticleData.DESERIALIZER;
 
@@ -13,6 +13,6 @@ public class GenericParticleType extends ParticleType<GenericParticleData>
     @Override
     public Codec<GenericParticleData> codec()
     {
-        return Codec.unit(new GenericParticleData(new Vector3d(0, 0, 0), 0, null));
+        return Codec.unit(new GenericParticleData(new Vec3(0, 0, 0), 0, null));
     }
 }

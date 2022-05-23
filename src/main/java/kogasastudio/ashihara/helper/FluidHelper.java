@@ -1,13 +1,13 @@
 package kogasastudio.ashihara.helper;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -19,7 +19,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.Optional;
 
-import static net.minecraft.util.SoundCategory.BLOCKS;
+import static net.minecraft.sounds.SoundSource.BLOCKS;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE;
 import static net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack.FLUID_NBT_KEY;
@@ -29,7 +29,7 @@ public class FluidHelper
     public static ItemStack fillContainer(ItemStack itemStack, Fluid fluid, int capacity)
     {
         ItemStack itemStack1 = itemStack.copy();
-        CompoundNBT fluidTag = new CompoundNBT();
+        CompoundTag fluidTag = new CompoundTag();
         new FluidStack(fluid, capacity).writeToNBT(fluidTag);
         itemStack1.getOrCreateTag().put(FLUID_NBT_KEY, fluidTag);
         return itemStack1;
@@ -41,7 +41,7 @@ public class FluidHelper
             FluidUtil.getFluidHandler(itemStack1).ifPresent
             (data ->
             {
-                CompoundNBT fluidTag = new CompoundNBT();
+                CompoundTag fluidTag = new CompoundTag();
                 new FluidStack(fluid, data.getTankCapacity(0)).writeToNBT(fluidTag);
                 itemStack1.getOrCreateTag().put(FLUID_NBT_KEY, fluidTag);
             });
@@ -79,7 +79,7 @@ public class FluidHelper
         return canFluidExtractFromTank(fluidIn, tank.orElse(new FluidTank(0)));
     }
 
-    public static boolean notifyFluidTankInteraction(PlayerEntity player, Hand hand, ItemStack stackIn, FluidTank fluidTank, World world, BlockPos pos)
+    public static boolean notifyFluidTankInteraction(Player player, InteractionHand hand, ItemStack stackIn, FluidTank fluidTank, Level world, BlockPos pos)
     {
         ItemStack stack = stackIn.copy();
         stack.setCount(1);
@@ -185,7 +185,7 @@ public class FluidHelper
         return false;
     }
 
-    public static boolean notifyFluidTankInteraction(ItemStackHandler itemHandler, int in, int out, FluidTank fluidTank, World world, BlockPos pos)
+    public static boolean notifyFluidTankInteraction(ItemStackHandler itemHandler, int in, int out, FluidTank fluidTank, Level world, BlockPos pos)
     {
         ItemStack stackIn = itemHandler.getStackInSlot(in);
         ItemStack stack = stackIn.copy();

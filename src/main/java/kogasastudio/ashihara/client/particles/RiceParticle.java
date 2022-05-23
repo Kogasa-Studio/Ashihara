@@ -1,13 +1,13 @@
 package kogasastudio.ashihara.client.particles;
 
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class RiceParticle extends SpriteTexturedParticle
 {
-    protected RiceParticle(ClientWorld world, double x, double y, double z)
+    protected RiceParticle(ClientLevel world, double x, double y, double z)
     {
         super(world, x, y, z, 0.0D, 0.0D, 0.0D);
         this.xd *= 0.8F;
@@ -64,7 +64,7 @@ public class RiceParticle extends SpriteTexturedParticle
         }
 
         @Override
-        public Particle createParticle(GenericParticleData typeIn, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
+        public Particle createParticle(GenericParticleData typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
         {
             RiceParticle riceparticle = new RiceParticle(worldIn, x, y, z);
             riceparticle.pickSprite(this.spriteSet);

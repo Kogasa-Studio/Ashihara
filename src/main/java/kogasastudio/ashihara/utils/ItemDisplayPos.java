@@ -1,18 +1,17 @@
 package kogasastudio.ashihara.utils;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import kogasastudio.ashihara.item.IHasCustomModel;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.BlockNamedItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
@@ -60,7 +59,7 @@ public class ItemDisplayPos
 
     public boolean hasCustomModel() {return this.getItemCustomModel() != null;}
 
-    public void render(MatrixStack stackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn)
+    public void render(PoseStack stackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
     {
         stackIn.pushPose();
         if (this.getItemCustomModel() != null) this.getItemCustomModel().render(stackIn, bufferIn, combinedLightIn, combinedOverlayIn, this.getDisplayStack().getCount());
@@ -80,13 +79,17 @@ public class ItemDisplayPos
                 stackIn.mulPose(Vector3f.XP.rotationDegrees(90.0f));
                 stackIn.mulPose(Vector3f.ZP.rotationDegrees(facing.toYRot()));
             }
-            else stackIn.mulPose(Vector3f.YP.rotationDegrees(facing.toYRot()));
+            else {
+                stackIn.mulPose(Vector3f.YP.rotationDegrees(facing.toYRot()));
+            }
 
             ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
             for (int i = 0; i < stack.getCount(); i += 1)
             {
-                if (i != 0 ) stackIn.translate(XTP(0.0f), XTP(isBlock ? (1.0f / scale) * 4.0f : 0.0f), XTP(isBlock ? 0.0f : -1.2f));
-                renderer.renderStatic(stack, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, stackIn, bufferIn);
+                if (i != 0 ) {
+                    stackIn.translate(XTP(0.0f), XTP(isBlock ? (1.0f / scale) * 4.0f : 0.0f), XTP(isBlock ? 0.0f : -1.2f));
+                }
+                renderer.renderStatic(stack, ItemTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, stackIn, bufferIn);
             }
         }
         stackIn.popPose();
@@ -107,7 +110,7 @@ public class ItemDisplayPos
 
     public float getScale() {return XTP(this.range);}
 
-    public CompoundNBT serializeNBT(CompoundNBT compound)
+    public CompoundTag serializeNBT(CompoundTag compound)
     {
         compound.putInt("slotID", this.slot);
         compound.putString("facing", this.facing.getSerializedName());
@@ -119,7 +122,7 @@ public class ItemDisplayPos
         return compound;
     }
 
-    public void deserializeNBT(CompoundNBT compound)
+    public void deserializeNBT(CompoundTag compound)
     {
         this.slot = compound.getInt("slotID");
         this.range = compound.getInt("range");

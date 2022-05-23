@@ -1,18 +1,16 @@
 package kogasastudio.ashihara.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CropsBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
-import net.minecraft.block.AbstractBlock.Properties;
-
-public class AbstractCropAge7 extends CropsBlock
+public class AbstractCropAge7 extends CropBlock
 {
     public AbstractCropAge7()
     {
@@ -43,5 +41,5 @@ public class AbstractCropAge7 extends CropsBlock
         Block.box(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D)
     };
 
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {return SHAPES[state.getValue(this.getAgeProperty())];}
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {return SHAPES[state.getValue(this.getAgeProperty())];}
 }

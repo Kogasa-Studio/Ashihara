@@ -1,9 +1,9 @@
 package kogasastudio.ashihara.world.biomes;
 
 import kogasastudio.ashihara.Ashihara;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.event.RegistryEvent;
@@ -25,7 +25,7 @@ public class BiomeRegistryHandler
 
     private static void addBiome(RegistryEvent.Register<Biome> event, BiomeManager.BiomeType type, String id, int weight, Biome biome)
     {
-        BiomeManager.addBiome(type, new BiomeManager.BiomeEntry(RegistryKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(Ashihara.MODID, id)), weight));
+        BiomeManager.addBiome(type, new BiomeManager.BiomeEntry(ResourceKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(Ashihara.MODID, id)), weight));
         event.getRegistry().register(biome);
     }
 }

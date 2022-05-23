@@ -1,21 +1,21 @@
 package kogasastudio.ashihara.inventory.container;
 
 import kogasastudio.ashihara.block.tileentities.MillTE;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class MillContainer extends AshiharaCommonContainer
 {
-    private final IIntArray millData;
+    private final ContainerData millData;
     private final MillTE te;
 
-    public MillContainer(int id, PlayerInventory inventory, World worldIn, BlockPos posIn, IIntArray millDataIn)
+    public MillContainer(int id, Inventory inventory, Level worldIn, BlockPos posIn, ContainerData millDataIn)
     {
         super(ContainerRegistryHandler.MILL_CONTAINER.get(), id);
         checkContainerDataCount(millDataIn, 4);
@@ -34,10 +34,15 @@ public class MillContainer extends AshiharaCommonContainer
         }
     }
 
-    public MillTE getTE() {return this.te;}
+    public MillContainer(int id, Inventory inventory, MillTE te)
+    {
+        this(id, inventory, inventory.player.level, te.getBlockPos(), te.millData);
+    }
+
+    public MillTE getBe() {return this.te;}
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {return true;}
+    public boolean stillValid(Player playerIn) {return true;}
 
     /**
      * 玩家在gui中shift点击时会调用的方法
@@ -46,7 +51,7 @@ public class MillContainer extends AshiharaCommonContainer
      * @return 玩家右键的物品
      */
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index)
+    public ItemStack quickMoveStack(Player playerIn, int index)
     {
         //玩家右键的具体格子
         Slot slot = this.slots.get(index);

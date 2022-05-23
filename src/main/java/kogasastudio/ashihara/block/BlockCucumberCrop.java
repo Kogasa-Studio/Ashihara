@@ -1,34 +1,34 @@
 package kogasastudio.ashihara.block;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.server.level.ServerLevel;
 
 import java.util.Random;
 
-import static net.minecraft.block.Blocks.FARMLAND;
-import static net.minecraft.item.Items.BONE_MEAL;
+import static net.minecraft.world.level.block.Blocks.FARMLAND;
+import static net.minecraft.world.item.Items.BONE_MEAL;
 import static net.minecraftforge.common.ForgeHooks.onCropsGrowPre;
 
 public class BlockCucumberCrop extends AbstractCropAge7
 {
     @Override
-    protected boolean mayPlaceOn(BlockState state, IBlockReader worldIn, BlockPos pos)
+    protected boolean mayPlaceOn(BlockState state, BlockGetter worldIn, BlockPos pos)
     {
         return super.mayPlaceOn(state, worldIn, pos) || (state.is(BlockRegistryHandler.CUCUMBERS.get()) && state.getValue(AGE) > 5);
     }
 
     @Override
-    public boolean isBonemealSuccess(World worldIn, Random rand, BlockPos pos, BlockState state)
+    public boolean isBonemealSuccess(Level worldIn, Random rand, BlockPos pos, BlockState state)
     {
         return this.isValidBonemealTarget(worldIn, pos, state, false);
     }
@@ -37,7 +37,7 @@ public class BlockCucumberCrop extends AbstractCropAge7
     public boolean isRandomlyTicking(BlockState state) {return true;}
 
     @Override
-    public boolean isValidBonemealTarget(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient)
+    public boolean isValidBonemealTarget(BlockGetter worldIn, BlockPos pos, BlockState state, boolean isClient)
     {
         int age = state.getValue(AGE);
         BlockState downState = worldIn.getBlockState(pos.below());
@@ -57,7 +57,7 @@ public class BlockCucumberCrop extends AbstractCropAge7
     }
 
     @Override
-    public void growCrops(World worldIn, BlockPos pos, BlockState state)
+    public void growCrops(Level worldIn, BlockPos pos, BlockState state)
     {
         BlockState downState = worldIn.getBlockState(pos.below());
         int age = this.getAge(state);
@@ -80,7 +80,7 @@ public class BlockCucumberCrop extends AbstractCropAge7
     }
 
     @Override
-    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
+    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random)
     {
         if (!worldIn.isAreaLoaded(pos, 1)) return; // Forge: prevent loading unloaded chunks when checking neighbor's light
 
@@ -113,7 +113,7 @@ public class BlockCucumberCrop extends AbstractCropAge7
     }
 
     @Override
-    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         BlockState downState = worldIn.getBlockState(pos.below());
         boolean isUpper = downState.is(BlockRegistryHandler.CUCUMBERS.get());
@@ -122,19 +122,19 @@ public class BlockCucumberCrop extends AbstractCropAge7
         int ageAvailable = isUpper ? 5 : 7;
         int ageTurnIn = isUpper ? 4 : 6;
         ItemStack stack = player.getItemInHand(handIn);
-        if (age < ageAvailable && stack.getItem().equals(BONE_MEAL)) return ActionResultType.PASS;
+        if (age < ageAvailable && stack.getItem().equals(BONE_MEAL)) return InteractionResult.PASS;
         if (age == ageAvailable)
         {
             if (!worldIn.isClientSide())
             {
-                for (ItemStack stack1 : getDrops(state, (ServerWorld) worldIn, pos, null))
+                for (ItemStack stack1 : getDrops(state, (ServerLevel) worldIn, pos, null))
                 {
                     popResource(worldIn, pos, stack1);
                 }
             }
-            worldIn.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundCategory.BLOCKS, 1.0F, 0.8F + worldIn.random.nextFloat() * 0.4F);
+            worldIn.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + worldIn.random.nextFloat() * 0.4F);
             worldIn.setBlockAndUpdate(pos, this.getStateForAge(ageTurnIn));
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return super.use(state, worldIn, pos, player, handIn, hit);
     }

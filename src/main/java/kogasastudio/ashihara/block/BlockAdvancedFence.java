@@ -1,33 +1,35 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.utils.AshiharaWoodTypes;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.StateContainer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import static kogasastudio.ashihara.block.BlockFenceDecoration.AXIS;
 import static kogasastudio.ashihara.block.BlockFenceDecoration.ORB;
 import static kogasastudio.ashihara.block.BlockFenceExpansion.FACING;
-
-import net.minecraft.block.AbstractBlock.Properties;
 
 public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodTypes>
 {
@@ -37,7 +39,7 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
         (
             Properties.of(Material.WOOD)
             .strength(0.5F)
-            .harvestTool(ToolType.AXE)
+            // todo tag .harvestTool(ToolType.AXE)
             .sound(SoundType.WOOD)
         );
         this.registerDefaultState(this.getStateDefinition().any().setValue(COLUMN, ColumnType.CORE));
@@ -56,12 +58,12 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
     public AshiharaWoodTypes getType() {return type;}
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         builder.add(NORTH).add(SOUTH).add(WEST).add(EAST).add(COLUMN);
     }
 
-    private boolean canConnect(World world, BlockPos pos, Direction direction)
+    private boolean canConnect(Level world, BlockPos pos, Direction direction)
     {
         BlockState state = world.getBlockState(pos);
         BlockState fromState = world.getBlockState(pos.relative(direction));
@@ -81,7 +83,7 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
     protected Block getExpansion() {return Blocks.AIR;}
 
     @Override
-    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
     {
         BlockState n = worldIn.getBlockState(pos.north());
         BlockState s = worldIn.getBlockState(pos.south());
@@ -171,9 +173,9 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        World worldIn = context.getLevel();
+        Level worldIn = context.getLevel();
         BlockPos pos = context.getClickedPos();
 
         BlockState init = this.defaultBlockState();
@@ -248,7 +250,7 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
     }
 
     @Override
-    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         ItemStack stack = player.getItemInHand(handIn);
         if (stack.getItem().equals(Items.GOLD_INGOT))
@@ -262,32 +264,32 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
                 else if (state.getValue(EAST) && state.getValue(WEST)) deco = deco.setValue(AXIS, Direction.Axis.X);
 
                 worldIn.setBlockAndUpdate(pos.above(), deco);
-                worldIn.playSound(player, pos, SoundEvents.LANTERN_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                worldIn.playSound(player, pos, SoundEvents.LANTERN_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
                 if (!player.isCreative()) player.getItemInHand(handIn).shrink(1);
 
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
         else if (state.getValue(COLUMN).equals(ColumnType.CORE) && stack.getItem().equals(Items.STICK) && (player.isCreative() || stack.getCount() >= 2))
         {
-            if (!(this.getExpansion() instanceof BlockFenceExpansion)) return ActionResultType.PASS;
+            if (!(this.getExpansion() instanceof BlockFenceExpansion)) return InteractionResult.PASS;
             Direction direction = hit.getDirection();
             if (direction.getAxis().isHorizontal() && worldIn.getBlockState(pos.relative(direction)).isAir())
             {
                 BlockState exp = this.getExpansion().defaultBlockState();
 
                 worldIn.setBlockAndUpdate(pos.relative(direction), exp.setValue(FACING, direction));
-                worldIn.playSound(player, pos, SoundEvents.WOOD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                worldIn.playSound(player, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
                 if (!player.isCreative()) player.getItemInHand(handIn).shrink(2);
 
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
     {
         VoxelShape part_N_DOWN = box(6.5d, 6.0d, 0.0d, 9.5d, 9.0, 8.0d);
         VoxelShape part_N_UP = box(6.5d, 12.0d, 0.0d, 9.5d, 15.0, 8.0d);
@@ -298,10 +300,10 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
         VoxelShape part_E_DOWN = box(8.0d, 6.0d, 6.5d, 16.0d, 9.0, 9.5d);
         VoxelShape part_E_UP = box(8.0d, 12.0d, 6.5d, 16.0d, 15.0, 9.5d);
 
-        VoxelShape part_N = VoxelShapes.or(part_N_UP, part_N_DOWN);
-        VoxelShape part_S = VoxelShapes.or(part_S_UP, part_S_DOWN);
-        VoxelShape part_W = VoxelShapes.or(part_W_UP, part_W_DOWN);
-        VoxelShape part_E = VoxelShapes.or(part_E_UP, part_E_DOWN);
+        VoxelShape part_N = Shapes.or(part_N_UP, part_N_DOWN);
+        VoxelShape part_S = Shapes.or(part_S_UP, part_S_DOWN);
+        VoxelShape part_W = Shapes.or(part_W_UP, part_W_DOWN);
+        VoxelShape part_E = Shapes.or(part_E_UP, part_E_DOWN);
 
         VoxelShape column_core = box(6.0d, 0.0d, 6.0d, 10.0d, 16.0d, 10.0d);
         VoxelShape column_mid = box(6.0d, 0.0d, 6.0d, 10.0d, 13.5d, 10.0d);
@@ -316,24 +318,24 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
             default: column = column_core;
         }
 
-        if (state.getValue(NORTH)) column = VoxelShapes.or(column, part_N);
-        if (state.getValue(SOUTH)) column = VoxelShapes.or(column, part_S);
-        if (state.getValue(WEST)) column = VoxelShapes.or(column, part_W);
-        if (state.getValue(EAST)) column = VoxelShapes.or(column, part_E);
+        if (state.getValue(NORTH)) column = Shapes.or(column, part_N);
+        if (state.getValue(SOUTH)) column = Shapes.or(column, part_S);
+        if (state.getValue(WEST)) column = Shapes.or(column, part_W);
+        if (state.getValue(EAST)) column = Shapes.or(column, part_E);
 
         return column;
     }
 
     @Override
-    public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face) {return 5;}
+    public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face) {return 5;}
 
     @Override
-    public int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face) {return 5;}
+    public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {return 5;}
 
     @Override
-    public boolean isFlammable(BlockState state, IBlockReader world, BlockPos pos, Direction face) {return true;}
+    public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face) {return true;}
 
-    public enum ColumnType implements IStringSerializable
+    public enum ColumnType implements StringRepresentable
     {
         CORE("core"),
         MID("mid"),

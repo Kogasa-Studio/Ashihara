@@ -4,14 +4,19 @@ import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.block.tileentities.IFluidHandler;
 import kogasastudio.ashihara.block.trees.CherryBlossomTree;
 import net.minecraft.block.trees.Tree;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.item.*;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Objects;
@@ -20,8 +25,6 @@ import java.util.Random;
 import static kogasastudio.ashihara.fluid.FluidRegistryHandler.SOY_MILK;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
-import net.minecraft.item.Item.Properties;
-
 public class ItemMinatoAqua extends Item
 {
     public ItemMinatoAqua()
@@ -29,18 +32,18 @@ public class ItemMinatoAqua extends Item
         super
         (
             new Properties()
-            .tab(ItemGroup.TAB_MATERIALS)
-            .food(new Food.Builder().nutrition(8).build())
+            .tab(CreativeModeTab.TAB_MATERIALS)
+            .food(new FoodProperties.Builder().nutrition(8).build())
         );
     }
 
     @Override
-    public ActionResultType useOn(ItemUseContext context)
+    public InteractionResult useOn(UseOnContext context)
     {
-        World world = context.getLevel();
+        Level world = context.getLevel();
         BlockPos pos = context.getClickedPos();
-        TileEntity te = world.getBlockEntity(pos);
-        PlayerEntity playerIn = context.getPlayer();
+        BlockEntity te = world.getBlockEntity(pos);
+        Player playerIn = context.getPlayer();
         ItemStack item = context.getItemInHand();
         Direction direction = context.getClickedFace();
         Tree tree = new CherryBlossomTree();
@@ -57,15 +60,15 @@ public class ItemMinatoAqua extends Item
                 }
             );
             te.setChanged();
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
 
         if (!item.isEmpty() && Objects.requireNonNull(playerIn).mayUseItemAt(pos.relative(direction), direction, item) && !world.isClientSide())
         {
-            ServerWorld worldIn = (ServerWorld)world;
+            ServerLevel worldIn = (ServerLevel)world;
             tree.growTree(worldIn, worldIn.getChunkSource().getGenerator(), pos, BlockRegistryHandler.CHERRY_LOG.get().defaultBlockState(), rand);
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        else return ActionResultType.PASS;
+        else return InteractionResult.PASS;
     }
 }

@@ -1,9 +1,9 @@
 package kogasastudio.ashihara.world.biomes;
 
 import kogasastudio.ashihara.world.WorldGenEventRegistryHandler;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.biome.*;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.carver.ConfiguredCarvers;
@@ -62,7 +62,7 @@ public class AshiharaBiomes
             .mobSpawnSettings
             (
                 getStandardMobSpawnBuilder()
-                .addSpawn(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.RABBIT, 4, 2, 3))
+                .addSpawn(MobCategory.CREATURE, new MobSpawnInfo.Spawners(EntityType.RABBIT, 4, 2, 3))
                 .build()
             )
             .generationSettings(builder.build())
@@ -101,8 +101,8 @@ public class AshiharaBiomes
             .mobSpawnSettings
             (
                 getStandardMobSpawnBuilder()
-                .addSpawn(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.RABBIT, 10, 2, 3))
-                .addSpawn(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.FOX, 5, 1, 3))
+                .addSpawn(MobCategory.CREATURE, new MobSpawnInfo.Spawners(EntityType.RABBIT, 10, 2, 3))
+                .addSpawn(MobCategory.CREATURE, new MobSpawnInfo.Spawners(EntityType.FOX, 5, 1, 3))
                 .build()
             )
             .generationSettings(builder.build())
@@ -143,9 +143,9 @@ public class AshiharaBiomes
             .mobSpawnSettings
             (
                 getStandardMobSpawnBuilder()
-                .addSpawn(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.RABBIT, 4, 2, 3))
-                .addSpawn(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.WOLF, 2, 2, 5))
-                .addSpawn(EntityClassification.CREATURE, new MobSpawnInfo.Spawners(EntityType.FOX, 3, 1, 4))
+                .addSpawn(MobCategory.CREATURE, new MobSpawnInfo.Spawners(EntityType.RABBIT, 4, 2, 3))
+                .addSpawn(MobCategory.CREATURE, new MobSpawnInfo.Spawners(EntityType.WOLF, 2, 2, 5))
+                .addSpawn(MobCategory.CREATURE, new MobSpawnInfo.Spawners(EntityType.FOX, 3, 1, 4))
                 .build()
             )
             .generationSettings(builder.build())
@@ -158,8 +158,8 @@ public class AshiharaBiomes
     private static int getSkyColorWithTemperatureModifier(float temperature)
     {
         float lvt_1_1_ = temperature / 3.0F;
-        lvt_1_1_ = MathHelper.clamp(lvt_1_1_, -1.0F, 1.0F);
-        return MathHelper.hsvToRgb(0.62222224F - lvt_1_1_ * 0.05F, 0.5F + lvt_1_1_ * 0.1F, 1.0F);
+        lvt_1_1_ = Mth.clamp(lvt_1_1_, -1.0F, 1.0F);
+        return Mth.hsvToRgb(0.62222224F - lvt_1_1_ * 0.05F, 0.5F + lvt_1_1_ * 0.1F, 1.0F);
     }
 
     private static MobSpawnInfo.Builder getStandardMobSpawnBuilder()

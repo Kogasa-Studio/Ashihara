@@ -1,8 +1,8 @@
 package kogasastudio.ashihara.utils;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ITag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.tags.Tag;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,16 +15,16 @@ public class CuttingBoardToolType
     public static final CuttingBoardToolType AXE = register(AshiharaTags.AXE, "axe");
     public static final CuttingBoardToolType KNIFE = register(AshiharaTags.KNIFE, "knife");
 
-    CuttingBoardToolType(ITag<Item> toolIn, String nameIn)
+    CuttingBoardToolType(Tag<Item> toolIn, String nameIn)
     {
         this.tool = toolIn;
         this.name = nameIn;
     }
 
-    private final ITag<Item> tool;
+    private final Tag<Item> tool;
     private final String name;
 
-    public ITag<Item> getTool() {return this.tool;}
+    public Tag<Item> getTool() {return this.tool;}
 
     public String getName() {return this.name;}
 
@@ -34,7 +34,7 @@ public class CuttingBoardToolType
 
     public boolean isEmpty() {return this.equals(NONE);}
 
-    private static CuttingBoardToolType register(ITag<Item> tool, String name)
+    private static CuttingBoardToolType register(Tag<Item> tool, String name)
     {
         CuttingBoardToolType instance = new CuttingBoardToolType(tool, name);
         INSTANCES.put(name, instance);

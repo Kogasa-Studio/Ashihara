@@ -5,17 +5,18 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.utils.CuttingBoardToolType;
+import net.minecraft.core.NonNullList;
 import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.util.RecipeMatcher;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
@@ -24,11 +25,9 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
-
-public class CuttingBoardRecipe implements IRecipe<RecipeWrapper>
+public class CuttingBoardRecipe implements Recipe<RecipeWrapper>
 {
-    public static IRecipeType<CuttingBoardRecipe> TYPE = IRecipeType.register(Ashihara.MODID + ":cutting");
+    public static RecipeType<CuttingBoardRecipe> TYPE = RecipeType.register(Ashihara.MODID + ":cutting");
     private final Serializer serializer = new Serializer();
 
     private final Ingredient input;
@@ -56,7 +55,7 @@ public class CuttingBoardRecipe implements IRecipe<RecipeWrapper>
     }
 
     @Override
-    public boolean matches(RecipeWrapper inv, World worldIn)
+    public boolean matches(RecipeWrapper inv, Level worldIn)
     {
         ArrayList<Ingredient> contained = new ArrayList<>();
         contained.add(this.input);
@@ -93,12 +92,12 @@ public class CuttingBoardRecipe implements IRecipe<RecipeWrapper>
     public ResourceLocation getId() {return this.id;}
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {return this.serializer;}
+    public RecipeSerializer<?> getSerializer() {return this.serializer;}
 
     @Override
-    public IRecipeType<?> getType() {return TYPE;}
+    public RecipeType<?> getType() {return TYPE;}
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CuttingBoardRecipe>
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CuttingBoardRecipe>
     {
         @Override
         public CuttingBoardRecipe fromJson(ResourceLocation recipeId, JsonObject json)
@@ -126,10 +125,10 @@ public class CuttingBoardRecipe implements IRecipe<RecipeWrapper>
         }
 
         @Override
-        public CuttingBoardRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer)
+        public CuttingBoardRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
         {
             Ingredient input = Ingredient.fromNetwork(buffer);
-            CompoundNBT nbt = buffer.readNbt();
+            CompoundTag nbt = buffer.readNbt();
             NonNullList<ItemStack> output = NonNullList.create();
             if (nbt != null)
             {
@@ -142,10 +141,10 @@ public class CuttingBoardRecipe implements IRecipe<RecipeWrapper>
         }
 
         @Override
-        public void toNetwork(PacketBuffer buffer, CuttingBoardRecipe recipe)
+        public void toNetwork(FriendlyByteBuf buffer, CuttingBoardRecipe recipe)
         {
             recipe.input.toNetwork(buffer);
-            CompoundNBT nbt = buffer.readNbt();
+            CompoundTag nbt = buffer.readNbt();
             if (nbt != null) ItemStackHelper.saveAllItems(nbt, recipe.output);
             buffer.writeUtf(recipe.type.getName());
         }

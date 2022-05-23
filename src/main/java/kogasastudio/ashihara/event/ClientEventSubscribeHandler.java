@@ -13,23 +13,23 @@ import kogasastudio.ashihara.client.render.ter.*;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.inventory.container.ContainerRegistryHandler;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
-import net.minecraft.block.Block;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
 //import net.minecraft.world.biome.BiomeColors;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 //import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -41,12 +41,12 @@ public class ClientEventSubscribeHandler
 {
     private static void setRenderType(Block block, RenderType type, FMLClientSetupEvent event)
     {
-        event.enqueueWork(() -> RenderTypeLookup.setRenderLayer(block, type));
+        event.enqueueWork(() -> ItemBlockRenderTypes.setRenderLayer(block, type));
     }
 
     private static void setRenderType(Fluid fluid, RenderType type, FMLClientSetupEvent event)
     {
-        event.enqueueWork(() -> RenderTypeLookup.setRenderLayer(fluid, type));
+        event.enqueueWork(() -> ItemBlockRenderTypes.setRenderLayer(fluid, type));
     }
 
     //设置渲染方式
@@ -111,10 +111,10 @@ public class ClientEventSubscribeHandler
     @SubscribeEvent
     public static void onModelBaked(ModelBakeEvent event)
     {
-        Map<ResourceLocation, IBakedModel> modelRegistry = event.getModelRegistry();
+        Map<ResourceLocation, BakedModel> modelRegistry = event.getModelRegistry();
         ModelResourceLocation location = new ModelResourceLocation
         (Objects.requireNonNull(ItemRegistryHandler.PAIL.get().getRegistryName()), "inventory");
-        IBakedModel existingModel = modelRegistry.get(location);
+        BakedModel existingModel = modelRegistry.get(location);
         if (existingModel == null)
         {
             throw new RuntimeException("Did not find Obsidian Hidden in registry");

@@ -2,12 +2,12 @@ package kogasastudio.ashihara.interaction.loot;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.NonNullList;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Random;
 
 import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
-import static net.minecraft.item.ItemStack.EMPTY;
+import static net.minecraft.world.item.ItemStack.EMPTY;
 
 /**
  * 添加一个从给定的物品列表中随机抽取指定数量项物品作为战利品表增量的LootModifier
@@ -28,7 +28,7 @@ public class AddRandomStackModifier extends LootModifier
     private final List<ItemStack> stacks;
     private final int times;
 
-    public AddRandomStackModifier(ILootCondition[] conditionsIn, List<ItemStack> stacksIn, int timesIn)
+    public AddRandomStackModifier(LootItemConditions[] conditionsIn, List<ItemStack> stacksIn, int timesIn)
     {
         super(conditionsIn);
         this.stacks = stacksIn;
@@ -61,11 +61,11 @@ public class AddRandomStackModifier extends LootModifier
     public static class Serializer extends GlobalLootModifierSerializer<AddRandomStackModifier>
     {
         @Override
-        public AddRandomStackModifier read(ResourceLocation location, JsonObject object, ILootCondition[] conditions)
+        public AddRandomStackModifier read(ResourceLocation location, JsonObject object, LootItemConditions[] conditions)
         {
             NonNullList<ItemStack> list = NonNullList.create();
-            JsonArray stacks = JSONUtils.getAsJsonArray(object, "items", null);
-            int rolls = JSONUtils.getAsInt(object, "roll", 1);
+            JsonArray stacks = GsonHelper.getAsJsonArray(object, "items", null);
+            int rolls = GsonHelper.getAsInt(object, "roll", 1);
             if (stacks == null) list = NonNullList.withSize(1, EMPTY);
             else
             {

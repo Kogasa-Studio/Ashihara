@@ -2,15 +2,15 @@
 package kogasastudio.ashihara.client.models;
 
 import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public class SujikabutoModel extends BipedModel<LivingEntity>
+public class SujikabutoModel extends HumanoidModel<LivingEntity>
 {
 	private final ModelRenderer bo;
 	private final ModelRenderer mayubisashi;
