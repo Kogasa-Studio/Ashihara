@@ -6,49 +6,44 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class AddTableModifier extends LootModifier
-{
+public class AddTableModifier extends LootModifier {
     private final ResourceLocation lootTable;
 
-    public AddTableModifier(LootItemConditions[] conditionsIn, ResourceLocation lootTableIn)
-    {
+    public AddTableModifier(LootItemCondition[] conditionsIn, ResourceLocation lootTableIn) {
         super(conditionsIn);
         this.lootTable = lootTableIn;
     }
 
-    public boolean canModify() {return true;}
+    public boolean canModify() {
+        return true;
+    }
 
     @Nonnull
     @Override
-    protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context)
-    {
-        if (this.canModify())
-        {
+    protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
+        if (this.canModify()) {
             LootTable table = context.getLootTable(this.lootTable);
             table.getRandomItemsRaw(context, LootTable.createStackSplitter(generatedLoot::add));
         }
         return generatedLoot;
     }
 
-    public static class Serializer extends GlobalLootModifierSerializer<AddTableModifier>
-    {
+    public static class Serializer extends GlobalLootModifierSerializer<AddTableModifier> {
         @Override
-        public AddTableModifier read(ResourceLocation location, JsonObject object, LootItemConditions[] ailootcondition)
-        {
+        public AddTableModifier read(ResourceLocation location, JsonObject object, LootItemCondition[] ailootcondition) {
             ResourceLocation lootTable = new ResourceLocation(GsonHelper.getAsString(object, "lootTable"));
             return new AddTableModifier(ailootcondition, lootTable);
         }
 
         @Override
-        public JsonObject write(AddTableModifier instance)
-        {
+        public JsonObject write(AddTableModifier instance) {
             JsonObject object = this.makeConditions(instance.conditions);
             object.addProperty("lootTable", instance.lootTable.toString());
             return object;

@@ -2,12 +2,11 @@ package kogasastudio.ashihara.interaction.recipe;
 
 import kogasastudio.ashihara.Ashihara;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
-public class RecipeTypesRegistryHandler
-{
+public class RecipeTypesRegistryHandler {
     public static final DeferredRegister<RecipeSerializer<?>> RECIPES = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Ashihara.MODID);
 
     public static final RegistryObject<RecipeSerializer<MillRecipe>> MILL = RECIPES.register("mill", MillRecipe.Serializer::new);

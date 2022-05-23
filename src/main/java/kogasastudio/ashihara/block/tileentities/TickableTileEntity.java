@@ -11,8 +11,6 @@ import net.minecraft.world.level.block.state.BlockState;
  * @author DustW
  **/
 public interface TickableTileEntity {
-    void tick();
-
     static <T extends BlockEntity> BlockEntityTicker<T> getTicker() {
         return (Level level, BlockPos bp, BlockState bs, T be) -> ((TickableTileEntity) be).tick();
     }
@@ -20,4 +18,6 @@ public interface TickableTileEntity {
     static <T extends BlockEntity> BlockEntityTicker<T> orEmpty(BlockEntityType<?> type1, BlockEntityType<?> type2) {
         return type1 == type2 ? getTicker() : null;
     }
+
+    void tick();
 }

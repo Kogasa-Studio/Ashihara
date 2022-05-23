@@ -4,12 +4,12 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class GenericItemStackHandler extends ItemStackHandler
-{
-    public GenericItemStackHandler(int numSlots) {super(numSlots);}
+public class GenericItemStackHandler extends ItemStackHandler {
+    public GenericItemStackHandler(int numSlots) {
+        super(numSlots);
+    }
 
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         for (ItemStack stack : this.stacks) {
             if (!stack.isEmpty()) {
                 return false;
@@ -26,13 +26,14 @@ public class GenericItemStackHandler extends ItemStackHandler
         }
     }
 
-    /** 警告！不应该直接通过此方法修改内容 */
+    /**
+     * 警告！不应该直接通过此方法修改内容
+     */
     public NonNullList<ItemStack> getContent() {
         return this.stacks;
     }
 
-    public int getActualSize()
-    {
+    public int getActualSize() {
         int i = 0;
         for (ItemStack stack : this.stacks) {
             if (!stack.isEmpty()) {
@@ -42,11 +43,12 @@ public class GenericItemStackHandler extends ItemStackHandler
         return i;
     }
 
-    public void clear() {this.stacks = NonNullList.withSize(this.getSlots(), ItemStack.EMPTY);}
+    public void clear() {
+        this.stacks = NonNullList.withSize(this.getSlots(), ItemStack.EMPTY);
+    }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return this.stacks.toString();
     }
 }

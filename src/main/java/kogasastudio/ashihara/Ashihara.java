@@ -19,28 +19,29 @@ import org.apache.logging.log4j.Logger;
 
 @Mod(Ashihara.MODID)
 @Mod.EventBusSubscriber(modid = Ashihara.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class Ashihara
-{
+public class Ashihara {
     public static final String MODID = "ashihara";
     public static final Logger LOGGER_MAIN = LogManager.getLogger();
-    public static final CreativeModeTab ASHIHARA = new CreativeModeTab("group_ashihara")
-    {
+    public static final CreativeModeTab ASHIHARA = new CreativeModeTab("group_ashihara") {
         @Override
-        public ItemStack makeIcon() {return new ItemStack(ItemRegistryHandler.ASHIHARA_ICON.get());}
+        public ItemStack makeIcon() {
+            return new ItemStack(ItemRegistryHandler.ASHIHARA_ICON.get());
+        }
     };
-    public static final CreativeModeTab MATERIALS = new CreativeModeTab("group_ash_materials")
-    {
+    public static final CreativeModeTab MATERIALS = new CreativeModeTab("group_ash_materials") {
         @Override
-        public ItemStack makeIcon() {return new ItemStack(ItemRegistryHandler.SAKURA.get());}
+        public ItemStack makeIcon() {
+            return new ItemStack(ItemRegistryHandler.SAKURA.get());
+        }
     };
-    public static final CreativeModeTab BUILDING_BLOCKS = new CreativeModeTab("group_ash_building_blocks")
-    {
+    public static final CreativeModeTab BUILDING_BLOCKS = new CreativeModeTab("group_ash_building_blocks") {
         @Override
-        public ItemStack makeIcon() {return new ItemStack(ItemRegistryHandler.JINJA_LANTERN.get());}
+        public ItemStack makeIcon() {
+            return new ItemStack(ItemRegistryHandler.JINJA_LANTERN.get());
+        }
     };
 
-    public Ashihara()
-    {
+    public Ashihara() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ItemRegistryHandler.ITEMS.register(bus);

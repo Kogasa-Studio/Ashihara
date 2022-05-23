@@ -5,24 +5,20 @@ import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.item.block.ItemBlockCandle;
 import kogasastudio.ashihara.item.block.ItemBlockPail;
-import kogasastudio.ashihara.item.foods.*;
-import net.minecraft.item.*;
+import kogasastudio.ashihara.item.foods.EasyFood;
+import kogasastudio.ashihara.item.foods.ItemDirtBallDon;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Tiers;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraft.world.item.*;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import static kogasastudio.ashihara.Ashihara.*;
 
 @SuppressWarnings("unused")
-public class ItemRegistryHandler
-{
+public class ItemRegistryHandler {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Ashihara.MODID);
 
     //特殊物品
@@ -49,9 +45,9 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> SUSHI_TAMAGO = ITEMS.register("sushi_tamago", () -> new EasyFood(6));
     public static final RegistryObject<Item> ONIGIRI = ITEMS.register("onigiri", () -> new EasyFood(6));
     public static final RegistryObject<Item> TAMAGO = ITEMS.register("tamago", () -> new EasyFood(1));
-    public static final RegistryObject<Item> CUCUMBER = ITEMS.register("cucumber",() -> new BlockNamedItem(BlockRegistryHandler.CUCUMBERS.get(), new Item.Properties().tab(MATERIALS).food(new FoodProperties.Builder().nutrition(2).build())));
+    public static final RegistryObject<Item> CUCUMBER = ITEMS.register("cucumber", () -> new ItemNameBlockItem(BlockRegistryHandler.CUCUMBERS.get(), new Item.Properties().tab(MATERIALS).food(new FoodProperties.Builder().nutrition(2).build())));
     public static final RegistryObject<Item> TOMATO = ITEMS.register("tomato", () -> new EasyFood(2));
-    public static final RegistryObject<Item> SWEET_POTATO = ITEMS.register("sweet_potato", () -> new BlockNamedItem(BlockRegistryHandler.SWEET_POTATOES.get(), new Item.Properties().tab(MATERIALS).food(new FoodProperties.Builder().nutrition(2).build())));
+    public static final RegistryObject<Item> SWEET_POTATO = ITEMS.register("sweet_potato", () -> new ItemNameBlockItem(BlockRegistryHandler.SWEET_POTATOES.get(), new Item.Properties().tab(MATERIALS).food(new FoodProperties.Builder().nutrition(2).build())));
     public static final RegistryObject<Item> ROASTED_SWEET_POTATO = ITEMS.register("roasted_sweet_potato", () -> new EasyFood(5));
     public static final RegistryObject<Item> TOFU = ITEMS.register("tofu", () -> new EasyFood(4));
     public static final RegistryObject<Item> MOCHI = ITEMS.register("mochi", () -> new EasyFood(3));
@@ -83,13 +79,13 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> FLOUR = ITEMS.register("flour", AshiharaMaterial::new);
     public static final RegistryObject<Item> RICE_POWDER = ITEMS.register("rice_powder", AshiharaMaterial::new);
     public static final RegistryObject<Item> BEAN_POWDER = ITEMS.register("bean_powder", AshiharaMaterial::new);
-    public static final RegistryObject<Item> SOY_BEAN = ITEMS.register("soy_bean", () -> new BlockNamedItem(BlockRegistryHandler.SOY_BEANS.get(), new Item.Properties().tab(MATERIALS)));
+    public static final RegistryObject<Item> SOY_BEAN = ITEMS.register("soy_bean", () -> new ItemNameBlockItem(BlockRegistryHandler.SOY_BEANS.get(), new Item.Properties().tab(MATERIALS)));
     public static final RegistryObject<Item> COTTON = ITEMS.register("cotton", AshiharaMaterial::new);
     public static final RegistryObject<Item> TEA_LEAF = ITEMS.register("tea_leaf", AshiharaMaterial::new);
     public static final RegistryObject<Item> DRIED_TEA_LEAF = ITEMS.register("dried_tea_leaf", AshiharaMaterial::new);
     public static final RegistryObject<Item> MACHA_POWDER = ITEMS.register("macha_powder", AshiharaMaterial::new);
     public static final RegistryObject<Item> TEA_FLOWER = ITEMS.register("tea_flower", AshiharaMaterial::new);
-    public static final RegistryObject<Item> TEA_SEED = ITEMS.register("tea_seeds", () -> new BlockNamedItem(BlockRegistryHandler.TEA_TREE.get(), (new Item.Properties()).tab(MATERIALS)));
+    public static final RegistryObject<Item> TEA_SEED = ITEMS.register("tea_seeds", () -> new ItemNameBlockItem(BlockRegistryHandler.TEA_TREE.get(), (new Item.Properties()).tab(MATERIALS)));
     public static final RegistryObject<Item> DRIED_BAMBOO = ITEMS.register("dried_bamboo", AshiharaMaterial::new);
     public static final RegistryObject<Item> BAMBOO_MATERIAL = ITEMS.register("bamboo_material", AshiharaMaterial::new);
     public static final RegistryObject<Item> BAMBOO_STICK = ITEMS.register("bamboo_stick", AshiharaMaterial::new);
@@ -163,13 +159,15 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> SOY_MILK_BUCKET = ITEMS.register("soy_milk_bucket", () -> new BucketItem(FluidRegistryHandler.SOY_MILK, new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
     public static final RegistryObject<Item> OIL_BUCKET = ITEMS.register("oil_bucket", () -> new BucketItem(FluidRegistryHandler.OIL, new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
 
-    private static class AshiharaItem extends Item
-    {
-        public AshiharaItem() {super(new Properties().tab(ASHIHARA));}
+    private static class AshiharaItem extends Item {
+        public AshiharaItem() {
+            super(new Properties().tab(ASHIHARA));
+        }
     }
 
-    private static class AshiharaMaterial extends Item
-    {
-        public AshiharaMaterial() {super(new Properties().tab(MATERIALS));}
+    private static class AshiharaMaterial extends Item {
+        public AshiharaMaterial() {
+            super(new Properties().tab(MATERIALS));
+        }
     }
 }

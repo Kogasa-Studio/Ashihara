@@ -8,8 +8,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
-public class AshiharaTags
-{
+public class AshiharaTags {
     public static final TagKey<Item> AXE = tagForge("axe");
     public static final TagKey<Item> KNIFE = tagForge("knife");
 
@@ -21,23 +20,19 @@ public class AshiharaTags
     public static final TagKey<Block> ADVANCED_FENCES = tagBlock("advanced_fences");
     public static final TagKey<Block> FENCE_EXPANSIONS = tagBlock("fence_expansions");
 
-    private static TagKey<Item> tag(String name)
-    {
+    private static TagKey<Item> tag(String name) {
         return ItemTags.create(new ResourceLocation(Ashihara.MODID, name));
     }
 
-    private static TagKey<Item> tagForge(String name)
-    {
+    private static TagKey<Item> tagForge(String name) {
         return ItemTags.create(new ResourceLocation("forge", name));
     }
 
-    private static TagKey<Block> tagBlock(String name)
-    {
+    private static TagKey<Block> tagBlock(String name) {
         return BlockTags.create(new ResourceLocation(Ashihara.MODID, name));
     }
 
-    private static TagKey<Block> tagForgeBlock(String name)
-    {
+    private static TagKey<Block> tagForgeBlock(String name) {
         return BlockTags.create(new ResourceLocation("forge", name));
     }
 }

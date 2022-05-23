@@ -1,28 +1,25 @@
 package kogasastudio.ashihara.helper;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Matrix4f;
 import kogasastudio.ashihara.block.tileentities.IFluidHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import com.mojang.blaze3d.vertex.BufferBuilder;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import com.mojang.blaze3d.vertex.Tesselator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.util.FastColor;
-import com.mojang.math.Matrix4f;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,47 +28,53 @@ import java.util.Map;
 
 import static com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_COLOR_TEX;
 
-public class RenderHelper
-{
+public class RenderHelper {
     /**
      * 将像素坐标转换为方块内坐标
+     *
      * @param pixels 像素坐标数值, 如5, 13
      * @return 方块内坐标数值, 如0.625,  0.25
      */
-    public static float XTP(float pixels) {return pixels / 16f;}
+    public static float XTP(float pixels) {
+        return pixels / 16f;
+    }
 
     /**
      * 将方块内坐标转换为像素坐标
      */
-    public static double PTX(double pos) {return pos * 16d;}
+    public static double PTX(double pos) {
+        return pos * 16d;
+    }
 
     /**
      * 将世界内坐标转换为方块内坐标
      */
-    public static double ATP(double absolutePos) {return absolutePos - Math.abs(absolutePos);}
+    public static double ATP(double absolutePos) {
+        return absolutePos - Math.abs(absolutePos);
+    }
 
     /**
      * 将世界内坐标转换为像素坐标
      */
-    public static double ATX(double absolutePos) {return PTX(ATP(absolutePos));}
+    public static double ATX(double absolutePos) {
+        return PTX(ATP(absolutePos));
+    }
 
     //贴图半透明部分渲染黑色
-    public static void buildMatrix(Matrix4f matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int overlay, int light)
-    {
+    public static void buildMatrix(Matrix4f matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int overlay, int light) {
         buildMatrix(matrix, builder, x, y, z, u, v, overlay, 0xffffff, 1.0f, light);
     }
 
     /**
      * 将给定列表中的RL统一变换为ashihara:xxx形式
      * 去掉头和尾巴就可以吃了
+     *
      * @param textures 需进行操作的列表(textures/xxx/xxx.png 形式)
-     * @return 操作过的列表(ashihara:xxx/xxx形式)
+     * @return 操作过的列表(ashihara : xxx / xxx形式)
      */
-    public static ArrayList<ResourceLocation> cookTextureRLs(List<ResourceLocation> textures)
-    {
+    public static ArrayList<ResourceLocation> cookTextureRLs(List<ResourceLocation> textures) {
         ArrayList<ResourceLocation> cooked = new ArrayList<>();
-        for (ResourceLocation location : textures)
-        {
+        for (ResourceLocation location : textures) {
             //这里还是用幻数
             String path = location.getPath().substring(9, location.getPath().length() - 4);
             cooked.add(new ResourceLocation(location.getNamespace(), path));
@@ -79,11 +82,9 @@ public class RenderHelper
         return cooked;
     }
 
-    public static Map<String, ResourceLocation> cookTextureRLsToMap(List<ResourceLocation> textures)
-    {
+    public static Map<String, ResourceLocation> cookTextureRLsToMap(List<ResourceLocation> textures) {
         Map<String, ResourceLocation> cooked = new HashMap<>();
-        for (ResourceLocation location : textures)
-        {
+        for (ResourceLocation location : textures) {
             //这里还是用幻数
             String path = location.getPath().substring(9, location.getPath().length() - 4);
             String name = path.substring(path.lastIndexOf("/") + 1);
@@ -94,106 +95,102 @@ public class RenderHelper
 
     /**
      * 渲染顶点
-     * @param matrix 渲染矩阵
+     *
+     * @param matrix  渲染矩阵
      * @param builder builder
-     * @param x 顶点x坐标
-     * @param y 顶点y坐标
-     * @param z 顶点z坐标
-     * @param u 顶点对应贴图的u坐标
-     * @param v 顶点对应贴图的v坐标
+     * @param x       顶点x坐标
+     * @param y       顶点y坐标
+     * @param z       顶点z坐标
+     * @param u       顶点对应贴图的u坐标
+     * @param v       顶点对应贴图的v坐标
      * @param overlay 覆盖
-     * @param light 光照
+     * @param light   光照
      */
-    public static void buildMatrix(Matrix4f matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int overlay, int RGBA, float alpha, int light)
-    {
+    public static void buildMatrix(Matrix4f matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int overlay, int RGBA, float alpha, int light) {
         float red = ((RGBA >> 16) & 0xFF) / 255f;
         float green = ((RGBA >> 8) & 0xFF) / 255f;
         float blue = ((RGBA) & 0xFF) / 255f;
 
         builder.vertex(matrix, x, y, z)
-        .color(red, green, blue, alpha)
-        .uv(u, v)
-        .overlayCoords(overlay)
-        .uv2(light)
-        .normal(0f, 1f, 0f)
-        .endVertex();
+                .color(red, green, blue, alpha)
+                .uv(u, v)
+                .overlayCoords(overlay)
+                .uv2(light)
+                .normal(0f, 1f, 0f)
+                .endVertex();
     }
 
     /**
      * 通过RGBA色值渲染顶点
      */
-    public static void buildMatrix(Matrix4f matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int RGBA)
-    {
-        int red = FastColor.PackedColor.red(RGBA);
-        int green = FastColor.PackedColor.green(RGBA);
-        int blue = FastColor.PackedColor.blue(RGBA);
-        int alpha = FastColor.PackedColor.alpha(RGBA);
+    public static void buildMatrix(Matrix4f matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int RGBA) {
+        int red = FastColor.ARGB32.red(RGBA);
+        int green = FastColor.ARGB32.green(RGBA);
+        int blue = FastColor.ARGB32.blue(RGBA);
+        int alpha = FastColor.ARGB32.alpha(RGBA);
 
         builder.vertex(matrix, x, y, z)
-        .color(red, green, blue, alpha)
-        .uv(u, v)
-        .endVertex();
+                .color(red, green, blue, alpha)
+                .uv(u, v)
+                .endVertex();
     }
 
     /**
      * 渲染tooltip
-     * @param gui 目标Screen
+     *
+     * @param gui    目标Screen
      * @param matrix 渲染矩阵
      * @param mouseX 鼠标所指x
      * @param mouseY 鼠标所指y
-     * @param x 鼠标悬停在上会渲染渲染tooltip的区域的起始x
-     * @param y 鼠标悬停在上会渲染渲染tooltip的区域的起始y
+     * @param x      鼠标悬停在上会渲染渲染tooltip的区域的起始x
+     * @param y      鼠标悬停在上会渲染渲染tooltip的区域的起始y
      * @param weight 区域宽度
      * @param height 区域高度
-     * @param list 渲染文本列表
+     * @param list   渲染文本列表
      */
-    public static void drawTooltip(Screen gui, PoseStack matrix, int mouseX, int mouseY, int x, int y, int weight, int height, List<TextComponent> list)
-    {
-        if ((x <= mouseX && mouseX <= x + weight) && (y <= mouseY && mouseY <= y + height))
-        {
+    public static void drawTooltip(Screen gui, PoseStack matrix, int mouseX, int mouseY, int x, int y, int weight, int height, List<Component> list) {
+        if ((x <= mouseX && mouseX <= x + weight) && (y <= mouseY && mouseY <= y + height)) {
             gui.renderComponentTooltip(matrix, list, mouseX, mouseY);
         }
     }
 
-    public static void drawFluidToolTip(Screen gui, PoseStack matrix, int mouseX, int mouseY, int x, int y, int weight, int height, FluidStack stack, int Capacity)
-    {
-        if (!stack.isEmpty())
-        {
-            ArrayList<TextComponent> list = new ArrayList<>();
+    public static void drawFluidToolTip(Screen gui, PoseStack matrix, int mouseX, int mouseY, int x, int y, int weight, int height, FluidStack stack, int Capacity) {
+        if (!stack.isEmpty()) {
+            ArrayList<Component> list = new ArrayList<>();
             list.add(new TranslatableComponent("tooltip.ashihara.fluid_existence"));
             list.add(new TextComponent
-            (
-            "    " + I18n.get(stack.getTranslationKey())
-                + ": " + stack.getAmount()
-                + (Capacity > 0 ? (" mB / " + Capacity + " mB") : " mB")
-            ));
+                    (
+                            "    " + I18n.get(stack.getTranslationKey())
+                                    + ": " + stack.getAmount()
+                                    + (Capacity > 0 ? (" mB / " + Capacity + " mB") : " mB")
+                    ));
             drawTooltip(gui, matrix, mouseX, mouseY, x, y, weight, height, list);
         }
     }
 
     /**
      * 在GUI中渲染流体
+     *
      * @param matrix 渲染矩阵
-     * @param fluid 需要渲染的流体（FluidStack）
-     * @param width 需要渲染的流体宽度
+     * @param fluid  需要渲染的流体（FluidStack）
+     * @param width  需要渲染的流体宽度
      * @param height 需要渲染的流体高度
-     * @param x x（绝对）
-     * @param y y（绝对）
+     * @param x      x（绝对）
+     * @param y      y（绝对）
      */
-    public static void renderFluidStackInGUI(Matrix4f matrix, FluidStack fluid, int width, int height, float x, float y)
-    {
+    public static void renderFluidStackInGUI(Matrix4f matrix, FluidStack fluid, int width, int height, float x, float y) {
         //正常渲染透明度
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
         //获取sprite
         TextureAtlasSprite FLUID =
-            Minecraft.getInstance()
-            .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-            .apply(fluid.getFluid().getAttributes().getStillTexture());
+                Minecraft.getInstance()
+                        .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
+                        .apply(fluid.getFluid().getAttributes().getStillTexture());
 
         //绑atlas
-        Minecraft.getInstance().getTextureManager().bind(InventoryMenu.BLOCK_ATLAS);
+        Minecraft.getInstance().getTextureManager().bindForSetup(InventoryMenu.BLOCK_ATLAS);
 
         int color = fluid.getFluid().getAttributes().getColor();
 
@@ -221,8 +218,7 @@ public class RenderHelper
          * [第一层（高）渲染完毕后渲染第二层，依此类推渲染所有高度层和额外高度层，以达成渲染任意长宽的流体矩形的目的]
          * 对于层，若层数为0（渲染数值小于16），则直接将渲染数值设为额外层数值。
          */
-        for (int i = hFloors; i >= 0; i --)
-        {
+        for (int i = hFloors; i >= 0; i--) {
             //i为流程控制码，若i=0则代表高度层已全部渲染完毕，此时若额外层高度为0（渲染高度参数本来就是16的整数倍）则跳出
             if (i == 0 && extraHeight == 0) break;
             float yStart = y - ((hFloors - i) * 16);
@@ -232,15 +228,14 @@ public class RenderHelper
             float v1 = i == 0 ? FLUID.getV0() + ((FLUID.getV1() - v0) * ((float) extraHeight / 16f)) : FLUID.getV1();
 
             //x层以此类推
-            for (int j = wFloors; j >= 0; j --)
-            {
+            for (int j = wFloors; j >= 0; j--) {
                 if (j == 0 && extraWidth == 0) break;
                 float xStart = x + (wFloors - j) * 16;
                 float xOffset = j == 0 ? (float) extraWidth : 16;
                 float u1 = j == 0 ? FLUID.getU0() + ((FLUID.getU1() - u0) * ((float) extraWidth / 16f)) : FLUID.getU1();
 
                 //渲染主代码
-                builder.begin(GL11.GL_QUADS, POSITION_COLOR_TEX);
+                builder.begin(VertexFormat.Mode.QUADS, POSITION_COLOR_TEX);
                 buildMatrix(matrix, builder, xStart, yStart - yOffset, 0.0f, u0, v0, color);
                 buildMatrix(matrix, builder, xStart, yStart, 0.0f, u0, v1, color);
                 buildMatrix(matrix, builder, xStart + xOffset, yStart, 0.0f, u1, v1, color);
@@ -252,24 +247,23 @@ public class RenderHelper
     }
 
     public static void renderLeveledFluidStack
-    (
-            FluidStack fluidIn, PoseStack stackIn, MultiBufferSource bufferIn,
-            int combinedLightIn, int combinedOverlayIn,
-            float xStart, float heightIn, float zStart,
-            float xEnd, float zEnd,
-            Level worldIn, BlockPos posIn
-    )
-    {
+            (
+                    FluidStack fluidIn, PoseStack stackIn, MultiBufferSource bufferIn,
+                    int combinedLightIn, int combinedOverlayIn,
+                    float xStart, float heightIn, float zStart,
+                    float xEnd, float zEnd,
+                    Level worldIn, BlockPos posIn
+            ) {
         VertexConsumer builder = bufferIn.getBuffer(RenderType.translucentNoCrumbling());
 
         TextureAtlasSprite FLUID = (worldIn != null && posIn != null)
-            ? Minecraft.getInstance()
-            .getBlockRenderer()
-            .getBlockModelShaper()
-            .getTexture(fluidIn.getFluid().defaultFluidState().createLegacyBlock(), worldIn, posIn)
-            : Minecraft.getInstance()
-            .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-            .apply(fluidIn.getFluid().getAttributes().getStillTexture());
+                ? Minecraft.getInstance()
+                .getBlockRenderer()
+                .getBlockModelShaper()
+                .getTexture(fluidIn.getFluid().defaultFluidState().createLegacyBlock(), worldIn, posIn)
+                : Minecraft.getInstance()
+                .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
+                .apply(fluidIn.getFluid().getAttributes().getStillTexture());
 
         int color = fluidIn.getFluid().getAttributes().getColor();
 
@@ -289,26 +283,24 @@ public class RenderHelper
     }
 
     public static void renderLeveledFluidStack
-    (
-            IFluidHandler teIn, PoseStack stackIn, MultiBufferSource bufferIn,
-            int combinedLightIn, int combinedOverlayIn,
-            float xStart, float minHeight, float zStart,
-            float xEnd, float maxHeight, float zEnd,
-            Level worldIn, BlockPos posIn
-    )
-    {
+            (
+                    IFluidHandler teIn, PoseStack stackIn, MultiBufferSource bufferIn,
+                    int combinedLightIn, int combinedOverlayIn,
+                    float xStart, float minHeight, float zStart,
+                    float xEnd, float maxHeight, float zEnd,
+                    Level worldIn, BlockPos posIn
+            ) {
         teIn.getTank().ifPresent
-        (
-            bucket ->
-            {
-                if (!bucket.isEmpty())
-                {
-                    FluidStack fluid = bucket.getFluid();
-                    float height = minHeight + ((float) fluid.getAmount() / bucket.getCapacity()) * (maxHeight - minHeight);
+                (
+                        bucket ->
+                        {
+                            if (!bucket.isEmpty()) {
+                                FluidStack fluid = bucket.getFluid();
+                                float height = minHeight + ((float) fluid.getAmount() / bucket.getCapacity()) * (maxHeight - minHeight);
 
-                    renderLeveledFluidStack(fluid, stackIn, bufferIn, combinedLightIn, combinedOverlayIn, xStart, height, zStart, xEnd, zEnd, worldIn, posIn);
-                }
-            }
-        );
+                                renderLeveledFluidStack(fluid, stackIn, bufferIn, combinedLightIn, combinedOverlayIn, xStart, height, zStart, xEnd, zEnd, worldIn, posIn);
+                            }
+                        }
+                );
     }
 }

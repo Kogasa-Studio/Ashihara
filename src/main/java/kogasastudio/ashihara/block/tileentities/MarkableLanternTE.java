@@ -9,12 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 
-public class MarkableLanternTE extends AshiharaMachineTE
-{
-    public MarkableLanternTE(BlockPos pos, BlockState state) {
-        super(TERegistryHandler.MARKABLE_LANTERN_TE.get(), pos, state);
-    }
-
+public class MarkableLanternTE extends AshiharaMachineTE {
     //获取所有纹章的rl列表
     private static final ArrayList<ResourceLocation> textures = new ArrayList<>
             (Minecraft.getInstance().getResourceManager().listResources("textures/icons/", s -> s.endsWith(".png")));
@@ -22,16 +17,18 @@ public class MarkableLanternTE extends AshiharaMachineTE
     private static final ArrayList<ResourceLocation> cookedTextures = RenderHelper.cookTextureRLs(textures);
     //当前纹章在列表中的下标
     private int pointer = 0;
+    public MarkableLanternTE(BlockPos pos, BlockState state) {
+        super(TERegistryHandler.MARKABLE_LANTERN_TE.get(), pos, state);
+    }
 
-    public ResourceLocation getIcon()
-    {
+    public ResourceLocation getIcon() {
         return cookedTextures.get(pointer);
     }
 
     //用来循环更改纹章
-    public void nextIcon()
-    {
-        if (pointer == cookedTextures.size() - 1) pointer = 0; else pointer += 1;
+    public void nextIcon() {
+        if (pointer == cookedTextures.size() - 1) pointer = 0;
+        else pointer += 1;
         setChanged();
     }
 

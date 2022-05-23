@@ -36,33 +36,26 @@ import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 // todo Block 默认没有 BlockEntity 了，需要手动实现 EntityBlock
-public class BlockMill extends Block implements EntityBlock
-{
-    public BlockMill()
-    {
-        super
-        (
-            Properties.of(Material.STONE)
-            .strength(2.0F, 6.0F)
-            // todo tag .harvestTool(ToolType.PICKAXE)
-            .requiresCorrectToolForDrops()
-            .sound(SoundType.STONE)
-        );
-    }
-
+public class BlockMill extends Block implements EntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-
+    public BlockMill() {
+        super
+                (
+                        Properties.of(Material.STONE)
+                                .strength(2.0F, 6.0F)
+                                // todo tag .harvestTool(ToolType.PICKAXE)
+                                .requiresCorrectToolForDrops()
+                                .sound(SoundType.STONE)
+                );
+    }
 
     @Override
-    public void playerDestroy(Level worldIn, Player player, BlockPos pos, BlockState state, BlockEntity te, ItemStack stack)
-    {
-        if (te instanceof MillTE)
-        {
+    public void playerDestroy(Level worldIn, Player player, BlockPos pos, BlockState state, BlockEntity te, ItemStack stack) {
+        if (te instanceof MillTE) {
             NonNullList<ItemStack> stacks = NonNullList.create();
-            for (int i = 0; i < ((MillTE) te).getInput().getSlots(); i += 1)
-            {
-                ItemStack stack1 =((MillTE) te).getInput().getStackInSlot(i);
+            for (int i = 0; i < ((MillTE) te).getInput().getSlots(); i += 1) {
+                ItemStack stack1 = ((MillTE) te).getInput().getStackInSlot(i);
                 if (!stack.isEmpty()) {
                     stacks.add(stack1);
                 }
@@ -74,47 +67,41 @@ public class BlockMill extends Block implements EntityBlock
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
-    {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
-    {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         VoxelShape shape1 = Block.box(2, 0, 2, 14, 5, 14);
         VoxelShape shape2 = Block.box(4, 5, 4, 12, 10, 12);
         return Shapes.or(shape1, shape2);
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
-    {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         ItemStack stack = player.getItemInHand(handIn);
         MillTE te = (MillTE) worldIn.getBlockEntity(pos);
 
-        if (te != null)
-        {
+        if (te != null) {
             FluidTank tank = te.getTank().orElse(new FluidTank(0));
-            if (!stack.isEmpty() && FluidHelper.notifyFluidTankInteraction(player, handIn, stack, tank, worldIn, pos))
-            {
+            if (!stack.isEmpty() && FluidHelper.notifyFluidTankInteraction(player, handIn, stack, tank, worldIn, pos)) {
                 player.getInventory().setChanged();
                 worldIn.sendBlockUpdated(pos, state, state, 3);
                 return InteractionResult.SUCCESS;
-            }
-            else if (!worldIn.isClientSide && handIn == InteractionHand.MAIN_HAND)
-            {
+            } else if (!worldIn.isClientSide && handIn == InteractionHand.MAIN_HAND) {
                 NetworkHooks.openGui((ServerPlayer) player, te, (FriendlyByteBuf packerBuffer) -> packerBuffer.writeBlockPos(te.getBlockPos()));
                 return InteractionResult.SUCCESS;
-            }
-            else return InteractionResult.SUCCESS;
+            } else return InteractionResult.SUCCESS;
         }
 
         return InteractionResult.PASS;
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {builder.add(FACING);}
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(FACING);
+    }
 
     @org.jetbrains.annotations.Nullable
     @Override
