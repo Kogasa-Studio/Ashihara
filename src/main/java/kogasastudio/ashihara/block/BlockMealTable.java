@@ -3,30 +3,25 @@ package kogasastudio.ashihara.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
-import net.minecraft.world.level.block.state.BlockBehaviour;
-
-public class BlockMealTable extends Block
-{
-    public BlockMealTable()
-    {
+public class BlockMealTable extends Block {
+    public BlockMealTable() {
         super
-        (
-            Properties.of(Material.WOOD)
-            .sound(SoundType.BAMBOO)
-            .strength(0.5f)
-        );
+                (
+                        Properties.of(Material.WOOD)
+                                .sound(SoundType.BAMBOO)
+                                .strength(0.5f)
+                );
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
-    {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         VoxelShape base = box(3.0d, 0.0d, 3.0d, 13.0d, 4.5d, 13.0d);
         VoxelShape plate_base = box(2.5d, 4.5d, 2.5d, 13.5d, 5.0d, 13.5d);
         VoxelShape plate = box(2.0, 5.0, 2.0, 14.0, 6.0, 14.0);

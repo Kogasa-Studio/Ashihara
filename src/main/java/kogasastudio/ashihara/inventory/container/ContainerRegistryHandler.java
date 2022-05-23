@@ -11,17 +11,16 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class ContainerRegistryHandler
-{
+public class ContainerRegistryHandler {
     public static final DeferredRegister<MenuType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, Ashihara.MODID);
 
     public static final RegistryObject<MenuType<MillContainer>> MILL_CONTAINER = CONTAINER_TYPES.register("mill_container",
-    () -> IForgeMenuType.create(((windowId, inv, data) ->
-            new MillContainer(windowId, inv, getBe(inv, data)))));
+            () -> IForgeMenuType.create(((windowId, inv, data) ->
+                    new MillContainer(windowId, inv, getBe(inv, data)))));
 
     public static final RegistryObject<MenuType<MortarContainer>> MORTAR_CONTAINER = CONTAINER_TYPES.register("mortar_container",
-    () -> IForgeMenuType.create(((windowId, inv, data) ->
-            new MortarContainer(windowId, inv, getBe(inv, data)))));
+            () -> IForgeMenuType.create(((windowId, inv, data) ->
+                    new MortarContainer(windowId, inv, getBe(inv, data)))));
 
     // todo 如果这里 cast 失败了说明真的该崩了
     @SuppressWarnings("unchecked")

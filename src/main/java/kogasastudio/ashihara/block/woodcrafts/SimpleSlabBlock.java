@@ -8,26 +8,28 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 
-import net.minecraft.world.level.block.state.BlockBehaviour;
-
-public class SimpleSlabBlock extends SlabBlock
-{
-    public SimpleSlabBlock()
-    {
+public class SimpleSlabBlock extends SlabBlock {
+    public SimpleSlabBlock() {
         super
-        (
-            Properties.of(Material.WOOD)
-            .strength(2.0F, 3.0F)
-            .sound(SoundType.WOOD)
-        );
+                (
+                        Properties.of(Material.WOOD)
+                                .strength(2.0F, 3.0F)
+                                .sound(SoundType.WOOD)
+                );
     }
 
     @Override
-    public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face) {return 20;}
+    public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+        return 20;
+    }
 
     @Override
-    public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {return 5;}
+    public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+        return 5;
+    }
 
     @Override
-    public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face) {return true;}
+    public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+        return true;
+    }
 }

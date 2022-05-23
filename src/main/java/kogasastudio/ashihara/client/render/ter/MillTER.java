@@ -7,22 +7,20 @@ import kogasastudio.ashihara.block.tileentities.MillTE;
 import kogasastudio.ashihara.client.models.MillStoneModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
 import static kogasastudio.ashihara.block.BlockMill.FACING;
 
-public class MillTER extends BlockEntityRenderer<MillTE>
-{
-    public MillTER(BlockEntityRenderDispatcher rendererDispatcherIn) {super(rendererDispatcherIn);}
-
+public class MillTER implements BlockEntityRenderer<MillTE> {
     private static final ResourceLocation tex = new ResourceLocation("ashihara:textures/block/mill_stone.png");
     private final MillStoneModel millStone = new MillStoneModel();
+    public MillTER(BlockEntityRendererProvider.Context rendererDispatcherIn) {
+    }
 
     @Override
-    public void render(MillTE tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
-    {
+    public void render(MillTE tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.5D, 1.5D, 0.5D);
         float facing = tileEntityIn.getBlockState().getValue(FACING).toYRot();

@@ -14,47 +14,38 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BlockImmatureRiceCrop extends CropBlock
-{
-    public BlockImmatureRiceCrop()
-    {
+public class BlockImmatureRiceCrop extends CropBlock {
+    public BlockImmatureRiceCrop() {
         super
-        (
-            BlockBehaviour.Properties.of(Material.PLANT)
-            .noCollission()
-            .randomTicks()
-            .instabreak()
-            .sound(SoundType.CROP)
-        );
+                (
+                        BlockBehaviour.Properties.of(Material.PLANT)
+                                .noCollission()
+                                .randomTicks()
+                                .instabreak()
+                                .sound(SoundType.CROP)
+                );
     }
 
     @Override
-    protected ItemLike getBaseSeedId()
-    {
+    protected ItemLike getBaseSeedId() {
         return ItemRegistryHandler.PADDY.get();
     }
 
     @Override
-    public int getMaxAge()
-    {
+    public int getMaxAge() {
         return 2;
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
-    {
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         List<ItemStack> list = new LinkedList<>();
-        if (this.getAge(state) == 2)
-        {
+        if (this.getAge(state) == 2) {
             list.add(new ItemStack(ItemRegistryHandler.RICE_SEEDLING.get()));
             return list;
-        }
-        else if (this.getAge(state) <= 1)
-        {
+        } else if (this.getAge(state) <= 1) {
             list.add(new ItemStack(ItemRegistryHandler.PADDY.get()));
             return list;
-        }
-        else {
+        } else {
             return Collections.emptyList();
         }
     }

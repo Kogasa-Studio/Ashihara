@@ -1,24 +1,26 @@
 package kogasastudio.ashihara.interaction.recipe;
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import kogasastudio.ashihara.Ashihara;
 import net.minecraft.core.NonNullList;
-import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.util.RecipeMatcher;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
-import net.minecraftforge.common.util.RecipeMatcher;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.ArrayList;
@@ -27,11 +29,9 @@ import java.util.Map;
 
 import static net.minecraft.world.item.ItemStack.EMPTY;
 
-public class MillRecipe implements Recipe<RecipeWrapper>
-{
-    public static RecipeType<MillRecipe> TYPE = RecipeType.register(Ashihara.MODID + ":mill");
+public class MillRecipe implements Recipe<RecipeWrapper> {
     public static final Serializer SERIALIZER = new Serializer();
-
+    public static RecipeType<MillRecipe> TYPE = RecipeType.register(Ashihara.MODID + ":mill");
     private final NonNullList<Ingredient> input;
     private final Map<Ingredient, Byte> inputCosts;
     private final NonNullList<ItemStack> output;
@@ -46,17 +46,16 @@ public class MillRecipe implements Recipe<RecipeWrapper>
     public float exp;
 
     public MillRecipe
-    (
-        ResourceLocation recipeId,
-        String groupId,
-        NonNullList<Ingredient> inputIn,
-        Map<Ingredient, Byte> inputCostsIn,
-        NonNullList<ItemStack> outputIn,
-        FluidStack inFluid,
-        FluidStack outFluid,
-        byte roundIn, int roundTicksIn, float expIn
-    )
-    {
+            (
+                    ResourceLocation recipeId,
+                    String groupId,
+                    NonNullList<Ingredient> inputIn,
+                    Map<Ingredient, Byte> inputCostsIn,
+                    NonNullList<ItemStack> outputIn,
+                    FluidStack inFluid,
+                    FluidStack outFluid,
+                    byte roundIn, int roundTicksIn, float expIn
+            ) {
         this.id = recipeId;
         this.group = groupId;
 
@@ -70,41 +69,50 @@ public class MillRecipe implements Recipe<RecipeWrapper>
         this.exp = expIn;
     }
 
-    public FluidStack getInputFluid() {return this.inputFluid.copy();}
+    public FluidStack getInputFluid() {
+        return this.inputFluid.copy();
+    }
 
-    public FluidStack getOutputFluid() {return this.outputFluid.copy();}
+    public FluidStack getOutputFluid() {
+        return this.outputFluid.copy();
+    }
 
-    public byte getCosts(Ingredient ingredient)
-    {
+    public byte getCosts(Ingredient ingredient) {
         return this.inputCosts.get(ingredient);
     }
 
     @Override
-    public NonNullList<Ingredient> getIngredients() {return this.input;}
+    public NonNullList<Ingredient> getIngredients() {
+        return this.input;
+    }
 
     @Override
-    public String getGroup() {return this.group;}
+    public String getGroup() {
+        return this.group;
+    }
 
     @Override
-    public ResourceLocation getId() {return this.id;}
+    public ResourceLocation getId() {
+        return this.id;
+    }
 
     @Override
-    public boolean matches(RecipeWrapper inv, Level worldIn)
-    {
+    public boolean matches(RecipeWrapper inv, Level worldIn) {
         ArrayList<ItemStack> inputs = new ArrayList<>();
         boolean costMatches = false;
 
-        for (int j = 0; j < 4; ++j)
-        {
+        for (int j = 0; j < 4; ++j) {
             ItemStack itemstack = inv.getItem(j);
-            if (!itemstack.isEmpty()) {inputs.add(itemstack);}
+            if (!itemstack.isEmpty()) {
+                inputs.add(itemstack);
+            }
         }
-        for (Ingredient ingredient : this.input)
-        {
-            for (ItemStack stack : inputs)
-            {
-                if (ingredient.test(stack) && stack.getCount() >= this.inputCosts.get(ingredient)) {costMatches = true;break;}
-                else costMatches = false;
+        for (Ingredient ingredient : this.input) {
+            for (ItemStack stack : inputs) {
+                if (ingredient.test(stack) && stack.getCount() >= this.inputCosts.get(ingredient)) {
+                    costMatches = true;
+                    break;
+                } else costMatches = false;
             }
             if (!costMatches) break;
         }
@@ -113,56 +121,38 @@ public class MillRecipe implements Recipe<RecipeWrapper>
 
     //这个没啥用
     @Override
-    public ItemStack assemble(RecipeWrapper inv) {return this.output.get(0).copy();}
+    public ItemStack assemble(RecipeWrapper inv) {
+        return this.output.get(0).copy();
+    }
 
     //这个也没啥用
     @Override
-    public ItemStack getResultItem() {return this.output.get(0).copy();}
+    public ItemStack getResultItem() {
+        return this.output.get(0).copy();
+    }
 
     //出结果的
-    public NonNullList<ItemStack> getCraftingResult() {return this.output;}
+    public NonNullList<ItemStack> getCraftingResult() {
+        return this.output;
+    }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {return width * height >= this.input.size();}
+    public boolean canCraftInDimensions(int width, int height) {
+        return width * height >= this.input.size();
+    }
 
     @Override
-    public RecipeType<?> getType() {return TYPE;}
+    public RecipeType<?> getType() {
+        return TYPE;
+    }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {return SERIALIZER;}
+    public RecipeSerializer<?> getSerializer() {
+        return SERIALIZER;
+    }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<MillRecipe>
-    {
-        @Override
-        public MillRecipe fromJson(ResourceLocation recipeId, JsonObject json)
-        {
-            final String groupIn = GsonHelper.getAsString(json, "group", "");
-            final NonNullList<Ingredient> inputIn = readIngredients(GsonHelper.getAsJsonArray(json, "ingredients"));
-            if (inputIn.isEmpty()) {throw new JsonParseException("No ingredients for mill recipe");}
-            else if (inputIn.size() > 4) {throw new JsonParseException("Too many ingredients for mill recipe! The max is 4");}
-            else
-            {
-                final Map<Ingredient, Byte> costsIn = serializeCosts(inputIn, GsonHelper.getAsJsonArray(json, "costs"));
-                final NonNullList<ItemStack> outputIn = readOutput(GsonHelper.getAsJsonArray(json, "result", null));
-                final byte roundIn = GsonHelper.getAsByte(json, "rounds", (byte) 1);
-                final int roundTicksIn = GsonHelper.getAsInt(json, "roundTicks", 100);
-                final float expIn = GsonHelper.getAsFloat(json, "experience", 20.0f);
-                if (json.has("fluids"))
-                {
-                    JsonElement fluids = json.get("fluids");
-                    JsonObject in = fluids.getAsJsonObject().has("input") ? fluids.getAsJsonObject().get("input").getAsJsonObject() : null;
-                    JsonObject out = fluids.getAsJsonObject().has("output") ? fluids.getAsJsonObject().get("output").getAsJsonObject() : null;
-                    if (!(in != null || out != null)) {throw new JsonParseException("Fluid ingredient announced but is content empty!");}
-                    FluidStack inFluid = readFluid(in);
-                    FluidStack outFluid = readFluid(out);
-                    return new MillRecipe(recipeId, groupIn, inputIn, costsIn, outputIn, inFluid, outFluid, roundIn, roundTicksIn, expIn);
-                }
-                else return new MillRecipe(recipeId, groupIn, inputIn, costsIn, outputIn, FluidStack.EMPTY, FluidStack.EMPTY, roundIn, roundTicksIn, expIn);
-            }
-        }
-
-        private static FluidStack readFluid(JsonObject object)
-        {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<MillRecipe> {
+        private static FluidStack readFluid(JsonObject object) {
             if (object == null) return FluidStack.EMPTY;
 
             String fluid = GsonHelper.getAsString(object, "fluid");
@@ -175,62 +165,93 @@ public class MillRecipe implements Recipe<RecipeWrapper>
             return FluidStack.loadFluidStackFromNBT(nbt);
         }
 
-        private static NonNullList<Ingredient> readIngredients(JsonArray ingredientArray)
-        {
+        private static NonNullList<Ingredient> readIngredients(JsonArray ingredientArray) {
             NonNullList<Ingredient> nonnulllist = NonNullList.create();
 
-            for (int i = 0; i < ingredientArray.size(); ++i)
-            {
+            for (int i = 0; i < ingredientArray.size(); ++i) {
                 Ingredient ingredient = Ingredient.fromJson(ingredientArray.get(i));
-                if (!ingredient.isEmpty()) {nonnulllist.add(ingredient);}
+                if (!ingredient.isEmpty()) {
+                    nonnulllist.add(ingredient);
+                }
             }
 
             return nonnulllist;
         }
 
-        private static Map<Ingredient, Byte> serializeCosts(NonNullList<Ingredient> ingredients, JsonArray costArray)
-        {
-            if (costArray.size() > ingredients.size()) {throw new JsonParseException("Cost counts does not match ingredient counts!");}
+        private static Map<Ingredient, Byte> serializeCosts(NonNullList<Ingredient> ingredients, JsonArray costArray) {
+            if (costArray.size() > ingredients.size()) {
+                throw new JsonParseException("Cost counts does not match ingredient counts!");
+            }
             Map<Ingredient, Byte> map = new HashMap<>(ingredients.size());
-            for (int i = 0; i < ingredients.size(); i += 1)
-            {
+            for (int i = 0; i < ingredients.size(); i += 1) {
                 byte b = costArray.get(i).getAsByte();
-                if (b > 64) {throw new JsonParseException("Costing over 64!");}
+                if (b > 64) {
+                    throw new JsonParseException("Costing over 64!");
+                }
                 map.put(ingredients.get(i), costArray.get(i).getAsByte());
             }
             return map;
         }
 
-        private static NonNullList<ItemStack> readOutput(JsonArray itemStackArray)
-        {
+        private static NonNullList<ItemStack> readOutput(JsonArray itemStackArray) {
             if (itemStackArray == null) return NonNullList.withSize(1, EMPTY);
 
             NonNullList<ItemStack> nonnulllist = NonNullList.create();
 
-            for (int i = 0; i < itemStackArray.size(); ++i)
-            {
+            for (int i = 0; i < itemStackArray.size(); ++i) {
                 ItemStack stack = CraftingHelper.getItemStack(itemStackArray.get(i).getAsJsonObject(), true);
-                if (!stack.isEmpty()) {nonnulllist.add(stack);}
+                if (!stack.isEmpty()) {
+                    nonnulllist.add(stack);
+                }
             }
 
             return nonnulllist;
         }
 
         @Override
-        public MillRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
-        {
+        public MillRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+            final String groupIn = GsonHelper.getAsString(json, "group", "");
+            final NonNullList<Ingredient> inputIn = readIngredients(GsonHelper.getAsJsonArray(json, "ingredients"));
+            if (inputIn.isEmpty()) {
+                throw new JsonParseException("No ingredients for mill recipe");
+            } else if (inputIn.size() > 4) {
+                throw new JsonParseException("Too many ingredients for mill recipe! The max is 4");
+            } else {
+                final Map<Ingredient, Byte> costsIn = serializeCosts(inputIn, GsonHelper.getAsJsonArray(json, "costs"));
+                final NonNullList<ItemStack> outputIn = readOutput(GsonHelper.getAsJsonArray(json, "result", null));
+                final byte roundIn = GsonHelper.getAsByte(json, "rounds", (byte) 1);
+                final int roundTicksIn = GsonHelper.getAsInt(json, "roundTicks", 100);
+                final float expIn = GsonHelper.getAsFloat(json, "experience", 20.0f);
+                if (json.has("fluids")) {
+                    JsonElement fluids = json.get("fluids");
+                    JsonObject in = fluids.getAsJsonObject().has("input") ? fluids.getAsJsonObject().get("input").getAsJsonObject() : null;
+                    JsonObject out = fluids.getAsJsonObject().has("output") ? fluids.getAsJsonObject().get("output").getAsJsonObject() : null;
+                    if (!(in != null || out != null)) {
+                        throw new JsonParseException("Fluid ingredient announced but is content empty!");
+                    }
+                    FluidStack inFluid = readFluid(in);
+                    FluidStack outFluid = readFluid(out);
+                    return new MillRecipe(recipeId, groupIn, inputIn, costsIn, outputIn, inFluid, outFluid, roundIn, roundTicksIn, expIn);
+                } else
+                    return new MillRecipe(recipeId, groupIn, inputIn, costsIn, outputIn, FluidStack.EMPTY, FluidStack.EMPTY, roundIn, roundTicksIn, expIn);
+            }
+        }
+
+        @Override
+        public MillRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             String groupIn = buffer.readUtf(32767);
             Map<Ingredient, Byte> costsIn = new HashMap<>(4);
             NonNullList<Ingredient> inputItemsIn = NonNullList.withSize(4, Ingredient.EMPTY);
             NonNullList<ItemStack> outputItemsIn = NonNullList.withSize(4, EMPTY);
 
-            for (int j = 0; j < inputItemsIn.size(); ++j)
-            {
+            for (int j = 0; j < inputItemsIn.size(); ++j) {
                 inputItemsIn.set(j, Ingredient.fromNetwork(buffer));
                 costsIn.put(Ingredient.fromNetwork(buffer), buffer.readByteArray()[j]);
             }
             CompoundTag nbt = buffer.readNbt();
-            if (nbt != null) ItemStackHelper.loadAllItems(nbt, outputItemsIn);
+            if (nbt != null) {
+                ContainerHelper.loadAllItems(nbt, outputItemsIn);
+            }
 
             FluidStack inFluid = FluidStack.readFromPacket(buffer);
             FluidStack outFluid = FluidStack.readFromPacket(buffer);
@@ -242,20 +263,20 @@ public class MillRecipe implements Recipe<RecipeWrapper>
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buffer, MillRecipe recipe)
-        {
+        public void toNetwork(FriendlyByteBuf buffer, MillRecipe recipe) {
             buffer.writeUtf(recipe.group);
             byte[] bytes = new byte[recipe.input.size()];
             int i = 0;
 
-            for (Ingredient ingredient : recipe.input)
-            {
+            for (Ingredient ingredient : recipe.input) {
                 ingredient.toNetwork(buffer);
                 bytes[i] = recipe.inputCosts.get(ingredient);
                 i += 1;
             }
             CompoundTag nbt = buffer.readNbt();
-            if (nbt != null) ItemStackHelper.saveAllItems(nbt, recipe.output);
+            if (nbt != null) {
+                ContainerHelper.saveAllItems(nbt, recipe.output);
+            }
 
             recipe.inputFluid.writeToPacket(buffer);
             recipe.outputFluid.writeToPacket(buffer);

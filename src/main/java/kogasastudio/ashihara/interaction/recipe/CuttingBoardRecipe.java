@@ -6,17 +6,16 @@ import com.google.gson.JsonParseException;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.utils.CuttingBoardToolType;
 import net.minecraft.core.NonNullList;
-import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.util.RecipeMatcher;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
@@ -25,8 +24,7 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class CuttingBoardRecipe implements Recipe<RecipeWrapper>
-{
+public class CuttingBoardRecipe implements Recipe<RecipeWrapper> {
     public static RecipeType<CuttingBoardRecipe> TYPE = RecipeType.register(Ashihara.MODID + ":cutting");
     private final Serializer serializer = new Serializer();
 
@@ -36,27 +34,24 @@ public class CuttingBoardRecipe implements Recipe<RecipeWrapper>
 
     public ResourceLocation id;
 
-    public CuttingBoardRecipe(ResourceLocation idIn, Ingredient inputIn, NonNullList<ItemStack> outputIn, CuttingBoardToolType typeIn)
-    {
+    public CuttingBoardRecipe(ResourceLocation idIn, Ingredient inputIn, NonNullList<ItemStack> outputIn, CuttingBoardToolType typeIn) {
         this.id = idIn;
         this.input = inputIn;
         this.output = outputIn;
         this.type = typeIn;
     }
 
-    public String getInfo()
-    {
+    public String getInfo() {
         return
-        "\n{\n    input: " + Arrays.toString(this.input.getItems())
-        + "\n    output: " + this.output.toString()
-        + "\n    id: " + this.id.toString()
-        + "\n    type: " + this.type.getName()
-        + "\n}";
+                "\n{\n    input: " + Arrays.toString(this.input.getItems())
+                        + "\n    output: " + this.output.toString()
+                        + "\n    id: " + this.id.toString()
+                        + "\n    type: " + this.type.getName()
+                        + "\n}";
     }
 
     @Override
-    public boolean matches(RecipeWrapper inv, Level worldIn)
-    {
+    public boolean matches(RecipeWrapper inv, Level worldIn) {
         ArrayList<Ingredient> contained = new ArrayList<>();
         contained.add(this.input);
         ArrayList<ItemStack> list = new ArrayList<>();
@@ -73,35 +68,64 @@ public class CuttingBoardRecipe implements Recipe<RecipeWrapper>
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {return width * height >= 1;}
+    public boolean canCraftInDimensions(int width, int height) {
+        return width * height >= 1;
+    }
 
     @Override
-    public NonNullList<Ingredient> getIngredients() {return NonNullList.of(this.input);}
+    public NonNullList<Ingredient> getIngredients() {
+        return NonNullList.of(this.input);
+    }
 
     @Override
-    public ItemStack assemble(RecipeWrapper inv) {return this.output.get(0);}
+    public ItemStack assemble(RecipeWrapper inv) {
+        return this.output.get(0);
+    }
 
     @Override
-    public ItemStack getResultItem() {return this.output.get(0);}
+    public ItemStack getResultItem() {
+        return this.output.get(0);
+    }
 
-    public NonNullList<ItemStack> getOutput() {return this.output;}
+    public NonNullList<ItemStack> getOutput() {
+        return this.output;
+    }
 
-    public CuttingBoardToolType getTool() {return this.type;}
+    public CuttingBoardToolType getTool() {
+        return this.type;
+    }
 
     @Override
-    public ResourceLocation getId() {return this.id;}
+    public ResourceLocation getId() {
+        return this.id;
+    }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {return this.serializer;}
+    public RecipeSerializer<?> getSerializer() {
+        return this.serializer;
+    }
 
     @Override
-    public RecipeType<?> getType() {return TYPE;}
+    public RecipeType<?> getType() {
+        return TYPE;
+    }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CuttingBoardRecipe>
-    {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CuttingBoardRecipe> {
+        private static NonNullList<ItemStack> readOutput(JsonArray itemStackArray) {
+            NonNullList<ItemStack> nonnulllist = NonNullList.create();
+
+            for (int i = 0; i < itemStackArray.size(); ++i) {
+                ItemStack stack = CraftingHelper.getItemStack(itemStackArray.get(i).getAsJsonObject(), true);
+                if (!stack.isEmpty()) {
+                    nonnulllist.add(stack);
+                }
+            }
+
+            return nonnulllist;
+        }
+
         @Override
-        public CuttingBoardRecipe fromJson(ResourceLocation recipeId, JsonObject json)
-        {
+        public CuttingBoardRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             final Ingredient input = Ingredient.fromJson(json.get("ingredient"));
             if (input.isEmpty()) throw new JsonParseException("No ingredient provided!");
             final NonNullList<ItemStack> output = readOutput(json.getAsJsonArray("result"));
@@ -111,29 +135,14 @@ public class CuttingBoardRecipe implements Recipe<RecipeWrapper>
             return new CuttingBoardRecipe(recipeId, input, output, type);
         }
 
-        private static NonNullList<ItemStack> readOutput(JsonArray itemStackArray)
-        {
-            NonNullList<ItemStack> nonnulllist = NonNullList.create();
-
-            for (int i = 0; i < itemStackArray.size(); ++i)
-            {
-                ItemStack stack = CraftingHelper.getItemStack(itemStackArray.get(i).getAsJsonObject(), true);
-                if (!stack.isEmpty()) {nonnulllist.add(stack);}
-            }
-
-            return nonnulllist;
-        }
-
         @Override
-        public CuttingBoardRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
-        {
+        public CuttingBoardRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             Ingredient input = Ingredient.fromNetwork(buffer);
             CompoundTag nbt = buffer.readNbt();
             NonNullList<ItemStack> output = NonNullList.create();
-            if (nbt != null)
-            {
+            if (nbt != null) {
                 output = NonNullList.withSize(nbt.getList("Items", 10).size(), ItemStack.EMPTY);
-                ItemStackHelper.loadAllItems(nbt, output);
+                ContainerHelper.loadAllItems(nbt, output);
             }
             CuttingBoardToolType type = CuttingBoardToolType.nameMatches(buffer.readUtf());
 
@@ -141,11 +150,10 @@ public class CuttingBoardRecipe implements Recipe<RecipeWrapper>
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buffer, CuttingBoardRecipe recipe)
-        {
+        public void toNetwork(FriendlyByteBuf buffer, CuttingBoardRecipe recipe) {
             recipe.input.toNetwork(buffer);
             CompoundTag nbt = buffer.readNbt();
-            if (nbt != null) ItemStackHelper.saveAllItems(nbt, recipe.output);
+            if (nbt != null) ContainerHelper.saveAllItems(nbt, recipe.output);
             buffer.writeUtf(recipe.type.getName());
         }
     }
