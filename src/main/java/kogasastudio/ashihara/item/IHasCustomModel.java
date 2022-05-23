@@ -1,12 +1,12 @@
 package kogasastudio.ashihara.item;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.Model;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Vector3f;
 
 public interface IHasCustomModel
 {
@@ -14,12 +14,12 @@ public interface IHasCustomModel
 
     ResourceLocation getTex();
 
-    default void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn, int stackSize)
+    default void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn, int stackSize)
     {
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.5D, 1.5D, 0.5D);
         matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180));
-        IVertexBuilder buffer = bufferIn.getBuffer(RenderType.entitySolid(this.getTex()));
+        VertexConsumer buffer = bufferIn.getBuffer(RenderType.entitySolid(this.getTex()));
         this.getModel().renderToBuffer(matrixStackIn, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
         matrixStackIn.popPose();
     }

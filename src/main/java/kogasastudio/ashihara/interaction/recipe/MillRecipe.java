@@ -2,18 +2,19 @@ package kogasastudio.ashihara.interaction.recipe;
 
 import com.google.gson.*;
 import kogasastudio.ashihara.Ashihara;
+import net.minecraft.core.NonNullList;
 import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
@@ -24,11 +25,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.minecraft.item.ItemStack.EMPTY;
+import static net.minecraft.world.item.ItemStack.EMPTY;
 
-public class MillRecipe implements IRecipe<RecipeWrapper>
+public class MillRecipe implements Recipe<RecipeWrapper>
 {
-    public static IRecipeType<MillRecipe> TYPE = IRecipeType.register(Ashihara.MODID + ":mill");
+    public static RecipeType<MillRecipe> TYPE = RecipeType.register(Ashihara.MODID + ":mill");
     public static final Serializer SERIALIZER = new Serializer();
 
     private final NonNullList<Ingredient> input;
@@ -88,7 +89,7 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
     public ResourceLocation getId() {return this.id;}
 
     @Override
-    public boolean matches(RecipeWrapper inv, World worldIn)
+    public boolean matches(RecipeWrapper inv, Level worldIn)
     {
         ArrayList<ItemStack> inputs = new ArrayList<>();
         boolean costMatches = false;
@@ -125,27 +126,27 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
     public boolean canCraftInDimensions(int width, int height) {return width * height >= this.input.size();}
 
     @Override
-    public IRecipeType<?> getType() {return TYPE;}
+    public RecipeType<?> getType() {return TYPE;}
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {return SERIALIZER;}
+    public RecipeSerializer<?> getSerializer() {return SERIALIZER;}
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<MillRecipe>
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<MillRecipe>
     {
         @Override
         public MillRecipe fromJson(ResourceLocation recipeId, JsonObject json)
         {
-            final String groupIn = JSONUtils.getAsString(json, "group", "");
-            final NonNullList<Ingredient> inputIn = readIngredients(JSONUtils.getAsJsonArray(json, "ingredients"));
+            final String groupIn = GsonHelper.getAsString(json, "group", "");
+            final NonNullList<Ingredient> inputIn = readIngredients(GsonHelper.getAsJsonArray(json, "ingredients"));
             if (inputIn.isEmpty()) {throw new JsonParseException("No ingredients for mill recipe");}
             else if (inputIn.size() > 4) {throw new JsonParseException("Too many ingredients for mill recipe! The max is 4");}
             else
             {
-                final Map<Ingredient, Byte> costsIn = serializeCosts(inputIn, JSONUtils.getAsJsonArray(json, "costs"));
-                final NonNullList<ItemStack> outputIn = readOutput(JSONUtils.getAsJsonArray(json, "result", null));
-                final byte roundIn = JSONUtils.getAsByte(json, "rounds", (byte) 1);
-                final int roundTicksIn = JSONUtils.getAsInt(json, "roundTicks", 100);
-                final float expIn = JSONUtils.getAsFloat(json, "experience", 20.0f);
+                final Map<Ingredient, Byte> costsIn = serializeCosts(inputIn, GsonHelper.getAsJsonArray(json, "costs"));
+                final NonNullList<ItemStack> outputIn = readOutput(GsonHelper.getAsJsonArray(json, "result", null));
+                final byte roundIn = GsonHelper.getAsByte(json, "rounds", (byte) 1);
+                final int roundTicksIn = GsonHelper.getAsInt(json, "roundTicks", 100);
+                final float expIn = GsonHelper.getAsFloat(json, "experience", 20.0f);
                 if (json.has("fluids"))
                 {
                     JsonElement fluids = json.get("fluids");
@@ -164,10 +165,10 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
         {
             if (object == null) return FluidStack.EMPTY;
 
-            String fluid = JSONUtils.getAsString(object, "fluid");
-            int amount = JSONUtils.getAsInt(object, "amount");
+            String fluid = GsonHelper.getAsString(object, "fluid");
+            int amount = GsonHelper.getAsInt(object, "amount");
 
-            CompoundNBT nbt = new CompoundNBT();
+            CompoundTag nbt = new CompoundTag();
             nbt.putString("FluidName", fluid);
             nbt.putInt("Amount", amount);
 
@@ -216,7 +217,7 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
         }
 
         @Override
-        public MillRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer)
+        public MillRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
         {
             String groupIn = buffer.readUtf(32767);
             Map<Ingredient, Byte> costsIn = new HashMap<>(4);
@@ -228,7 +229,7 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
                 inputItemsIn.set(j, Ingredient.fromNetwork(buffer));
                 costsIn.put(Ingredient.fromNetwork(buffer), buffer.readByteArray()[j]);
             }
-            CompoundNBT nbt = buffer.readNbt();
+            CompoundTag nbt = buffer.readNbt();
             if (nbt != null) ItemStackHelper.loadAllItems(nbt, outputItemsIn);
 
             FluidStack inFluid = FluidStack.readFromPacket(buffer);
@@ -241,7 +242,7 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
         }
 
         @Override
-        public void toNetwork(PacketBuffer buffer, MillRecipe recipe)
+        public void toNetwork(FriendlyByteBuf buffer, MillRecipe recipe)
         {
             buffer.writeUtf(recipe.group);
             byte[] bytes = new byte[recipe.input.size()];
@@ -253,7 +254,7 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
                 bytes[i] = recipe.inputCosts.get(ingredient);
                 i += 1;
             }
-            CompoundNBT nbt = buffer.readNbt();
+            CompoundTag nbt = buffer.readNbt();
             if (nbt != null) ItemStackHelper.saveAllItems(nbt, recipe.output);
 
             recipe.inputFluid.writeToPacket(buffer);

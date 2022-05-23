@@ -2,49 +2,47 @@ package kogasastudio.ashihara.item.block;
 
 import kogasastudio.ashihara.block.BlockCandle;
 import kogasastudio.ashihara.block.tileentities.CandleTE;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 import static kogasastudio.ashihara.Ashihara.BUILDING_BLOCKS;
 import static kogasastudio.ashihara.block.BlockRegistryHandler.CANDLE;
 import static kogasastudio.ashihara.block.tileentities.TERegistryHandler.CANDLE_TE;
-import static net.minecraft.block.Blocks.AIR;
-
-import net.minecraft.item.Item.Properties;
+import static net.minecraft.world.level.block.Blocks.AIR;
 
 public class ItemBlockCandle extends BlockItem
 {
     public ItemBlockCandle() {super(CANDLE.get(), new Properties().tab(BUILDING_BLOCKS));}
 
     @Override
-    public ActionResultType place(BlockItemUseContext context)
+    public InteractionResult place(BlockPlaceContext context)
     {
         ItemStack stack = context.getItemInHand();
-        PlayerEntity player = context.getPlayer();
-        Vector3d hitVec = context.getClickLocation();
-        World world = context.getLevel();
+        Player player = context.getPlayer();
+        Vec3 hitVec = context.getClickLocation();
+        Level world = context.getLevel();
         BlockPos pos = context.getClickedPos();
         BlockState state = world.getBlockState(pos);
         if (state.is(CANDLE.get()))
         {
             if (state.getValue(BlockCandle.MULTIPLE))
             {
-                TileEntity te = world.getBlockEntity(pos);
+                BlockEntity te = world.getBlockEntity(pos);
                 if (te != null && te.getType().equals(CANDLE_TE.get()))
                 {
                     CandleTE candle = (CandleTE) te;
                     if (candle.addCurrentCandle(hitVec.x() - pos.getX(), hitVec.z() - pos.getZ(), world.getRandom()))
                     {
                         if (player != null && !player.isCreative()) stack.shrink(1);
-                        return ActionResultType.SUCCESS;
+                        return InteractionResult.SUCCESS;
                     }
                     else return super.place(context);
                 }
@@ -53,7 +51,7 @@ public class ItemBlockCandle extends BlockItem
             else
             {
                 world.setBlockAndUpdate(pos, state.setValue(BlockCandle.MULTIPLE, true));
-                TileEntity te = world.getBlockEntity(pos);
+                BlockEntity te = world.getBlockEntity(pos);
                 if (te != null && te.getType().equals(CANDLE_TE.get()))
                 {
                     CandleTE candle = (CandleTE) te;
@@ -61,7 +59,7 @@ public class ItemBlockCandle extends BlockItem
                     if (candle.addCurrentCandle(hitVec.x() - pos.getX(), hitVec.z() - pos.getZ(), world.getRandom()))
                     {
                         if (player != null && !player.isCreative()) stack.shrink(1);
-                        return ActionResultType.SUCCESS;
+                        return InteractionResult.SUCCESS;
                     }
                     else return super.place(context);
                 }
@@ -71,13 +69,13 @@ public class ItemBlockCandle extends BlockItem
         else if (state.is(AIR) && player != null && player.isShiftKeyDown())
         {
             world.setBlockAndUpdate(pos, CANDLE.get().defaultBlockState().setValue(BlockCandle.MULTIPLE, true));
-            TileEntity te = world.getBlockEntity(pos);
+            BlockEntity te = world.getBlockEntity(pos);
             if (te != null && te.getType().equals(CANDLE_TE.get()))
             {
                 CandleTE candle = (CandleTE) te;
                 candle.init(hitVec.x() - pos.getX(), hitVec.z() - pos.getZ());
                 if (!player.isCreative()) stack.shrink(1);
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
             else throw new IllegalStateException("te create failed...");
         }

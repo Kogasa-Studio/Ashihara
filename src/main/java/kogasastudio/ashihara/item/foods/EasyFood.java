@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.item.foods;
 
-import net.minecraft.item.Food;
-import net.minecraft.item.Item;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
 
 import static kogasastudio.ashihara.Ashihara.MATERIALS;
 
@@ -12,7 +12,7 @@ public class EasyFood extends Item
         super
         (
             new Item.Properties().tab(MATERIALS)
-            .food(new Food.Builder().nutrition(hunger).build())
+            .food(new FoodProperties.Builder().nutrition(hunger).build())
         );
     }
 }

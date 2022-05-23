@@ -1,32 +1,30 @@
 package kogasastudio.ashihara.item;
 
 import kogasastudio.ashihara.block.BlockRegistryHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import java.util.Objects;
 
 import static kogasastudio.ashihara.Ashihara.ASHIHARA;
-
-import net.minecraft.item.Item.Properties;
 
 public class ItemRiceSeedling extends Item
 {
     public ItemRiceSeedling() {super(new Properties().tab(ASHIHARA));}
 
     @Override
-    public ActionResultType useOn(ItemUseContext context)
+    public InteractionResult useOn(UseOnContext context)
     {
         ItemStack item = context.getItemInHand();
-        PlayerEntity player = context.getPlayer();
-        World worldIn = context.getLevel();
+        Player player = context.getPlayer();
+        Level worldIn = context.getLevel();
         BlockPos pos = context.getClickedPos().below();
         Direction facing = context.getClickedFace();
         if (!item.isEmpty() && Objects.requireNonNull(player).mayUseItemAt(pos.relative(facing), facing, item))
@@ -36,10 +34,10 @@ public class ItemRiceSeedling extends Item
             {
                 worldIn.setBlockAndUpdate(pos.above(2), BlockRegistryHandler.RICE_CROP.get().defaultBlockState());
                 if (!player.abilities.instabuild) {item.shrink(1);}
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
-            else return ActionResultType.PASS;
+            else return InteractionResult.PASS;
         }
-        else return ActionResultType.FAIL;
+        else return InteractionResult.FAIL;
     }
 }

@@ -6,40 +6,42 @@ import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.helper.FluidHelper;
 import kogasastudio.ashihara.item.ItemOtsuchi;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.block.HorizontalBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import java.util.*;
 
 import static kogasastudio.ashihara.utils.AshiharaTags.CEREALS;
 import static kogasastudio.ashihara.utils.AshiharaTags.CEREAL_PROCESSED;
-
-import net.minecraft.block.AbstractBlock.Properties;
 
 public class BlockMortar extends Block
 {
@@ -58,19 +60,19 @@ public class BlockMortar extends Block
     public static final DirectionProperty FACING = HorizontalBlock.FACING;
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         builder.add(FACING);
     }
 
     @Override
-    public void playerDestroy(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, TileEntity te, ItemStack stack)
+    public void playerDestroy(Level worldIn, Player player, BlockPos pos, BlockState state, BlockEntity te, ItemStack stack)
     {
         if (te instanceof MortarTE)
         {
@@ -86,7 +88,7 @@ public class BlockMortar extends Block
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
     {
         VoxelShape bottom_1 = box(3.0d,0.0d,3.0d,13.0d,2.0d,13.0d);
         VoxelShape bottom_2 = box(2.0d,2.0d,2.0d,14.0d,4.0d,14.0d);
@@ -94,15 +96,15 @@ public class BlockMortar extends Block
         VoxelShape e = box(12.5d,4.0d,3.5d,14.5d,16.0d,12.5d);
         VoxelShape s = box(1.5d,4.0d,12.5d,14.5d,16.0d,14.5d);
         VoxelShape w = box(1.5d, 4.0d, 3.5d, 3.5d, 16.0d, 12.5d);
-        return VoxelShapes.or(bottom_1, bottom_2, n, e, s, w);
+        return Shapes.or(bottom_1, bottom_2, n, e, s, w);
     }
 
     @Override
-    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         ItemStack stack = player.getItemInHand(handIn);
         MortarTE te = (MortarTE) worldIn.getBlockEntity(pos);
-        if (te == null) return ActionResultType.FAIL;
+        if (te == null) return InteractionResult.FAIL;
 
         FluidTank tank = te.getTank().orElse(new FluidTank(0));
         if (!stack.isEmpty() && FluidHelper.notifyFluidTankInteraction(player, handIn, stack, tank, worldIn, pos))
@@ -110,15 +112,15 @@ public class BlockMortar extends Block
             player.inventory.setChanged();
             te.notifyStateChanged();
             worldIn.sendBlockUpdated(pos, state, state, 3);
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        else if (handIn.equals(Hand.MAIN_HAND))
+        else if (handIn.equals(InteractionHand.MAIN_HAND))
         {
             if (stack.getItem().equals(ItemRegistryHandler.KOISHI.get()))
             {
                 player.sendMessage
                 (
-                    new TranslationTextComponent
+                    new TranslatableComponent
                     (
                         "\n{\n    te_contents: " + te.contents.toString()
                         + ";\n    te_contained_output: " + te.output.toString()
@@ -141,12 +143,12 @@ public class BlockMortar extends Block
                 {
                     if (isPowder)
                     {
-                        worldIn.playSound(player, pos, SoundEvents.SAND_PLACE, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                        worldIn.playSound(player, pos, SoundEvents.SAND_PLACE, SoundSource.BLOCKS, 1.0f, 1.0f);
                     }
                 }
                 else if (isTool)
                 {
-                    worldIn.playSound(player, pos, SoundEvents.WOOD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    worldIn.playSound(player, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
                     if (te.recipeType == 0)
                     {
                         Random rand = worldIn.getRandom();
@@ -154,7 +156,7 @@ public class BlockMortar extends Block
                         {
                             worldIn.addParticle
                             (
-                                new GenericParticleData(new Vector3d(0, 0, 0), 0, ParticleRegistryHandler.RICE.get()),
+                                new GenericParticleData(new Vec3(0, 0, 0), 0, ParticleRegistryHandler.RICE.get()),
                                 (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D,
                                 (double) pos.getZ() + 0.5D, rand.nextFloat() / 2.0F,
                                 5.0E-5D,
@@ -165,22 +167,22 @@ public class BlockMortar extends Block
                 }
                 else
                 {
-                    worldIn.playSound(player, pos, SoundEvents.ARMOR_EQUIP_GENERIC, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                    worldIn.playSound(player, pos, SoundEvents.ARMOR_EQUIP_GENERIC, SoundSource.BLOCKS, 1.0f, 1.0f);
                 }
                 worldIn.sendBlockUpdated(pos, state, state, 3);
             }
             else if (!worldIn.isClientSide())
             {
-                NetworkHooks.openGui((ServerPlayerEntity) player, te, (PacketBuffer packerBuffer) -> packerBuffer.writeBlockPos(te.getBlockPos()));
+                NetworkHooks.openGui((ServerPlayer) player, te, (FriendlyByteBuf packerBuffer) -> packerBuffer.writeBlockPos(te.getBlockPos()));
             }
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
     @Override
     public boolean hasTileEntity(BlockState state) {return true;}
 
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {return new MortarTE();}
+    public BlockEntity createTileEntity(BlockState state, BlockGetter world) {return new MortarTE();}
 }

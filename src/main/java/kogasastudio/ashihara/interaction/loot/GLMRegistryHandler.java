@@ -2,7 +2,7 @@ package kogasastudio.ashihara.interaction.loot;
 
 import kogasastudio.ashihara.Ashihara;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 

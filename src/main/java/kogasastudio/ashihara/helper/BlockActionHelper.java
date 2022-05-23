@@ -1,22 +1,21 @@
 package kogasastudio.ashihara.helper;
 
 import kogasastudio.ashihara.block.IVariable;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.ToIntFunction;
 
-//import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
-import static net.minecraft.state.properties.BlockStateProperties.*;
+import static net.minecraft.world.level.block.state.properties.BlockStateProperties.*;
 
 /**
  * 这是一个为了方便提供各种方块操作的类
@@ -31,12 +30,12 @@ public class BlockActionHelper
      * @param block 你想检测的方块实例
      * @return 这个坐标上的方块旁边有没有你想检测的方块
      */
-    public static boolean fourWaysNeighborsIncludes(World worldIn, BlockPos pos, Block block)
+    public static boolean fourWaysNeighborsIncludes(Level worldIn, BlockPos pos, Block block)
     {
-        return worldIn.getBlockState(pos.north()).getBlock().is(block)
-            || worldIn.getBlockState(pos.east()).getBlock().is(block)
-            || worldIn.getBlockState(pos.south()).getBlock().is(block)
-            || worldIn.getBlockState(pos.west()).getBlock().is(block);
+        return worldIn.getBlockState(pos.north()).is(block)
+            || worldIn.getBlockState(pos.east()).is(block)
+            || worldIn.getBlockState(pos.south()).is(block)
+            || worldIn.getBlockState(pos.west()).is(block);
     }
 
     /**
@@ -46,7 +45,7 @@ public class BlockActionHelper
      * @param tag 你想判断的方块tag
      * @return 是否被tag
      */
-    public static boolean fourWaysBlocksTagged(World worldIn, BlockPos pos, ITag<Block> tag)
+    public static boolean fourWaysBlocksTagged(Level worldIn, BlockPos pos, TagKey<Block> tag)
     {
         return worldIn.getBlockState(pos.north()).is(tag)
             || worldIn.getBlockState(pos.east()).is(tag)
@@ -61,7 +60,7 @@ public class BlockActionHelper
      * @param fluidTag 你想判断的流体tag
      * @return 是否被tag
      */
-    public static boolean fourWaysFluidsTagged(World worldIn, BlockPos pos, ITag<Fluid> fluidTag)
+    public static boolean fourWaysFluidsTagged(Level worldIn, BlockPos pos, TagKey<Fluid> fluidTag)
     {
         return worldIn.getBlockState(pos.north()).getFluidState().is(fluidTag)
             || worldIn.getBlockState(pos.east()).getFluidState().is(fluidTag)
@@ -69,7 +68,7 @@ public class BlockActionHelper
             || worldIn.getBlockState(pos.west()).getFluidState().is(fluidTag);
     }
 
-    private static boolean watered(World worldIn, BlockPos pos1)
+    private static boolean watered(Level worldIn, BlockPos pos1)
     {
         boolean flag = false;
         FluidState fluid1 = worldIn.getFluidState(pos1);
@@ -81,7 +80,7 @@ public class BlockActionHelper
         return flag;
     }
 
-    public static boolean fourWaysFluidsIncludesWater(World worldIn, BlockPos pos)
+    public static boolean fourWaysFluidsIncludesWater(Level worldIn, BlockPos pos)
     {
         //        LOGGER_MAIN.info("检测了水源，水源状态： " + flag + "， 坐标：x：" + pos.getX() + "，z：" + pos.getZ());
         return watered(worldIn, pos.north())
@@ -98,7 +97,7 @@ public class BlockActionHelper
      * @param expected 预期的方块
      * @return 判定到的方块的坐标，以List形式
      */
-    public static List<BlockPos> getMarkedBlockPosAround(World worldIn, BlockPos pos, Block expected)
+    public static List<BlockPos> getMarkedBlockPosAround(Level worldIn, BlockPos pos, Block expected)
     {
         List<BlockPos> list = new LinkedList<>();
 
@@ -119,7 +118,7 @@ public class BlockActionHelper
      * @param expected 预期的流体
      * @return 判定到的流体的坐标，以List形式
      */
-    public static List<BlockPos> getMarkedFluidPosAround(World worldIn, BlockPos pos, Fluid expected)
+    public static List<BlockPos> getMarkedFluidPosAround(Level worldIn, BlockPos pos, Fluid expected)
     {
         List<BlockPos> list = new LinkedList<>();
 

@@ -1,12 +1,12 @@
 package kogasastudio.ashihara.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import kogasastudio.ashihara.helper.RenderHelper;
 import kogasastudio.ashihara.inventory.container.MillContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
@@ -15,7 +15,7 @@ public class MillScreen extends ContainerScreen<MillContainer>
     private static final ResourceLocation GUI = new ResourceLocation("ashihara:textures/gui/mill.png");
     private int progress;
 
-    public MillScreen(MillContainer container, PlayerInventory inv, ITextComponent title)
+    public MillScreen(MillContainer container, Inventory inv, TextComponent title)
     {
         super(container, inv, title);
     }
@@ -24,7 +24,7 @@ public class MillScreen extends ContainerScreen<MillContainer>
     public void tick() {super.tick();progress = menu.getArrowWidth();}
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks)
     {
         renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
@@ -32,7 +32,7 @@ public class MillScreen extends ContainerScreen<MillContainer>
     }
 
     @Override
-    protected void renderTooltip(MatrixStack matrixStack, int x, int y)
+    protected void renderTooltip(PoseStack matrixStack, int x, int y)
     {
         super.renderTooltip(matrixStack, x, y);
         int i = (this.width - this.imageWidth) / 2;
@@ -47,7 +47,7 @@ public class MillScreen extends ContainerScreen<MillContainer>
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y)
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y)
     {
         renderBackground(matrixStack);
 

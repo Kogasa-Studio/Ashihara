@@ -1,12 +1,12 @@
 package kogasastudio.ashihara.interaction.loot;
 
 import com.google.gson.JsonObject;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 
@@ -17,7 +17,7 @@ public class AddTableModifier extends LootModifier
 {
     private final ResourceLocation lootTable;
 
-    public AddTableModifier(ILootCondition[] conditionsIn, ResourceLocation lootTableIn)
+    public AddTableModifier(LootItemConditions[] conditionsIn, ResourceLocation lootTableIn)
     {
         super(conditionsIn);
         this.lootTable = lootTableIn;
@@ -40,9 +40,9 @@ public class AddTableModifier extends LootModifier
     public static class Serializer extends GlobalLootModifierSerializer<AddTableModifier>
     {
         @Override
-        public AddTableModifier read(ResourceLocation location, JsonObject object, ILootCondition[] ailootcondition)
+        public AddTableModifier read(ResourceLocation location, JsonObject object, LootItemConditions[] ailootcondition)
         {
-            ResourceLocation lootTable = new ResourceLocation(JSONUtils.getAsString(object, "lootTable"));
+            ResourceLocation lootTable = new ResourceLocation(GsonHelper.getAsString(object, "lootTable"));
             return new AddTableModifier(ailootcondition, lootTable);
         }
 

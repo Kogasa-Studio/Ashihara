@@ -1,16 +1,16 @@
 package kogasastudio.ashihara.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
 
-import net.minecraft.block.AbstractBlock.Properties;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class BlockMealTable extends Block
 {
@@ -25,7 +25,7 @@ public class BlockMealTable extends Block
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
     {
         VoxelShape base = box(3.0d, 0.0d, 3.0d, 13.0d, 4.5d, 13.0d);
         VoxelShape plate_base = box(2.5d, 4.5d, 2.5d, 13.5d, 5.0d, 13.5d);
@@ -35,6 +35,6 @@ public class BlockMealTable extends Block
         VoxelShape edge_s = box(1.0, 5.0, 14.0, 15.0, 7.0, 15.0);
         VoxelShape edge_w = box(2.0, 5.0, 1.0, 14.0, 7.0, 2.0);
 
-        return VoxelShapes.or(base, plate_base, plate, edge_n, edge_e, edge_s, edge_w);
+        return Shapes.or(base, plate_base, plate, edge_n, edge_e, edge_s, edge_w);
     }
 }

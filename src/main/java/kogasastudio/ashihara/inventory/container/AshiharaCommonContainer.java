@@ -1,16 +1,16 @@
 package kogasastudio.ashihara.inventory.container;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class AshiharaCommonContainer extends Container
+public class AshiharaCommonContainer extends AbstractContainerMenu
 {
-    protected AshiharaCommonContainer(ContainerType<?> type, int id) {super(type, id);}
+    protected AshiharaCommonContainer(MenuType<?> type, int id) {super(type, id);}
 
     /**
      * 批量添加格子
@@ -22,7 +22,7 @@ public class AshiharaCommonContainer extends Container
      * @param dx 格子之间的距离
      * @return 加格子后最后一个格子对应的格子序号
      */
-    protected int addSlotRange(IInventory inventory, int index, int x, int y, int amount, int dx)
+    protected int addSlotRange(Container inventory, int index, int x, int y, int amount, int dx)
     {
         for (int i = 0; i < amount; i++)
         {
@@ -55,7 +55,7 @@ public class AshiharaCommonContainer extends Container
      * @param verAmount 列数
      * @param dy 竖着数格子间的距离
      */
-    protected void addSlotBox(IInventory inventory, int index, int x, int y, int horAmount, int dx, int verAmount, int dy)
+    protected void addSlotBox(Container inventory, int index, int x, int y, int horAmount, int dx, int verAmount, int dy)
     {
         for (int j = 0; j < verAmount; j++)
         {
@@ -74,7 +74,7 @@ public class AshiharaCommonContainer extends Container
     }
 
     //将玩家的整个物品栏添加进container
-    protected void layoutPlayerInventorySlots(IInventory inventory, int leftCol, int topRow)
+    protected void layoutPlayerInventorySlots(Container inventory, int leftCol, int topRow)
     {
         //背包
         addSlotBox(inventory, 9, leftCol, topRow, 9, 18, 3, 18);
@@ -85,5 +85,5 @@ public class AshiharaCommonContainer extends Container
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {return false;}
+    public boolean stillValid(Player playerIn) {return false;}
 }

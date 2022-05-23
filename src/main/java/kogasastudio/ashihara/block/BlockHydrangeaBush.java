@@ -1,20 +1,18 @@
 package kogasastudio.ashihara.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.block.IGrowable;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.Random;
-
-import net.minecraft.block.AbstractBlock.Properties;
 
 public class BlockHydrangeaBush extends Block implements IGrowable
 {
@@ -33,7 +31,7 @@ public class BlockHydrangeaBush extends Block implements IGrowable
     }
 
     @Override
-    public int getLightBlock(BlockState state, IBlockReader worldIn, BlockPos pos)
+    public int getLightBlock(BlockState state, BlockGetter worldIn, BlockPos pos)
     {
         return 1;
     }
@@ -44,7 +42,7 @@ public class BlockHydrangeaBush extends Block implements IGrowable
     public boolean isRandomlyTicking(BlockState state) {return !state.getValue(BLOOMED);}
 
     @Override
-    public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
+    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random)
     {
         if (random.nextInt(3) == 1 && this.isValidBonemealTarget(worldIn, pos, state, false))
         {
@@ -53,23 +51,23 @@ public class BlockHydrangeaBush extends Block implements IGrowable
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         builder.add(BLOOMED);
     }
 
     @Override
-    public boolean isValidBonemealTarget(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient)
+    public boolean isValidBonemealTarget(BlockGetter worldIn, BlockPos pos, BlockState state, boolean isClient)
     {
         BlockState down = worldIn.getBlockState(pos);
         return down.getMaterial() == Material.DIRT && !state.getValue(BLOOMED);
     }
 
     @Override
-    public boolean isBonemealSuccess(World worldIn, Random rand, BlockPos pos, BlockState state) {return !state.getValue(BLOOMED);}
+    public boolean isBonemealSuccess(Level worldIn, Random rand, BlockPos pos, BlockState state) {return !state.getValue(BLOOMED);}
 
     @Override
-    public void performBonemeal(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state)
+    public void performBonemeal(ServerLevel worldIn, Random rand, BlockPos pos, BlockState state)
     {
         worldIn.setBlockAndUpdate(pos, state.setValue(BLOOMED, true));
     }

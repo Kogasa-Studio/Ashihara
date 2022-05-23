@@ -1,22 +1,22 @@
 package kogasastudio.ashihara.client.models.baked;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.BakedQuad;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.ItemOverrideList;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 
 import java.util.List;
 import java.util.Random;
 
-public class PailModel implements IBakedModel
+public class PailModel implements BakedModel
 {
-    private final IBakedModel existingModel;
+    private final BakedModel existingModel;
 
-    public PailModel(IBakedModel model)
+    public PailModel(BakedModel model)
     {
         this.existingModel = model;
     }
@@ -43,9 +43,9 @@ public class PailModel implements IBakedModel
     public TextureAtlasSprite getParticleIcon() {return this.existingModel.getParticleIcon();}
 
     @Override
-    public ItemOverrideList getOverrides() {return this.existingModel.getOverrides();}
+    public ItemOverrides getOverrides() {return this.existingModel.getOverrides();}
 
     @Override
-    public IBakedModel handlePerspective(ItemCameraTransforms.TransformType cameraTransformType, MatrixStack mat)
+    public BakedModel handlePerspective(ItemTransforms.TransformType cameraTransformType, PoseStack mat)
     {return existingModel.handlePerspective(cameraTransformType, mat);}
 }

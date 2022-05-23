@@ -7,15 +7,18 @@ import kogasastudio.ashihara.item.block.ItemBlockCandle;
 import kogasastudio.ashihara.item.block.ItemBlockPail;
 import kogasastudio.ashihara.item.foods.*;
 import net.minecraft.item.*;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Tiers;
+import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import static kogasastudio.ashihara.Ashihara.*;
-
-import net.minecraft.item.Item.Properties;
 
 @SuppressWarnings("unused")
 public class ItemRegistryHandler
@@ -37,7 +40,7 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> SUJIKABUTO = ITEMS.register("sujikabuto", ItemSujikaButo::new);
 
     //食物
-    public static final RegistryObject<Item> SAKURAMOCHI = ITEMS.register("sakuramochi", () -> new Item(new Item.Properties().tab(ASHIHARA).food(new Food.Builder().nutrition(4).effect(new EffectInstance(Effects.HEAL, 1, 2), 1.0F).build())));
+    public static final RegistryObject<Item> SAKURAMOCHI = ITEMS.register("sakuramochi", () -> new Item(new Item.Properties().tab(ASHIHARA).food(new FoodProperties.Builder().nutrition(4).effect(new MobEffectInstance(MobEffects.HEAL, 1, 2), 1.0F).build())));
     public static final RegistryObject<Item> COOKED_RICE = ITEMS.register("cooked_rice", () -> new EasyFood(5));
     public static final RegistryObject<Item> DIRT_BALL_DON = ITEMS.register("dirt_ball_don", ItemDirtBallDon::new);
     public static final RegistryObject<Item> SUSHI_BASIC = ITEMS.register("sushi_basic", () -> new EasyFood(5));
@@ -46,9 +49,9 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> SUSHI_TAMAGO = ITEMS.register("sushi_tamago", () -> new EasyFood(6));
     public static final RegistryObject<Item> ONIGIRI = ITEMS.register("onigiri", () -> new EasyFood(6));
     public static final RegistryObject<Item> TAMAGO = ITEMS.register("tamago", () -> new EasyFood(1));
-    public static final RegistryObject<Item> CUCUMBER = ITEMS.register("cucumber",() -> new BlockNamedItem(BlockRegistryHandler.CUCUMBERS.get(), new Item.Properties().tab(MATERIALS).food(new Food.Builder().nutrition(2).build())));
+    public static final RegistryObject<Item> CUCUMBER = ITEMS.register("cucumber",() -> new BlockNamedItem(BlockRegistryHandler.CUCUMBERS.get(), new Item.Properties().tab(MATERIALS).food(new FoodProperties.Builder().nutrition(2).build())));
     public static final RegistryObject<Item> TOMATO = ITEMS.register("tomato", () -> new EasyFood(2));
-    public static final RegistryObject<Item> SWEET_POTATO = ITEMS.register("sweet_potato", () -> new BlockNamedItem(BlockRegistryHandler.SWEET_POTATOES.get(), new Item.Properties().tab(MATERIALS).food(new Food.Builder().nutrition(2).build())));
+    public static final RegistryObject<Item> SWEET_POTATO = ITEMS.register("sweet_potato", () -> new BlockNamedItem(BlockRegistryHandler.SWEET_POTATOES.get(), new Item.Properties().tab(MATERIALS).food(new FoodProperties.Builder().nutrition(2).build())));
     public static final RegistryObject<Item> ROASTED_SWEET_POTATO = ITEMS.register("roasted_sweet_potato", () -> new EasyFood(5));
     public static final RegistryObject<Item> TOFU = ITEMS.register("tofu", () -> new EasyFood(4));
     public static final RegistryObject<Item> MOCHI = ITEMS.register("mochi", () -> new EasyFood(3));
@@ -61,16 +64,16 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> DANGO_MITARASHI = ITEMS.register("dango_mitarashi", () -> new EasyFood(6));
 
     //工具
-    public static final RegistryObject<Item> TACHI = ITEMS.register("tachi", () -> new SwordItem(ItemTier.DIAMOND, 15, 4.0f, new Item.Properties().tab(ASHIHARA)));
+    public static final RegistryObject<Item> TACHI = ITEMS.register("tachi", () -> new SwordItem(Tiers.DIAMOND, 15, 4.0f, new Item.Properties().tab(ASHIHARA)));
 
-    public static final RegistryObject<Item> WOOD_OTSUCHI = ITEMS.register("wood_otsuchi", () -> new ItemOtsuchi(ItemTier.WOOD, 16, -3.4d));
-    public static final RegistryObject<Item> IRON_OTSUCHI = ITEMS.register("iron_otsuchi", () -> new ItemOtsuchi(ItemTier.IRON, 16, -3.5d));
-    public static final RegistryObject<Item> DIAMOND_OTSUCHI = ITEMS.register("diamond_otsuchi", () -> new ItemOtsuchi(ItemTier.DIAMOND, 16, -3.55d));
+    public static final RegistryObject<Item> WOOD_OTSUCHI = ITEMS.register("wood_otsuchi", () -> new ItemOtsuchi(Tiers.WOOD, 16, -3.4d));
+    public static final RegistryObject<Item> IRON_OTSUCHI = ITEMS.register("iron_otsuchi", () -> new ItemOtsuchi(Tiers.IRON, 16, -3.5d));
+    public static final RegistryObject<Item> DIAMOND_OTSUCHI = ITEMS.register("diamond_otsuchi", () -> new ItemOtsuchi(Tiers.DIAMOND, 16, -3.55d));
 
     //材料
-    public static final RegistryObject<Item> SAKURA = ITEMS.register("sakura", () -> new Item(new Item.Properties().tab(MATERIALS).food(new Food.Builder().nutrition(1).effect(new EffectInstance(Effects.HEAL, 1, 1), 1.0F).build())));
+    public static final RegistryObject<Item> SAKURA = ITEMS.register("sakura", () -> new Item(new Item.Properties().tab(MATERIALS).food(new FoodProperties.Builder().nutrition(1).effect(new MobEffectInstance(MobEffects.HEAL, 1, 1), 1.0F).build())));
     public static final RegistryObject<Item> SAKURA_PETAL = ITEMS.register("sakura_petal", AshiharaMaterial::new);
-    public static final RegistryObject<Item> DIRT_BALL = ITEMS.register("dirt_ball", () -> new Item(new Item.Properties().tab(MATERIALS).food(new Food.Builder().nutrition(2).effect(new EffectInstance(Effects.CONFUSION, 400, 2), 1.0F).build())));
+    public static final RegistryObject<Item> DIRT_BALL = ITEMS.register("dirt_ball", () -> new Item(new Item.Properties().tab(MATERIALS).food(new FoodProperties.Builder().nutrition(2).effect(new MobEffectInstance(MobEffects.CONFUSION, 400, 2), 1.0F).build())));
     public static final RegistryObject<Item> CHRYSANTHEMUM_FLOWER = ITEMS.register("chrysanthemum_flower", AshiharaMaterial::new);
     public static final RegistryObject<Item> IRON_ORE_SHATTER = ITEMS.register("iron_ore_shatter", AshiharaMaterial::new);
     public static final RegistryObject<Item> GOLD_ORE_SHATTER = ITEMS.register("gold_ore_shatter", AshiharaMaterial::new);
@@ -94,8 +97,8 @@ public class ItemRegistryHandler
 
     //以下为方块
     //TODO: public static final RegistryObject<Item>  = ITEMS.register("", () -> new BlockItem(BlockRegistryHandler. .get(), new Item.Properties().group(ASHIHARA)));
-    public static final RegistryObject<Item> DIRT_DEPRESSION = ITEMS.register("dirt_depression", () -> new BlockItem(BlockRegistryHandler.DIRT_DEPRESSION.get(), new Item.Properties().tab(ItemGroup.TAB_BUILDING_BLOCKS)));
-    public static final RegistryObject<Item> WATER_FIELD = ITEMS.register("water_field", () -> new BlockItem(BlockRegistryHandler.WATER_FIELD.get(), new Item.Properties().tab(ItemGroup.TAB_BUILDING_BLOCKS)));
+    public static final RegistryObject<Item> DIRT_DEPRESSION = ITEMS.register("dirt_depression", () -> new BlockItem(BlockRegistryHandler.DIRT_DEPRESSION.get(), new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
+    public static final RegistryObject<Item> WATER_FIELD = ITEMS.register("water_field", () -> new BlockItem(BlockRegistryHandler.WATER_FIELD.get(), new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
     public static final RegistryObject<Item> CHERRY_SAPLING = ITEMS.register("cherry_sapling", () -> new BlockItem(BlockRegistryHandler.CHERRY_SAPLING.get(), new Item.Properties().tab(ASHIHARA)));
     public static final RegistryObject<Item> RED_MAPLE_SAPLING = ITEMS.register("red_maple_sapling", () -> new BlockItem(BlockRegistryHandler.RED_MAPLE_SAPLING.get(), new Item.Properties().tab(ASHIHARA)));
     public static final RegistryObject<Item> TETSUSENCHI = ITEMS.register("tetsusenchi", () -> new BlockItem(BlockRegistryHandler.TETSUSENCHI.get(), new Item.Properties().tab(ASHIHARA)));
@@ -157,8 +160,8 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> MAPLE_BUTTON = ITEMS.register("maple_button", () -> new BlockItem(BlockRegistryHandler.MAPLE_BUTTON.get(), new Item.Properties().tab(BUILDING_BLOCKS)));
 
     //桶
-    public static final RegistryObject<Item> SOY_MILK_BUCKET = ITEMS.register("soy_milk_bucket", () -> new BucketItem(FluidRegistryHandler.SOY_MILK, new Item.Properties().tab(ItemGroup.TAB_MISC)));
-    public static final RegistryObject<Item> OIL_BUCKET = ITEMS.register("oil_bucket", () -> new BucketItem(FluidRegistryHandler.OIL, new Item.Properties().tab(ItemGroup.TAB_MISC)));
+    public static final RegistryObject<Item> SOY_MILK_BUCKET = ITEMS.register("soy_milk_bucket", () -> new BucketItem(FluidRegistryHandler.SOY_MILK, new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
+    public static final RegistryObject<Item> OIL_BUCKET = ITEMS.register("oil_bucket", () -> new BucketItem(FluidRegistryHandler.OIL, new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
 
     private static class AshiharaItem extends Item
     {

@@ -1,40 +1,42 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.block.tileentities.MillTE;
+import kogasastudio.ashihara.block.tileentities.TERegistryHandler;
+import kogasastudio.ashihara.block.tileentities.TickableTileEntity;
 import kogasastudio.ashihara.helper.FluidHelper;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.block.AbstractBlock.Properties;
-
-public class BlockMill extends Block
+// todo Block 默认没有 BlockEntity 了，需要手动实现 EntityBlock
+public class BlockMill extends Block implements EntityBlock
 {
     public BlockMill()
     {
@@ -42,7 +44,7 @@ public class BlockMill extends Block
         (
             Properties.of(Material.STONE)
             .strength(2.0F, 6.0F)
-            .harvestTool(ToolType.PICKAXE)
+            // todo tag .harvestTool(ToolType.PICKAXE)
             .requiresCorrectToolForDrops()
             .sound(SoundType.STONE)
         );
@@ -50,8 +52,10 @@ public class BlockMill extends Block
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
+
+
     @Override
-    public void playerDestroy(World worldIn, PlayerEntity player, BlockPos pos, BlockState state, TileEntity te, ItemStack stack)
+    public void playerDestroy(Level worldIn, Player player, BlockPos pos, BlockState state, BlockEntity te, ItemStack stack)
     {
         if (te instanceof MillTE)
         {
@@ -59,30 +63,32 @@ public class BlockMill extends Block
             for (int i = 0; i < ((MillTE) te).getInput().getSlots(); i += 1)
             {
                 ItemStack stack1 =((MillTE) te).getInput().getStackInSlot(i);
-                if (!stack.isEmpty()) stacks.add(stack1);
+                if (!stack.isEmpty()) {
+                    stacks.add(stack1);
+                }
             }
-            InventoryHelper.dropContents(worldIn, pos, stacks);
-            InventoryHelper.dropContents(worldIn, pos, ((MillTE) te).getOutput());
+            Containers.dropContents(worldIn, pos, stacks);
+            Containers.dropContents(worldIn, pos, ((MillTE) te).getOutput().getContent());
         }
         super.playerDestroy(worldIn, player, pos, state, te, stack);
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
     {
         VoxelShape shape1 = Block.box(2, 0, 2, 14, 5, 14);
         VoxelShape shape2 = Block.box(4, 5, 4, 12, 10, 12);
-        return VoxelShapes.or(shape1, shape2);
+        return Shapes.or(shape1, shape2);
     }
 
     @Override
-    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         ItemStack stack = player.getItemInHand(handIn);
         MillTE te = (MillTE) worldIn.getBlockEntity(pos);
@@ -92,28 +98,34 @@ public class BlockMill extends Block
             FluidTank tank = te.getTank().orElse(new FluidTank(0));
             if (!stack.isEmpty() && FluidHelper.notifyFluidTankInteraction(player, handIn, stack, tank, worldIn, pos))
             {
-                player.inventory.setChanged();
+                player.getInventory().setChanged();
                 worldIn.sendBlockUpdated(pos, state, state, 3);
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
-            else if (!worldIn.isClientSide && handIn == Hand.MAIN_HAND)
+            else if (!worldIn.isClientSide && handIn == InteractionHand.MAIN_HAND)
             {
-                NetworkHooks.openGui((ServerPlayerEntity) player, te, (PacketBuffer packerBuffer) -> packerBuffer.writeBlockPos(te.getBlockPos()));
-                return ActionResultType.SUCCESS;
+                NetworkHooks.openGui((ServerPlayer) player, te, (FriendlyByteBuf packerBuffer) -> packerBuffer.writeBlockPos(te.getBlockPos()));
+                return InteractionResult.SUCCESS;
             }
-            else return ActionResultType.SUCCESS;
+            else return InteractionResult.SUCCESS;
         }
 
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {builder.add(FACING);}
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {builder.add(FACING);}
 
+    @org.jetbrains.annotations.Nullable
     @Override
-    public boolean hasTileEntity(BlockState state) {return true;}
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new MillTE(pos, state);
+    }
 
+    // todo 需要 tick 的 BlockEntity 都需要在 EntityBlock 里注册 Ticker
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {return new MillTE();}
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_153212_, BlockState p_153213_, BlockEntityType<T> p_153214_) {
+        return TickableTileEntity.orEmpty(p_153214_, TERegistryHandler.MILL_TE.get());
+    }
 }

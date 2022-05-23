@@ -1,21 +1,21 @@
 package kogasastudio.ashihara.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.block.BushBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.state.properties.DoubleBlockHalf;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IForgeShearable;
 
-import net.minecraft.block.AbstractBlock.Properties;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BlockChrysanthemumBush extends BushBlock implements IForgeShearable
 {
@@ -31,7 +31,7 @@ public class BlockChrysanthemumBush extends BushBlock implements IForgeShearable
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
     {
         return box(2.0D, 0.0D, 2.0D, 14.0D, 6.0D, 14.0D);
     }
@@ -40,6 +40,6 @@ public class BlockChrysanthemumBush extends BushBlock implements IForgeShearable
     @OnlyIn(Dist.CLIENT)
     public long getSeed(BlockState state, BlockPos pos)
     {
-        return MathHelper.getSeed(pos.getX(), pos.getY(), pos.getZ());
+        return Mth.getSeed(pos.getX(), pos.getY(), pos.getZ());
     }
 }

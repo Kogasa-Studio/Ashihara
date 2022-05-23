@@ -1,7 +1,6 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.block.woodcrafts.BlockKumimono;
 import kogasastudio.ashihara.block.trees.CherryBlossomTree;
 import kogasastudio.ashihara.block.trees.RedMapleTree;
 import kogasastudio.ashihara.block.woodcrafts.*;
@@ -11,11 +10,13 @@ import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.utils.AshiharaWoodTypes;
 import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
 import net.minecraft.util.IItemProvider;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class BlockRegistryHandler {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Ashihara.MODID);
@@ -24,8 +25,8 @@ public class BlockRegistryHandler {
     public static final RegistryObject<Block> RICE_CROP = BLOCKS.register("rice_crop", BlockRiceCrop::new);
     public static final RegistryObject<Block> DIRT_DEPRESSION = BLOCKS.register("dirt_depression", BlockDirtDepression::new);
     public static final RegistryObject<Block> TETSUSENCHI = BLOCKS.register("tetsusenchi", BlockTetsusenchi::new);
-    public static final RegistryObject<Block> CHERRY_SAPLING = BLOCKS.register("cherry_sapling", () -> new SaplingBlock(new CherryBlossomTree(), AbstractBlock.Properties.of(Material.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
-    public static final RegistryObject<Block> RED_MAPLE_SAPLING = BLOCKS.register("red_maple_sapling", () -> new SaplingBlock(new RedMapleTree(), AbstractBlock.Properties.of(Material.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
+    public static final RegistryObject<Block> CHERRY_SAPLING = BLOCKS.register("cherry_sapling", () -> new SaplingBlock(new CherryBlossomTree(), BlockBehaviour.Properties.of(Material.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
+    public static final RegistryObject<Block> RED_MAPLE_SAPLING = BLOCKS.register("red_maple_sapling", () -> new SaplingBlock(new RedMapleTree(), BlockBehaviour.Properties.of(Material.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
     public static final RegistryObject<Block> MORTAR = BLOCKS.register("mortar", BlockMortar::new);
     public static final RegistryObject<Block> IMMATURE_RICE = BLOCKS.register("immature_rice", BlockImmatureRiceCrop::new);
     public static final RegistryObject<Block> POTTED_CHERRY_SAPLING = BLOCKS.register("potted_cherry_sapling", () -> new FlowerPotBlock(BlockRegistryHandler.CHERRY_SAPLING.get(), AbstractBlock.Properties.of(Material.DECORATION).instabreak().noOcclusion()));
@@ -94,8 +95,8 @@ public class BlockRegistryHandler {
     public static final RegistryObject<Block> RED_KUMIMONO = BLOCKS.register("red_kumimono", () -> new BlockKumimono(AshiharaWoodTypes.RED));
     public static final RegistryObject<Block> RED_KAWAKI = BLOCKS.register("red_kawaki", () -> new BlockKawaki(AshiharaWoodTypes.RED));
 
-    public static final RegistryObject<FlowingFluidBlock> SOY_MILK_BLOCK = BLOCKS.register("soy_milk", () ->
-        new FlowingFluidBlock(FluidRegistryHandler.SOY_MILK, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
-    public static final RegistryObject<FlowingFluidBlock> OIL_BLOCK = BLOCKS.register("oil", () ->
-        new FlowingFluidBlock(FluidRegistryHandler.OIL, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
+    public static final RegistryObject<LiquidBlock> SOY_MILK_BLOCK = BLOCKS.register("soy_milk", () ->
+        new LiquidBlock(FluidRegistryHandler.SOY_MILK, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
+    public static final RegistryObject<LiquidBlock> OIL_BLOCK = BLOCKS.register("oil", () ->
+        new LiquidBlock(FluidRegistryHandler.OIL, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
 }

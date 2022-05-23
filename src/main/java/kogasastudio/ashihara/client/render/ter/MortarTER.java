@@ -1,25 +1,24 @@
 package kogasastudio.ashihara.client.render.ter;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
 import kogasastudio.ashihara.block.tileentities.MortarTE;
 import kogasastudio.ashihara.client.render.AshiharaAtlas;
 import kogasastudio.ashihara.helper.RenderHelper;
 import kogasastudio.ashihara.utils.AshiharaTags;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import com.mojang.math.Matrix4f;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -28,9 +27,9 @@ import static kogasastudio.ashihara.block.BlockMortar.FACING;
 import static kogasastudio.ashihara.helper.RenderHelper.XTP;
 import static kogasastudio.ashihara.helper.RenderHelper.buildMatrix;
 
-public class MortarTER extends TileEntityRenderer<MortarTE>
+public class MortarTER extends BlockEntityRenderer<MortarTE>
 {
-    public MortarTER(TileEntityRendererDispatcher rendererDispatcherIn) {super(rendererDispatcherIn);}
+    public MortarTER(BlockEntityRenderDispatcher rendererDispatcherIn) {super(rendererDispatcherIn);}
 
     private static final ArrayList<ResourceLocation> textures = new ArrayList<>
             (Minecraft.getInstance().getResourceManager().listResources("textures/assistants/", s -> s.endsWith(".png")));
@@ -40,7 +39,7 @@ public class MortarTER extends TileEntityRenderer<MortarTE>
     private static final String PROCESSED = "processed_level";
 
     @Override
-    public void render(MortarTE tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn)
+    public void render(MortarTE tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
     {
         RenderHelper.renderLeveledFluidStack
         (
@@ -69,7 +68,7 @@ public class MortarTER extends TileEntityRenderer<MortarTE>
                     String key = stack.getItem().is(AshiharaTags.CEREAL_PROCESSED) ? PROCESSED : CEREALS;
 
                     RenderType ASSISTANCE = RenderType.entityCutout(AshiharaAtlas.ASSISTANCE_ATLAS);
-                    IVertexBuilder builder = bufferIn.getBuffer(ASSISTANCE);
+                    VertexConsumer builder = bufferIn.getBuffer(ASSISTANCE);
                     TextureAtlasSprite level = Minecraft.getInstance().getTextureAtlas(AshiharaAtlas.ASSISTANCE_ATLAS).apply(cookedTextures.get(key));
 
                     float u0 = level.getU0(); float u1 = level.getU1();
@@ -93,7 +92,7 @@ public class MortarTER extends TileEntityRenderer<MortarTE>
                     matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(tileEntityIn.getBlockState().getValue(FACING).toYRot()));
 
                     ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
-                    renderer.renderStatic(stack, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
+                    renderer.renderStatic(stack, ItemTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
                 }
                 matrixStackIn.popPose();
             }

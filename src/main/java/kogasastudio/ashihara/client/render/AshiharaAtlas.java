@@ -1,9 +1,9 @@
 package kogasastudio.ashihara.client.render;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.ModelBakery;
-import net.minecraft.client.renderer.model.RenderMaterial;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -25,7 +25,7 @@ public class AshiharaAtlas
     public static void onAtlasGenerate(ModelRegistryEvent event)
     {
         //用反射拿到一个原版字段，用来将我们的小贴图丢进Atlas并把Atlas丢进游戏
-        Set<RenderMaterial> miscMaterials = ObfuscationReflectionHelper.getPrivateValue(ModelBakery.class, null, "UNREFERENCED_TEXTURES");
+        Set<Material> miscMaterials = ObfuscationReflectionHelper.getPrivateValue(ModelBakery.class, null, "UNREFERENCED_TEXTURES");
         //纹章
         ArrayList<ResourceLocation> icons = new ArrayList<>
         (Minecraft.getInstance().getResourceManager().listResources("textures/icons/", s -> s.endsWith(".png")));
@@ -39,14 +39,14 @@ public class AshiharaAtlas
             {
                 //用来省略开头和结尾
                 String path = location.getPath().substring(9, location.getPath().length() - 4);
-                miscMaterials.add(new RenderMaterial(ICON_ATLAS, new ResourceLocation(location.getNamespace(), path)));
+                miscMaterials.add(new Material(ICON_ATLAS, new ResourceLocation(location.getNamespace(), path)));
             }
             //添加辅助类贴图
             for (ResourceLocation location : assistants)
             {
                 //用来省略开头和结尾
                 String path = location.getPath().substring(9, location.getPath().length() - 4);
-                miscMaterials.add(new RenderMaterial(ASSISTANCE_ATLAS, new ResourceLocation(location.getNamespace(), path)));
+                miscMaterials.add(new Material(ASSISTANCE_ATLAS, new ResourceLocation(location.getNamespace(), path)));
             }
         }
     }

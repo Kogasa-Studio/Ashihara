@@ -1,12 +1,12 @@
 package kogasastudio.ashihara.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import kogasastudio.ashihara.helper.RenderHelper;
 import kogasastudio.ashihara.inventory.container.MortarContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
@@ -52,7 +52,7 @@ public class MortarScreen extends ContainerScreen<MortarContainer>
     private int progress;
     private int stepStateCode;
 
-    public MortarScreen(MortarContainer container, PlayerInventory inv, ITextComponent title)
+    public MortarScreen(MortarContainer container, Inventory inv, TextComponent title)
     {
         super(container, inv, title);
         this.progress = container.getArrowHeight();
@@ -70,7 +70,7 @@ public class MortarScreen extends ContainerScreen<MortarContainer>
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks)
     {
         renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
@@ -78,7 +78,7 @@ public class MortarScreen extends ContainerScreen<MortarContainer>
     }
 
     @Override
-    protected void renderTooltip(MatrixStack matrixStack, int x, int y)
+    protected void renderTooltip(PoseStack matrixStack, int x, int y)
     {
         super.renderTooltip(matrixStack, x, y);
         int i = (this.width - this.imageWidth) / 2;
@@ -90,7 +90,7 @@ public class MortarScreen extends ContainerScreen<MortarContainer>
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y)
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y)
     {
         renderBackground(matrixStack);
 

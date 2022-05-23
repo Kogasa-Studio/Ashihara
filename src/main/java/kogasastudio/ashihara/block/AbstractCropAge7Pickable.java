@@ -1,26 +1,21 @@
 package kogasastudio.ashihara.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
-import static kogasastudio.ashihara.item.ItemRegistryHandler.*;
-import static net.minecraft.item.Items.AIR;
-import static net.minecraft.item.Items.BONE_MEAL;
-
-import net.minecraft.block.AbstractBlock.Properties;
+import static net.minecraft.world.item.Items.BONE_MEAL;
 
 public class AbstractCropAge7Pickable extends AbstractCropAge7
 {
@@ -28,7 +23,7 @@ public class AbstractCropAge7Pickable extends AbstractCropAge7
     {
         super
         (
-            Properties.of(Material.PLANT)
+            BlockBehaviour.Properties.of(Material.PLANT)
             .noCollission()
             .randomTicks()
             .strength(0.2F)
@@ -42,23 +37,23 @@ public class AbstractCropAge7Pickable extends AbstractCropAge7
     protected final int ageTurnIn;
 
     @Override
-    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         int age = state.getValue(AGE);
         ItemStack stack = player.getItemInHand(handIn);
-        if (age < this.ageAvailable && stack.getItem().equals(BONE_MEAL)) return ActionResultType.PASS;
+        if (age < this.ageAvailable && stack.getItem().equals(BONE_MEAL)) return InteractionResult.PASS;
         if (age == this.ageAvailable)
         {
             if (!worldIn.isClientSide())
             {
-                for (ItemStack stack1 : getDrops(state, (ServerWorld) worldIn, pos, null))
+                for (ItemStack stack1 : getDrops(state, (ServerLevel) worldIn, pos, null))
                 {
                     popResource(worldIn, pos, stack1);
                 }
             }
-            worldIn.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundCategory.BLOCKS, 1.0F, 0.8F + worldIn.random.nextFloat() * 0.4F);
+            worldIn.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + worldIn.random.nextFloat() * 0.4F);
             worldIn.setBlockAndUpdate(pos, state.setValue(AGE, this.ageTurnIn));
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return super.use(state, worldIn, pos, player, handIn, hit);
     }

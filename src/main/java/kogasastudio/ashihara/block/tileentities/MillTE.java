@@ -5,24 +5,23 @@ import kogasastudio.ashihara.helper.FluidHelper;
 import kogasastudio.ashihara.interaction.recipe.MillRecipe;
 import kogasastudio.ashihara.inventory.container.GenericItemStackHandler;
 import kogasastudio.ashihara.inventory.container.MillContainer;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -31,18 +30,17 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 import javax.annotation.Nullable;
-
 import java.util.Optional;
 
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
-public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, INamedContainerProvider, IFluidHandler
+public class MillTE extends AshiharaMachineTE implements TickableTileEntity, MenuProvider, IFluidHandler
 {
-    public MillTE() {super(TERegistryHandler.MILL_TE.get());}
+    public MillTE(BlockPos pos, BlockState state) {super(TERegistryHandler.MILL_TE.get(), pos, state);}
 
     public GenericItemStackHandler input = new GenericItemStackHandler(4);
-    public Inventory output = new Inventory(4);
+    public GenericItemStackHandler output = new GenericItemStackHandler(4);
     public GenericItemStackHandler fluidIO = new GenericItemStackHandler(3);
     public byte round; //现在已经转的圈数
     public byte roundTotal; //完成这个配方需要转的总圈数, 由所选配方决定
@@ -53,44 +51,51 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     private MillRecipe recipe;
     public LazyOptional<FluidTank> tankIn = LazyOptional.of(this::createTank);
     public LazyOptional<FluidTank> tankOut = LazyOptional.of(this::createTank);
-    public IIntArray millData = new IIntArray()
+    public ContainerData millData = new ContainerData()
     {
+        @Override
         public int get(int index)
         {
-            switch (index)
-            {
-                case 0:return round;
-                case 1:return roundTotal;
-                case 2:return roundProgress;
-                case 3:return roundTicks;
-                default:return 0;
-            }
+            return switch (index) {
+                case 0 -> round;
+                case 1 -> roundTotal;
+                case 2 -> roundProgress;
+                case 3 -> roundTicks;
+                default -> 0;
+            };
         }
 
+        @Override
         public void set(int index, int value)
         {
-            switch (index)
-            {
-                case 0:round = (byte) value;break;
-                case 1:roundTotal = (byte) value;break;
-                case 2:roundProgress = value;break;
-                case 3:roundTicks = value;
+            switch (index) {
+                case 0 -> round = (byte) value;
+                case 1 -> roundTotal = (byte) value;
+                case 2 -> roundProgress = value;
+                case 3 -> roundTicks = value;
             }
         }
 
+        @Override
         public int getCount () {return 4;}
     };
 
     private Optional<MillRecipe> tryMatchRecipe(RecipeWrapper wrapper)
     {
-        if(level == null) return Optional.empty();
+        if(level == null) {
+            return Optional.empty();
+        }
 
         return level.getRecipeManager().getRecipeFor(MillRecipe.TYPE, wrapper, level);
     }
 
     private boolean hasInput()
     {
-        for (int i = 0; i < 4; i += 1) {if (!input.getStackInSlot(i).isEmpty()) return true;}
+        for (int i = 0; i < 4; i += 1) {
+            if (!input.getStackInSlot(i).isEmpty()) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -103,8 +108,9 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
         if (hasInput())
         {
             NonNullList<ItemStack> outputIn = recipeIn.getCraftingResult();//配方产物列表
-            if (this.output.isEmpty()) flag0 = true;
-            else
+            if (this.output.getStackInSlot(0).isEmpty()) {
+                flag0 = true;
+            } else
             {
                 int availableSlotCount = 0;
                 int emptySlotCount = 0;
@@ -115,18 +121,20 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
                 即空格子数+有效格子数大于给定产物的种数，则输出true*/
                 for (ItemStack stack : outputIn)
                 {
-                    for (int j = 0; j < 4; j += 1) {if (output.getItem(j).isEmpty()) {emptySlotCount += 1;}}
+                    for (int j = 0; j < 4; j += 1) {if (output.getStackInSlot(j).isEmpty()) {emptySlotCount += 1;}}
                     for (int i = 0; i < 4; i += 1)
                     {
-                        if (!output.getItem(i).isEmpty() && output.canPlaceItem(i, stack))
+                        if (!output.getStackInSlot(i).isEmpty() && output.isItemValid(i, stack))
                         {
-                            ItemStack stackInstant = output.getItem(i);
+                            ItemStack stackInstant = output.getStackInSlot(i);
                             if (stack.sameItem(stackInstant) && stack.getCount() + stackInstant.getCount() <= stackInstant.getMaxStackSize())
                             {availableSlotCount += 1;break;}
                         }
                     }
                 }
-                if (availableSlotCount + emptySlotCount >= outputIn.size()) flag0 = true;
+                if (availableSlotCount + emptySlotCount >= outputIn.size()) {
+                    flag0 = true;
+                }
             }
         }
         if (!recipeIn.getInputFluid().isEmpty())
@@ -165,7 +173,9 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
         {
             if (recipeIn.getCraftingResult() != null)
             {
-                for (ItemStack stack : this.recipe.getCraftingResult()) {output.addItem(stack);}
+                for (ItemStack stack : this.recipe.getCraftingResult()) {
+                    output.addItem(stack);
+                }
             }
             for (Ingredient ingredient : recipeIn.getIngredients())
             {
@@ -200,8 +210,9 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
                     {
                         FluidStack fluid = recipeIn.getOutputFluid();
                         FluidStack fluidInTank = tank.getFluid();
-                        if (tank.isEmpty()) tank.fill(fluid, EXECUTE);
-                        else if (fluid.isFluidEqual(fluidInTank))
+                        if (tank.isEmpty()) {
+                            tank.fill(fluid, EXECUTE);
+                        } else if (fluid.isFluidEqual(fluidInTank))
                         {
                             fluidInTank.setAmount(Math.min(fluid.getAmount() + fluidInTank.getAmount(), tank.getCapacity()));
                             tank.setFluid(fluidInTank);
@@ -210,7 +221,10 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
                     }
                 );
             }
-            if (this.level != null) this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition), this.level.getBlockState(this.worldPosition), 3);
+            if (this.level != null) {
+                this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition),
+                        this.level.getBlockState(this.worldPosition), 3);
+            }
         }
         this.recipe = null;
         this.sync();
@@ -227,7 +241,7 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     {
         return input;
     }
-    public Inventory getOutput() {return output;}
+    public GenericItemStackHandler getOutput() {return output;}
 
     @Override
     public FluidTank createTank() {return new FluidTank(4000);}
@@ -246,7 +260,7 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     }
 
     @Override
-    protected void invalidateCaps()
+    public void invalidateCaps()
     {
         super.invalidateCaps();
         this.tankIn.invalidate();
@@ -254,7 +268,7 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     }
 
     @Override
-    protected void reviveCaps()
+    public void reviveCaps()
     {
         super.reviveCaps();
         this.tankIn = LazyOptional.of(this::createTank);
@@ -262,39 +276,40 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt)
-    {
+    public void load(CompoundTag nbt) {
         this.round = nbt.getByte("round");
         this.roundTotal = nbt.getByte("roundTotal");
         this.roundProgress = nbt.getInt("roundProgress");
         this.roundTicks = nbt.getInt("roundTicks");
         this.input.deserializeNBT(nbt.getCompound("input"));
         this.fluidIO.deserializeNBT(nbt.getCompound("fluidIO"));
-        this.output.fromTag(nbt.getList("output", 10));
+        this.output.deserializeNBT(nbt.getCompound("output"));
         this.tankIn.ifPresent(fluidTank -> fluidTank.readFromNBT(nbt.getCompound("tankIn")));
         this.tankOut.ifPresent(fluidTank -> fluidTank.readFromNBT(nbt.getCompound("tankOut")));
-        super.load(state, nbt);
+        super.load(nbt);
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound)
-    {
+    protected void saveAdditional(CompoundTag compound) {
         compound.putByte("round", this.round);
         compound.putByte("roundTotal", this.roundTotal);
         compound.putInt("roundProgress", this.roundProgress);
         compound.putInt("roundTicks", this.roundTicks);
         compound.put("input", this.input.serializeNBT());
         compound.put("fluidIO", this.fluidIO.serializeNBT());
-        compound.put("output", this.output.createTag());
-        this.tankIn.ifPresent(fluidTank -> compound.put("tankIn", fluidTank.writeToNBT(new CompoundNBT())));
-        this.tankOut.ifPresent(fluidTank -> compound.put("tankOut", fluidTank.writeToNBT(new CompoundNBT())));
-        return super.save(compound);
+        compound.put("output", this.output.serializeNBT());
+        this.tankIn.ifPresent(fluidTank -> compound.put("tankIn", fluidTank.writeToNBT(new CompoundTag())));
+        this.tankOut.ifPresent(fluidTank -> compound.put("tankOut", fluidTank.writeToNBT(new CompoundTag())));
+        super.saveAdditional(compound);
     }
 
     @Override
     public void tick()
     {
-        if (this.level == null) return;
+        // todo 这时的 level 不会是 null
+        // if (this.level == null) {
+        //     return;
+        // }
 
         if
         (
@@ -303,7 +318,12 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
         )
         {
             this.setChanged();
-            if (this.level != null) this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition), this.level.getBlockState(this.worldPosition), 3);
+            if (this.level != null) {
+                // todo 最后一个参数不再在混淆的时候去除了，可以在 Block 里调用常量
+                this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition),
+                        //                                           todo 之前你写的 3
+                        this.level.getBlockState(this.worldPosition), Block.UPDATE_ALL);
+            }
         }
 
         if (!this.level.isClientSide())
@@ -314,7 +334,9 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
                 Optional<MillRecipe> recipeIn = tryMatchRecipe(new RecipeWrapper(input));
                 if (recipeIn.isPresent() && canProduce(recipeIn.get()))
                 {
-                    if (this.recipe == null || !this.recipe.equals(recipeIn.get())) applyRecipe(recipeIn.get());
+                    if (this.recipe == null || !this.recipe.equals(recipeIn.get())) {
+                        applyRecipe(recipeIn.get());
+                    }
                     matchAny = true;
                 }
                 if (!matchAny) {finishReciping(null);}
@@ -335,33 +357,39 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     }
 
     @Override
-    public ITextComponent getDisplayName() {return new TranslationTextComponent("gui." + Ashihara.MODID + ".mill");}
+    public TranslatableComponent getDisplayName() {return new TranslatableComponent("gui." + Ashihara.MODID + ".mill");}
 
     @Nullable
     @Override
-    public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_)
+    public AbstractContainerMenu createMenu(int p_createMenu_1_, Inventory p_createMenu_2_, Player p_createMenu_3_)
     {
-        if (this.level == null) return null;
+        if (this.level == null) {
+            return null;
+        }
         return new MillContainer(p_createMenu_1_, p_createMenu_2_, this.level, this.worldPosition, this.millData);
     }
 
+    // todo 我感觉很没有必要
     private void sync()
     {
-        if (this.level == null) return;
-        CompoundNBT nbt = new CompoundNBT();
+        if (this.level == null || this.level.isClientSide()) {
+            return;
+        }
+        CompoundTag nbt = new CompoundTag();
         nbt.putInt("roundProgress", this.roundProgress);
         nbt.putInt("roundTicks", this.roundTicks);
-        this.tankIn.ifPresent(tank -> nbt.put("tankIn", tank.writeToNBT(new CompoundNBT())));
-        this.tankOut.ifPresent(tank -> nbt.put("tankOut", tank.writeToNBT(new CompoundNBT())));
-        SUpdateTileEntityPacket p = new SUpdateTileEntityPacket(this.worldPosition, 1, nbt);
-        ((ServerWorld)this.level).getChunkSource().chunkMap.getPlayers(new ChunkPos(this.worldPosition), false)
+        this.tankIn.ifPresent(tank -> nbt.put("tankIn", tank.writeToNBT(new CompoundTag())));
+        this.tankOut.ifPresent(tank -> nbt.put("tankOut", tank.writeToNBT(new CompoundTag())));
+        //                                                                  todo create 的单参调用 getUpdateTag
+        ClientboundBlockEntityDataPacket p = ClientboundBlockEntityDataPacket.create(this, (be) -> nbt);
+        ((ServerLevel)this.level).getChunkSource().chunkMap.getPlayers(new ChunkPos(this.worldPosition), false)
         .forEach(k -> k.connection.send(p));
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
     {
-        CompoundNBT nbt = pkt.getTag();
+        CompoundTag nbt = pkt.getTag();
         this.roundProgress = nbt.getInt("roundProgress");
         this.roundTicks = nbt.getInt("roundTicks");
         this.tankIn.ifPresent(tank -> tank.readFromNBT(nbt.getCompound("tankIn")));

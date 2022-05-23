@@ -1,18 +1,16 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.utils.AshiharaWoodTypes;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IStringSerializable;
-
-import net.minecraft.block.AbstractBlock.Properties;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.core.Direction;
 
 public class BlockShoujiBeam extends Block implements IVariable<AshiharaWoodTypes>
 {
@@ -36,7 +34,7 @@ public class BlockShoujiBeam extends Block implements IVariable<AshiharaWoodType
     public static final BooleanProperty BACK = BooleanProperty.create("back");
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         builder.add(TOP, UPPER, LOWER, BOTTOM, AXIS, FRONT, BACK);
     }
@@ -47,7 +45,7 @@ public class BlockShoujiBeam extends Block implements IVariable<AshiharaWoodType
         return AshiharaWoodTypes.OAK;
     }
 
-    enum FillType implements IStringSerializable
+    enum FillType implements StringRepresentable
     {
         BEAM("beam"),
         NAGESHI("nageshi"),

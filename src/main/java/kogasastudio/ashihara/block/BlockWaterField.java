@@ -2,33 +2,36 @@ package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.state.BooleanProperty;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.ToolType;
 
 import java.util.*;
 
 import static kogasastudio.ashihara.helper.BlockActionHelper.*;
 import static net.minecraft.fluid.Fluids.WATER;
-
-import net.minecraft.block.AbstractBlock.Properties;
 
 public class BlockWaterField extends Block implements ILiquidContainer, IBucketPickupHandler
 {
@@ -49,7 +52,7 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
 
     private boolean matchesWaterField(BlockState state) {return state.is(BlockRegistryHandler.WATER_FIELD.get());}
 
-    private boolean hasExit(World worldIn, BlockPos pos)
+    private boolean hasExit(Level worldIn, BlockPos pos)
     {
         boolean flag = false;
         BlockPos.Mutable pos1 = pos.mutable();
@@ -77,19 +80,19 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
         return flag;
     }
 
-    private void onScheduleTick(World worldIn, BlockPos pos, int time)
+    private void onScheduleTick(Level worldIn, BlockPos pos, int time)
     {
         worldIn.getBlockTicks().scheduleTick(pos, this, time);
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) //注册BS
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) //注册BS
     {
         builder.add(ISLINKEDTOSOURCE, LEVEL);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) //碰撞箱的设定
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) //碰撞箱的设定
     {
         return Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
     }
@@ -103,7 +106,7 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
     }
 
     @Override
-    public float getShadeBrightness(BlockState state, IBlockReader worldIn, BlockPos pos)
+    public float getShadeBrightness(BlockState state, BlockGetter worldIn, BlockPos pos)
     {
         return 1.0F;
     }
@@ -154,7 +157,7 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
      * @param isMoving 2
      */
     @Override
-    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) //那一大堆判定
+    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) //那一大堆判定
     {
         BlockState fromState = worldIn.getBlockState(fromPos);
         if (!fromState.is(BlockRegistryHandler.RICE_CROP.get()))
@@ -222,7 +225,7 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
     }
 
     @Override
-    public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random rand)
+    public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, Random rand)
     {
         BlockState n = worldIn.getBlockState(pos.north());
         BlockState e = worldIn.getBlockState(pos.east());
@@ -257,9 +260,9 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        World worldIn = context.getLevel();
+        Level worldIn = context.getLevel();
         BlockPos pos = context.getClickedPos();
         BlockState preState = this.defaultBlockState();
         boolean watered = false;int level = 4;
@@ -315,19 +318,19 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
     }
 
     @Override
-    public boolean canPlaceLiquid(IBlockReader worldIn, BlockPos pos, BlockState state, Fluid fluidIn)
+    public boolean canPlaceLiquid(BlockGetter worldIn, BlockPos pos, BlockState state, Fluid fluidIn)
     {
         return state.getValue(LEVEL) < 8 && (fluidIn == Fluids.FLOWING_WATER || fluidIn == WATER);
     }
 
     @Override
-    public boolean placeLiquid(IWorld worldIn, BlockPos pos, BlockState state, FluidState fluidStateIn)
+    public boolean placeLiquid(Level worldIn, BlockPos pos, BlockState state, FluidState fluidStateIn)
     {
         if (fluidStateIn.getType() == Fluids.FLOWING_WATER || fluidStateIn.getType() == WATER)
         {
             if (!worldIn.isClientSide())
             {
-                onScheduleTick((World)worldIn, pos, 10);
+                onScheduleTick((Level)worldIn, pos, 10);
             }
             return true;
         }
@@ -335,7 +338,7 @@ public class BlockWaterField extends Block implements ILiquidContainer, IBucketP
     }
 
     @Override
-    public Fluid takeLiquid(IWorld worldIn, BlockPos pos, BlockState state)
+    public Fluid takeLiquid(Level worldIn, BlockPos pos, BlockState state)
     {
         return Fluids.EMPTY;
     }

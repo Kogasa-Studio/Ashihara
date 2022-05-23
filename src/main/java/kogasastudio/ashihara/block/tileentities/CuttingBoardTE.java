@@ -1,19 +1,23 @@
 package kogasastudio.ashihara.block.tileentities;
 
 import kogasastudio.ashihara.interaction.recipe.CuttingBoardRecipe;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.BlockParticleData;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ItemParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
@@ -26,7 +30,9 @@ public class CuttingBoardTE extends AshiharaMachineTE
 {
     private ItemStack content = ItemStack.EMPTY;
 
-    public CuttingBoardTE() {super(TERegistryHandler.CUTTING_BOARD_TE.get());}
+    public CuttingBoardTE(BlockPos pos, BlockState state) {
+        super(TERegistryHandler.CUTTING_BOARD_TE.get(), pos, state);
+    }
 
     public ItemStack getContent() {return this.content.copy();}
 
@@ -41,13 +47,13 @@ public class CuttingBoardTE extends AshiharaMachineTE
     {
         if (this.level == null) return;
         SoundEvent event = SoundEvents.AXE_STRIP;
-        this.level.playSound(null, this.worldPosition, event, SoundCategory.BLOCKS, 1.0f, 1.0f);
+        this.level.playSound(null, this.worldPosition, event, SoundSource.BLOCKS, 1.0f, 1.0f);
         if (this.level.isClientSide())
         {
             Random random = this.level.getRandom();
-            IParticleData data = this.content.getItem() instanceof BlockItem
-            ? new BlockParticleData(ParticleTypes.BLOCK, ((BlockItem) this.content.getItem()).getBlock().defaultBlockState())
-            : new ItemParticleData(ParticleTypes.ITEM, this.content);
+            ParticleOptions data = this.content.getItem() instanceof BlockItem
+            ? new BlockParticleOption(ParticleTypes.BLOCK, ((BlockItem) this.content.getItem()).getBlock().defaultBlockState())
+            : new ItemParticleOption(ParticleTypes.ITEM, this.content);
             for (int i = 0; i < 10; i += 1)
             {
                 this.level.addParticle
@@ -76,7 +82,7 @@ public class CuttingBoardTE extends AshiharaMachineTE
         setChanged();
     }
 
-    public boolean handleInteraction(PlayerEntity playerIn, Hand handIn, World worldIn, BlockPos posIn)
+    public boolean handleInteraction(Player playerIn, InteractionHand handIn, Level worldIn, BlockPos posIn)
     {
         ItemStack stack = playerIn.getItemInHand(handIn);
         if (!this.content.isEmpty())
@@ -85,7 +91,7 @@ public class CuttingBoardTE extends AshiharaMachineTE
             {
                 playerIn.setItemInHand(handIn, this.content);
                 this.content = ItemStack.EMPTY;
-                worldIn.playSound(playerIn, posIn, SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                worldIn.playSound(playerIn, posIn, SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.BLOCKS, 1.0f, 1.0f);
                 setChanged();
                 return true;
             }
@@ -112,7 +118,7 @@ public class CuttingBoardTE extends AshiharaMachineTE
         else
         {
             this.content = stack.split(Math.min(stack.getCount(), 4));
-            worldIn.playSound(playerIn, posIn, SoundEvents.ITEM_FRAME_ADD_ITEM, SoundCategory.BLOCKS, 1.0f, 1.0f);
+            worldIn.playSound(playerIn, posIn, SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, 1.0f, 1.0f);
             setChanged();
             return true;
         }
@@ -120,17 +126,14 @@ public class CuttingBoardTE extends AshiharaMachineTE
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt)
-    {
-        super.load(state, nbt);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
         this.content = ItemStack.of(nbt.getCompound("content"));
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound)
-    {
-        compound.put("content", this.content.save(new CompoundNBT()));
-        super.save(compound);
-        return compound;
+    protected void saveAdditional(CompoundTag compound) {
+        compound.put("content", this.content.save(new CompoundTag()));
+        super.saveAdditional(compound);
     }
 }

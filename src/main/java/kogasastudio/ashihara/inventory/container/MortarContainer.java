@@ -1,10 +1,10 @@
 package kogasastudio.ashihara.inventory.container;
 
 import kogasastudio.ashihara.block.tileentities.MortarTE;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -22,7 +22,7 @@ public class MortarContainer extends AshiharaCommonContainer
         public int getMaxStackSize() {return 1;}
 
         @Override
-        public boolean mayPlace(ItemStack stack) {return stack.getItem().is(MASHABLE);}
+        public boolean mayPlace(ItemStack stack) {return stack.is(MASHABLE);}
     }
 
     @Override
@@ -37,10 +37,11 @@ public class MortarContainer extends AshiharaCommonContainer
         return index;
     }
 
-    public MortarContainer(int id, PlayerInventory inv, MortarTE teIn)
+    public MortarContainer(int id, Inventory inv, MortarTE teIn)
     {
         super(ContainerRegistryHandler.MORTAR_CONTAINER.get(), id);
         this.te = teIn;
+
         layoutPlayerInventorySlots(inv, 8, 121);
         if (teIn != null)
         {
@@ -51,7 +52,7 @@ public class MortarContainer extends AshiharaCommonContainer
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn)
+    public boolean stillValid(Player playerIn)
     {
         return true;
     }
@@ -63,12 +64,12 @@ public class MortarContainer extends AshiharaCommonContainer
      * @return 玩家右键的物品
      */
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index)
+    public ItemStack quickMoveStack(Player playerIn, int index)
     {
         //玩家点击的具体格子
         Slot slot = this.slots.get(index);
 
-        if (slot == null || !slot.hasItem()) {return ItemStack.EMPTY;}
+        if (!slot.hasItem()) {return ItemStack.EMPTY;}
 
         ItemStack newStack = slot.getItem();
         ItemStack oldStack = newStack.copy();

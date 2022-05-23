@@ -1,24 +1,35 @@
 package kogasastudio.ashihara.inventory.container;
 
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.block.tileentities.MillTE;
-import kogasastudio.ashihara.block.tileentities.MortarTE;
-import net.minecraft.client.Minecraft;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraftforge.common.extensions.IForgeContainerType;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class ContainerRegistryHandler
 {
-    public static final DeferredRegister<ContainerType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, Ashihara.MODID);
+    public static final DeferredRegister<MenuType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, Ashihara.MODID);
 
-    public static final RegistryObject<ContainerType<MillContainer>> MILL_CONTAINER
-    = CONTAINER_TYPES.register("mill_container",
-    () -> IForgeContainerType.create(((windowId, inv, data) -> new MillContainer(windowId, inv, Minecraft.getInstance().level, data.readBlockPos(), new MillTE().millData))));
+    public static final RegistryObject<MenuType<MillContainer>> MILL_CONTAINER = CONTAINER_TYPES.register("mill_container",
+    () -> IForgeMenuType.create(((windowId, inv, data) ->
+            new MillContainer(windowId, inv, getBe(inv, data)))));
 
-    public static final RegistryObject<ContainerType<MortarContainer>> MORTAR_CONTAINER
-    = CONTAINER_TYPES.register("mortar_container",
-    () -> IForgeContainerType.create(((windowId, inv, data) -> new MortarContainer(windowId, inv, (MortarTE) Minecraft.getInstance().level.getBlockEntity(data.readBlockPos())))));
+    public static final RegistryObject<MenuType<MortarContainer>> MORTAR_CONTAINER = CONTAINER_TYPES.register("mortar_container",
+    () -> IForgeMenuType.create(((windowId, inv, data) ->
+            new MortarContainer(windowId, inv, getBe(inv, data)))));
+
+    // todo 如果这里 cast 失败了说明真的该崩了
+    @SuppressWarnings("unchecked")
+    static <T extends BlockEntity> T getBe(Inventory inv, FriendlyByteBuf data) {
+        return (T) getLevel(inv).getBlockEntity(data.readBlockPos());
+    }
+
+    static Level getLevel(Inventory inv) {
+        return inv.player.level;
+    }
 }

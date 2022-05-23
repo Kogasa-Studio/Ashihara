@@ -1,13 +1,13 @@
 package kogasastudio.ashihara.block.tileentities;
 
 import kogasastudio.ashihara.block.BlockRegistryHandler;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Random;
 
@@ -18,7 +18,9 @@ public class CandleTE extends AshiharaMachineTE
     private final NonNullList<double[]> posList = NonNullList.create();
     private final BlockState state = BlockRegistryHandler.CANDLE.get().defaultBlockState();
 
-    public CandleTE() {super(TERegistryHandler.CANDLE_TE.get());}
+    public CandleTE(BlockPos pos, BlockState state) {
+        super(TERegistryHandler.CANDLE_TE.get(), pos, state);
+    }
 
     public boolean addCurrentCandle(double x, double y, double z)
     {
@@ -41,7 +43,7 @@ public class CandleTE extends AshiharaMachineTE
         return this.addCurrentCandle(x, 0 - (0.4d * rand.nextDouble()), z);
     }
 
-    public int pickCandle(boolean pickAll, World worldIn, BlockPos posIn)
+    public int pickCandle(boolean pickAll, Level worldIn, BlockPos posIn)
     {
         if (pickAll || posList.size() == 1)
         {
@@ -77,13 +79,12 @@ public class CandleTE extends AshiharaMachineTE
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt)
-    {
-        super.load(state, nbt);
-        ListNBT poses = nbt.getList("posList", Constants.NBT.TAG_COMPOUND);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
+        ListTag poses = nbt.getList("posList", Tag.TAG_COMPOUND);
         for (int i = 0; i < poses.size(); i += 1)
         {
-            CompoundNBT array = poses.getCompound(i);
+            CompoundTag array = poses.getCompound(i);
             double x = array.getDouble("x");
             double y = array.getDouble("y");
             double z = array.getDouble("z");
@@ -92,15 +93,14 @@ public class CandleTE extends AshiharaMachineTE
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound)
-    {
-        super.save(compound);
-        ListNBT nbt = new ListNBT();
+    protected void saveAdditional(CompoundTag compound) {
+        super.saveAdditional(compound);
+        ListTag nbt = new ListTag();
         for (double[] d : this.posList)
         {
             if (d.length == 3)
             {
-                CompoundNBT arrays = new CompoundNBT();
+                CompoundTag arrays = new CompoundTag();
                 arrays.putDouble("x", d[0]);
                 arrays.putDouble("z", d[1]);
                 arrays.putDouble("y", d[2]);
@@ -108,7 +108,6 @@ public class CandleTE extends AshiharaMachineTE
             }
         }
         compound.put("posList", nbt);
-        return compound;
     }
 
     public NonNullList<double[]> getPosList()

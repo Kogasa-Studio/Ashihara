@@ -3,17 +3,21 @@ package kogasastudio.ashihara.block.tileentities;
 import kogasastudio.ashihara.inventory.container.GenericItemStackHandler;
 import kogasastudio.ashihara.item.IHasCustomModel;
 import kogasastudio.ashihara.utils.ItemDisplayPos;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class MealTableTE extends AshiharaMachineTE
 {
-    public MealTableTE() {super(TERegistryHandler.MEAL_TABLE_TE.get());}
+    public MealTableTE(BlockPos pos, BlockState state) {
+        super(TERegistryHandler.MEAL_TABLE_TE.get(), pos, state);
+    }
 
     public GenericItemStackHandler content = new GenericItemStackHandler(5)
     {
@@ -38,15 +42,13 @@ public class MealTableTE extends AshiharaMachineTE
             if (this.content.getStackInSlot(i).isEmpty()) {posMap.remove(i);}
             else if (this.posMap.get(i) == null) {this.posMap.put(i, new ItemDisplayPos(this.content, i, 4, Direction.NORTH));}
         }
-        float[][] list;
-        switch (this.posMap.size())
-        {
-            case 1 : list = SIZE_1;break;
-            case 2 : list = SIZE_2;break;
-            case 3 : list = SIZE_3;break;
-            case 4 : list = SIZE_4;break;
-            default: list = SIZE_5;
-        }
+        float[][] list = switch (this.posMap.size()) {
+            case 1 -> SIZE_1;
+            case 2 -> SIZE_2;
+            case 3 -> SIZE_3;
+            case 4 -> SIZE_4;
+            default -> SIZE_5;
+        };
         for (int i = 0; i < list.length; i += 1)
         {
             posMap.get(i).applyPos(list[i]);
@@ -54,7 +56,7 @@ public class MealTableTE extends AshiharaMachineTE
         setChanged();
     }
 
-    public void handleInteraction(PlayerEntity playerIn, Hand handIn)
+    public void handleInteraction(Player playerIn, InteractionHand handIn)
     {
         ItemStack stack = playerIn.getItemInHand(handIn);
 
