@@ -14,24 +14,26 @@ import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockHydrangeaBush extends Block implements IGrowable
 {
     public BlockHydrangeaBush(boolean bloomed)
     {
         super
         (
-            Properties.create(Material.LEAVES)
-            .hardnessAndResistance(0.05F)
-            .sound(SoundType.PLANT)
-            .notSolid()
-            .tickRandomly()
-            .setLightLevel((state) -> 1)
+            Properties.of(Material.LEAVES)
+            .strength(0.05F)
+            .sound(SoundType.GRASS)
+            .noOcclusion()
+            .randomTicks()
+            .lightLevel((state) -> 1)
         );
-        this.setDefaultState(this.getStateContainer().getBaseState().with(BLOOMED, bloomed));
+        this.registerDefaultState(this.getStateDefinition().any().setValue(BLOOMED, bloomed));
     }
 
     @Override
-    public int getOpacity(BlockState state, IBlockReader worldIn, BlockPos pos)
+    public int getLightBlock(BlockState state, IBlockReader worldIn, BlockPos pos)
     {
         return 1;
     }
@@ -39,36 +41,36 @@ public class BlockHydrangeaBush extends Block implements IGrowable
     public static final BooleanProperty BLOOMED = BooleanProperty.create("bloomed");
 
     @Override
-    public boolean ticksRandomly(BlockState state) {return !state.get(BLOOMED);}
+    public boolean isRandomlyTicking(BlockState state) {return !state.getValue(BLOOMED);}
 
     @Override
     public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
     {
-        if (random.nextInt(3) == 1 && this.canGrow(worldIn, pos, state, false))
+        if (random.nextInt(3) == 1 && this.isValidBonemealTarget(worldIn, pos, state, false))
         {
-            this.grow(worldIn, random, pos, state);
+            this.performBonemeal(worldIn, random, pos, state);
         }
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(BLOOMED);
     }
 
     @Override
-    public boolean canGrow(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient)
+    public boolean isValidBonemealTarget(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient)
     {
         BlockState down = worldIn.getBlockState(pos);
-        return down.getMaterial() == Material.EARTH && !state.get(BLOOMED);
+        return down.getMaterial() == Material.DIRT && !state.getValue(BLOOMED);
     }
 
     @Override
-    public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, BlockState state) {return !state.get(BLOOMED);}
+    public boolean isBonemealSuccess(World worldIn, Random rand, BlockPos pos, BlockState state) {return !state.getValue(BLOOMED);}
 
     @Override
-    public void grow(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state)
+    public void performBonemeal(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state)
     {
-        worldIn.setBlockState(pos, state.with(BLOOMED, true));
+        worldIn.setBlockAndUpdate(pos, state.setValue(BLOOMED, true));
     }
 }

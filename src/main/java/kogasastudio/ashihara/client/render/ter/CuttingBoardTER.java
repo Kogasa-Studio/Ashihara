@@ -27,8 +27,8 @@ public class CuttingBoardTER extends TileEntityRenderer<CuttingBoardTE>
         ItemStack stack = tileEntityIn.getContent();
         if (!stack.isEmpty())
         {
-            matrixStackIn.push();
-            Direction facing = tileEntityIn.getBlockState().get(FACING);
+            matrixStackIn.pushPose();
+            Direction facing = tileEntityIn.getBlockState().getValue(FACING);
             boolean isBlock = stack.getItem() instanceof BlockItem && !(stack.getItem() instanceof BlockNamedItem);
 
             float tHeight = isBlock ? 3.0f : 1.5f;
@@ -36,18 +36,18 @@ public class CuttingBoardTER extends TileEntityRenderer<CuttingBoardTE>
             matrixStackIn.scale(0.5f, 0.5f, 0.5f);
             if (!isBlock)
             {
-                matrixStackIn.rotate(Vector3f.XP.rotationDegrees(90.0f));
-                matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(facing.getHorizontalAngle()));
+                matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(90.0f));
+                matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(facing.toYRot()));
             }
-            else matrixStackIn.rotate(Vector3f.YP.rotationDegrees(facing.getHorizontalAngle()));
+            else matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(facing.toYRot()));
 
             ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
             for (int i = 0; i < stack.getCount(); i += 1)
             {
                 if (i != 0 ) matrixStackIn.translate(XTP(0.0f), XTP(isBlock ? 8.0f : 0.0f), XTP(isBlock ? 0.0f : -1.2f));
-                renderer.renderItem(stack, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
+                renderer.renderStatic(stack, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn);
             }
-            matrixStackIn.pop();
+            matrixStackIn.popPose();
         }
     }
 }

@@ -26,17 +26,17 @@ public class Ashihara
     public static final ItemGroup ASHIHARA = new ItemGroup("group_ashihara")
     {
         @Override
-        public ItemStack createIcon() {return new ItemStack(ItemRegistryHandler.ASHIHARA_ICON.get());}
+        public ItemStack makeIcon() {return new ItemStack(ItemRegistryHandler.ASHIHARA_ICON.get());}
     };
     public static final ItemGroup MATERIALS = new ItemGroup("group_ash_materials")
     {
         @Override
-        public ItemStack createIcon() {return new ItemStack(ItemRegistryHandler.SAKURA.get());}
+        public ItemStack makeIcon() {return new ItemStack(ItemRegistryHandler.SAKURA.get());}
     };
     public static final ItemGroup BUILDING_BLOCKS = new ItemGroup("group_ash_building_blocks")
     {
         @Override
-        public ItemStack createIcon() {return new ItemStack(ItemRegistryHandler.JINJA_LANTERN.get());}
+        public ItemStack makeIcon() {return new ItemStack(ItemRegistryHandler.JINJA_LANTERN.get());}
     };
 
     public Ashihara()

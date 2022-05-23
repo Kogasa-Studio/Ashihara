@@ -20,20 +20,20 @@ public class WorldGenerationEventHandler
     public static void onTreesGenerate(BiomeLoadingEvent event)
     {
         BiomeGenerationSettingsBuilder settings = event.getGeneration();
-        RegistryKey<Biome> biome = RegistryKey.getOrCreateKey(ForgeRegistries.Keys.BIOMES, event.getName());
+        RegistryKey<Biome> biome = RegistryKey.create(ForgeRegistries.Keys.BIOMES, event.getName());
 //        if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.FOREST))
 //        {
 //            settings.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.FOREST_CHERRY_TREES);
 //        }
         if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.PLAINS))
         {
-            settings.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.PLAIN_CHERRY_TREES);
-            settings.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.PLAIN_RED_MAPLE_TREES);
+            settings.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.PLAIN_CHERRY_TREES);
+            settings.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.PLAIN_RED_MAPLE_TREES);
         }
         if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.HILLS))
         {
-            settings.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.PLAIN_CHERRY_TREES);
-            settings.withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.PLAIN_RED_MAPLE_TREES);
+            settings.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.PLAIN_CHERRY_TREES);
+            settings.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.PLAIN_RED_MAPLE_TREES);
         }
     }
 }

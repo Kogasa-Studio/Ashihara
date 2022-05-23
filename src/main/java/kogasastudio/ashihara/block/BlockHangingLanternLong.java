@@ -29,16 +29,18 @@ import java.util.Random;
 
 import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockHangingLanternLong extends BlockLantern
 {
     public BlockHangingLanternLong()
     {
         super
         (
-            Properties.create(Material.WOOL)
-            .hardnessAndResistance(1.0F)
+            Properties.of(Material.WOOL)
+            .strength(1.0F)
             .sound(SoundType.BAMBOO_SAPLING)
-            .setLightLevel(getLightValueLit(15))
+            .lightLevel(getLightValueLit(15))
         );
     }
 
@@ -58,9 +60,9 @@ public class BlockHangingLanternLong extends BlockLantern
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
     {
-        VoxelShape shape1 = Block.makeCuboidShape(5, 0.5, 5, 11, 1.5, 11);
-        VoxelShape shape2 = Block.makeCuboidShape(4, 1.5, 4, 12, 14.5, 12);
-        VoxelShape shape3 = Block.makeCuboidShape(5, 14.5, 5, 11, 15.5, 11);
+        VoxelShape shape1 = Block.box(5, 0.5, 5, 11, 1.5, 11);
+        VoxelShape shape2 = Block.box(4, 1.5, 4, 12, 14.5, 12);
+        VoxelShape shape3 = Block.box(5, 14.5, 5, 11, 15.5, 11);
         return VoxelShapes.or(shape1, shape2, shape3);
     }
 
@@ -68,7 +70,7 @@ public class BlockHangingLanternLong extends BlockLantern
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
     {
-        if (stateIn.get(LIT))
+        if (stateIn.getValue(LIT))
         {
             double d0 = (double)pos.getX() + 0.5D;
             double d1 = (double)pos.getY() + 0.5D;
@@ -78,30 +80,30 @@ public class BlockHangingLanternLong extends BlockLantern
     }
 
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
+    public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos)
     {
-        return worldIn.getBlockState(pos.up()).getBlock() != Blocks.AIR;
+        return worldIn.getBlockState(pos.above()).getBlock() != Blocks.AIR;
     }
 
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
     {
-        return !this.isValidPosition(stateIn, worldIn, currentPos) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+        return !this.canSurvive(stateIn, worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
-        if(player.getHeldItem(handIn).getItem() == Items.AIR)
+        if(player.getItemInHand(handIn).getItem() == Items.AIR)
         {
             Random random = worldIn.getRandom();
-            Boolean instantState = worldIn.getBlockState(pos).get(LIT);
-            worldIn.playSound(player, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
-            worldIn.setBlockState(pos, state.with(LIT, !instantState));
+            Boolean instantState = worldIn.getBlockState(pos).getValue(LIT);
+            worldIn.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
+            worldIn.setBlockAndUpdate(pos, state.setValue(LIT, !instantState));
             return ActionResultType.SUCCESS;
         }
-        else if (player.getHeldItem(handIn).getItem() == ItemRegistryHandler.KOISHI.get())
+        else if (player.getItemInHand(handIn).getItem() == ItemRegistryHandler.KOISHI.get())
         {
-            MarkableLanternTE te = (MarkableLanternTE) worldIn.getTileEntity(pos);
+            MarkableLanternTE te = (MarkableLanternTE) worldIn.getBlockEntity(pos);
             if (te != null) {te.nextIcon();return ActionResultType.SUCCESS;}
             else return ActionResultType.PASS;
         }

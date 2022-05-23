@@ -10,12 +10,12 @@ public class RiceParticle extends SpriteTexturedParticle
     protected RiceParticle(ClientWorld world, double x, double y, double z)
     {
         super(world, x, y, z, 0.0D, 0.0D, 0.0D);
-        this.motionX *= 0.8F;
-        this.motionY *= 0.8F;
-        this.motionZ *= 0.8F;
-        this.motionY = (this.rand.nextFloat() * 0.4F + 0.05F);
-        this.particleScale *= this.rand.nextFloat() * 2.0F + 0.2F;
-        this.maxAge = (int)(16.0D / (Math.random() * 0.8D + 0.2D));
+        this.xd *= 0.8F;
+        this.yd *= 0.8F;
+        this.zd *= 0.8F;
+        this.yd = (this.random.nextFloat() * 0.4F + 0.05F);
+        this.quadSize *= this.random.nextFloat() * 2.0F + 0.2F;
+        this.lifetime = (int)(16.0D / (Math.random() * 0.8D + 0.2D));
     }
 
     @Override
@@ -25,7 +25,7 @@ public class RiceParticle extends SpriteTexturedParticle
     }
 
     @Override
-    public float getScale(float scaleFactor)
+    public float getQuadSize(float scaleFactor)
     {
         return 0.2F;
     }
@@ -33,23 +33,23 @@ public class RiceParticle extends SpriteTexturedParticle
     @Override
     public void tick()
     {
-        if (this.age++ >= this.maxAge)
+        if (this.age++ >= this.lifetime)
         {
-            this.setExpired();
+            this.remove();
         }
         else
         {
-            this.prevPosX = this.posX;
-            this.prevPosY = this.posY;
-            this.prevPosZ = this.posZ;
-            this.motionY -= 0.03D;
-            this.move(this.motionX, this.motionY, this.motionZ);
-            this.motionX *= 0.999F;
-            this.motionY *= 0.999F;
-            this.motionZ *= 0.999F;
+            this.xo = this.x;
+            this.yo = this.y;
+            this.zo = this.z;
+            this.yd -= 0.03D;
+            this.move(this.xd, this.yd, this.zd);
+            this.xd *= 0.999F;
+            this.yd *= 0.999F;
+            this.zd *= 0.999F;
             if (this.onGround) {
-                this.motionX *= 0.7F;
-                this.motionZ *= 0.7F;
+                this.xd *= 0.7F;
+                this.zd *= 0.7F;
             }
         }
     }
@@ -64,10 +64,10 @@ public class RiceParticle extends SpriteTexturedParticle
         }
 
         @Override
-        public Particle makeParticle(GenericParticleData typeIn, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
+        public Particle createParticle(GenericParticleData typeIn, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
         {
             RiceParticle riceparticle = new RiceParticle(worldIn, x, y, z);
-            riceparticle.selectSpriteRandomly(this.spriteSet);
+            riceparticle.pickSprite(this.spriteSet);
             return riceparticle;
         }
     }

@@ -18,11 +18,11 @@ public class MillContainer extends AshiharaCommonContainer
     public MillContainer(int id, PlayerInventory inventory, World worldIn, BlockPos posIn, IIntArray millDataIn)
     {
         super(ContainerRegistryHandler.MILL_CONTAINER.get(), id);
-        assertIntArraySize(millDataIn, 4);
+        checkContainerDataCount(millDataIn, 4);
         this.millData = millDataIn;
-        trackIntArray(millDataIn);
+        addDataSlots(millDataIn);
         layoutPlayerInventorySlots(inventory, 8, 120);
-        MillTE teIn = (MillTE) worldIn.getTileEntity(posIn);
+        MillTE teIn = (MillTE) worldIn.getBlockEntity(posIn);
         this.te = teIn;
         if (teIn != null)
         {
@@ -37,7 +37,7 @@ public class MillContainer extends AshiharaCommonContainer
     public MillTE getTE() {return this.te;}
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {return true;}
+    public boolean stillValid(PlayerEntity playerIn) {return true;}
 
     /**
      * 玩家在gui中shift点击时会调用的方法
@@ -46,40 +46,40 @@ public class MillContainer extends AshiharaCommonContainer
      * @return 玩家右键的物品
      */
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index)
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index)
     {
         //玩家右键的具体格子
-        Slot slot = this.inventorySlots.get(index);
+        Slot slot = this.slots.get(index);
 
-        if (slot == null || !slot.getHasStack()) {return ItemStack.EMPTY;}
+        if (slot == null || !slot.hasItem()) {return ItemStack.EMPTY;}
 
-        ItemStack newStack = slot.getStack(), oldStack = newStack.copy();
+        ItemStack newStack = slot.getItem(), oldStack = newStack.copy();
 
         boolean isMerged;
 
         // 0~8: 快捷栏, 9~35: 玩家背包, 36~39: 输入槽, 40~43: 输出槽, 44~46: 流体互动槽
         if (index < 9)
         {
-            isMerged = mergeItemStack(newStack, 36, 40, false)
-            || mergeItemStack(newStack, 44, 47, false)
-            || mergeItemStack(newStack, 9, 36, false);
+            isMerged = moveItemStackTo(newStack, 36, 40, false)
+            || moveItemStackTo(newStack, 44, 47, false)
+            || moveItemStackTo(newStack, 9, 36, false);
         }
         else if (index < 36)
         {
-            isMerged = mergeItemStack(newStack, 36, 40, false)
-            || mergeItemStack(newStack, 44, 47, false)
-            || mergeItemStack(newStack, 0, 9, true);
+            isMerged = moveItemStackTo(newStack, 36, 40, false)
+            || moveItemStackTo(newStack, 44, 47, false)
+            || moveItemStackTo(newStack, 0, 9, true);
         }
         else
         {
-            isMerged = mergeItemStack(newStack, 0, 9, true)
-            || mergeItemStack(newStack, 9, 36, false);
+            isMerged = moveItemStackTo(newStack, 0, 9, true)
+            || moveItemStackTo(newStack, 9, 36, false);
         }
 
         if (!isMerged){return ItemStack.EMPTY;}
 
-        if (newStack.getCount() == 0) {slot.putStack(ItemStack.EMPTY);}
-        else {slot.onSlotChanged();}
+        if (newStack.getCount() == 0) {slot.set(ItemStack.EMPTY);}
+        else {slot.setChanged();}
 
         slot.onTake(playerIn, newStack);
 

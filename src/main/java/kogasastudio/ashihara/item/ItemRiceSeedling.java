@@ -15,25 +15,27 @@ import java.util.Objects;
 
 import static kogasastudio.ashihara.Ashihara.ASHIHARA;
 
+import net.minecraft.item.Item.Properties;
+
 public class ItemRiceSeedling extends Item
 {
-    public ItemRiceSeedling() {super(new Properties().group(ASHIHARA));}
+    public ItemRiceSeedling() {super(new Properties().tab(ASHIHARA));}
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context)
+    public ActionResultType useOn(ItemUseContext context)
     {
-        ItemStack item = context.getItem();
+        ItemStack item = context.getItemInHand();
         PlayerEntity player = context.getPlayer();
-        World worldIn = context.getWorld();
-        BlockPos pos = context.getPos().down();
-        Direction facing = context.getFace();
-        if (!item.isEmpty() && Objects.requireNonNull(player).canPlayerEdit(pos.offset(facing), facing, item))
+        World worldIn = context.getLevel();
+        BlockPos pos = context.getClickedPos().below();
+        Direction facing = context.getClickedFace();
+        if (!item.isEmpty() && Objects.requireNonNull(player).mayUseItemAt(pos.relative(facing), facing, item))
         {
-            BlockState state = worldIn.getBlockState(pos.up());
-            if (state.matchesBlock(BlockRegistryHandler.WATER_FIELD.get()) && worldIn.getBlockState(pos.up(2)).getBlock() == Blocks.AIR)
+            BlockState state = worldIn.getBlockState(pos.above());
+            if (state.is(BlockRegistryHandler.WATER_FIELD.get()) && worldIn.getBlockState(pos.above(2)).getBlock() == Blocks.AIR)
             {
-                worldIn.setBlockState(pos.up(2), BlockRegistryHandler.RICE_CROP.get().getDefaultState());
-                if (!player.abilities.isCreativeMode) {item.shrink(1);}
+                worldIn.setBlockAndUpdate(pos.above(2), BlockRegistryHandler.RICE_CROP.get().defaultBlockState());
+                if (!player.abilities.instabuild) {item.shrink(1);}
                 return ActionResultType.SUCCESS;
             }
             else return ActionResultType.PASS;

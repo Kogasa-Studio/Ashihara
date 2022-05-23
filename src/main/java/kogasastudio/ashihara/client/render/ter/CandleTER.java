@@ -22,7 +22,7 @@ public class CandleTER extends TileEntityRenderer<CandleTE>
     @Override
     public void render(CandleTE tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn)
     {
-        IVertexBuilder builder = bufferIn.getBuffer(RenderType.getEntitySolid(tex));
+        IVertexBuilder builder = bufferIn.getBuffer(RenderType.entitySolid(tex));
 
         for (double[] d : tileEntityIn.getPosList())
         {
@@ -30,12 +30,12 @@ public class CandleTER extends TileEntityRenderer<CandleTE>
             double z = d[1];
             double y = d[2];
 
-            matrixStackIn.push();
-            GlStateManager.enableBlend();
+            matrixStackIn.pushPose();
+            GlStateManager._enableBlend();
             matrixStackIn.translate(x, y + 1.5d, z);
-            matrixStackIn.rotate(Vector3f.XP.rotationDegrees(180));
-            candleSingle.render(matrixStackIn, builder, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
-            matrixStackIn.pop();
+            matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180));
+            candleSingle.renderToBuffer(matrixStackIn, builder, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+            matrixStackIn.popPose();
         }
     }
 }

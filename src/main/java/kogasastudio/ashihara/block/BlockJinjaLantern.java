@@ -13,26 +13,28 @@ import net.minecraft.world.IBlockReader;
 
 import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockJinjaLantern extends BlockDoubleLantern
 {
     public BlockJinjaLantern()
     {
         super
         (
-            Properties.create(Material.WOOD)
-            .hardnessAndResistance(0.5F)
+            Properties.of(Material.WOOD)
+            .strength(0.5F)
             .sound(SoundType.WOOD)
-            .setLightLevel(getLightValueLit(15))
+            .lightLevel(getLightValueLit(15))
         );
     }
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
     {
-        VoxelShape UPPER_X = Block.makeCuboidShape(1.8D, 0.0D, 12.9D, 14.2D, 13.1D, 3.2D);
-        VoxelShape UPPER_Z = Block.makeCuboidShape(12.9D, 0.0D, 1.8D, 3.2D, 12.3D, 14.2D);
-        VoxelShape LOWER = Block.makeCuboidShape(7.5D, 0.0D, 7.5D, 8.5D, 16.0D, 8.5D);
-        if (state.get(HALF) == DoubleBlockHalf.LOWER) {return LOWER;}
-        else {return state.get(AXIS) == Direction.Axis.X ? UPPER_Z : UPPER_X;}
+        VoxelShape UPPER_X = Block.box(1.8D, 0.0D, 12.9D, 14.2D, 13.1D, 3.2D);
+        VoxelShape UPPER_Z = Block.box(12.9D, 0.0D, 1.8D, 3.2D, 12.3D, 14.2D);
+        VoxelShape LOWER = Block.box(7.5D, 0.0D, 7.5D, 8.5D, 16.0D, 8.5D);
+        if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {return LOWER;}
+        else {return state.getValue(AXIS) == Direction.Axis.X ? UPPER_Z : UPPER_X;}
     }
 }

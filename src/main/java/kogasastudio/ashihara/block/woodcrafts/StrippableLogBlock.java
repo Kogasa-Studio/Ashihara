@@ -23,18 +23,18 @@ public class StrippableLogBlock extends SimpleLogBlock
     public Block getStrippedBlock() {return STRIPPED_OAK_LOG;}
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
-        if (player.getHeldItem(handIn).getItem() instanceof AxeItem)
+        if (player.getItemInHand(handIn).getItem() instanceof AxeItem)
         {
-            worldIn.playSound(player, pos, SoundEvents.ITEM_AXE_STRIP, SoundCategory.BLOCKS, 1.0f, 1.0f);
-            if (!worldIn.isRemote())
+            worldIn.playSound(player, pos, SoundEvents.AXE_STRIP, SoundCategory.BLOCKS, 1.0f, 1.0f);
+            if (!worldIn.isClientSide())
             {
                 Block block = this.getStrippedBlock();
-                BlockState stripped = block.getDefaultState().hasProperty(AXIS) ? block.getDefaultState().with(AXIS, state.get(AXIS)) : block.getDefaultState();
-                worldIn.setBlockState(pos, stripped);
-                if (!this.getStripItem().isEmpty()) worldIn.addEntity(new ItemEntity(worldIn, pos.getX(), pos.getY(), pos.getZ(), this.getStripItem()));
-                if (!player.isCreative()) player.getHeldItem(handIn).damageItem(1, player, (playerIn) -> playerIn.sendBreakAnimation(handIn));
+                BlockState stripped = block.defaultBlockState().hasProperty(AXIS) ? block.defaultBlockState().setValue(AXIS, state.getValue(AXIS)) : block.defaultBlockState();
+                worldIn.setBlockAndUpdate(pos, stripped);
+                if (!this.getStripItem().isEmpty()) worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY(), pos.getZ(), this.getStripItem()));
+                if (!player.isCreative()) player.getItemInHand(handIn).hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
             }
             return ActionResultType.SUCCESS;
         }

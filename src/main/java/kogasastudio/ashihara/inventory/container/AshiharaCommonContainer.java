@@ -85,5 +85,5 @@ public class AshiharaCommonContainer extends Container
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {return false;}
+    public boolean stillValid(PlayerEntity playerIn) {return false;}
 }

@@ -62,7 +62,7 @@ public class ItemDisplayPos
 
     public void render(MatrixStack stackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn)
     {
-        stackIn.push();
+        stackIn.pushPose();
         if (this.getItemCustomModel() != null) this.getItemCustomModel().render(stackIn, bufferIn, combinedLightIn, combinedOverlayIn, this.getDisplayStack().getCount());
         else if (!this.getDisplayStack().isEmpty())
         {
@@ -77,19 +77,19 @@ public class ItemDisplayPos
             stackIn.scale(scale, scale, scale);
             if (!isBlock)
             {
-                stackIn.rotate(Vector3f.XP.rotationDegrees(90.0f));
-                stackIn.rotate(Vector3f.ZP.rotationDegrees(facing.getHorizontalAngle()));
+                stackIn.mulPose(Vector3f.XP.rotationDegrees(90.0f));
+                stackIn.mulPose(Vector3f.ZP.rotationDegrees(facing.toYRot()));
             }
-            else stackIn.rotate(Vector3f.YP.rotationDegrees(facing.getHorizontalAngle()));
+            else stackIn.mulPose(Vector3f.YP.rotationDegrees(facing.toYRot()));
 
             ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
             for (int i = 0; i < stack.getCount(); i += 1)
             {
                 if (i != 0 ) stackIn.translate(XTP(0.0f), XTP(isBlock ? (1.0f / scale) * 4.0f : 0.0f), XTP(isBlock ? 0.0f : -1.2f));
-                renderer.renderItem(stack, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, stackIn, bufferIn);
+                renderer.renderStatic(stack, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, stackIn, bufferIn);
             }
         }
-        stackIn.pop();
+        stackIn.popPose();
     }
 
     public float[] getTranslation() {return this.pos;}
@@ -110,7 +110,7 @@ public class ItemDisplayPos
     public CompoundNBT serializeNBT(CompoundNBT compound)
     {
         compound.putInt("slotID", this.slot);
-        compound.putString("facing", this.facing.getString());
+        compound.putString("facing", this.facing.getSerializedName());
         compound.putFloat("range", this.range);
         compound.putFloat("x", this.pos[0]);
         compound.putFloat("y", this.pos[1]);

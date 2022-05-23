@@ -7,14 +7,16 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class SimpleStairsBlock extends StairsBlock
 {
     public SimpleStairsBlock()
     {
         super
         (
-            BlockRegistryHandler.CHERRY_PLANKS.get().getDefaultState(),
-            Properties.from(BlockRegistryHandler.CHERRY_PLANKS.get())
+            BlockRegistryHandler.CHERRY_PLANKS.get().defaultBlockState(),
+            Properties.copy(BlockRegistryHandler.CHERRY_PLANKS.get())
         );
     }
 

@@ -23,14 +23,14 @@ public class MillTER extends TileEntityRenderer<MillTE>
     @Override
     public void render(MillTE tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn)
     {
-        matrixStackIn.push();
+        matrixStackIn.pushPose();
         matrixStackIn.translate(0.5D, 1.5D, 0.5D);
-        float facing = tileEntityIn.getBlockState().get(FACING).getHorizontalAngle();
-        matrixStackIn.rotate(Vector3f.XP.rotationDegrees(180));
-        matrixStackIn.rotate(Vector3f.YP.rotationDegrees(facing));
-        matrixStackIn.rotate(Vector3f.YP.rotationDegrees(tileEntityIn.getMillStoneRotation()));
-        IVertexBuilder buffer = bufferIn.getBuffer(RenderType.getEntitySolid(tex));
-        millStone.render(matrixStackIn, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
-        matrixStackIn.pop();
+        float facing = tileEntityIn.getBlockState().getValue(FACING).toYRot();
+        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180));
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(facing));
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(tileEntityIn.getMillStoneRotation()));
+        IVertexBuilder buffer = bufferIn.getBuffer(RenderType.entitySolid(tex));
+        millStone.renderToBuffer(matrixStackIn, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+        matrixStackIn.popPose();
     }
 }

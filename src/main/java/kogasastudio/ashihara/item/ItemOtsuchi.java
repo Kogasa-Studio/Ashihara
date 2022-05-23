@@ -12,30 +12,32 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.TieredItem;
 
+import net.minecraft.item.Item.Properties;
+
 public class ItemOtsuchi extends TieredItem
 {
     private final Multimap<Attribute, AttributeModifier> attributeModifiers;
 
     public ItemOtsuchi(IItemTier tier, int dmgIn, double spdIn)
     {
-        super(tier, new Properties().group(ItemGroup.TOOLS));
-        float attackDamage = (float) dmgIn + (float) Math.pow(tier.getAttackDamage(), 2);
+        super(tier, new Properties().tab(ItemGroup.TAB_TOOLS));
+        float attackDamage = (float) dmgIn + (float) Math.pow(tier.getAttackDamageBonus(), 2);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", attackDamage, AttributeModifier.Operation.ADDITION));
-        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", spdIn, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", attackDamage, AttributeModifier.Operation.ADDITION));
+        builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", spdIn, AttributeModifier.Operation.ADDITION));
         this.attributeModifiers = builder.build();
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker)
+    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker)
     {
-        stack.damageItem(3, attacker, (entity) -> entity.sendBreakAnimation(EquipmentSlotType.MAINHAND));
+        stack.hurtAndBreak(3, attacker, (entity) -> entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
         return true;
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot)
+    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot)
     {
-        return equipmentSlot == EquipmentSlotType.MAINHAND ? this.attributeModifiers : super.getAttributeModifiers(equipmentSlot);
+        return equipmentSlot == EquipmentSlotType.MAINHAND ? this.attributeModifiers : super.getDefaultAttributeModifiers(equipmentSlot);
     }
 }

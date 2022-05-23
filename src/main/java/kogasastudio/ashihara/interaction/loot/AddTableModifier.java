@@ -32,7 +32,7 @@ public class AddTableModifier extends LootModifier
         if (this.canModify())
         {
             LootTable table = context.getLootTable(this.lootTable);
-            table.recursiveGenerate(context, LootTable.capStackSizes(generatedLoot::add));
+            table.getRandomItemsRaw(context, LootTable.createStackSplitter(generatedLoot::add));
         }
         return generatedLoot;
     }
@@ -42,7 +42,7 @@ public class AddTableModifier extends LootModifier
         @Override
         public AddTableModifier read(ResourceLocation location, JsonObject object, ILootCondition[] ailootcondition)
         {
-            ResourceLocation lootTable = new ResourceLocation(JSONUtils.getString(object, "lootTable"));
+            ResourceLocation lootTable = new ResourceLocation(JSONUtils.getAsString(object, "lootTable"));
             return new AddTableModifier(ailootcondition, lootTable);
         }
 

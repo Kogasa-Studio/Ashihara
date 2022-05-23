@@ -15,11 +15,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static kogasastudio.ashihara.Ashihara.ASHIHARA;
 
+import net.minecraft.item.Item.Properties;
+
 public class ItemSujikaButo extends ArmorItem
 {
     public ItemSujikaButo()
     {
-        super(ArmorMaterial.NETHERITE, EquipmentSlotType.HEAD, new Properties().group(ASHIHARA));
+        super(ArmorMaterial.NETHERITE, EquipmentSlotType.HEAD, new Properties().tab(ASHIHARA));
     }
     private static final ResourceLocation TEXTURE = new ResourceLocation(Ashihara.MODID, "textures/armors/sujikabuto.png");
 

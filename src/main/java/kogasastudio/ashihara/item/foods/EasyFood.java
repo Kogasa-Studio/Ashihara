@@ -11,8 +11,8 @@ public class EasyFood extends Item
     {
         super
         (
-            new Item.Properties().group(MATERIALS)
-            .food(new Food.Builder().hunger(hunger).build())
+            new Item.Properties().tab(MATERIALS)
+            .food(new Food.Builder().nutrition(hunger).build())
         );
     }
 }

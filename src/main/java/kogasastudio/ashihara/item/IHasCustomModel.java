@@ -16,12 +16,12 @@ public interface IHasCustomModel
 
     default void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn, int stackSize)
     {
-        matrixStackIn.push();
+        matrixStackIn.pushPose();
         matrixStackIn.translate(0.5D, 1.5D, 0.5D);
-        matrixStackIn.rotate(Vector3f.XP.rotationDegrees(180));
-        IVertexBuilder buffer = bufferIn.getBuffer(RenderType.getEntitySolid(this.getTex()));
-        this.getModel().render(matrixStackIn, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
-        matrixStackIn.pop();
+        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180));
+        IVertexBuilder buffer = bufferIn.getBuffer(RenderType.entitySolid(this.getTex()));
+        this.getModel().renderToBuffer(matrixStackIn, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+        matrixStackIn.popPose();
     }
 
     default float getScale() {return 1.0f;}

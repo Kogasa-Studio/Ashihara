@@ -5,17 +5,19 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.common.IForgeShearable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockReed extends DoublePlantBlock implements IForgeShearable
 {
     public BlockReed()
     {
         super
         (
-            Properties.create(Material.TALL_PLANTS)
-            .doesNotBlockMovement()
-            .zeroHardnessAndResistance()
-            .sound(SoundType.PLANT)
-            .notSolid()
+            Properties.of(Material.REPLACEABLE_PLANT)
+            .noCollission()
+            .instabreak()
+            .sound(SoundType.GRASS)
+            .noOcclusion()
         );
     }
 }

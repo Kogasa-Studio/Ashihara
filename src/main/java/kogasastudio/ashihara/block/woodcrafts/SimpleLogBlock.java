@@ -9,15 +9,17 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class SimpleLogBlock extends RotatedPillarBlock
 {
     public SimpleLogBlock()
     {
         super
         (
-            Properties.create(Material.WOOD, (state) ->
-            state.get(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? MaterialColor.ADOBE : MaterialColor.STONE)
-            .hardnessAndResistance(2.0F)
+            Properties.of(Material.WOOD, (state) ->
+            state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? MaterialColor.COLOR_ORANGE : MaterialColor.STONE)
+            .strength(2.0F)
             .sound(SoundType.WOOD)
         );
     }

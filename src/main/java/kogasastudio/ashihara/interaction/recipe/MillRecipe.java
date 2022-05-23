@@ -95,7 +95,7 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
 
         for (int j = 0; j < 4; ++j)
         {
-            ItemStack itemstack = inv.getStackInSlot(j);
+            ItemStack itemstack = inv.getItem(j);
             if (!itemstack.isEmpty()) {inputs.add(itemstack);}
         }
         for (Ingredient ingredient : this.input)
@@ -112,17 +112,17 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
 
     //这个没啥用
     @Override
-    public ItemStack getCraftingResult(RecipeWrapper inv) {return this.output.get(0).copy();}
+    public ItemStack assemble(RecipeWrapper inv) {return this.output.get(0).copy();}
 
     //这个也没啥用
     @Override
-    public ItemStack getRecipeOutput() {return this.output.get(0).copy();}
+    public ItemStack getResultItem() {return this.output.get(0).copy();}
 
     //出结果的
     public NonNullList<ItemStack> getCraftingResult() {return this.output;}
 
     @Override
-    public boolean canFit(int width, int height) {return width * height >= this.input.size();}
+    public boolean canCraftInDimensions(int width, int height) {return width * height >= this.input.size();}
 
     @Override
     public IRecipeType<?> getType() {return TYPE;}
@@ -133,19 +133,19 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<MillRecipe>
     {
         @Override
-        public MillRecipe read(ResourceLocation recipeId, JsonObject json)
+        public MillRecipe fromJson(ResourceLocation recipeId, JsonObject json)
         {
-            final String groupIn = JSONUtils.getString(json, "group", "");
-            final NonNullList<Ingredient> inputIn = readIngredients(JSONUtils.getJsonArray(json, "ingredients"));
+            final String groupIn = JSONUtils.getAsString(json, "group", "");
+            final NonNullList<Ingredient> inputIn = readIngredients(JSONUtils.getAsJsonArray(json, "ingredients"));
             if (inputIn.isEmpty()) {throw new JsonParseException("No ingredients for mill recipe");}
             else if (inputIn.size() > 4) {throw new JsonParseException("Too many ingredients for mill recipe! The max is 4");}
             else
             {
-                final Map<Ingredient, Byte> costsIn = serializeCosts(inputIn, JSONUtils.getJsonArray(json, "costs"));
-                final NonNullList<ItemStack> outputIn = readOutput(JSONUtils.getJsonArray(json, "result", null));
-                final byte roundIn = JSONUtils.getByte(json, "rounds", (byte) 1);
-                final int roundTicksIn = JSONUtils.getInt(json, "roundTicks", 100);
-                final float expIn = JSONUtils.getFloat(json, "experience", 20.0f);
+                final Map<Ingredient, Byte> costsIn = serializeCosts(inputIn, JSONUtils.getAsJsonArray(json, "costs"));
+                final NonNullList<ItemStack> outputIn = readOutput(JSONUtils.getAsJsonArray(json, "result", null));
+                final byte roundIn = JSONUtils.getAsByte(json, "rounds", (byte) 1);
+                final int roundTicksIn = JSONUtils.getAsInt(json, "roundTicks", 100);
+                final float expIn = JSONUtils.getAsFloat(json, "experience", 20.0f);
                 if (json.has("fluids"))
                 {
                     JsonElement fluids = json.get("fluids");
@@ -164,8 +164,8 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
         {
             if (object == null) return FluidStack.EMPTY;
 
-            String fluid = JSONUtils.getString(object, "fluid");
-            int amount = JSONUtils.getInt(object, "amount");
+            String fluid = JSONUtils.getAsString(object, "fluid");
+            int amount = JSONUtils.getAsInt(object, "amount");
 
             CompoundNBT nbt = new CompoundNBT();
             nbt.putString("FluidName", fluid);
@@ -180,8 +180,8 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
 
             for (int i = 0; i < ingredientArray.size(); ++i)
             {
-                Ingredient ingredient = Ingredient.deserialize(ingredientArray.get(i));
-                if (!ingredient.hasNoMatchingItems()) {nonnulllist.add(ingredient);}
+                Ingredient ingredient = Ingredient.fromJson(ingredientArray.get(i));
+                if (!ingredient.isEmpty()) {nonnulllist.add(ingredient);}
             }
 
             return nonnulllist;
@@ -216,19 +216,19 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
         }
 
         @Override
-        public MillRecipe read(ResourceLocation recipeId, PacketBuffer buffer)
+        public MillRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer)
         {
-            String groupIn = buffer.readString(32767);
+            String groupIn = buffer.readUtf(32767);
             Map<Ingredient, Byte> costsIn = new HashMap<>(4);
             NonNullList<Ingredient> inputItemsIn = NonNullList.withSize(4, Ingredient.EMPTY);
             NonNullList<ItemStack> outputItemsIn = NonNullList.withSize(4, EMPTY);
 
             for (int j = 0; j < inputItemsIn.size(); ++j)
             {
-                inputItemsIn.set(j, Ingredient.read(buffer));
-                costsIn.put(Ingredient.read(buffer), buffer.readByteArray()[j]);
+                inputItemsIn.set(j, Ingredient.fromNetwork(buffer));
+                costsIn.put(Ingredient.fromNetwork(buffer), buffer.readByteArray()[j]);
             }
-            CompoundNBT nbt = buffer.readCompoundTag();
+            CompoundNBT nbt = buffer.readNbt();
             if (nbt != null) ItemStackHelper.loadAllItems(nbt, outputItemsIn);
 
             FluidStack inFluid = FluidStack.readFromPacket(buffer);
@@ -241,19 +241,19 @@ public class MillRecipe implements IRecipe<RecipeWrapper>
         }
 
         @Override
-        public void write(PacketBuffer buffer, MillRecipe recipe)
+        public void toNetwork(PacketBuffer buffer, MillRecipe recipe)
         {
-            buffer.writeString(recipe.group);
+            buffer.writeUtf(recipe.group);
             byte[] bytes = new byte[recipe.input.size()];
             int i = 0;
 
             for (Ingredient ingredient : recipe.input)
             {
-                ingredient.write(buffer);
+                ingredient.toNetwork(buffer);
                 bytes[i] = recipe.inputCosts.get(ingredient);
                 i += 1;
             }
-            CompoundNBT nbt = buffer.readCompoundTag();
+            CompoundNBT nbt = buffer.readNbt();
             if (nbt != null) ItemStackHelper.saveAllItems(nbt, recipe.output);
 
             recipe.inputFluid.writeToPacket(buffer);

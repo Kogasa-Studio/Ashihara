@@ -18,67 +18,69 @@ import static kogasastudio.ashihara.block.BlockRegistryHandler.CANDLE;
 import static kogasastudio.ashihara.block.tileentities.TERegistryHandler.CANDLE_TE;
 import static net.minecraft.block.Blocks.AIR;
 
+import net.minecraft.item.Item.Properties;
+
 public class ItemBlockCandle extends BlockItem
 {
-    public ItemBlockCandle() {super(CANDLE.get(), new Properties().group(BUILDING_BLOCKS));}
+    public ItemBlockCandle() {super(CANDLE.get(), new Properties().tab(BUILDING_BLOCKS));}
 
     @Override
-    public ActionResultType tryPlace(BlockItemUseContext context)
+    public ActionResultType place(BlockItemUseContext context)
     {
-        ItemStack stack = context.getItem();
+        ItemStack stack = context.getItemInHand();
         PlayerEntity player = context.getPlayer();
-        Vector3d hitVec = context.getHitVec();
-        World world = context.getWorld();
-        BlockPos pos = context.getPos();
+        Vector3d hitVec = context.getClickLocation();
+        World world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
         BlockState state = world.getBlockState(pos);
-        if (state.matchesBlock(CANDLE.get()))
+        if (state.is(CANDLE.get()))
         {
-            if (state.get(BlockCandle.MULTIPLE))
+            if (state.getValue(BlockCandle.MULTIPLE))
             {
-                TileEntity te = world.getTileEntity(pos);
+                TileEntity te = world.getBlockEntity(pos);
                 if (te != null && te.getType().equals(CANDLE_TE.get()))
                 {
                     CandleTE candle = (CandleTE) te;
-                    if (candle.addCurrentCandle(hitVec.getX() - pos.getX(), hitVec.getZ() - pos.getZ(), world.getRandom()))
+                    if (candle.addCurrentCandle(hitVec.x() - pos.getX(), hitVec.z() - pos.getZ(), world.getRandom()))
                     {
                         if (player != null && !player.isCreative()) stack.shrink(1);
                         return ActionResultType.SUCCESS;
                     }
-                    else return super.tryPlace(context);
+                    else return super.place(context);
                 }
                 else throw new IllegalStateException("the candle doesn't have a correct te wut happened");
             }
             else
             {
-                world.setBlockState(pos, state.with(BlockCandle.MULTIPLE, true));
-                TileEntity te = world.getTileEntity(pos);
+                world.setBlockAndUpdate(pos, state.setValue(BlockCandle.MULTIPLE, true));
+                TileEntity te = world.getBlockEntity(pos);
                 if (te != null && te.getType().equals(CANDLE_TE.get()))
                 {
                     CandleTE candle = (CandleTE) te;
                     candle.init();
-                    if (candle.addCurrentCandle(hitVec.getX() - pos.getX(), hitVec.getZ() - pos.getZ(), world.getRandom()))
+                    if (candle.addCurrentCandle(hitVec.x() - pos.getX(), hitVec.z() - pos.getZ(), world.getRandom()))
                     {
                         if (player != null && !player.isCreative()) stack.shrink(1);
                         return ActionResultType.SUCCESS;
                     }
-                    else return super.tryPlace(context);
+                    else return super.place(context);
                 }
                 else throw new IllegalStateException("te create failed...");
             }
         }
-        else if (state.matchesBlock(AIR) && player != null && player.isSneaking())
+        else if (state.is(AIR) && player != null && player.isShiftKeyDown())
         {
-            world.setBlockState(pos, CANDLE.get().getDefaultState().with(BlockCandle.MULTIPLE, true));
-            TileEntity te = world.getTileEntity(pos);
+            world.setBlockAndUpdate(pos, CANDLE.get().defaultBlockState().setValue(BlockCandle.MULTIPLE, true));
+            TileEntity te = world.getBlockEntity(pos);
             if (te != null && te.getType().equals(CANDLE_TE.get()))
             {
                 CandleTE candle = (CandleTE) te;
-                candle.init(hitVec.getX() - pos.getX(), hitVec.getZ() - pos.getZ());
+                candle.init(hitVec.x() - pos.getX(), hitVec.z() - pos.getZ());
                 if (!player.isCreative()) stack.shrink(1);
                 return ActionResultType.SUCCESS;
             }
             else throw new IllegalStateException("te create failed...");
         }
-        else return super.tryPlace(context);
+        else return super.place(context);
     }
 }

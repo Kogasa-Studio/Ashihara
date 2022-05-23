@@ -25,13 +25,13 @@ public class AshiharaAtlas
     public static void onAtlasGenerate(ModelRegistryEvent event)
     {
         //用反射拿到一个原版字段，用来将我们的小贴图丢进Atlas并把Atlas丢进游戏
-        Set<RenderMaterial> miscMaterials = ObfuscationReflectionHelper.getPrivateValue(ModelBakery.class, null, "field_177602_b");
+        Set<RenderMaterial> miscMaterials = ObfuscationReflectionHelper.getPrivateValue(ModelBakery.class, null, "UNREFERENCED_TEXTURES");
         //纹章
         ArrayList<ResourceLocation> icons = new ArrayList<>
-        (Minecraft.getInstance().getResourceManager().getAllResourceLocations("textures/icons/", s -> s.endsWith(".png")));
+        (Minecraft.getInstance().getResourceManager().listResources("textures/icons/", s -> s.endsWith(".png")));
         //辅助
         ArrayList<ResourceLocation> assistants = new ArrayList<>
-        (Minecraft.getInstance().getResourceManager().getAllResourceLocations("textures/assistants/", s -> s.endsWith(".png")));
+        (Minecraft.getInstance().getResourceManager().listResources("textures/assistants/", s -> s.endsWith(".png")));
         if (miscMaterials != null)
         {
             //添加纹章类贴图

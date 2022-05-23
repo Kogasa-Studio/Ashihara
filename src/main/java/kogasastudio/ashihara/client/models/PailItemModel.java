@@ -19,31 +19,31 @@ public class PailItemModel extends Model
 
 	public PailItemModel()
 	{
-		super(RenderType::getEntitySolid);
+		super(RenderType::entitySolid);
 
-		textureWidth = 64;
-		textureHeight = 64;
+		texWidth = 64;
+		texHeight = 64;
 
 		edges = new ModelRenderer(this);
-		edges.setRotationPoint(-7.5F, 23.5F, 8.5F);
-		edges.setTextureOffset(28, 9).addBox(2.5F, -9.5F, -13.5F, 10.0F, 10.0F, 1.0F, 0.0F, false);
-		edges.setTextureOffset(0, 9).addBox(2.5F, -9.5F, -12.5F, 1.0F, 10.0F, 8.0F, 0.0F, false);
-		edges.setTextureOffset(35, 35).addBox(2.5F, -9.5F, -4.5F, 10.0F, 10.0F, 1.0F, 0.0F, false);
-		edges.setTextureOffset(18, 18).addBox(11.5F, -9.5F, -12.5F, 1.0F, 10.0F, 8.0F, 0.0F, false);
+		edges.setPos(-7.5F, 23.5F, 8.5F);
+		edges.texOffs(28, 9).addBox(2.5F, -9.5F, -13.5F, 10.0F, 10.0F, 1.0F, 0.0F, false);
+		edges.texOffs(0, 9).addBox(2.5F, -9.5F, -12.5F, 1.0F, 10.0F, 8.0F, 0.0F, false);
+		edges.texOffs(35, 35).addBox(2.5F, -9.5F, -4.5F, 10.0F, 10.0F, 1.0F, 0.0F, false);
+		edges.texOffs(18, 18).addBox(11.5F, -9.5F, -12.5F, 1.0F, 10.0F, 8.0F, 0.0F, false);
 
 		handle = new ModelRenderer(this);
-		handle.setRotationPoint(-8.0F, 16.0F, 8.0F);
-		handle.setTextureOffset(0, 9).addBox(12.0F, -8.0F, -9.0F, 1.0F, 6.0F, 2.0F, 0.0F, false);
-		handle.setTextureOffset(0, 0).addBox(3.0F, -8.0F, -9.0F, 1.0F, 6.0F, 2.0F, 0.0F, false);
-		handle.setTextureOffset(10, 10).addBox(4.0F, -7.5F, -8.5F, 8.0F, 1.0F, 1.0F, 0.0F, false);
+		handle.setPos(-8.0F, 16.0F, 8.0F);
+		handle.texOffs(0, 9).addBox(12.0F, -8.0F, -9.0F, 1.0F, 6.0F, 2.0F, 0.0F, false);
+		handle.texOffs(0, 0).addBox(3.0F, -8.0F, -9.0F, 1.0F, 6.0F, 2.0F, 0.0F, false);
+		handle.texOffs(10, 10).addBox(4.0F, -7.5F, -8.5F, 8.0F, 1.0F, 1.0F, 0.0F, false);
 
 		bone = new ModelRenderer(this);
-		bone.setRotationPoint(0.0F, 24.0F, 0.0F);
-		bone.setTextureOffset(0, 0).addBox(-4.0F, -1.5F, -4.0F, 8.0F, 1.0F, 8.0F, 0.0F, false);
+		bone.setPos(0.0F, 24.0F, 0.0F);
+		bone.texOffs(0, 0).addBox(-4.0F, -1.5F, -4.0F, 8.0F, 1.0F, 8.0F, 0.0F, false);
 	}
 
 	@Override
-	public void render(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
+	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
 	{
 		edges.render(matrixStack, buffer, packedLight, packedOverlay);
 		handle.render(matrixStack, buffer, packedLight, packedOverlay);

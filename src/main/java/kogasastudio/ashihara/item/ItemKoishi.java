@@ -26,31 +26,33 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
+import net.minecraft.item.Item.Properties;
+
 public class ItemKoishi extends Item
 {
     public ItemKoishi()
     {
-        super(new Properties().group(ItemGroup.MATERIALS));
+        super(new Properties().tab(ItemGroup.TAB_MATERIALS));
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context)
+    public ActionResultType useOn(ItemUseContext context)
     {
-        ItemStack item = context.getItem();
+        ItemStack item = context.getItemInHand();
         PlayerEntity player = context.getPlayer();
-        BlockPos pos = context.getPos();
-        Direction facing = context.getFace();
-        World worldIn = context.getWorld();
-        TileEntity te = worldIn.getTileEntity(pos);
+        BlockPos pos = context.getClickedPos();
+        Direction facing = context.getClickedFace();
+        World worldIn = context.getLevel();
+        TileEntity te = worldIn.getBlockEntity(pos);
 
-        if (!item.isEmpty() && Objects.requireNonNull(player).canPlayerEdit(pos.offset(facing), facing, item))
+        if (!item.isEmpty() && Objects.requireNonNull(player).mayUseItemAt(pos.relative(facing), facing, item))
         {
             BlockState blockState = worldIn.getBlockState(pos); //测试功能：右击草方块变钻石
             if (blockState.getBlock() == Blocks.GRASS_BLOCK)
             {
-                worldIn.playSound(player, pos, SoundEvents.BLOCK_BAMBOO_HIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                worldIn.setBlockState(pos, Blocks.DIAMOND_BLOCK.getDefaultState());
-                if (!player.abilities.isCreativeMode)
+                worldIn.playSound(player, pos, SoundEvents.BAMBOO_HIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                worldIn.setBlockAndUpdate(pos, Blocks.DIAMOND_BLOCK.defaultBlockState());
+                if (!player.abilities.instabuild)
                 {
                     item.shrink(1);
                 }
@@ -58,19 +60,19 @@ public class ItemKoishi extends Item
             }
             else if (blockState.getBlock() == BlockRegistryHandler.WATER_FIELD.get())
             {
-                worldIn.playSound(player, pos, SoundEvents.BLOCK_BAMBOO_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                worldIn.setBlockState(pos, blockState.with(BlockWaterField.LEVEL, 6));
+                worldIn.playSound(player, pos, SoundEvents.BAMBOO_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                worldIn.setBlockAndUpdate(pos, blockState.setValue(BlockWaterField.LEVEL, 6));
                 return ActionResultType.SUCCESS;
             }
             else if (te != null)
             {
                 CompoundNBT nbt = te.serializeNBT();
-                player.sendMessage(new TranslationTextComponent((worldIn.isRemote() ? "client: " : "server: ") + nbt.toString()), UUID.randomUUID());
+                player.sendMessage(new TranslationTextComponent((worldIn.isClientSide() ? "client: " : "server: ") + nbt.toString()), UUID.randomUUID());
                 return ActionResultType.SUCCESS;
             }
             else
             {
-                Random rand = context.getWorld().getRandom();
+                Random rand = context.getLevel().getRandom();
                 for (int i = 0;i<8;i+=1)
                 {
                     worldIn.addParticle(new GenericParticleData(new Vector3d(0,0,0), 0, ParticleRegistryHandler.SAKURA.get()), (double)pos.getX() + 0.5D, (double)pos.getY() + 2.1D, (double)pos.getZ() + 0.5D, rand.nextFloat() / 2.0F, 0, rand.nextFloat() / 2.0F);

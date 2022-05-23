@@ -21,25 +21,27 @@ import net.minecraft.world.World;
 
 import static net.minecraft.state.properties.BlockStateProperties.HORIZONTAL_AXIS;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockTatami extends Block
 {
     public BlockTatami()
     {
         super
         (
-            Properties.create(Material.BAMBOO_SAPLING)
-            .hardnessAndResistance(0.3F)
+            Properties.of(Material.BAMBOO_SAPLING)
+            .strength(0.3F)
             .sound(SoundType.BAMBOO_SAPLING)
         );
-        this.setDefaultState
+        this.registerDefaultState
         (
-            getStateContainer().getBaseState()
-            .with(LEFT, false)
-            .with(RIGHT, false)
-            .with(XCUT, false)
-            .with(ZCUT, false)
-            .with(LOCKED, false)
-            .with(AXIS, Direction.Axis.X)
+            getStateDefinition().any()
+            .setValue(LEFT, false)
+            .setValue(RIGHT, false)
+            .setValue(XCUT, false)
+            .setValue(ZCUT, false)
+            .setValue(LOCKED, false)
+            .setValue(AXIS, Direction.Axis.X)
         );
     }
 
@@ -55,27 +57,27 @@ public class BlockTatami extends Block
     //随后由multipart模型对其进行模型更新
     private BlockState updateState(BlockState state, World worldIn, BlockPos pos)
     {
-        if (state.matchesBlock(BlockRegistryHandler.TATAMI.get()) && !state.get(LOCKED))
+        if (state.is(BlockRegistryHandler.TATAMI.get()) && !state.getValue(LOCKED))
         {
             BlockState n = worldIn.getBlockState(pos.north());
             BlockState s = worldIn.getBlockState(pos.south());
             BlockState e = worldIn.getBlockState(pos.east());
             BlockState w = worldIn.getBlockState(pos.west());
 
-            boolean isX = state.get(AXIS).equals(Direction.Axis.X);
+            boolean isX = state.getValue(AXIS).equals(Direction.Axis.X);
 
-            state = state.with(LEFT, check(isX ? n : e, state))
-            .with(RIGHT, check(isX ? s : w, state));
+            state = state.setValue(LEFT, check(isX ? n : e, state))
+            .setValue(RIGHT, check(isX ? s : w, state));
         }
         return state;
     }
 
     //检查传入的方块是否是榻榻米且轴与判断源榻榻米方块相同
     private boolean check(BlockState state, BlockState newState)
-    {return state.matchesBlock(BlockRegistryHandler.TATAMI.get()) && state.get(AXIS) == newState.get(AXIS);}
+    {return state.is(BlockRegistryHandler.TATAMI.get()) && state.getValue(AXIS) == newState.getValue(AXIS);}
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(LEFT, RIGHT, XCUT, ZCUT, LOCKED, AXIS);
     }
@@ -84,48 +86,48 @@ public class BlockTatami extends Block
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
     {
         BlockState fromState = worldIn.getBlockState(fromPos);
-        if (fromState.matchesBlock(BlockRegistryHandler.TATAMI.get()) || fromState.matchesBlock(Blocks.AIR))
+        if (fromState.is(BlockRegistryHandler.TATAMI.get()) || fromState.is(Blocks.AIR))
         {
-            worldIn.setBlockState(pos, updateState(state, worldIn, pos));
+            worldIn.setBlockAndUpdate(pos, updateState(state, worldIn, pos));
         }
     }
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        World worldIn = context.getWorld();
-        BlockPos pos = context.getPos();
-        return updateState(this.getDefaultState(), worldIn, pos).with(AXIS, context.getPlacementHorizontalFacing().getAxis());
+        World worldIn = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        return updateState(this.defaultBlockState(), worldIn, pos).setValue(AXIS, context.getHorizontalDirection().getAxis());
     }
 
     //空手shift右键锁定，剪刀右键加中央边缘权重（剪开或合上）
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
-        if (state.matchesBlock(BlockRegistryHandler.TATAMI.get()))
+        if (state.is(BlockRegistryHandler.TATAMI.get()))
         {
-            if (player.getHeldItem(handIn).isEmpty() && player.isSneaking())
+            if (player.getItemInHand(handIn).isEmpty() && player.isShiftKeyDown())
             {
-                worldIn.setBlockState(pos, state.with(LOCKED, !state.get(LOCKED)));
-                worldIn.playSound(player, pos, SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                worldIn.setBlockAndUpdate(pos, state.setValue(LOCKED, !state.getValue(LOCKED)));
+                worldIn.playSound(player, pos, SoundEvents.WOOD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 for(byte b = 0; b < 12; b += 1)
                 {
                     worldIn.addParticle(new GenericParticleData(new Vector3d(0,0,0), 0, ParticleRegistryHandler.RICE.get()), (double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, RANDOM.nextFloat() / 2.0F, 5.0E-5D, RANDOM.nextFloat() / 2.0F);
                 }
                 return ActionResultType.SUCCESS;
             }
-            else if (player.getHeldItem(handIn).getItem() instanceof ShearsItem && !player.isSneaking())
+            else if (player.getItemInHand(handIn).getItem() instanceof ShearsItem && !player.isShiftKeyDown())
             {
-                Direction direction = player.getHorizontalFacing();
+                Direction direction = player.getDirection();
                 if (direction.getAxis().equals(Direction.Axis.X))
                 {
-                    worldIn.setBlockState(pos, state.with(XCUT, !state.get(XCUT)));
-                    worldIn.playSound(player, pos, SoundEvents.BLOCK_BAMBOO_SAPLING_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    worldIn.setBlockAndUpdate(pos, state.setValue(XCUT, !state.getValue(XCUT)));
+                    worldIn.playSound(player, pos, SoundEvents.BAMBOO_SAPLING_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
                 else if (direction.getAxis().equals(Direction.Axis.Z))
                 {
-                    worldIn.setBlockState(pos, state.with(ZCUT, !state.get(ZCUT)));
-                    worldIn.playSound(player, pos, SoundEvents.BLOCK_BAMBOO_SAPLING_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    worldIn.setBlockAndUpdate(pos, state.setValue(ZCUT, !state.getValue(ZCUT)));
+                    worldIn.playSound(player, pos, SoundEvents.BAMBOO_SAPLING_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
                 return ActionResultType.SUCCESS;
             }

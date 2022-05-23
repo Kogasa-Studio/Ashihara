@@ -33,10 +33,10 @@ public class BlockActionHelper
      */
     public static boolean fourWaysNeighborsIncludes(World worldIn, BlockPos pos, Block block)
     {
-        return worldIn.getBlockState(pos.north()).getBlock().matchesBlock(block)
-            || worldIn.getBlockState(pos.east()).getBlock().matchesBlock(block)
-            || worldIn.getBlockState(pos.south()).getBlock().matchesBlock(block)
-            || worldIn.getBlockState(pos.west()).getBlock().matchesBlock(block);
+        return worldIn.getBlockState(pos.north()).getBlock().is(block)
+            || worldIn.getBlockState(pos.east()).getBlock().is(block)
+            || worldIn.getBlockState(pos.south()).getBlock().is(block)
+            || worldIn.getBlockState(pos.west()).getBlock().is(block);
     }
 
     /**
@@ -48,10 +48,10 @@ public class BlockActionHelper
      */
     public static boolean fourWaysBlocksTagged(World worldIn, BlockPos pos, ITag<Block> tag)
     {
-        return worldIn.getBlockState(pos.north()).isIn(tag)
-            || worldIn.getBlockState(pos.east()).isIn(tag)
-            || worldIn.getBlockState(pos.south()).isIn(tag)
-            || worldIn.getBlockState(pos.west()).isIn(tag);
+        return worldIn.getBlockState(pos.north()).is(tag)
+            || worldIn.getBlockState(pos.east()).is(tag)
+            || worldIn.getBlockState(pos.south()).is(tag)
+            || worldIn.getBlockState(pos.west()).is(tag);
     }
 
     /**
@@ -63,20 +63,20 @@ public class BlockActionHelper
      */
     public static boolean fourWaysFluidsTagged(World worldIn, BlockPos pos, ITag<Fluid> fluidTag)
     {
-        return worldIn.getBlockState(pos.north()).getFluidState().isTagged(fluidTag)
-            || worldIn.getBlockState(pos.east()).getFluidState().isTagged(fluidTag)
-            || worldIn.getBlockState(pos.south()).getFluidState().isTagged(fluidTag)
-            || worldIn.getBlockState(pos.west()).getFluidState().isTagged(fluidTag);
+        return worldIn.getBlockState(pos.north()).getFluidState().is(fluidTag)
+            || worldIn.getBlockState(pos.east()).getFluidState().is(fluidTag)
+            || worldIn.getBlockState(pos.south()).getFluidState().is(fluidTag)
+            || worldIn.getBlockState(pos.west()).getFluidState().is(fluidTag);
     }
 
     private static boolean watered(World worldIn, BlockPos pos1)
     {
         boolean flag = false;
         FluidState fluid1 = worldIn.getFluidState(pos1);
-        if (fluid1.getFluid() == Fluids.WATER) {flag = true;}
-        else if (fluid1.getFluid() == Fluids.FLOWING_WATER)
+        if (fluid1.getType() == Fluids.WATER) {flag = true;}
+        else if (fluid1.getType() == Fluids.FLOWING_WATER)
         {
-            if (fluid1.get(LEVEL_1_8) == 8 && fluid1.get(FALLING)) {flag = true;}
+            if (fluid1.getValue(LEVEL_FLOWING) == 8 && fluid1.getValue(FALLING)) {flag = true;}
         }
         return flag;
     }
@@ -88,7 +88,7 @@ public class BlockActionHelper
             || watered(worldIn, pos.east())
             || watered(worldIn, pos.south())
             || watered(worldIn, pos.west())
-            || watered(worldIn, pos.up());
+            || watered(worldIn, pos.above());
     }
 
     /**
@@ -123,13 +123,13 @@ public class BlockActionHelper
     {
         List<BlockPos> list = new LinkedList<>();
 
-        if (worldIn.getFluidState(pos.north()).getFluid() == expected)
+        if (worldIn.getFluidState(pos.north()).getType() == expected)
         {list.add(pos.north());}
-        if (worldIn.getFluidState(pos.east()).getFluid() == expected)
+        if (worldIn.getFluidState(pos.east()).getType() == expected)
         {list.add(pos.east());}
-        if (worldIn.getFluidState(pos.south()).getFluid() == expected)
+        if (worldIn.getFluidState(pos.south()).getType() == expected)
         {list.add(pos.south());}
-        if (worldIn.getFluidState(pos.west()).getFluid() == expected)
+        if (worldIn.getFluidState(pos.west()).getType() == expected)
         {list.add(pos.west());}
         return list;
     }
@@ -142,7 +142,7 @@ public class BlockActionHelper
      */
     public static ToIntFunction<BlockState> getLightValueLit(int lightValue)
     {
-        return (state) -> state.get(LIT) ? lightValue : 1;
+        return (state) -> state.getValue(LIT) ? lightValue : 1;
     }
 
     /**

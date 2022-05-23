@@ -63,8 +63,8 @@ public class MortarScreen extends ContainerScreen<MortarContainer>
     public void tick()
     {
         super.tick();
-        int progressIn = this.container.getArrowHeight();
-        int stepStateCodeIn = this.container.getNextStep();
+        int progressIn = this.menu.getArrowHeight();
+        int stepStateCodeIn = this.menu.getNextStep();
         if (progressIn != this.progress) {this.progress = progressIn;}
         if (stepStateCodeIn != this.stepStateCode) {this.stepStateCode = stepStateCodeIn;}
     }
@@ -74,48 +74,48 @@ public class MortarScreen extends ContainerScreen<MortarContainer>
     {
         renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        renderHoveredTooltip(matrixStack, mouseX, mouseY);
+        renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void renderHoveredTooltip(MatrixStack matrixStack, int x, int y)
+    protected void renderTooltip(MatrixStack matrixStack, int x, int y)
     {
-        super.renderHoveredTooltip(matrixStack, x, y);
-        int i = (this.width - this.xSize) / 2;
-        int j = (this.height - this.ySize) / 2;
-        FluidTank tank = this.container.getTE().getTank().orElse(new FluidTank(0));
+        super.renderTooltip(matrixStack, x, y);
+        int i = (this.width - this.imageWidth) / 2;
+        int j = (this.height - this.imageHeight) / 2;
+        FluidTank tank = this.menu.getTE().getTank().orElse(new FluidTank(0));
 
         RenderHelper.drawFluidToolTip
         (this, matrixStack, x, y, i + 17, j + 13, 16, 64, tank.getFluid(), tank.getCapacity());
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y)
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y)
     {
         renderBackground(matrixStack);
 
         if (this.minecraft == null) return;
 
-        this.minecraft.getTextureManager().bindTexture(GUI);
+        this.minecraft.getTextureManager().bind(GUI);
         MortarToolTypes nextStep = this.getNextStep(this.stepStateCode);
-        int i = (this.width - this.xSize) / 2;
-        int j = (this.height - this.ySize) / 2;
+        int i = (this.width - this.imageWidth) / 2;
+        int j = (this.height - this.imageHeight) / 2;
         blit(matrixStack, i, j, 0, 0, 176, 202, 256, 256);
         blit(matrixStack, i + 126, j + 23, 176, 23, 15, progress);
         blit(matrixStack, i + nextStep.x, j + nextStep.y, nextStep.texX, nextStep.texY, nextStep.width, nextStep.height);
 
-        this.container.getTE().getTank().ifPresent
+        this.menu.getTE().getTank().ifPresent
         (
             tank ->
             {
                 if (!tank.isEmpty())
                 {
-                    matrixStack.push();
+                    matrixStack.pushPose();
                     int capacity = tank.getCapacity();
                     FluidStack fluid = tank.getFluid();
                     int fluidAmount = fluid.getAmount();
                     int displayHeight = (int) (((float) fluidAmount / (float) capacity) * 64);
-                    RenderHelper.renderFluidStackInGUI(matrixStack.getLast().getMatrix(), fluid, 16, displayHeight, i + 21, j + 79);
+                    RenderHelper.renderFluidStackInGUI(matrixStack.last().pose(), fluid, 16, displayHeight, i + 21, j + 79);
                 }
             }
         );

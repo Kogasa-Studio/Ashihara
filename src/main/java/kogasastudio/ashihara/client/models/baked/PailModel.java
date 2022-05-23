@@ -28,19 +28,19 @@ public class PailModel implements IBakedModel
     }
 
     @Override
-    public boolean isAmbientOcclusion() {return this.existingModel.isAmbientOcclusion();}
+    public boolean useAmbientOcclusion() {return this.existingModel.useAmbientOcclusion();}
 
     @Override
     public boolean isGui3d() {return this.existingModel.isGui3d();}
 
     @Override
-    public boolean isSideLit() {return this.existingModel.isSideLit();}
+    public boolean usesBlockLight() {return this.existingModel.usesBlockLight();}
 
     @Override
-    public boolean isBuiltInRenderer() {return true;}
+    public boolean isCustomRenderer() {return true;}
 
     @Override
-    public TextureAtlasSprite getParticleTexture() {return this.existingModel.getParticleTexture();}
+    public TextureAtlasSprite getParticleIcon() {return this.existingModel.getParticleIcon();}
 
     @Override
     public ItemOverrideList getOverrides() {return this.existingModel.getOverrides();}

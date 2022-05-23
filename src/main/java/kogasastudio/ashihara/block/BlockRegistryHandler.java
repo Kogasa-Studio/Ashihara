@@ -24,12 +24,12 @@ public class BlockRegistryHandler {
     public static final RegistryObject<Block> RICE_CROP = BLOCKS.register("rice_crop", BlockRiceCrop::new);
     public static final RegistryObject<Block> DIRT_DEPRESSION = BLOCKS.register("dirt_depression", BlockDirtDepression::new);
     public static final RegistryObject<Block> TETSUSENCHI = BLOCKS.register("tetsusenchi", BlockTetsusenchi::new);
-    public static final RegistryObject<Block> CHERRY_SAPLING = BLOCKS.register("cherry_sapling", () -> new SaplingBlock(new CherryBlossomTree(), AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.PLANT)));
-    public static final RegistryObject<Block> RED_MAPLE_SAPLING = BLOCKS.register("red_maple_sapling", () -> new SaplingBlock(new RedMapleTree(), AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().zeroHardnessAndResistance().sound(SoundType.PLANT)));
+    public static final RegistryObject<Block> CHERRY_SAPLING = BLOCKS.register("cherry_sapling", () -> new SaplingBlock(new CherryBlossomTree(), AbstractBlock.Properties.of(Material.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
+    public static final RegistryObject<Block> RED_MAPLE_SAPLING = BLOCKS.register("red_maple_sapling", () -> new SaplingBlock(new RedMapleTree(), AbstractBlock.Properties.of(Material.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
     public static final RegistryObject<Block> MORTAR = BLOCKS.register("mortar", BlockMortar::new);
     public static final RegistryObject<Block> IMMATURE_RICE = BLOCKS.register("immature_rice", BlockImmatureRiceCrop::new);
-    public static final RegistryObject<Block> POTTED_CHERRY_SAPLING = BLOCKS.register("potted_cherry_sapling", () -> new FlowerPotBlock(BlockRegistryHandler.CHERRY_SAPLING.get(), AbstractBlock.Properties.create(Material.MISCELLANEOUS).zeroHardnessAndResistance().notSolid()));
-    public static final RegistryObject<Block> POTTED_RED_MAPLE_SAPLING = BLOCKS.register("potted_red_maple_sapling", () -> new FlowerPotBlock(BlockRegistryHandler.RED_MAPLE_SAPLING.get(), AbstractBlock.Properties.create(Material.MISCELLANEOUS).zeroHardnessAndResistance().notSolid()));
+    public static final RegistryObject<Block> POTTED_CHERRY_SAPLING = BLOCKS.register("potted_cherry_sapling", () -> new FlowerPotBlock(BlockRegistryHandler.CHERRY_SAPLING.get(), AbstractBlock.Properties.of(Material.DECORATION).instabreak().noOcclusion()));
+    public static final RegistryObject<Block> POTTED_RED_MAPLE_SAPLING = BLOCKS.register("potted_red_maple_sapling", () -> new FlowerPotBlock(BlockRegistryHandler.RED_MAPLE_SAPLING.get(), AbstractBlock.Properties.of(Material.DECORATION).instabreak().noOcclusion()));
     public static final RegistryObject<Block> CHRYSANTHEMUM = BLOCKS.register("chrysanthemum", BlockChrysanthemumBush::new);
     public static final RegistryObject<Block> REED = BLOCKS.register("reed", BlockReed::new);
     public static final RegistryObject<Block> SHORTER_REED = BLOCKS.register("shorter_reed", BlockShorterReed::new);
@@ -54,9 +54,9 @@ public class BlockRegistryHandler {
     public static final RegistryObject<Block> OAK_SHOUJI_BEAM_MUD = BLOCKS.register("oak_shouji_beam_mud", BlockShoujiBeam::new);
 
     //作物
-    public static final RegistryObject<Block> SOY_BEANS = BLOCKS.register("soy_beans", () -> new AbstractCropAge7Pickable(7, 3) {@Override protected IItemProvider getSeedsItem() {return ItemRegistryHandler.SOY_BEAN.get();}});
-    public static final RegistryObject<Block> SWEET_POTATOES = BLOCKS.register("sweet_potatoes", () -> new AbstractCropAge7() {@Override protected IItemProvider getSeedsItem() {return ItemRegistryHandler.SWEET_POTATO.get();}});
-    public static final RegistryObject<Block> CUCUMBERS = BLOCKS.register("cucumbers", () -> new BlockCucumberCrop() {@Override protected IItemProvider getSeedsItem() {return ItemRegistryHandler.CUCUMBER.get();}});
+    public static final RegistryObject<Block> SOY_BEANS = BLOCKS.register("soy_beans", () -> new AbstractCropAge7Pickable(7, 3) {@Override protected IItemProvider getBaseSeedId() {return ItemRegistryHandler.SOY_BEAN.get();}});
+    public static final RegistryObject<Block> SWEET_POTATOES = BLOCKS.register("sweet_potatoes", () -> new AbstractCropAge7() {@Override protected IItemProvider getBaseSeedId() {return ItemRegistryHandler.SWEET_POTATO.get();}});
+    public static final RegistryObject<Block> CUCUMBERS = BLOCKS.register("cucumbers", () -> new BlockCucumberCrop() {@Override protected IItemProvider getBaseSeedId() {return ItemRegistryHandler.CUCUMBER.get();}});
 
     //木制品
     public static final RegistryObject<Block> CHERRY_LOG = BLOCKS.register("cherry_log", () -> new StrippableLogBlock() {@Override public Block getStrippedBlock() {return STRIPPED_CHERRY_LOG.get();}});
@@ -95,7 +95,7 @@ public class BlockRegistryHandler {
     public static final RegistryObject<Block> RED_KAWAKI = BLOCKS.register("red_kawaki", () -> new BlockKawaki(AshiharaWoodTypes.RED));
 
     public static final RegistryObject<FlowingFluidBlock> SOY_MILK_BLOCK = BLOCKS.register("soy_milk", () ->
-        new FlowingFluidBlock(FluidRegistryHandler.SOY_MILK, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()));
+        new FlowingFluidBlock(FluidRegistryHandler.SOY_MILK, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
     public static final RegistryObject<FlowingFluidBlock> OIL_BLOCK = BLOCKS.register("oil", () ->
-        new FlowingFluidBlock(FluidRegistryHandler.OIL, Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()));
+        new FlowingFluidBlock(FluidRegistryHandler.OIL, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
 }

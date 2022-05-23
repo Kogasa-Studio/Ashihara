@@ -20,6 +20,8 @@ import java.util.Random;
 import static kogasastudio.ashihara.fluid.FluidRegistryHandler.SOY_MILK;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
+import net.minecraft.item.Item.Properties;
+
 public class ItemMinatoAqua extends Item
 {
     public ItemMinatoAqua()
@@ -27,22 +29,22 @@ public class ItemMinatoAqua extends Item
         super
         (
             new Properties()
-            .group(ItemGroup.MATERIALS)
-            .food(new Food.Builder().hunger(8).build())
+            .tab(ItemGroup.TAB_MATERIALS)
+            .food(new Food.Builder().nutrition(8).build())
         );
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context)
+    public ActionResultType useOn(ItemUseContext context)
     {
-        World world = context.getWorld();
-        BlockPos pos = context.getPos();
-        TileEntity te = world.getTileEntity(pos);
+        World world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        TileEntity te = world.getBlockEntity(pos);
         PlayerEntity playerIn = context.getPlayer();
-        ItemStack item = context.getItem();
-        Direction direction = context.getFace();
+        ItemStack item = context.getItemInHand();
+        Direction direction = context.getClickedFace();
         Tree tree = new CherryBlossomTree();
-        Random rand = context.getWorld().getRandom();
+        Random rand = context.getLevel().getRandom();
 
         if (te instanceof IFluidHandler)
         {
@@ -54,14 +56,14 @@ public class ItemMinatoAqua extends Item
                     else tank.fill(new FluidStack(SOY_MILK.get(), 100), EXECUTE);
                 }
             );
-            te.markDirty();
+            te.setChanged();
             return ActionResultType.SUCCESS;
         }
 
-        if (!item.isEmpty() && Objects.requireNonNull(playerIn).canPlayerEdit(pos.offset(direction), direction, item) && !world.isRemote())
+        if (!item.isEmpty() && Objects.requireNonNull(playerIn).mayUseItemAt(pos.relative(direction), direction, item) && !world.isClientSide())
         {
             ServerWorld worldIn = (ServerWorld)world;
-            tree.attemptGrowTree(worldIn, worldIn.getChunkProvider().getChunkGenerator(), pos, BlockRegistryHandler.CHERRY_LOG.get().getDefaultState(), rand);
+            tree.growTree(worldIn, worldIn.getChunkSource().getGenerator(), pos, BlockRegistryHandler.CHERRY_LOG.get().defaultBlockState(), rand);
             return ActionResultType.SUCCESS;
         }
         else return ActionResultType.PASS;

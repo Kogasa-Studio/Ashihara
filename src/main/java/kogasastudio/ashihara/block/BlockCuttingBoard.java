@@ -22,33 +22,35 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockCuttingBoard extends Block
 {
     public BlockCuttingBoard()
     {
         super
         (
-            Properties.create(Material.WOOD)
+            Properties.of(Material.WOOD)
             .sound(SoundType.WOOD)
-            .hardnessAndResistance(0.4F)
+            .strength(0.4F)
         );
     }
 
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {builder.add(FACING);}
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {builder.add(FACING);}
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
-        TileEntity teIn = worldIn.getTileEntity(pos);
+        TileEntity teIn = worldIn.getBlockEntity(pos);
         if (teIn == null || !teIn.getType().equals(TERegistryHandler.CUTTING_BOARD_TE.get())) return ActionResultType.FAIL;
         CuttingBoardTE te = (CuttingBoardTE) teIn;
         if (te.handleInteraction(player, handIn, worldIn, pos)) return ActionResultType.SUCCESS;
@@ -58,10 +60,10 @@ public class BlockCuttingBoard extends Block
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
     {
-        VoxelShape x = makeCuboidShape(2.0d, 0.0d, 1.0d, 14.0d, 1.0d, 15.0d);
-        VoxelShape z = makeCuboidShape(1.0d, 0.0d, 2.0d, 15.0d, 1.0d, 14.0d);
+        VoxelShape x = box(2.0d, 0.0d, 1.0d, 14.0d, 1.0d, 15.0d);
+        VoxelShape z = box(1.0d, 0.0d, 2.0d, 15.0d, 1.0d, 14.0d);
 
-        return state.get(FACING).getAxis().equals(Direction.Axis.X) ? x : z;
+        return state.getValue(FACING).getAxis().equals(Direction.Axis.X) ? x : z;
     }
 
     @Override

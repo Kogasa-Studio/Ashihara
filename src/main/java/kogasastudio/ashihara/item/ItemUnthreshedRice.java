@@ -16,24 +16,26 @@ import java.util.Objects;
 
 import static kogasastudio.ashihara.Ashihara.ASHIHARA;
 
+import net.minecraft.item.Item.Properties;
+
 public class ItemUnthreshedRice extends Item
 {
-    public ItemUnthreshedRice(){super(new Properties().group(ASHIHARA));}
+    public ItemUnthreshedRice(){super(new Properties().tab(ASHIHARA));}
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context)
+    public ActionResultType useOn(ItemUseContext context)
     {
-        ItemStack item = context.getItem();
+        ItemStack item = context.getItemInHand();
         PlayerEntity player = context.getPlayer();
-        World worldIn = context.getWorld();
-        BlockPos pos = context.getPos().down();
-        Direction facing = context.getFace();
-        if (!item.isEmpty() && Objects.requireNonNull(player).canPlayerEdit(pos.offset(facing), facing, item))
+        World worldIn = context.getLevel();
+        BlockPos pos = context.getClickedPos().below();
+        Direction facing = context.getClickedFace();
+        if (!item.isEmpty() && Objects.requireNonNull(player).mayUseItemAt(pos.relative(facing), facing, item))
         {
-            BlockState state = worldIn.getBlockState(pos.up());
-            if (state.getBlock() == Blocks.FARMLAND && worldIn.getBlockState(pos.up(2)).getBlock() == Blocks.AIR)
+            BlockState state = worldIn.getBlockState(pos.above());
+            if (state.getBlock() == Blocks.FARMLAND && worldIn.getBlockState(pos.above(2)).getBlock() == Blocks.AIR)
             {
-                worldIn.setBlockState(pos.up(2), BlockRegistryHandler.IMMATURE_RICE.get().getDefaultState());
+                worldIn.setBlockAndUpdate(pos.above(2), BlockRegistryHandler.IMMATURE_RICE.get().defaultBlockState());
                 if (!player.isCreative()) {item.shrink(1);}
                 return ActionResultType.SUCCESS;
             }

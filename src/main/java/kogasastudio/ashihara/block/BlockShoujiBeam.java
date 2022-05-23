@@ -12,14 +12,16 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IStringSerializable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockShoujiBeam extends Block implements IVariable<AshiharaWoodTypes>
 {
     public BlockShoujiBeam()
     {
         super
         (
-            Properties.create(Material.WOOD)
-            .hardnessAndResistance(0.3F)
+            Properties.of(Material.WOOD)
+            .strength(0.3F)
             .sound(SoundType.WOOD)
         );
     }
@@ -34,7 +36,7 @@ public class BlockShoujiBeam extends Block implements IVariable<AshiharaWoodType
     public static final BooleanProperty BACK = BooleanProperty.create("back");
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(TOP, UPPER, LOWER, BOTTOM, AXIS, FRONT, BACK);
     }
@@ -57,6 +59,6 @@ public class BlockShoujiBeam extends Block implements IVariable<AshiharaWoodType
         FillType(String nameIn) {this.name = nameIn;}
 
         @Override
-        public String getString() {return this.name;}
+        public String getSerializedName() {return this.name;}
     }
 }

@@ -48,7 +48,7 @@ public class CuttingBoardRecipe implements IRecipe<RecipeWrapper>
     public String getInfo()
     {
         return
-        "\n{\n    input: " + Arrays.toString(this.input.getMatchingStacks())
+        "\n{\n    input: " + Arrays.toString(this.input.getItems())
         + "\n    output: " + this.output.toString()
         + "\n    id: " + this.id.toString()
         + "\n    type: " + this.type.getName()
@@ -61,7 +61,7 @@ public class CuttingBoardRecipe implements IRecipe<RecipeWrapper>
         ArrayList<Ingredient> contained = new ArrayList<>();
         contained.add(this.input);
         ArrayList<ItemStack> list = new ArrayList<>();
-        list.add(inv.getStackInSlot(0));
+        list.add(inv.getItem(0));
         boolean b = RecipeMatcher.findMatches(list, contained) != null;
 //        LOGGER_MAIN.info
 //        (
@@ -74,16 +74,16 @@ public class CuttingBoardRecipe implements IRecipe<RecipeWrapper>
     }
 
     @Override
-    public boolean canFit(int width, int height) {return width * height >= 1;}
+    public boolean canCraftInDimensions(int width, int height) {return width * height >= 1;}
 
     @Override
-    public NonNullList<Ingredient> getIngredients() {return NonNullList.from(this.input);}
+    public NonNullList<Ingredient> getIngredients() {return NonNullList.of(this.input);}
 
     @Override
-    public ItemStack getCraftingResult(RecipeWrapper inv) {return this.output.get(0);}
+    public ItemStack assemble(RecipeWrapper inv) {return this.output.get(0);}
 
     @Override
-    public ItemStack getRecipeOutput() {return this.output.get(0);}
+    public ItemStack getResultItem() {return this.output.get(0);}
 
     public NonNullList<ItemStack> getOutput() {return this.output;}
 
@@ -101,10 +101,10 @@ public class CuttingBoardRecipe implements IRecipe<RecipeWrapper>
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CuttingBoardRecipe>
     {
         @Override
-        public CuttingBoardRecipe read(ResourceLocation recipeId, JsonObject json)
+        public CuttingBoardRecipe fromJson(ResourceLocation recipeId, JsonObject json)
         {
-            final Ingredient input = Ingredient.deserialize(json.get("ingredient"));
-            if (input.hasNoMatchingItems()) throw new JsonParseException("No ingredient provided!");
+            final Ingredient input = Ingredient.fromJson(json.get("ingredient"));
+            if (input.isEmpty()) throw new JsonParseException("No ingredient provided!");
             final NonNullList<ItemStack> output = readOutput(json.getAsJsonArray("result"));
             if (output.isEmpty()) throw new JsonParseException("No output items!");
             final CuttingBoardToolType type = CuttingBoardToolType.nameMatches(json.get("tool").getAsString());
@@ -126,28 +126,28 @@ public class CuttingBoardRecipe implements IRecipe<RecipeWrapper>
         }
 
         @Override
-        public CuttingBoardRecipe read(ResourceLocation recipeId, PacketBuffer buffer)
+        public CuttingBoardRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer)
         {
-            Ingredient input = Ingredient.read(buffer);
-            CompoundNBT nbt = buffer.readCompoundTag();
+            Ingredient input = Ingredient.fromNetwork(buffer);
+            CompoundNBT nbt = buffer.readNbt();
             NonNullList<ItemStack> output = NonNullList.create();
             if (nbt != null)
             {
                 output = NonNullList.withSize(nbt.getList("Items", 10).size(), ItemStack.EMPTY);
                 ItemStackHelper.loadAllItems(nbt, output);
             }
-            CuttingBoardToolType type = CuttingBoardToolType.nameMatches(buffer.readString());
+            CuttingBoardToolType type = CuttingBoardToolType.nameMatches(buffer.readUtf());
 
             return new CuttingBoardRecipe(recipeId, input, output, type);
         }
 
         @Override
-        public void write(PacketBuffer buffer, CuttingBoardRecipe recipe)
+        public void toNetwork(PacketBuffer buffer, CuttingBoardRecipe recipe)
         {
-            recipe.input.write(buffer);
-            CompoundNBT nbt = buffer.readCompoundTag();
+            recipe.input.toNetwork(buffer);
+            CompoundNBT nbt = buffer.readNbt();
             if (nbt != null) ItemStackHelper.saveAllItems(nbt, recipe.output);
-            buffer.writeString(recipe.type.getName());
+            buffer.writeUtf(recipe.type.getName());
         }
     }
 }

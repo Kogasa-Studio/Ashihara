@@ -24,72 +24,74 @@ import static kogasastudio.ashihara.block.BlockAdvancedFence.*;
 import static kogasastudio.ashihara.utils.AshiharaTags.ADVANCED_FENCES;
 import static net.minecraft.state.properties.BlockStateProperties.HORIZONTAL_AXIS;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockFenceDecoration extends Block
 {
     public BlockFenceDecoration()
     {
         super
         (
-            Properties.create(Material.IRON, MaterialColor.GOLD)
-            .hardnessAndResistance(0.2F)
+            Properties.of(Material.METAL, MaterialColor.GOLD)
+            .strength(0.2F)
             .sound(SoundType.LANTERN)
-            .notSolid()
+            .noOcclusion()
         );
-        this.setDefaultState(this.getStateContainer().getBaseState().with(ORB, false));
+        this.registerDefaultState(this.getStateDefinition().any().setValue(ORB, false));
     }
 
     public static final EnumProperty<Direction.Axis> AXIS = HORIZONTAL_AXIS;
     public static final BooleanProperty ORB = BooleanProperty.create("orb");
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(AXIS, ORB);
     }
 
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
+    public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos)
     {
-        return worldIn.getBlockState(pos.down()).isIn(ADVANCED_FENCES);
+        return worldIn.getBlockState(pos.below()).is(ADVANCED_FENCES);
     }
 
     @Override
-    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
     {
-        return !this.isValidPosition(stateIn, worldIn, currentPos) ? Blocks.AIR.getDefaultState()
-                : super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+        return !this.canSurvive(stateIn, worldIn, currentPos) ? Blocks.AIR.defaultBlockState()
+                : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
     @Override
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
     {
-        BlockState fence = worldIn.getBlockState(pos.down());
+        BlockState fence = worldIn.getBlockState(pos.below());
 
-        if (!this.isValidPosition(state, worldIn, pos)) return;
+        if (!this.canSurvive(state, worldIn, pos)) return;
 
-        if (fence.get(COLUMN).equals(BlockAdvancedFence.ColumnType.CORE))
+        if (fence.getValue(COLUMN).equals(BlockAdvancedFence.ColumnType.CORE))
         {
-            worldIn.setBlockState(pos, state.with(ORB, true));
+            worldIn.setBlockAndUpdate(pos, state.setValue(ORB, true));
         }
         else
         {
-            if (fence.get(NORTH) && fence.get(SOUTH)) worldIn.setBlockState(pos, state.with(AXIS, Direction.Axis.Z));
-            else if (fence.get(EAST) && fence.get(WEST)) worldIn.setBlockState(pos, state.with(AXIS, Direction.Axis.X));
+            if (fence.getValue(NORTH) && fence.getValue(SOUTH)) worldIn.setBlockAndUpdate(pos, state.setValue(AXIS, Direction.Axis.Z));
+            else if (fence.getValue(EAST) && fence.getValue(WEST)) worldIn.setBlockAndUpdate(pos, state.setValue(AXIS, Direction.Axis.X));
         }
     }
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
     {
-        VoxelShape x = makeCuboidShape(3.5d, -0.1d, 6.5d, 12.5d, -0.95d, 9.5d);
-        VoxelShape z = makeCuboidShape(6.5d, -0.1d, 3.5d, 9.5d, -0.95d, 12.5d);
+        VoxelShape x = box(3.5d, -0.1d, 6.5d, 12.5d, -0.95d, 9.5d);
+        VoxelShape z = box(6.5d, -0.1d, 3.5d, 9.5d, -0.95d, 12.5d);
 
-        VoxelShape orb = makeCuboidShape(5.5d, -1.0d, 5.5d, 10.5d, 9.5d, 10.5d);
+        VoxelShape orb = box(5.5d, -1.0d, 5.5d, 10.5d, 9.5d, 10.5d);
 
-        if (state.get(ORB)) return orb;
-        else return state.get(AXIS).equals(Direction.Axis.X) ? x : z;
+        if (state.getValue(ORB)) return orb;
+        else return state.getValue(AXIS).equals(Direction.Axis.X) ? x : z;
     }
 
     @Override
-    public ItemStack getItem(IBlockReader worldIn, BlockPos pos, BlockState state) {return new ItemStack(Items.GOLD_INGOT);}
+    public ItemStack getCloneItemStack(IBlockReader worldIn, BlockPos pos, BlockState state) {return new ItemStack(Items.GOLD_INGOT);}
 }

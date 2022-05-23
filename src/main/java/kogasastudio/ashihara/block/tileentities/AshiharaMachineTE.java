@@ -14,16 +14,16 @@ public class AshiharaMachineTE extends TileEntity
     public AshiharaMachineTE(TileEntityType<?> type) {super(type);}
 
     @Override
-    public CompoundNBT getUpdateTag() {return this.write(new CompoundNBT());}
+    public CompoundNBT getUpdateTag() {return this.save(new CompoundNBT());}
 
     @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT tag) {this.read(state, tag);}
+    public void handleUpdateTag(BlockState state, CompoundNBT tag) {this.load(state, tag);}
 
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket()
-    {return new SUpdateTileEntityPacket(this.pos, -1, this.write(new CompoundNBT()));}
+    {return new SUpdateTileEntityPacket(this.worldPosition, -1, this.save(new CompoundNBT()));}
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {this.read(this.getBlockState(), pkt.getNbtCompound());}
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {this.load(this.getBlockState(), pkt.getTag());}
 }

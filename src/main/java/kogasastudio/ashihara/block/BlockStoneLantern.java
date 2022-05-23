@@ -31,27 +31,29 @@ import java.util.Random;
 import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 import static net.minecraft.item.Items.GLASS_PANE;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockStoneLantern extends BlockDoubleLantern
 {
     public BlockStoneLantern()
     {
         super
         (
-            Properties.create(Material.ROCK)
-            .hardnessAndResistance(4.0F)
+            Properties.of(Material.STONE)
+            .strength(4.0F)
             .sound(SoundType.STONE)
-            .setLightLevel(getLightValueLit(15))
+            .lightLevel(getLightValueLit(15))
         );
-        this.setDefaultState(this.getDefaultState().with(SEALED, false).with(MOSSY, false));
+        this.registerDefaultState(this.defaultBlockState().setValue(SEALED, false).setValue(MOSSY, false));
     }
 
     public static final BooleanProperty SEALED = BooleanProperty.create("sealed");
     public static final BooleanProperty MOSSY = BooleanProperty.create("mossy");
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
-        super.fillStateContainer(builder);
+        super.createBlockStateDefinition(builder);
         builder.add(SEALED, MOSSY);
     }
 
@@ -59,7 +61,7 @@ public class BlockStoneLantern extends BlockDoubleLantern
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
     {
-        if (stateIn.get(LIT) && stateIn.get(HALF) == DoubleBlockHalf.UPPER)
+        if (stateIn.getValue(LIT) && stateIn.getValue(HALF) == DoubleBlockHalf.UPPER)
         {
             double d0 = (double)pos.getX() + 0.5D;
             double d1 = (double)pos.getY() + 0.125D;
@@ -71,59 +73,59 @@ public class BlockStoneLantern extends BlockDoubleLantern
     @Override
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
     {
-        DoubleBlockHalf doubleblockhalf = state.get(HALF);
+        DoubleBlockHalf doubleblockhalf = state.getValue(HALF);
         if (doubleblockhalf == DoubleBlockHalf.UPPER)
         {
-            BlockPos blockpos = pos.down();
+            BlockPos blockpos = pos.below();
             BlockState blockstate = worldIn.getBlockState(blockpos);
-            if (blockstate.getBlock() != state.getBlock() || blockstate.get(HALF) != DoubleBlockHalf.LOWER)
+            if (blockstate.getBlock() != state.getBlock() || blockstate.getValue(HALF) != DoubleBlockHalf.LOWER)
             {
-                worldIn.setBlockState(pos, state.get(WATERLOGGED) ? Blocks.WATER.getDefaultState() : Blocks.AIR.getDefaultState(), 35);
+                worldIn.setBlock(pos, state.getValue(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState(), 35);
             }
-            else if (state.get(LIT) && state.get(WATERLOGGED) && !state.get(SEALED))
+            else if (state.getValue(LIT) && state.getValue(WATERLOGGED) && !state.getValue(SEALED))
             {
-                worldIn.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                worldIn.setBlockState(pos, state.with(LIT, false));
+                worldIn.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                worldIn.setBlockAndUpdate(pos, state.setValue(LIT, false));
             }
         }
         else if (doubleblockhalf == DoubleBlockHalf.LOWER)
         {
-            BlockPos blockpos = pos.up();
+            BlockPos blockpos = pos.above();
             BlockState blockstate = worldIn.getBlockState(blockpos);
-            if (blockstate.getBlock() != state.getBlock() || blockstate.get(HALF) != DoubleBlockHalf.UPPER)
+            if (blockstate.getBlock() != state.getBlock() || blockstate.getValue(HALF) != DoubleBlockHalf.UPPER)
             {
-                worldIn.setBlockState(pos, state.get(WATERLOGGED) ? Blocks.WATER.getDefaultState() : Blocks.AIR.getDefaultState(), 35);
+                worldIn.setBlock(pos, state.getValue(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState(), 35);
             }
         }
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
-        if (player.getHeldItem(handIn).getItem() == Items.AIR && state.get(HALF) == DoubleBlockHalf.UPPER)
+        if (player.getItemInHand(handIn).getItem() == Items.AIR && state.getValue(HALF) == DoubleBlockHalf.UPPER)
         {
-            if (player.isSneaking() && state.get(SEALED))
+            if (player.isShiftKeyDown() && state.getValue(SEALED))
             {
-                worldIn.playSound(player, pos, SoundEvents.BLOCK_GLASS_HIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                worldIn.setBlockState(pos, state.with(SEALED, false));
-                if (!player.isCreative()) player.setHeldItem(handIn, new ItemStack(GLASS_PANE));
+                worldIn.playSound(player, pos, SoundEvents.GLASS_HIT, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                worldIn.setBlockAndUpdate(pos, state.setValue(SEALED, false));
+                if (!player.isCreative()) player.setItemInHand(handIn, new ItemStack(GLASS_PANE));
                 return ActionResultType.SUCCESS;
             }
-            else if (!state.get(WATERLOGGED) || state.get(SEALED))
+            else if (!state.getValue(WATERLOGGED) || state.getValue(SEALED))
             {
                 Random random = worldIn.getRandom();
-                Boolean instantState = worldIn.getBlockState(pos).get(LIT);
-                worldIn.playSound(player, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
-                worldIn.setBlockState(pos, state.with(LIT, !instantState));
+                Boolean instantState = worldIn.getBlockState(pos).getValue(LIT);
+                worldIn.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
+                worldIn.setBlockAndUpdate(pos, state.setValue(LIT, !instantState));
                 return ActionResultType.SUCCESS;
             }
             else return ActionResultType.PASS;
         }
-        else if (player.getHeldItem(handIn).getItem().equals(GLASS_PANE) && state.get(HALF).equals(DoubleBlockHalf.UPPER) && !state.get(SEALED))
+        else if (player.getItemInHand(handIn).getItem().equals(GLASS_PANE) && state.getValue(HALF).equals(DoubleBlockHalf.UPPER) && !state.getValue(SEALED))
         {
-            worldIn.playSound(player, pos, SoundEvents.BLOCK_GLASS_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            worldIn.setBlockState(pos, state.with(SEALED, true));
-            if (!player.isCreative()) player.getHeldItem(handIn).shrink(1);
+            worldIn.playSound(player, pos, SoundEvents.GLASS_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            worldIn.setBlockAndUpdate(pos, state.setValue(SEALED, true));
+            if (!player.isCreative()) player.getItemInHand(handIn).shrink(1);
             return ActionResultType.SUCCESS;
         }
         else return ActionResultType.PASS;
@@ -132,28 +134,28 @@ public class BlockStoneLantern extends BlockDoubleLantern
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
     {
-        VoxelShape v1 = Block.makeCuboidShape(2.0d, 0.0d, 2.0d, 14.0d, 8.0d, 14.0d);
-        VoxelShape v2 = Block.makeCuboidShape(3.0d, 8.0d, 3.0d, 13.0d, 16.0d, 13.0d);
+        VoxelShape v1 = Block.box(2.0d, 0.0d, 2.0d, 14.0d, 8.0d, 14.0d);
+        VoxelShape v2 = Block.box(3.0d, 8.0d, 3.0d, 13.0d, 16.0d, 13.0d);
         VoxelShape LOWER = VoxelShapes.or(v1, v2);
-        VoxelShape v3 = Block.makeCuboidShape(5.0d, 0.0d, 5.0d, 11.0d, 5.0d, 11.0d);
-        VoxelShape v4 = Block.makeCuboidShape(2.0d, 5.0d, 2.0d, 14.0d, 11.25d, 14.0d);
-        VoxelShape v5 = Block.makeCuboidShape(7.0d, 11.25d, 7.0d, 9.0d, 13.25d, 9.0d);
+        VoxelShape v3 = Block.box(5.0d, 0.0d, 5.0d, 11.0d, 5.0d, 11.0d);
+        VoxelShape v4 = Block.box(2.0d, 5.0d, 2.0d, 14.0d, 11.25d, 14.0d);
+        VoxelShape v5 = Block.box(7.0d, 11.25d, 7.0d, 9.0d, 13.25d, 9.0d);
         VoxelShape UPPER = VoxelShapes.or(v3, v4, v5);
-        if (state.get(HALF) == DoubleBlockHalf.LOWER) {return LOWER;}
+        if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {return LOWER;}
         else {return UPPER;}
     }
 
     @Override
-    public void fillWithRain(World worldIn, BlockPos pos)
+    public void handleRain(World worldIn, BlockPos pos)
     {
         BlockState state = worldIn.getBlockState(pos);
-        if (!state.matchesBlock(BlockRegistryHandler.STONE_LANTERN.get())) return;
+        if (!state.is(BlockRegistryHandler.STONE_LANTERN.get())) return;
         Random random = worldIn.getRandom();
         if (random.nextInt(10) <= 5)
         {
-            BlockPos offset = state.get(HALF).equals(DoubleBlockHalf.LOWER) ? pos.up() : pos.down();
-            worldIn.setBlockState(pos, worldIn.getBlockState(pos).with(MOSSY, true));
-            worldIn.setBlockState(offset, worldIn.getBlockState(offset).with(MOSSY, true));
+            BlockPos offset = state.getValue(HALF).equals(DoubleBlockHalf.LOWER) ? pos.above() : pos.below();
+            worldIn.setBlockAndUpdate(pos, worldIn.getBlockState(pos).setValue(MOSSY, true));
+            worldIn.setBlockAndUpdate(offset, worldIn.getBlockState(offset).setValue(MOSSY, true));
         }
     }
 }
