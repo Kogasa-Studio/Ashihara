@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -35,7 +36,9 @@ public class ItemDisplayPos
         this.slot = slotIn;
         this.range = rangeIn;
         this.facing = facingIn;
-        if (posIn.length != 3) posIn = Arrays.copyOfRange(posIn, 0, 2);
+        if (posIn.length != 3) {
+            posIn = Arrays.copyOfRange(posIn, 0, 2);
+        }
         this.pos = posIn;
     }
 
@@ -62,14 +65,15 @@ public class ItemDisplayPos
     public void render(PoseStack stackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
     {
         stackIn.pushPose();
-        if (this.getItemCustomModel() != null) this.getItemCustomModel().render(stackIn, bufferIn, combinedLightIn, combinedOverlayIn, this.getDisplayStack().getCount());
-        else if (!this.getDisplayStack().isEmpty())
+        if (this.getItemCustomModel() != null) {
+            this.getItemCustomModel().render(stackIn, bufferIn, combinedLightIn, combinedOverlayIn, this.getDisplayStack().getCount());
+        } else if (!this.getDisplayStack().isEmpty())
         {
             float[] translation = this.getTranslation();
             float scale = this.getScale();
             ItemStack stack = this.getDisplayStack();
             Direction facing = this.getFacing();
-            boolean isBlock = stack.getItem() instanceof BlockItem && !(stack.getItem() instanceof BlockNamedItem);
+            boolean isBlock = stack.getItem() instanceof BlockItem && !(stack.getItem() instanceof ItemNameBlockItem);
 
 //            float tHeight = isBlock ? 3.0f : 1.5f;
             stackIn.translate(XTP(translation[0]), XTP(translation[1]), XTP(translation[2]));
@@ -89,7 +93,7 @@ public class ItemDisplayPos
                 if (i != 0 ) {
                     stackIn.translate(XTP(0.0f), XTP(isBlock ? (1.0f / scale) * 4.0f : 0.0f), XTP(isBlock ? 0.0f : -1.2f));
                 }
-                renderer.renderStatic(stack, ItemTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, stackIn, bufferIn);
+                renderer.renderStatic(stack, ItemTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, stackIn, bufferIn, 0);
             }
         }
         stackIn.popPose();
