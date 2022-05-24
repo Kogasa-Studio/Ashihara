@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "kogasastudio.ashihara.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "ashihara.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
