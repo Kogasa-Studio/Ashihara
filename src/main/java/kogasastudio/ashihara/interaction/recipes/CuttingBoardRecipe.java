@@ -81,4 +81,8 @@ public class CuttingBoardRecipe extends BaseRecipe {
     public RecipeType<?> getType() {
         return RecipeTypes.CUTTING_BOARD.get();
     }
+
+    public Ingredient getInput() {
+        return input;
+    }
 }
