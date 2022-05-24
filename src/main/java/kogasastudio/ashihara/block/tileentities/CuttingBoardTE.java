@@ -1,8 +1,8 @@
 package kogasastudio.ashihara.block.tileentities;
 
-import kogasastudio.ashihara.interaction.recipe.CuttingBoardRecipe;
+import kogasastudio.ashihara.interaction.recipes.CuttingBoardRecipe;
+import kogasastudio.ashihara.interaction.recipes.register.RecipeTypes;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -18,9 +18,8 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -37,10 +36,11 @@ public class CuttingBoardTE extends AshiharaMachineTE {
         return this.content.copy();
     }
 
-    public Optional<CuttingBoardRecipe> tryMatchRecipe(RecipeWrapper wrapper) {
+    public Optional<CuttingBoardRecipe> tryMatchRecipe() {
         if (this.level == null) return Optional.empty();
 
-        return this.level.getRecipeManager().getRecipeFor(CuttingBoardRecipe.TYPE, wrapper, this.level);
+        return this.level.getRecipeManager().getAllRecipesFor(RecipeTypes.CUTTING_BOARD.get())
+                .stream().filter(r -> r.matches(List.of(content))).findFirst();
     }
 
     public void cut(CuttingBoardRecipe recipe) {
@@ -87,8 +87,7 @@ public class CuttingBoardTE extends AshiharaMachineTE {
                 setChanged();
                 return true;
             } else {
-                ItemStackHandler inv = new ItemStackHandler(NonNullList.withSize(1, this.content));
-                Optional<CuttingBoardRecipe> recipe = tryMatchRecipe(new RecipeWrapper(inv));
+                Optional<CuttingBoardRecipe> recipe = tryMatchRecipe();
 //                LOGGER_MAIN.info
 //                (
 //                    "\n{\n    inv: " + inv.serializeNBT()

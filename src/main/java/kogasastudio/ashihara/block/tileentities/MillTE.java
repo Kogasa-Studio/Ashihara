@@ -2,16 +2,15 @@ package kogasastudio.ashihara.block.tileentities;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.helper.FluidHelper;
-import kogasastudio.ashihara.interaction.recipe.MillRecipe;
+import kogasastudio.ashihara.interaction.recipes.MillRecipe;
+import kogasastudio.ashihara.interaction.recipes.register.RecipeTypes;
 import kogasastudio.ashihara.inventory.container.GenericItemStackHandler;
 import kogasastudio.ashihara.inventory.container.MillContainer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -19,7 +18,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -27,13 +25,14 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
+import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE;
 
 public class MillTE extends AshiharaMachineTE implements TickableTileEntity, MenuProvider, IFluidHandler {
     public GenericItemStackHandler input = new GenericItemStackHandler(4);
@@ -79,12 +78,11 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
         super(TERegistryHandler.MILL_TE.get(), pos, state);
     }
 
-    private Optional<MillRecipe> tryMatchRecipe(RecipeWrapper wrapper) {
-        if (level == null) {
-            return Optional.empty();
-        }
-
-        return level.getRecipeManager().getRecipeFor(MillRecipe.TYPE, wrapper, level);
+    private Optional<MillRecipe> tryMatchRecipe() {
+        return level.getRecipeManager().getAllRecipesFor(RecipeTypes.MILL.get())
+                .stream()
+                .filter(this::canProduce)
+                .findFirst();
     }
 
     private boolean hasInput() {
@@ -96,51 +94,79 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
         return false;
     }
 
+
+    //todo:
+    // 好像性能没差多少，但是我感觉好看点了（
+    // simulate 为 true 的时候不会修改内容，但是会判断能不能放入
+    // 我的观念是能复用轮子就复用轮子
     //检测当前匹配的配方其产出物是否能够填充进输出栏
-    private boolean canProduce(MillRecipe recipeIn) {
-        boolean flag0 = false;
-        boolean flag1 = true;
-        boolean flag2 = true;
-        if (hasInput()) {
-            NonNullList<ItemStack> outputIn = recipeIn.getCraftingResult();//配方产物列表
-            if (this.output.getStackInSlot(0).isEmpty()) {
-                flag0 = true;
-            } else {
-                int availableSlotCount = 0;
-                int emptySlotCount = 0;
-                /*遍历给定产物的每一个物品并遍历当前输出栏的每一个格子
-                若格子为空，空格子数+1
-                若物品可以与格子中物品合并，有效格数+1
-                若对于产出的每一个物品，都至少有一个不重复的格子可用，
-                即空格子数+有效格子数大于给定产物的种数，则输出true*/
-                for (ItemStack stack : outputIn) {
-                    for (int j = 0; j < 4; j += 1) {
-                        if (output.getStackInSlot(j).isEmpty()) {
-                            emptySlotCount += 1;
-                        }
+    private boolean canProduce(MillRecipe r) {
+        var result = r.matches(input.getContent()) &&
+                r.testInputFluid(tankIn.orElse(null)) &&
+                // todo 善用 simulate 模拟输入输出
+                tankOut.resolve().get().fill(r.getOutputFluid(), SIMULATE) == r.getOutputFluid().getAmount();
+
+        if (!result) {
+
+            var outputList = new ArrayList<>(r.getCraftingResult());
+
+            for (int i = 0; i < outputList.size(); i++) {
+                for (int i1 = 0; i1 < output.getSlots(); i1++) {
+                    if (!outputList.get(i).isEmpty()) {
+                        outputList.set(i, output.insertItem(i1, outputList.get(i), true));
                     }
-                    for (int i = 0; i < 4; i += 1) {
-                        if (!output.getStackInSlot(i).isEmpty() && output.isItemValid(i, stack)) {
-                            ItemStack stackInstant = output.getStackInSlot(i);
-                            if (stack.sameItem(stackInstant) && stack.getCount() + stackInstant.getCount() <= stackInstant.getMaxStackSize()) {
-                                availableSlotCount += 1;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (availableSlotCount + emptySlotCount >= outputIn.size()) {
-                    flag0 = true;
                 }
             }
+
+            return outputList.stream().allMatch(ItemStack::isEmpty);
         }
-        if (!recipeIn.getInputFluid().isEmpty()) {
-            flag1 = FluidHelper.canFluidExtractFromTank(recipeIn.getInputFluid(), this.tankIn);
-        }
-        if (!recipeIn.getOutputFluid().isEmpty()) {
-            flag2 = FluidHelper.canFluidAddToTank(recipeIn.getOutputFluid(), this.tankOut);
-        }
-        return flag0 && flag1 && flag2;
+
+        return false;
+
+        // boolean flag0 = false;
+        // boolean flag1 = true;
+        // boolean flag2 = true;
+        // if (hasInput()) {
+        //     NonNullList<ItemStack> outputIn = recipeIn.getCraftingResult();//配方产物列表
+        //     if (this.output.getStackInSlot(0).isEmpty()) {
+        //         flag0 = true;
+        //     } else {
+        //         int availableSlotCount = 0;
+        //         int emptySlotCount = 0;
+        //         /*遍历给定产物的每一个物品并遍历当前输出栏的每一个格子
+        //         若格子为空，空格子数+1
+        //         若物品可以与格子中物品合并，有效格数+1
+        //         若对于产出的每一个物品，都至少有一个不重复的格子可用，
+        //         即空格子数+有效格子数大于给定产物的种数，则输出true*/
+
+        //         for (ItemStack stack : outputIn) {
+        //             for (int j = 0; j < 4; j += 1) {
+        //                 if (output.getStackInSlot(j).isEmpty()) {
+        //                     emptySlotCount += 1;
+        //                 }
+        //             }
+        //             for (int i = 0; i < 4; i += 1) {
+        //                 if (!output.getStackInSlot(i).isEmpty() && output.isItemValid(i, stack)) {
+        //                     ItemStack stackInstant = output.getStackInSlot(i);
+        //                     if (stack.sameItem(stackInstant) && stack.getCount() + stackInstant.getCount() <= stackInstant.getMaxStackSize()) {
+        //                         availableSlotCount += 1;
+        //                         break;
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //         if (availableSlotCount + emptySlotCount >= outputIn.size()) {
+        //             flag0 = true;
+        //         }
+        //     }
+        // }
+        // if (!recipeIn.getInputFluid().isEmpty()) {
+        //     flag1 = FluidHelper.canFluidExtractFromTank(recipeIn.getInputFluid(), this.tankIn);
+        // }
+        // if (!recipeIn.getOutputFluid().isEmpty()) {
+        //     flag2 = FluidHelper.canFluidAddToTank(recipeIn.getOutputFluid(), this.tankOut);
+        // }
+        // return flag0 && flag1 && flag2;
     }
 
     private void applyRecipe(MillRecipe recipeIn) {
@@ -178,19 +204,23 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
                 }
             }
             if (!recipeIn.getInputFluid().isEmpty()) {
-                this.tankIn.ifPresent
-                        (
-                                tank ->
-                                {
-                                    FluidStack fluid = recipeIn.getInputFluid();
-                                    FluidStack fluidInTank = tank.getFluid();
-                                    if (fluid.isFluidEqual(fluidInTank)) {
-                                        fluidInTank.setAmount(Math.max(0, fluidInTank.getAmount() - fluid.getAmount()));
-                                        tank.setFluid(fluidInTank);
-                                        setChanged();
-                                    }
-                                }
-                        );
+                // todo 直接用 drain
+                tankIn.ifPresent(tank -> {
+                    tank.drain(recipeIn.getInputFluid(), EXECUTE);
+                });
+                // this.tankIn.ifPresent
+                //         (
+                //                 tank ->
+                //                 {
+                //                     FluidStack fluid = recipeIn.getInputFluid();
+                //                     FluidStack fluidInTank = tank.getFluid();
+                //                     if (fluid.isFluidEqual(fluidInTank)) {
+                //                         fluidInTank.setAmount(Math.max(0, fluidInTank.getAmount() - fluid.getAmount()));
+                //                         tank.setFluid(fluidInTank);
+                //                         setChanged();
+                //                     }
+                //                 }
+                //         );
             }
             if (!recipeIn.getOutputFluid().isEmpty()) {
                 this.tankOut.ifPresent
@@ -299,10 +329,9 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
 
     @Override
     public void tick() {
-        // todo 这时的 level 不会是 null
-        // if (this.level == null) {
-        //     return;
-        // }
+        if (this.level == null) {
+            return;
+        }
 
         if
         (
@@ -321,7 +350,7 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
         if (!this.level.isClientSide()) {
             if (hasInput()) {
                 boolean matchAny = false;
-                Optional<MillRecipe> recipeIn = tryMatchRecipe(new RecipeWrapper(input));
+                Optional<MillRecipe> recipeIn = tryMatchRecipe();
                 if (recipeIn.isPresent() && canProduce(recipeIn.get())) {
                     if (this.recipe == null || !this.recipe.equals(recipeIn.get())) {
                         applyRecipe(recipeIn.get());
@@ -345,7 +374,9 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
                         setChanged();
                     }
                 }
-            } else if (isWorking) finishReciping(null);
+            } else if (isWorking) {
+                finishReciping(null);
+            }
         }
     }
 
@@ -363,20 +394,30 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
         return new MillContainer(p_createMenu_1_, p_createMenu_2_, this.level, this.worldPosition, this.millData);
     }
 
-    // todo 我感觉很没有必要
-    private void sync() {
-        if (this.level == null || this.level.isClientSide()) {
-            return;
-        }
+    // todo 不应该让 sync 变得臃肿，而是覆写 getUpdateTag
+    // private void sync() {
+    //     if (this.level == null || this.level.isClientSide()) {
+    //         return;
+    //     }
+    //     CompoundTag nbt = new CompoundTag();
+    //     nbt.putInt("roundProgress", this.roundProgress);
+    //     nbt.putInt("roundTicks", this.roundTicks);
+    //     this.tankIn.ifPresent(tank -> nbt.put("tankIn", tank.writeToNBT(new CompoundTag())));
+    //     this.tankOut.ifPresent(tank -> nbt.put("tankOut", tank.writeToNBT(new CompoundTag())));
+    //     //                                                                  todo create 的单参调用 getUpdateTag
+    //     ClientboundBlockEntityDataPacket p = ClientboundBlockEntityDataPacket.create(this, (be) -> nbt);
+    //     ((ServerLevel) this.level).getChunkSource().chunkMap.getPlayers(new ChunkPos(this.worldPosition), false)
+    //             .forEach(k -> k.connection.send(p));
+    // }
+
+    @Override
+    public CompoundTag getUpdateTag() {
         CompoundTag nbt = new CompoundTag();
         nbt.putInt("roundProgress", this.roundProgress);
         nbt.putInt("roundTicks", this.roundTicks);
         this.tankIn.ifPresent(tank -> nbt.put("tankIn", tank.writeToNBT(new CompoundTag())));
         this.tankOut.ifPresent(tank -> nbt.put("tankOut", tank.writeToNBT(new CompoundTag())));
-        //                                                                  todo create 的单参调用 getUpdateTag
-        ClientboundBlockEntityDataPacket p = ClientboundBlockEntityDataPacket.create(this, (be) -> nbt);
-        ((ServerLevel) this.level).getChunkSource().chunkMap.getPlayers(new ChunkPos(this.worldPosition), false)
-                .forEach(k -> k.connection.send(p));
+        return nbt;
     }
 
     @Override
