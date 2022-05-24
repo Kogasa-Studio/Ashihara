@@ -5,10 +5,12 @@ import kogasastudio.ashihara.block.tileentities.TERegistryHandler;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.interaction.loot.GLMRegistryHandler;
+import kogasastudio.ashihara.interaction.recipes.register.RecipeManager;
 import kogasastudio.ashihara.inventory.container.ContainerRegistryHandler;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
-import kogasastudio.ashihara.interaction.recipes.register.RecipeManager;
 import kogasastudio.ashihara.sounds.SoundEvents;
+import kogasastudio.ashihara.world.WorldGenEventRegistryHandler;
+import kogasastudio.ashihara.world.biomes.BiomeRegistryHandler;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -53,6 +55,10 @@ public class Ashihara {
         // RecipeTypesRegistryHandler.RECIPES.register(bus);
         FluidRegistryHandler.FLUIDS.register(bus);
         GLMRegistryHandler.MODIFIERS.register(bus);
+
+        BiomeRegistryHandler.BIOMES.register(bus);
+        WorldGenEventRegistryHandler.PLACED_FEATURE.register(bus);
+        WorldGenEventRegistryHandler.CONFIGURED_FEATURE.register(bus);
 
         RecipeManager.register(bus);
     }
