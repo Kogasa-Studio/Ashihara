@@ -2,7 +2,8 @@ package kogasastudio.ashihara.block.tileentities;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.helper.FluidHelper;
-import kogasastudio.ashihara.interaction.recipe.MortarRecipe;
+import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
+import kogasastudio.ashihara.interaction.recipes.register.RecipeTypes;
 import kogasastudio.ashihara.inventory.container.GenericItemStackHandler;
 import kogasastudio.ashihara.inventory.container.MortarContainer;
 import kogasastudio.ashihara.item.ItemOtsuchi;
@@ -26,7 +27,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 import java.util.Optional;
 
@@ -117,15 +117,16 @@ public class MortarTE extends AshiharaMachineTE implements MenuProvider, IFluidH
         };
     }
 
-    private Optional<MortarRecipe> tryMatchRecipe(RecipeWrapper wrapper) {
+    private Optional<MortarRecipe> tryMatchRecipe() {
         if (level == null) return Optional.empty();
 
-        return level.getRecipeManager().getRecipeFor(MortarRecipe.TYPE, wrapper, level);
+        return level.getRecipeManager().getAllRecipesFor(RecipeTypes.MORTAR.get())
+                .stream().filter(r -> r.matches(contents.getContent())).findFirst();
     }
 
     //检查当前状态, 若内容物匹配配方则尝试启用配方
     public void notifyStateChanged() {
-        Optional<MortarRecipe> recipeIn = tryMatchRecipe(new RecipeWrapper(this.contents));
+        Optional<MortarRecipe> recipeIn = tryMatchRecipe();
         if (recipeIn.isPresent()) {
             boolean flag = true;
             if (!recipeIn.get().getFluidCost().isEmpty()) {
