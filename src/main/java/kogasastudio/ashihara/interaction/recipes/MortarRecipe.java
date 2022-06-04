@@ -15,6 +15,7 @@ import net.minecraftforge.common.util.RecipeMatcher;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -70,6 +71,10 @@ public class MortarRecipe extends BaseRecipe {
 
     @Override
     public boolean matches(List<ItemStack> inputs) {
+        if (inputs == null || this.input == null) {
+            LogManager.getLogger().error("MortarRecipe.matches: input is null. id: " + getId());
+        }
+
         return RecipeMatcher.findMatches(inputs, this.input) != null;
     }
 
