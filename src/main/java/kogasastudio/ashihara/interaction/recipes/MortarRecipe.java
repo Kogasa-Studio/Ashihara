@@ -73,6 +73,7 @@ public class MortarRecipe extends BaseRecipe {
     public boolean matches(List<ItemStack> inputs) {
         if (inputs == null || this.input == null) {
             LogManager.getLogger().error("MortarRecipe.matches: input is null. id: " + getId());
+            return false;
         }
 
         return RecipeMatcher.findMatches(inputs, this.input) != null;
