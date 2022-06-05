@@ -24,7 +24,7 @@ public class BaseSerializer<RECIPE extends BaseRecipe>
     @Nullable
     @Override
     public RECIPE fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
-        return JsonUtils.INSTANCE.normal.fromJson(pBuffer.readUtf(), recipeClass);
+        return JsonUtils.INSTANCE.normal.fromJson(pBuffer.readUtf(), recipeClass).setID(pRecipeId);
     }
 
     @Override
@@ -34,9 +34,7 @@ public class BaseSerializer<RECIPE extends BaseRecipe>
 
     @Override
     public RECIPE fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
-        var recipe = JsonUtils.INSTANCE.normal.fromJson(pSerializedRecipe, recipeClass);
-        recipe.setID(pRecipeId);
-        return recipe;
+        return JsonUtils.INSTANCE.normal.fromJson(pSerializedRecipe, recipeClass).setID(pRecipeId);
     }
 
     public JsonObject toJson(RECIPE pRecipe) {
