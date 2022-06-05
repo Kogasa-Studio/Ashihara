@@ -41,8 +41,9 @@ public abstract class BaseRecipe implements Recipe<Container> {
         return false;
     }
 
-    public void setID(ResourceLocation id) {
+    public <T extends BaseRecipe> T setID(ResourceLocation id) {
         this.id = id;
+        return (T) this;
     }
 
     @Override
