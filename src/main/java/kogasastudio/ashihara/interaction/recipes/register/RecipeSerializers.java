@@ -20,7 +20,7 @@ public class RecipeSerializers {
             DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Ashihara.MODID);
 
     public static final RegistryObject<BaseSerializer<?>> CUTTING_BOARD =
-            SERIALIZER.register("cutting_board", () -> new BaseSerializer<>(CuttingBoardRecipe.class));
+            SERIALIZER.register("cutting", () -> new BaseSerializer<>(CuttingBoardRecipe.class));
 
     public static final RegistryObject<BaseSerializer<?>> MORTAR =
             SERIALIZER.register("mortar", () -> new BaseSerializer<>(MortarRecipe.class));

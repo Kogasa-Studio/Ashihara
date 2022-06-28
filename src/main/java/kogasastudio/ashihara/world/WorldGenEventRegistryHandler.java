@@ -4,6 +4,7 @@ import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -12,11 +13,16 @@ import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSi
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FancyFoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.FancyTrunkPlacer;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.OptionalInt;
 
 public class WorldGenEventRegistryHandler {
@@ -27,24 +33,57 @@ public class WorldGenEventRegistryHandler {
             DeferredRegister.create(BuiltinRegistries.PLACED_FEATURE.key(), Ashihara.MODID);
 
     public static final RegistryObject<ConfiguredFeature<?, ?>> FANCY_CHERRY =
-            CONFIGURED_FEATURE.register("fancy_cherry", () -> new ConfiguredFeature<>(
-                    Feature.TREE,
-                    new TreeConfiguration.TreeConfigurationBuilder(
-                            BlockStateProvider.simple(BlockRegistryHandler.CHERRY_LOG.get().defaultBlockState()),
-                            new FancyTrunkPlacer(3, 11, 0),
-                            BlockStateProvider.simple(BlockRegistryHandler.CHERRY_BLOSSOM.get().defaultBlockState()),
-                            new FancyFoliagePlacer(ConstantInt.of(2), ConstantInt.of(4), 4),
-                            new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4))
-                    )
-                            .ignoreVines()
-                            // .heightmap(Heightmap.Type.MOTION_BLOCKING)
-                            .build()));
+        CONFIGURED_FEATURE.register
+        ("fancy_cherry", () -> new ConfiguredFeature<>
+            (
+                Feature.TREE,
+                new TreeConfiguration.TreeConfigurationBuilder
+                (
+                        BlockStateProvider.simple(BlockRegistryHandler.CHERRY_LOG.get().defaultBlockState()),
+                        new FancyTrunkPlacer(3, 11, 0),
+                        BlockStateProvider.simple(BlockRegistryHandler.CHERRY_BLOSSOM.get().defaultBlockState()),
+                        new FancyFoliagePlacer(ConstantInt.of(2), ConstantInt.of(4), 4),
+                        new TwoLayersFeatureSize(1, 0, 1)
+                )
+                .ignoreVines()
+                // .heightmap(Heightmap.Type.MOTION_BLOCKING)
+                .build()
+            )
+        );
+
+
+    private static List<PlacementModifier> DefaultTreeModifiers(int baseAmount, float extraProbability, int extraAmount)
+    {
+        List<PlacementModifier> modifiers =
+        new ArrayList<>
+        (
+            Arrays.asList
+            (
+                PlacementUtils.HEIGHTMAP,
+                InSquarePlacement.spread(),
+                VegetationPlacements.TREE_THRESHOLD,
+                PlacementUtils.HEIGHTMAP_OCEAN_FLOOR,
+                PlacementUtils.filteredByBlockSurvival(BlockRegistryHandler.CHERRY_SAPLING.get()),
+                BiomeFilter.biome()
+            )
+        );
+        modifiers.add(PlacementUtils.countExtra(baseAmount, extraProbability, extraAmount));
+        return modifiers;
+    }
 
     public static final RegistryObject<PlacedFeature> FOREST_CHERRY_TREES =
-            PLACED_FEATURE.register("forest_cherry_trees",
-                    () -> new PlacedFeature(FANCY_CHERRY.getHolder().get(),
-                            Arrays.asList(PlacementUtils.HEIGHTMAP,
-                                    PlacementUtils.countExtra(3, 0.1F, 0))));
+        PLACED_FEATURE.register
+        (
+            "forest_cherry_trees",
+            () -> new PlacedFeature(FANCY_CHERRY.getHolder().get(), DefaultTreeModifiers(3, 0.1F, 1))
+        );
+
+    public static final RegistryObject<PlacedFeature> PLAIN_CHERRY_TREES =
+        PLACED_FEATURE.register
+        (
+            "plain_cherry_trees",
+            () -> new PlacedFeature(FANCY_CHERRY.getHolder().get(), DefaultTreeModifiers(0, 0.05F, 1))
+        );
 
 
     //Trees

@@ -26,6 +26,6 @@ public class CuttingBoardRecipes extends AvarusRecipes {
 
     protected void addRecipe(CuttingBoardRecipe recipe) {
         recipe.type = RecipeSerializers.CUTTING_BOARD.get().getRegistryName().toString();
-        addRecipe(recipe.getId(), JsonUtils.INSTANCE.pretty.toJson(recipe), "cutting_board");
+        addRecipe(recipe.getId(), JsonUtils.INSTANCE.pretty.toJson(recipe), "cutting");
     }
 }

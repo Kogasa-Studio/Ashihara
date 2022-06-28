@@ -43,7 +43,8 @@ public class Ashihara {
         }
     };
 
-    public Ashihara() {
+    public Ashihara()
+    {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ItemRegistryHandler.ITEMS.register(bus);
