@@ -3,110 +3,120 @@ package kogasastudio.ashihara.block.woodcrafts;
 import kogasastudio.ashihara.block.IVariable;
 import kogasastudio.ashihara.helper.BlockActionHelper;
 import kogasastudio.ashihara.utils.AshiharaWoodTypes;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.EnumProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
+import net.minecraft.world.World;
 
-public class BlockKawaki extends Block implements IVariable<AshiharaWoodTypes> {
-    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final BooleanProperty ISLONG = BooleanProperty.create("is_long");
+public class BlockKawaki extends Block implements IVariable<AshiharaWoodTypes>
+{
     private static AshiharaWoodTypes type;
-    public BlockKawaki(AshiharaWoodTypes typeIn) {
+    public BlockKawaki(AshiharaWoodTypes typeIn)
+    {
         super
-                (
-                        Properties.of(Material.WOOD)
-                                .strength(0.5F)
-                                .sound(SoundType.WOOD)
-                );
+        (
+            Properties.create(Material.WOOD)
+            .hardnessAndResistance(0.5F)
+            .sound(SoundType.WOOD)
+        );
         type = typeIn;
     }
 
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, ISLONG);
-    }
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final BooleanProperty ISLONG = BooleanProperty.create("is_long");
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        Level worldIn = context.getLevel();
-        BlockPos posIn = context.getClickedPos();
-        Direction facingIn = context.getHorizontalDirection();
-        BlockState facingState = worldIn.getBlockState(posIn.relative(facingIn.getOpposite()));
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {builder.add(FACING, ISLONG);}
 
-        return this.defaultBlockState()
-                .setValue(FACING, facingIn.getOpposite())
-                .setValue(ISLONG, facingState.isFaceSturdy(worldIn, posIn.relative(facingIn), facingIn.getOpposite())
-                        || canConnect(this.defaultBlockState(), facingState));
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context)
+    {
+        World worldIn = context.getWorld();
+        BlockPos posIn = context.getPos();
+        Direction facingIn = context.getPlacementHorizontalFacing();
+        BlockState facingState = worldIn.getBlockState(posIn.offset(facingIn.getOpposite()));
+
+        return this.getDefaultState()
+        .with(FACING, facingIn.getOpposite())
+        .with(ISLONG, facingState.isSolidSide(worldIn, posIn.offset(facingIn), facingIn.getOpposite())
+            || canConnect(this.getDefaultState(), facingState));
     }
 
-    private boolean canConnect(BlockState state, BlockState toCheck) {
+    private boolean canConnect(BlockState state, BlockState toCheck)
+    {
         return BlockActionHelper.typeMatches(state, toCheck) && (toCheck.getBlock() instanceof BlockKawaki || toCheck.getBlock() instanceof BlockKumimono);
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-        BlockState expandedState = worldIn.getBlockState(pos.relative(state.getValue(FACING)));
-        boolean shouldBeLong = expandedState.isFaceSturdy(worldIn, pos.relative(state.getValue(FACING)), state.getValue(FACING).getOpposite())
-                || canConnect(state, expandedState);
-        if (state.getValue(ISLONG) != shouldBeLong) {
-            worldIn.setBlockAndUpdate(pos, state.setValue(ISLONG, shouldBeLong));
+    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+    {
+        BlockState expandedState = worldIn.getBlockState(pos.offset(state.get(FACING)));
+        boolean shouldBeLong = expandedState.isSolidSide(worldIn, pos.offset(state.get(FACING)), state.get(FACING).getOpposite())
+        || canConnect(state, expandedState);
+        if (state.get(ISLONG) != shouldBeLong)
+        {
+            worldIn.setBlockState(pos, state.with(ISLONG, shouldBeLong));
         }
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
-        return !worldIn.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).isAir();
+    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos)
+    {
+        return !worldIn.getBlockState(pos.offset(state.get(FACING).getOpposite())).isAir();
     }
 
     @Override
-    public BlockState updateShape
-            (BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
-        return !this.canSurvive(stateIn, worldIn, currentPos)
-                ? Blocks.AIR.defaultBlockState()
-                : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+    public BlockState updatePostPlacement
+    (BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
+    {
+        return !this.isValidPosition(stateIn, worldIn, currentPos)
+        ? Blocks.AIR.getDefaultState()
+        : super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-        VoxelShape n = box(5.0d, 6.0d, 4.5d, 11.0d, 16.0d, 16.0d);
-        VoxelShape e = box(0.0d, 6.0d, 5.0d, 11.5d, 16.0d, 11.0d);
-        VoxelShape s = box(5.0d, 6.0d, 0.0d, 11.0d, 16.0d, 11.5d);
-        VoxelShape w = box(4.5d, 6.0d, 5.0d, 16.0d, 16.0d, 11.0d);
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+    {
+        VoxelShape n = makeCuboidShape(5.0d, 6.0d, 4.5d, 11.0d, 16.0d, 16.0d);
+        VoxelShape e = makeCuboidShape(0.0d, 6.0d, 5.0d, 11.5d, 16.0d, 11.0d);
+        VoxelShape s = makeCuboidShape(5.0d, 6.0d, 0.0d, 11.0d, 16.0d, 11.5d);
+        VoxelShape w = makeCuboidShape(4.5d, 6.0d, 5.0d, 16.0d, 16.0d, 11.0d);
 
-        VoxelShape long_X = box(0.0d, 6.0d, 5.0d, 16.0d, 16.0d, 11.0d);
-        VoxelShape long_Z = box(5.0d, 6.0d, 0.0d, 11.0d, 16.0d, 16.0d);
+        VoxelShape long_X = makeCuboidShape(0.0d, 6.0d, 5.0d, 16.0d, 16.0d, 11.0d);
+        VoxelShape long_Z = makeCuboidShape(5.0d, 6.0d, 0.0d, 11.0d, 16.0d, 16.0d);
 
-        if (state.getValue(ISLONG)) {
-            if (state.getValue(FACING).getAxis().equals(Direction.Axis.X)) return long_X;
+        if (state.get(ISLONG))
+        {
+            if (state.get(FACING).getAxis().equals(Direction.Axis.X)) return long_X;
             else return long_Z;
-        } else {
-            return switch (state.getValue(FACING)) {
-                case NORTH -> n;
-                case EAST -> e;
-                case SOUTH -> s;
-                case WEST -> w;
-                default -> long_Z;
-            };
+        }
+        else
+        {
+            switch (state.get(FACING))
+            {
+                case NORTH: return n;
+                case EAST: return e;
+                case SOUTH: return s;
+                case WEST: return w;
+                default: return long_Z;
+            }
         }
     }
 
     @Override
-    public AshiharaWoodTypes getType() {
-        return type;
-    }
+    public AshiharaWoodTypes getType() {return type;}
 }

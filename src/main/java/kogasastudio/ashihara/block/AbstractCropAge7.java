@@ -1,44 +1,45 @@
 package kogasastudio.ashihara.block;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.CropsBlock;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
 
-public class AbstractCropAge7 extends CropBlock {
-    private static final VoxelShape[] SHAPES = new VoxelShape[]
-            {
-                    Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D),
-                    Block.box(0.0D, 0.0D, 0.0D, 16.0D, 3.0D, 16.0D),
-                    Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D),
-                    Block.box(0.0D, 0.0D, 0.0D, 16.0D, 5.0D, 16.0D),
-                    Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D),
-                    Block.box(0.0D, 0.0D, 0.0D, 16.0D, 7.0D, 16.0D),
-                    Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D),
-                    Block.box(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D)
-            };
-
-    public AbstractCropAge7() {
+public class AbstractCropAge7 extends CropsBlock
+{
+    public AbstractCropAge7()
+    {
         super
-                (
-                        Properties.of(Material.PLANT)
-                                .noCollission()
-                                .randomTicks()
-                                .instabreak()
-                                .sound(SoundType.CROP)
-                );
+        (
+            Properties.create(Material.PLANTS)
+            .doesNotBlockMovement()
+            .tickRandomly()
+            .zeroHardnessAndResistance()
+            .sound(SoundType.CROP)
+        );
     }
 
-    protected AbstractCropAge7(Properties properties) {
+    protected AbstractCropAge7(Properties properties)
+    {
         super(properties);
     }
 
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-        return SHAPES[state.getValue(this.getAgeProperty())];
-    }
+    private static final VoxelShape[] SHAPES = new VoxelShape[]
+    {
+        Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D),
+        Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 3.0D, 16.0D),
+        Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D),
+        Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 5.0D, 16.0D),
+        Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D),
+        Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 7.0D, 16.0D),
+        Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D),
+        Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D)
+    };
+
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {return SHAPES[state.get(this.getAgeProperty())];}
 }

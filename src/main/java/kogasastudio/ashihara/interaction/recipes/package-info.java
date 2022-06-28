@@ -1,4 +1,0 @@
-@ParametersAreNonnullByDefault
-package kogasastudio.ashihara.interaction.recipes;
-
-import javax.annotation.ParametersAreNonnullByDefault;

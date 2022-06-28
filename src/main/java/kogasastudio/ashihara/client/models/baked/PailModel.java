@@ -1,61 +1,51 @@
 package kogasastudio.ashihara.client.models.baked;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.util.Direction;
 
 import java.util.List;
 import java.util.Random;
 
-public class PailModel implements BakedModel {
-    private final BakedModel existingModel;
+public class PailModel implements IBakedModel
+{
+    private final IBakedModel existingModel;
 
-    public PailModel(BakedModel model) {
+    public PailModel(IBakedModel model)
+    {
         this.existingModel = model;
     }
 
     @Override
-    public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand) {
+    public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand)
+    {
         return this.existingModel.getQuads(state, side, rand);
     }
 
     @Override
-    public boolean useAmbientOcclusion() {
-        return this.existingModel.useAmbientOcclusion();
-    }
+    public boolean isAmbientOcclusion() {return this.existingModel.isAmbientOcclusion();}
 
     @Override
-    public boolean isGui3d() {
-        return this.existingModel.isGui3d();
-    }
+    public boolean isGui3d() {return this.existingModel.isGui3d();}
 
     @Override
-    public boolean usesBlockLight() {
-        return this.existingModel.usesBlockLight();
-    }
+    public boolean isSideLit() {return this.existingModel.isSideLit();}
 
     @Override
-    public boolean isCustomRenderer() {
-        return true;
-    }
+    public boolean isBuiltInRenderer() {return true;}
 
     @Override
-    public TextureAtlasSprite getParticleIcon() {
-        return this.existingModel.getParticleIcon();
-    }
+    public TextureAtlasSprite getParticleTexture() {return this.existingModel.getParticleTexture();}
 
     @Override
-    public ItemOverrides getOverrides() {
-        return this.existingModel.getOverrides();
-    }
+    public ItemOverrideList getOverrides() {return this.existingModel.getOverrides();}
 
     @Override
-    public BakedModel handlePerspective(ItemTransforms.TransformType cameraTransformType, PoseStack mat) {
-        return existingModel.handlePerspective(cameraTransformType, mat);
-    }
+    public IBakedModel handlePerspective(ItemCameraTransforms.TransformType cameraTransformType, MatrixStack mat)
+    {return existingModel.handlePerspective(cameraTransformType, mat);}
 }

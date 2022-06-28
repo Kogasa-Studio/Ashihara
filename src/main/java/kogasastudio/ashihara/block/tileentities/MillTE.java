@@ -2,41 +2,47 @@ package kogasastudio.ashihara.block.tileentities;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.helper.FluidHelper;
-import kogasastudio.ashihara.interaction.recipes.MillRecipe;
-import kogasastudio.ashihara.interaction.recipes.register.RecipeTypes;
+import kogasastudio.ashihara.interaction.recipe.MillRecipe;
 import kogasastudio.ashihara.inventory.container.GenericItemStackHandler;
 import kogasastudio.ashihara.inventory.container.MillContainer;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.util.IIntArray;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
+
 import java.util.Optional;
 
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
-import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE;
 
-public class MillTE extends AshiharaMachineTE implements TickableTileEntity, MenuProvider, IFluidHandler {
+public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, INamedContainerProvider, IFluidHandler
+{
+    public MillTE() {super(TERegistryHandler.MILL_TE.get());}
+
     public GenericItemStackHandler input = new GenericItemStackHandler(4);
-    public GenericItemStackHandler output = new GenericItemStackHandler(4);
+    public Inventory output = new Inventory(4);
     public GenericItemStackHandler fluidIO = new GenericItemStackHandler(3);
     public byte round; //现在已经转的圈数
     public byte roundTotal; //完成这个配方需要转的总圈数, 由所选配方决定
@@ -44,132 +50,98 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
     public int roundTicks; //每转一圈所需要的时间, 由所选配方决定
     public float exp; //转完配方可以得到的经验，由所选配方决定
     public boolean isWorking;
+    private MillRecipe recipe;
     public LazyOptional<FluidTank> tankIn = LazyOptional.of(this::createTank);
     public LazyOptional<FluidTank> tankOut = LazyOptional.of(this::createTank);
-    public ContainerData millData = new ContainerData() {
-        @Override
-        public int get(int index) {
-            return switch (index) {
-                case 0 -> round;
-                case 1 -> roundTotal;
-                case 2 -> roundProgress;
-                case 3 -> roundTicks;
-                default -> 0;
-            };
-        }
-
-        @Override
-        public void set(int index, int value) {
-            switch (index) {
-                case 0 -> round = (byte) value;
-                case 1 -> roundTotal = (byte) value;
-                case 2 -> roundProgress = value;
-                case 3 -> roundTicks = value;
+    public IIntArray millData = new IIntArray()
+    {
+        public int get(int index)
+        {
+            switch (index)
+            {
+                case 0:return round;
+                case 1:return roundTotal;
+                case 2:return roundProgress;
+                case 3:return roundTicks;
+                default:return 0;
             }
         }
 
-        @Override
-        public int getCount() {
-            return 4;
+        public void set(int index, int value)
+        {
+            switch (index)
+            {
+                case 0:round = (byte) value;break;
+                case 1:roundTotal = (byte) value;break;
+                case 2:roundProgress = value;break;
+                case 3:roundTicks = value;
+            }
         }
+
+        public int size () {return 4;}
     };
-    private MillRecipe recipe;
-    public MillTE(BlockPos pos, BlockState state) {
-        super(TERegistryHandler.MILL_TE.get(), pos, state);
+
+    private Optional<MillRecipe> tryMatchRecipe(RecipeWrapper wrapper)
+    {
+        if(world == null) return Optional.empty();
+
+        return world.getRecipeManager().getRecipe(MillRecipe.TYPE, wrapper, world);
     }
 
-    private Optional<MillRecipe> tryMatchRecipe() {
-        return level.getRecipeManager().getAllRecipesFor(RecipeTypes.MILL.get())
-                .stream()
-                .filter(this::canProduce)
-                .findFirst();
-    }
-
-    private boolean hasInput() {
-        for (int i = 0; i < 4; i += 1) {
-            if (!input.getStackInSlot(i).isEmpty()) {
-                return true;
-            }
-        }
+    private boolean hasInput()
+    {
+        for (int i = 0; i < 4; i += 1) {if (!input.getStackInSlot(i).isEmpty()) return true;}
         return false;
     }
 
-
-    //todo:
-    // 好像性能没差多少，但是我感觉好看点了（
-    // simulate 为 true 的时候不会修改内容，但是会判断能不能放入
-    // 我的观念是能复用轮子就复用轮子
     //检测当前匹配的配方其产出物是否能够填充进输出栏
-    private boolean canProduce(MillRecipe r) {
-        var result = r.matches(input.getContent()) &&
-                r.testInputFluid(tankIn.orElse(null)) &&
-                // todo 善用 simulate 模拟输入输出
-                tankOut.resolve().get().fill(r.getOutputFluid(), SIMULATE) == r.getOutputFluid().getAmount();
-
-        if (!result) {
-
-            var outputList = new ArrayList<>(r.getCraftingResult());
-
-            for (int i = 0; i < outputList.size(); i++) {
-                for (int i1 = 0; i1 < output.getSlots(); i1++) {
-                    if (!outputList.get(i).isEmpty()) {
-                        outputList.set(i, output.insertItem(i1, outputList.get(i), true));
+    private boolean canProduce(MillRecipe recipeIn)
+    {
+        boolean flag0 = false;
+        boolean flag1 = true;
+        boolean flag2 = true;
+        if (hasInput())
+        {
+            NonNullList<ItemStack> outputIn = recipeIn.getCraftingResult();//配方产物列表
+            if (this.output.isEmpty()) flag0 = true;
+            else
+            {
+                int availableSlotCount = 0;
+                int emptySlotCount = 0;
+                /*遍历给定产物的每一个物品并遍历当前输出栏的每一个格子
+                若格子为空，空格子数+1
+                若物品可以与格子中物品合并，有效格数+1
+                若对于产出的每一个物品，都至少有一个不重复的格子可用，
+                即空格子数+有效格子数大于给定产物的种数，则输出true*/
+                for (ItemStack stack : outputIn)
+                {
+                    for (int j = 0; j < 4; j += 1) {if (output.getStackInSlot(j).isEmpty()) {emptySlotCount += 1;}}
+                    for (int i = 0; i < 4; i += 1)
+                    {
+                        if (!output.getStackInSlot(i).isEmpty() && output.isItemValidForSlot(i, stack))
+                        {
+                            ItemStack stackInstant = output.getStackInSlot(i);
+                            if (stack.isItemEqual(stackInstant) && stack.getCount() + stackInstant.getCount() <= stackInstant.getMaxStackSize())
+                            {availableSlotCount += 1;break;}
+                        }
                     }
                 }
+                if (availableSlotCount + emptySlotCount >= outputIn.size()) flag0 = true;
             }
-
-            return outputList.stream().allMatch(ItemStack::isEmpty);
         }
-
-        return false;
-
-        // boolean flag0 = false;
-        // boolean flag1 = true;
-        // boolean flag2 = true;
-        // if (hasInput()) {
-        //     NonNullList<ItemStack> outputIn = recipeIn.getCraftingResult();//配方产物列表
-        //     if (this.output.getStackInSlot(0).isEmpty()) {
-        //         flag0 = true;
-        //     } else {
-        //         int availableSlotCount = 0;
-        //         int emptySlotCount = 0;
-        //         /*遍历给定产物的每一个物品并遍历当前输出栏的每一个格子
-        //         若格子为空，空格子数+1
-        //         若物品可以与格子中物品合并，有效格数+1
-        //         若对于产出的每一个物品，都至少有一个不重复的格子可用，
-        //         即空格子数+有效格子数大于给定产物的种数，则输出true*/
-
-        //         for (ItemStack stack : outputIn) {
-        //             for (int j = 0; j < 4; j += 1) {
-        //                 if (output.getStackInSlot(j).isEmpty()) {
-        //                     emptySlotCount += 1;
-        //                 }
-        //             }
-        //             for (int i = 0; i < 4; i += 1) {
-        //                 if (!output.getStackInSlot(i).isEmpty() && output.isItemValid(i, stack)) {
-        //                     ItemStack stackInstant = output.getStackInSlot(i);
-        //                     if (stack.sameItem(stackInstant) && stack.getCount() + stackInstant.getCount() <= stackInstant.getMaxStackSize()) {
-        //                         availableSlotCount += 1;
-        //                         break;
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //         if (availableSlotCount + emptySlotCount >= outputIn.size()) {
-        //             flag0 = true;
-        //         }
-        //     }
-        // }
-        // if (!recipeIn.getInputFluid().isEmpty()) {
-        //     flag1 = FluidHelper.canFluidExtractFromTank(recipeIn.getInputFluid(), this.tankIn);
-        // }
-        // if (!recipeIn.getOutputFluid().isEmpty()) {
-        //     flag2 = FluidHelper.canFluidAddToTank(recipeIn.getOutputFluid(), this.tankOut);
-        // }
-        // return flag0 && flag1 && flag2;
+        if (!recipeIn.getInputFluid().isEmpty())
+        {
+            flag1 = FluidHelper.canFluidExtractFromTank(recipeIn.getInputFluid(), this.tankIn);
+        }
+        if (!recipeIn.getOutputFluid().isEmpty())
+        {
+            flag2 = FluidHelper.canFluidAddToTank(recipeIn.getOutputFluid(), this.tankOut);
+        }
+        return flag0 && flag1 && flag2;
     }
 
-    private void applyRecipe(MillRecipe recipeIn) {
+    private void applyRecipe(MillRecipe recipeIn)
+    {
         this.round = 0;
         this.roundProgress = 0;
         this.roundTotal = recipeIn.round;
@@ -178,251 +150,218 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
         this.recipe = recipeIn;
         this.isWorking = true;
         this.sync();
-        setChanged();
+        markDirty();
     }
 
     //结束时调用, 将te重置并生成产出物
-    private void finishReciping(MillRecipe recipeIn) {
+    private void finishReciping(MillRecipe recipeIn)
+    {
         this.round = 0;
         this.roundTotal = 0;
         this.roundProgress = 0;
         this.roundTicks = 0;
         this.isWorking = false;
-        if (recipeIn != null) {
-            if (recipeIn.getCraftingResult() != null) {
-                for (ItemStack stack : this.recipe.getCraftingResult()) {
-                    output.addItem(stack);
-                }
+        if (recipeIn != null)
+        {
+            if (recipeIn.getCraftingResult() != null)
+            {
+                for (ItemStack stack : this.recipe.getCraftingResult()) {output.addItem(stack);}
             }
-            for (Ingredient ingredient : recipeIn.getIngredients()) {
-                for (int i = 0; i < this.input.getSlots(); i += 1) {
+            for (Ingredient ingredient : recipeIn.getIngredients())
+            {
+                for (int i = 0; i < this.input.getSlots(); i += 1)
+                {
                     ItemStack stack = this.input.getStackInSlot(i);
-                    if (!stack.isEmpty() && ingredient.test(stack)) {
-                        stack.shrink(recipeIn.getCosts(ingredient));
-                        break;
-                    }
+                    if (!stack.isEmpty() && ingredient.test(stack)) {stack.shrink(recipeIn.getCosts(ingredient));break;}
                 }
             }
-            if (!recipeIn.getInputFluid().isEmpty()) {
-                // todo 直接用 drain
-                tankIn.ifPresent(tank -> {
-                    tank.drain(recipeIn.getInputFluid(), EXECUTE);
-                });
-                // this.tankIn.ifPresent
-                //         (
-                //                 tank ->
-                //                 {
-                //                     FluidStack fluid = recipeIn.getInputFluid();
-                //                     FluidStack fluidInTank = tank.getFluid();
-                //                     if (fluid.isFluidEqual(fluidInTank)) {
-                //                         fluidInTank.setAmount(Math.max(0, fluidInTank.getAmount() - fluid.getAmount()));
-                //                         tank.setFluid(fluidInTank);
-                //                         setChanged();
-                //                     }
-                //                 }
-                //         );
+            if (!recipeIn.getInputFluid().isEmpty())
+            {
+                this.tankIn.ifPresent
+                (
+                    tank ->
+                    {
+                        FluidStack fluid = recipeIn.getInputFluid();
+                        FluidStack fluidInTank = tank.getFluid();
+                        if (fluid.isFluidEqual(fluidInTank))
+                        {
+                            fluidInTank.setAmount(Math.max(0, fluidInTank.getAmount() - fluid.getAmount()));
+                            tank.setFluid(fluidInTank);
+                            markDirty();
+                        }
+                    }
+                );
             }
-            if (!recipeIn.getOutputFluid().isEmpty()) {
+            if (!recipeIn.getOutputFluid().isEmpty())
+            {
                 this.tankOut.ifPresent
-                        (
-                                tank ->
-                                {
-                                    FluidStack fluid = recipeIn.getOutputFluid();
-                                    FluidStack fluidInTank = tank.getFluid();
-                                    if (tank.isEmpty()) {
-                                        tank.fill(fluid, EXECUTE);
-                                    } else if (fluid.isFluidEqual(fluidInTank)) {
-                                        fluidInTank.setAmount(Math.min(fluid.getAmount() + fluidInTank.getAmount(), tank.getCapacity()));
-                                        tank.setFluid(fluidInTank);
-                                        setChanged();
-                                    }
-                                }
-                        );
+                (
+                    tank ->
+                    {
+                        FluidStack fluid = recipeIn.getOutputFluid();
+                        FluidStack fluidInTank = tank.getFluid();
+                        if (tank.isEmpty()) tank.fill(fluid, EXECUTE);
+                        else if (fluid.isFluidEqual(fluidInTank))
+                        {
+                            fluidInTank.setAmount(Math.min(fluid.getAmount() + fluidInTank.getAmount(), tank.getCapacity()));
+                            tank.setFluid(fluidInTank);
+                            markDirty();
+                        }
+                    }
+                );
             }
-            if (this.level != null) {
-                this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition),
-                        this.level.getBlockState(this.worldPosition), 3);
-            }
+            if (this.world != null) this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
         }
         this.recipe = null;
         this.sync();
-        setChanged();
+        markDirty();
     }
 
     //获取磨石的旋转角度（角度制）
-    public int getMillStoneRotation() {
+    public int getMillStoneRotation()
+    {
         return this.roundTicks != 0 ? 360 * this.roundProgress / this.roundTicks : 0;
     }
 
-    public ItemStackHandler getInput() {
+    public ItemStackHandler getInput()
+    {
         return input;
     }
-
-    public GenericItemStackHandler getOutput() {
-        return output;
-    }
+    public Inventory getOutput() {return output;}
 
     @Override
-    public FluidTank createTank() {
-        return new FluidTank(4000);
-    }
+    public FluidTank createTank() {return new FluidTank(4000);}
 
     @Override
-    public FluidTank createTank(int capacity) {
-        return new FluidTank(capacity);
-    }
+    public FluidTank createTank(int capacity) {return new FluidTank(capacity);}
 
     @Override
-    public LazyOptional<FluidTank> getTank() {
-        return this.tankIn;
-    }
+    public LazyOptional<FluidTank> getTank() {return this.tankIn;}
 
     @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap) {
-        if (!this.isRemoved() && cap.equals(FLUID_HANDLER_CAPABILITY)) {
-            return this.tankIn.cast();
-        }
+    public <T> LazyOptional<T> getCapability(Capability<T> cap)
+    {
+        if (!this.isRemoved() && cap.equals(FLUID_HANDLER_CAPABILITY)) {return this.tankIn.cast();}
         return super.getCapability(cap);
     }
 
     @Override
-    public void invalidateCaps() {
+    protected void invalidateCaps()
+    {
         super.invalidateCaps();
         this.tankIn.invalidate();
         this.tankOut.invalidate();
     }
 
     @Override
-    public void reviveCaps() {
+    protected void reviveCaps()
+    {
         super.reviveCaps();
         this.tankIn = LazyOptional.of(this::createTank);
         this.tankOut = LazyOptional.of(this::createTank);
     }
 
     @Override
-    public void load(CompoundTag nbt) {
+    public void read(BlockState state, CompoundNBT nbt)
+    {
         this.round = nbt.getByte("round");
         this.roundTotal = nbt.getByte("roundTotal");
         this.roundProgress = nbt.getInt("roundProgress");
         this.roundTicks = nbt.getInt("roundTicks");
         this.input.deserializeNBT(nbt.getCompound("input"));
         this.fluidIO.deserializeNBT(nbt.getCompound("fluidIO"));
-        this.output.deserializeNBT(nbt.getCompound("output"));
+        this.output.read(nbt.getList("output", 10));
         this.tankIn.ifPresent(fluidTank -> fluidTank.readFromNBT(nbt.getCompound("tankIn")));
         this.tankOut.ifPresent(fluidTank -> fluidTank.readFromNBT(nbt.getCompound("tankOut")));
-        super.load(nbt);
+        super.read(state, nbt);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound) {
+    public CompoundNBT write(CompoundNBT compound)
+    {
         compound.putByte("round", this.round);
         compound.putByte("roundTotal", this.roundTotal);
         compound.putInt("roundProgress", this.roundProgress);
         compound.putInt("roundTicks", this.roundTicks);
         compound.put("input", this.input.serializeNBT());
         compound.put("fluidIO", this.fluidIO.serializeNBT());
-        compound.put("output", this.output.serializeNBT());
-        this.tankIn.ifPresent(fluidTank -> compound.put("tankIn", fluidTank.writeToNBT(new CompoundTag())));
-        this.tankOut.ifPresent(fluidTank -> compound.put("tankOut", fluidTank.writeToNBT(new CompoundTag())));
-        super.saveAdditional(compound);
+        compound.put("output", this.output.write());
+        this.tankIn.ifPresent(fluidTank -> compound.put("tankIn", fluidTank.writeToNBT(new CompoundNBT())));
+        this.tankOut.ifPresent(fluidTank -> compound.put("tankOut", fluidTank.writeToNBT(new CompoundNBT())));
+        return super.write(compound);
     }
 
     @Override
-    public void tick() {
-        if (this.level == null) {
-            return;
-        }
+    public void tick()
+    {
+        if (this.world == null) return;
 
         if
         (
-                FluidHelper.notifyFluidTankInteraction(this.fluidIO, 0, 2, this.tankIn.orElse(new FluidTank(0)), this.level, this.worldPosition)
-                        || FluidHelper.notifyFluidTankInteraction(this.fluidIO, 1, 2, this.tankOut.orElse(new FluidTank(0)), this.level, this.worldPosition)
-        ) {
-            this.setChanged();
-            if (this.level != null) {
-                // todo 最后一个参数不再在混淆的时候去除了，可以在 Block 里调用常量
-                this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition),
-                        //                                           todo 之前你写的 3
-                        this.level.getBlockState(this.worldPosition), Block.UPDATE_ALL);
-            }
+            FluidHelper.notifyFluidTankInteraction(this.fluidIO, 0, 2, this.tankIn.orElse(new FluidTank(0)), this.world, this.pos)
+         || FluidHelper.notifyFluidTankInteraction(this.fluidIO, 1, 2, this.tankOut.orElse(new FluidTank(0)), this.world, this.pos)
+        )
+        {
+            this.markDirty();
+            if (this.world != null) this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 3);
         }
 
-        if (!this.level.isClientSide()) {
-            if (hasInput()) {
+        if (!this.world.isRemote())
+        {
+            if (hasInput())
+            {
                 boolean matchAny = false;
-                Optional<MillRecipe> recipeIn = tryMatchRecipe();
-                if (recipeIn.isPresent() && canProduce(recipeIn.get())) {
-                    if (this.recipe == null || !this.recipe.equals(recipeIn.get())) {
-                        applyRecipe(recipeIn.get());
-                    }
+                Optional<MillRecipe> recipeIn = tryMatchRecipe(new RecipeWrapper(input));
+                if (recipeIn.isPresent() && canProduce(recipeIn.get()))
+                {
+                    if (this.recipe == null || !this.recipe.equals(recipeIn.get())) applyRecipe(recipeIn.get());
                     matchAny = true;
                 }
-                if (!matchAny) {
-                    finishReciping(null);
-                }
-                if (isWorking) {
-                    if (round == roundTotal) {
-                        finishReciping(recipe);
-                    } else {
-                        if (roundProgress == roundTicks) {
-                            roundProgress = 0;
-                            round += 1;
-                        } else {
-                            roundProgress += 1;
-                        }
+                if (!matchAny) {finishReciping(null);}
+                if (isWorking)
+                {
+                    if (round == roundTotal) {finishReciping(recipe);}
+                    else
+                    {
+                        if (roundProgress == roundTicks) {roundProgress = 0; round += 1;}
+                        else {roundProgress += 1;}
                         this.sync();
-                        setChanged();
+                        markDirty();
                     }
                 }
-            } else if (isWorking) {
-                finishReciping(null);
             }
+            else if (isWorking) finishReciping(null);
         }
     }
 
     @Override
-    public TranslatableComponent getDisplayName() {
-        return new TranslatableComponent("gui." + Ashihara.MODID + ".mill");
-    }
+    public ITextComponent getDisplayName() {return new TranslationTextComponent("gui." + Ashihara.MODID + ".mill");}
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int p_createMenu_1_, Inventory p_createMenu_2_, Player p_createMenu_3_) {
-        if (this.level == null) {
-            return null;
-        }
-        return new MillContainer(p_createMenu_1_, p_createMenu_2_, this.level, this.worldPosition, this.millData);
+    public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_)
+    {
+        if (this.world == null) return null;
+        return new MillContainer(p_createMenu_1_, p_createMenu_2_, this.world, this.pos, this.millData);
     }
 
-    // todo 不应该让 sync 变得臃肿，而是覆写 getUpdateTag
-    // private void sync() {
-    //     if (this.level == null || this.level.isClientSide()) {
-    //         return;
-    //     }
-    //     CompoundTag nbt = new CompoundTag();
-    //     nbt.putInt("roundProgress", this.roundProgress);
-    //     nbt.putInt("roundTicks", this.roundTicks);
-    //     this.tankIn.ifPresent(tank -> nbt.put("tankIn", tank.writeToNBT(new CompoundTag())));
-    //     this.tankOut.ifPresent(tank -> nbt.put("tankOut", tank.writeToNBT(new CompoundTag())));
-    //     //                                                                  todo create 的单参调用 getUpdateTag
-    //     ClientboundBlockEntityDataPacket p = ClientboundBlockEntityDataPacket.create(this, (be) -> nbt);
-    //     ((ServerLevel) this.level).getChunkSource().chunkMap.getPlayers(new ChunkPos(this.worldPosition), false)
-    //             .forEach(k -> k.connection.send(p));
-    // }
-
-    @Override
-    public CompoundTag getUpdateTag() {
-        CompoundTag nbt = new CompoundTag();
+    private void sync()
+    {
+        if (this.world == null) return;
+        CompoundNBT nbt = new CompoundNBT();
         nbt.putInt("roundProgress", this.roundProgress);
         nbt.putInt("roundTicks", this.roundTicks);
-        this.tankIn.ifPresent(tank -> nbt.put("tankIn", tank.writeToNBT(new CompoundTag())));
-        this.tankOut.ifPresent(tank -> nbt.put("tankOut", tank.writeToNBT(new CompoundTag())));
-        return nbt;
+        this.tankIn.ifPresent(tank -> nbt.put("tankIn", tank.writeToNBT(new CompoundNBT())));
+        this.tankOut.ifPresent(tank -> nbt.put("tankOut", tank.writeToNBT(new CompoundNBT())));
+        SUpdateTileEntityPacket p = new SUpdateTileEntityPacket(this.pos, 1, nbt);
+        ((ServerWorld)this.world).getChunkProvider().chunkManager.getTrackingPlayers(new ChunkPos(this.pos), false)
+        .forEach(k -> k.connection.sendPacket(p));
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-        CompoundTag nbt = pkt.getTag();
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
+    {
+        CompoundNBT nbt = pkt.getNbtCompound();
         this.roundProgress = nbt.getInt("roundProgress");
         this.roundTicks = nbt.getInt("roundTicks");
         this.tankIn.ifPresent(tank -> tank.readFromNBT(nbt.getCompound("tankIn")));

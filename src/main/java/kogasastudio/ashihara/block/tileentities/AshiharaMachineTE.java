@@ -1,44 +1,29 @@
 package kogasastudio.ashihara.block.tileentities;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 
-public class AshiharaMachineTE extends BlockEntity {
+import javax.annotation.Nullable;
 
-    public AshiharaMachineTE(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
-    }
+public class AshiharaMachineTE extends TileEntity
+{
+    public AshiharaMachineTE(TileEntityType<?> type) {super(type);}
 
     @Override
-    public CompoundTag getUpdateTag() {
-        var result = new CompoundTag();
-        this.saveAdditional(result);
-        return result;
-    }
-
-    // todo 将子类的 sync 提上来
-    protected final void sync() {
-        if (this.level == null || this.level.isClientSide()) {
-            return;
-        }
-        //                                                                  todo create 的单参调用 getUpdateTag
-        var packet = ClientboundBlockEntityDataPacket.create(this);
-        ((ServerLevel) this.level).getChunkSource().chunkMap.getPlayers(new ChunkPos(this.worldPosition), false)
-                .forEach(k -> k.connection.send(packet));
-    }
-
-    // todo handleUpdateTag / handlePacket 是默认实现，所以删了
+    public CompoundNBT getUpdateTag() {return this.write(new CompoundNBT());}
 
     @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
-    }
+    public void handleUpdateTag(BlockState state, CompoundNBT tag) {this.read(state, tag);}
+
+    @Nullable
+    @Override
+    public SUpdateTileEntityPacket getUpdatePacket()
+    {return new SUpdateTileEntityPacket(this.pos, -1, this.write(new CompoundNBT()));}
+
+    @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {this.read(this.getBlockState(), pkt.getNbtCompound());}
 }

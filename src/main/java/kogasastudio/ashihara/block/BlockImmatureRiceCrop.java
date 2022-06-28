@@ -1,52 +1,58 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.item.ItemRegistryHandler;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.CropsBlock;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.util.IItemProvider;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BlockImmatureRiceCrop extends CropBlock {
-    public BlockImmatureRiceCrop() {
+public class BlockImmatureRiceCrop extends CropsBlock
+{
+    public BlockImmatureRiceCrop()
+    {
         super
-                (
-                        BlockBehaviour.Properties.of(Material.PLANT)
-                                .noCollission()
-                                .randomTicks()
-                                .instabreak()
-                                .sound(SoundType.CROP)
-                );
+        (
+            Properties.create(Material.PLANTS)
+            .doesNotBlockMovement()
+            .tickRandomly()
+            .zeroHardnessAndResistance()
+            .sound(SoundType.CROP)
+        );
     }
 
     @Override
-    protected ItemLike getBaseSeedId() {
+    protected IItemProvider getSeedsItem()
+    {
         return ItemRegistryHandler.PADDY.get();
     }
 
     @Override
-    public int getMaxAge() {
+    public int getMaxAge()
+    {
         return 2;
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
+    {
         List<ItemStack> list = new LinkedList<>();
-        if (this.getAge(state) == 2) {
+        if (this.getAge(state) == 2)
+        {
             list.add(new ItemStack(ItemRegistryHandler.RICE_SEEDLING.get()));
             return list;
-        } else if (this.getAge(state) <= 1) {
+        }
+        else if (this.getAge(state) <= 1)
+        {
             list.add(new ItemStack(ItemRegistryHandler.PADDY.get()));
             return list;
-        } else {
-            return Collections.emptyList();
         }
+        else return Collections.emptyList();
     }
 }

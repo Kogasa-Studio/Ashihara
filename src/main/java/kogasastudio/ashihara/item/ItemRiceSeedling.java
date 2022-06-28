@@ -1,42 +1,43 @@
 package kogasastudio.ashihara.item;
 
 import kogasastudio.ashihara.block.BlockRegistryHandler;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import java.util.Objects;
 
 import static kogasastudio.ashihara.Ashihara.ASHIHARA;
 
-public class ItemRiceSeedling extends Item {
-    public ItemRiceSeedling() {
-        super(new Properties().tab(ASHIHARA));
-    }
+public class ItemRiceSeedling extends Item
+{
+    public ItemRiceSeedling() {super(new Properties().group(ASHIHARA));}
 
     @Override
-    public InteractionResult useOn(UseOnContext context) {
-        ItemStack item = context.getItemInHand();
-        Player player = context.getPlayer();
-        Level worldIn = context.getLevel();
-        BlockPos pos = context.getClickedPos().below();
-        Direction facing = context.getClickedFace();
-        if (!item.isEmpty() && Objects.requireNonNull(player).mayUseItemAt(pos.relative(facing), facing, item)) {
-            BlockState state = worldIn.getBlockState(pos.above());
-            if (state.is(BlockRegistryHandler.WATER_FIELD.get()) && worldIn.getBlockState(pos.above(2)).getBlock() == Blocks.AIR) {
-                worldIn.setBlockAndUpdate(pos.above(2), BlockRegistryHandler.RICE_CROP.get().defaultBlockState());
-                if (!player.getAbilities().instabuild) {
-                    item.shrink(1);
-                }
-                return InteractionResult.SUCCESS;
-            } else return InteractionResult.PASS;
-        } else return InteractionResult.FAIL;
+    public ActionResultType onItemUse(ItemUseContext context)
+    {
+        ItemStack item = context.getItem();
+        PlayerEntity player = context.getPlayer();
+        World worldIn = context.getWorld();
+        BlockPos pos = context.getPos().down();
+        Direction facing = context.getFace();
+        if (!item.isEmpty() && Objects.requireNonNull(player).canPlayerEdit(pos.offset(facing), facing, item))
+        {
+            BlockState state = worldIn.getBlockState(pos.up());
+            if (state.matchesBlock(BlockRegistryHandler.WATER_FIELD.get()) && worldIn.getBlockState(pos.up(2)).getBlock() == Blocks.AIR)
+            {
+                worldIn.setBlockState(pos.up(2), BlockRegistryHandler.RICE_CROP.get().getDefaultState());
+                if (!player.abilities.isCreativeMode) {item.shrink(1);}
+                return ActionResultType.SUCCESS;
+            }
+            else return ActionResultType.PASS;
+        }
+        else return ActionResultType.FAIL;
     }
 }
