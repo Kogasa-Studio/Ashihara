@@ -40,11 +40,11 @@ public class WorldGenEventRegistryHandler {
                 Feature.TREE,
                 new TreeConfiguration.TreeConfigurationBuilder
                 (
-                        BlockStateProvider.simple(BlockRegistryHandler.CHERRY_LOG.get().defaultBlockState()),
-                        new FancyTrunkPlacer(3, 11, 0),
-                        BlockStateProvider.simple(BlockRegistryHandler.CHERRY_BLOSSOM.get().defaultBlockState()),
-                        new FancyFoliagePlacer(ConstantInt.of(2), ConstantInt.of(4), 4),
-                        new TwoLayersFeatureSize(1, 0, 1)
+                    BlockStateProvider.simple(BlockRegistryHandler.CHERRY_LOG.get().defaultBlockState()),
+                    new FancyTrunkPlacer(3, 11, 0),
+                    BlockStateProvider.simple(BlockRegistryHandler.CHERRY_BLOSSOM.get()),
+                    new FancyFoliagePlacer(ConstantInt.of(2), ConstantInt.of(4), 4),
+                    new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4))
                 )
                 .ignoreVines()
                 // .heightmap(Heightmap.Type.MOTION_BLOCKING)

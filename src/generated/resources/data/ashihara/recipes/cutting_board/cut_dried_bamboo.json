@@ -1,8 +1,8 @@
 {
-  "input": {
+  "ingredient": {
     "item": "ashihara:dried_bamboo"
   },
-  "output": [
+  "result": [
     {
       "item": "ashihara:bamboo_material",
       "count": 4

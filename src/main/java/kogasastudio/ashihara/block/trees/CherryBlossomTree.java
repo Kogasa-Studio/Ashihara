@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block.trees;
 
+import kogasastudio.ashihara.world.WorldGenEventRegistryHandler;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.grower.AbstractTreeGrower;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -10,9 +11,8 @@ import java.util.Random;
 public class CherryBlossomTree extends AbstractTreeGrower {
     @Nullable
     @Override
-    protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(Random randomIn, boolean largeHive) {
-        // todo
-        //return WorldGenEventRegistryHandler.FANCY_CHERRY;
-        return null;
+    protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(Random randomIn, boolean largeHive)
+    {
+        return WorldGenEventRegistryHandler.FANCY_CHERRY.getHolder().get();
     }
 }

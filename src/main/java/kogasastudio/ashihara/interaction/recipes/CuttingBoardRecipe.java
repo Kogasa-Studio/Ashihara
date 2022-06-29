@@ -19,14 +19,14 @@ public class CuttingBoardRecipe extends BaseRecipe {
     @Expose
     private final Ingredient ingredient;
     @Expose
-    private final NonNullList<ItemStack> output;
+    private final NonNullList<ItemStack> result;
     @Expose
     private final CuttingBoardToolType tool;
 
     public CuttingBoardRecipe(ResourceLocation idIn, Ingredient inputIn, NonNullList<ItemStack> outputIn, CuttingBoardToolType typeIn) {
         this.id = idIn;
         this.ingredient = inputIn;
-        this.output = outputIn;
+        this.result = outputIn;
         this.tool = typeIn;
     }
 
@@ -34,7 +34,7 @@ public class CuttingBoardRecipe extends BaseRecipe {
     {
         return
         "\n{\n    input: " + Arrays.toString(this.ingredient.getItems())
-        + "\n    output: " + this.output.toString()
+        + "\n    output: " + this.result.toString()
         + "\n    id: " + this.id.toString()
         + "\n    type: " + this.tool.getName()
         + "\n}";
@@ -57,11 +57,11 @@ public class CuttingBoardRecipe extends BaseRecipe {
 
     @Override
     public ItemStack getResultItem() {
-        return this.output.get(0);
+        return this.result.get(0);
     }
 
     public NonNullList<ItemStack> getOutput() {
-        return this.output;
+        return this.result;
     }
 
     public CuttingBoardToolType getTool() {
