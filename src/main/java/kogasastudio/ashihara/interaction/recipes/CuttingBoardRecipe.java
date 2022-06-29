@@ -17,7 +17,7 @@ import java.util.List;
 
 public class CuttingBoardRecipe extends BaseRecipe {
     @Expose
-    private final Ingredient input;
+    private final Ingredient ingredient;
     @Expose
     private final NonNullList<ItemStack> output;
     @Expose
@@ -25,23 +25,24 @@ public class CuttingBoardRecipe extends BaseRecipe {
 
     public CuttingBoardRecipe(ResourceLocation idIn, Ingredient inputIn, NonNullList<ItemStack> outputIn, CuttingBoardToolType typeIn) {
         this.id = idIn;
-        this.input = inputIn;
+        this.ingredient = inputIn;
         this.output = outputIn;
         this.tool = typeIn;
     }
 
-    public String getInfo() {
+    public String getInfo()
+    {
         return
-                "\n{\n    input: " + Arrays.toString(this.input.getItems())
-                        + "\n    output: " + this.output.toString()
-                        + "\n    id: " + this.id.toString()
-                        + "\n    type: " + this.tool.getName()
-                        + "\n}";
+        "\n{\n    input: " + Arrays.toString(this.ingredient.getItems())
+        + "\n    output: " + this.output.toString()
+        + "\n    id: " + this.id.toString()
+        + "\n    type: " + this.tool.getName()
+        + "\n}";
     }
 
     @Override
     public boolean matches(List<ItemStack> inputs) {
-        return input.test(inputs.get(0));
+        return ingredient.test(inputs.get(0));
     }
 
     @Override
@@ -51,7 +52,7 @@ public class CuttingBoardRecipe extends BaseRecipe {
 
     @Override
     public NonNullList<Ingredient> getIngredients() {
-        return NonNullList.of(this.input);
+        return NonNullList.of(this.ingredient);
     }
 
     @Override
@@ -83,6 +84,6 @@ public class CuttingBoardRecipe extends BaseRecipe {
     }
 
     public Ingredient getInput() {
-        return input;
+        return ingredient;
     }
 }

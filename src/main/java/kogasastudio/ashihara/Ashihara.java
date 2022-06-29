@@ -19,11 +19,14 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Random;
+
 @Mod(Ashihara.MODID)
 @Mod.EventBusSubscriber(modid = Ashihara.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Ashihara {
     public static final String MODID = "ashihara";
     public static final Logger LOGGER_MAIN = LogManager.getLogger();
+    public static final Random RANDOM = new Random();
     public static final CreativeModeTab ASHIHARA = new CreativeModeTab("group_ashihara") {
         @Override
         public ItemStack makeIcon() {
@@ -42,6 +45,10 @@ public class Ashihara {
             return new ItemStack(ItemRegistryHandler.JINJA_LANTERN.get());
         }
     };
+
+    public static Random getRandom() {return RANDOM;}
+
+    public static int getRandomBounded(int startIndex, int endIndex) {return RANDOM.nextInt(endIndex - startIndex) + startIndex;}
 
     public Ashihara()
     {

@@ -2,6 +2,7 @@ package kogasastudio.ashihara.world;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
@@ -75,7 +76,7 @@ public class WorldGenEventRegistryHandler {
         PLACED_FEATURE.register
         (
             "forest_cherry_trees",
-            () -> new PlacedFeature(FANCY_CHERRY.getHolder().get(), DefaultTreeModifiers(3, 0.1F, 1))
+            () -> new PlacedFeature(FANCY_CHERRY.getHolder().get(), DefaultTreeModifiers(4, 0.1F, Ashihara.getRandomBounded(1, 3)))
         );
 
     public static final RegistryObject<PlacedFeature> PLAIN_CHERRY_TREES =
