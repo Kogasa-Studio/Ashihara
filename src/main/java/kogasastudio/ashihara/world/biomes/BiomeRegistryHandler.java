@@ -19,6 +19,8 @@ public class BiomeRegistryHandler {
 
     public static final RegistryObject<Biome> JUNIOR_CHERRY_FOREST =
             BIOMES.register("junior_cherry_forest", AshiharaBiomes::juniorCherryForest);
+    public static final RegistryObject<Biome> RED_MAPLE_FOREST =
+            BIOMES.register("red_maple_forest", AshiharaBiomes::redMapleForest);
 
     public static void onRegister(RegistryEvent.Register<Biome> event) {
         /// addBiome(event, BiomeManager.BiomeType.WARM, "junior_cherry_forest", 5, JuniorCherryForest());
@@ -30,9 +32,7 @@ public class BiomeRegistryHandler {
 
     @SubscribeEvent
     public static void onEvent(FMLCommonSetupEvent event) {
-        event.enqueueWork(() -> {
-            Regions.register(new AshiharaBiomeRegion(new ResourceLocation(Ashihara.MODID, OVERWORD), 2));
-        });
+        event.enqueueWork(() -> Regions.register(new AshiharaBiomeRegion(new ResourceLocation(Ashihara.MODID, OVERWORD), 2)));
     }
 
     private static RegistryObject<Biome> addBiome(RegistryObject<Biome> biome, BiomeManager.BiomeType type, int weight) {

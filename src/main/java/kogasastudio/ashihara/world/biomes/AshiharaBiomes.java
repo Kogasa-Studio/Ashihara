@@ -51,44 +51,47 @@ public class AshiharaBiomes {
                 .build();
     }
 
-    //public static Biome RedMapleForest() {
-    //    BiomeGenerationSettings.Builder builder = makeDefaultBuilder();
-    //    builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.FOREST_RED_MAPLE_TREES);
-    //    DefaultBiomeFeatures.addForestGrass(builder);
-    //    DefaultBiomeFeatures.addForestFlowers(builder);
+    public static Biome redMapleForest()
+    {
+        BiomeGenerationSettings.Builder builder = makeDefaultBuilder();
 
-    //    return
-    //            (
-    //                    new Biome.Builder()
-    //                            .precipitation(Biome.RainType.RAIN)
-    //                            .biomeCategory(Biome.Category.FOREST)
-    //                            .depth(0.1F)
-    //                            .scale(0.2F)
-    //                            .temperature(0.6F)
-    //                            .downfall(0.8F)
-    //                            .specialEffects
-    //                                    (
-    //                                            new BiomeAmbience.Builder()
-    //                                                    .waterColor(0x00BBC6)
-    //                                                    .waterFogColor(0x00AA93)
-    //                                                    .fogColor(0xC7EA7A)
-    //                                                    .grassColorOverride(0xA1E013)
-    //                                                    .skyColor(getSkyColorWithTemperatureModifier(0.9F))
-    //                                                    .ambientMoodSound(MoodSoundAmbience.LEGACY_CAVE_SETTINGS)
-    //                                                    .build()
-    //                                    )
-    //                            .mobSpawnSettings
-    //                                    (
-    //                                            getStandardMobSpawnBuilder()
-    //                                                    .addSpawn(MobCategory.CREATURE, new MobSpawnInfo.Spawners(EntityType.RABBIT, 10, 2, 3))
-    //                                                    .addSpawn(MobCategory.CREATURE, new MobSpawnInfo.Spawners(EntityType.FOX, 5, 1, 3))
-    //                                                    .build()
-    //                                    )
-    //                            .generationSettings(builder.build())
-    //                            .build()
-    //                            .setRegistryName("ashihara:red_maple_forest")
-    //            );
-    //}
+        builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.FOREST_RED_MAPLE_TREES.getHolder().get());
+        BiomeDefaultFeatures.addSavannaGrass(builder);
+        BiomeDefaultFeatures.addSavannaExtraGrass(builder);
+        BiomeDefaultFeatures.addDefaultOres(builder, true);
+        BiomeDefaultFeatures.addDefaultSoftDisks(builder);
+        BiomeDefaultFeatures.addDefaultMushrooms(builder);
+        BiomeDefaultFeatures.addDefaultExtraVegetation(builder);
+
+        return
+        (
+            new Biome.BiomeBuilder()
+            .precipitation(Biome.Precipitation.RAIN)
+            .biomeCategory(Biome.BiomeCategory.FOREST)
+            .temperature(0.6F)
+            .downfall(0.8F)
+            .specialEffects
+            (
+                new BiomeSpecialEffects.Builder()
+                .waterColor(0x00BBC6)
+                .waterFogColor(0x00AA93)
+                .fogColor(0xC7EA7A)
+                .grassColorOverride(0xA1E013)
+                .skyColor(getSkyColorWithTemperatureModifier(0.9F))
+                .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
+                .build()
+            )
+            .mobSpawnSettings
+            (
+                getStandardMobSpawnBuilder()
+                .addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.RABBIT, 10, 2, 3))
+                .addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.FOX, 5, 1, 3))
+                .build()
+            )
+            .generationSettings(builder.build())
+            .build()
+        );
+    }
 
     //public static Biome SnowyCherryForest() {
     //    BiomeGenerationSettings.Builder builder = makeDefaultBuilder();

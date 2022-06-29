@@ -17,13 +17,11 @@ public class WorldGenerationEventHandler {
     @SubscribeEvent
     public static void onTreesGenerate(BiomeLoadingEvent event)
     {
-        if (event.getCategory().equals(Biome.BiomeCategory.PLAINS))
+        Biome.BiomeCategory category = event.getCategory();
+        if (category.equals(Biome.BiomeCategory.PLAINS) || category.equals(Biome.BiomeCategory.EXTREME_HILLS))
         {
             event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.PLAIN_CHERRY_TREES.getHolder().get());
-        }
-        if (event.getCategory().equals(Biome.BiomeCategory.EXTREME_HILLS))
-        {
-            event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.PLAIN_CHERRY_TREES.getHolder().get());
+            event.getGeneration().addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, WorldGenEventRegistryHandler.PLAIN_RED_MAPLE_TREES.getHolder().get());
         }
         // todo 需要重写
         // if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.PLAINS)) {
