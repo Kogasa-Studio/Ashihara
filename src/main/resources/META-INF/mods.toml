@@ -23,3 +23,9 @@ A mod which adds tons of japanese elements
     versionRange="[1.18,1.19)"
     ordering="NONE"
     side="BOTH"
+[[dependencies.ashihara]]
+    modId="terrablender"
+    mandatory=true
+    versionRange="[1.1.0.101,)"
+    ordering="NONE"
+    side="BOTH"
