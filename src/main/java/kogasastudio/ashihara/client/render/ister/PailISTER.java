@@ -8,6 +8,7 @@ import com.mojang.math.Vector3f;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.block.tileentities.PailTE;
 import kogasastudio.ashihara.client.models.PailItemModel;
+import kogasastudio.ashihara.client.render.LayerRegistryHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -25,8 +26,12 @@ import net.minecraftforge.fluids.FluidStack;
 import static kogasastudio.ashihara.helper.RenderHelper.buildMatrix;
 
 public class PailISTER extends BlockEntityWithoutLevelRenderer {
-    public PailISTER(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet) {
+
+    private final PailItemModel model;
+    public PailISTER(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet)
+    {
         super(pBlockEntityRenderDispatcher, pEntityModelSet);
+        this.model = new PailItemModel(pEntityModelSet.bakeLayer(LayerRegistryHandler.PAIL_ITEM));
     }
 
     @Override
@@ -36,8 +41,6 @@ public class PailISTER extends BlockEntityWithoutLevelRenderer {
         PailTE te = new PailTE(BlockPos.ZERO, BlockRegistryHandler.PAIL.get().defaultBlockState());
         CompoundTag nbt = stack.getTagElement("BlockEntityTag");
         if (nbt != null && !nbt.isEmpty()) te.load(nbt);
-
-        PailItemModel model = new PailItemModel();
 
         VertexConsumer builder = buffer.getBuffer(RenderType.translucentNoCrumbling());
         VertexConsumer builder1 = buffer.getBuffer(RenderType.entitySolid(PAIL));

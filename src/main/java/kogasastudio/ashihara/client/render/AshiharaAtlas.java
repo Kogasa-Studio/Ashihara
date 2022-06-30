@@ -20,9 +20,9 @@ public class AshiharaAtlas {
     //纹理路径省略开头的 textures/ 和结尾的 .png ，mc会自动加上
 
     @SubscribeEvent
-    public static void onAtlasGenerate(ModelRegistryEvent event) {
-        // todo 建议使用 at
-        //用反射拿到一个原版字段，用来将我们的小贴图丢进Atlas并把Atlas丢进游戏
+    public static void onAtlasGenerate(ModelRegistryEvent event)
+    {
+        //用at拿到一个原版字段，用来将我们的小贴图丢进Atlas并把Atlas丢进游戏
         Set<Material> miscMaterials = ModelBakery.UNREFERENCED_TEXTURES;
         //纹章
         ArrayList<ResourceLocation> icons = new ArrayList<>
