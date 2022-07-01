@@ -34,7 +34,7 @@ public class AshiharaBiomeRegion extends Region {
             (
                 span(-0.41f, 4.5f),
                 span(0.4f, 0.85f),
-                span(-0.11f, 0.35f),
+                span(0.21f, 0.35f),
                 span(-0.2225f, 0.05f),
                 point(1.0f),
                 span(-0.4F, -0.26F),
@@ -49,7 +49,7 @@ public class AshiharaBiomeRegion extends Region {
             (
                 span(-0.21f, 5.5f),
                 span(0.3f, 0.85f),
-                span(0.05f, 0.35f),
+                span(0.29f, 0.35f),
                 span(-0.2225f, 0.05f),
                 point(1.0f),
                 span(-0.35F, -0.18F),
