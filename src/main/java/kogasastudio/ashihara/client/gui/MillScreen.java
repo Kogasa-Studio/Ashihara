@@ -45,12 +45,11 @@ public class MillScreen extends AbstractContainerScreen<MillContainer> {
     }
 
     @Override
-    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y)
+    {
         renderBackground(matrixStack);
 
-        if (this.minecraft == null) {
-            return;
-        }
+        if (this.minecraft == null) return;
 
         this.minecraft.getTextureManager().bindForSetup(GUI);
         int i = (this.width - this.imageWidth) / 2;
@@ -59,35 +58,35 @@ public class MillScreen extends AbstractContainerScreen<MillContainer> {
         blit(matrixStack, i + 91, j + 59, 176, 0, progress, 12);
 
         this.menu.getBe().getTank().ifPresent
-                (
-                        tank ->
-                        {
-                            if (!tank.isEmpty()) {
-                                matrixStack.pushPose();
-                                int capacity = tank.getCapacity();
-                                FluidStack fluid = tank.getFluid();
-                                int fluidAmount = fluid.getAmount();
-                                int displayHeight = (int) (((float) fluidAmount / (float) capacity) * 64);
-                                RenderHelper.renderFluidStackInGUI(matrixStack.last().pose(), fluid, 16, displayHeight, i + 17, j + 77);
-                                matrixStack.popPose();
-                            }
-                        }
-                );
+        (
+            tank ->
+            {
+                if (!tank.isEmpty()) {
+                    matrixStack.pushPose();
+                    int capacity = tank.getCapacity();
+                    FluidStack fluid = tank.getFluid();
+                    int fluidAmount = fluid.getAmount();
+                    int displayHeight = (int) (((float) fluidAmount / (float) capacity) * 64);
+                    RenderHelper.renderFluidStackInGUI(matrixStack.last().pose(), fluid, 16, displayHeight, i + 17, j + 77);
+                    matrixStack.popPose();
+                }
+            }
+        );
 
         this.menu.getBe().tankOut.ifPresent
-                (
-                        tank ->
-                        {
-                            if (!tank.isEmpty()) {
-                                matrixStack.pushPose();
-                                int capacity = tank.getCapacity();
-                                FluidStack fluid = tank.getFluid();
-                                int fluidAmount = fluid.getAmount();
-                                int displayWidth = (int) (((float) fluidAmount / (float) capacity) * 64);
-                                RenderHelper.renderFluidStackInGUI(matrixStack.last().pose(), fluid, displayWidth, 6, i + 54, j + 105);
-                                matrixStack.popPose();
-                            }
-                        }
-                );
+        (
+            tank ->
+            {
+                if (!tank.isEmpty()) {
+                    matrixStack.pushPose();
+                    int capacity = tank.getCapacity();
+                    FluidStack fluid = tank.getFluid();
+                    int fluidAmount = fluid.getAmount();
+                    int displayWidth = (int) (((float) fluidAmount / (float) capacity) * 64);
+                    RenderHelper.renderFluidStackInGUI(matrixStack.last().pose(), fluid, displayWidth, 6, i + 54, j + 105);
+                    matrixStack.popPose();
+                }
+            }
+        );
     }
 }

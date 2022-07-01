@@ -100,11 +100,12 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
     // simulate 为 true 的时候不会修改内容，但是会判断能不能放入
     // 我的观念是能复用轮子就复用轮子
     //检测当前匹配的配方其产出物是否能够填充进输出栏
-    private boolean canProduce(MillRecipe r) {
+    private boolean canProduce(MillRecipe r)
+    {
         var result = r.matches(input.getContent()) &&
-                r.testInputFluid(tankIn.orElse(null)) &&
+                r.testInputFluid(tankIn.orElse(new FluidTank(0))) &&
                 // todo 善用 simulate 模拟输入输出
-                tankOut.resolve().get().fill(r.getOutputFluid(), SIMULATE) == r.getOutputFluid().getAmount();
+                tankOut.resolve().orElse(new FluidTank(0)).fill(r.getOutputFluid(), SIMULATE) == r.getOutputFluid().getAmount();
 
         if (!result) {
 

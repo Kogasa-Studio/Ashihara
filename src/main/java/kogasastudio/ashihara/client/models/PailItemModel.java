@@ -1,7 +1,5 @@
 package kogasastudio.ashihara.client.models;
 // Made with Blockbench 4.2.5
-// Exported for Minecraft version 1.17 - 1.18 with Mojang mappings
-// Paste this class into your mod and generate all required imports
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.Model;

@@ -3,7 +3,6 @@ package kogasastudio.ashihara.item.block;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.client.render.ister.PailISTER;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.nbt.CompoundTag;
@@ -31,7 +30,7 @@ public class ItemBlockPail extends BlockItem {
         consumer.accept(new IItemRenderProperties() {
             @Override
             public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
-                return new PailISTER(Minecraft.getInstance().getBlockEntityRenderDispatcher(), new EntityModelSet());
+                return new PailISTER(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
             }
         });
     }

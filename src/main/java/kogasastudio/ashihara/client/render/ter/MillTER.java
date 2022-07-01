@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import kogasastudio.ashihara.block.tileentities.MillTE;
 import kogasastudio.ashihara.client.models.MillStoneModel;
+import kogasastudio.ashihara.client.render.LayerRegistryHandler;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -15,8 +16,10 @@ import static kogasastudio.ashihara.block.BlockMill.FACING;
 
 public class MillTER implements BlockEntityRenderer<MillTE> {
     private static final ResourceLocation tex = new ResourceLocation("ashihara:textures/block/mill_stone.png");
-    private final MillStoneModel millStone = new MillStoneModel();
-    public MillTER(BlockEntityRendererProvider.Context rendererDispatcherIn) {
+    private final MillStoneModel millStone;
+    public MillTER(BlockEntityRendererProvider.Context rendererDispatcherIn)
+    {
+        this.millStone = new MillStoneModel(rendererDispatcherIn.bakeLayer(LayerRegistryHandler.MILL_STONE));
     }
 
     @Override
