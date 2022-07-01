@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kogasastudio.ashihara.helper.RenderHelper;
 import kogasastudio.ashihara.inventory.container.MillContainer;
@@ -51,7 +52,7 @@ public class MillScreen extends AbstractContainerScreen<MillContainer> {
 
         if (this.minecraft == null) return;
 
-        this.minecraft.getTextureManager().bindForSetup(GUI);
+        RenderSystem.setShaderTexture(0, GUI);
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
         blit(matrixStack, i, j, 0, 0, 176, 202, 256, 256);

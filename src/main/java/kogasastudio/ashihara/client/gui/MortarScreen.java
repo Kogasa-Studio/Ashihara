@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kogasastudio.ashihara.helper.RenderHelper;
 import kogasastudio.ashihara.inventory.container.MortarContainer;
@@ -67,7 +68,7 @@ public class MortarScreen extends AbstractContainerScreen<MortarContainer> {
             return;
         }
 
-        this.minecraft.getTextureManager().bindForSetup(GUI);
+        RenderSystem.setShaderTexture(0, GUI);
         MortarToolTypes nextStep = this.getNextStep(this.stepStateCode);
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
