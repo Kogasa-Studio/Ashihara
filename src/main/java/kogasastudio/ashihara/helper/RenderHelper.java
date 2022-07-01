@@ -190,7 +190,7 @@ public class RenderHelper {
                         .apply(fluid.getFluid().getAttributes().getStillTexture());
 
         //绑atlas
-        Minecraft.getInstance().getTextureManager().bindForSetup(InventoryMenu.BLOCK_ATLAS);
+        RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
 
         int color = fluid.getFluid().getAttributes().getColor();
 
