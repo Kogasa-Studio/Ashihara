@@ -30,7 +30,8 @@ public class ItemBlockPail extends BlockItem {
         consumer.accept(new IItemRenderProperties() {
             @Override
             public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
-                return new PailISTER(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
+                return new PailISTER(Minecraft.getInstance().getBlockEntityRenderDispatcher(),
+                        Minecraft.getInstance().getEntityModels());
             }
         });
     }
