@@ -1,0 +1,25 @@
+{
+  "inputCosts": [
+    [
+      {
+        "item": "minecraft:iron_ore"
+      },
+      1
+    ]
+  ],
+  "output": [
+    {
+      "item": "ashihara:iron_ore_shatter",
+      "count": 2
+    },
+    {
+      "item": "ashihara:stone_shatter",
+      "count": 2
+    }
+  ],
+  "round": 5,
+  "roundTicks": 100,
+  "exp": 20.0,
+  "type": "ashihara:mill",
+  "group": "test_group"
+}

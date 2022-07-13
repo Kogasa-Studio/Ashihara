@@ -1,0 +1,13 @@
+{
+  "ingredient": {
+    "item": "minecraft:warped_stem"
+  },
+  "result": [
+    {
+      "item": "minecraft:stripped_warped_stem",
+      "count": 1
+    }
+  ],
+  "tool": "axe",
+  "type": "ashihara:cutting"
+}

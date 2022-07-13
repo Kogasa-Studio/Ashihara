@@ -20,16 +20,17 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MortarRecipe extends BaseRecipe {
     @Expose
-    private final NonNullList<Ingredient> input;
+    public final NonNullList<Ingredient> input;
     @Expose
-    private final NonNullList<ItemStack> output;
+    public final NonNullList<ItemStack> output;
 
     @Expose
     @SerializedName("fluid")
-    private final FluidStack fluidCost;
+    public final FluidStack fluidCost;
 
     @Expose
     public int progress;
@@ -76,6 +77,8 @@ public class MortarRecipe extends BaseRecipe {
             return false;
         }
 
+        inputs = inputs.stream().filter(i -> !i.isEmpty()).collect(Collectors.toList());
+
         return RecipeMatcher.findMatches(inputs, this.input) != null;
     }
 
@@ -119,6 +122,6 @@ public class MortarRecipe extends BaseRecipe {
     }
 
     public FluidStack getFluidCost() {
-        return fluidCost;
+        return fluidCost == null ? FluidStack.EMPTY : fluidCost;
     }
 }

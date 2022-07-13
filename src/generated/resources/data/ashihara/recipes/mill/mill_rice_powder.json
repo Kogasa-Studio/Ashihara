@@ -1,0 +1,21 @@
+{
+  "inputCosts": [
+    [
+      {
+        "item": "ashihara:rice"
+      },
+      1
+    ]
+  ],
+  "output": [
+    {
+      "item": "ashihara:rice_powder",
+      "count": 1
+    }
+  ],
+  "round": 3,
+  "roundTicks": 30,
+  "exp": 20.0,
+  "type": "ashihara:mill",
+  "group": "test_group"
+}

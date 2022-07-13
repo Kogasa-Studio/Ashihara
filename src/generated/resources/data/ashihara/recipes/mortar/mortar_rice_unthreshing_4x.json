@@ -1,0 +1,45 @@
+{
+  "input": [
+    {
+      "item": "ashihara:paddy"
+    },
+    {
+      "item": "ashihara:paddy"
+    },
+    {
+      "item": "ashihara:paddy"
+    },
+    {
+      "item": "ashihara:paddy"
+    }
+  ],
+  "output": [
+    {
+      "item": "ashihara:rice",
+      "count": 1
+    },
+    {
+      "item": "ashihara:rice",
+      "count": 1
+    },
+    {
+      "item": "ashihara:rice",
+      "count": 1
+    },
+    {
+      "item": "ashihara:rice",
+      "count": 1
+    }
+  ],
+  "progress": 0,
+  "recipeType": 0,
+  "sequence": [
+    1,
+    1,
+    1,
+    1,
+    0
+  ],
+  "type": "ashihara:mortar",
+  "group": ""
+}

@@ -19,19 +19,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MillRecipe extends BaseRecipe {
-    @Expose
     private final NonNullList<Ingredient> input;
     @Expose
-    private final Map<Ingredient, Byte> inputCosts;
+    public final Map<Ingredient, Byte> inputCosts;
     @Expose
-    private final NonNullList<ItemStack> output;
+    public final NonNullList<ItemStack> output;
 
     @Expose
-    private final FluidStack inputFluid;
+    public final FluidStack inputFluid;
     @Expose
-    private final FluidStack outputFluid;
+    public final FluidStack outputFluid;
 
     @Expose
     public byte round;
@@ -44,7 +44,6 @@ public class MillRecipe extends BaseRecipe {
             (
                     ResourceLocation recipeId,
                     String groupId,
-                    NonNullList<Ingredient> inputIn,
                     Map<Ingredient, Byte> inputCostsIn,
                     NonNullList<ItemStack> outputIn,
                     FluidStack inFluid,
@@ -54,7 +53,7 @@ public class MillRecipe extends BaseRecipe {
         this.id = recipeId;
         this.group = groupId;
 
-        this.input = inputIn;
+        this.input = NonNullList.of(Ingredient.EMPTY, inputCostsIn.keySet().toArray(new Ingredient[0]));
         this.inputCosts = inputCostsIn;
         this.output = outputIn;
         this.inputFluid = inFluid;
@@ -92,6 +91,8 @@ public class MillRecipe extends BaseRecipe {
             LogManager.getLogger().error("MortarRecipe.matches: input is null. id: " + getId());
             return false;
         }
+
+        inputs = inputs.stream().filter(i -> !i.isEmpty()).collect(Collectors.toList());
 
         return RecipeMatcher.findMatches(inputs, this.input) != null;
     }

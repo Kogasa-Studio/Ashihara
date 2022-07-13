@@ -1,0 +1,13 @@
+{
+  "ingredient": {
+    "item": "minecraft:acacia_log"
+  },
+  "result": [
+    {
+      "item": "minecraft:stripped_acacia_log",
+      "count": 1
+    }
+  ],
+  "tool": "axe",
+  "type": "ashihara:cutting"
+}

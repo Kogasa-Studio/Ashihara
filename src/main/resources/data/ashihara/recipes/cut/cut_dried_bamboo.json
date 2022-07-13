@@ -1,6 +1,0 @@
-{
-  "type": "ashihara:cutting",
-  "ingredient": {"item": "ashihara:dried_bamboo"},
-  "result": [{"item": "ashihara:bamboo_material", "count": 4}],
-  "tool": "knife"
-}

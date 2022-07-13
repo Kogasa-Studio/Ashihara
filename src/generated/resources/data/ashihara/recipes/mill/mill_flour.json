@@ -1,0 +1,21 @@
+{
+  "inputCosts": [
+    [
+      {
+        "item": "minecraft:wheat"
+      },
+      2
+    ]
+  ],
+  "output": [
+    {
+      "item": "ashihara:flour",
+      "count": 2
+    }
+  ],
+  "round": 3,
+  "roundTicks": 100,
+  "exp": 20.0,
+  "type": "ashihara:mill",
+  "group": "test_group"
+}

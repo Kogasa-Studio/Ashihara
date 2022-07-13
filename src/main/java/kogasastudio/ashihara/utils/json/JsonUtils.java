@@ -3,13 +3,11 @@ package kogasastudio.ashihara.utils.json;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import kogasastudio.ashihara.utils.CuttingBoardToolType;
-import kogasastudio.ashihara.utils.json.serializer.CuttingBoardToolTypeSerializer;
-import kogasastudio.ashihara.utils.json.serializer.IngredientSerializer;
-import kogasastudio.ashihara.utils.json.serializer.ItemStackSerializer;
-import kogasastudio.ashihara.utils.json.serializer.NonNullListSerializer;
+import kogasastudio.ashihara.utils.json.serializer.*;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.fluids.FluidStack;
 
 /**
  * @author DustW
@@ -31,6 +29,7 @@ public enum JsonUtils {
                 .registerTypeAdapter(Ingredient.class, new IngredientSerializer())
                 .registerTypeAdapter(ItemStack.class, new ItemStackSerializer())
                 .registerTypeAdapter(NonNullList.class, new NonNullListSerializer())
+                .registerTypeAdapter(FluidStack.class, new FluidStackSerializer())
                 .registerTypeAdapter(CuttingBoardToolType.class, new CuttingBoardToolTypeSerializer());
 
         // 无视 @Expose 注解的 Gson 实例

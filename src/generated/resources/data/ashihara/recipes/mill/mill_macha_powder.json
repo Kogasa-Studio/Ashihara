@@ -1,0 +1,21 @@
+{
+  "inputCosts": [
+    [
+      {
+        "item": "ashihara:dried_tea_leaf"
+      },
+      3
+    ]
+  ],
+  "output": [
+    {
+      "item": "ashihara:macha_powder",
+      "count": 2
+    }
+  ],
+  "round": 3,
+  "roundTicks": 30,
+  "exp": 20.0,
+  "type": "ashihara:mill",
+  "group": "test_group"
+}

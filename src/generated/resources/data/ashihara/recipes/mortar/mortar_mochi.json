@@ -1,0 +1,34 @@
+{
+  "input": [
+    {
+      "item": "ashihara:rice_powder"
+    },
+    {
+      "item": "ashihara:rice_powder"
+    }
+  ],
+  "output": [
+    {
+      "item": "ashihara:mochi",
+      "count": 1
+    }
+  ],
+  "fluid": {
+    "fluid": "minecraft:water",
+    "amount": 1000
+  },
+  "progress": 0,
+  "recipeType": 1,
+  "sequence": [
+    2,
+    0,
+    2,
+    0,
+    2,
+    0,
+    2,
+    0
+  ],
+  "type": "ashihara:mortar",
+  "group": ""
+}

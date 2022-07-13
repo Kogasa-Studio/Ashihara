@@ -1,0 +1,21 @@
+{
+  "inputCosts": [
+    [
+      {
+        "item": "ashihara:soy_bean"
+      },
+      1
+    ]
+  ],
+  "output": [
+    {
+      "item": "ashihara:bean_powder",
+      "count": 2
+    }
+  ],
+  "round": 3,
+  "roundTicks": 50,
+  "exp": 20.0,
+  "type": "ashihara:mill",
+  "group": "test_group"
+}

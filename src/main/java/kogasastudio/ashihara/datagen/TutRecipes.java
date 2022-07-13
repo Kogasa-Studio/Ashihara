@@ -1,7 +1,9 @@
 package kogasastudio.ashihara.datagen;
 
-import kogasastudio.ashihara.datagen.recipes.AvarusRecipes;
+import kogasastudio.ashihara.datagen.recipes.MillRecipes;
+import kogasastudio.ashihara.datagen.recipes.ModGenRecipes;
 import kogasastudio.ashihara.datagen.recipes.CuttingBoardRecipes;
+import kogasastudio.ashihara.datagen.recipes.MortarRecipes;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.HashCache;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -27,7 +29,13 @@ public class TutRecipes extends RecipeProvider {
         super(generatorIn);
     }
 
-    protected List<AvarusRecipes> recipes = new ArrayList<>();
+    protected List<ModGenRecipes> recipes = new ArrayList<>();
+
+    protected void addCustomRecipes() {
+        recipes.add(new CuttingBoardRecipes());
+        recipes.add(new MillRecipes());
+        recipes.add(new MortarRecipes());
+    }
 
     @Override
     public void run(HashCache pCache) {
@@ -77,9 +85,5 @@ public class TutRecipes extends RecipeProvider {
     @Override
     protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
         addCustomRecipes();
-    }
-
-    protected void addCustomRecipes() {
-        recipes.add(new CuttingBoardRecipes());
     }
 }

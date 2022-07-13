@@ -1,0 +1,24 @@
+{
+  "inputCosts": [
+    [
+      {
+        "item": "ashihara:bean_powder"
+      },
+      2
+    ]
+  ],
+  "output": [],
+  "inputFluid": {
+    "fluid": "minecraft:water",
+    "amount": 100
+  },
+  "outputFluid": {
+    "fluid": "ashihara:soy_milk",
+    "amount": 100
+  },
+  "round": 1,
+  "roundTicks": 20,
+  "exp": 20.0,
+  "type": "ashihara:mill",
+  "group": "test_group"
+}

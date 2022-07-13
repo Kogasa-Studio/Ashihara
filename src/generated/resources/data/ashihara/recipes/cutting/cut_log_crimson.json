@@ -1,0 +1,13 @@
+{
+  "ingredient": {
+    "item": "minecraft:crimson_stem"
+  },
+  "result": [
+    {
+      "item": "minecraft:stripped_crimson_stem",
+      "count": 1
+    }
+  ],
+  "tool": "axe",
+  "type": "ashihara:cutting"
+}

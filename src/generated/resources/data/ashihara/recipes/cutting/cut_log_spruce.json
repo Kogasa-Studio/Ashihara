@@ -1,0 +1,13 @@
+{
+  "ingredient": {
+    "item": "minecraft:spruce_log"
+  },
+  "result": [
+    {
+      "item": "minecraft:stripped_spruce_log",
+      "count": 1
+    }
+  ],
+  "tool": "axe",
+  "type": "ashihara:cutting"
+}

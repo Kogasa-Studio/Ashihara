@@ -1,6 +1,0 @@
-{
-  "type": "ashihara:cutting",
-  "ingredient": {"item": "minecraft:melon"},
-  "result": [{"item": "minecraft:melon_slice", "count": 9}],
-  "tool": "axe"
-}

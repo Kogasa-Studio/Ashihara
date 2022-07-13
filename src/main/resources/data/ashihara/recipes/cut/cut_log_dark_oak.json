@@ -1,6 +1,0 @@
-{
-  "type": "ashihara:cutting",
-  "ingredient": {"item": "minecraft:dark_oak_log"},
-  "result": [{"item": "minecraft:stripped_dark_oak_log", "count": 1}],
-  "tool": "axe"
-}
