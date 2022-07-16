@@ -62,8 +62,6 @@ public class MortarScreen extends AbstractContainerScreen<MortarContainer> {
 
     @Override
     protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
-        renderBackground(matrixStack);
-
         if (this.minecraft == null) {
             return;
         }

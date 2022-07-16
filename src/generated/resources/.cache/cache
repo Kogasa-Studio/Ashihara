@@ -1,3 +1,5 @@
+401a3e8eca393758b604f7b144b3d0740223a8ea data/ashihara/loot_tables/blocks/cherry_blossom.json
+9547c819bcf3ee66e83ef6c95642ebc9337b7a40 data/ashihara/loot_tables/blocks/maple_leaves_red.json
 fff1d78bc558a9465fdb8690bd14e973b5a238f9 data/ashihara/recipes/cutting/cut_dried_bamboo.json
 c2c865cb6e1bd53ccb220f633d22038382089065 data/ashihara/recipes/cutting/cut_log_acacia.json
 d950fdc721feae7d2591fbe7c4da57eb4c3ec9bf data/ashihara/recipes/cutting/cut_log_birch.json
@@ -13,7 +15,7 @@ ec2f30da3a183b375194a48f56300b8515daec4c data/ashihara/recipes/cutting/cut_melon
 61725c9bce0c0a6964cb3f9df2b5919e6e1d54e0 data/ashihara/recipes/mill/mill_flour.json
 26371aebd94fa3772183696957f8317c9611ddc8 data/ashihara/recipes/mill/mill_glowstone_dust.json
 44a3839a450c441f57dbfdbd17f7068cbe98c40d data/ashihara/recipes/mill/mill_gold_ore_milling.json
-6f4e250c0c1835b4e27e2faa7299dc11cdc0907e data/ashihara/recipes/mill/mill_iron_ore_milling.json
+6b2d07ec3cc33394f533af6c5916ea7202b80d93 data/ashihara/recipes/mill/mill_iron_ore_milling.json
 ae8b1445352432ce88ef5170cea1e5e66fc5d9ad data/ashihara/recipes/mill/mill_macha_powder.json
 09590a1750f50bae2cc0d348fdb0905b03728c7f data/ashihara/recipes/mill/mill_rice.json
 1eb6d6e8e2286e193c9cd446214e8a81aab13ec6 data/ashihara/recipes/mill/mill_rice_powder.json

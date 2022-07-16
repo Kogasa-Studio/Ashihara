@@ -1,36 +1,36 @@
 {
   "type": "minecraft:block",
-  "pools":
-  [
+  "pools": [
     {
-      "rolls": 1,
-      "entries":
-      [
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
         {
           "type": "minecraft:alternatives",
-          "children":
-          [
+          "children": [
             {
               "type": "minecraft:item",
-              "conditions":
-              [
+              "conditions": [
                 {
                   "condition": "minecraft:alternative",
-                  "terms":
-                  [
+                  "terms": [
                     {
                       "condition": "minecraft:match_tool",
-                      "predicate": {"item": "minecraft:shears"}
+                      "predicate": {
+                        "items": [
+                          "minecraft:shears"
+                        ]
+                      }
                     },
                     {
                       "condition": "minecraft:match_tool",
-                      "predicate":
-                      {
-                        "enchantments":
-                        [
+                      "predicate": {
+                        "enchantments": [
                           {
                             "enchantment": "minecraft:silk_touch",
-                            "levels": {"min": 1}
+                            "levels": {
+                              "min": 1
+                            }
                           }
                         ]
                       }
@@ -42,14 +42,14 @@
             },
             {
               "type": "minecraft:item",
-              "conditions":
-              [
-                {"condition": "minecraft:survives_explosion"},
+              "conditions": [
+                {
+                  "condition": "minecraft:survives_explosion"
+                },
                 {
                   "condition": "minecraft:table_bonus",
                   "enchantment": "minecraft:fortune",
-                  "chances":
-                  [
+                  "chances": [
                     0.05,
                     0.0625,
                     0.083333336,
@@ -64,18 +64,16 @@
       ]
     },
     {
-      "rolls": 1,
-      "entries":
-      [
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
         {
           "type": "minecraft:item",
-          "conditions":
-          [
+          "conditions": [
             {
               "condition": "minecraft:table_bonus",
               "enchantment": "minecraft:fortune",
-              "chances":
-              [
+              "chances": [
                 0.02,
                 0.022222223,
                 0.025,
@@ -84,45 +82,46 @@
               ]
             }
           ],
-          "functions":
-          [
+          "functions": [
             {
               "function": "minecraft:set_count",
-              "count":
-              {
+              "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 2.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 2.0
+              },
+              "add": false
             },
-            {"function": "minecraft:explosion_decay"}
+            {
+              "function": "minecraft:explosion_decay"
+            }
           ],
           "name": "minecraft:stick"
         }
       ],
-      "conditions":
-      [
+      "conditions": [
         {
           "condition": "minecraft:inverted",
-          "term":
-          {
+          "term": {
             "condition": "minecraft:alternative",
-            "terms":
-            [
+            "terms": [
               {
                 "condition": "minecraft:match_tool",
-                "predicate":
-                {"item": "minecraft:shears"}
+                "predicate": {
+                  "items": [
+                    "minecraft:shears"
+                  ]
+                }
               },
               {
                 "condition": "minecraft:match_tool",
-                "predicate":
-                {
-                  "enchantments":
-                  [
+                "predicate": {
+                  "enchantments": [
                     {
                       "enchantment": "minecraft:silk_touch",
-                      "levels": {"min": 1}
+                      "levels": {
+                        "min": 1
+                      }
                     }
                   ]
                 }

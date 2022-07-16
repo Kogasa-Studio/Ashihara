@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.client.render.ter;
 
+import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
@@ -20,7 +21,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import static kogasastudio.ashihara.block.BlockMortar.FACING;
@@ -28,11 +28,21 @@ import static kogasastudio.ashihara.helper.RenderHelper.XTP;
 import static kogasastudio.ashihara.helper.RenderHelper.buildMatrix;
 
 public class MortarTER implements BlockEntityRenderer<MortarTE> {
-    private static final ArrayList<ResourceLocation> textures = new ArrayList<>
-            (Minecraft.getInstance().getResourceManager().listResources("textures/assistants/", s -> s.endsWith(".png")));
-    private static final Map<String, ResourceLocation> cookedTextures = RenderHelper.cookTextureRLsToMap(textures);
+    private static final Map<String, ResourceLocation> cookedTextures = assistanceMap();
     private static final String CEREALS = "cereals_level";
     private static final String PROCESSED = "processed_level";
+
+    public static Map<String, ResourceLocation> assistanceMap() {
+        ImmutableMap.Builder<String, ResourceLocation> builder = new ImmutableMap.Builder<>();
+
+        for (ResourceLocation resourceLocation : AshiharaAtlas.ALL_ASSISTANCE) {
+            String path = resourceLocation.getPath();
+            builder.put(path.substring(path.lastIndexOf("/") + 1), resourceLocation);
+        }
+
+        return builder.build();
+    }
+
     public MortarTER(BlockEntityRendererProvider.Context rendererDispatcherIn) {
     }
 

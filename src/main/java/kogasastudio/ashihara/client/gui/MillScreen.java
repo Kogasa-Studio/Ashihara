@@ -48,8 +48,6 @@ public class MillScreen extends AbstractContainerScreen<MillContainer> {
     @Override
     protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y)
     {
-        renderBackground(matrixStack);
-
         if (this.minecraft == null) return;
 
         RenderSystem.setShaderTexture(0, GUI);
