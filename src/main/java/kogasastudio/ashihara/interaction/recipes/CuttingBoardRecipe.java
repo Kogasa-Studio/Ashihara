@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.interaction.recipes;
 
 import com.google.gson.annotations.Expose;
+import kogasastudio.ashihara.helper.DataHelper;
 import kogasastudio.ashihara.interaction.recipes.base.BaseRecipe;
 import kogasastudio.ashihara.interaction.recipes.register.RecipeSerializers;
 import kogasastudio.ashihara.interaction.recipes.register.RecipeTypes;
@@ -61,7 +62,7 @@ public class CuttingBoardRecipe extends BaseRecipe {
     }
 
     public NonNullList<ItemStack> getOutput() {
-        return this.result;
+        return DataHelper.copyFrom(this.result);
     }
 
     public CuttingBoardToolType getTool() {

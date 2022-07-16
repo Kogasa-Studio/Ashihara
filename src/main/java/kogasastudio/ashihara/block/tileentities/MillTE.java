@@ -17,11 +17,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.common.util.RecipeMatcher;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
@@ -29,6 +29,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
@@ -102,12 +103,12 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
     //检测当前匹配的配方其产出物是否能够填充进输出栏
     private boolean canProduce(MillRecipe r)
     {
-        var result = r.matches(input.getContent()) &&
+        var result = r.matches(input.getContent().stream().filter(i -> !i.isEmpty()).collect(Collectors.toList())) &&
                 r.testInputFluid(tankIn.orElse(new FluidTank(0))) &&
                 // todo 善用 simulate 模拟输入输出
                 tankOut.resolve().orElse(new FluidTank(0)).fill(r.getOutputFluid(), SIMULATE) == r.getOutputFluid().getAmount();
 
-        if (!result) {
+        if (result) {
 
             var outputList = new ArrayList<>(r.getCraftingResult());
 
@@ -195,15 +196,17 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
                     output.addItem(stack);
                 }
             }
-            for (Ingredient ingredient : recipeIn.getIngredients()) {
-                for (int i = 0; i < this.input.getSlots(); i += 1) {
-                    ItemStack stack = this.input.getStackInSlot(i);
-                    if (!stack.isEmpty() && ingredient.test(stack)) {
-                        stack.shrink(recipeIn.getCosts(ingredient));
-                        break;
-                    }
+
+            int[] matches = RecipeMatcher.findMatches(input.getContent().stream()
+                    .filter(i -> !i.isEmpty())
+                    .collect(Collectors.toList()), recipeIn.getIngredients());
+
+            if (matches != null) {
+                for (int i = 0; i < matches.length; i++) {
+                    input.getStackInSlot(i).shrink(recipeIn.getCosts(recipeIn.getIngredients().get(matches[i])));
                 }
             }
+
             if (!recipeIn.getInputFluid().isEmpty()) {
                 // todo 直接用 drain
                 tankIn.ifPresent(tank -> {

@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.interaction.recipes;
 
 import com.google.gson.annotations.Expose;
+import kogasastudio.ashihara.helper.DataHelper;
 import kogasastudio.ashihara.interaction.recipes.base.BaseRecipe;
 import kogasastudio.ashihara.interaction.recipes.register.RecipeSerializers;
 import kogasastudio.ashihara.interaction.recipes.register.RecipeTypes;
@@ -22,7 +23,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MillRecipe extends BaseRecipe {
-    private final NonNullList<Ingredient> input;
+    private NonNullList<Ingredient> input;
+
+    private NonNullList<Ingredient> input() {
+        return input != null ? input :
+                (input = NonNullList.of(Ingredient.EMPTY, inputCosts.keySet().toArray(new Ingredient[0])));
+    }
+
     @Expose
     public final Map<Ingredient, Byte> inputCosts;
     @Expose
@@ -53,7 +60,6 @@ public class MillRecipe extends BaseRecipe {
         this.id = recipeId;
         this.group = groupId;
 
-        this.input = NonNullList.of(Ingredient.EMPTY, inputCostsIn.keySet().toArray(new Ingredient[0]));
         this.inputCosts = inputCostsIn;
         this.output = outputIn;
         this.inputFluid = inFluid;
@@ -64,16 +70,17 @@ public class MillRecipe extends BaseRecipe {
     }
 
     public boolean testInputFluid(@Nullable FluidTank tank) {
-        return tank == null ? inputFluid == null :
-                tank.drain(inputFluid.copy(), IFluidHandler.FluidAction.SIMULATE).getAmount() >= inputFluid.getAmount();
+        return tank == null ? getInputFluid().isEmpty() :
+                getInputFluid().isEmpty() ||
+                        tank.drain(getInputFluid().copy(), IFluidHandler.FluidAction.SIMULATE).getAmount() >= getInputFluid().getAmount();
     }
 
     public FluidStack getInputFluid() {
-        return inputFluid;
+        return inputFluid == null ? FluidStack.EMPTY : inputFluid;
     }
 
     public FluidStack getOutputFluid() {
-        return this.outputFluid.copy();
+        return outputFluid == null ? FluidStack.EMPTY : this.outputFluid.copy();
     }
 
     public byte getCosts(Ingredient ingredient) {
@@ -82,19 +89,19 @@ public class MillRecipe extends BaseRecipe {
 
     @Override
     public NonNullList<Ingredient> getIngredients() {
-        return this.input;
+        return this.input();
     }
 
     @Override
     public boolean matches(List<ItemStack> inputs) {
-        if (inputs == null || this.input == null) {
+        if (inputs == null || this.input() == null) {
             LogManager.getLogger().error("MortarRecipe.matches: input is null. id: " + getId());
             return false;
         }
 
         inputs = inputs.stream().filter(i -> !i.isEmpty()).collect(Collectors.toList());
 
-        return RecipeMatcher.findMatches(inputs, this.input) != null;
+        return RecipeMatcher.findMatches(inputs, this.input()) != null;
     }
 
     @Override
@@ -110,17 +117,17 @@ public class MillRecipe extends BaseRecipe {
     //这个也没啥用
     @Override
     public ItemStack getResultItem() {
-        return this.output.get(0).copy();
+        return output.size() > 0 ? this.output.get(0).copy() : ItemStack.EMPTY;
     }
 
     //出结果的
     public NonNullList<ItemStack> getCraftingResult() {
-        return this.output;
+        return DataHelper.copyFrom(output);
     }
 
     @Override
     public boolean canCraftInDimensions(int width, int height) {
-        return width * height >= this.input.size();
+        return width * height >= this.input().size();
     }
 
     @Override
