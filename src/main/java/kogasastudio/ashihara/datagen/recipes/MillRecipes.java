@@ -64,7 +64,7 @@ public class MillRecipes extends ModGenRecipes {
 
         addRecipe("mill_gold_ore_milling",
                 ImmutableMap.of(
-                        Ingredient.of(Items.GOLD_ORE), (byte) 1
+                        Ingredient.of(Items.RAW_GOLD), (byte) 1
                 ),
                 new ItemStack[] {
                         new ItemStack(ItemRegistryHandler.GOLD_ORE_SHATTER.get(), 2),

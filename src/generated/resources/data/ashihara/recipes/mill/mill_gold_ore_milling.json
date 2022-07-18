@@ -2,7 +2,7 @@
   "inputCosts": [
     [
       {
-        "item": "minecraft:gold_ore"
+        "item": "minecraft:raw_gold"
       },
       1
     ]

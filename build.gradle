@@ -18,7 +18,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '0.0.0.7'
+version = '0.0.0.8'
 group = 'kogasastudio.ashihara' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'Ashihara'
 
