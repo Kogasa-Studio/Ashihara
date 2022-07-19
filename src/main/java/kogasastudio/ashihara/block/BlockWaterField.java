@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -32,7 +33,7 @@ import java.util.Random;
 import static kogasastudio.ashihara.helper.BlockActionHelper.fourWaysFluidsIncludesWater;
 import static kogasastudio.ashihara.helper.BlockActionHelper.getMarkedBlockPosAround;
 
-public class BlockWaterField extends Block implements LiquidBlockContainer, BucketPickup {
+public class BlockWaterField extends Block implements BucketPickup, LiquidBlockContainer {
     public static final BooleanProperty ISLINKEDTOSOURCE = BooleanProperty.create("haswaterinside");
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 4, 8);
     public BlockWaterField() {
@@ -334,15 +335,23 @@ public class BlockWaterField extends Block implements LiquidBlockContainer, Buck
         }
     }
 
-    // todo 这个可能需要你自己琢磨
+    // TODO 待修改
     @Override
     public ItemStack pickupBlock(LevelAccessor pLevel, BlockPos pPos, BlockState pState) {
-        return null;
+        if (pState.getValue(LEVEL) == 8) {
+            pLevel.setBlock(pPos, pState.setValue(LEVEL, 0), 3);
+            if (!pState.canSurvive(pLevel, pPos)) {
+                pLevel.destroyBlock(pPos, true);
+            }
+
+            return new ItemStack(Items.WATER_BUCKET);
+        } else {
+            return ItemStack.EMPTY;
+        }
     }
 
-    // todo 这个可能需要你自己琢磨
     @Override
     public Optional<SoundEvent> getPickupSound() {
-        return Optional.empty();
+        return Fluids.WATER.getPickupSound();
     }
 }
