@@ -84,6 +84,10 @@ public class MillRecipe extends BaseRecipe {
     }
 
     public byte getCosts(Ingredient ingredient) {
+        if (ingredient == Ingredient.EMPTY) {
+            return 0;
+        }
+
         return this.inputCosts.get(ingredient);
     }
 

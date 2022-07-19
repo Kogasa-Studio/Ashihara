@@ -17,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -28,6 +29,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -197,13 +199,19 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
                 }
             }
 
-            int[] matches = RecipeMatcher.findMatches(input.getContent().stream()
-                    .filter(i -> !i.isEmpty())
-                    .collect(Collectors.toList()), recipeIn.getIngredients());
+            int size = input.getSlots();
+            List<Ingredient> ingredients = new ArrayList<>(recipeIn.getIngredients());
+
+            int ingredientSize = ingredients.size();
+            for (int i = 0; i < size - ingredientSize; i++) {
+                ingredients.add(Ingredient.EMPTY);
+            }
+
+            int[] matches = RecipeMatcher.findMatches(input.getContent(), ingredients);
 
             if (matches != null) {
                 for (int i = 0; i < matches.length; i++) {
-                    input.getStackInSlot(i).shrink(recipeIn.getCosts(recipeIn.getIngredients().get(matches[i])));
+                    input.extractItem(i, recipeIn.getCosts(ingredients.get(matches[i])), false);
                 }
             }
 
