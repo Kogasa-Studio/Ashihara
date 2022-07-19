@@ -60,6 +60,8 @@ public class MortarScreen extends AbstractContainerScreen<MortarContainer> {
                 (this, matrixStack, x, y, i + 17, j + 13, 16, 64, tank.getFluid(), tank.getCapacity());
     }
 
+    final FluidStackRenderer renderer = new FluidStackRenderer(4000, 37 - 21, 79 - 15);
+
     @Override
     protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
         if (this.minecraft == null) {
@@ -80,11 +82,8 @@ public class MortarScreen extends AbstractContainerScreen<MortarContainer> {
                         {
                             if (!tank.isEmpty()) {
                                 matrixStack.pushPose();
-                                int capacity = tank.getCapacity();
                                 FluidStack fluid = tank.getFluid();
-                                int fluidAmount = fluid.getAmount();
-                                int displayHeight = (int) (((float) fluidAmount / (float) capacity) * 64);
-                                RenderHelper.renderFluidStackInGUI(matrixStack.last().pose(), fluid, 16, displayHeight, i + 21, j + 79);
+                                renderer.render(matrixStack, leftPos + 21, topPos + 15, fluid);
                             }
                         }
                 );

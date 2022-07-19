@@ -10,7 +10,7 @@ public class EasyFood extends Item {
         super
                 (
                         new Item.Properties().tab(MATERIALS)
-                                .food(new FoodProperties.Builder().nutrition(hunger).build())
+                                .food(new FoodProperties.Builder().nutrition(hunger).saturationMod(1).build())
                 );
     }
 }

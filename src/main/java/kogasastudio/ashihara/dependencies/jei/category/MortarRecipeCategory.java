@@ -5,6 +5,7 @@ import kogasastudio.ashihara.dependencies.jei.JeiPlugin;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
@@ -44,6 +45,12 @@ public class MortarRecipeCategory extends BaseRecipeCategory<MortarRecipe> {
         for (int i = 0; i < output.size(); i++) {
             builder.addSlot(RecipeIngredientRole.OUTPUT, 80 + 18, 26 + i * 18)
                     .addItemStack(output.get(i));
+        }
+
+        if (recipe.fluidCost != null) {
+            builder.addSlot(RecipeIngredientRole.INPUT, 21, 15)
+                    .addIngredient(ForgeTypes.FLUID_STACK, recipe.fluidCost)
+                    .setFluidRenderer(4000, true, 37 - 21, 79 - 15);
         }
     }
 }

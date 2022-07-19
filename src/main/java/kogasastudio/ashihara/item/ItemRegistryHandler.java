@@ -36,7 +36,7 @@ public class ItemRegistryHandler {
     public static final RegistryObject<Item> SUJIKABUTO = ITEMS.register("sujikabuto", ItemSujikaButo::new);
 
     //食物
-    public static final RegistryObject<Item> SAKURAMOCHI = ITEMS.register("sakuramochi", () -> new Item(new Item.Properties().tab(ASHIHARA).food(new FoodProperties.Builder().nutrition(4).effect(new MobEffectInstance(MobEffects.HEAL, 1, 2), 1.0F).build())));
+    public static final RegistryObject<Item> SAKURAMOCHI = ITEMS.register("sakuramochi", () -> new Item(new Item.Properties().tab(ASHIHARA).food(new FoodProperties.Builder().nutrition(4).saturationMod(1).effect(new MobEffectInstance(MobEffects.HEAL, 1, 2), 1.0F).build())));
     public static final RegistryObject<Item> COOKED_RICE = ITEMS.register("cooked_rice", () -> new EasyFood(5));
     public static final RegistryObject<Item> DIRT_BALL_DON = ITEMS.register("dirt_ball_don", ItemDirtBallDon::new);
     public static final RegistryObject<Item> SUSHI_BASIC = ITEMS.register("sushi_basic", () -> new EasyFood(5));
