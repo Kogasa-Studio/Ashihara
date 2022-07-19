@@ -6,7 +6,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -34,7 +33,7 @@ import static kogasastudio.ashihara.helper.BlockActionHelper.fourWaysFluidsInclu
 import static kogasastudio.ashihara.helper.BlockActionHelper.getMarkedBlockPosAround;
 
 public class BlockWaterField extends Block implements BucketPickup, LiquidBlockContainer {
-    public static final BooleanProperty ISLINKEDTOSOURCE = BooleanProperty.create("haswaterinside");
+    public static final BooleanProperty HAS_WATER = BooleanProperty.create("haswaterinside");
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 4, 8);
     public BlockWaterField() {
         super
@@ -44,7 +43,7 @@ public class BlockWaterField extends Block implements BucketPickup, LiquidBlockC
                         // todo tag .harvestLevel(2)
                         .sound(SoundType.GRAVEL)
                 );
-        this.registerDefaultState(this.stateDefinition.any().setValue(ISLINKEDTOSOURCE, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(HAS_WATER, false));
     }
 
     private boolean matchesWaterField(BlockState state) {
@@ -85,7 +84,7 @@ public class BlockWaterField extends Block implements BucketPickup, LiquidBlockC
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) //注册BS
     {
-        builder.add(ISLINKEDTOSOURCE, LEVEL);
+        builder.add(HAS_WATER, LEVEL);
     }
 
     @Override
@@ -164,10 +163,10 @@ public class BlockWaterField extends Block implements BucketPickup, LiquidBlockC
             }
             boolean hasExit = hasExit(worldIn, pos);
             int levelT = state.getValue(LEVEL);
-            boolean boolT = state.getValue(ISLINKEDTOSOURCE);
+            boolean boolT = state.getValue(HAS_WATER);
             if (watered) {
                 if (!boolT) {
-                    worldIn.setBlockAndUpdate(pos, state.setValue(ISLINKEDTOSOURCE, true));
+                    worldIn.setBlockAndUpdate(pos, state.setValue(HAS_WATER, true));
                     onScheduleTick(worldIn, pos, 22);
                 }
             } else {
@@ -177,16 +176,16 @@ public class BlockWaterField extends Block implements BucketPickup, LiquidBlockC
             }
             if (matchesWaterField(fromState)) {
                 int levelF = fromState.getValue(LEVEL);
-                boolean boolF = fromState.getValue(ISLINKEDTOSOURCE);
+                boolean boolF = fromState.getValue(HAS_WATER);
                 if (boolT != boolF) {
                     if (!boolF) {
                         if (watered) {
-                            worldIn.setBlockAndUpdate(fromPos, fromState.setValue(ISLINKEDTOSOURCE, true));
+                            worldIn.setBlockAndUpdate(fromPos, fromState.setValue(HAS_WATER, true));
                         } else {
-                            worldIn.setBlockAndUpdate(pos, state.setValue(ISLINKEDTOSOURCE, false));
+                            worldIn.setBlockAndUpdate(pos, state.setValue(HAS_WATER, false));
                         }
                     } else {
-                        worldIn.setBlockAndUpdate(pos, state.setValue(ISLINKEDTOSOURCE, true));
+                        worldIn.setBlockAndUpdate(pos, state.setValue(HAS_WATER, true));
                     }
                 }
                 if (levelT != levelF) {
@@ -202,7 +201,7 @@ public class BlockWaterField extends Block implements BucketPickup, LiquidBlockC
                 }
             } else {
                 if (!watered) {
-                    worldIn.setBlockAndUpdate(pos, state.setValue(ISLINKEDTOSOURCE, false));
+                    worldIn.setBlockAndUpdate(pos, state.setValue(HAS_WATER, false));
                 }
             }
             if (levelT > 5) {
@@ -224,7 +223,7 @@ public class BlockWaterField extends Block implements BucketPickup, LiquidBlockC
         BlockState e = worldIn.getBlockState(pos.east());
         BlockState s = worldIn.getBlockState(pos.south());
         BlockState w = worldIn.getBlockState(pos.west());
-        boolean hasWater = state.getValue(ISLINKEDTOSOURCE);
+        boolean hasWater = state.getValue(HAS_WATER);
         boolean hasExit = hasExit(worldIn, pos);
         boolean watered = fourWaysFluidsIncludesWater(worldIn, pos); //用来进水
         int level = state.getValue(LEVEL);
@@ -238,17 +237,17 @@ public class BlockWaterField extends Block implements BucketPickup, LiquidBlockC
         }
         //用来延时状态反弹
         if (watered) {
-            if (matchesWaterField(n) && !n.getValue(ISLINKEDTOSOURCE)) {
-                worldIn.setBlockAndUpdate(pos.north(), n.setValue(ISLINKEDTOSOURCE, true));
+            if (matchesWaterField(n) && !n.getValue(HAS_WATER)) {
+                worldIn.setBlockAndUpdate(pos.north(), n.setValue(HAS_WATER, true));
             }
-            if (matchesWaterField(e) && !e.getValue(ISLINKEDTOSOURCE)) {
-                worldIn.setBlockAndUpdate(pos.east(), e.setValue(ISLINKEDTOSOURCE, true));
+            if (matchesWaterField(e) && !e.getValue(HAS_WATER)) {
+                worldIn.setBlockAndUpdate(pos.east(), e.setValue(HAS_WATER, true));
             }
-            if (matchesWaterField(s) && !s.getValue(ISLINKEDTOSOURCE)) {
-                worldIn.setBlockAndUpdate(pos.south(), s.setValue(ISLINKEDTOSOURCE, true));
+            if (matchesWaterField(s) && !s.getValue(HAS_WATER)) {
+                worldIn.setBlockAndUpdate(pos.south(), s.setValue(HAS_WATER, true));
             }
-            if (matchesWaterField(w) && !w.getValue(ISLINKEDTOSOURCE)) {
-                worldIn.setBlockAndUpdate(pos.west(), w.setValue(ISLINKEDTOSOURCE, true));
+            if (matchesWaterField(w) && !w.getValue(HAS_WATER)) {
+                worldIn.setBlockAndUpdate(pos.west(), w.setValue(HAS_WATER, true));
             }
         }
     }
@@ -269,7 +268,7 @@ public class BlockWaterField extends Block implements BucketPickup, LiquidBlockC
             level = 8;
         } else {
             if (matchesWaterField(n)) {
-                if (n.getValue(ISLINKEDTOSOURCE)) {
+                if (n.getValue(HAS_WATER)) {
                     watered = true;
                 }
                 if (n.getValue(LEVEL) > level) {
@@ -277,7 +276,7 @@ public class BlockWaterField extends Block implements BucketPickup, LiquidBlockC
                 }
             }
             if (matchesWaterField(e)) {
-                if (e.getValue(ISLINKEDTOSOURCE)) {
+                if (e.getValue(HAS_WATER)) {
                     watered = true;
                 }
                 if (e.getValue(LEVEL) > level) {
@@ -285,7 +284,7 @@ public class BlockWaterField extends Block implements BucketPickup, LiquidBlockC
                 }
             }
             if (matchesWaterField(s)) {
-                if (s.getValue(ISLINKEDTOSOURCE)) {
+                if (s.getValue(HAS_WATER)) {
                     watered = true;
                 }
                 if (s.getValue(LEVEL) > level) {
@@ -293,7 +292,7 @@ public class BlockWaterField extends Block implements BucketPickup, LiquidBlockC
                 }
             }
             if (matchesWaterField(w)) {
-                if (w.getValue(ISLINKEDTOSOURCE)) {
+                if (w.getValue(HAS_WATER)) {
                     watered = true;
                 }
                 if (w.getValue(LEVEL) > level) {
@@ -304,7 +303,7 @@ public class BlockWaterField extends Block implements BucketPickup, LiquidBlockC
         if (fourWaysFluidsIncludesWater(worldIn, pos) || hasExit(worldIn, pos)) {
             onScheduleTick(worldIn, pos, 10);
         }
-        return preState.setValue(ISLINKEDTOSOURCE, watered).setValue(LEVEL, level);
+        return preState.setValue(HAS_WATER, watered).setValue(LEVEL, level);
     }
 
     @Override
@@ -338,16 +337,7 @@ public class BlockWaterField extends Block implements BucketPickup, LiquidBlockC
     // TODO 待修改
     @Override
     public ItemStack pickupBlock(LevelAccessor pLevel, BlockPos pPos, BlockState pState) {
-        if (pState.getValue(LEVEL) == 8) {
-            pLevel.setBlock(pPos, pState.setValue(LEVEL, 0), 3);
-            if (!pState.canSurvive(pLevel, pPos)) {
-                pLevel.destroyBlock(pPos, true);
-            }
-
-            return new ItemStack(Items.WATER_BUCKET);
-        } else {
-            return ItemStack.EMPTY;
-        }
+        return ItemStack.EMPTY;
     }
 
     @Override
