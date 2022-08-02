@@ -83,7 +83,7 @@ public class BlockPail extends Block implements EntityBlock {
     @Override
     public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
         int ambientLight = super.getLightEmission(state, level, pos);
-        if (ambientLight == 15) {
+        if (level == null || ambientLight == 15) {
             return ambientLight;
         }
         BlockEntity tileEntity = level.getBlockEntity(pos);
@@ -92,8 +92,8 @@ public class BlockPail extends Block implements EntityBlock {
             FluidStack fluid = te.getTank().orElse(new FluidTank(0)).getFluid();
             if (!fluid.isEmpty()) {
                 FluidAttributes fluidAttributes = fluid.getFluid().getAttributes();
-                ambientLight = Math.max(ambientLight, level instanceof BlockAndTintGetter
-                        ? fluidAttributes.getLuminosity((BlockAndTintGetter) level, pos)
+                ambientLight = Math.max(ambientLight, level instanceof BlockAndTintGetter btg
+                        ? fluidAttributes.getLuminosity(btg, pos)
                         : fluidAttributes.getLuminosity(fluid));
             }
         }
