@@ -10,11 +10,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class MillContainer extends AshiharaCommonContainer {
+public class MillContainer extends AshiharaCommonContainer
+{
     private final ContainerData millData;
     private final MillTE te;
 
-    public MillContainer(int id, Inventory inventory, Level worldIn, BlockPos posIn, ContainerData millDataIn) {
+    public MillContainer(int id, Inventory inventory, Level worldIn, BlockPos posIn, ContainerData millDataIn)
+    {
         super(ContainerRegistryHandler.MILL_CONTAINER.get(), id);
         checkContainerDataCount(millDataIn, 4);
         this.millData = millDataIn;
@@ -22,7 +24,8 @@ public class MillContainer extends AshiharaCommonContainer {
         layoutPlayerInventorySlots(inventory, 8, 120);
         MillTE teIn = (MillTE) worldIn.getBlockEntity(posIn);
         this.te = teIn;
-        if (teIn != null) {
+        if (teIn != null)
+        {
             addSlotBox(te.getInput(), 0, 55, 39, 2, 18, 2, 18);
             addSlotBox(te.getOutput(), 0, 130, 39, 2, 18, 2, 18);
             addSlot(new SlotItemHandler(te.fluidIO, 0, 17, 83));
@@ -31,16 +34,19 @@ public class MillContainer extends AshiharaCommonContainer {
         }
     }
 
-    public MillContainer(int id, Inventory inventory, MillTE te) {
+    public MillContainer(int id, Inventory inventory, MillTE te)
+    {
         this(id, inventory, inventory.player.level, te.getBlockPos(), te.millData);
     }
 
-    public MillTE getBe() {
+    public MillTE getBe()
+    {
         return this.te;
     }
 
     @Override
-    public boolean stillValid(Player playerIn) {
+    public boolean stillValid(Player playerIn)
+    {
         return true;
     }
 
@@ -52,11 +58,13 @@ public class MillContainer extends AshiharaCommonContainer {
      * @return 玩家右键的物品
      */
     @Override
-    public ItemStack quickMoveStack(Player playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index)
+    {
         //玩家右键的具体格子
         Slot slot = this.slots.get(index);
 
-        if (slot == null || !slot.hasItem()) {
+        if (slot == null || !slot.hasItem())
+        {
             return ItemStack.EMPTY;
         }
 
@@ -65,26 +73,32 @@ public class MillContainer extends AshiharaCommonContainer {
         boolean isMerged;
 
         // 0~8: 快捷栏, 9~35: 玩家背包, 36~39: 输入槽, 40~43: 输出槽, 44~46: 流体互动槽
-        if (index < 9) {
+        if (index < 9)
+        {
             isMerged = moveItemStackTo(newStack, 36, 40, false)
                     || moveItemStackTo(newStack, 44, 47, false)
                     || moveItemStackTo(newStack, 9, 36, false);
-        } else if (index < 36) {
+        } else if (index < 36)
+        {
             isMerged = moveItemStackTo(newStack, 36, 40, false)
                     || moveItemStackTo(newStack, 44, 47, false)
                     || moveItemStackTo(newStack, 0, 9, true);
-        } else {
+        } else
+        {
             isMerged = moveItemStackTo(newStack, 0, 9, true)
                     || moveItemStackTo(newStack, 9, 36, false);
         }
 
-        if (!isMerged) {
+        if (!isMerged)
+        {
             return ItemStack.EMPTY;
         }
 
-        if (newStack.getCount() == 0) {
+        if (newStack.getCount() == 0)
+        {
             slot.set(ItemStack.EMPTY);
-        } else {
+        } else
+        {
             slot.setChanged();
         }
 
@@ -93,7 +107,8 @@ public class MillContainer extends AshiharaCommonContainer {
         return oldStack;
     }
 
-    public int getArrowWidth() {
+    public int getArrowWidth()
+    {
         int round = millData.get(0);
         int roundTotal = millData.get(1);
         int roundProgress = millData.get(2);

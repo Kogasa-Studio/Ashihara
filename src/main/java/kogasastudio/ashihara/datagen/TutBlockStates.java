@@ -7,14 +7,17 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 /**
  * @author DustW
  **/
-public class TutBlockStates extends BlockStateProvider {
+public class TutBlockStates extends BlockStateProvider
+{
 
-    public TutBlockStates(DataGenerator gen, ExistingFileHelper helper) {
+    public TutBlockStates(DataGenerator gen, ExistingFileHelper helper)
+    {
         super(gen, DataGenerators.MOD_ID, helper);
     }
 
     @Override
-    protected void registerStatesAndModels() {
+    protected void registerStatesAndModels()
+    {
         //simpleBlock(AvarusBlocks.RED_DIRT.get());
         //simpleBlock(AvarusBlocks.GREEN_DIRT.get());
         //simpleBlock(AvarusBlocks.BLUE_DIRT.get());

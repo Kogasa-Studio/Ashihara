@@ -54,15 +54,12 @@
   "item.ashihara.bamboo_material": "竹材",
   "item.ashihara.bamboo_stick": "细竹棒",
   "item.ashihara.bamboo_strips": "细竹条",
-
   "item.ashihara.tachi": "太刀",
   "item.ashihara.wood_otsuchi": "木大槌",
   "item.ashihara.iron_otsuchi": "鉄大槌",
   "item.ashihara.diamond_otsuchi": "钻石大槌",
-
   "item.ashihara.soy_milk_bucket": "豆浆桶",
   "item.ashihara.oil_bucket": "油桶",
-
   "block.ashihara.water_field": "水田",
   "block.ashihara.dirt_depression": "土洼",
   "block.ashihara.immature_rice": "水稻幼芽",
@@ -93,7 +90,6 @@
   "block.ashihara.cucumbers": "黄瓜作物",
   "block.ashihara.meal_table": "膳桌",
   "block.ashihara.cutting_board": "砧板",
-
   "block.ashihara.cherry_log": "樱木原木",
   "block.ashihara.stripped_cherry_log": "去皮樱木",
   "block.ashihara.cherry_planks": "樱木板",
@@ -103,7 +99,6 @@
   "block.ashihara.cherry_fence_gate": "樱木栅栏门",
   "block.ashihara.cherry_button": "樱木按钮",
   "block.ashihara.cherry_wood": "樱木",
-
   "block.ashihara.maple_log": "枫木原木",
   "block.ashihara.stripped_maple_log": "去皮枫木",
   "block.ashihara.maple_planks": "枫木板",
@@ -113,7 +108,6 @@
   "block.ashihara.maple_fence_gate": "枫木栅栏门",
   "block.ashihara.maple_button": "枫木按钮",
   "block.ashihara.maple_wood": "枫木",
-
   "block.ashihara.stripped_red_log": "朱木",
   "block.ashihara.red_planks": "朱木板",
   "block.ashihara.red_stairs": "朱木楼梯",
@@ -124,25 +118,19 @@
   "block.ashihara.red_kumimono": "朱木斗栱",
   "block.ashihara.red_kawaki": "朱木替木",
   "block.ashihara.advanced_spruce_fence": "素木勾栏",
-
   "block.ashihara.gold_fence_decoration": "金钉隐",
   "block.ashihara.red_fence_expansion": "朱木勾栏出头",
-
   "block.ashihara.soy_milk": "豆浆",
   "block.ashihara.oil": "油",
-
   "fluid.ashihara.soy_milk": "豆浆",
   "fluid.ashihara.soy_milk_flowing": "流动的豆浆",
   "fluid.ashihara.oil": "油",
   "fluid.ashihara.oil_flowing": "流动的油",
-
   "itemGroup.group_ashihara": "苇原",
   "itemGroup.group_ash_materials": "苇原-材料",
   "itemGroup.group_ash_building_blocks": "苇原-建筑方块",
-
   "gui.ashihara.mill": "石磨",
   "gui.ashihara.mortar": "舂",
-
   "item.ashihara.dirt_ball_don.projectile": "§d§l§o这东西散发着一种不可思议的气场",
   "item.ashihara.dirt_ball_don.projectile_1": "§9§l§o§m别把这事告诉4z（",
   "tooltip.ashihara.pail_display": "§e§l提桶: §n",

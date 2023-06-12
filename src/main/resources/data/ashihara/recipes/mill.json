@@ -1,19 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
   "group": "",
-  "pattern":
-  [
+  "pattern": [
     "   ",
     " #I",
     "###"
   ],
-  "key":
-  {
-    "#": {"item": "minecraft:cobblestone"},
-    "I": {"item": "minecraft:stick"}
+  "key": {
+    "#": {
+      "item": "minecraft:cobblestone"
+    },
+    "I": {
+      "item": "minecraft:stick"
+    }
   },
-  "result":
-  {
+  "result": {
     "item": "ashihara:mill",
     "count": 1
   }

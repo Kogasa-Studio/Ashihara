@@ -54,15 +54,12 @@
   "item.ashihara.bamboo_material": "竹材",
   "item.ashihara.bamboo_stick": "竹棒",
   "item.ashihara.bamboo_strips": "竹簡",
-
   "item.ashihara.tachi": "太刀",
   "item.ashihara.wood_otsuchi": "木の大槌",
   "item.ashihara.iron_otsuchi": "鉄の大槌",
   "item.ashihara.diamond_otsuchi": "鑽石の大槌",
-
   "item.ashihara.soy_milk_bucket": "豆乳の樽",
   "item.ashihara.oil_bucket": "油の樽",
-
   "block.ashihara.water_field": "水田",
   "block.ashihara.dirt_depression": "漥",
   "block.ashihara.immature_rice": "もやし",
@@ -93,7 +90,6 @@
   "block.ashihara.cucumbers": "きゅうりの作物",
   "block.ashihara.meal_table": "膳桌",
   "block.ashihara.cutting_board": "まな板",
-
   "block.ashihara.cherry_log": "桜の原木",
   "block.ashihara.stripped_cherry_log": "桜木の丸太",
   "block.ashihara.cherry_planks": "桜木の板材",
@@ -103,7 +99,6 @@
   "block.ashihara.cherry_fence_gate": "桜木のお欄の門",
   "block.ashihara.cherry_button": "桜木のボタン",
   "block.ashihara.cherry_wood": "桜の木",
-
   "block.ashihara.maple_log": "楓の原木",
   "block.ashihara.stripped_maple_log": "楓木の丸太",
   "block.ashihara.maple_planks": "楓木の板材",
@@ -113,7 +108,6 @@
   "block.ashihara.maple_fence_gate": "楓木のお欄の門",
   "block.ashihara.maple_button": "楓木のボタン",
   "block.ashihara.maple_wood": "楓の木",
-
   "block.ashihara.stripped_red_log": "朱木の丸太",
   "block.ashihara.red_planks": "朱木の板材",
   "block.ashihara.red_stairs": "朱木の階段",
@@ -124,25 +118,19 @@
   "block.ashihara.red_kumimono": "朱木の組物",
   "block.ashihara.red_kawaki": "朱木の替木",
   "block.ashihara.advanced_spruce_fence": "素木勾欄",
-
   "block.ashihara.gold_fence_decoration": "金の釘隱",
   "block.ashihara.red_fence_expansion": "朱木勾欄の出会",
-
   "block.ashihara.soy_milk": "豆乳",
   "block.ashihara.oil": "油",
-
   "fluid.ashihara.soy_milk": "豆乳",
   "fluid.ashihara.soy_milk_flowing": "流れ豆乳",
   "fluid.ashihara.oil": "油",
   "fluid.ashihara.oil_flowing": "流れ油",
-
   "itemGroup.group_ashihara": "葦原",
   "itemGroup.group_ash_materials": "葦原-材料",
   "itemGroup.group_ash_building_blocks": "葦原-築造",
-
   "gui.ashihara.mill": "石臼",
   "gui.ashihara.mortar": "臼",
-
   "item.ashihara.dirt_ball_don.projectile": "§d§l§o これ何...",
   "item.ashihara.dirt_ball_don.projectile_1": "§9§l§o丼でしょか...ならばこちは食べるいいかなぁ...",
   "tooltip.ashihara.pail_display": "§e§l樽: §n",

@@ -11,18 +11,23 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
-public class MortarScreen extends AbstractContainerScreen<MortarContainer> {
+public class MortarScreen extends AbstractContainerScreen<MortarContainer>
+{
     private static final ResourceLocation GUI = new ResourceLocation("ashihara:textures/gui/mortar.png");
     private int progress;
     private int stepStateCode;
-    public MortarScreen(MortarContainer container, Inventory inv, Component title) {
+
+    public MortarScreen(MortarContainer container, Inventory inv, Component title)
+    {
         super(container, inv, title);
         this.progress = container.getArrowHeight();
         this.stepStateCode = container.getNextStep();
     }
 
-    private MortarToolTypes getNextStep(int stateCode) {
-        return switch (stateCode) {
+    private MortarToolTypes getNextStep(int stateCode)
+    {
+        return switch (stateCode)
+        {
             case 0 -> MortarToolTypes.HANDS;
             case 1 -> MortarToolTypes.PESTLE;
             case 2 -> MortarToolTypes.OTSUCHI;
@@ -31,26 +36,31 @@ public class MortarScreen extends AbstractContainerScreen<MortarContainer> {
     }
 
     @Override
-    public void containerTick() {
+    public void containerTick()
+    {
         int progressIn = this.menu.getArrowHeight();
         int stepStateCodeIn = this.menu.getNextStep();
-        if (progressIn != this.progress) {
+        if (progressIn != this.progress)
+        {
             this.progress = progressIn;
         }
-        if (stepStateCodeIn != this.stepStateCode) {
+        if (stepStateCodeIn != this.stepStateCode)
+        {
             this.stepStateCode = stepStateCodeIn;
         }
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks)
+    {
         renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void renderTooltip(PoseStack matrixStack, int x, int y) {
+    protected void renderTooltip(PoseStack matrixStack, int x, int y)
+    {
         super.renderTooltip(matrixStack, x, y);
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
@@ -63,8 +73,10 @@ public class MortarScreen extends AbstractContainerScreen<MortarContainer> {
     final FluidStackRenderer renderer = new FluidStackRenderer(4000, 37 - 21, 79 - 15);
 
     @Override
-    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
-        if (this.minecraft == null) {
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y)
+    {
+        if (this.minecraft == null)
+        {
             return;
         }
 
@@ -80,7 +92,8 @@ public class MortarScreen extends AbstractContainerScreen<MortarContainer> {
                 (
                         tank ->
                         {
-                            if (!tank.isEmpty()) {
+                            if (!tank.isEmpty())
+                            {
                                 matrixStack.pushPose();
                                 FluidStack fluid = tank.getFluid();
                                 renderer.render(matrixStack, leftPos + 21, topPos + 15, fluid);
@@ -89,7 +102,8 @@ public class MortarScreen extends AbstractContainerScreen<MortarContainer> {
                 );
     }
 
-    private enum MortarToolTypes {
+    private enum MortarToolTypes
+    {
         NONE(0, 0, 0, 0, 0, 0),
         HANDS(65, 8, 176, 0, 11, 13),
         PESTLE(82, 7, 187, 0, 14, 14),
@@ -102,7 +116,8 @@ public class MortarScreen extends AbstractContainerScreen<MortarContainer> {
         int width;
         int height;
 
-        MortarToolTypes(int xIn, int yIn, int texXIn, int texYIn, int widthIn, int heightIn) {
+        MortarToolTypes(int xIn, int yIn, int texXIn, int texYIn, int widthIn, int heightIn)
+        {
             this.x = xIn;
             this.y = yIn;
             this.texX = texXIn;

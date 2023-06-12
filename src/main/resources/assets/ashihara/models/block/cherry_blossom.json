@@ -1,8 +1,7 @@
 {
-	"parent": "minecraft:block/leaves",
-	"ambientocclusion": false,
-	"textures":
-	{
-		"all": "ashihara:block/cherry_blossom"
-	}
+  "parent": "minecraft:block/leaves",
+  "ambientocclusion": false,
+  "textures": {
+    "all": "ashihara:block/cherry_blossom"
+  }
 }

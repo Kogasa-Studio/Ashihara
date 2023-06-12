@@ -12,18 +12,23 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
-public class CandleTER implements BlockEntityRenderer<CandleTE> {
+public class CandleTER implements BlockEntityRenderer<CandleTE>
+{
     private static final ResourceLocation tex = new ResourceLocation("ashihara:textures/block/candle_java.png");
     private final CandleModel candleSingle = new CandleModel();
-    public CandleTER(BlockEntityRendererProvider.Context dispatcherIn) {
+
+    public CandleTER(BlockEntityRendererProvider.Context dispatcherIn)
+    {
 
     }
 
     @Override
-    public void render(CandleTE tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(CandleTE tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
+    {
         VertexConsumer builder = bufferIn.getBuffer(RenderType.entitySolid(tex));
 
-        for (double[] d : tileEntityIn.getPosList()) {
+        for (double[] d : tileEntityIn.getPosList())
+        {
             double x = d[0];
             double z = d[1];
             double y = d[2];

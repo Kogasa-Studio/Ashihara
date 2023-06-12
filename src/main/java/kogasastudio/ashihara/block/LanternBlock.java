@@ -21,22 +21,28 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.Random;
 
-public class BlockLantern extends Block {
+public class LanternBlock extends Block
+{
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
-    public BlockLantern(Properties properties) {
+
+    public LanternBlock(Properties properties)
+    {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(LIT, Boolean.FALSE).setValue(FACING, Direction.NORTH));
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context)
+    {
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
-        if (player.getItemInHand(handIn).getItem() == Items.AIR) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    {
+        if (player.getItemInHand(handIn).getItem() == Items.AIR)
+        {
             Random random = worldIn.getRandom();
             Boolean instantState = worldIn.getBlockState(pos).getValue(LIT);
             worldIn.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
@@ -46,7 +52,8 @@ public class BlockLantern extends Block {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
         builder.add(LIT, FACING);
     }
 }

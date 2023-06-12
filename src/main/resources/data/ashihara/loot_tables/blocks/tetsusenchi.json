@@ -1,17 +1,19 @@
 {
   "type": "minecraft:block",
-  "pools":
-  [
+  "pools": [
     {
       "rolls": 1,
-      "entries":
-      [
+      "entries": [
         {
           "type": "minecraft:item",
           "name": "ashihara:tetsusenchi"
         }
       ],
-      "conditions": [{"condition": "minecraft:survives_explosion"}]
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
     }
   ]
 }

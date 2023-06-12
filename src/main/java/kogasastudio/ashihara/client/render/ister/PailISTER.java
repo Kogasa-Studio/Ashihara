@@ -25,9 +25,11 @@ import net.minecraftforge.fluids.FluidStack;
 
 import static kogasastudio.ashihara.helper.RenderHelper.buildMatrix;
 
-public class PailISTER extends BlockEntityWithoutLevelRenderer {
+public class PailISTER extends BlockEntityWithoutLevelRenderer
+{
 
     private final PailItemModel model;
+
     public PailISTER(BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet)
     {
         super(pBlockEntityRenderDispatcher, pEntityModelSet);
@@ -35,7 +37,8 @@ public class PailISTER extends BlockEntityWithoutLevelRenderer {
     }
 
     @Override
-    public void renderByItem(ItemStack stack, ItemTransforms.TransformType p_239207_2_, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
+    public void renderByItem(ItemStack stack, ItemTransforms.TransformType p_239207_2_, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay)
+    {
         ResourceLocation PAIL = new ResourceLocation("ashihara:textures/block/pail_multiple.png");
 
         PailTE te = new PailTE(BlockPos.ZERO, BlockRegistryHandler.PAIL.get().defaultBlockState());
@@ -49,7 +52,8 @@ public class PailISTER extends BlockEntityWithoutLevelRenderer {
                 (
                         bucket ->
                         {
-                            if (!bucket.isEmpty()) {
+                            if (!bucket.isEmpty())
+                            {
                                 FluidStack fluid = bucket.getFluid();
                                 TextureAtlasSprite FLUID =
                                         Minecraft.getInstance()

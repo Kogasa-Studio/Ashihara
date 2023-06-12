@@ -15,14 +15,17 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class AbstractFallenLeavesBlock extends Block {
+public class AbstractFallenLeavesBlock extends Block
+{
     private final boolean flammable;
 
-    public AbstractFallenLeavesBlock() {
+    public AbstractFallenLeavesBlock()
+    {
         this(false);
     }
 
-    public AbstractFallenLeavesBlock(boolean flammableIn) {
+    public AbstractFallenLeavesBlock(boolean flammableIn)
+    {
         super
                 (
                         Properties.of(Material.PLANT)
@@ -35,37 +38,44 @@ public class AbstractFallenLeavesBlock extends Block {
     }
 
     @Override
-    public boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
+    public boolean canBeReplaced(BlockState state, BlockPlaceContext useContext)
+    {
         return useContext.getItemInHand().getItem() != ItemRegistryHandler.FALLEN_SAKURA.get();
     }
 
     @Override
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos)
+    {
         return !stateIn.canSurvive(worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos)
+    {
         return worldIn.getBlockState(pos.below()).canOcclude() || worldIn.getBlockState(pos.below()).isFaceSturdy(worldIn, pos.below(), Direction.UP);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+    {
         return Block.box(0.0D, 0.0D, 0.0D, 16.0D, 1.0D, 16.0D);
     }
 
     @Override
-    public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+    public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face)
+    {
         return this.flammable ? 60 : 0;
     }
 
     @Override
-    public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+    public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face)
+    {
         return this.flammable ? 60 : 0;
     }
 
     @Override
-    public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+    public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face)
+    {
         return this.flammable;
     }
 }

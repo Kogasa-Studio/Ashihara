@@ -1,7 +1,6 @@
 {
   "replace": false,
-  "values":
-  [
+  "values": [
     "minecraft:wooden_axe",
     "minecraft:stone_axe",
     "minecraft:iron_axe",

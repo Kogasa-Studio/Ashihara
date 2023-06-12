@@ -1,13 +1,28 @@
 {
-  "variants":
-  {
-    "age=0": {"model": "ashihara:block/crops/sweet_potatoes_stage0"},
-    "age=1": {"model": "ashihara:block/crops/sweet_potatoes_stage0"},
-    "age=2": {"model": "ashihara:block/crops/sweet_potatoes_stage1"},
-    "age=3": {"model": "ashihara:block/crops/sweet_potatoes_stage1"},
-    "age=4": {"model": "ashihara:block/crops/sweet_potatoes_stage2"},
-    "age=5": {"model": "ashihara:block/crops/sweet_potatoes_stage2"},
-    "age=6": {"model": "ashihara:block/crops/sweet_potatoes_stage2"},
-    "age=7": {"model": "ashihara:block/crops/sweet_potatoes_stage3"}
+  "variants": {
+    "age=0": {
+      "model": "ashihara:block/crops/sweet_potatoes_stage0"
+    },
+    "age=1": {
+      "model": "ashihara:block/crops/sweet_potatoes_stage0"
+    },
+    "age=2": {
+      "model": "ashihara:block/crops/sweet_potatoes_stage1"
+    },
+    "age=3": {
+      "model": "ashihara:block/crops/sweet_potatoes_stage1"
+    },
+    "age=4": {
+      "model": "ashihara:block/crops/sweet_potatoes_stage2"
+    },
+    "age=5": {
+      "model": "ashihara:block/crops/sweet_potatoes_stage2"
+    },
+    "age=6": {
+      "model": "ashihara:block/crops/sweet_potatoes_stage2"
+    },
+    "age=7": {
+      "model": "ashihara:block/crops/sweet_potatoes_stage3"
+    }
   }
 }

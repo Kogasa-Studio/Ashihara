@@ -1,4 +1,6 @@
 {
   "parent": "minecraft:block/flower_pot_cross",
-  "textures": {"plant": "ashihara:block/red_maple_sapling"}
+  "textures": {
+    "plant": "ashihara:block/red_maple_sapling"
+  }
 }

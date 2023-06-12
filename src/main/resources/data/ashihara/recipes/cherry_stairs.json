@@ -1,15 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
   "group": "wooden_stairs",
-  "pattern":
-  [
+  "pattern": [
     "#  ",
     "## ",
     "###"
   ],
-  "key": {"#": {"item": "ashihara:cherry_planks"}},
-  "result":
-  {
+  "key": {
+    "#": {
+      "item": "ashihara:cherry_planks"
+    }
+  },
+  "result": {
     "item": "ashihara:cherry_stairs",
     "count": 4
   }

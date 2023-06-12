@@ -1,7 +1,6 @@
 {
   "parent": "ashihara:item/advanced_fence",
-  "textures":
-  {
+  "textures": {
     "wood": "ashihara:block/woodcrafts/spruce_fence",
     "part": "minecraft:block/stripped_spruce_log"
   }

@@ -1,7 +1,6 @@
 {
   "parent": "ashihara:block/building_blocks/kumimono/kawaki_long_z",
-  "textures":
-  {
+  "textures": {
     "wood": "ashihara:block/woodcrafts/red_kumimono",
     "part": "ashihara:block/woodcrafts/stripped_red_log"
   }

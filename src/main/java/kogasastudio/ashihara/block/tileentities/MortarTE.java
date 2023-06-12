@@ -33,7 +33,8 @@ import java.util.Optional;
 import static kogasastudio.ashihara.utils.AshiharaTags.MASHABLE;
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
-public class MortarTE extends AshiharaMachineTE implements MenuProvider, IFluidHandler {
+public class MortarTE extends AshiharaMachineTE implements MenuProvider, IFluidHandler
+{
     public MortarInventory contents = new MortarInventory(4);
     public GenericItemStackHandler fluidIO = new GenericItemStackHandler(2);
     public LazyOptional<FluidTank> tank = LazyOptional.of(this::createTank);
@@ -57,59 +58,72 @@ public class MortarTE extends AshiharaMachineTE implements MenuProvider, IFluidH
     public byte[] sequence = new byte[0];
     public boolean isWorking;
 
-    public MortarTE(BlockPos pos, BlockState state) {
+    public MortarTE(BlockPos pos, BlockState state)
+    {
         super(TERegistryHandler.MORTAR_TE.get(), pos, state);
     }
 
     @Override
-    public FluidTank createTank() {
+    public FluidTank createTank()
+    {
         return new FluidTank(4000);
     }
 
     @Override
-    public LazyOptional<FluidTank> getTank() {
+    public LazyOptional<FluidTank> getTank()
+    {
         return this.tank;
     }
 
     @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap) {
-        if (!this.isRemoved() && cap.equals(FLUID_HANDLER_CAPABILITY)) {
+    public <T> LazyOptional<T> getCapability(Capability<T> cap)
+    {
+        if (!this.isRemoved() && cap.equals(FLUID_HANDLER_CAPABILITY))
+        {
             return this.tank.cast();
         }
         return super.getCapability(cap);
     }
 
     @Override
-    public void invalidateCaps() {
+    public void invalidateCaps()
+    {
         super.invalidateCaps();
         this.tank.invalidate();
     }
 
     @Override
-    public void reviveCaps() {
+    public void reviveCaps()
+    {
         super.reviveCaps();
         tank = LazyOptional.of(this::createTank);
     }
 
-    private void process(boolean isSauceProcess) {
+    private void process(boolean isSauceProcess)
+    {
         this.progress += isSauceProcess ? this.nextStep : 1;
-        if (this.progress >= this.progressTotal) {
+        if (this.progress >= this.progressTotal)
+        {
             finishReciping(true);
             setChanged();
             return;
         }
-        if (!this.isWorking) {
+        if (!this.isWorking)
+        {
             this.isWorking = true;
         }
-        if (!isSauceProcess) {
+        if (!isSauceProcess)
+        {
             this.pointer += 1;
             this.nextStep = this.sequence[this.pointer];
         }
         setChanged();
     }
 
-    private boolean isNextStepNeeded(ItemStack stack) {
-        return switch (this.nextStep) {
+    private boolean isNextStepNeeded(ItemStack stack)
+    {
+        return switch (this.nextStep)
+        {
             case 0 -> stack.isEmpty();
             case 1 -> stack.getItem().equals(ItemRegistryHandler.PESTLE.get());
             case 2 -> stack.getItem() instanceof ItemOtsuchi;
@@ -117,7 +131,8 @@ public class MortarTE extends AshiharaMachineTE implements MenuProvider, IFluidH
         };
     }
 
-    private Optional<MortarRecipe> tryMatchRecipe() {
+    private Optional<MortarRecipe> tryMatchRecipe()
+    {
         if (level == null) return Optional.empty();
 
         return level.getRecipeManager().getAllRecipesFor(RecipeTypes.MORTAR.get())
@@ -125,27 +140,33 @@ public class MortarTE extends AshiharaMachineTE implements MenuProvider, IFluidH
     }
 
     //检查当前状态, 若内容物匹配配方则尝试启用配方
-    public void notifyStateChanged() {
+    public void notifyStateChanged()
+    {
         Optional<MortarRecipe> recipeIn = tryMatchRecipe();
-        if (recipeIn.isPresent()) {
+        if (recipeIn.isPresent())
+        {
             boolean flag = true;
-            if (!recipeIn.get().getFluidCost().isEmpty()) {
+            if (!recipeIn.get().getFluidCost().isEmpty())
+            {
                 flag = FluidHelper.canFluidExtractFromTank(recipeIn.get().getFluidCost(), this.tank);
             }
             if (!this.isWorking && flag) applyRecipe(recipeIn.get());
-        } else {
+        } else
+        {
             finishReciping(false);
             if (this.level != null)
                 this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition), this.level.getBlockState(this.worldPosition), 3);
         }
-        if (FluidHelper.notifyFluidTankInteraction(this.fluidIO, 0, 1, this.tank.orElse(new FluidTank(0)), this.level, this.worldPosition)) {
+        if (FluidHelper.notifyFluidTankInteraction(this.fluidIO, 0, 1, this.tank.orElse(new FluidTank(0)), this.level, this.worldPosition))
+        {
             this.setChanged();
             if (this.level != null)
                 this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition), this.level.getBlockState(this.worldPosition), 3);
         }
     }
 
-    private void applyRecipe(MortarRecipe recipeIn) {
+    private void applyRecipe(MortarRecipe recipeIn)
+    {
         this.progress = 0;
         this.pointer = 0;
 
@@ -155,20 +176,23 @@ public class MortarTE extends AshiharaMachineTE implements MenuProvider, IFluidH
         this.fluidCost = recipeIn.getFluidCost();
         this.nextStep = recipeIn.recipeType == 2 ? -1 : this.sequence[this.pointer];
         this.output.clear();
-        for (ItemStack stack : recipeIn.getOutput()) {
+        for (ItemStack stack : recipeIn.getOutput())
+        {
             this.output.add(stack.copy());
         }
         setChanged();
     }
 
-    private void finishReciping(boolean produce) {
+    private void finishReciping(boolean produce)
+    {
         this.progress = 0;
         this.progressTotal = 0;
         this.sequence = new byte[0];
         this.recipeType = -1;
         this.pointer = -1;
         this.nextStep = -1;
-        if (produce) {
+        if (produce)
+        {
             this.produce();
         }
         this.fluidCost = FluidStack.EMPTY;
@@ -177,19 +201,23 @@ public class MortarTE extends AshiharaMachineTE implements MenuProvider, IFluidH
         setChanged();
     }
 
-    private void produce() {
+    private void produce()
+    {
         this.contents.clear();
-        for (int i = 0; i < this.output.size(); i += 1) {
+        for (int i = 0; i < this.output.size(); i += 1)
+        {
             ItemStack stack = this.output.get(i);
             if (!stack.isEmpty()) this.contents.setStackInSlot(i, stack);
         }
-        if (!this.fluidCost.isEmpty()) {
+        if (!this.fluidCost.isEmpty())
+        {
             this.tank.ifPresent
                     (
                             tank ->
                             {
                                 FluidStack fluidInTank = tank.getFluid();
-                                if (this.fluidCost.isFluidEqual(fluidInTank)) {
+                                if (this.fluidCost.isFluidEqual(fluidInTank))
+                                {
                                     fluidInTank.setAmount(Math.max(0, fluidInTank.getAmount() - this.fluidCost.getAmount()));
                                     tank.setFluid(fluidInTank);
                                     setChanged();
@@ -200,25 +228,32 @@ public class MortarTE extends AshiharaMachineTE implements MenuProvider, IFluidH
     }
 
     //若不在工作状态中空手右击则取出物品，持物品右击则尝试将物品放入舂
-    public boolean notifyInteraction(ItemStack stackIn, Level worldIn, BlockPos posIn, Player player) {
-        if (isNextStepNeeded(stackIn)) {
+    public boolean notifyInteraction(ItemStack stackIn, Level worldIn, BlockPos posIn, Player player)
+    {
+        if (isNextStepNeeded(stackIn))
+        {
             player.getCooldowns().addCooldown(stackIn.getItem(), 8);
-            if (!stackIn.isEmpty() && !player.isCreative()) {
+            if (!stackIn.isEmpty() && !player.isCreative())
+            {
                 stackIn.hurtAndBreak(1, player, (playerEntity) -> player.broadcastBreakEvent(EquipmentSlot.MAINHAND));
             }
             process(this.recipeType == 2);
             return true;
         }
-        if (!this.isWorking) {
-            for (int i = 0; i < this.contents.getSlots(); i += 1) {
+        if (!this.isWorking)
+        {
+            for (int i = 0; i < this.contents.getSlots(); i += 1)
+            {
                 ItemStack stack = this.contents.getStackInSlot(i);
-                if (!stack.isEmpty() && stackIn.isEmpty()) {
+                if (!stack.isEmpty() && stackIn.isEmpty())
+                {
                     this.contents.setStackInSlot(i, ItemStack.EMPTY);
                     notifyStateChanged();
                     setChanged();
                     Containers.dropItemStack(worldIn, posIn.getX(), posIn.getY() + 0.5F, posIn.getZ(), stack);
                     return true;
-                } else if (stack.isEmpty() && stackIn.is(MASHABLE)) {
+                } else if (stack.isEmpty() && stackIn.is(MASHABLE))
+                {
                     this.contents.insertItem(i, new ItemStack(stackIn.getItem()), false);
                     if (!player.isCreative()) stackIn.shrink(1);
                     notifyStateChanged();
@@ -231,7 +266,8 @@ public class MortarTE extends AshiharaMachineTE implements MenuProvider, IFluidH
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound) {
+    protected void saveAdditional(CompoundTag compound)
+    {
         super.saveAdditional(compound);
         compound.putInt("progress", this.progress);
         compound.putInt("progressTotal", this.progressTotal);
@@ -250,8 +286,10 @@ public class MortarTE extends AshiharaMachineTE implements MenuProvider, IFluidH
         this.tank.ifPresent(fluidTank -> compound.put("tank", fluidTank.writeToNBT(new CompoundTag())));
 
         ListTag outputIn = new ListTag();
-        for (int i = 0; i < this.output.size(); i++) {
-            if (!this.output.get(i).isEmpty()) {
+        for (int i = 0; i < this.output.size(); i++)
+        {
+            if (!this.output.get(i).isEmpty())
+            {
                 CompoundTag itemTag = new CompoundTag();
                 itemTag.putInt("Slot", i);
                 outputIn.add(this.output.get(i).save(itemTag));
@@ -261,7 +299,8 @@ public class MortarTE extends AshiharaMachineTE implements MenuProvider, IFluidH
     }
 
     @Override
-    public void load(CompoundTag nbt) {
+    public void load(CompoundTag nbt)
+    {
         this.output = NonNullList.create();
         this.progress = nbt.getInt("progress");
         this.progressTotal = nbt.getInt("progressTotal");
@@ -280,11 +319,13 @@ public class MortarTE extends AshiharaMachineTE implements MenuProvider, IFluidH
         this.tank.ifPresent(fluidTank -> fluidTank.readFromNBT(nbt.getCompound("tank")));
 
         ListTag outputIn = nbt.getList("output", Tag.TAG_COMPOUND);
-        for (int i = 0; i < outputIn.size(); i++) {
+        for (int i = 0; i < outputIn.size(); i++)
+        {
             CompoundTag itemTags = outputIn.getCompound(i);
             int slot = itemTags.getInt("Slot");
 
-            if (slot >= 0) {
+            if (slot >= 0)
+            {
                 this.output.add(slot, ItemStack.of(itemTags));
             }
         }
@@ -292,25 +333,31 @@ public class MortarTE extends AshiharaMachineTE implements MenuProvider, IFluidH
     }
 
     @Override
-    public TranslatableComponent getDisplayName() {
+    public TranslatableComponent getDisplayName()
+    {
         return new TranslatableComponent("gui." + Ashihara.MODID + ".mortar");
     }
 
     @Override
-    public AbstractContainerMenu createMenu(int p_createMenu_1_, Inventory p_createMenu_2_, Player p_createMenu_3_) {
-        if (this.level == null) {
+    public AbstractContainerMenu createMenu(int p_createMenu_1_, Inventory p_createMenu_2_, Player p_createMenu_3_)
+    {
+        if (this.level == null)
+        {
             return null;
         }
         return new MortarContainer(p_createMenu_1_, p_createMenu_2_, this);
     }
 
-    public static class MortarInventory extends GenericItemStackHandler {
-        public MortarInventory(int numSlots) {
+    public static class MortarInventory extends GenericItemStackHandler
+    {
+        public MortarInventory(int numSlots)
+        {
             super(numSlots);
         }
 
         @Override
-        protected int getStackLimit(int slot, ItemStack stack) {
+        protected int getStackLimit(int slot, ItemStack stack)
+        {
             return 1;
         }
     }

@@ -1,15 +1,14 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
+  "pattern": [
     "BBB"
   ],
-  "key":
-  {
-    "B": {"tag": "forge:stripped_logs"}
+  "key": {
+    "B": {
+      "tag": "forge:stripped_logs"
+    }
   },
-  "result":
-  {
+  "result": {
     "item": "ashihara:cutting_board",
     "count": 1
   }

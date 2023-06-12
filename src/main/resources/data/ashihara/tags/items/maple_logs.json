@@ -1,9 +1,8 @@
 {
   "replace": false,
-  "values":
-     [
-       "ashihara:maple_log",
-       "ashihara:maple_wood",
-       "ashihara:stripped_maple_log"
-     ]
+  "values": [
+    "ashihara:maple_log",
+    "ashihara:maple_wood",
+    "ashihara:stripped_maple_log"
+  ]
 }

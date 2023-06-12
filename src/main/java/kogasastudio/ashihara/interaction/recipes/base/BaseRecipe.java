@@ -12,7 +12,8 @@ import java.util.List;
 /**
  * @author DustW
  **/
-public abstract class BaseRecipe implements Recipe<Container> {
+public abstract class BaseRecipe implements Recipe<Container>
+{
     protected ResourceLocation id;
     @Expose
     public String type;
@@ -22,42 +23,50 @@ public abstract class BaseRecipe implements Recipe<Container> {
     public abstract boolean matches(List<ItemStack> inputs);
 
     @Override
-    public boolean matches(Container pContainer, Level pLevel) {
+    public boolean matches(Container pContainer, Level pLevel)
+    {
         return false;
     }
 
     @Override
-    public ItemStack assemble(Container pContainer) {
+    public ItemStack assemble(Container pContainer)
+    {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public String getGroup() {
+    public String getGroup()
+    {
         return group == null ? "" : group;
     }
 
     @Override
-    public boolean canCraftInDimensions(int pWidth, int pHeight) {
+    public boolean canCraftInDimensions(int pWidth, int pHeight)
+    {
         return false;
     }
 
-    public <T extends BaseRecipe> T setID(ResourceLocation id) {
+    public <T extends BaseRecipe> T setID(ResourceLocation id)
+    {
         this.id = id;
         return (T) this;
     }
 
     @Override
-    public ResourceLocation getId() {
+    public ResourceLocation getId()
+    {
         return id;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return id.hashCode();
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj)
+    {
         return obj instanceof BaseRecipe recipe && recipe.id.equals(id);
     }
 }

@@ -8,9 +8,11 @@ import net.minecraft.world.entity.LivingEntity;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class SujikabutoModel extends HumanoidModel<LivingEntity> {
+public class SujikabutoModel extends HumanoidModel<LivingEntity>
+{
 
-    public SujikabutoModel(ModelPart pRoot) {
+    public SujikabutoModel(ModelPart pRoot)
+    {
         super(pRoot);
     }
 }

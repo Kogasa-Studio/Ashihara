@@ -1,4 +1,6 @@
 {
   "parent": "item/generated",
-  "textures": {"layer0": "ashihara:item/onigiri"}
+  "textures": {
+    "layer0": "ashihara:item/onigiri"
+  }
 }

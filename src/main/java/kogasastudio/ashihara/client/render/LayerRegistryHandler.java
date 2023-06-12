@@ -17,6 +17,7 @@ public class LayerRegistryHandler
 {
     public static final ModelLayerLocation PAIL_ITEM = register("pail_item");
     public static final ModelLayerLocation MILL_STONE = register("mill_stone");
+
     @SubscribeEvent
     public static void registerLDs(EntityRenderersEvent.RegisterLayerDefinitions event)
     {

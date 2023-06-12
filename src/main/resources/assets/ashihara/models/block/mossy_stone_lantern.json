@@ -1,8 +1,7 @@
 {
-	"parent": "ashihara:block/stone_lantern",
-	"textures":
-	{
-		"0": "ashihara:block/mossy_stone_lantern",
-		"particle": "ashihara:block/mossy_stone_lantern"
-	}
+  "parent": "ashihara:block/stone_lantern",
+  "textures": {
+    "0": "ashihara:block/mossy_stone_lantern",
+    "particle": "ashihara:block/mossy_stone_lantern"
+  }
 }

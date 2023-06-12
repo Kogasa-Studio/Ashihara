@@ -1,3 +1,7 @@
 {
-  "variants": {"": {"model": "ashihara:block/fluid/soy_milk"}}
+  "variants": {
+    "": {
+      "model": "ashihara:block/fluid/soy_milk"
+    }
+  }
 }

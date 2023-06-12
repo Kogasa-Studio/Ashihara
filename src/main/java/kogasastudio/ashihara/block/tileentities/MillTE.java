@@ -37,7 +37,8 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE;
 
-public class MillTE extends AshiharaMachineTE implements TickableTileEntity, MenuProvider, IFluidHandler {
+public class MillTE extends AshiharaMachineTE implements TickableTileEntity, MenuProvider, IFluidHandler
+{
     public GenericItemStackHandler input = new GenericItemStackHandler(4);
     public GenericItemStackHandler output = new GenericItemStackHandler(4);
     public GenericItemStackHandler fluidIO = new GenericItemStackHandler(3);
@@ -49,10 +50,13 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
     public boolean isWorking;
     public LazyOptional<FluidTank> tankIn = LazyOptional.of(this::createTank);
     public LazyOptional<FluidTank> tankOut = LazyOptional.of(this::createTank);
-    public ContainerData millData = new ContainerData() {
+    public ContainerData millData = new ContainerData()
+    {
         @Override
-        public int get(int index) {
-            return switch (index) {
+        public int get(int index)
+        {
+            return switch (index)
+            {
                 case 0 -> round;
                 case 1 -> roundTotal;
                 case 2 -> roundProgress;
@@ -62,8 +66,10 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
         }
 
         @Override
-        public void set(int index, int value) {
-            switch (index) {
+        public void set(int index, int value)
+        {
+            switch (index)
+            {
                 case 0 -> round = (byte) value;
                 case 1 -> roundTotal = (byte) value;
                 case 2 -> roundProgress = value;
@@ -72,25 +78,32 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
         }
 
         @Override
-        public int getCount() {
+        public int getCount()
+        {
             return 4;
         }
     };
     private MillRecipe recipe;
-    public MillTE(BlockPos pos, BlockState state) {
+
+    public MillTE(BlockPos pos, BlockState state)
+    {
         super(TERegistryHandler.MILL_TE.get(), pos, state);
     }
 
-    private Optional<MillRecipe> tryMatchRecipe() {
+    private Optional<MillRecipe> tryMatchRecipe()
+    {
         return level.getRecipeManager().getAllRecipesFor(RecipeTypes.MILL.get())
                 .stream()
                 .filter(this::canProduce)
                 .findFirst();
     }
 
-    private boolean hasInput() {
-        for (int i = 0; i < 4; i += 1) {
-            if (!input.getStackInSlot(i).isEmpty()) {
+    private boolean hasInput()
+    {
+        for (int i = 0; i < 4; i += 1)
+        {
+            if (!input.getStackInSlot(i).isEmpty())
+            {
                 return true;
             }
         }
@@ -110,13 +123,17 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
                 // todo 善用 simulate 模拟输入输出
                 tankOut.resolve().orElse(new FluidTank(0)).fill(r.getOutputFluid(), SIMULATE) == r.getOutputFluid().getAmount();
 
-        if (result) {
+        if (result)
+        {
 
             var outputList = new ArrayList<>(r.getCraftingResult());
 
-            for (int i = 0; i < outputList.size(); i++) {
-                for (int i1 = 0; i1 < output.getSlots(); i1++) {
-                    if (!outputList.get(i).isEmpty()) {
+            for (int i = 0; i < outputList.size(); i++)
+            {
+                for (int i1 = 0; i1 < output.getSlots(); i1++)
+                {
+                    if (!outputList.get(i).isEmpty())
+                    {
                         outputList.set(i, output.insertItem(i1, outputList.get(i), true));
                     }
                 }
@@ -173,7 +190,8 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
         // return flag0 && flag1 && flag2;
     }
 
-    private void applyRecipe(MillRecipe recipeIn) {
+    private void applyRecipe(MillRecipe recipeIn)
+    {
         this.round = 0;
         this.roundProgress = 0;
         this.roundTotal = recipeIn.round;
@@ -186,15 +204,19 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
     }
 
     //结束时调用, 将te重置并生成产出物
-    private void finishReciping(MillRecipe recipeIn) {
+    private void finishReciping(MillRecipe recipeIn)
+    {
         this.round = 0;
         this.roundTotal = 0;
         this.roundProgress = 0;
         this.roundTicks = 0;
         this.isWorking = false;
-        if (recipeIn != null) {
-            if (recipeIn.getCraftingResult() != null) {
-                for (ItemStack stack : this.recipe.getCraftingResult()) {
+        if (recipeIn != null)
+        {
+            if (recipeIn.getCraftingResult() != null)
+            {
+                for (ItemStack stack : this.recipe.getCraftingResult())
+                {
                     output.addItem(stack);
                 }
             }
@@ -203,21 +225,26 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
             List<Ingredient> ingredients = new ArrayList<>(recipeIn.getIngredients());
 
             int ingredientSize = ingredients.size();
-            for (int i = 0; i < size - ingredientSize; i++) {
+            for (int i = 0; i < size - ingredientSize; i++)
+            {
                 ingredients.add(Ingredient.EMPTY);
             }
 
             int[] matches = RecipeMatcher.findMatches(input.getContent(), ingredients);
 
-            if (matches != null) {
-                for (int i = 0; i < matches.length; i++) {
+            if (matches != null)
+            {
+                for (int i = 0; i < matches.length; i++)
+                {
                     input.extractItem(i, recipeIn.getCosts(ingredients.get(matches[i])), false);
                 }
             }
 
-            if (!recipeIn.getInputFluid().isEmpty()) {
+            if (!recipeIn.getInputFluid().isEmpty())
+            {
                 // todo 直接用 drain
-                tankIn.ifPresent(tank -> {
+                tankIn.ifPresent(tank ->
+                {
                     tank.drain(recipeIn.getInputFluid(), EXECUTE);
                 });
                 // this.tankIn.ifPresent
@@ -234,16 +261,19 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
                 //                 }
                 //         );
             }
-            if (!recipeIn.getOutputFluid().isEmpty()) {
+            if (!recipeIn.getOutputFluid().isEmpty())
+            {
                 this.tankOut.ifPresent
                         (
                                 tank ->
                                 {
                                     FluidStack fluid = recipeIn.getOutputFluid();
                                     FluidStack fluidInTank = tank.getFluid();
-                                    if (tank.isEmpty()) {
+                                    if (tank.isEmpty())
+                                    {
                                         tank.fill(fluid, EXECUTE);
-                                    } else if (fluid.isFluidEqual(fluidInTank)) {
+                                    } else if (fluid.isFluidEqual(fluidInTank))
+                                    {
                                         fluidInTank.setAmount(Math.min(fluid.getAmount() + fluidInTank.getAmount(), tank.getCapacity()));
                                         tank.setFluid(fluidInTank);
                                         setChanged();
@@ -251,7 +281,8 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
                                 }
                         );
             }
-            if (this.level != null) {
+            if (this.level != null)
+            {
                 this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition),
                         this.level.getBlockState(this.worldPosition), 3);
             }
@@ -262,57 +293,68 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
     }
 
     //获取磨石的旋转角度（角度制）
-    public int getMillStoneRotation() {
+    public int getMillStoneRotation()
+    {
         return this.roundTicks != 0 ? 360 * this.roundProgress / this.roundTicks : 0;
     }
 
-    public ItemStackHandler getInput() {
+    public ItemStackHandler getInput()
+    {
         return input;
     }
 
-    public GenericItemStackHandler getOutput() {
+    public GenericItemStackHandler getOutput()
+    {
         return output;
     }
 
     @Override
-    public FluidTank createTank() {
+    public FluidTank createTank()
+    {
         return new FluidTank(4000);
     }
 
     @Override
-    public FluidTank createTank(int capacity) {
+    public FluidTank createTank(int capacity)
+    {
         return new FluidTank(capacity);
     }
 
     @Override
-    public LazyOptional<FluidTank> getTank() {
+    public LazyOptional<FluidTank> getTank()
+    {
         return this.tankIn;
     }
 
     @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap) {
-        if (!this.isRemoved() && cap.equals(FLUID_HANDLER_CAPABILITY)) {
+    public <T> LazyOptional<T> getCapability(Capability<T> cap)
+    {
+        if (!this.isRemoved() && cap.equals(FLUID_HANDLER_CAPABILITY))
+        {
             return this.tankIn.cast();
         }
         return super.getCapability(cap);
     }
 
     @Override
-    public void invalidateCaps() {
+    public void invalidateCaps()
+    {
         super.invalidateCaps();
         this.tankIn.invalidate();
         this.tankOut.invalidate();
     }
 
     @Override
-    public void reviveCaps() {
+    public void reviveCaps()
+    {
         super.reviveCaps();
         this.tankIn = LazyOptional.of(this::createTank);
         this.tankOut = LazyOptional.of(this::createTank);
     }
 
     @Override
-    public void load(CompoundTag nbt) {
+    public void load(CompoundTag nbt)
+    {
         this.round = nbt.getByte("round");
         this.roundTotal = nbt.getByte("roundTotal");
         this.roundProgress = nbt.getInt("roundProgress");
@@ -326,7 +368,8 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound) {
+    protected void saveAdditional(CompoundTag compound)
+    {
         compound.putByte("round", this.round);
         compound.putByte("roundTotal", this.roundTotal);
         compound.putInt("roundProgress", this.roundProgress);
@@ -340,8 +383,10 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
     }
 
     @Override
-    public void tick() {
-        if (this.level == null) {
+    public void tick()
+    {
+        if (this.level == null)
+        {
             return;
         }
 
@@ -349,9 +394,11 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
         (
                 FluidHelper.notifyFluidTankInteraction(this.fluidIO, 0, 2, this.tankIn.orElse(new FluidTank(0)), this.level, this.worldPosition)
                         || FluidHelper.notifyFluidTankInteraction(this.fluidIO, 1, 2, this.tankOut.orElse(new FluidTank(0)), this.level, this.worldPosition)
-        ) {
+        )
+        {
             this.setChanged();
-            if (this.level != null) {
+            if (this.level != null)
+            {
                 // todo 最后一个参数不再在混淆的时候去除了，可以在 Block 里调用常量
                 this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition),
                         //                                           todo 之前你写的 3
@@ -359,48 +406,62 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
             }
         }
 
-        if (!this.level.isClientSide()) {
-            if (hasInput()) {
+        if (!this.level.isClientSide())
+        {
+            if (hasInput())
+            {
                 boolean matchAny = false;
                 Optional<MillRecipe> recipeIn = tryMatchRecipe();
-                if (recipeIn.isPresent() && canProduce(recipeIn.get())) {
-                    if (this.recipe == null || !this.recipe.equals(recipeIn.get())) {
+                if (recipeIn.isPresent() && canProduce(recipeIn.get()))
+                {
+                    if (this.recipe == null || !this.recipe.equals(recipeIn.get()))
+                    {
                         applyRecipe(recipeIn.get());
                     }
                     matchAny = true;
                 }
-                if (!matchAny) {
+                if (!matchAny)
+                {
                     finishReciping(null);
                 }
-                if (isWorking) {
-                    if (round == roundTotal) {
+                if (isWorking)
+                {
+                    if (round == roundTotal)
+                    {
                         finishReciping(recipe);
-                    } else {
-                        if (roundProgress == roundTicks) {
+                    } else
+                    {
+                        if (roundProgress == roundTicks)
+                        {
                             roundProgress = 0;
                             round += 1;
-                        } else {
+                        } else
+                        {
                             roundProgress += 1;
                         }
                         this.sync();
                         setChanged();
                     }
                 }
-            } else if (isWorking) {
+            } else if (isWorking)
+            {
                 finishReciping(null);
             }
         }
     }
 
     @Override
-    public TranslatableComponent getDisplayName() {
+    public TranslatableComponent getDisplayName()
+    {
         return new TranslatableComponent("gui." + Ashihara.MODID + ".mill");
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int p_createMenu_1_, Inventory p_createMenu_2_, Player p_createMenu_3_) {
-        if (this.level == null) {
+    public AbstractContainerMenu createMenu(int p_createMenu_1_, Inventory p_createMenu_2_, Player p_createMenu_3_)
+    {
+        if (this.level == null)
+        {
             return null;
         }
         return new MillContainer(p_createMenu_1_, p_createMenu_2_, this.level, this.worldPosition, this.millData);
@@ -423,7 +484,8 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
     // }
 
     @Override
-    public CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag()
+    {
         CompoundTag nbt = new CompoundTag();
         nbt.putInt("roundProgress", this.roundProgress);
         nbt.putInt("roundTicks", this.roundTicks);
@@ -433,7 +495,8 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
+    {
         CompoundTag nbt = pkt.getTag();
         this.roundProgress = nbt.getInt("roundProgress");
         this.roundTicks = nbt.getInt("roundTicks");

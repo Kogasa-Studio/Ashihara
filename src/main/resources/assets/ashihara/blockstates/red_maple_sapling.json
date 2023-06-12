@@ -1,6 +1,7 @@
 {
-  "variants":
-  {
-    "": {"model": "ashihara:block/red_maple_sapling"}
+  "variants": {
+    "": {
+      "model": "ashihara:block/red_maple_sapling"
+    }
   }
 }

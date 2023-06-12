@@ -1,8 +1,7 @@
 {
-	"parent": "ashihara:block/building_blocks/advanced_fence/column_mid",
-	"textures":
-	{
-		"wood": "ashihara:block/woodcrafts/spruce_fence",
-		"part": "minecraft:block/stripped_spruce_log"
-	}
+  "parent": "ashihara:block/building_blocks/advanced_fence/column_mid",
+  "textures": {
+    "wood": "ashihara:block/woodcrafts/spruce_fence",
+    "part": "minecraft:block/stripped_spruce_log"
+  }
 }

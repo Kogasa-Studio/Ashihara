@@ -10,15 +10,18 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import static kogasastudio.ashihara.utils.AshiharaTags.MASHABLE;
 
-public class MortarContainer extends AshiharaCommonContainer {
+public class MortarContainer extends AshiharaCommonContainer
+{
     private final MortarTE te;
 
-    public MortarContainer(int id, Inventory inv, MortarTE teIn) {
+    public MortarContainer(int id, Inventory inv, MortarTE teIn)
+    {
         super(ContainerRegistryHandler.MORTAR_CONTAINER.get(), id);
         this.te = teIn;
 
         layoutPlayerInventorySlots(inv, 8, 121);
-        if (teIn != null) {
+        if (teIn != null)
+        {
             addSlotBox(teIn.contents, 0, 80, 26, 1, 18, 4, 18);
             addSlot(new SlotItemHandler(teIn.fluidIO, 0, 21, 85));
             addSlot(new SlotItemHandler(teIn.fluidIO, 1, 148, 85));
@@ -26,8 +29,10 @@ public class MortarContainer extends AshiharaCommonContainer {
     }
 
     @Override
-    protected int addSlotRange(IItemHandler inventory, int index, int x, int y, int amount, int dx) {
-        for (int i = 0; i < amount; i++) {
+    protected int addSlotRange(IItemHandler inventory, int index, int x, int y, int amount, int dx)
+    {
+        for (int i = 0; i < amount; i++)
+        {
             addSlot(new MortarSlot(inventory, index, x, y));
             x += dx;
             index += 1;
@@ -36,7 +41,8 @@ public class MortarContainer extends AshiharaCommonContainer {
     }
 
     @Override
-    public boolean stillValid(Player playerIn) {
+    public boolean stillValid(Player playerIn)
+    {
         return true;
     }
 
@@ -48,11 +54,13 @@ public class MortarContainer extends AshiharaCommonContainer {
      * @return 玩家右键的物品
      */
     @Override
-    public ItemStack quickMoveStack(Player playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index)
+    {
         //玩家点击的具体格子
         Slot slot = this.slots.get(index);
 
-        if (!slot.hasItem()) {
+        if (!slot.hasItem())
+        {
             return ItemStack.EMPTY;
         }
 
@@ -62,26 +70,32 @@ public class MortarContainer extends AshiharaCommonContainer {
         boolean isMerged;
 
         // 0~8: 快捷栏, 9~35: 玩家背包, 36~39: 内容槽, 40~41: 流体互动槽
-        if (index < 9) {
+        if (index < 9)
+        {
             isMerged = moveItemStackTo(newStack, 36, 40, false)
                     || moveItemStackTo(newStack, 40, 42, false)
                     || moveItemStackTo(newStack, 9, 36, false);
-        } else if (index < 36) {
+        } else if (index < 36)
+        {
             isMerged = moveItemStackTo(newStack, 36, 40, false)
                     || moveItemStackTo(newStack, 40, 42, false)
                     || moveItemStackTo(newStack, 0, 9, true);
-        } else {
+        } else
+        {
             isMerged = moveItemStackTo(newStack, 0, 9, true)
                     || moveItemStackTo(newStack, 9, 36, false);
         }
 
-        if (!isMerged) {
+        if (!isMerged)
+        {
             return ItemStack.EMPTY;
         }
 
-        if (newStack.getCount() == 0) {
+        if (newStack.getCount() == 0)
+        {
             slot.set(ItemStack.EMPTY);
-        } else {
+        } else
+        {
             slot.setChanged();
         }
 
@@ -91,38 +105,46 @@ public class MortarContainer extends AshiharaCommonContainer {
     }
 
     @Override
-    public void broadcastChanges() {
+    public void broadcastChanges()
+    {
         super.broadcastChanges();
         te.notifyStateChanged();
     }
 
-    public int getArrowHeight() {
+    public int getArrowHeight()
+    {
         int teProgress = this.te.progress;
         int teProgressTotal = this.te.progressTotal;
         float progress = teProgressTotal == 0 ? 0f : (float) teProgress / (float) teProgressTotal;
         return (int) (progress * 81);
     }
 
-    public int getNextStep() {
+    public int getNextStep()
+    {
         return this.te.nextStep;
     }
 
-    public MortarTE getTE() {
+    public MortarTE getTE()
+    {
         return this.te;
     }
 
-    private static class MortarSlot extends SlotItemHandler {
-        MortarSlot(IItemHandler inv, int index, int x, int y) {
+    private static class MortarSlot extends SlotItemHandler
+    {
+        MortarSlot(IItemHandler inv, int index, int x, int y)
+        {
             super(inv, index, x, y);
         }
 
         @Override
-        public int getMaxStackSize() {
+        public int getMaxStackSize()
+        {
             return 1;
         }
 
         @Override
-        public boolean mayPlace(ItemStack stack) {
+        public boolean mayPlace(ItemStack stack)
+        {
             return stack.is(MASHABLE);
         }
     }

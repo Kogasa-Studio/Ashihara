@@ -1,18 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
+  "pattern": [
     "# #",
     "# #",
     "___"
   ],
-  "key":
-  {
-    "#": {"tag": "forge:stripped_logs"},
-    "_": {"tag": "minecraft:planks"}
+  "key": {
+    "#": {
+      "tag": "forge:stripped_logs"
+    },
+    "_": {
+      "tag": "minecraft:planks"
+    }
   },
-  "result":
-  {
+  "result": {
     "item": "ashihara:mortar",
     "count": 1
   }

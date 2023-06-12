@@ -11,25 +11,30 @@ import java.util.Map;
 /**
  * @author DustW
  **/
-public abstract class ModGenRecipes {
+public abstract class ModGenRecipes
+{
     private final Map<ResourceLocation, Map.Entry<String, String>> recipes = new HashMap<>();
 
     protected abstract void addRecipes();
 
-    protected final void addRecipe(ResourceLocation name, String recipe, String subPath) {
+    protected final void addRecipe(ResourceLocation name, String recipe, String subPath)
+    {
         recipes.put(name, new HashMap.SimpleEntry<>(recipe, subPath));
     }
 
-    public Map<ResourceLocation, Map.Entry<String, String>> getRecipes() {
+    public Map<ResourceLocation, Map.Entry<String, String>> getRecipes()
+    {
         addRecipes();
         return recipes;
     }
 
-    protected ResourceLocation defaultName(Item item) {
+    protected ResourceLocation defaultName(Item item)
+    {
         return item.getRegistryName();
     }
 
-    protected <TYPE extends BaseRecipe> String baseRecipe(TYPE recipe) {
+    protected <TYPE extends BaseRecipe> String baseRecipe(TYPE recipe)
+    {
         return JsonUtils.INSTANCE.pretty.toJson(recipe);
     }
 }

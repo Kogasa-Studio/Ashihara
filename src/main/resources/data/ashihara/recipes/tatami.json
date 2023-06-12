@@ -1,17 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
+  "pattern": [
     "A A",
     "YYY"
   ],
-  "key":
-  {
-    "A": {"item": "minecraft:paper"},
-    "Y": {"item": "ashihara:straw"}
+  "key": {
+    "A": {
+      "item": "minecraft:paper"
+    },
+    "Y": {
+      "item": "ashihara:straw"
+    }
   },
-  "result":
-  {
+  "result": {
     "item": "ashihara:tatami",
     "count": 4
   }

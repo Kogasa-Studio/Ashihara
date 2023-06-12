@@ -14,7 +14,8 @@ import net.minecraftforge.registries.RegistryObject;
 import terrablender.api.Regions;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public class BiomeRegistryHandler {
+public class BiomeRegistryHandler
+{
     public static final DeferredRegister<Biome> BIOMES = DeferredRegister.create(ForgeRegistries.BIOMES, Ashihara.MODID);
 
     public static final RegistryObject<Biome> JUNIOR_CHERRY_FOREST =
@@ -22,7 +23,8 @@ public class BiomeRegistryHandler {
     public static final RegistryObject<Biome> RED_MAPLE_FOREST =
             BIOMES.register("red_maple_forest", AshiharaBiomes::redMapleForest);
 
-    public static void onRegister(RegistryEvent.Register<Biome> event) {
+    public static void onRegister(RegistryEvent.Register<Biome> event)
+    {
         /// addBiome(event, BiomeManager.BiomeType.WARM, "junior_cherry_forest", 5, JuniorCherryForest());
         /// addBiome(event, BiomeManager.BiomeType.COOL, "red_maple_forest", 12, RedMapleForest());
         /// addBiome(event, BiomeManager.BiomeType.ICY, "snowy_cherry_forest", 15, SnowyCherryForest());
@@ -31,11 +33,13 @@ public class BiomeRegistryHandler {
     private static final String OVERWORD = "overworld";
 
     @SubscribeEvent
-    public static void onEvent(FMLCommonSetupEvent event) {
+    public static void onEvent(FMLCommonSetupEvent event)
+    {
         event.enqueueWork(() -> Regions.register(new AshiharaBiomeRegion(new ResourceLocation(Ashihara.MODID, OVERWORD), 2)));
     }
 
-    private static RegistryObject<Biome> addBiome(RegistryObject<Biome> biome, BiomeManager.BiomeType type, int weight) {
+    private static RegistryObject<Biome> addBiome(RegistryObject<Biome> biome, BiomeManager.BiomeType type, int weight)
+    {
         BiomeManager.addBiome(type, new BiomeManager.BiomeEntry(biome.getKey(), weight));
         return biome;
     }

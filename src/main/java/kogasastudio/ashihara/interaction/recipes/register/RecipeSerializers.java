@@ -13,9 +13,11 @@ import net.minecraftforge.registries.RegistryObject;
 
 /**
  * todo 注册新的 RecipeSerializer 在这里注册
+ *
  * @author DustW
  **/
-public class RecipeSerializers {
+public class RecipeSerializers
+{
     private static final DeferredRegister<RecipeSerializer<?>> SERIALIZER =
             DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Ashihara.MODID);
 
@@ -29,7 +31,8 @@ public class RecipeSerializers {
             SERIALIZER.register("mill", () -> new BaseSerializer<>(MillRecipe.class));
 
 
-    static void register(IEventBus bus) {
+    static void register(IEventBus bus)
+    {
         SERIALIZER.register(bus);
     }
 }

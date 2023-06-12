@@ -1,22 +1,80 @@
 {
-	"credit": "Made with Blockbench",
-	"parent": "minecraft:block/block",
-	"textures": {
-		"0": "ashihara:block/woodcrafts/oak_fence",
-		"particle": "ashihara:block/woodcrafts/oak_fence"
-	},
-	"elements": [
-		{
-			"from": [6, 4, 0],
-			"to": [10, 8, 16],
-			"faces": {
-				"north": {"uv": [10, 0, 14, 4], "texture": "#0"},
-				"east": {"uv": [6, 0, 10, 16], "rotation": 90, "texture": "#0"},
-				"south": {"uv": [10, 0, 14, 4], "texture": "#0"},
-				"west": {"uv": [6, 0, 10, 16], "rotation": 90, "texture": "#0"},
-				"up": {"uv": [6, 0, 10, 16], "texture": "#0"},
-				"down": {"uv": [6, 0, 10, 16], "texture": "#0"}
-			}
-		}
-	]
+  "credit": "Made with Blockbench",
+  "parent": "minecraft:block/block",
+  "textures": {
+    "0": "ashihara:block/woodcrafts/oak_fence",
+    "particle": "ashihara:block/woodcrafts/oak_fence"
+  },
+  "elements": [
+    {
+      "from": [
+        6,
+        4,
+        0
+      ],
+      "to": [
+        10,
+        8,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            0,
+            14,
+            4
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            6,
+            0,
+            10,
+            16
+          ],
+          "rotation": 90,
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            10,
+            0,
+            14,
+            4
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            6,
+            0,
+            10,
+            16
+          ],
+          "rotation": 90,
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            6,
+            0,
+            10,
+            16
+          ],
+          "texture": "#0"
+        },
+        "down": {
+          "uv": [
+            6,
+            0,
+            10,
+            16
+          ],
+          "texture": "#0"
+        }
+      }
+    }
+  ]
 }

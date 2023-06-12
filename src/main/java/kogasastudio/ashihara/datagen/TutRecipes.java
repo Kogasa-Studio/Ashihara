@@ -23,30 +23,36 @@ import java.util.function.Consumer;
 /**
  * @author DustW
  **/
-public class TutRecipes extends RecipeProvider {
+public class TutRecipes extends RecipeProvider
+{
 
-    public TutRecipes(DataGenerator generatorIn) {
+    public TutRecipes(DataGenerator generatorIn)
+    {
         super(generatorIn);
     }
 
     protected List<ModGenRecipes> recipes = new ArrayList<>();
 
-    protected void addCustomRecipes() {
+    protected void addCustomRecipes()
+    {
         recipes.add(new CuttingBoardRecipes());
         recipes.add(new MillRecipes());
         recipes.add(new MortarRecipes());
     }
 
     @Override
-    public void run(HashCache pCache) {
+    public void run(HashCache pCache)
+    {
         super.run(pCache);
 
-        recipes.forEach(recipes -> {
+        recipes.forEach(recipes ->
+        {
             recipes.getRecipes().forEach((name, entry) -> save(pCache, name, entry));
         });
     }
 
-    protected void save(HashCache pCache, ResourceLocation name, Map.Entry<String, String> entry) {
+    protected void save(HashCache pCache, ResourceLocation name, Map.Entry<String, String> entry)
+    {
         String json = entry.getKey();
         String subPath = entry.getValue();
 
@@ -55,19 +61,26 @@ public class TutRecipes extends RecipeProvider {
         saveRecipe(pCache, json, path.resolve("data/" + name.getNamespace() + "/recipes/" + subPath + "/" + name.getPath() + ".json"));
     }
 
-    private static void saveRecipe(HashCache pCache, String recipe, Path pPath) {
-        try {
+    private static void saveRecipe(HashCache pCache, String recipe, Path pPath)
+    {
+        try
+        {
             String s1 = SHA1.hashUnencodedChars(recipe).toString();
-            if (!Objects.equals(pCache.getHash(pPath), s1) || !Files.exists(pPath)) {
+            if (!Objects.equals(pCache.getHash(pPath), s1) || !Files.exists(pPath))
+            {
                 Files.createDirectories(pPath.getParent());
                 BufferedWriter bufferedwriter = Files.newBufferedWriter(pPath);
 
-                try {
+                try
+                {
                     bufferedwriter.write(recipe);
-                } catch (Throwable throwable1) {
-                    try {
+                } catch (Throwable throwable1)
+                {
+                    try
+                    {
                         bufferedwriter.close();
-                    } catch (Throwable throwable) {
+                    } catch (Throwable throwable)
+                    {
                         throwable1.addSuppressed(throwable);
                     }
 
@@ -78,12 +91,12 @@ public class TutRecipes extends RecipeProvider {
             }
 
             pCache.putNew(pPath, s1);
-        } catch (IOException ignored) {
-        }
+        } catch (IOException ignored) {}
     }
 
     @Override
-    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
+    {
         addCustomRecipes();
     }
 }

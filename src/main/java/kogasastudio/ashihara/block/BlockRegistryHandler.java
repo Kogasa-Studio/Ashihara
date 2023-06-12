@@ -9,6 +9,7 @@ import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.utils.AshiharaWoodTypes;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -17,85 +18,112 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class BlockRegistryHandler {
+import java.util.ArrayList;
+import java.util.List;
+
+public class BlockRegistryHandler
+{
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Ashihara.MODID);
 
-    public static final RegistryObject<Block> WATER_FIELD = BLOCKS.register("water_field", BlockWaterField::new);
-    public static final RegistryObject<Block> RICE_CROP = BLOCKS.register("rice_crop", BlockRiceCrop::new);
-    public static final RegistryObject<Block> DIRT_DEPRESSION = BLOCKS.register("dirt_depression", BlockDirtDepression::new);
-    public static final RegistryObject<Block> TETSUSENCHI = BLOCKS.register("tetsusenchi", BlockTetsusenchi::new);
+    public static final RegistryObject<Block> WATER_FIELD = BLOCKS.register("water_field", PaddyFieldBlock::new);
+    public static final RegistryObject<Block> RICE_CROP = BLOCKS.register("rice_crop", RiceCropBlock::new);
+    public static final RegistryObject<Block> DIRT_DEPRESSION = BLOCKS.register("dirt_depression", DirtDepressionBlock::new);
+    public static final RegistryObject<Block> TETSUSENCHI = BLOCKS.register("tetsusenchi", TetsusenchiBlock::new);
     public static final RegistryObject<Block> CHERRY_SAPLING = BLOCKS.register("cherry_sapling", () -> new SaplingBlock(new CherryBlossomTree(), BlockBehaviour.Properties.of(Material.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
     public static final RegistryObject<Block> POTTED_CHERRY_SAPLING = BLOCKS.register("potted_cherry_sapling", () -> new FlowerPotBlock(BlockRegistryHandler.CHERRY_SAPLING.get(), BlockBehaviour.Properties.of(Material.DECORATION).instabreak().noOcclusion()));
     public static final RegistryObject<Block> RED_MAPLE_SAPLING = BLOCKS.register("red_maple_sapling", () -> new SaplingBlock(new RedMapleTree(), BlockBehaviour.Properties.of(Material.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
     public static final RegistryObject<Block> POTTED_RED_MAPLE_SAPLING = BLOCKS.register("potted_red_maple_sapling", () -> new FlowerPotBlock(BlockRegistryHandler.RED_MAPLE_SAPLING.get(), BlockBehaviour.Properties.of(Material.DECORATION).instabreak().noOcclusion()));
-    public static final RegistryObject<Block> MORTAR = BLOCKS.register("mortar", BlockMortar::new);
-    public static final RegistryObject<Block> IMMATURE_RICE = BLOCKS.register("immature_rice", BlockImmatureRiceCrop::new);
-    public static final RegistryObject<Block> CHRYSANTHEMUM = BLOCKS.register("chrysanthemum", BlockChrysanthemumBush::new);
-    public static final RegistryObject<Block> REED = BLOCKS.register("reed", BlockReed::new);
-    public static final RegistryObject<Block> SHORTER_REED = BLOCKS.register("shorter_reed", BlockShorterReed::new);
-    public static final RegistryObject<Block> MILL = BLOCKS.register("mill", BlockMill::new);
-    public static final RegistryObject<Block> HYDRANGEA_BUSH = BLOCKS.register("hydrangea_bush", () -> new BlockHydrangeaBush(false));
-    public static final RegistryObject<Block> PAIL = BLOCKS.register("pail", BlockPail::new);
-    public static final RegistryObject<Block> TEA_TREE = BLOCKS.register("tea_tree", BlockTeaTree::new);
-    public static final RegistryObject<Block> MEAL_TABLE = BLOCKS.register("meal_table", BlockMealTable::new);
-    public static final RegistryObject<Block> CUTTING_BOARD = BLOCKS.register("cutting_board", BlockCuttingBoard::new);
+    public static final RegistryObject<Block> MORTAR = BLOCKS.register("mortar", MortarBlock::new);
+    public static final RegistryObject<Block> IMMATURE_RICE = BLOCKS.register("immature_rice", ImmatureRiceCropBlock::new);
+    public static final RegistryObject<Block> CHRYSANTHEMUM = BLOCKS.register("chrysanthemum", ChrysanthemumBushBlock::new);
+    public static final RegistryObject<Block> REED = BLOCKS.register("reed", ReedBlock::new);
+    public static final RegistryObject<Block> SHORTER_REED = BLOCKS.register("shorter_reed", ShorterReedBlock::new);
+    public static final RegistryObject<Block> MILL = BLOCKS.register("mill", MillBlock::new);
+    public static final RegistryObject<Block> HYDRANGEA_BUSH = BLOCKS.register("hydrangea_bush", () -> new HydrangeaBushBlock(false));
+    public static final RegistryObject<Block> PAIL = BLOCKS.register("pail", PailBlock::new);
+    public static final RegistryObject<Block> TEA_TREE = BLOCKS.register("tea_tree", TeaTreeBlock::new);
+    public static final RegistryObject<Block> MEAL_TABLE = BLOCKS.register("meal_table", MealTableBlock::new);
+    public static final RegistryObject<Block> CUTTING_BOARD = BLOCKS.register("cutting_board", CuttingBoardBlock::new);
     public static final RegistryObject<Block> FALLEN_SAKURA = BLOCKS.register("fallen_sakura", AbstractFallenLeavesBlock::new);
     //建筑
-    public static final RegistryObject<Block> CHERRY_BLOSSOM = BLOCKS.register("cherry_blossom", () -> new AbstractFallingLeavesBlock(5, false) {
+    public static final RegistryObject<Block> CHERRY_BLOSSOM = BLOCKS.register("cherry_blossom", () -> new AbstractFallingLeavesBlock(5, false)
+    {
         @Override
-        protected Block getFallenBlock() {
+        protected Block getFallenBlock()
+        {
             return FALLEN_SAKURA.get();
         }
 
         @Override
-        protected GenericParticleType getParticle() {
+        protected GenericParticleType getParticle()
+        {
             return ParticleRegistryHandler.SAKURA.get();
+        }
+
+        @Override
+        protected List<ItemStack> getBonusResource()
+        {
+            ArrayList<ItemStack> list = new ArrayList<>();
+            list.add(new ItemStack(ItemRegistryHandler.SAKURA.get(), Ashihara.RANDOM.nextInt(1,2)));
+            list.add(new ItemStack(ItemRegistryHandler.SAKURA_PETAL.get(), Ashihara.RANDOM.nextInt(1,3)));
+            return list;
         }
     });
     public static final RegistryObject<Block> FALLEN_MAPLE_LEAVES_RED = BLOCKS.register("fallen_maple_leaves_red", AbstractFallenLeavesBlock::new);
-    public static final RegistryObject<Block> MAPLE_LEAVES_RED = BLOCKS.register("maple_leaves_red", () -> new AbstractFallingLeavesBlock() {
+    public static final RegistryObject<Block> MAPLE_LEAVES_RED = BLOCKS.register("maple_leaves_red", () -> new AbstractFallingLeavesBlock()
+    {
         @Override
-        protected Block getFallenBlock() {
+        protected Block getFallenBlock()
+        {
             return FALLEN_MAPLE_LEAVES_RED.get();
         }
 
         @Override
-        protected GenericParticleType getParticle() {
+        protected GenericParticleType getParticle()
+        {
             return ParticleRegistryHandler.MAPLE_LEAF.get();
         }
     });
-    public static final RegistryObject<Block> JINJA_LANTERN = BLOCKS.register("jinja_lantern", BlockJinjaLantern::new);
-    public static final RegistryObject<Block> STONE_LANTERN = BLOCKS.register("stone_lantern", BlockStoneLantern::new);
-    public static final RegistryObject<Block> LANTERN_LONG_WHITE = BLOCKS.register("lantern_long_white", BlockHangingLanternLong::new);
-    public static final RegistryObject<Block> LANTERN_LONG_RED = BLOCKS.register("lantern_long_red", BlockHangingLanternLong::new);
-    public static final RegistryObject<Block> CANDLE = BLOCKS.register("candle", BlockCandle::new);
-    public static final RegistryObject<Block> TATAMI = BLOCKS.register("tatami", BlockTatami::new);
-    public static final RegistryObject<Block> OAK_SHOUJI_BEAM_MUD = BLOCKS.register("oak_shouji_beam_mud", BlockShoujiBeam::new);
+    public static final RegistryObject<Block> JINJA_LANTERN = BLOCKS.register("jinja_lantern", JinjaLanternBlock::new);
+    public static final RegistryObject<Block> STONE_LANTERN = BLOCKS.register("stone_lantern", StoneLanternBlock::new);
+    public static final RegistryObject<Block> LANTERN_LONG_WHITE = BLOCKS.register("lantern_long_white", HangingLanternLongBlock::new);
+    public static final RegistryObject<Block> LANTERN_LONG_RED = BLOCKS.register("lantern_long_red", HangingLanternLongBlock::new);
+    public static final RegistryObject<Block> CANDLE = BLOCKS.register("candle", CandleBlock::new);
+    public static final RegistryObject<Block> TATAMI = BLOCKS.register("tatami", TatamiBlock::new);
+    public static final RegistryObject<Block> OAK_SHOUJI_BEAM_MUD = BLOCKS.register("oak_shouji_beam_mud", ShoujiBeamBlock::new);
 
     //作物
-    public static final RegistryObject<Block> SOY_BEANS = BLOCKS.register("soy_beans", () -> new AbstractCropAge7Pickable(7, 3) {
+    public static final RegistryObject<Block> SOY_BEANS = BLOCKS.register("soy_beans", () -> new AbstractCropAge7Pickable(7, 3)
+    {
         @Override
-        protected ItemLike getBaseSeedId() {
+        protected ItemLike getBaseSeedId()
+        {
             return ItemRegistryHandler.SOY_BEAN.get();
         }
     });
-    public static final RegistryObject<Block> SWEET_POTATOES = BLOCKS.register("sweet_potatoes", () -> new AbstractCropAge7() {
+    public static final RegistryObject<Block> SWEET_POTATOES = BLOCKS.register("sweet_potatoes", () -> new AbstractCropAge7()
+    {
         @Override
-        protected ItemLike getBaseSeedId() {
+        protected ItemLike getBaseSeedId()
+        {
             return ItemRegistryHandler.SWEET_POTATO.get();
         }
     });
-    public static final RegistryObject<Block> CUCUMBERS = BLOCKS.register("cucumbers", () -> new BlockCucumberCrop() {
+    public static final RegistryObject<Block> CUCUMBERS = BLOCKS.register("cucumbers", () -> new CucumberCropBlock()
+    {
         @Override
-        protected ItemLike getBaseSeedId() {
+        protected ItemLike getBaseSeedId()
+        {
             return ItemRegistryHandler.CUCUMBER.get();
         }
     });
     public static final RegistryObject<Block> STRIPPED_CHERRY_LOG = BLOCKS.register("stripped_cherry_log", SimpleLogBlock::new);
     //木制品
-    public static final RegistryObject<Block> CHERRY_LOG = BLOCKS.register("cherry_log", () -> new StrippableLogBlock() {
+    public static final RegistryObject<Block> CHERRY_LOG = BLOCKS.register("cherry_log", () -> new StrippableLogBlock()
+    {
         @Override
-        public Block getStrippedBlock() {
+        public Block getStrippedBlock()
+        {
             return STRIPPED_CHERRY_LOG.get();
         }
     });
@@ -114,9 +142,11 @@ public class BlockRegistryHandler {
     public static final RegistryObject<Block> RED_FENCE = BLOCKS.register("red_fence", SimpleFenceBlock::new);
     public static final RegistryObject<Block> RED_FENCE_GATE = BLOCKS.register("red_fence_gate", SimpleFenceGateBlock::new);
     public static final RegistryObject<Block> STRIPPED_MAPLE_LOG = BLOCKS.register("stripped_maple_log", SimpleLogBlock::new);
-    public static final RegistryObject<Block> MAPLE_LOG = BLOCKS.register("maple_log", () -> new StrippableLogBlock() {
+    public static final RegistryObject<Block> MAPLE_LOG = BLOCKS.register("maple_log", () -> new StrippableLogBlock()
+    {
         @Override
-        public Block getStrippedBlock() {
+        public Block getStrippedBlock()
+        {
             return STRIPPED_MAPLE_LOG.get();
         }
     });
@@ -126,23 +156,27 @@ public class BlockRegistryHandler {
     public static final RegistryObject<Block> MAPLE_FENCE = BLOCKS.register("maple_fence", SimpleFenceBlock::new);
     public static final RegistryObject<Block> MAPLE_FENCE_GATE = BLOCKS.register("maple_fence_gate", SimpleFenceGateBlock::new);
     public static final RegistryObject<Block> MAPLE_BUTTON = BLOCKS.register("maple_button", SimpleButtonBlock::new);
-    public static final RegistryObject<Block> RED_FENCE_EXPANSION = BLOCKS.register("red_fence_expansion", () -> new BlockFenceExpansion(AshiharaWoodTypes.RED));
-    public static final RegistryObject<Block> RED_ADVANCED_FENCE = BLOCKS.register("advanced_red_fence", () -> new BlockAdvancedFence(AshiharaWoodTypes.RED) {
+    public static final RegistryObject<Block> RED_FENCE_EXPANSION = BLOCKS.register("red_fence_expansion", () -> new FenceExpansionBlock(AshiharaWoodTypes.RED));
+    public static final RegistryObject<Block> RED_ADVANCED_FENCE = BLOCKS.register("advanced_red_fence", () -> new AdvancedFenceBlock(AshiharaWoodTypes.RED)
+    {
         @Override
-        protected Block getExpansion() {
+        protected Block getExpansion()
+        {
             return RED_FENCE_EXPANSION.get();
         }
     });
-    public static final RegistryObject<Block> SPRUCE_FENCE_EXPANSION = BLOCKS.register("spruce_fence_expansion", () -> new BlockFenceExpansion(AshiharaWoodTypes.SPRUCE));
-    public static final RegistryObject<Block> SPRUCE_ADVANCED_FENCE = BLOCKS.register("advanced_spruce_fence", () -> new BlockAdvancedFence(AshiharaWoodTypes.SPRUCE) {
+    public static final RegistryObject<Block> SPRUCE_FENCE_EXPANSION = BLOCKS.register("spruce_fence_expansion", () -> new FenceExpansionBlock(AshiharaWoodTypes.SPRUCE));
+    public static final RegistryObject<Block> SPRUCE_ADVANCED_FENCE = BLOCKS.register("advanced_spruce_fence", () -> new AdvancedFenceBlock(AshiharaWoodTypes.SPRUCE)
+    {
         @Override
-        protected Block getExpansion() {
+        protected Block getExpansion()
+        {
             return SPRUCE_FENCE_EXPANSION.get();
         }
     });
-    public static final RegistryObject<Block> GOLD_FENCE_DECORATION = BLOCKS.register("gold_fence_decoration", BlockFenceDecoration::new);
-    public static final RegistryObject<Block> RED_KUMIMONO = BLOCKS.register("red_kumimono", () -> new BlockKumimono(AshiharaWoodTypes.RED));
-    public static final RegistryObject<Block> RED_KAWAKI = BLOCKS.register("red_kawaki", () -> new BlockKawaki(AshiharaWoodTypes.RED));
+    public static final RegistryObject<Block> GOLD_FENCE_DECORATION = BLOCKS.register("gold_fence_decoration", FenceDecorationBlock::new);
+    public static final RegistryObject<Block> RED_KUMIMONO = BLOCKS.register("red_kumimono", () -> new KumimonoBlock(AshiharaWoodTypes.RED));
+    public static final RegistryObject<Block> RED_KAWAKI = BLOCKS.register("red_kawaki", () -> new KawakiBlock(AshiharaWoodTypes.RED));
 
     public static final RegistryObject<LiquidBlock> SOY_MILK_BLOCK = BLOCKS.register("soy_milk", () ->
             new LiquidBlock(FluidRegistryHandler.SOY_MILK, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));

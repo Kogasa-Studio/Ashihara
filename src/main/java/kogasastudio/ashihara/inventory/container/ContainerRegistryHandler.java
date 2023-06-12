@@ -11,7 +11,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class ContainerRegistryHandler {
+public class ContainerRegistryHandler
+{
     public static final DeferredRegister<MenuType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, Ashihara.MODID);
 
     public static final RegistryObject<MenuType<MillContainer>> MILL_CONTAINER = CONTAINER_TYPES.register("mill_container",
@@ -24,11 +25,13 @@ public class ContainerRegistryHandler {
 
     // todo 如果这里 cast 失败了说明真的该崩了
     @SuppressWarnings("unchecked")
-    static <T extends BlockEntity> T getBe(Inventory inv, FriendlyByteBuf data) {
+    static <T extends BlockEntity> T getBe(Inventory inv, FriendlyByteBuf data)
+    {
         return (T) getLevel(inv).getBlockEntity(data.readBlockPos());
     }
 
-    static Level getLevel(Inventory inv) {
+    static Level getLevel(Inventory inv)
+    {
         return inv.player.level;
     }
 }

@@ -10,15 +10,18 @@ import java.lang.reflect.Type;
 /**
  * @author DustW
  **/
-public class ItemStackSerializer implements BaseSerializer<ItemStack> {
+public class ItemStackSerializer implements BaseSerializer<ItemStack>
+{
 
     @Override
-    public ItemStack deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public ItemStack deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
+    {
         return CraftingHelper.getItemStack(json.getAsJsonObject(), true);
     }
 
     @Override
-    public JsonElement serialize(ItemStack src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(ItemStack src, Type typeOfSrc, JsonSerializationContext context)
+    {
         JsonObject result = new JsonObject();
         CompoundTag allTag = src.serializeNBT();
 
@@ -26,12 +29,14 @@ public class ItemStackSerializer implements BaseSerializer<ItemStack> {
         result.addProperty("item", item);
 
         var tag = allTag.getCompound("tag");
-        if (allTag.contains("ForgeCaps")) {
+        if (allTag.contains("ForgeCaps"))
+        {
             var fCap = allTag.getCompound("ForgeCaps");
             tag.put("ForgeCaps", fCap);
         }
 
-        if (!tag.isEmpty()) {
+        if (!tag.isEmpty())
+        {
             JsonPrimitive nbt = new JsonPrimitive(tag.toString());
             result.add("nbt", nbt);
         }

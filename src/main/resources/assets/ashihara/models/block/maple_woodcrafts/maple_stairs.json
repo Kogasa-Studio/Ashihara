@@ -1,7 +1,6 @@
 {
   "parent": "minecraft:block/stairs",
-  "textures":
-  {
+  "textures": {
     "bottom": "ashihara:block/woodcrafts/maple_planks",
     "top": "ashihara:block/woodcrafts/maple_planks",
     "side": "ashihara:block/woodcrafts/maple_planks"

@@ -25,10 +25,12 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Random;
 
-public class BlockTetsusenchi extends Block {
+public class TetsusenchiBlock extends Block
+{
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
-    public BlockTetsusenchi() {
+    public TetsusenchiBlock()
+    {
         super
                 (
                         Properties.of(Material.WOOD)
@@ -40,25 +42,31 @@ public class BlockTetsusenchi extends Block {
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context)
+    {
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
         builder.add(FACING);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+    {
         return Block.box(1.0D, 0.0D, 1.0D, 15.0D, 12.45D, 15.0D);
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    {
         ItemStack item = player.getItemInHand(handIn);
-        if (item.getItem() == ItemRegistryHandler.RICE_CROP.get()) {
-            if (!player.getCooldowns().isOnCooldown(item.getItem())) {
+        if (item.getItem() == ItemRegistryHandler.RICE_CROP.get())
+        {
+            if (!player.getCooldowns().isOnCooldown(item.getItem()))
+            {
                 Random rand = worldIn.getRandom();
                 worldIn.playSound(player, pos, SoundEvents.UNTHRESH.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
                 Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemRegistryHandler.STRAW.get()));
@@ -66,10 +74,12 @@ public class BlockTetsusenchi extends Block {
                 player.getCooldowns().addCooldown(item.getItem(), 8);
                 item.shrink(1);
                 return InteractionResult.SUCCESS;
-            } else {
+            } else
+            {
                 return InteractionResult.PASS;
             }
-        } else {
+        } else
+        {
             return InteractionResult.PASS;
         }
     }

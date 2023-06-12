@@ -1,9 +1,8 @@
 {
   "replace": false,
-  "values":
-     [
-       "ashihara:cherry_log",
-       "ashihara:cherry_wood",
-       "ashihara:stripped_cherry_log"
-     ]
+  "values": [
+    "ashihara:cherry_log",
+    "ashihara:cherry_wood",
+    "ashihara:stripped_cherry_log"
+  ]
 }

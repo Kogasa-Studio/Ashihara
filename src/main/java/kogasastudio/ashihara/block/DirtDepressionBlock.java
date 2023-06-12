@@ -16,10 +16,12 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class BlockDirtDepression extends Block implements SimpleWaterloggedBlock {
+public class DirtDepressionBlock extends Block implements SimpleWaterloggedBlock
+{
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public BlockDirtDepression() {
+    public DirtDepressionBlock()
+    {
         super
                 (
                         Properties.of(Material.DIRT)
@@ -33,7 +35,8 @@ public class BlockDirtDepression extends Block implements SimpleWaterloggedBlock
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
         builder.add(WATERLOGGED);
     }
 
@@ -44,12 +47,14 @@ public class BlockDirtDepression extends Block implements SimpleWaterloggedBlock
     }
 
     @Override
-    public FluidState getFluidState(BlockState state) {
+    public FluidState getFluidState(BlockState state)
+    {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context)
+    {
         return this.defaultBlockState().setValue(WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType().equals(Fluids.WATER));
     }
 }

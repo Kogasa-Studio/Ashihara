@@ -1,31 +1,31 @@
-modLoader="javafml"
-loaderVersion="[36,)"
-license="All rights reserved"
+modLoader = "javafml"
+loaderVersion = "[36,)"
+license = "All rights reserved"
 [[mods]]
-modId="ashihara"
-version="${file.jarVersion}"
-displayName="Ashihara"
-logoFile="ashihara.png"
-credits="Author Kogasa Studio, everyone attending this test, Syameimaru zheng, 3TUSK, Zomb_076, Morning, MalayP, and YAOYOROZUKAMI"
-authors="Kogasastudio"
-description='''
+modId = "ashihara"
+version = "${file.jarVersion}"
+displayName = "Ashihara"
+logoFile = "ashihara.png"
+credits = "Author Kogasa Studio, everyone attending this test, Syameimaru zheng, 3TUSK, Zomb_076, Morning, MalayP, and YAOYOROZUKAMI"
+authors = "Kogasastudio"
+description = '''
 A mod which adds tons of japanese elements
 '''
 [[dependencies.ashihara]]
-    modId="forge"
-    mandatory=true
-    versionRange="[40,)"
-    ordering="NONE"
-    side="BOTH"
+modId = "forge"
+mandatory = true
+versionRange = "[40,)"
+ordering = "NONE"
+side = "BOTH"
 [[dependencies.ashihara]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.18,1.19)"
-    ordering="NONE"
-    side="BOTH"
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.18,1.19)"
+ordering = "NONE"
+side = "BOTH"
 [[dependencies.ashihara]]
-    modId="terrablender"
-    mandatory=true
-    versionRange="[1.1.0.101,)"
-    ordering="NONE"
-    side="BOTH"
+modId = "terrablender"
+mandatory = true
+versionRange = "[1.1.0.101,)"
+ordering = "NONE"
+side = "BOTH"

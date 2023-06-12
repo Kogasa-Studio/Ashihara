@@ -9,14 +9,17 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 /**
  * @author DustW
  **/
-public class TutBlockTags extends BlockTagsProvider {
+public class TutBlockTags extends BlockTagsProvider
+{
 
-    public TutBlockTags(DataGenerator generator, ExistingFileHelper helper) {
+    public TutBlockTags(DataGenerator generator, ExistingFileHelper helper)
+    {
         super(generator, DataGenerators.MOD_ID, helper);
     }
 
     @Override
-    protected void addTags() {
+    protected void addTags()
+    {
         // todo 就用类似这样的方式给 block 添加 tag
         tag(BlockTags.MINEABLE_WITH_SHOVEL)
                 .add(BlockRegistryHandler.WATER_FIELD.get());
@@ -26,7 +29,8 @@ public class TutBlockTags extends BlockTagsProvider {
     }
 
     @Override
-    public String getName() {
+    public String getName()
+    {
         return DataGenerators.MOD_ID + " Tags";
     }
 }

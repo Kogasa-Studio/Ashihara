@@ -12,10 +12,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TieredItem;
 
-public class ItemOtsuchi extends TieredItem {
+public class ItemOtsuchi extends TieredItem
+{
     private final Multimap<Attribute, AttributeModifier> attributeModifiers;
 
-    public ItemOtsuchi(Tier tier, int dmgIn, double spdIn) {
+    public ItemOtsuchi(Tier tier, int dmgIn, double spdIn)
+    {
         super(tier, new Properties().tab(CreativeModeTab.TAB_TOOLS));
         float attackDamage = (float) dmgIn + (float) Math.pow(tier.getAttackDamageBonus(), 2);
         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
@@ -25,13 +27,15 @@ public class ItemOtsuchi extends TieredItem {
     }
 
     @Override
-    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker)
+    {
         stack.hurtAndBreak(3, attacker, (entity) -> entity.broadcastBreakEvent(EquipmentSlot.MAINHAND));
         return true;
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
+    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot)
+    {
         return equipmentSlot == EquipmentSlot.MAINHAND ? this.attributeModifiers : super.getDefaultAttributeModifiers(equipmentSlot);
     }
 }

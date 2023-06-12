@@ -1,9 +1,8 @@
 {
   "replace": false,
-  "values":
-     [
-       "#ashihara:cherry_logs",
-       "#ashihara:maple_logs",
-       "ashihara:stripped_red_log"
-     ]
+  "values": [
+    "#ashihara:cherry_logs",
+    "#ashihara:maple_logs",
+    "ashihara:stripped_red_log"
+  ]
 }

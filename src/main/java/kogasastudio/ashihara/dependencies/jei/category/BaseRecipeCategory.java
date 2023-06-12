@@ -11,49 +11,58 @@ import net.minecraft.world.item.crafting.Recipe;
 /**
  * @author DustW
  **/
-public class BaseRecipeCategory<T extends Recipe<?>> implements IRecipeCategory<T> {
+public class BaseRecipeCategory<T extends Recipe<?>> implements IRecipeCategory<T>
+{
     protected final RecipeType<T> type;
     protected String translateKey;
     IDrawable icon;
     IDrawable background;
 
-    public BaseRecipeCategory(RecipeType<T> type, IDrawable icon, IDrawable background) {
+    public BaseRecipeCategory(RecipeType<T> type, IDrawable icon, IDrawable background)
+    {
         this.type = type;
         this.icon = icon;
         this.background = background;
     }
 
-    protected String defaultTranslateKey() {
+    protected String defaultTranslateKey()
+    {
         return type.getUid().toString().replace("/", ".");
     }
 
     @Override
-    public Component getTitle() {
+    public Component getTitle()
+    {
         return new TranslatableComponent(translateKey == null ? translateKey = defaultTranslateKey() : translateKey);
     }
 
     @Override
-    public IDrawable getBackground() {
+    public IDrawable getBackground()
+    {
         return background;
     }
 
     @Override
-    public IDrawable getIcon() {
+    public IDrawable getIcon()
+    {
         return icon;
     }
 
     @Override
-    public RecipeType<T> getRecipeType() {
+    public RecipeType<T> getRecipeType()
+    {
         return type;
     }
 
     @Override
-    public ResourceLocation getUid() {
+    public ResourceLocation getUid()
+    {
         return type.getUid();
     }
 
     @Override
-    public Class<? extends T> getRecipeClass() {
+    public Class<? extends T> getRecipeClass()
+    {
         return type.getRecipeClass();
     }
 }

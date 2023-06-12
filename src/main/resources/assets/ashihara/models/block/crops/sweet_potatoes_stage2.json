@@ -1,4 +1,6 @@
 {
   "parent": "minecraft:block/crop",
-  "textures": {"crop": "ashihara:block/crops/sweet_potatoes_2"}
+  "textures": {
+    "crop": "ashihara:block/crops/sweet_potatoes_2"
+  }
 }

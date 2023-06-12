@@ -1,4 +1,6 @@
 {
   "parent": "minecraft:item/generated",
-  "textures": {"layer0": "ashihara:block/chrysanthemum"}
+  "textures": {
+    "layer0": "ashihara:block/chrysanthemum"
+  }
 }

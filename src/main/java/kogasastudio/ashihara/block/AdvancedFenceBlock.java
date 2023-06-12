@@ -27,18 +27,21 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import static kogasastudio.ashihara.block.BlockFenceDecoration.AXIS;
-import static kogasastudio.ashihara.block.BlockFenceDecoration.ORB;
-import static kogasastudio.ashihara.block.BlockFenceExpansion.FACING;
+import static kogasastudio.ashihara.block.FenceDecorationBlock.AXIS;
+import static kogasastudio.ashihara.block.FenceDecorationBlock.ORB;
+import static kogasastudio.ashihara.block.FenceExpansionBlock.FACING;
 
-public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodTypes> {
+public class AdvancedFenceBlock extends Block implements IVariable<AshiharaWoodTypes>
+{
     public static final BooleanProperty NORTH = BooleanProperty.create("north");
     public static final BooleanProperty SOUTH = BooleanProperty.create("south");
     public static final BooleanProperty WEST = BooleanProperty.create("west");
     public static final BooleanProperty EAST = BooleanProperty.create("east");
     public static final EnumProperty<ColumnType> COLUMN = EnumProperty.create("column", ColumnType.class);
     public static AshiharaWoodTypes type;
-    public BlockAdvancedFence(AshiharaWoodTypes typeIn) {
+
+    public AdvancedFenceBlock(AshiharaWoodTypes typeIn)
+    {
         super
                 (
                         Properties.of(Material.WOOD)
@@ -51,22 +54,27 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
     }
 
     @Override
-    public AshiharaWoodTypes getType() {
+    public AshiharaWoodTypes getType()
+    {
         return type;
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
         builder.add(NORTH).add(SOUTH).add(WEST).add(EAST).add(COLUMN);
     }
 
-    private boolean canConnect(Level world, BlockPos pos, Direction direction) {
+    private boolean canConnect(Level world, BlockPos pos, Direction direction)
+    {
         BlockState state = world.getBlockState(pos);
         BlockState fromState = world.getBlockState(pos.relative(direction));
 
         boolean expanded = false;
-        if (state.getBlock() instanceof BlockAdvancedFence && fromState.getBlock() instanceof BlockFenceExpansion) {
-            if (((BlockFenceExpansion) fromState.getBlock()).getType().equals(((BlockAdvancedFence) state.getBlock()).getType())) {
+        if (state.getBlock() instanceof AdvancedFenceBlock && fromState.getBlock() instanceof FenceExpansionBlock)
+        {
+            if (((FenceExpansionBlock) fromState.getBlock()).getType().equals(((AdvancedFenceBlock) state.getBlock()).getType()))
+            {
                 expanded = fromState.getValue(FACING).equals(direction);
             }
         }
@@ -74,12 +82,14 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
         return fromState.isFaceSturdy(world, pos.relative(direction), direction.getOpposite()) || expanded;
     }
 
-    protected Block getExpansion() {
+    protected Block getExpansion()
+    {
         return Blocks.AIR;
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+    {
         BlockState n = worldIn.getBlockState(pos.north());
         BlockState s = worldIn.getBlockState(pos.south());
         BlockState w = worldIn.getBlockState(pos.west());
@@ -107,12 +117,13 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
         if
         (
                 (worldIn.getBlockState(pos.above()).isFaceSturdy(worldIn, pos.above(), Direction.DOWN))
-                        || (up.getBlock() instanceof BlockAdvancedFence
-                        && ((BlockAdvancedFence) up.getBlock()).getType().equals(((BlockAdvancedFence) state.getBlock()).getType()))
+                        || (up.getBlock() instanceof AdvancedFenceBlock
+                        && ((AdvancedFenceBlock) up.getBlock()).getType().equals(((AdvancedFenceBlock) state.getBlock()).getType()))
                         || (up.is(BlockRegistryHandler.GOLD_FENCE_DECORATION.get()) && up.getValue(ORB))
                         || (connected != 2)
                         || ((nS && (wS || eS)) || (sS && (wS || eS)))
-        ) {
+        )
+        {
             init = init.setValue(COLUMN, ColumnType.CORE);
         } else if
         (
@@ -124,7 +135,8 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
                                 (w.is(state.getBlock()) && (w.getValue(COLUMN).equals(ColumnType.CORE) || w.getValue(COLUMN).equals(ColumnType.MID)))
                                         && (e.is(state.getBlock()) && (e.getValue(COLUMN).equals(ColumnType.CORE) || e.getValue(COLUMN).equals(ColumnType.MID)))
                         )
-        ) {
+        )
+        {
             init = init.setValue(COLUMN, ColumnType.SHORT);
         } else if
         (
@@ -152,7 +164,8 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
                                 (w.is(state.getBlock()) && w.getValue(COLUMN).equals(ColumnType.MID))
                                         && (e.is(state.getBlock()) && e.getValue(COLUMN).equals(ColumnType.SHORT))
                         )
-        ) {
+        )
+        {
             init = init.setValue(COLUMN, ColumnType.MID);
         } else init = init.setValue(COLUMN, ColumnType.MID);
 
@@ -162,7 +175,8 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context)
+    {
         Level worldIn = context.getLevel();
         BlockPos pos = context.getClickedPos();
 
@@ -194,7 +208,8 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
                 (worldIn.getBlockState(pos.above()).isFaceSturdy(worldIn, pos.above(), Direction.DOWN))
                         || (connected != 2)
                         || ((nS && (wS || eS)) || (sS && (wS || eS)))
-        ) {
+        )
+        {
             init = init.setValue(COLUMN, ColumnType.CORE);
         } else if
         (
@@ -206,7 +221,8 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
                                 (wC && (w.getValue(COLUMN).equals(ColumnType.CORE)))
                                         && (eC && (e.getValue(COLUMN).equals(ColumnType.CORE)))
                         )
-        ) {
+        )
+        {
             BlockState nF = worldIn.getBlockState(pos.north(2));
             BlockState sF = worldIn.getBlockState(pos.south(2));
             BlockState wF = worldIn.getBlockState(pos.west(2));
@@ -222,7 +238,8 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
                                     (wF.is(init.getBlock()) && (wF.getValue(COLUMN).equals(ColumnType.CORE) || wF.getValue(COLUMN).equals(ColumnType.MID)))
                                             && (eF.is(init.getBlock()) && (eF.getValue(COLUMN).equals(ColumnType.CORE) || eF.getValue(COLUMN).equals(ColumnType.MID)))
                             )
-            ) {
+            )
+            {
                 init = init.setValue(COLUMN, ColumnType.MID);
             }
         } else init = init.setValue(COLUMN, ColumnType.CORE);
@@ -233,10 +250,13 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    {
         ItemStack stack = player.getItemInHand(handIn);
-        if (stack.getItem().equals(Items.GOLD_INGOT)) {
-            if (hit.getDirection().equals(Direction.UP) && worldIn.getBlockState(pos.above()).isAir()) {
+        if (stack.getItem().equals(Items.GOLD_INGOT))
+        {
+            if (hit.getDirection().equals(Direction.UP) && worldIn.getBlockState(pos.above()).isAir())
+            {
                 BlockState deco = BlockRegistryHandler.GOLD_FENCE_DECORATION.get().defaultBlockState();
 
                 if (state.getValue(COLUMN).equals(ColumnType.CORE)) deco = deco.setValue(ORB, true);
@@ -249,10 +269,12 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
 
                 return InteractionResult.SUCCESS;
             }
-        } else if (state.getValue(COLUMN).equals(ColumnType.CORE) && stack.getItem().equals(Items.STICK) && (player.isCreative() || stack.getCount() >= 2)) {
-            if (!(this.getExpansion() instanceof BlockFenceExpansion)) return InteractionResult.PASS;
+        } else if (state.getValue(COLUMN).equals(ColumnType.CORE) && stack.getItem().equals(Items.STICK) && (player.isCreative() || stack.getCount() >= 2))
+        {
+            if (!(this.getExpansion() instanceof FenceExpansionBlock)) return InteractionResult.PASS;
             Direction direction = hit.getDirection();
-            if (direction.getAxis().isHorizontal() && worldIn.getBlockState(pos.relative(direction)).isAir()) {
+            if (direction.getAxis().isHorizontal() && worldIn.getBlockState(pos.relative(direction)).isAir())
+            {
                 BlockState exp = this.getExpansion().defaultBlockState();
 
                 worldIn.setBlockAndUpdate(pos.relative(direction), exp.setValue(FACING, direction));
@@ -266,7 +288,8 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+    {
         VoxelShape part_N_DOWN = box(6.5d, 6.0d, 0.0d, 9.5d, 9.0, 8.0d);
         VoxelShape part_N_UP = box(6.5d, 12.0d, 0.0d, 9.5d, 15.0, 8.0d);
         VoxelShape part_W_DOWN = box(0.0d, 6.0d, 6.5d, 8.0d, 9.0, 9.5d);
@@ -287,7 +310,8 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
 
         VoxelShape column;
 
-        switch (state.getValue(COLUMN)) {
+        switch (state.getValue(COLUMN))
+        {
             case MID:
                 column = column_mid;
                 break;
@@ -307,33 +331,39 @@ public class BlockAdvancedFence extends Block implements IVariable<AshiharaWoodT
     }
 
     @Override
-    public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+    public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face)
+    {
         return 5;
     }
 
     @Override
-    public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+    public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face)
+    {
         return 5;
     }
 
     @Override
-    public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+    public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face)
+    {
         return true;
     }
 
-    public enum ColumnType implements StringRepresentable {
+    public enum ColumnType implements StringRepresentable
+    {
         CORE("core"),
         MID("mid"),
         SHORT("short");
 
         private final String name;
 
-        ColumnType(String name) {
+        ColumnType(String name)
+        {
             this.name = name;
         }
 
         @Override
-        public String getSerializedName() {
+        public String getSerializedName()
+        {
             return this.name;
         }
     }

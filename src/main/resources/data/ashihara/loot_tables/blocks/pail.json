@@ -6,8 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "functions":
-          [
+          "functions": [
             {
               "function": "minecraft:copy_name",
               "source": "block_entity"
@@ -15,8 +14,7 @@
             {
               "function": "minecraft:copy_nbt",
               "source": "block_entity",
-              "ops":
-              [
+              "ops": [
                 {
                   "source": "bucket.FluidName",
                   "target": "BlockEntityTag.FluidName",
@@ -33,7 +31,11 @@
           "name": "ashihara:pail"
         }
       ],
-      "conditions": [{"condition": "minecraft:survives_explosion"}]
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
     }
   ]
 }

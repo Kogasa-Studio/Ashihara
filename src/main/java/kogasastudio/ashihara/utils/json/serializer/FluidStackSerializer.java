@@ -13,41 +13,49 @@ import java.lang.reflect.Type;
 /**
  * @author DustW
  **/
-public class FluidStackSerializer implements BaseSerializer<FluidStack> {
+public class FluidStackSerializer implements BaseSerializer<FluidStack>
+{
     @Override
-    public FluidStack deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public FluidStack deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
+    {
         var obj = json.getAsJsonObject();
         var fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(obj.get("fluid").getAsString()));
 
-        if (fluid == null) {
+        if (fluid == null)
+        {
             throw new JsonParseException("Fluid not found: " + obj.get("fluid").getAsString());
         }
 
         var amount = obj.get("amount").getAsInt();
 
-        if (obj.has("nbt")) {
+        if (obj.has("nbt"))
+        {
             CompoundTag nbt = null;
 
-            try {
+            try
+            {
                 nbt = TagParser.parseTag(obj.get("nbt").getAsString());
-            } catch (CommandSyntaxException e) {
+            } catch (CommandSyntaxException e)
+            {
                 e.printStackTrace();
             }
 
             return new FluidStack(fluid, amount, nbt);
-        }
-        else {
+        } else
+        {
             return new FluidStack(fluid, amount);
         }
     }
 
     @Override
-    public JsonElement serialize(FluidStack src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(FluidStack src, Type typeOfSrc, JsonSerializationContext context)
+    {
         var result = new JsonObject();
         result.addProperty("fluid", src.getFluid().getRegistryName().toString());
         result.addProperty("amount", src.getAmount());
 
-        if (src.getTag() != null) {
+        if (src.getTag() != null)
+        {
             result.addProperty("nbt", src.getTag().toString());
         }
 

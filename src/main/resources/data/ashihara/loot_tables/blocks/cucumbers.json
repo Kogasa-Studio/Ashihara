@@ -1,11 +1,9 @@
 {
   "type": "minecraft:block",
-  "pools":
-  [
+  "pools": [
     {
       "rolls": 1.0,
-      "entries":
-      [
+      "entries": [
         {
           "type": "minecraft:item",
           "name": "ashihara:cucumber"
@@ -14,18 +12,15 @@
     },
     {
       "rolls": 1.0,
-      "entries":
-      [
+      "entries": [
         {
           "type": "minecraft:item",
-          "functions":
-          [
+          "functions": [
             {
               "function": "minecraft:apply_bonus",
               "enchantment": "minecraft:fortune",
               "formula": "minecraft:binomial_with_bonus_count",
-              "parameters":
-              {
+              "parameters": {
                 "extra": 3,
                 "probability": 0.5714286
               }
@@ -34,20 +29,27 @@
           "name": "ashihara:cucumber"
         }
       ],
-      "conditions":
-      [
+      "conditions": [
         {
           "condition": "minecraft:block_state_property",
           "block": "ashihara:cucumbers",
-          "properties": {"age": "7"}
+          "properties": {
+            "age": "7"
+          }
         },
         {
           "condition": "minecraft:block_state_property",
           "block": "ashihara:cucumbers",
-          "properties": {"age": "5"}
+          "properties": {
+            "age": "5"
+          }
         }
       ]
     }
   ],
-  "functions": [{"function": "minecraft:explosion_decay"}]
+  "functions": [
+    {
+      "function": "minecraft:explosion_decay"
+    }
+  ]
 }

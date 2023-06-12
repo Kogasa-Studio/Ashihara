@@ -1,19 +1,22 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
+  "pattern": [
     " _ ",
     "OiO",
     " _ "
   ],
-  "key":
-  {
-    "_": {"item": "minecraft:bamboo"},
-    "O": {"item": "minecraft:paper"},
-    "i": {"item": "minecraft:coal"}
+  "key": {
+    "_": {
+      "item": "minecraft:bamboo"
+    },
+    "O": {
+      "item": "minecraft:paper"
+    },
+    "i": {
+      "item": "minecraft:coal"
+    }
   },
-  "result":
-  {
+  "result": {
     "item": "ashihara:lantern_long_white",
     "count": 2
   }

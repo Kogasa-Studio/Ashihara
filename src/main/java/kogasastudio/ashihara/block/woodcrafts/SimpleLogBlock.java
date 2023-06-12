@@ -9,8 +9,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 
-public class SimpleLogBlock extends RotatedPillarBlock {
-    public SimpleLogBlock() {
+public class SimpleLogBlock extends RotatedPillarBlock
+{
+    public SimpleLogBlock()
+    {
         super
                 (
                         Properties.of(Material.WOOD, (state) ->
@@ -21,17 +23,20 @@ public class SimpleLogBlock extends RotatedPillarBlock {
     }
 
     @Override
-    public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+    public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face)
+    {
         return 5;
     }
 
     @Override
-    public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+    public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face)
+    {
         return 5;
     }
 
     @Override
-    public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+    public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face)
+    {
         return true;
     }
 }

@@ -1,3 +1,7 @@
 {
-  "variants": {"": {"model": "ashihara:block/maple_woodcrafts/maple_planks"}}
+  "variants": {
+    "": {
+      "model": "ashihara:block/maple_woodcrafts/maple_planks"
+    }
+  }
 }

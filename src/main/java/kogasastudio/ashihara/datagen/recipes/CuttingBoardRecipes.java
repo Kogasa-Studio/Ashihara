@@ -14,9 +14,11 @@ import net.minecraft.world.item.crafting.Ingredient;
 /**
  * @author DustW
  **/
-public class CuttingBoardRecipes extends ModGenRecipes {
+public class CuttingBoardRecipes extends ModGenRecipes
+{
     @Override
-    protected void addRecipes() {
+    protected void addRecipes()
+    {
         addRecipe("cut_dried_bamboo",
                 Ingredient.of(ItemRegistryHandler.DRIED_BAMBOO.get()),
                 CuttingBoardToolType.KNIFE,
@@ -68,7 +70,8 @@ public class CuttingBoardRecipes extends ModGenRecipes {
                 new ItemStack(Items.MELON_SLICE, 9));
     }
 
-    protected void addRecipe(String name, Ingredient ingredient, CuttingBoardToolType type, ItemStack... itemStacks) {
+    protected void addRecipe(String name, Ingredient ingredient, CuttingBoardToolType type, ItemStack... itemStacks)
+    {
         CuttingBoardRecipe recipe = new CuttingBoardRecipe(
                 new ResourceLocation(Ashihara.MODID, name),
                 ingredient,
@@ -76,6 +79,6 @@ public class CuttingBoardRecipes extends ModGenRecipes {
                 type
         );
         recipe.type = RecipeSerializers.CUTTING_BOARD.get().getRegistryName().toString();
-        addRecipe(recipe.getId(),baseRecipe(recipe), "cutting");
+        addRecipe(recipe.getId(), baseRecipe(recipe), "cutting");
     }
 }

@@ -1,7 +1,6 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "ingredients":
-  [
+  "ingredients": [
     {
       "item": "ashihara:sakura"
     }

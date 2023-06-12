@@ -1,10 +1,18 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "ingredients":
-  [
-    {"item": "ashihara:mochi"},
-    {"item": "ashihara:bamboo_stick"},
-    {"item": "ashihara:soy_bean"}
+  "ingredients": [
+    {
+      "item": "ashihara:mochi"
+    },
+    {
+      "item": "ashihara:bamboo_stick"
+    },
+    {
+      "item": "ashihara:soy_bean"
+    }
   ],
-  "result": {"item": "ashihara:dango_bean", "count": 1}
+  "result": {
+    "item": "ashihara:dango_bean",
+    "count": 1
+  }
 }

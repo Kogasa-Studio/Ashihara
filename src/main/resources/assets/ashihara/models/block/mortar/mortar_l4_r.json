@@ -1,20 +1,55 @@
 {
-	"credit": "Made with Blockbench",
-	"parent": "minecraft:block/block",
-	"texture_size": [28, 64],
-	"textures": {
-		"1": "ashihara:block/levels"
-	},
-	"elements": [
-		{
-			"name": "level",
-			"from": [2.5, 11, 2.5],
-			"to": [13.5, 11, 13.5],
-			"rotation": {"angle": 0, "axis": "y", "origin": [15.5, 19, 15.5]},
-			"faces": {
-				"up": {"uv": [0, 5.5, 12.57143, 11], "texture": "#1"},
-				"down": {"uv": [0, 0, 12.57143, 5.5], "texture": "#1"}
-			}
-		}
-	]
+  "credit": "Made with Blockbench",
+  "parent": "minecraft:block/block",
+  "texture_size": [
+    28,
+    64
+  ],
+  "textures": {
+    "1": "ashihara:block/levels"
+  },
+  "elements": [
+    {
+      "name": "level",
+      "from": [
+        2.5,
+        11,
+        2.5
+      ],
+      "to": [
+        13.5,
+        11,
+        13.5
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          15.5,
+          19,
+          15.5
+        ]
+      },
+      "faces": {
+        "up": {
+          "uv": [
+            0,
+            5.5,
+            12.57143,
+            11
+          ],
+          "texture": "#1"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            12.57143,
+            5.5
+          ],
+          "texture": "#1"
+        }
+      }
+    }
+  ]
 }

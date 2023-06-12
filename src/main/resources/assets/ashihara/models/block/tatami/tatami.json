@@ -1,7 +1,6 @@
 {
   "parent": "minecraft:block/cube",
-  "textures":
-  {
+  "textures": {
     "particle": "ashihara:block/tatami/tatami",
     "north": "ashihara:block/tatami/tatami_side",
     "south": "ashihara:block/tatami/tatami_side",

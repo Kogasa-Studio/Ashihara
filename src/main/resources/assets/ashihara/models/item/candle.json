@@ -1,1 +1,3 @@
-{"parent": "ashihara:block/candle"}
+{
+  "parent": "ashihara:block/candle"
+}

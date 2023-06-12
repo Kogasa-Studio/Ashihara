@@ -1,7 +1,11 @@
 {
-  "variants":
-  {
-    "axis=x": {"model": "ashihara:block/pail", "y": 90},
-    "axis=z": {"model": "ashihara:block/pail"}
+  "variants": {
+    "axis=x": {
+      "model": "ashihara:block/pail",
+      "y": 90
+    },
+    "axis=z": {
+      "model": "ashihara:block/pail"
+    }
   }
 }

@@ -26,7 +26,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.OptionalInt;
 
-public class WorldGenEventRegistryHandler {
+public class WorldGenEventRegistryHandler
+{
     public static final DeferredRegister<ConfiguredFeature<?, ?>> CONFIGURED_FEATURE =
             DeferredRegister.create(BuiltinRegistries.CONFIGURED_FEATURE.key(), Ashihara.MODID);
 
@@ -34,85 +35,85 @@ public class WorldGenEventRegistryHandler {
             DeferredRegister.create(BuiltinRegistries.PLACED_FEATURE.key(), Ashihara.MODID);
 
     public static final RegistryObject<ConfiguredFeature<?, ?>> FANCY_CHERRY =
-        CONFIGURED_FEATURE.register
-        ("fancy_cherry", () -> new ConfiguredFeature<>
-            (
-                Feature.TREE,
-                new TreeConfiguration.TreeConfigurationBuilder
-                (
-                    BlockStateProvider.simple(BlockRegistryHandler.CHERRY_LOG.get().defaultBlockState()),
-                    new FancyTrunkPlacer(3, 11, 0),
-                    BlockStateProvider.simple(BlockRegistryHandler.CHERRY_BLOSSOM.get()),
-                    new FancyFoliagePlacer(ConstantInt.of(2), ConstantInt.of(4), 4),
-                    new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4))
-                )
-                .ignoreVines()
-                .build()
-            )
-        );
+            CONFIGURED_FEATURE.register
+                    ("fancy_cherry", () -> new ConfiguredFeature<>
+                            (
+                                    Feature.TREE,
+                                    new TreeConfiguration.TreeConfigurationBuilder
+                                            (
+                                                    BlockStateProvider.simple(BlockRegistryHandler.CHERRY_LOG.get().defaultBlockState()),
+                                                    new FancyTrunkPlacer(3, 11, 0),
+                                                    BlockStateProvider.simple(BlockRegistryHandler.CHERRY_BLOSSOM.get()),
+                                                    new FancyFoliagePlacer(ConstantInt.of(2), ConstantInt.of(4), 4),
+                                                    new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4))
+                                            )
+                                            .ignoreVines()
+                                            .build()
+                            )
+                    );
 
     public static final RegistryObject<ConfiguredFeature<?, ?>> RED_MAPLE =
-        CONFIGURED_FEATURE.register
-        (
-    "red_maple", () -> new ConfiguredFeature<>
-            (
-                Feature.TREE,
-                new TreeConfiguration.TreeConfigurationBuilder
-                (
-                    BlockStateProvider.simple(BlockRegistryHandler.MAPLE_LOG.get().defaultBlockState()),
-                    new StraightTrunkPlacer(5, 2, 0),
-                    BlockStateProvider.simple(BlockRegistryHandler.MAPLE_LEAVES_RED.get().defaultBlockState()),
-                    new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
-                    new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4))
-                )
-                .ignoreVines()
-                .build()
-            )
-        );
+            CONFIGURED_FEATURE.register
+                    (
+                            "red_maple", () -> new ConfiguredFeature<>
+                                    (
+                                            Feature.TREE,
+                                            new TreeConfiguration.TreeConfigurationBuilder
+                                                    (
+                                                            BlockStateProvider.simple(BlockRegistryHandler.MAPLE_LOG.get().defaultBlockState()),
+                                                            new StraightTrunkPlacer(5, 2, 0),
+                                                            BlockStateProvider.simple(BlockRegistryHandler.MAPLE_LEAVES_RED.get().defaultBlockState()),
+                                                            new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
+                                                            new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4))
+                                                    )
+                                                    .ignoreVines()
+                                                    .build()
+                                    )
+                    );
 
 
     private static List<PlacementModifier> DefaultTreeModifiers(int baseAmount, float extraProbability, int extraAmount)
     {
         return
-        List.of
-        (
-            PlacementUtils.countExtra(baseAmount, extraProbability, extraAmount),
-            InSquarePlacement.spread(),
-            VegetationPlacements.TREE_THRESHOLD,
-            PlacementUtils.HEIGHTMAP_OCEAN_FLOOR,
-            PlacementUtils.filteredByBlockSurvival(BlockRegistryHandler.CHERRY_SAPLING.get()),
-            BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(BlockRegistryHandler.CHERRY_SAPLING.get().defaultBlockState(), BlockPos.ZERO)),
-            BiomeFilter.biome()
-        );
+                List.of
+                        (
+                                PlacementUtils.countExtra(baseAmount, extraProbability, extraAmount),
+                                InSquarePlacement.spread(),
+                                VegetationPlacements.TREE_THRESHOLD,
+                                PlacementUtils.HEIGHTMAP_OCEAN_FLOOR,
+                                PlacementUtils.filteredByBlockSurvival(BlockRegistryHandler.CHERRY_SAPLING.get()),
+                                BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(BlockRegistryHandler.CHERRY_SAPLING.get().defaultBlockState(), BlockPos.ZERO)),
+                                BiomeFilter.biome()
+                        );
     }
 
     public static final RegistryObject<PlacedFeature> FOREST_CHERRY_TREES =
-        PLACED_FEATURE.register
-        (
-            "forest_cherry_trees",
-            () -> new PlacedFeature(FANCY_CHERRY.getHolder().get(), DefaultTreeModifiers(8, 0.1F, Ashihara.getRandomBounded(1, 3)))
-        );
+            PLACED_FEATURE.register
+                    (
+                            "forest_cherry_trees",
+                            () -> new PlacedFeature(FANCY_CHERRY.getHolder().get(), DefaultTreeModifiers(8, 0.1F, Ashihara.getRandomBounded(1, 3)))
+                    );
 
     public static final RegistryObject<PlacedFeature> FOREST_RED_MAPLE_TREES =
-        PLACED_FEATURE.register
-        (
-            "forest_red_maple_trees",
-            () -> new PlacedFeature(RED_MAPLE.getHolder().get(), DefaultTreeModifiers(10, 0.1F, 1))
-        );
+            PLACED_FEATURE.register
+                    (
+                            "forest_red_maple_trees",
+                            () -> new PlacedFeature(RED_MAPLE.getHolder().get(), DefaultTreeModifiers(10, 0.1F, 1))
+                    );
 
     public static final RegistryObject<PlacedFeature> PLAIN_CHERRY_TREES =
-        PLACED_FEATURE.register
-        (
-            "plain_cherry_trees",
-            () -> new PlacedFeature(FANCY_CHERRY.getHolder().get(), DefaultTreeModifiers(0, 0.05F, 1))
-        );
+            PLACED_FEATURE.register
+                    (
+                            "plain_cherry_trees",
+                            () -> new PlacedFeature(FANCY_CHERRY.getHolder().get(), DefaultTreeModifiers(0, 0.05F, 1))
+                    );
 
     public static final RegistryObject<PlacedFeature> PLAIN_RED_MAPLE_TREES =
-        PLACED_FEATURE.register
-        (
-            "plain_red_maple_trees",
-            () -> new PlacedFeature(RED_MAPLE.getHolder().get(), DefaultTreeModifiers(0, 0.05F, 1))
-        );
+            PLACED_FEATURE.register
+                    (
+                            "plain_red_maple_trees",
+                            () -> new PlacedFeature(RED_MAPLE.getHolder().get(), DefaultTreeModifiers(0, 0.05F, 1))
+                    );
 
 
     //Trees

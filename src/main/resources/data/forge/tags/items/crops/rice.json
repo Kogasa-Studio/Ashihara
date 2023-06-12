@@ -1,4 +1,6 @@
 {
   "replace": false,
-  "values": ["ashihara:rice"]
+  "values": [
+    "ashihara:rice"
+  ]
 }

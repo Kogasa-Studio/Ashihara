@@ -1,7 +1,6 @@
 {
   "replace": false,
-  "values":
-  [
+  "values": [
     "minecraft:iron_sword",
     "ashihara:tachi"
   ]

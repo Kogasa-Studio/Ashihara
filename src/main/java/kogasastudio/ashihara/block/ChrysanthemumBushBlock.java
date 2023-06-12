@@ -13,8 +13,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.IForgeShearable;
 
-public class BlockChrysanthemumBush extends BushBlock implements IForgeShearable {
-    public BlockChrysanthemumBush() {
+public class ChrysanthemumBushBlock extends BushBlock implements IForgeShearable
+{
+    public ChrysanthemumBushBlock()
+    {
         super
                 (
                         Properties.of(Material.PLANT)
@@ -25,13 +27,15 @@ public class BlockChrysanthemumBush extends BushBlock implements IForgeShearable
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+    {
         return box(2.0D, 0.0D, 2.0D, 14.0D, 6.0D, 14.0D);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public long getSeed(BlockState state, BlockPos pos) {
+    public long getSeed(BlockState state, BlockPos pos)
+    {
         return Mth.getSeed(pos.getX(), pos.getY(), pos.getZ());
     }
 }

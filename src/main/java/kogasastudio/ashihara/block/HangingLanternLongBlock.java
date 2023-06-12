@@ -34,8 +34,10 @@ import java.util.Random;
 
 import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 
-public class BlockHangingLanternLong extends BlockLantern implements EntityBlock {
-    public BlockHangingLanternLong() {
+public class HangingLanternLongBlock extends LanternBlock implements EntityBlock
+{
+    public HangingLanternLongBlock()
+    {
         super
                 (
                         Properties.of(Material.WOOL)
@@ -46,7 +48,8 @@ public class BlockHangingLanternLong extends BlockLantern implements EntityBlock
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+    {
         VoxelShape shape1 = Block.box(5, 0.5, 5, 11, 1.5, 11);
         VoxelShape shape2 = Block.box(4, 1.5, 4, 12, 14.5, 12);
         VoxelShape shape3 = Block.box(5, 14.5, 5, 11, 15.5, 11);
@@ -55,8 +58,10 @@ public class BlockHangingLanternLong extends BlockLantern implements EntityBlock
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
-        if (stateIn.getValue(LIT)) {
+    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand)
+    {
+        if (stateIn.getValue(LIT))
+        {
             double d0 = (double) pos.getX() + 0.5D;
             double d1 = (double) pos.getY() + 0.5D;
             double d2 = (double) pos.getZ() + 0.5D;
@@ -65,25 +70,31 @@ public class BlockHangingLanternLong extends BlockLantern implements EntityBlock
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos)
+    {
         return worldIn.getBlockState(pos.above()).getBlock() != Blocks.AIR;
     }
 
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos)
+    {
         return !this.canSurvive(stateIn, worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
-        if (player.getItemInHand(handIn).getItem() == Items.AIR) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    {
+        if (player.getItemInHand(handIn).getItem() == Items.AIR)
+        {
             Random random = worldIn.getRandom();
             Boolean instantState = worldIn.getBlockState(pos).getValue(LIT);
             worldIn.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
             worldIn.setBlockAndUpdate(pos, state.setValue(LIT, !instantState));
             return InteractionResult.SUCCESS;
-        } else if (player.getItemInHand(handIn).getItem() == ItemRegistryHandler.KOISHI.get()) {
+        } else if (player.getItemInHand(handIn).getItem() == ItemRegistryHandler.KOISHI.get())
+        {
             MarkableLanternTE te = (MarkableLanternTE) worldIn.getBlockEntity(pos);
-            if (te != null) {
+            if (te != null)
+            {
                 te.nextIcon();
                 return InteractionResult.SUCCESS;
             } else return InteractionResult.PASS;
@@ -92,7 +103,8 @@ public class BlockHangingLanternLong extends BlockLantern implements EntityBlock
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return  new MarkableLanternTE(pPos, pState);
+    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState)
+    {
+        return new MarkableLanternTE(pPos, pState);
     }
 }

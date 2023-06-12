@@ -1,18 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
+  "pattern": [
     "#I#",
     "# #",
     " # "
   ],
-  "key":
-  {
-    "#": {"tag": "minecraft:planks"},
-    "I": {"item": "minecraft:stick"}
+  "key": {
+    "#": {
+      "tag": "minecraft:planks"
+    },
+    "I": {
+      "item": "minecraft:stick"
+    }
   },
-  "result":
-  {
+  "result": {
     "item": "ashihara:pail",
     "count": 1
   }

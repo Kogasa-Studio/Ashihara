@@ -1,7 +1,10 @@
 {
-  "variants":
-  {
-    "multiple=false": {"model": "ashihara:block/candle"},
-    "multiple=true": {"model": "minecraft:block/air"}
+  "variants": {
+    "multiple=false": {
+      "model": "ashihara:block/candle"
+    },
+    "multiple=true": {
+      "model": "minecraft:block/air"
+    }
   }
 }

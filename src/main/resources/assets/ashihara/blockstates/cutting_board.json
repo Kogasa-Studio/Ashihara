@@ -1,9 +1,19 @@
 {
-  "variants":
-  {
-    "facing=north": {"model": "ashihara:block/cutting_board"},
-    "facing=east": {"model": "ashihara:block/cutting_board", "y": 90},
-    "facing=south": {"model": "ashihara:block/cutting_board", "y": 180},
-    "facing=west": {"model": "ashihara:block/cutting_board", "y": 270}
+  "variants": {
+    "facing=north": {
+      "model": "ashihara:block/cutting_board"
+    },
+    "facing=east": {
+      "model": "ashihara:block/cutting_board",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "ashihara:block/cutting_board",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "ashihara:block/cutting_board",
+      "y": 270
+    }
   }
 }

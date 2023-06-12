@@ -1,7 +1,23 @@
 {
-  "multipart":
-  [
-    {"when": {"axis": "x", "half": "lower"},"apply": {"model": "ashihara:block/jinja_lantern", "y": 90}},
-    {"when": {"axis": "z", "half": "lower"},"apply": {"model": "ashihara:block/jinja_lantern"}}
+  "multipart": [
+    {
+      "when": {
+        "axis": "x",
+        "half": "lower"
+      },
+      "apply": {
+        "model": "ashihara:block/jinja_lantern",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "half": "lower"
+      },
+      "apply": {
+        "model": "ashihara:block/jinja_lantern"
+      }
+    }
   ]
 }

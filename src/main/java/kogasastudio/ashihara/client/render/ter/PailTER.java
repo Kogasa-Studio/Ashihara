@@ -7,12 +7,15 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 
-public class PailTER implements BlockEntityRenderer<PailTE> {
-    public PailTER(BlockEntityRendererProvider.Context rendererDispatcherIn) {
+public class PailTER implements BlockEntityRenderer<PailTE>
+{
+    public PailTER(BlockEntityRendererProvider.Context rendererDispatcherIn)
+    {
     }
 
     @Override
-    public void render(PailTE tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(PailTE tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
+    {
         RenderHelper.renderLeveledFluidStack
                 (
                         tileEntityIn, matrixStackIn, bufferIn,

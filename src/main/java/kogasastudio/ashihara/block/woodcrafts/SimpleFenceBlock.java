@@ -9,8 +9,10 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 
-public class SimpleFenceBlock extends FenceBlock {
-    public SimpleFenceBlock() {
+public class SimpleFenceBlock extends FenceBlock
+{
+    public SimpleFenceBlock()
+    {
         super
                 (
                         BlockBehaviour.Properties.of(Material.WOOD)
@@ -20,17 +22,20 @@ public class SimpleFenceBlock extends FenceBlock {
     }
 
     @Override
-    public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+    public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face)
+    {
         return 20;
     }
 
     @Override
-    public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+    public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face)
+    {
         return 5;
     }
 
     @Override
-    public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+    public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face)
+    {
         return true;
     }
 }

@@ -13,31 +13,37 @@ import org.jetbrains.annotations.Nullable;
  **/
 public class BaseSerializer<RECIPE extends BaseRecipe>
         extends ForgeRegistryEntry<RecipeSerializer<?>>
-        implements RecipeSerializer<RECIPE> {
+        implements RecipeSerializer<RECIPE>
+{
 
     Class<RECIPE> recipeClass;
 
-    public BaseSerializer(Class<RECIPE> recipeClass) {
+    public BaseSerializer(Class<RECIPE> recipeClass)
+    {
         this.recipeClass = recipeClass;
     }
 
     @Nullable
     @Override
-    public RECIPE fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
+    public RECIPE fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer)
+    {
         return JsonUtils.INSTANCE.normal.fromJson(pBuffer.readUtf(), recipeClass).setID(pRecipeId);
     }
 
     @Override
-    public void toNetwork(FriendlyByteBuf pBuffer, RECIPE pRecipe) {
+    public void toNetwork(FriendlyByteBuf pBuffer, RECIPE pRecipe)
+    {
         pBuffer.writeUtf(JsonUtils.INSTANCE.normal.toJson(pRecipe));
     }
 
     @Override
-    public RECIPE fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
+    public RECIPE fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe)
+    {
         return JsonUtils.INSTANCE.normal.fromJson(pSerializedRecipe, recipeClass).setID(pRecipeId);
     }
 
-    public JsonObject toJson(RECIPE pRecipe) {
+    public JsonObject toJson(RECIPE pRecipe)
+    {
         return JsonUtils.INSTANCE.normal.toJsonTree(pRecipe).getAsJsonObject();
     }
 }

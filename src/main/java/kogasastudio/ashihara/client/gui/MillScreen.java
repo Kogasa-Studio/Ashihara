@@ -11,28 +11,33 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
-public class MillScreen extends AbstractContainerScreen<MillContainer> {
+public class MillScreen extends AbstractContainerScreen<MillContainer>
+{
     private static final ResourceLocation GUI = new ResourceLocation("ashihara:textures/gui/mill.png");
     private int progress;
 
-    public MillScreen(MillContainer container, Inventory inv, Component title) {
+    public MillScreen(MillContainer container, Inventory inv, Component title)
+    {
         super(container, inv, title);
     }
 
     @Override
-    protected void containerTick() {
+    protected void containerTick()
+    {
         progress = menu.getArrowWidth();
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks)
+    {
         renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void renderTooltip(PoseStack matrixStack, int x, int y) {
+    protected void renderTooltip(PoseStack matrixStack, int x, int y)
+    {
         super.renderTooltip(matrixStack, x, y);
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
@@ -57,35 +62,37 @@ public class MillScreen extends AbstractContainerScreen<MillContainer> {
         blit(matrixStack, i + 91, j + 59, 176, 0, progress, 12);
 
         this.menu.getBe().getTank().ifPresent
-        (
-            tank ->
-            {
-                if (!tank.isEmpty()) {
-                    matrixStack.pushPose();
-                    int capacity = tank.getCapacity();
-                    FluidStack fluid = tank.getFluid();
-                    int fluidAmount = fluid.getAmount();
-                    int displayHeight = (int) (((float) fluidAmount / (float) capacity) * 64);
-                    RenderHelper.renderFluidStackInGUI(matrixStack.last().pose(), fluid, 16, displayHeight, i + 17, j + 77);
-                    matrixStack.popPose();
-                }
-            }
-        );
+                (
+                        tank ->
+                        {
+                            if (!tank.isEmpty())
+                            {
+                                matrixStack.pushPose();
+                                int capacity = tank.getCapacity();
+                                FluidStack fluid = tank.getFluid();
+                                int fluidAmount = fluid.getAmount();
+                                int displayHeight = (int) (((float) fluidAmount / (float) capacity) * 64);
+                                RenderHelper.renderFluidStackInGUI(matrixStack.last().pose(), fluid, 16, displayHeight, i + 17, j + 77);
+                                matrixStack.popPose();
+                            }
+                        }
+                );
 
         this.menu.getBe().tankOut.ifPresent
-        (
-            tank ->
-            {
-                if (!tank.isEmpty()) {
-                    matrixStack.pushPose();
-                    int capacity = tank.getCapacity();
-                    FluidStack fluid = tank.getFluid();
-                    int fluidAmount = fluid.getAmount();
-                    int displayWidth = (int) (((float) fluidAmount / (float) capacity) * 64);
-                    RenderHelper.renderFluidStackInGUI(matrixStack.last().pose(), fluid, displayWidth, 6, i + 54, j + 105);
-                    matrixStack.popPose();
-                }
-            }
-        );
+                (
+                        tank ->
+                        {
+                            if (!tank.isEmpty())
+                            {
+                                matrixStack.pushPose();
+                                int capacity = tank.getCapacity();
+                                FluidStack fluid = tank.getFluid();
+                                int fluidAmount = fluid.getAmount();
+                                int displayWidth = (int) (((float) fluidAmount / (float) capacity) * 64);
+                                RenderHelper.renderFluidStackInGUI(matrixStack.last().pose(), fluid, displayWidth, 6, i + 54, j + 105);
+                                matrixStack.popPose();
+                            }
+                        }
+                );
     }
 }

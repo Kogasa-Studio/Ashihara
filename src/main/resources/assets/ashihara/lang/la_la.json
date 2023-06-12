@@ -54,15 +54,12 @@
   "item.ashihara.bamboo_material": "Materia bambusae",
   "item.ashihara.bamboo_stick": "Baculum bambusae",
   "item.ashihara.bamboo_strips": "Asser bambusae",
-
   "item.ashihara.tachi": "Gladius Magnus",
   "item.ashihara.wood_otsuchi": "Malleus magnus ligneus",
   "item.ashihara.iron_otsuchi": "Malleus magnus ferreus",
   "item.ashihara.diamond_otsuchi": "Malleus magnus adamantinus",
-
   "item.ashihara.soy_milk_bucket": "Hama lactis glycinis",
   "item.ashihara.oil_bucket": "Hama olei",
-
   "block.ashihara.water_field": "Ager aquae",
   "block.ashihara.dirt_depression": "Depressio humi",
   "block.ashihara.immature_rice": "Oryza immatura",
@@ -93,7 +90,6 @@
   "block.ashihara.cucumbers": "Seges cucumeris",
   "block.ashihara.meal_table": "Mensa edendi",
   "block.ashihara.cutting_board": "Tabula secando serviens",
-
   "block.ashihara.cherry_log": "Truncus cerasi",
   "block.ashihara.stripped_cherry_log": "Truncus cerasi decorticatus",
   "block.ashihara.cherry_planks": "Tabulae cerasi",
@@ -103,7 +99,6 @@
   "block.ashihara.cherry_fence_gate": "Foris cerasi",
   "block.ashihara.cherry_button": "Premendus cerasi",
   "block.ashihara.cherry_wood": "Lignum cerasi",
-
   "block.ashihara.maple_log": "Truncus aceris",
   "block.ashihara.stripped_maple_log": "Truncus aceris decorticatus",
   "block.ashihara.maple_planks": "Tabulae aceris",
@@ -113,7 +108,6 @@
   "block.ashihara.maple_fence_gate": "Foris aceris",
   "block.ashihara.maple_button": "Premendus aceris",
   "block.ashihara.maple_wood": "Lignum aceris",
-
   "block.ashihara.stripped_red_log": "Truncus ruber",
   "block.ashihara.red_planks": "Tabulae rubrae",
   "block.ashihara.red_stairs": "Scalae rubrae",
@@ -124,25 +118,19 @@
   "block.ashihara.red_kumimono": "Cumimonon rubrum ",
   "block.ashihara.red_kawaki": "Cavacis rubrus",
   "block.ashihara.advanced_spruce_fence": "Saepes piceae amplificata",
-
   "block.ashihara.gold_fence_decoration": "Ornamentum saepis aureae",
   "block.ashihara.red_fence_expansion": "Propagatio saepis rubrae",
-
   "block.ashihara.soy_milk": "Lac glycinis",
   "block.ashihara.oil": "Oleum",
-
   "fluid.ashihara.soy_milk": "Lac glycinis",
   "fluid.ashihara.soy_milk_flowing": "Lac glycinis fluens",
   "fluid.ashihara.oil": "Oleum",
   "fluid.ashihara.oil_flowing": "Oleum fluens",
-
   "itemGroup.group_ashihara": "Aspara",
   "itemGroup.group_ash_materials": "Aspara-materiae",
   "itemGroup.group_ash_building_blocks": "Aspara-materiae aedificationis",
-
   "gui.ashihara.mill": "Mola",
   "gui.ashihara.mortar": "Mortarium",
-
   "item.ashihara.dirt_ball_don.projectile": "§d§l§oAnimus notabilis ex corde meo crescit, dum id video",
   "item.ashihara.dirt_ball_don.projectile_1": "§9§l§oNescio, cur aliquid ut hoc exsistat",
   "tooltip.ashihara.pail_display": "§e§lSitula: §n",

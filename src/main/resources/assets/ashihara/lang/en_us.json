@@ -1,6 +1,6 @@
 {
-  "item.ashihara.koishi":"Koishi",
-  "item.ashihara.dirt_ball":"Dirt ball",
+  "item.ashihara.koishi": "Koishi",
+  "item.ashihara.dirt_ball": "Dirt ball",
   "item.ashihara.rice_seedling": "Rice seedling",
   "item.ashihara.aqua": "AQUA",
   "item.ashihara.rice_crop_item": "Rice crop",
@@ -54,16 +54,13 @@
   "item.ashihara.bamboo_material": "Bamboo material",
   "item.ashihara.bamboo_stick": "Bamboo Stick",
   "item.ashihara.bamboo_strips": "Bamboo Strips",
-
   "item.ashihara.tachi": "Tachi",
   "item.ashihara.wood_otsuchi": "Wood otsuchi",
   "item.ashihara.iron_otsuchi": "Iron otsuchi",
   "item.ashihara.diamond_otsuchi": "Diamond otsuchi",
-
   "item.ashihara.soy_milk_bucket": "Soy milk bucket",
   "item.ashihara.oil_bucket": "Oil bucket",
-
-  "block.ashihara.water_field":"Water field",
+  "block.ashihara.water_field": "Water field",
   "block.ashihara.dirt_depression": "Dirt depression",
   "block.ashihara.immature_rice": "Immature rice",
   "block.ashihara.rice_crop": "Rice crop",
@@ -93,7 +90,6 @@
   "block.ashihara.cucumbers": "Cucumber crop",
   "block.ashihara.meal_table": "Meal table",
   "block.ashihara.cutting_board": "Cutting Board",
-
   "block.ashihara.cherry_log": "Cherry log",
   "block.ashihara.stripped_cherry_log": "Stripped cherry log",
   "block.ashihara.cherry_planks": "Cherry planks",
@@ -103,7 +99,6 @@
   "block.ashihara.cherry_fence_gate": "Cherry fence gate",
   "block.ashihara.cherry_button": "Cherry button",
   "block.ashihara.cherry_wood": "Cherry wood",
-
   "block.ashihara.maple_log": "Maple log",
   "block.ashihara.stripped_maple_log": "Stripped Maple log",
   "block.ashihara.maple_planks": "Maple planks",
@@ -113,7 +108,6 @@
   "block.ashihara.maple_fence_gate": "Maple fence gate",
   "block.ashihara.maple_button": "Maple button",
   "block.ashihara.maple_wood": "Maple wood",
-
   "block.ashihara.stripped_red_log": "Red log",
   "block.ashihara.red_planks": "Red planks",
   "block.ashihara.red_stairs": "Red stairs",
@@ -124,25 +118,19 @@
   "block.ashihara.red_kumimono": "Red Kumimono",
   "block.ashihara.red_kawaki": "Red Kawaki",
   "block.ashihara.advanced_spruce_fence": "Advanced spruce fence",
-
   "block.ashihara.gold_fence_decoration": "Gold fence decoration",
   "block.ashihara.red_fence_expansion": "Red fence expansion",
-
   "block.ashihara.soy_milk": "Soy milk",
   "block.ashihara.oil": "Oil",
-
   "fluid.ashihara.soy_milk": "Soy milk",
   "fluid.ashihara.soy_milk_flowing": "Flowing soy milk",
   "fluid.ashihara.oil": "Oil",
   "fluid.ashihara.oil_flowing": "Flowing oil",
-
   "itemGroup.group_ashihara": "Ashihara",
   "itemGroup.group_ash_materials": "Ashihara-materials",
   "itemGroup.group_ash_building_blocks": "Ashihara-building blocks",
-
   "gui.ashihara.mill": "Mill",
   "gui.ashihara.mortar": "Mortar",
-
   "item.ashihara.dirt_ball_don.projectile": "§d§l§oA strong and weird felling grows inside your heart while you are looking at it",
   "item.ashihara.dirt_ball_don.projectile_1": "§9§l§oI don't know why something like this exists",
   "tooltip.ashihara.pail_display": "§e§lPail: §n",

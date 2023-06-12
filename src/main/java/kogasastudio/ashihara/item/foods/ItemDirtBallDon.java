@@ -14,8 +14,10 @@ import java.util.List;
 
 import static kogasastudio.ashihara.Ashihara.ASHIHARA;
 
-public class ItemDirtBallDon extends FoodBowled {
-    public ItemDirtBallDon() {
+public class ItemDirtBallDon extends FoodBowled
+{
+    public ItemDirtBallDon()
+    {
         super
                 (
                         new Properties().tab(ASHIHARA)
@@ -29,7 +31,8 @@ public class ItemDirtBallDon extends FoodBowled {
     }
 
     @Override
-    public boolean isFoil(ItemStack stack) {
+    public boolean isFoil(ItemStack stack)
+    {
         return true;
     }
 
@@ -38,7 +41,8 @@ public class ItemDirtBallDon extends FoodBowled {
     private static final Component PROJECTILE_1 = new TranslatableComponent("item.ashihara.dirt_ball_don.projectile_1");
 
     @Override
-    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn)
+    {
         tooltip.add(PROJECTILE);
         tooltip.add(PROJECTILE_1);
     }

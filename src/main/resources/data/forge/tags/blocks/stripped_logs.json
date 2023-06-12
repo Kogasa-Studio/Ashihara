@@ -1,7 +1,6 @@
 {
   "replace": false,
-  "values":
-  [
+  "values": [
     "minecraft:stripped_dark_oak_log",
     "minecraft:stripped_dark_oak_wood",
     "minecraft:stripped_oak_log",

@@ -18,15 +18,18 @@ import static net.minecraft.world.level.biome.Climate.Parameter.span;
 /**
  * @author DustW
  **/
-public class AshiharaBiomeRegion extends Region {
-    public AshiharaBiomeRegion(ResourceLocation name, int weight) {
+public class AshiharaBiomeRegion extends Region
+{
+    public AshiharaBiomeRegion(ResourceLocation name, int weight)
+    {
         super(name, RegionType.OVERWORLD, weight);
     }
 
     private final Climate.Parameter FULL_RANGE = Climate.Parameter.span(-1.0F, 1.0F);
 
     @Override
-    public void addBiomes(Registry<Biome> registry, Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> mapper) {
+    public void addBiomes(Registry<Biome> registry, Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> mapper)
+    {
         /*addBiome
         (
             mapper,

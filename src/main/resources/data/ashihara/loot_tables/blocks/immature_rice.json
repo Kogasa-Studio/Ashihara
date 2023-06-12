@@ -3,42 +3,44 @@
   "pools": [
     {
       "rolls": 1.0,
-      "entries":
-      [
+      "entries": [
         {
           "type": "minecraft:item",
           "name": "ashihara:rice_seedling"
         }
       ],
-      "conditions":
-      [
+      "conditions": [
         {
           "condition": "minecraft:block_state_property",
           "block": "ashihara:immature_rice",
-          "properties": {"age": "2"}
+          "properties": {
+            "age": "2"
+          }
         }
       ]
     },
     {
       "rolls": 1.0,
-      "entries":
-      [
+      "entries": [
         {
           "type": "minecraft:item",
           "name": "ashihara:paddy"
         }
       ],
-      "conditions":
-      [
+      "conditions": [
         {
           "condition": "minecraft:block_state_property",
           "block": "ashihara:immature_rice",
-          "properties": {"age": "0"}
+          "properties": {
+            "age": "0"
+          }
         },
         {
           "condition": "minecraft:block_state_property",
           "block": "ashihara:immature_rice",
-          "properties": {"age": "1"}
+          "properties": {
+            "age": "1"
+          }
         }
       ]
     }

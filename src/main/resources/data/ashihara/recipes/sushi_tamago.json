@@ -1,12 +1,14 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "ingredients":
-  [
-    {"item": "ashihara:tamago"},
-    {"item": "minecraft:dried_kelp"}
+  "ingredients": [
+    {
+      "item": "ashihara:tamago"
+    },
+    {
+      "item": "minecraft:dried_kelp"
+    }
   ],
-  "result":
-  {
+  "result": {
     "item": "ashihara:sushi_tamago",
     "count": 4
   }

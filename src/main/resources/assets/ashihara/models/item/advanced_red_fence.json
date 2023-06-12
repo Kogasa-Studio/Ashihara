@@ -1,7 +1,6 @@
 {
   "parent": "ashihara:item/advanced_fence",
-  "textures":
-  {
+  "textures": {
     "wood": "ashihara:block/woodcrafts/red_fence",
     "part": "ashihara:block/woodcrafts/stripped_red_log"
   }

@@ -5,8 +5,10 @@ import net.minecraft.world.item.Item;
 
 import static kogasastudio.ashihara.Ashihara.MATERIALS;
 
-public class EasyFood extends Item {
-    public EasyFood(int hunger) {
+public class EasyFood extends Item
+{
+    public EasyFood(int hunger)
+    {
         super
                 (
                         new Item.Properties().tab(MATERIALS)

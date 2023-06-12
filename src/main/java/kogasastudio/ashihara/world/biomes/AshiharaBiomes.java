@@ -9,8 +9,10 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 
-public class AshiharaBiomes {
-    public static Biome juniorCherryForest() {
+public class AshiharaBiomes
+{
+    public static Biome juniorCherryForest()
+    {
         MobSpawnSettings.Builder spawnSetting = getStandardMobSpawnBuilder()
                 .addSpawn(MobCategory.CREATURE,
                         new MobSpawnSettings.SpawnerData(EntityType.RABBIT, 4, 2, 3));
@@ -64,33 +66,33 @@ public class AshiharaBiomes {
         BiomeDefaultFeatures.addDefaultExtraVegetation(builder);
 
         return
-        (
-            new Biome.BiomeBuilder()
-            .precipitation(Biome.Precipitation.RAIN)
-            .biomeCategory(Biome.BiomeCategory.FOREST)
-            .temperature(0.6F)
-            .downfall(0.8F)
-            .specialEffects
-            (
-                new BiomeSpecialEffects.Builder()
-                .waterColor(0x00BBC6)
-                .waterFogColor(0x00AA93)
-                .fogColor(0xC7EA7A)
-                .grassColorOverride(0xA1E013)
-                .skyColor(getSkyColorWithTemperatureModifier(0.9F))
-                .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
-                .build()
-            )
-            .mobSpawnSettings
-            (
-                getStandardMobSpawnBuilder()
-                .addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.RABBIT, 10, 2, 3))
-                .addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.FOX, 5, 1, 3))
-                .build()
-            )
-            .generationSettings(builder.build())
-            .build()
-        );
+                (
+                        new Biome.BiomeBuilder()
+                                .precipitation(Biome.Precipitation.RAIN)
+                                .biomeCategory(Biome.BiomeCategory.FOREST)
+                                .temperature(0.6F)
+                                .downfall(0.8F)
+                                .specialEffects
+                                        (
+                                                new BiomeSpecialEffects.Builder()
+                                                        .waterColor(0x00BBC6)
+                                                        .waterFogColor(0x00AA93)
+                                                        .fogColor(0xC7EA7A)
+                                                        .grassColorOverride(0xA1E013)
+                                                        .skyColor(getSkyColorWithTemperatureModifier(0.9F))
+                                                        .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
+                                                        .build()
+                                        )
+                                .mobSpawnSettings
+                                        (
+                                                getStandardMobSpawnBuilder()
+                                                        .addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.RABBIT, 10, 2, 3))
+                                                        .addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.FOX, 5, 1, 3))
+                                                        .build()
+                                        )
+                                .generationSettings(builder.build())
+                                .build()
+                );
     }
 
     //public static Biome SnowyCherryForest() {
@@ -136,20 +138,23 @@ public class AshiharaBiomes {
     //}
 
     //原版
-    private static int getSkyColorWithTemperatureModifier(float temperature) {
+    private static int getSkyColorWithTemperatureModifier(float temperature)
+    {
         float lvt_1_1_ = temperature / 3.0F;
         lvt_1_1_ = Mth.clamp(lvt_1_1_, -1.0F, 1.0F);
         return Mth.hsvToRgb(0.62222224F - lvt_1_1_ * 0.05F, 0.5F + lvt_1_1_ * 0.1F, 1.0F);
     }
 
-    private static MobSpawnSettings.Builder getStandardMobSpawnBuilder() {
+    private static MobSpawnSettings.Builder getStandardMobSpawnBuilder()
+    {
         MobSpawnSettings.Builder mobspawninfo$builder = new MobSpawnSettings.Builder();
         BiomeDefaultFeatures.farmAnimals(mobspawninfo$builder);
         BiomeDefaultFeatures.commonSpawns(mobspawninfo$builder);
         return mobspawninfo$builder;
     }
 
-    private static BiomeGenerationSettings.Builder makeDefaultBuilder() {
+    private static BiomeGenerationSettings.Builder makeDefaultBuilder()
+    {
         //抄原版用来装饰群系
         BiomeGenerationSettings.Builder builder = new BiomeGenerationSettings.Builder();
         globalOverworldGeneration(builder);
@@ -159,7 +164,8 @@ public class AshiharaBiomes {
     /**
      * @see net.minecraft.data.worldgen.biome.OverworldBiomes
      */
-    private static void globalOverworldGeneration(BiomeGenerationSettings.Builder builder) {
+    private static void globalOverworldGeneration(BiomeGenerationSettings.Builder builder)
+    {
         BiomeDefaultFeatures.addDefaultCarversAndLakes(builder);
         BiomeDefaultFeatures.addDefaultCrystalFormations(builder);
         BiomeDefaultFeatures.addDefaultMonsterRoom(builder);

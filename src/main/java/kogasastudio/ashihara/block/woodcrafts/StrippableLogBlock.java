@@ -16,27 +16,35 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import static net.minecraft.world.level.block.Blocks.STRIPPED_OAK_LOG;
 
-public class StrippableLogBlock extends SimpleLogBlock {
-    public ItemStack getStripItem() {
+public class StrippableLogBlock extends SimpleLogBlock
+{
+    public ItemStack getStripItem()
+    {
         return ItemStack.EMPTY;
     }
 
-    public Block getStrippedBlock() {
+    public Block getStrippedBlock()
+    {
         return STRIPPED_OAK_LOG;
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
-        if (player.getItemInHand(handIn).getItem() instanceof AxeItem) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    {
+        if (player.getItemInHand(handIn).getItem() instanceof AxeItem)
+        {
             worldIn.playSound(player, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0f, 1.0f);
-            if (!worldIn.isClientSide()) {
+            if (!worldIn.isClientSide())
+            {
                 Block block = this.getStrippedBlock();
                 BlockState stripped = block.defaultBlockState().hasProperty(AXIS) ? block.defaultBlockState().setValue(AXIS, state.getValue(AXIS)) : block.defaultBlockState();
                 worldIn.setBlockAndUpdate(pos, stripped);
-                if (!this.getStripItem().isEmpty()) {
+                if (!this.getStripItem().isEmpty())
+                {
                     worldIn.addFreshEntity(new ItemEntity(worldIn, pos.getX(), pos.getY(), pos.getZ(), this.getStripItem()));
                 }
-                if (!player.isCreative()) {
+                if (!player.isCreative())
+                {
                     player.getItemInHand(handIn).hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
                 }
             }

@@ -1,4 +1,6 @@
 {
   "parent": "ashihara:item/otsuchi",
-  "textures": {"tier": "ashihara:item/otsuchi_tiers/wood"}
+  "textures": {
+    "tier": "ashihara:item/otsuchi_tiers/wood"
+  }
 }

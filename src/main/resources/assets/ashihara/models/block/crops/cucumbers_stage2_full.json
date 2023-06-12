@@ -1,4 +1,6 @@
 {
   "parent": "minecraft:block/cross",
-  "textures": {"cross": "ashihara:block/crops/cucumbers_2_full"}
+  "textures": {
+    "cross": "ashihara:block/crops/cucumbers_2_full"
+  }
 }

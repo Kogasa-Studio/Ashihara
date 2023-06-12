@@ -44,10 +44,12 @@ import static net.minecraft.world.item.Items.GLASS_BOTTLE;
 import static net.minecraft.world.item.Items.POTION;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_AXIS;
 
-public class BlockPail extends Block implements EntityBlock {
+public class PailBlock extends Block implements EntityBlock
+{
     public static final EnumProperty<Direction.Axis> AXIS = HORIZONTAL_AXIS;
 
-    public BlockPail() {
+    public PailBlock()
+    {
         super
                 (
                         Properties.of(Material.WOOD)
@@ -58,12 +60,15 @@ public class BlockPail extends Block implements EntityBlock {
                 );
     }
 
-    private ItemStack getIdentifiedItem(Level worldIn, BlockPos pos) {
+    private ItemStack getIdentifiedItem(Level worldIn, BlockPos pos)
+    {
         PailTE te = (PailTE) worldIn.getBlockEntity(pos);
         ItemStack stack = new ItemStack(PAIL.get());
-        if (te != null && !worldIn.isClientSide() && !te.getTank().orElse(new FluidTank(0)).isEmpty()) {
+        if (te != null && !worldIn.isClientSide() && !te.getTank().orElse(new FluidTank(0)).isEmpty())
+        {
             CompoundTag nbt = te.serializeNBT();
-            if (!nbt.isEmpty()) {
+            if (!nbt.isEmpty())
+            {
                 stack.addTagElement("BlockEntityTag", nbt);
             }
         }
@@ -71,26 +76,32 @@ public class BlockPail extends Block implements EntityBlock {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
         builder.add(AXIS);
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context)
+    {
         return this.defaultBlockState().setValue(AXIS, context.getHorizontalDirection().getAxis());
     }
 
     @Override
-    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos) {
+    public int getLightEmission(BlockState state, BlockGetter level, BlockPos pos)
+    {
         int ambientLight = super.getLightEmission(state, level, pos);
-        if (level == null || ambientLight == 15) {
+        if (level == null || ambientLight == 15)
+        {
             return ambientLight;
         }
         BlockEntity tileEntity = level.getBlockEntity(pos);
-        if (tileEntity != null && tileEntity.getType().equals(TERegistryHandler.PAIL_TE.get())) {
+        if (tileEntity != null && tileEntity.getType().equals(TERegistryHandler.PAIL_TE.get()))
+        {
             PailTE te = (PailTE) tileEntity;
             FluidStack fluid = te.getTank().orElse(new FluidTank(0)).getFluid();
-            if (!fluid.isEmpty()) {
+            if (!fluid.isEmpty())
+            {
                 FluidAttributes fluidAttributes = fluid.getFluid().getAttributes();
                 ambientLight = Math.max(ambientLight, level instanceof BlockAndTintGetter btg
                         ? fluidAttributes.getLuminosity(btg, pos)
@@ -101,8 +112,10 @@ public class BlockPail extends Block implements EntityBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
-        if (!player.isCreative()) {
+    public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player)
+    {
+        if (!player.isCreative())
+        {
             ItemStack stack = getIdentifiedItem(worldIn, pos);
 
             ItemEntity entity = new ItemEntity(worldIn, (double) pos.getX() + 0.5d, (double) pos.getY() + 0.5d, pos.getZ() + 0.5d, stack);
@@ -113,28 +126,33 @@ public class BlockPail extends Block implements EntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    {
         ItemStack stack = player.getItemInHand(handIn);
         PailTE te = (PailTE) worldIn.getBlockEntity(pos);
 
         if (te == null) return InteractionResult.FAIL;
 
         FluidTank bucket = te.getTank().orElse(new FluidTank(0));
-        if (!stack.isEmpty() && FluidHelper.notifyFluidTankInteraction(player, handIn, stack, bucket, worldIn, pos)) {
+        if (!stack.isEmpty() && FluidHelper.notifyFluidTankInteraction(player, handIn, stack, bucket, worldIn, pos))
+        {
             player.getInventory().setChanged();
             worldIn.sendBlockUpdated(pos, state, state, 3);
             return InteractionResult.SUCCESS;
         }
 
-        if (stack.isEmpty() && !player.isShiftKeyDown()) {
+        if (stack.isEmpty() && !player.isShiftKeyDown())
+        {
             ItemStack item = getIdentifiedItem(worldIn, pos);
             player.setItemInHand(handIn, item);
             worldIn.removeBlock(pos, false);
             return InteractionResult.SUCCESS;
         }
 
-        if (stack.getItem().equals(ItemRegistryHandler.KOISHI.get())) {
-            if (!worldIn.isClientSide()) {
+        if (stack.getItem().equals(ItemRegistryHandler.KOISHI.get()))
+        {
+            if (!worldIn.isClientSide())
+            {
                 player.sendMessage
                         (
                                 new TranslatableComponent
@@ -146,19 +164,24 @@ public class BlockPail extends Block implements EntityBlock {
             }
             return InteractionResult.SUCCESS;
         }
-        if (stack.getItem().equals(MINATO_AQUA.get()) && !worldIn.isClientSide()) {
+        if (stack.getItem().equals(MINATO_AQUA.get()) && !worldIn.isClientSide())
+        {
             player.sendMessage(new TranslatableComponent("Debu!"), UUID.randomUUID());
             return InteractionResult.SUCCESS;
         }
 
-        if (!bucket.isEmpty()) {
-            if (stack.getItem().equals(GLASS_BOTTLE) && bucket.getFluid().getFluid() == Fluids.WATER) {
-                if (bucket.getFluidAmount() >= 250) {
+        if (!bucket.isEmpty())
+        {
+            if (stack.getItem().equals(GLASS_BOTTLE) && bucket.getFluid().getFluid() == Fluids.WATER)
+            {
+                if (bucket.getFluidAmount() >= 250)
+                {
                     player.setItemInHand(handIn, new ItemStack(POTION));
                     bucket.drain(250, IFluidHandler.FluidAction.EXECUTE);
                     return InteractionResult.SUCCESS;
                 } else return InteractionResult.PASS;
-            } else if (stack.isEmpty() && player.isShiftKeyDown()) {
+            } else if (stack.isEmpty() && player.isShiftKeyDown())
+            {
                 bucket.drain(bucket.getFluidAmount(), IFluidHandler.FluidAction.EXECUTE);
                 return InteractionResult.SUCCESS;
             }
@@ -167,7 +190,8 @@ public class BlockPail extends Block implements EntityBlock {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+    {
         VoxelShape sideN = box(3.0d, 0.0d, 3.0d, 13.0d, 10.0d, 4.0d);
         VoxelShape sideE = box(12.0d, 0.0d, 4.0d, 13.0d, 10.0d, 12.0d);
         VoxelShape sideS = box(3.0d, 0.0d, 12.0d, 13.0d, 10.0d, 13.0d);
@@ -189,7 +213,8 @@ public class BlockPail extends Block implements EntityBlock {
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState)
+    {
         return new PailTE(pPos, pState);
     }
 }

@@ -13,10 +13,12 @@ import java.util.List;
 /**
  * @author DustW
  **/
-public class NonNullListSerializer implements BaseSerializer<NonNullList<?>> {
+public class NonNullListSerializer implements BaseSerializer<NonNullList<?>>
+{
 
     @Override
-    public NonNullList<?> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public NonNullList<?> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
+    {
         final Type[] typeArguments = ((ParameterizedType) typeOfT).getActualTypeArguments();
         final Type parametrizedType = BaseSerializer.listOf(typeArguments[0]).getType();
         final List<?> list = context.deserialize(json, parametrizedType);
@@ -24,7 +26,8 @@ public class NonNullListSerializer implements BaseSerializer<NonNullList<?>> {
     }
 
     @Override
-    public JsonElement serialize(NonNullList<?> src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(NonNullList<?> src, Type typeOfSrc, JsonSerializationContext context)
+    {
         final Type[] typeArguments = ((ParameterizedType) typeOfSrc).getActualTypeArguments();
         final Type parametrizedType = BaseSerializer.listOf(typeArguments[0]).getType();
         return context.serialize(src, parametrizedType);

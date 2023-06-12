@@ -13,18 +13,21 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
-import static kogasastudio.ashihara.block.BlockLantern.FACING;
+import static kogasastudio.ashihara.block.LanternBlock.FACING;
 import static kogasastudio.ashihara.helper.BlockActionHelper.getRotationByFacing;
 import static kogasastudio.ashihara.helper.RenderHelper.buildMatrix;
 
-public class MarkableLanternTER implements BlockEntityRenderer<MarkableLanternTE> {
+public class MarkableLanternTER implements BlockEntityRenderer<MarkableLanternTE>
+{
     private static final RenderType ICONS = RenderType.entityTranslucent(AshiharaAtlas.ICON_ATLAS);
 
-    public MarkableLanternTER(BlockEntityRendererProvider.Context dispatcher) {
+    public MarkableLanternTER(BlockEntityRendererProvider.Context dispatcher)
+    {
     }
 
     @Override
-    public void render(MarkableLanternTE tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(MarkableLanternTE tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
+    {
         //获取IVertexBuilder
         VertexConsumer builder = bufferIn.getBuffer(ICONS);
         //通过小纹理的源文件获取该小纹理在Atlas上的位置

@@ -1,15 +1,12 @@
 {
   "type": "minecraft:block",
-  "pools":
-  [
+  "pools": [
     {
       "rolls": 1.0,
-      "entries":
-      [
+      "entries": [
         {
           "type": "minecraft:item",
-          "functions":
-          [
+          "functions": [
             {
               "function": "minecraft:set_count",
               "count": 2
@@ -18,24 +15,25 @@
           "name": "minecraft:stick"
         }
       ],
-      "conditions": [{"condition": "minecraft:survives_explosion"}]
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
     },
     {
       "rolls": 1.0,
-      "entries":
-      [
+      "entries": [
         {
           "type": "minecraft:item",
           "name": "minecraft:gold_ingot"
         }
       ],
-      "conditions":
-      [
+      "conditions": [
         {
           "condition": "minecraft:block_state_property",
           "block": "ashihara:spruce_fence_expansion",
-          "properties":
-          {
+          "properties": {
             "decoration": "gold"
           }
         }

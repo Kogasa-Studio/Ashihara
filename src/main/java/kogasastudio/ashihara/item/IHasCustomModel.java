@@ -8,12 +8,14 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
-public interface IHasCustomModel {
+public interface IHasCustomModel
+{
     Model getModel();
 
     ResourceLocation getTex();
 
-    default void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn, int stackSize) {
+    default void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn, int stackSize)
+    {
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.5D, 1.5D, 0.5D);
         matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180));
@@ -22,27 +24,33 @@ public interface IHasCustomModel {
         matrixStackIn.popPose();
     }
 
-    default float getScale() {
+    default float getScale()
+    {
         return 1.0f;
     }
 
-    default int getModelStackSize() {
+    default int getModelStackSize()
+    {
         return 4;
     }
 
-    default float[] getTranslation(int stackSize) {
+    default float[] getTranslation(int stackSize)
+    {
         return new float[]{8.0f, 0.0f, 8.0f};
     }
 
-    default float getXOffset(int stackSize) {
+    default float getXOffset(int stackSize)
+    {
         return 0.0f;
     }
 
-    default float getYOffset(int stackSize) {
+    default float getYOffset(int stackSize)
+    {
         return stackSize == 0 ? 0.0f : 1.2f;
     }
 
-    default float getZOffset(int stackSize) {
+    default float getZOffset(int stackSize)
+    {
         return 0.0f;
     }
 }

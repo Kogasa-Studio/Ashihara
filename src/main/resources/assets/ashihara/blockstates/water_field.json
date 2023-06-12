@@ -1,10 +1,19 @@
 {
-  "variants":
-  {
-    "level=4": {"model": "ashihara:block/water_field_dry"},
-    "level=5": {"model": "ashihara:block/water_field"},
-    "level=6": {"model": "ashihara:block/water_field"},
-    "level=7": {"model": "ashihara:block/water_field"},
-    "level=8": {"model": "ashihara:block/water_field"}
+  "variants": {
+    "level=4": {
+      "model": "ashihara:block/water_field_dry"
+    },
+    "level=5": {
+      "model": "ashihara:block/water_field"
+    },
+    "level=6": {
+      "model": "ashihara:block/water_field"
+    },
+    "level=7": {
+      "model": "ashihara:block/water_field"
+    },
+    "level=8": {
+      "model": "ashihara:block/water_field"
+    }
   }
 }

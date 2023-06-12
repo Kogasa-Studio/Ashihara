@@ -5,8 +5,10 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.IForgeShearable;
 
-public class BlockReed extends DoublePlantBlock implements IForgeShearable {
-    public BlockReed() {
+public class ReedBlock extends DoublePlantBlock implements IForgeShearable
+{
+    public ReedBlock()
+    {
         super
                 (
                         Properties.of(Material.REPLACEABLE_PLANT)

@@ -1,19 +1,15 @@
 {
   "type": "minecraft:block",
-  "pools":
-  [
+  "pools": [
     {
       "rolls": 1,
-      "entries":
-      [
+      "entries": [
         {
           "type": "minecraft:alternatives",
-          "children":
-          [
+          "children": [
             {
               "type": "minecraft:item",
-              "functions":
-              [
+              "functions": [
                 {
                   "function": "minecraft:set_count",
                   "count": {
@@ -22,37 +18,32 @@
                     "type": "minecraft:uniform"
                   }
                 },
-                {"function": "minecraft:explosion_decay"}
+                {
+                  "function": "minecraft:explosion_decay"
+                }
               ],
               "name": "ashihara:chrysanthemum_flower"
             }
           ],
-          "conditions":
-          [
+          "conditions": [
             {
               "condition": "minecraft:inverted",
-              "term":
-              {
+              "term": {
                 "condition": "minecraft:alternative",
-                "terms":
-                [
+                "terms": [
                   {
                     "condition": "minecraft:match_tool",
-                    "predicate":
-                    {
+                    "predicate": {
                       "item": "minecraft:shears"
                     }
                   },
                   {
                     "condition": "minecraft:match_tool",
-                    "predicate":
-                    {
-                      "enchantments":
-                      [
+                    "predicate": {
+                      "enchantments": [
                         {
                           "enchantment": "minecraft:silk_touch",
-                          "levels":
-                          {
+                          "levels": {
                             "min": 1
                           }
                         }

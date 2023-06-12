@@ -13,40 +13,40 @@ import net.minecraft.client.renderer.RenderType;
 
 public class MillStoneModel extends Model
 {
-	private final ModelPart stone;
-	private final ModelPart handle;
+    private final ModelPart stone;
+    private final ModelPart handle;
 
-	public MillStoneModel(ModelPart root)
-	{
-		super(RenderType::entitySolid);
-		this.stone = root.getChild("stone");
-		this.handle = root.getChild("handle");
-	}
+    public MillStoneModel(ModelPart root)
+    {
+        super(RenderType::entitySolid);
+        this.stone = root.getChild("stone");
+        this.handle = root.getChild("handle");
+    }
 
-	public static LayerDefinition createBodyLayer()
-	{
-		MeshDefinition meshdefinition = new MeshDefinition();
-		PartDefinition partdefinition = meshdefinition.getRoot();
+    public static LayerDefinition createBodyLayer()
+    {
+        MeshDefinition meshdefinition = new MeshDefinition();
+        PartDefinition partdefinition = meshdefinition.getRoot();
 
-		partdefinition.addOrReplaceChild("stone", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -4.0F, -1.0F, 8.0F, 4.0F, 5.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 16).addBox(1.0F, -4.0F, -3.0F, 3.0F, 4.0F, 2.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 16).addBox(-4.0F, -4.0F, -3.0F, 3.0F, 4.0F, 2.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 9).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 4.0F, 1.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 9).addBox(-4.0F, -5.0F, -4.0F, 8.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 9).addBox(-4.0F, -5.0F, 3.0F, 8.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-		.texOffs(12, 12).addBox(-4.0F, -5.0F, -3.0F, 1.0F, 1.0F, 6.0F, new CubeDeformation(0.0F))
-		.texOffs(12, 12).addBox(3.0F, -5.0F, -3.0F, 1.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 19.0F, 0.0F));
+        partdefinition.addOrReplaceChild("stone", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -4.0F, -1.0F, 8.0F, 4.0F, 5.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 16).addBox(1.0F, -4.0F, -3.0F, 3.0F, 4.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 16).addBox(-4.0F, -4.0F, -3.0F, 3.0F, 4.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 9).addBox(-4.0F, -4.0F, -4.0F, 8.0F, 4.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 9).addBox(-4.0F, -5.0F, -4.0F, 8.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 9).addBox(-4.0F, -5.0F, 3.0F, 8.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
+                .texOffs(12, 12).addBox(-4.0F, -5.0F, -3.0F, 1.0F, 1.0F, 6.0F, new CubeDeformation(0.0F))
+                .texOffs(12, 12).addBox(3.0F, -5.0F, -3.0F, 1.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 19.0F, 0.0F));
 
-		partdefinition.addOrReplaceChild("handle", CubeListBuilder.create().texOffs(18, 9).addBox(4.0F, 17.0F, -1.0F, 3.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
-		.texOffs(10, 19).addBox(5.5F, 12.0F, -0.5F, 1.0F, 5.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        partdefinition.addOrReplaceChild("handle", CubeListBuilder.create().texOffs(18, 9).addBox(4.0F, 17.0F, -1.0F, 3.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
+                .texOffs(10, 19).addBox(5.5F, 12.0F, -0.5F, 1.0F, 5.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		return LayerDefinition.create(meshdefinition, 32, 32);
-	}
+        return LayerDefinition.create(meshdefinition, 32, 32);
+    }
 
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
-	{
-		stone.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		handle.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-	}
+    @Override
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
+    {
+        stone.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        handle.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+    }
 }

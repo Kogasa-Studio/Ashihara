@@ -1,4 +1,6 @@
 {
-	"parent": "minecraft:block/cross",
-	"textures": {"cross": "ashihara:block/cherry_sapling"}
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "ashihara:block/cherry_sapling"
+  }
 }

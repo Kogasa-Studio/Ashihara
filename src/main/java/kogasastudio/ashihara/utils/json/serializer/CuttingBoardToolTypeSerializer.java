@@ -8,14 +8,17 @@ import java.lang.reflect.Type;
 /**
  * @author DustW
  **/
-public class CuttingBoardToolTypeSerializer implements BaseSerializer<CuttingBoardToolType> {
+public class CuttingBoardToolTypeSerializer implements BaseSerializer<CuttingBoardToolType>
+{
     @Override
-    public CuttingBoardToolType deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public CuttingBoardToolType deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
+    {
         return CuttingBoardToolType.nameMatches(json.getAsString());
     }
 
     @Override
-    public JsonElement serialize(CuttingBoardToolType src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(CuttingBoardToolType src, Type typeOfSrc, JsonSerializationContext context)
+    {
         return new JsonPrimitive(src.getName());
     }
 }

@@ -13,7 +13,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber(modid = Ashihara.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class WorldGenerationEventHandler {
+public class WorldGenerationEventHandler
+{
     @SubscribeEvent
     public static void onTreesGenerate(BiomeLoadingEvent event)
     {

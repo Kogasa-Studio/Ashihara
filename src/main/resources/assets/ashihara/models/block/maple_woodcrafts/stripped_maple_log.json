@@ -1,7 +1,6 @@
 {
   "parent": "minecraft:block/cube_column",
-  "textures":
-  {
+  "textures": {
     "end": "ashihara:block/woodcrafts/stripped_maple_log_top",
     "side": "ashihara:block/woodcrafts/stripped_maple_log"
   }

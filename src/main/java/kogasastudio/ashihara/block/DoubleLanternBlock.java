@@ -27,12 +27,15 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.Random;
 
-public class BlockDoubleLantern extends Block implements SimpleWaterloggedBlock {
+public class DoubleLanternBlock extends Block implements SimpleWaterloggedBlock
+{
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    public BlockDoubleLantern(Properties properties) {
+
+    public DoubleLanternBlock(Properties properties)
+    {
         super(properties);
         this.registerDefaultState
                 (
@@ -45,25 +48,31 @@ public class BlockDoubleLantern extends Block implements SimpleWaterloggedBlock 
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+    {
         DoubleBlockHalf doubleblockhalf = state.getValue(HALF);
-        if (doubleblockhalf == DoubleBlockHalf.UPPER) {
+        if (doubleblockhalf == DoubleBlockHalf.UPPER)
+        {
             BlockPos blockpos = pos.below();
             BlockState blockstate = worldIn.getBlockState(blockpos);
-            if (blockstate.getBlock() != state.getBlock() || blockstate.getValue(HALF) != DoubleBlockHalf.LOWER) {
+            if (blockstate.getBlock() != state.getBlock() || blockstate.getValue(HALF) != DoubleBlockHalf.LOWER)
+            {
                 worldIn.setBlock(pos, state.getValue(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState(), 35);
             }
-        } else if (doubleblockhalf == DoubleBlockHalf.LOWER) {
+        } else if (doubleblockhalf == DoubleBlockHalf.LOWER)
+        {
             BlockPos blockpos = pos.above();
             BlockState blockstate = worldIn.getBlockState(blockpos);
-            if (blockstate.getBlock() != state.getBlock() || blockstate.getValue(HALF) != DoubleBlockHalf.UPPER) {
+            if (blockstate.getBlock() != state.getBlock() || blockstate.getValue(HALF) != DoubleBlockHalf.UPPER)
+            {
                 worldIn.setBlock(pos, state.getValue(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState(), 35);
             }
         }
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context)
+    {
         BlockPos blockpos = context.getClickedPos();
         return blockpos.getY() < 255 && context.getLevel().getBlockState(blockpos.above()).canBeReplaced(context)
                 ? this.defaultBlockState()
@@ -73,8 +82,10 @@ public class BlockDoubleLantern extends Block implements SimpleWaterloggedBlock 
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
-        if (player.getItemInHand(handIn).getItem() == Items.AIR && state.getValue(HALF) == DoubleBlockHalf.UPPER) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    {
+        if (player.getItemInHand(handIn).getItem() == Items.AIR && state.getValue(HALF) == DoubleBlockHalf.UPPER)
+        {
             Random random = worldIn.getRandom();
             Boolean instantState = worldIn.getBlockState(pos).getValue(LIT);
             worldIn.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
@@ -85,7 +96,8 @@ public class BlockDoubleLantern extends Block implements SimpleWaterloggedBlock 
 
     //大部分是抄的原版
     @Override
-    public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack)
+    {
         worldIn.setBlock
                 (
                         pos.above(),
@@ -98,12 +110,14 @@ public class BlockDoubleLantern extends Block implements SimpleWaterloggedBlock 
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
         builder.add(LIT, AXIS, HALF, WATERLOGGED);
     }
 
     @Override
-    public FluidState getFluidState(BlockState state) {
+    public FluidState getFluidState(BlockState state)
+    {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 }

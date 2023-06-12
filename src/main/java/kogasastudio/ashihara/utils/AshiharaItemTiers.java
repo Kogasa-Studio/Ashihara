@@ -7,7 +7,8 @@ import net.minecraftforge.common.util.Lazy;
 
 import java.util.function.Supplier;
 
-public enum AshiharaItemTiers implements Tier {
+public enum AshiharaItemTiers implements Tier
+{
     STEEL(4, 1200, 7.0F, 5.0F, 10, 1.5f,
             () -> Ingredient.of(ItemRegistryHandler.RICE.get())),
 
@@ -22,7 +23,8 @@ public enum AshiharaItemTiers implements Tier {
     private final float akatsuibility;
     private final Lazy<Ingredient> repairMaterial;
 
-    AshiharaItemTiers(int levelIn, int durIn, float effIn, float dmgIn, int ectIn, float akaIn, Supplier<Ingredient> mtrIn) {
+    AshiharaItemTiers(int levelIn, int durIn, float effIn, float dmgIn, int ectIn, float akaIn, Supplier<Ingredient> mtrIn)
+    {
         this.harvestLevel = levelIn;
         this.maxUses = durIn;
         this.efficiency = effIn;
@@ -33,32 +35,38 @@ public enum AshiharaItemTiers implements Tier {
     }
 
     @Override
-    public int getUses() {
+    public int getUses()
+    {
         return 0;
     }
 
     @Override
-    public float getSpeed() {
+    public float getSpeed()
+    {
         return 0;
     }
 
     @Override
-    public float getAttackDamageBonus() {
+    public float getAttackDamageBonus()
+    {
         return 0;
     }
 
     @Override
-    public int getLevel() {
+    public int getLevel()
+    {
         return 0;
     }
 
     @Override
-    public int getEnchantmentValue() {
+    public int getEnchantmentValue()
+    {
         return 0;
     }
 
     @Override
-    public Ingredient getRepairIngredient() {
+    public Ingredient getRepairIngredient()
+    {
         return null;
     }
 }

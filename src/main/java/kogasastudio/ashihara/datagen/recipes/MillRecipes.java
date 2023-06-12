@@ -19,14 +19,16 @@ import java.util.Map;
 /**
  * @author DustW
  **/
-public class MillRecipes extends ModGenRecipes {
+public class MillRecipes extends ModGenRecipes
+{
     @Override
-    protected void addRecipes() {
+    protected void addRecipes()
+    {
         addRecipe("mill_bean_powder",
                 ImmutableMap.of(
                         Ingredient.of(ItemRegistryHandler.SOY_BEAN.get()), (byte) 1
                 ),
-                new ItemStack[] {
+                new ItemStack[]{
                         new ItemStack(ItemRegistryHandler.BEAN_POWDER.get(), 2)
                 },
                 null, null,
@@ -36,7 +38,7 @@ public class MillRecipes extends ModGenRecipes {
                 ImmutableMap.of(
                         Ingredient.of(Items.COAL), (byte) 1
                 ),
-                new ItemStack[] {
+                new ItemStack[]{
                         new ItemStack(ItemRegistryHandler.COAL_POWDER.get(), 2)
                 },
                 null, null,
@@ -46,7 +48,7 @@ public class MillRecipes extends ModGenRecipes {
                 ImmutableMap.of(
                         Ingredient.of(Items.WHEAT), (byte) 2
                 ),
-                new ItemStack[] {
+                new ItemStack[]{
                         new ItemStack(ItemRegistryHandler.FLOUR.get(), 2)
                 },
                 null, null,
@@ -56,7 +58,7 @@ public class MillRecipes extends ModGenRecipes {
                 ImmutableMap.of(
                         Ingredient.of(Items.GLOWSTONE), (byte) 2
                 ),
-                new ItemStack[] {
+                new ItemStack[]{
                         new ItemStack(Items.GLOWSTONE_DUST, 8)
                 },
                 null, null,
@@ -66,7 +68,7 @@ public class MillRecipes extends ModGenRecipes {
                 ImmutableMap.of(
                         Ingredient.of(Items.RAW_GOLD), (byte) 1
                 ),
-                new ItemStack[] {
+                new ItemStack[]{
                         new ItemStack(ItemRegistryHandler.GOLD_ORE_SHATTER.get(), 2),
                         new ItemStack(ItemRegistryHandler.STONE_SHATTER.get(), 2)
                 },
@@ -77,7 +79,7 @@ public class MillRecipes extends ModGenRecipes {
                 ImmutableMap.of(
                         Ingredient.of(Items.RAW_IRON), (byte) 1
                 ),
-                new ItemStack[] {
+                new ItemStack[]{
                         new ItemStack(ItemRegistryHandler.IRON_ORE_SHATTER.get(), 2),
                         new ItemStack(ItemRegistryHandler.STONE_SHATTER.get(), 2)
                 },
@@ -88,7 +90,7 @@ public class MillRecipes extends ModGenRecipes {
                 ImmutableMap.of(
                         Ingredient.of(ItemRegistryHandler.DRIED_TEA_LEAF.get()), (byte) 3
                 ),
-                new ItemStack[] {
+                new ItemStack[]{
                         new ItemStack(ItemRegistryHandler.MACHA_POWDER.get(), 2)
                 },
                 null, null,
@@ -98,7 +100,7 @@ public class MillRecipes extends ModGenRecipes {
                 ImmutableMap.of(
                         Ingredient.of(ItemRegistryHandler.PADDY.get()), (byte) 1
                 ),
-                new ItemStack[] {
+                new ItemStack[]{
                         new ItemStack(ItemRegistryHandler.RICE.get(), 2)
                 },
                 null, null,
@@ -108,7 +110,7 @@ public class MillRecipes extends ModGenRecipes {
                 ImmutableMap.of(
                         Ingredient.of(ItemRegistryHandler.RICE.get()), (byte) 1
                 ),
-                new ItemStack[] {
+                new ItemStack[]{
                         new ItemStack(ItemRegistryHandler.RICE_POWDER.get(), 1)
                 },
                 null, null,
@@ -118,7 +120,7 @@ public class MillRecipes extends ModGenRecipes {
                 ImmutableMap.of(
                         Ingredient.of(ItemRegistryHandler.BEAN_POWDER.get()), (byte) 2
                 ),
-                new ItemStack[] {},
+                new ItemStack[]{},
                 new FluidStack(Fluids.WATER, 100),
                 new FluidStack(FluidRegistryHandler.SOY_MILK.get(), 100),
                 (byte) 1, 20, 20);
@@ -126,11 +128,12 @@ public class MillRecipes extends ModGenRecipes {
 
     void addRecipe(String name, Map<Ingredient, Byte> inputCostsIn, ItemStack[] outputs,
                    FluidStack inFluid, FluidStack outFluid,
-                   byte roundIn, int roundTicksIn, float expIn) {
+                   byte roundIn, int roundTicksIn, float expIn)
+    {
         MillRecipe recipe = new MillRecipe(new ResourceLocation(Ashihara.MODID, name),
                 "test_group", inputCostsIn, NonNullList.of(ItemStack.EMPTY, outputs),
-                inFluid, outFluid,  roundIn, roundTicksIn, expIn);
+                inFluid, outFluid, roundIn, roundTicksIn, expIn);
         recipe.type = RecipeSerializers.MILL.get().getRegistryName().toString();
-        addRecipe(recipe.getId(),baseRecipe(recipe), "mill");
+        addRecipe(recipe.getId(), baseRecipe(recipe), "mill");
     }
 }

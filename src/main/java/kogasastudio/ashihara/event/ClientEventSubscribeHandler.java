@@ -35,18 +35,22 @@ import java.util.Map;
 import java.util.Objects;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public class ClientEventSubscribeHandler {
-    private static void setRenderType(Block block, RenderType type, FMLClientSetupEvent event) {
+public class ClientEventSubscribeHandler
+{
+    private static void setRenderType(Block block, RenderType type, FMLClientSetupEvent event)
+    {
         event.enqueueWork(() -> ItemBlockRenderTypes.setRenderLayer(block, type));
     }
 
-    private static void setRenderType(Fluid fluid, RenderType type, FMLClientSetupEvent event) {
+    private static void setRenderType(Fluid fluid, RenderType type, FMLClientSetupEvent event)
+    {
         event.enqueueWork(() -> ItemBlockRenderTypes.setRenderLayer(fluid, type));
     }
 
     //设置渲染方式
     @SubscribeEvent
-    public static void onRenderTypeSetup(FMLClientSetupEvent event) {
+    public static void onRenderTypeSetup(FMLClientSetupEvent event)
+    {
         setRenderType(BlockRegistryHandler.RICE_CROP.get(), RenderType.cutoutMipped(), event);
         setRenderType(BlockRegistryHandler.IMMATURE_RICE.get(), RenderType.cutoutMipped(), event);
         setRenderType(BlockRegistryHandler.CHERRY_BLOSSOM.get(), RenderType.cutoutMipped(), event);
@@ -82,7 +86,8 @@ public class ClientEventSubscribeHandler {
 
     //注册粒子
     @SubscribeEvent
-    public static void onParticleFactoryRegister(ParticleFactoryRegisterEvent event) {
+    public static void onParticleFactoryRegister(ParticleFactoryRegisterEvent event)
+    {
         ParticleEngine manager = Minecraft.getInstance().particleEngine;
         manager.register(ParticleRegistryHandler.RICE.get(), RiceParticle.RiceParticleFactory::new);
         manager.register(ParticleRegistryHandler.SAKURA.get(), SakuraParticle.SakuraParticleFactory::new);
@@ -91,7 +96,8 @@ public class ClientEventSubscribeHandler {
 
     //绑定TER
     @SubscribeEvent
-    public static void onTERBind(EntityRenderersEvent.RegisterRenderers event) {
+    public static void onTERBind(EntityRenderersEvent.RegisterRenderers event)
+    {
         event.registerBlockEntityRenderer(TERegistryHandler.MARKABLE_LANTERN_TE.get(), MarkableLanternTER::new);
         event.registerBlockEntityRenderer(TERegistryHandler.MILL_TE.get(), MillTER::new);
         event.registerBlockEntityRenderer(TERegistryHandler.PAIL_TE.get(), PailTER::new);
@@ -101,16 +107,20 @@ public class ClientEventSubscribeHandler {
     }
 
     @SubscribeEvent
-    public static void onModelBaked(ModelBakeEvent event) {
+    public static void onModelBaked(ModelBakeEvent event)
+    {
         Map<ResourceLocation, BakedModel> modelRegistry = event.getModelRegistry();
         ModelResourceLocation location = new ModelResourceLocation
                 (Objects.requireNonNull(ItemRegistryHandler.PAIL.get().getRegistryName()), "inventory");
         BakedModel existingModel = modelRegistry.get(location);
-        if (existingModel == null) {
+        if (existingModel == null)
+        {
             throw new RuntimeException("Did not find Obsidian Hidden in registry");
-        } else if (existingModel instanceof PailModel) {
+        } else if (existingModel instanceof PailModel)
+        {
             throw new RuntimeException("Tried to replaceObsidian Hidden twice");
-        } else {
+        } else
+        {
             PailModel model = new PailModel(existingModel);
             event.getModelRegistry().put(location, model);
         }
@@ -118,8 +128,10 @@ public class ClientEventSubscribeHandler {
 
     //绑定GUI
     @SubscribeEvent
-    public static void onScreenBind(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
+    public static void onScreenBind(FMLClientSetupEvent event)
+    {
+        event.enqueueWork(() ->
+        {
             MenuScreens.register(ContainerRegistryHandler.MILL_CONTAINER.get(), MillScreen::new);
             MenuScreens.register(ContainerRegistryHandler.MORTAR_CONTAINER.get(), MortarScreen::new);
         });

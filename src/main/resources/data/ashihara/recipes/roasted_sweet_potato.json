@@ -1,6 +1,8 @@
 {
   "type": "minecraft:smelting",
-  "ingredient": {"item": "ashihara:sweet_potato"},
+  "ingredient": {
+    "item": "ashihara:sweet_potato"
+  },
   "result": "ashihara:roasted_sweet_potato",
   "experience": 0.35,
   "cookingtime": 200

@@ -22,10 +22,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class MillRecipe extends BaseRecipe {
+public class MillRecipe extends BaseRecipe
+{
     private NonNullList<Ingredient> input;
 
-    private NonNullList<Ingredient> input() {
+    private NonNullList<Ingredient> input()
+    {
         return input != null ? input :
                 (input = NonNullList.of(Ingredient.EMPTY, inputCosts.keySet().toArray(new Ingredient[0])));
     }
@@ -56,7 +58,8 @@ public class MillRecipe extends BaseRecipe {
                     FluidStack inFluid,
                     FluidStack outFluid,
                     byte roundIn, int roundTicksIn, float expIn
-            ) {
+            )
+    {
         this.id = recipeId;
         this.group = groupId;
 
@@ -69,22 +72,27 @@ public class MillRecipe extends BaseRecipe {
         this.exp = expIn;
     }
 
-    public boolean testInputFluid(@Nullable FluidTank tank) {
+    public boolean testInputFluid(@Nullable FluidTank tank)
+    {
         return tank == null ? getInputFluid().isEmpty() :
                 getInputFluid().isEmpty() ||
                         tank.drain(getInputFluid().copy(), IFluidHandler.FluidAction.SIMULATE).getAmount() >= getInputFluid().getAmount();
     }
 
-    public FluidStack getInputFluid() {
+    public FluidStack getInputFluid()
+    {
         return inputFluid == null ? FluidStack.EMPTY : inputFluid;
     }
 
-    public FluidStack getOutputFluid() {
+    public FluidStack getOutputFluid()
+    {
         return outputFluid == null ? FluidStack.EMPTY : this.outputFluid.copy();
     }
 
-    public byte getCosts(Ingredient ingredient) {
-        if (ingredient == Ingredient.EMPTY) {
+    public byte getCosts(Ingredient ingredient)
+    {
+        if (ingredient == Ingredient.EMPTY)
+        {
             return 0;
         }
 
@@ -92,13 +100,16 @@ public class MillRecipe extends BaseRecipe {
     }
 
     @Override
-    public NonNullList<Ingredient> getIngredients() {
+    public NonNullList<Ingredient> getIngredients()
+    {
         return this.input();
     }
 
     @Override
-    public boolean matches(List<ItemStack> inputs) {
-        if (inputs == null || this.input() == null) {
+    public boolean matches(List<ItemStack> inputs)
+    {
+        if (inputs == null || this.input() == null)
+        {
             LogManager.getLogger().error("MortarRecipe.matches: input is null. id: " + getId());
             return false;
         }
@@ -109,38 +120,45 @@ public class MillRecipe extends BaseRecipe {
     }
 
     @Override
-    public String getGroup() {
+    public String getGroup()
+    {
         return this.group;
     }
 
     @Override
-    public ResourceLocation getId() {
+    public ResourceLocation getId()
+    {
         return this.id;
     }
 
     //这个也没啥用
     @Override
-    public ItemStack getResultItem() {
+    public ItemStack getResultItem()
+    {
         return output.size() > 0 ? this.output.get(0).copy() : ItemStack.EMPTY;
     }
 
     //出结果的
-    public NonNullList<ItemStack> getCraftingResult() {
+    public NonNullList<ItemStack> getCraftingResult()
+    {
         return DataHelper.copyFrom(output);
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height)
+    {
         return width * height >= this.input().size();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<?> getType()
+    {
         return RecipeTypes.MILL.get();
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer()
+    {
         return RecipeSerializers.MILL.get();
     }
 }

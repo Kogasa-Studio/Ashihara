@@ -11,7 +11,8 @@ import java.util.List;
 /**
  * @author DustW
  **/
-public interface BaseSerializer<T> extends JsonSerializer<T>, JsonDeserializer<T> {
+public interface BaseSerializer<T> extends JsonSerializer<T>, JsonDeserializer<T>
+{
     static <E> TypeToken<List<E>> listOf(final Type arg)
     {
         return new TypeToken<List<E>>() {}.where(new TypeParameter<E>() {}, (TypeToken<E>) TypeToken.of(arg));

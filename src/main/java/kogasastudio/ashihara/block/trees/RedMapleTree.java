@@ -8,7 +8,8 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class RedMapleTree extends AbstractTreeGrower {
+public class RedMapleTree extends AbstractTreeGrower
+{
     @Nullable
     @Override
     protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(Random randomIn, boolean largeHive)

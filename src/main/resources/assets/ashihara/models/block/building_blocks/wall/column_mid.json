@@ -1,25 +1,95 @@
 {
-	"credit": "Made with Blockbench",
-	"parent": "minecraft:block/block",
-	"textures": {
-		"0": "ashihara:block/bulding_blocks/beams/beam_oak_thick",
-		"1": "ashihara:block/bulding_blocks/beams/beam_oak_thick_cut",
-		"particle": "ashihara:block/bulding_blocks/beams/beam_oak_thick"
-	},
-	"elements": [
-		{
-			"name": "column",
-			"from": [4, 0, 4],
-			"to": [12, 17, 12],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0.5, 8]},
-			"faces": {
-				"north": {"uv": [0, 0, 16, 8], "rotation": 90, "texture": "#0"},
-				"east": {"uv": [0, 0, 16, 8], "rotation": 90, "texture": "#0"},
-				"south": {"uv": [0, 0, 16, 8], "rotation": 90, "texture": "#0"},
-				"west": {"uv": [0, 0, 16, 8], "rotation": 90, "texture": "#0"},
-				"up": {"uv": [0, 0, 8, 8], "rotation": 90, "texture": "#1"},
-				"down": {"uv": [0, 0, 8, 8], "rotation": 90, "texture": "#1"}
-			}
-		}
-	]
+  "credit": "Made with Blockbench",
+  "parent": "minecraft:block/block",
+  "textures": {
+    "0": "ashihara:block/bulding_blocks/beams/beam_oak_thick",
+    "1": "ashihara:block/bulding_blocks/beams/beam_oak_thick_cut",
+    "particle": "ashihara:block/bulding_blocks/beams/beam_oak_thick"
+  },
+  "elements": [
+    {
+      "name": "column",
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        17,
+        12
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          8,
+          0.5,
+          8
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            8
+          ],
+          "rotation": 90,
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            8
+          ],
+          "rotation": 90,
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            8
+          ],
+          "rotation": 90,
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            8
+          ],
+          "rotation": 90,
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "rotation": 90,
+          "texture": "#1"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "rotation": 90,
+          "texture": "#1"
+        }
+      }
+    }
+  ]
 }

@@ -1,8 +1,7 @@
 {
-	"parent": "ashihara:block/building_blocks/advanced_fence/part_expansion",
-	"textures":
-	{
-		"wood": "ashihara:block/woodcrafts/red_expansion",
-		"part": "ashihara:block/woodcrafts/stripped_red_log"
-	}
+  "parent": "ashihara:block/building_blocks/advanced_fence/part_expansion",
+  "textures": {
+    "wood": "ashihara:block/woodcrafts/red_expansion",
+    "part": "ashihara:block/woodcrafts/stripped_red_log"
+  }
 }

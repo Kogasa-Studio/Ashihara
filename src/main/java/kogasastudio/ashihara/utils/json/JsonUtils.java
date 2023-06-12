@@ -12,14 +12,18 @@ import net.minecraftforge.fluids.FluidStack;
 /**
  * @author DustW
  **/
-public enum JsonUtils {
-    /** 最 佳 单 例 */
+public enum JsonUtils
+{
+    /**
+     * 最 佳 单 例
+     */
     INSTANCE;
     public final Gson normal;
     public final Gson pretty;
     public final Gson noExpose;
 
-    JsonUtils() {
+    JsonUtils()
+    {
         GsonBuilder builder = new GsonBuilder()
                 // 关闭 html 转义
                 .disableHtmlEscaping()

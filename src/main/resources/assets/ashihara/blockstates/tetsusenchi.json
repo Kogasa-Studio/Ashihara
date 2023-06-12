@@ -1,9 +1,19 @@
 {
-  "variants":
-  {
-    "facing=east": {"model": "ashihara:block/tetsusenchi", "y": 270},
-    "facing=north": {"model": "ashihara:block/tetsusenchi", "y": 180},
-    "facing=south": {"model": "ashihara:block/tetsusenchi"},
-    "facing=west": {"model": "ashihara:block/tetsusenchi", "y": 90}
+  "variants": {
+    "facing=east": {
+      "model": "ashihara:block/tetsusenchi",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "ashihara:block/tetsusenchi",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "ashihara:block/tetsusenchi"
+    },
+    "facing=west": {
+      "model": "ashihara:block/tetsusenchi",
+      "y": 90
+    }
   }
 }

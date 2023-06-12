@@ -5,8 +5,10 @@ import net.minecraft.client.particle.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class RiceParticle extends TextureSheetParticle {
-    protected RiceParticle(ClientLevel world, double x, double y, double z) {
+public class RiceParticle extends TextureSheetParticle
+{
+    protected RiceParticle(ClientLevel world, double x, double y, double z)
+    {
         super(world, x, y, z, 0.0D, 0.0D, 0.0D);
         this.xd *= 0.8F;
         this.yd *= 0.8F;
@@ -17,20 +19,25 @@ public class RiceParticle extends TextureSheetParticle {
     }
 
     @Override
-    public ParticleRenderType getRenderType() {
+    public ParticleRenderType getRenderType()
+    {
         return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
     @Override
-    public float getQuadSize(float scaleFactor) {
+    public float getQuadSize(float scaleFactor)
+    {
         return 0.2F;
     }
 
     @Override
-    public void tick() {
-        if (this.age++ >= this.lifetime) {
+    public void tick()
+    {
+        if (this.age++ >= this.lifetime)
+        {
             this.remove();
-        } else {
+        } else
+        {
             this.xo = this.x;
             this.yo = this.y;
             this.zo = this.z;
@@ -39,7 +46,8 @@ public class RiceParticle extends TextureSheetParticle {
             this.xd *= 0.999F;
             this.yd *= 0.999F;
             this.zd *= 0.999F;
-            if (this.onGround) {
+            if (this.onGround)
+            {
                 this.xd *= 0.7F;
                 this.zd *= 0.7F;
             }
@@ -47,15 +55,18 @@ public class RiceParticle extends TextureSheetParticle {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class RiceParticleFactory implements ParticleProvider<GenericParticleData> {
+    public static class RiceParticleFactory implements ParticleProvider<GenericParticleData>
+    {
         private final SpriteSet spriteSet;
 
-        public RiceParticleFactory(SpriteSet spriteSet) {
+        public RiceParticleFactory(SpriteSet spriteSet)
+        {
             this.spriteSet = spriteSet;
         }
 
         @Override
-        public Particle createParticle(GenericParticleData typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+        public Particle createParticle(GenericParticleData typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
+        {
             RiceParticle riceparticle = new RiceParticle(worldIn, x, y, z);
             riceparticle.pickSprite(this.spriteSet);
             return riceparticle;

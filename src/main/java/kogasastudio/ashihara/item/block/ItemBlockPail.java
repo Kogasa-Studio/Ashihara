@@ -20,16 +20,21 @@ import java.util.function.Consumer;
 
 import static kogasastudio.ashihara.Ashihara.ASHIHARA;
 
-public class ItemBlockPail extends BlockItem {
-    public ItemBlockPail() {
+public class ItemBlockPail extends BlockItem
+{
+    public ItemBlockPail()
+    {
         super(BlockRegistryHandler.PAIL.get(), new Properties().tab(ASHIHARA));
     }
 
     @Override
-    public void initializeClient(Consumer<IItemRenderProperties> consumer) {
-        consumer.accept(new IItemRenderProperties() {
+    public void initializeClient(Consumer<IItemRenderProperties> consumer)
+    {
+        consumer.accept(new IItemRenderProperties()
+        {
             @Override
-            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+            public BlockEntityWithoutLevelRenderer getItemStackRenderer()
+            {
                 return new PailISTER(Minecraft.getInstance().getBlockEntityRenderDispatcher(),
                         Minecraft.getInstance().getEntityModels());
             }
@@ -37,11 +42,13 @@ public class ItemBlockPail extends BlockItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn)
+    {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         TranslatableComponent component = new TranslatableComponent(new TranslatableComponent("tooltip.ashihara.pail_empty_message").getString());
         CompoundTag nbt = stack.getTagElement("BlockEntityTag");
-        if (nbt != null && !nbt.isEmpty() && !nbt.getCompound("bucket").getString("FluidName").equals("minecraft:empty")) {
+        if (nbt != null && !nbt.isEmpty() && !nbt.getCompound("bucket").getString("FluidName").equals("minecraft:empty"))
+        {
             CompoundTag bucket = nbt.getCompound("bucket");
             ResourceLocation rl = new ResourceLocation(bucket.getString("FluidName"));
             String nameSpace = rl.getNamespace();

@@ -1,4 +1,6 @@
 {
   "parent": "item/generated",
-  "textures": {"layer0": "ashihara:item/liquids/soy_milk_bucket"}
+  "textures": {
+    "layer0": "ashihara:item/liquids/soy_milk_bucket"
+  }
 }

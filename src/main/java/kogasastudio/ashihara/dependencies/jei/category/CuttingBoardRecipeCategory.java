@@ -23,20 +23,23 @@ import net.minecraft.world.item.ItemStack;
 /**
  * @author DustW
  **/
-public class CuttingBoardRecipeCategory extends BaseRecipeCategory<CuttingBoardRecipe> {
+public class CuttingBoardRecipeCategory extends BaseRecipeCategory<CuttingBoardRecipe>
+{
     protected static final ResourceLocation BACKGROUND =
             new ResourceLocation(Ashihara.MODID, "textures/gui/jei/cutting_board.png");
     private final ImmutableRect2i textArea =
             new ImmutableRect2i(40, 1, 60, 34);
 
-    public CuttingBoardRecipeCategory(IGuiHelper helper) {
+    public CuttingBoardRecipeCategory(IGuiHelper helper)
+    {
         super(JeiPlugin.CUTTING_BOARD,
                 helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ItemRegistryHandler.CUTTING_BOARD.get())),
                 helper.createDrawable(BACKGROUND, 0, 0, 176, 166 - 90));
     }
 
     @Override
-    public void draw(CuttingBoardRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
+    public void draw(CuttingBoardRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY)
+    {
         Minecraft minecraft = Minecraft.getInstance();
         Font font = minecraft.font;
         Component toolName = new TextComponent(recipe.getTool().getName());
@@ -45,12 +48,14 @@ public class CuttingBoardRecipeCategory extends BaseRecipeCategory<CuttingBoardR
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, CuttingBoardRecipe recipe, IFocusGroup focuses) {
+    public void setRecipe(IRecipeLayoutBuilder builder, CuttingBoardRecipe recipe, IFocusGroup focuses)
+    {
         builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).addIngredients(recipe.getInput());
 
         var output = recipe.getOutput();
 
-        for (int i = 0; i < output.size(); i++) {
+        for (int i = 0; i < output.size(); i++)
+        {
             builder.addSlot(RecipeIngredientRole.OUTPUT, 20, 1 + i * 20).addItemStack(output.get(i));
         }
     }

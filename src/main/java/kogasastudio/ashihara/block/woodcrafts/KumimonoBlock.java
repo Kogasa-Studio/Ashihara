@@ -27,13 +27,16 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class BlockKumimono extends Block implements IVariable<AshiharaWoodTypes> {
+public class KumimonoBlock extends Block implements IVariable<AshiharaWoodTypes>
+{
     public static final BooleanProperty BEAM_N = BlockStateProperties.NORTH;
     public static final BooleanProperty BEAM_E = BlockStateProperties.EAST;
     public static final BooleanProperty BEAM_S = BlockStateProperties.SOUTH;
     public static final BooleanProperty BEAM_W = BlockStateProperties.WEST;
     private static AshiharaWoodTypes type;
-    public BlockKumimono(AshiharaWoodTypes typeIn) {
+
+    public KumimonoBlock(AshiharaWoodTypes typeIn)
+    {
         super
                 (
                         Properties.of(Material.WOOD)
@@ -46,43 +49,53 @@ public class BlockKumimono extends Block implements IVariable<AshiharaWoodTypes>
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
         builder.add(BEAM_N, BEAM_E, BEAM_S, BEAM_W);
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    {
         ItemStack stack = player.getItemInHand(handIn);
 
         boolean isBeam = stack.getItem() instanceof BlockItem
-                && state.getBlock() instanceof BlockKumimono
-                && ((BlockItem) stack.getItem()).getBlock() instanceof BlockKawaki
-                && ((BlockKawaki) ((BlockItem) stack.getItem()).getBlock()).getType().equals(((BlockKumimono) state.getBlock()).getType());
+                && state.getBlock() instanceof KumimonoBlock
+                && ((BlockItem) stack.getItem()).getBlock() instanceof KawakiBlock
+                && ((KawakiBlock) ((BlockItem) stack.getItem()).getBlock()).getType().equals(((KumimonoBlock) state.getBlock()).getType());
 
-        if (isBeam || stack.getItem() instanceof AxeItem) {
+        if (isBeam || stack.getItem() instanceof AxeItem)
+        {
             SoundEvent event = isBeam ? SoundEvents.WOOD_PLACE : SoundEvents.WOOD_BREAK;
             BooleanProperty dir = BEAM_N;
             Direction facing = player.getDirection();
-            switch (facing) {
-                case NORTH: {
+            switch (facing)
+            {
+                case NORTH:
+                {
                     dir = BEAM_N;
-                    if (state.getValue(BEAM_S) != isBeam) {
+                    if (state.getValue(BEAM_S) != isBeam)
+                    {
                         worldIn.setBlockAndUpdate(pos, state.setValue(BEAM_S, isBeam));
                         worldIn.playSound(player, pos, event, SoundSource.BLOCKS, 1.0f, 1.0f);
                         return InteractionResult.SUCCESS;
-                    } else if (state.getValue(BEAM_N) != isBeam) {
+                    } else if (state.getValue(BEAM_N) != isBeam)
+                    {
                         worldIn.setBlockAndUpdate(pos, state.setValue(BEAM_N, isBeam));
                         worldIn.playSound(player, pos, event, SoundSource.BLOCKS, 1.0f, 1.0f);
                         return InteractionResult.SUCCESS;
                     }
                     break;
                 }
-                case EAST: {
-                    if (state.getValue(BEAM_W) != isBeam) {
+                case EAST:
+                {
+                    if (state.getValue(BEAM_W) != isBeam)
+                    {
                         worldIn.setBlockAndUpdate(pos, state.setValue(BEAM_W, isBeam));
                         worldIn.playSound(player, pos, event, SoundSource.BLOCKS, 1.0f, 1.0f);
                         return InteractionResult.SUCCESS;
-                    } else if (state.getValue(BEAM_E) != isBeam) {
+                    } else if (state.getValue(BEAM_E) != isBeam)
+                    {
                         worldIn.setBlockAndUpdate(pos, state.setValue(BEAM_E, isBeam));
                         worldIn.playSound(player, pos, event, SoundSource.BLOCKS, 1.0f, 1.0f);
                         return InteractionResult.SUCCESS;
@@ -90,12 +103,15 @@ public class BlockKumimono extends Block implements IVariable<AshiharaWoodTypes>
                     dir = BEAM_E;
                     break;
                 }
-                case SOUTH: {
-                    if (state.getValue(BEAM_N) != isBeam) {
+                case SOUTH:
+                {
+                    if (state.getValue(BEAM_N) != isBeam)
+                    {
                         worldIn.setBlockAndUpdate(pos, state.setValue(BEAM_N, isBeam));
                         worldIn.playSound(player, pos, event, SoundSource.BLOCKS, 1.0f, 1.0f);
                         return InteractionResult.SUCCESS;
-                    } else if (state.getValue(BEAM_S) != isBeam) {
+                    } else if (state.getValue(BEAM_S) != isBeam)
+                    {
                         worldIn.setBlockAndUpdate(pos, state.setValue(BEAM_S, isBeam));
                         worldIn.playSound(player, pos, event, SoundSource.BLOCKS, 1.0f, 1.0f);
                         return InteractionResult.SUCCESS;
@@ -103,12 +119,15 @@ public class BlockKumimono extends Block implements IVariable<AshiharaWoodTypes>
                     dir = BEAM_S;
                     break;
                 }
-                case WEST: {
-                    if (state.getValue(BEAM_E) != isBeam) {
+                case WEST:
+                {
+                    if (state.getValue(BEAM_E) != isBeam)
+                    {
                         worldIn.setBlockAndUpdate(pos, state.setValue(BEAM_E, isBeam));
                         worldIn.playSound(player, pos, event, SoundSource.BLOCKS, 1.0f, 1.0f);
                         return InteractionResult.SUCCESS;
-                    } else if (state.getValue(BEAM_W) != isBeam) {
+                    } else if (state.getValue(BEAM_W) != isBeam)
+                    {
                         worldIn.setBlockAndUpdate(pos, state.setValue(BEAM_W, isBeam));
                         worldIn.playSound(player, pos, event, SoundSource.BLOCKS, 1.0f, 1.0f);
                         return InteractionResult.SUCCESS;
@@ -118,11 +137,12 @@ public class BlockKumimono extends Block implements IVariable<AshiharaWoodTypes>
             }
             BlockState expandedState = worldIn.getBlockState(pos.relative(player.getDirection().getOpposite()));
 
-            boolean expandable = expandedState.getBlock() instanceof BlockKumimono
-                    && state.getBlock() instanceof BlockKumimono
-                    && ((BlockKumimono) expandedState.getBlock()).getType().equals(((BlockKumimono) state.getBlock()).getType());
+            boolean expandable = expandedState.getBlock() instanceof KumimonoBlock
+                    && state.getBlock() instanceof KumimonoBlock
+                    && ((KumimonoBlock) expandedState.getBlock()).getType().equals(((KumimonoBlock) state.getBlock()).getType());
 
-            if (isBeam && expandable && !expandedState.getValue(dir)) {
+            if (isBeam && expandable && !expandedState.getValue(dir))
+            {
                 worldIn.setBlockAndUpdate(pos.relative(player.getDirection().getOpposite()), expandedState.setValue(dir, true));
                 worldIn.playSound(player, pos, event, SoundSource.BLOCKS, 1.0f, 1.0f);
                 return InteractionResult.SUCCESS;
@@ -132,7 +152,8 @@ public class BlockKumimono extends Block implements IVariable<AshiharaWoodTypes>
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+    {
         VoxelShape body = box(2.5d, 0.0d, 2.5d, 13.5d, 10.0d, 13.5d);
         VoxelShape beam_n = box(5.0d, 6.0d, 0.0d, 11.0d, 16.0d, 8.0d);
         VoxelShape beam_e = box(8.0d, 6.0d, 5.0d, 16.0d, 16.0d, 11.0d);
@@ -148,7 +169,8 @@ public class BlockKumimono extends Block implements IVariable<AshiharaWoodTypes>
     }
 
     @Override
-    public AshiharaWoodTypes getType() {
+    public AshiharaWoodTypes getType()
+    {
         return type;
     }
 }

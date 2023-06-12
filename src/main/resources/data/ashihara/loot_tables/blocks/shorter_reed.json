@@ -1,23 +1,18 @@
 {
   "type": "minecraft:block",
-  "pools":
-  [
+  "pools": [
     {
       "rolls": 1,
-      "entries":
-      [
+      "entries": [
         {
           "type": "minecraft:alternatives",
-          "children":
-          [
+          "children": [
             {
               "type": "minecraft:item",
-              "conditions":
-              [
+              "conditions": [
                 {
                   "condition": "minecraft:match_tool",
-                  "predicate":
-                  {
+                  "predicate": {
                     "item": "minecraft:shears"
                   }
                 }

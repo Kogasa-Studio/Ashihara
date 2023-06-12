@@ -8,13 +8,16 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class BlockShorterReed extends BlockReed {
-    public BlockShorterReed() {
+public class ShorterReedBlock extends ReedBlock
+{
+    public ShorterReedBlock()
+    {
         super();
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+    {
         VoxelShape SHAPE1 = Block.box(0, 0, 0, 16, 16, 16);
         VoxelShape SHAPE2 = Block.box(0, 0, 0, 16, 8, 16);
         return state.getValue(HALF) == DoubleBlockHalf.UPPER ? SHAPE2 : SHAPE1;

@@ -1,4 +1,6 @@
 {
   "parent": "item/generated",
-  "textures": {"layer0": "ashihara:item/bamboo_strips"}
+  "textures": {
+    "layer0": "ashihara:item/bamboo_strips"
+  }
 }

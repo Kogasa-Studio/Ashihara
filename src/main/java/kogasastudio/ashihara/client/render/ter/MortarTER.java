@@ -23,19 +23,22 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.Map;
 
-import static kogasastudio.ashihara.block.BlockMortar.FACING;
+import static kogasastudio.ashihara.block.MortarBlock.FACING;
 import static kogasastudio.ashihara.helper.RenderHelper.XTP;
 import static kogasastudio.ashihara.helper.RenderHelper.buildMatrix;
 
-public class MortarTER implements BlockEntityRenderer<MortarTE> {
+public class MortarTER implements BlockEntityRenderer<MortarTE>
+{
     private static final Map<String, ResourceLocation> cookedTextures = assistanceMap();
     private static final String CEREALS = "cereals_level";
     private static final String PROCESSED = "processed_level";
 
-    public static Map<String, ResourceLocation> assistanceMap() {
+    public static Map<String, ResourceLocation> assistanceMap()
+    {
         ImmutableMap.Builder<String, ResourceLocation> builder = new ImmutableMap.Builder<>();
 
-        for (ResourceLocation resourceLocation : AshiharaAtlas.ALL_ASSISTANCE) {
+        for (ResourceLocation resourceLocation : AshiharaAtlas.ALL_ASSISTANCE)
+        {
             String path = resourceLocation.getPath();
             builder.put(path.substring(path.lastIndexOf("/") + 1), resourceLocation);
         }
@@ -43,11 +46,13 @@ public class MortarTER implements BlockEntityRenderer<MortarTE> {
         return builder.build();
     }
 
-    public MortarTER(BlockEntityRendererProvider.Context rendererDispatcherIn) {
+    public MortarTER(BlockEntityRendererProvider.Context rendererDispatcherIn)
+    {
     }
 
     @Override
-    public void render(MortarTE tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(MortarTE tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
+    {
         RenderHelper.renderLeveledFluidStack
                 (
                         tileEntityIn, matrixStackIn, bufferIn,
@@ -58,16 +63,20 @@ public class MortarTER implements BlockEntityRenderer<MortarTE> {
                 );
 
         NonNullList<ItemStack> list = NonNullList.create();
-        for (int i = 0; i < tileEntityIn.contents.getSlots(); i += 1) {
+        for (int i = 0; i < tileEntityIn.contents.getSlots(); i += 1)
+        {
             list.add(i, tileEntityIn.contents.getStackInSlot(i));
         }
 
         float renderHeight = XTP(4.0f);
-        for (ItemStack stack : list) {
-            if (!stack.isEmpty()) {
+        for (ItemStack stack : list)
+        {
+            if (!stack.isEmpty())
+            {
                 renderHeight += XTP(2.0f);
                 //以Quad方式渲染谷物或产物
-                if (stack.is(AshiharaTags.CEREALS) || stack.is(AshiharaTags.CEREAL_PROCESSED)) {
+                if (stack.is(AshiharaTags.CEREALS) || stack.is(AshiharaTags.CEREAL_PROCESSED))
+                {
                     String key = stack.is(AshiharaTags.CEREAL_PROCESSED) ? PROCESSED : CEREALS;
 
                     RenderType ASSISTANCE = RenderType.entityCutout(AshiharaAtlas.ASSISTANCE_ATLAS);
@@ -87,7 +96,8 @@ public class MortarTER implements BlockEntityRenderer<MortarTE> {
                     buildMatrix(wtf, builder, XTP(3.5f), 0.0f, XTP(12.5f), u0, v1, combinedOverlayIn, combinedLightIn);
                     buildMatrix(wtf, builder, XTP(12.5f), 0.0f, XTP(12.5f), u1, v1, combinedOverlayIn, combinedLightIn);
                     buildMatrix(wtf, builder, XTP(12.5f), 0.0f, XTP(3.5f), u1, v0, combinedOverlayIn, combinedLightIn);
-                } else {
+                } else
+                {
                     matrixStackIn.pushPose();
                     matrixStackIn.translate(XTP(8.0f), renderHeight, XTP(8.0f));
                     matrixStackIn.scale(0.6f, 0.6f, 0.6f);

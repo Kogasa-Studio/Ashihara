@@ -12,10 +12,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static kogasastudio.ashihara.Ashihara.ASHIHARA;
 
-public class ItemSujikaButo extends ArmorItem {
+public class ItemSujikaButo extends ArmorItem
+{
     private static final ResourceLocation TEXTURE = new ResourceLocation(Ashihara.MODID, "textures/armors/sujikabuto.png");
 
-    public ItemSujikaButo() {
+    public ItemSujikaButo()
+    {
         super(ArmorMaterials.NETHERITE, EquipmentSlot.HEAD, new Properties().tab(ASHIHARA));
     }
 
@@ -29,7 +31,8 @@ public class ItemSujikaButo extends ArmorItem {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
+    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type)
+    {
         return TEXTURE.toString();
     }
 }

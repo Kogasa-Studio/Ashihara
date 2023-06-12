@@ -14,7 +14,8 @@ import java.util.List;
 import java.util.Set;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public class AshiharaAtlas {
+public class AshiharaAtlas
+{
     //为Atlas提供RL
 
     public static final ResourceLocation ICON_ATLAS = new ResourceLocation(Ashihara.MODID, "textures/atlas/icons.png");
@@ -27,7 +28,8 @@ public class AshiharaAtlas {
     //纹理路径省略开头的 textures/ 和结尾的 .png ，mc会自动加上
 
     @SubscribeEvent
-    public static void onAtlasGenerate(ModelRegistryEvent event) {
+    public static void onAtlasGenerate(ModelRegistryEvent event)
+    {
         ALL_ICON.clear();
         ALL_ASSISTANCE.clear();
 
@@ -42,16 +44,20 @@ public class AshiharaAtlas {
         ArrayList<ResourceLocation> assistants = new ArrayList<>
                 (Minecraft.getInstance().getResourceManager().listResources("textures/assistants/", s -> s.endsWith(".png")));
         //添加纹章类贴图
-        for (ResourceLocation location : icons) {
-            if (location.getNamespace().equals(Ashihara.MODID)) {
+        for (ResourceLocation location : icons)
+        {
+            if (location.getNamespace().equals(Ashihara.MODID))
+            {
                 ResourceLocation trans = trans(location);
                 miscMaterials.add(new Material(ICON_ATLAS, trans));
                 ALL_ICON.add(trans);
             }
         }
         //添加辅助类贴图
-        for (ResourceLocation location : assistants) {
-            if (location.getNamespace().equals(Ashihara.MODID)) {
+        for (ResourceLocation location : assistants)
+        {
+            if (location.getNamespace().equals(Ashihara.MODID))
+            {
                 ResourceLocation trans = trans(location);
                 miscMaterials.add(new Material(ASSISTANCE_ATLAS, trans));
                 ALL_ASSISTANCE.add(trans);
@@ -59,8 +65,11 @@ public class AshiharaAtlas {
         }
     }
 
-    /** 用来省略开头和结尾 */
-    public static ResourceLocation trans(ResourceLocation location) {
+    /**
+     * 用来省略开头和结尾
+     */
+    public static ResourceLocation trans(ResourceLocation location)
+    {
         return new ResourceLocation(location.getNamespace(), location.getPath().substring(9, location.getPath().length() - 4));
     }
 }

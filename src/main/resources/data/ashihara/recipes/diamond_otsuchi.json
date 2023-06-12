@@ -1,19 +1,22 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern":
-  [
+  "pattern": [
     "TO ",
     " IO",
     "I  "
   ],
-  "key":
-  {
-    "T": {"item": "minecraft:diamond"},
-    "O": {"tag": "forge:stripped_logs"},
-    "I": {"item": "minecraft:stick"}
+  "key": {
+    "T": {
+      "item": "minecraft:diamond"
+    },
+    "O": {
+      "tag": "forge:stripped_logs"
+    },
+    "I": {
+      "item": "minecraft:stick"
+    }
   },
-  "result":
-  {
+  "result": {
     "item": "ashihara:diamond_otsuchi",
     "count": 1
   }

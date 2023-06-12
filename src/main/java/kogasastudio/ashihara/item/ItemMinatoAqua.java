@@ -23,8 +23,10 @@ import java.util.Random;
 import static kogasastudio.ashihara.fluid.FluidRegistryHandler.SOY_MILK;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
-public class ItemMinatoAqua extends Item {
-    public ItemMinatoAqua() {
+public class ItemMinatoAqua extends Item
+{
+    public ItemMinatoAqua()
+    {
         super
                 (
                         new Properties()
@@ -34,7 +36,8 @@ public class ItemMinatoAqua extends Item {
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext context) {
+    public InteractionResult useOn(UseOnContext context)
+    {
         Level world = context.getLevel();
         BlockPos pos = context.getClickedPos();
         BlockEntity te = world.getBlockEntity(pos);
@@ -44,14 +47,17 @@ public class ItemMinatoAqua extends Item {
         var tree = new CherryBlossomTree();
         Random rand = context.getLevel().getRandom();
 
-        if (te instanceof IFluidHandler) {
+        if (te instanceof IFluidHandler)
+        {
             ((IFluidHandler) te).getTank().ifPresent
                     (
                             tank ->
                             {
-                                if (!tank.isEmpty()) {
+                                if (!tank.isEmpty())
+                                {
                                     tank.getFluid().setAmount(tank.getFluidAmount() + 100);
-                                } else {
+                                } else
+                                {
                                     tank.fill(new FluidStack(SOY_MILK.get(), 100), EXECUTE);
                                 }
                             }
@@ -60,7 +66,8 @@ public class ItemMinatoAqua extends Item {
             return InteractionResult.SUCCESS;
         }
 
-        if (!item.isEmpty() && Objects.requireNonNull(playerIn).mayUseItemAt(pos.relative(direction), direction, item) && !world.isClientSide()) {
+        if (!item.isEmpty() && Objects.requireNonNull(playerIn).mayUseItemAt(pos.relative(direction), direction, item) && !world.isClientSide())
+        {
             ServerLevel worldIn = (ServerLevel) world;
             tree.growTree(worldIn, worldIn.getChunkSource().getGenerator(), pos, BlockRegistryHandler.CHERRY_LOG.get().defaultBlockState(), rand);
             return InteractionResult.SUCCESS;

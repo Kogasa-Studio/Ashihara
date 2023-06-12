@@ -1,8 +1,16 @@
 {
-  "variants":
-  {
-    "axis=x": {"model": "ashihara:block/maple_woodcrafts/maple_wood", "x": 90, "y": 90},
-    "axis=y": {"model": "ashihara:block/maple_woodcrafts/maple_wood"},
-    "axis=z": {"model": "ashihara:block/maple_woodcrafts/maple_wood", "x": 90}
+  "variants": {
+    "axis=x": {
+      "model": "ashihara:block/maple_woodcrafts/maple_wood",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "ashihara:block/maple_woodcrafts/maple_wood"
+    },
+    "axis=z": {
+      "model": "ashihara:block/maple_woodcrafts/maple_wood",
+      "x": 90
+    }
   }
 }

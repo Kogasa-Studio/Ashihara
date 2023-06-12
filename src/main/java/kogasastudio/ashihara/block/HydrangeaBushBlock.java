@@ -14,10 +14,12 @@ import net.minecraft.world.level.material.Material;
 
 import java.util.Random;
 
-public class BlockHydrangeaBush extends Block implements BonemealableBlock {
+public class HydrangeaBushBlock extends Block implements BonemealableBlock
+{
     public static final BooleanProperty BLOOMED = BooleanProperty.create("bloomed");
 
-    public BlockHydrangeaBush(boolean bloomed) {
+    public HydrangeaBushBlock(boolean bloomed)
+    {
         super
                 (
                         Properties.of(Material.LEAVES)
@@ -31,40 +33,48 @@ public class BlockHydrangeaBush extends Block implements BonemealableBlock {
     }
 
     @Override
-    public int getLightBlock(BlockState state, BlockGetter worldIn, BlockPos pos) {
+    public int getLightBlock(BlockState state, BlockGetter worldIn, BlockPos pos)
+    {
         return 1;
     }
 
     @Override
-    public boolean isRandomlyTicking(BlockState state) {
+    public boolean isRandomlyTicking(BlockState state)
+    {
         return !state.getValue(BLOOMED);
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random) {
-        if (random.nextInt(3) == 1 && this.isValidBonemealTarget(worldIn, pos, state, false)) {
+    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random)
+    {
+        if (random.nextInt(3) == 1 && this.isValidBonemealTarget(worldIn, pos, state, false))
+        {
             this.performBonemeal(worldIn, random, pos, state);
         }
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
         builder.add(BLOOMED);
     }
 
     @Override
-    public boolean isValidBonemealTarget(BlockGetter worldIn, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(BlockGetter worldIn, BlockPos pos, BlockState state, boolean isClient)
+    {
         BlockState down = worldIn.getBlockState(pos);
         return down.getMaterial() == Material.DIRT && !state.getValue(BLOOMED);
     }
 
     @Override
-    public boolean isBonemealSuccess(Level worldIn, Random rand, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level worldIn, Random rand, BlockPos pos, BlockState state)
+    {
         return !state.getValue(BLOOMED);
     }
 
     @Override
-    public void performBonemeal(ServerLevel worldIn, Random rand, BlockPos pos, BlockState state) {
+    public void performBonemeal(ServerLevel worldIn, Random rand, BlockPos pos, BlockState state)
+    {
         worldIn.setBlockAndUpdate(pos, state.setValue(BLOOMED, true));
     }
 }

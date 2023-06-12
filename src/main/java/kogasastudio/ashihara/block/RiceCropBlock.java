@@ -14,10 +14,12 @@ import net.minecraft.world.level.material.Material;
 
 import java.util.Random;
 
-import static kogasastudio.ashihara.block.BlockWaterField.LEVEL;
+import static kogasastudio.ashihara.block.PaddyFieldBlock.LEVEL;
 
-public class BlockRiceCrop extends CropBlock {
-    public BlockRiceCrop() {
+public class RiceCropBlock extends CropBlock
+{
+    public RiceCropBlock()
+    {
         super
                 (
                         Properties.of(Material.PLANT)
@@ -29,16 +31,21 @@ public class BlockRiceCrop extends CropBlock {
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random) {
-        if (!worldIn.isAreaLoaded(pos, 1)) {
+    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random)
+    {
+        if (!worldIn.isAreaLoaded(pos, 1))
+        {
             // Forge: prevent loading unloaded chunks when checking neighbor's light
             return;
         }
-        if (worldIn.getRawBrightness(pos, 0) >= 9) {
+        if (worldIn.getRawBrightness(pos, 0) >= 9)
+        {
             int i = this.getAge(state);
-            if (i < this.getMaxAge() && this.isValidBonemealTarget(worldIn, pos, state, true)) {
+            if (i < this.getMaxAge() && this.isValidBonemealTarget(worldIn, pos, state, true))
+            {
                 float f = random.nextInt(3) + 22;
-                if (net.minecraftforge.common.ForgeHooks.onCropsGrowPre(worldIn, pos, state, random.nextInt((int) (25.0F / f) + 1) == 0)) {
+                if (net.minecraftforge.common.ForgeHooks.onCropsGrowPre(worldIn, pos, state, random.nextInt((int) (25.0F / f) + 1) == 0))
+                {
                     worldIn.setBlock(pos, this.getStateForAge(i + 1), 2);
                     net.minecraftforge.common.ForgeHooks.onCropsGrowPost(worldIn, pos, state);
                 }
@@ -47,31 +54,37 @@ public class BlockRiceCrop extends CropBlock {
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos)
+    {
         return worldIn.getBlockState(pos.below()).is(BlockRegistryHandler.WATER_FIELD.get());
     }
 
     @Override
-    protected boolean mayPlaceOn(BlockState state, BlockGetter worldIn, BlockPos pos) {
+    protected boolean mayPlaceOn(BlockState state, BlockGetter worldIn, BlockPos pos)
+    {
         return state.is(BlockRegistryHandler.WATER_FIELD.get());
     }
 
     @Override
-    public boolean isValidBonemealTarget(BlockGetter worldIn, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(BlockGetter worldIn, BlockPos pos, BlockState state, boolean isClient)
+    {
         boolean flag = false;
-        if (worldIn.getBlockState(pos.below()).is(BlockRegistryHandler.WATER_FIELD.get())) {
+        if (worldIn.getBlockState(pos.below()).is(BlockRegistryHandler.WATER_FIELD.get()))
+        {
             flag = !this.isMaxAge(state) && worldIn.getBlockState(pos.below()).getValue(LEVEL) > 5;
         }
         return flag;
     }
 
     @Override
-    protected ItemLike getBaseSeedId() {
+    protected ItemLike getBaseSeedId()
+    {
         return ItemRegistryHandler.RICE_SEEDLING.get();
     }
 
     @Override
-    public boolean isBonemealSuccess(Level worldIn, Random rand, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level worldIn, Random rand, BlockPos pos, BlockState state)
+    {
         return this.isValidBonemealTarget(worldIn, pos, state, true);
     }
 }

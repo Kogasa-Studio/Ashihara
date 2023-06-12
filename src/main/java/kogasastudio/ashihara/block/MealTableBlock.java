@@ -10,8 +10,10 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class BlockMealTable extends Block {
-    public BlockMealTable() {
+public class MealTableBlock extends Block
+{
+    public MealTableBlock()
+    {
         super
                 (
                         Properties.of(Material.WOOD)
@@ -21,7 +23,8 @@ public class BlockMealTable extends Block {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+    {
         VoxelShape base = box(3.0d, 0.0d, 3.0d, 13.0d, 4.5d, 13.0d);
         VoxelShape plate_base = box(2.5d, 4.5d, 2.5d, 13.5d, 5.0d, 13.5d);
         VoxelShape plate = box(2.0, 5.0, 2.0, 14.0, 6.0, 14.0);

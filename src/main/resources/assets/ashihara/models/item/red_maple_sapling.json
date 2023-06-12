@@ -1,4 +1,6 @@
 {
   "parent": "item/generated",
-  "textures": {"layer0": "ashihara:block/red_maple_sapling"}
+  "textures": {
+    "layer0": "ashihara:block/red_maple_sapling"
+  }
 }

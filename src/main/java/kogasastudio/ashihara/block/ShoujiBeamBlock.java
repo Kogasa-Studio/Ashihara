@@ -12,7 +12,8 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.Material;
 
-public class BlockShoujiBeam extends Block implements IVariable<AshiharaWoodTypes> {
+public class ShoujiBeamBlock extends Block implements IVariable<AshiharaWoodTypes>
+{
     public static final EnumProperty<FillType> TOP = EnumProperty.create("top", FillType.class);
     public static final EnumProperty<FillType> UPPER = EnumProperty.create("upper", FillType.class);
     public static final EnumProperty<FillType> LOWER = EnumProperty.create("lower", FillType.class);
@@ -20,7 +21,9 @@ public class BlockShoujiBeam extends Block implements IVariable<AshiharaWoodType
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
     public static final BooleanProperty FRONT = BooleanProperty.create("front");
     public static final BooleanProperty BACK = BooleanProperty.create("back");
-    public BlockShoujiBeam() {
+
+    public ShoujiBeamBlock()
+    {
         super
                 (
                         Properties.of(Material.WOOD)
@@ -30,16 +33,19 @@ public class BlockShoujiBeam extends Block implements IVariable<AshiharaWoodType
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
         builder.add(TOP, UPPER, LOWER, BOTTOM, AXIS, FRONT, BACK);
     }
 
     @Override
-    public AshiharaWoodTypes getType() {
+    public AshiharaWoodTypes getType()
+    {
         return AshiharaWoodTypes.OAK;
     }
 
-    enum FillType implements StringRepresentable {
+    enum FillType implements StringRepresentable
+    {
         BEAM("beam"),
         NAGESHI("nageshi"),
         WALL("wall"),
@@ -47,12 +53,14 @@ public class BlockShoujiBeam extends Block implements IVariable<AshiharaWoodType
 
         public final String name;
 
-        FillType(String nameIn) {
+        FillType(String nameIn)
+        {
             this.name = nameIn;
         }
 
         @Override
-        public String getSerializedName() {
+        public String getSerializedName()
+        {
             return this.name;
         }
     }

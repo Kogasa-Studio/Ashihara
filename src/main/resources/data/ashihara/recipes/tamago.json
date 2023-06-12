@@ -1,11 +1,11 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "ingredients":
-  [
-    {"item": "minecraft:salmon"}
+  "ingredients": [
+    {
+      "item": "minecraft:salmon"
+    }
   ],
-  "result":
-  {
+  "result": {
     "item": "ashihara:tamago",
     "count": 4
   }

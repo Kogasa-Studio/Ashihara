@@ -1,11 +1,19 @@
 {
   "type": "minecraft:block",
-  "pools":
-  [
+  "pools": [
     {
       "rolls": 1,
-      "entries": [{"type": "minecraft:item", "name": "ashihara:red_kawaki"}],
-      "conditions": [{"condition": "minecraft:survives_explosion"}]
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "ashihara:red_kawaki"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
     }
   ]
 }

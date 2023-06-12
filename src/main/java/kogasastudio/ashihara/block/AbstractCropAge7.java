@@ -10,7 +10,8 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class AbstractCropAge7 extends CropBlock {
+public class AbstractCropAge7 extends CropBlock
+{
     private static final VoxelShape[] SHAPES = new VoxelShape[]
             {
                     Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D),
@@ -23,7 +24,8 @@ public class AbstractCropAge7 extends CropBlock {
                     Block.box(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D)
             };
 
-    public AbstractCropAge7() {
+    public AbstractCropAge7()
+    {
         super
                 (
                         Properties.of(Material.PLANT)
@@ -34,11 +36,13 @@ public class AbstractCropAge7 extends CropBlock {
                 );
     }
 
-    protected AbstractCropAge7(Properties properties) {
+    protected AbstractCropAge7(Properties properties)
+    {
         super(properties);
     }
 
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+    {
         return SHAPES[state.getValue(this.getAgeProperty())];
     }
 }

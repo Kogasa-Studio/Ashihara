@@ -8,8 +8,10 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 
-public class SimpleWoodBlock extends RotatedPillarBlock {
-    public SimpleWoodBlock() {
+public class SimpleWoodBlock extends RotatedPillarBlock
+{
+    public SimpleWoodBlock()
+    {
         super
                 (
                         Properties.of(Material.WOOD)
@@ -19,17 +21,20 @@ public class SimpleWoodBlock extends RotatedPillarBlock {
     }
 
     @Override
-    public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+    public int getFlammability(BlockState state, BlockGetter world, BlockPos pos, Direction face)
+    {
         return 5;
     }
 
     @Override
-    public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+    public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face)
+    {
         return 5;
     }
 
     @Override
-    public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+    public boolean isFlammable(BlockState state, BlockGetter world, BlockPos pos, Direction face)
+    {
         return true;
     }
 }

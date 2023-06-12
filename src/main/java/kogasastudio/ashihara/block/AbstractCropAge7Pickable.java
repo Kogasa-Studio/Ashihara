@@ -17,10 +17,13 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import static net.minecraft.world.item.Items.BONE_MEAL;
 
-public class AbstractCropAge7Pickable extends AbstractCropAge7 {
+public class AbstractCropAge7Pickable extends AbstractCropAge7
+{
     protected final int ageAvailable;
     protected final int ageTurnIn;
-    public AbstractCropAge7Pickable(int max, int turn) {
+
+    public AbstractCropAge7Pickable(int max, int turn)
+    {
         super
                 (
                         BlockBehaviour.Properties.of(Material.PLANT)
@@ -34,13 +37,17 @@ public class AbstractCropAge7Pickable extends AbstractCropAge7 {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    {
         int age = state.getValue(AGE);
         ItemStack stack = player.getItemInHand(handIn);
         if (age < this.ageAvailable && stack.getItem().equals(BONE_MEAL)) return InteractionResult.PASS;
-        if (age == this.ageAvailable) {
-            if (!worldIn.isClientSide()) {
-                for (ItemStack stack1 : getDrops(state, (ServerLevel) worldIn, pos, null)) {
+        if (age == this.ageAvailable)
+        {
+            if (!worldIn.isClientSide())
+            {
+                for (ItemStack stack1 : getDrops(state, (ServerLevel) worldIn, pos, null))
+                {
                     popResource(worldIn, pos, stack1);
                 }
             }

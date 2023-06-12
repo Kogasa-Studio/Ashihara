@@ -1,8 +1,7 @@
 {
-	"parent": "ashihara:block/building_blocks/advanced_fence/column_core",
-	"textures":
-	{
-		"wood": "ashihara:block/woodcrafts/red_fence",
-		"part": "ashihara:block/woodcrafts/stripped_red_log"
-	}
+  "parent": "ashihara:block/building_blocks/advanced_fence/column_core",
+  "textures": {
+    "wood": "ashihara:block/woodcrafts/red_fence",
+    "part": "ashihara:block/woodcrafts/stripped_red_log"
+  }
 }

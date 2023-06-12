@@ -39,10 +39,13 @@ import java.util.Random;
 import static kogasastudio.ashihara.block.tileentities.TERegistryHandler.CANDLE_TE;
 import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 
-public class BlockCandle extends Block implements EntityBlock {
+public class CandleBlock extends Block implements EntityBlock
+{
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     public static final BooleanProperty MULTIPLE = BooleanProperty.create("multiple");
-    public BlockCandle() {
+
+    public CandleBlock()
+    {
         super
                 (
                         Properties.of(Material.TOP_SNOW)
@@ -54,15 +57,18 @@ public class BlockCandle extends Block implements EntityBlock {
         this.registerDefaultState(this.getStateDefinition().any().setValue(LIT, false).setValue(MULTIPLE, false));
     }
 
-    private CandleTE checkCandle(BlockGetter worldIn, BlockPos pos) {
+    private CandleTE checkCandle(BlockGetter worldIn, BlockPos pos)
+    {
         BlockEntity te = worldIn.getBlockEntity(pos);
         if (te != null && te.getType().equals(CANDLE_TE.get())) return (CandleTE) te;
         else return null;
     }
 
     @Override
-    public void playerDestroy(Level worldIn, Player player, BlockPos pos, BlockState state, BlockEntity te, ItemStack stack) {
-        if (state.getValue(MULTIPLE) && te instanceof CandleTE) {
+    public void playerDestroy(Level worldIn, Player player, BlockPos pos, BlockState state, BlockEntity te, ItemStack stack)
+    {
+        if (state.getValue(MULTIPLE) && te instanceof CandleTE)
+        {
             CandleTE candle = (CandleTE) te;
             int amount = candle.pickCandle(true, worldIn, pos);
             if (amount == 0) return;
@@ -76,15 +82,19 @@ public class BlockCandle extends Block implements EntityBlock {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
         builder.add(LIT, MULTIPLE);
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
-        if (player.getItemInHand(handIn).isEmpty()) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    {
+        if (player.getItemInHand(handIn).isEmpty())
+        {
             CandleTE te = checkCandle(worldIn, pos);
-            if (player.isShiftKeyDown() && te != null) {
+            if (player.isShiftKeyDown() && te != null)
+            {
                 int amount = te.pickCandle(false, worldIn, pos);
                 if (amount == 0) return InteractionResult.PASS;
                 player.setItemInHand(handIn, new ItemStack(ItemRegistryHandler.CANDLE.get(), amount));
@@ -100,17 +110,22 @@ public class BlockCandle extends Block implements EntityBlock {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
-        if (stateIn.getValue(LIT)) {
+    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand)
+    {
+        if (stateIn.getValue(LIT))
+        {
             CandleTE te = checkCandle(worldIn, pos);
-            if (stateIn.getValue(MULTIPLE) && te != null) {
-                for (double[] d : te.getPosList()) {
+            if (stateIn.getValue(MULTIPLE) && te != null)
+            {
+                for (double[] d : te.getPosList())
+                {
                     double x = d[0];
                     double z = d[1];
                     double y = d[2];
                     worldIn.addParticle(ParticleTypes.FLAME, pos.getX() + x, pos.getY() + 1.075d + y, pos.getZ() + z, 0.0D, 0.0D, 0.0D);
                 }
-            } else {
+            } else
+            {
                 double d0 = (double) pos.getX() + 0.5D;
                 double d1 = (double) pos.getY() + 1.075D;
                 double d2 = (double) pos.getZ() + 0.5D;
@@ -121,22 +136,28 @@ public class BlockCandle extends Block implements EntityBlock {
 
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos)
+    {
         return worldIn.getBlockState(pos.below()).getBlock() != Blocks.AIR;
     }
 
     @Override
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
+    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos)
+    {
         return !this.canSurvive(stateIn, worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-        if (state.getValue(MULTIPLE)) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+    {
+        if (state.getValue(MULTIPLE))
+        {
             CandleTE te = checkCandle(worldIn, pos);
-            if (te != null) {
+            if (te != null)
+            {
                 VoxelShape shape = Shapes.empty();
-                for (double[] d : te.getPosList()) {
+                for (double[] d : te.getPosList())
+                {
                     shape = Shapes.or(shape, box(16 * d[0] - 1.3d, 0d, 16 * d[1] - 1.3d, 16 * d[0] + 1.3d, 16 * d[2] + 14d, 16 * d[1] + 1.3d));
                 }
                 return shape;
@@ -147,7 +168,8 @@ public class BlockCandle extends Block implements EntityBlock {
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState)
+    {
         return new CandleTE(pPos, pState);
     }
 }

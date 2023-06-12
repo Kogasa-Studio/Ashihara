@@ -1,6 +1,8 @@
 {
   "type": "minecraft:smelting",
-  "ingredient": {"item": "minecraft:bamboo"},
+  "ingredient": {
+    "item": "minecraft:bamboo"
+  },
   "result": "ashihara:dried_bamboo",
   "experience": 0.35,
   "cookingtime": 200

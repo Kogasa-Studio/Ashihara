@@ -12,18 +12,21 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
-import static kogasastudio.ashihara.block.BlockMill.FACING;
+import static kogasastudio.ashihara.block.MillBlock.FACING;
 
-public class MillTER implements BlockEntityRenderer<MillTE> {
+public class MillTER implements BlockEntityRenderer<MillTE>
+{
     private static final ResourceLocation tex = new ResourceLocation("ashihara:textures/block/mill_stone.png");
     private final MillStoneModel millStone;
+
     public MillTER(BlockEntityRendererProvider.Context rendererDispatcherIn)
     {
         this.millStone = new MillStoneModel(rendererDispatcherIn.bakeLayer(LayerRegistryHandler.MILL_STONE));
     }
 
     @Override
-    public void render(MillTE tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void render(MillTE tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
+    {
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.5D, 1.5D, 0.5D);
         float facing = tileEntityIn.getBlockState().getValue(FACING).toYRot();

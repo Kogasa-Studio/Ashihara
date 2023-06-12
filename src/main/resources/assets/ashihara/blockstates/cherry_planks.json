@@ -1,3 +1,7 @@
 {
-  "variants": {"": {"model": "ashihara:block/cherry_woodcrafts/cherry_planks"}}
+  "variants": {
+    "": {
+      "model": "ashihara:block/cherry_woodcrafts/cherry_planks"
+    }
+  }
 }

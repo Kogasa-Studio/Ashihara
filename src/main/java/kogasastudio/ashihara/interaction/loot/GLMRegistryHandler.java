@@ -6,7 +6,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class GLMRegistryHandler {
+public class GLMRegistryHandler
+{
     public static final DeferredRegister<GlobalLootModifierSerializer<?>> MODIFIERS =
             DeferredRegister.create(ForgeRegistries.Keys.LOOT_MODIFIER_SERIALIZERS, Ashihara.MODID);
 

@@ -1,8 +1,7 @@
 {
-	"parent": "minecraft:block/leaves",
-	"ambientocclusion": false,
-	"textures":
-	{
-		"all": "ashihara:block/maple_leaves_red"
-	}
+  "parent": "minecraft:block/leaves",
+  "ambientocclusion": false,
+  "textures": {
+    "all": "ashihara:block/maple_leaves_red"
+  }
 }

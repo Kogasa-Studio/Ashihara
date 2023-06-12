@@ -10,10 +10,13 @@ import net.minecraft.world.phys.Vec3;
 import java.util.Locale;
 
 
-public class GenericParticleData implements ParticleOptions {
-    public static final Deserializer<GenericParticleData> DESERIALIZER = new Deserializer<GenericParticleData>() {
+public class GenericParticleData implements ParticleOptions
+{
+    public static final Deserializer<GenericParticleData> DESERIALIZER = new Deserializer<GenericParticleData>()
+    {
         @Override
-        public GenericParticleData fromCommand(ParticleType<GenericParticleData> particleTypeIn, StringReader reader) throws CommandSyntaxException {
+        public GenericParticleData fromCommand(ParticleType<GenericParticleData> particleTypeIn, StringReader reader) throws CommandSyntaxException
+        {
             reader.expect(' ');
             double speedX = reader.readDouble();
             reader.expect(' ');
@@ -26,7 +29,8 @@ public class GenericParticleData implements ParticleOptions {
         }
 
         @Override
-        public GenericParticleData fromNetwork(ParticleType<GenericParticleData> particleTypeIn, FriendlyByteBuf buffer) {
+        public GenericParticleData fromNetwork(ParticleType<GenericParticleData> particleTypeIn, FriendlyByteBuf buffer)
+        {
             double speedX = buffer.readDouble();
             double speedY = buffer.readDouble();
             double speedZ = buffer.readDouble();
@@ -38,19 +42,22 @@ public class GenericParticleData implements ParticleOptions {
     private final float diameter;
     private final ParticleType<?> type;
 
-    public GenericParticleData(Vec3 speed, float diameter, ParticleType<?> type) {
+    public GenericParticleData(Vec3 speed, float diameter, ParticleType<?> type)
+    {
         this.speed = speed;
         this.diameter = diameter;
         this.type = type;
     }
 
     @Override
-    public ParticleType<?> getType() {
+    public ParticleType<?> getType()
+    {
         return type;
     }
 
     @Override
-    public void writeToNetwork(FriendlyByteBuf buffer) {
+    public void writeToNetwork(FriendlyByteBuf buffer)
+    {
         buffer.writeDouble(this.speed.x);
         buffer.writeDouble(this.speed.y);
         buffer.writeDouble(this.speed.z);
@@ -58,7 +65,8 @@ public class GenericParticleData implements ParticleOptions {
     }
 
     @Override
-    public String writeToString() {
+    public String writeToString()
+    {
         return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f",
                 this.getType().getRegistryName(), diameter, speed.x(), speed.y(), speed.z());
     }

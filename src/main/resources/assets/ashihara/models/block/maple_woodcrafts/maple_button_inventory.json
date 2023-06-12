@@ -1,4 +1,6 @@
 {
   "parent": "minecraft:block/button_inventory",
-  "textures": {"texture": "ashihara:block/woodcrafts/maple_planks"}
+  "textures": {
+    "texture": "ashihara:block/woodcrafts/maple_planks"
+  }
 }

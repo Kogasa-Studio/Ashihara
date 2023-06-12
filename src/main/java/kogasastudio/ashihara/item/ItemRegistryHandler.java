@@ -18,7 +18,8 @@ import net.minecraftforge.registries.RegistryObject;
 import static kogasastudio.ashihara.Ashihara.*;
 
 @SuppressWarnings("unused")
-public class ItemRegistryHandler {
+public class ItemRegistryHandler
+{
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Ashihara.MODID);
 
     //特殊物品
@@ -159,14 +160,18 @@ public class ItemRegistryHandler {
     public static final RegistryObject<Item> SOY_MILK_BUCKET = ITEMS.register("soy_milk_bucket", () -> new BucketItem(FluidRegistryHandler.SOY_MILK, new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
     public static final RegistryObject<Item> OIL_BUCKET = ITEMS.register("oil_bucket", () -> new BucketItem(FluidRegistryHandler.OIL, new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
 
-    private static class AshiharaItem extends Item {
-        public AshiharaItem() {
+    private static class AshiharaItem extends Item
+    {
+        public AshiharaItem()
+        {
             super(new Properties().tab(ASHIHARA));
         }
     }
 
-    private static class AshiharaMaterial extends Item {
-        public AshiharaMaterial() {
+    private static class AshiharaMaterial extends Item
+    {
+        public AshiharaMaterial()
+        {
             super(new Properties().tab(MATERIALS));
         }
     }

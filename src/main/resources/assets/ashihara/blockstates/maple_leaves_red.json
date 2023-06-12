@@ -1,7 +1,7 @@
 {
-  "variants":
-  {
-    "":
-    {"model": "ashihara:block/maple_leaves_red"}
+  "variants": {
+    "": {
+      "model": "ashihara:block/maple_leaves_red"
+    }
   }
 }

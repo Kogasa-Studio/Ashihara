@@ -1,4 +1,6 @@
 {
-	"parent": "ashihara:block/fallen_leaves",
-	"textures": {"leaves": "ashihara:block/cherry_blossom"}
+  "parent": "ashihara:block/fallen_leaves",
+  "textures": {
+    "leaves": "ashihara:block/cherry_blossom"
+  }
 }

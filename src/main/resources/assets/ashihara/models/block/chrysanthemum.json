@@ -1,4 +1,6 @@
 {
   "parent": "minecraft:block/cross",
-  "textures": {"cross": "ashihara:block/chrysanthemum"}
+  "textures": {
+    "cross": "ashihara:block/chrysanthemum"
+  }
 }

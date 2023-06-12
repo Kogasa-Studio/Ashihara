@@ -28,40 +28,46 @@ import java.util.Map;
 
 import static com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_COLOR_TEX;
 
-public class RenderHelper {
+public class RenderHelper
+{
     /**
      * 将像素坐标转换为方块内坐标
      *
      * @param pixels 像素坐标数值, 如5, 13
      * @return 方块内坐标数值, 如0.625,  0.25
      */
-    public static float XTP(float pixels) {
+    public static float XTP(float pixels)
+    {
         return pixels / 16f;
     }
 
     /**
      * 将方块内坐标转换为像素坐标
      */
-    public static double PTX(double pos) {
+    public static double PTX(double pos)
+    {
         return pos * 16d;
     }
 
     /**
      * 将世界内坐标转换为方块内坐标
      */
-    public static double ATP(double absolutePos) {
+    public static double ATP(double absolutePos)
+    {
         return absolutePos - Math.abs(absolutePos);
     }
 
     /**
      * 将世界内坐标转换为像素坐标
      */
-    public static double ATX(double absolutePos) {
+    public static double ATX(double absolutePos)
+    {
         return PTX(ATP(absolutePos));
     }
 
     //贴图半透明部分渲染黑色
-    public static void buildMatrix(Matrix4f matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int overlay, int light) {
+    public static void buildMatrix(Matrix4f matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int overlay, int light)
+    {
         buildMatrix(matrix, builder, x, y, z, u, v, overlay, 0xffffff, 1.0f, light);
     }
 
@@ -72,9 +78,11 @@ public class RenderHelper {
      * @param textures 需进行操作的列表(textures/xxx/xxx.png 形式)
      * @return 操作过的列表(ashihara : xxx / xxx形式)
      */
-    public static ArrayList<ResourceLocation> cookTextureRLs(List<ResourceLocation> textures) {
+    public static ArrayList<ResourceLocation> cookTextureRLs(List<ResourceLocation> textures)
+    {
         ArrayList<ResourceLocation> cooked = new ArrayList<>();
-        for (ResourceLocation location : textures) {
+        for (ResourceLocation location : textures)
+        {
             //这里还是用幻数
             String path = location.getPath().substring(9, location.getPath().length() - 4);
             cooked.add(new ResourceLocation(location.getNamespace(), path));
@@ -82,9 +90,11 @@ public class RenderHelper {
         return cooked;
     }
 
-    public static Map<String, ResourceLocation> cookTextureRLsToMap(List<ResourceLocation> textures) {
+    public static Map<String, ResourceLocation> cookTextureRLsToMap(List<ResourceLocation> textures)
+    {
         Map<String, ResourceLocation> cooked = new HashMap<>();
-        for (ResourceLocation location : textures) {
+        for (ResourceLocation location : textures)
+        {
             //这里还是用幻数
             String path = location.getPath().substring(9, location.getPath().length() - 4);
             String name = path.substring(path.lastIndexOf("/") + 1);
@@ -106,7 +116,8 @@ public class RenderHelper {
      * @param overlay 覆盖
      * @param light   光照
      */
-    public static void buildMatrix(Matrix4f matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int overlay, int RGBA, float alpha, int light) {
+    public static void buildMatrix(Matrix4f matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int overlay, int RGBA, float alpha, int light)
+    {
         float red = ((RGBA >> 16) & 0xFF) / 255f;
         float green = ((RGBA >> 8) & 0xFF) / 255f;
         float blue = ((RGBA) & 0xFF) / 255f;
@@ -123,7 +134,8 @@ public class RenderHelper {
     /**
      * 通过RGBA色值渲染顶点
      */
-    public static void buildMatrix(Matrix4f matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int RGBA) {
+    public static void buildMatrix(Matrix4f matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int RGBA)
+    {
         int red = FastColor.ARGB32.red(RGBA);
         int green = FastColor.ARGB32.green(RGBA);
         int blue = FastColor.ARGB32.blue(RGBA);
@@ -148,14 +160,18 @@ public class RenderHelper {
      * @param height 区域高度
      * @param list   渲染文本列表
      */
-    public static void drawTooltip(Screen gui, PoseStack matrix, int mouseX, int mouseY, int x, int y, int weight, int height, List<Component> list) {
-        if ((x <= mouseX && mouseX <= x + weight) && (y <= mouseY && mouseY <= y + height)) {
+    public static void drawTooltip(Screen gui, PoseStack matrix, int mouseX, int mouseY, int x, int y, int weight, int height, List<Component> list)
+    {
+        if ((x <= mouseX && mouseX <= x + weight) && (y <= mouseY && mouseY <= y + height))
+        {
             gui.renderComponentTooltip(matrix, list, mouseX, mouseY);
         }
     }
 
-    public static void drawFluidToolTip(Screen gui, PoseStack matrix, int mouseX, int mouseY, int x, int y, int weight, int height, FluidStack stack, int Capacity) {
-        if (!stack.isEmpty()) {
+    public static void drawFluidToolTip(Screen gui, PoseStack matrix, int mouseX, int mouseY, int x, int y, int weight, int height, FluidStack stack, int Capacity)
+    {
+        if (!stack.isEmpty())
+        {
             ArrayList<Component> list = new ArrayList<>();
             list.add(new TranslatableComponent("tooltip.ashihara.fluid_existence"));
             list.add(new TextComponent
@@ -178,7 +194,8 @@ public class RenderHelper {
      * @param x      x（绝对）
      * @param y      y（绝对）
      */
-    public static void renderFluidStackInGUI(Matrix4f matrix, FluidStack fluid, int width, int height, float x, float y) {
+    public static void renderFluidStackInGUI(Matrix4f matrix, FluidStack fluid, int width, int height, float x, float y)
+    {
         //正常渲染透明度
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -218,7 +235,8 @@ public class RenderHelper {
          * [第一层（高）渲染完毕后渲染第二层，依此类推渲染所有高度层和额外高度层，以达成渲染任意长宽的流体矩形的目的]
          * 对于层，若层数为0（渲染数值小于16），则直接将渲染数值设为额外层数值。
          */
-        for (int i = hFloors; i >= 0; i--) {
+        for (int i = hFloors; i >= 0; i--)
+        {
             //i为流程控制码，若i=0则代表高度层已全部渲染完毕，此时若额外层高度为0（渲染高度参数本来就是16的整数倍）则跳出
             if (i == 0 && extraHeight == 0) break;
             float yStart = y - ((hFloors - i) * 16);
@@ -228,7 +246,8 @@ public class RenderHelper {
             float v1 = i == 0 ? FLUID.getV0() + ((FLUID.getV1() - v0) * ((float) extraHeight / 16f)) : FLUID.getV1();
 
             //x层以此类推
-            for (int j = wFloors; j >= 0; j--) {
+            for (int j = wFloors; j >= 0; j--)
+            {
                 if (j == 0 && extraWidth == 0) break;
                 float xStart = x + (wFloors - j) * 16;
                 float xOffset = j == 0 ? (float) extraWidth : 16;
@@ -253,7 +272,8 @@ public class RenderHelper {
                     float xStart, float heightIn, float zStart,
                     float xEnd, float zEnd,
                     Level worldIn, BlockPos posIn
-            ) {
+            )
+    {
         VertexConsumer builder = bufferIn.getBuffer(RenderType.translucentNoCrumbling());
 
         TextureAtlasSprite FLUID = (worldIn != null && posIn != null)
@@ -289,12 +309,14 @@ public class RenderHelper {
                     float xStart, float minHeight, float zStart,
                     float xEnd, float maxHeight, float zEnd,
                     Level worldIn, BlockPos posIn
-            ) {
+            )
+    {
         teIn.getTank().ifPresent
                 (
                         bucket ->
                         {
-                            if (!bucket.isEmpty()) {
+                            if (!bucket.isEmpty())
+                            {
                                 FluidStack fluid = bucket.getFluid();
                                 float height = minHeight + ((float) fluid.getAmount() / bucket.getCapacity()) * (maxHeight - minHeight);
 

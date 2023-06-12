@@ -1,25 +1,92 @@
 {
-	"credit": "Made with Blockbench",
-	"parent": "minecraft:block/block",
-	"ambientocclusion": false,
-	"texture_size": [96, 32],
-	"textures": {
-		"0": "ashihara:block/water_field",
-		"particle": "minecraft:block/dirt"
-	},
-	"elements": [
-		{
-			"from": [0, 0, 0],
-			"to": [16, 8, 16],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 15]},
-			"faces": {
-				"north": {"uv": [10.6655, 7.9965, 15.99817, 15.993], "texture": "#0"},
-				"east": {"uv": [10.66633, 7.999, 15.99917, 15.9955], "texture": "#0"},
-				"south": {"uv": [10.66633, 7.999, 15.99917, 15.9955], "texture": "#0"},
-				"west": {"uv": [10.66633, 7.999, 15.99917, 15.9955], "texture": "#0"},
-				"up": {"uv": [5.33283, 0, 10.6655, 15.9985], "texture": "#0"},
-				"down": {"uv": [10.66633, 0, 15.99917, 15.9985], "texture": "#0"}
-			}
-		}
-	]
+  "credit": "Made with Blockbench",
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "texture_size": [
+    96,
+    32
+  ],
+  "textures": {
+    "0": "ashihara:block/water_field",
+    "particle": "minecraft:block/dirt"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        8,
+        16
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          8,
+          8,
+          15
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            10.6655,
+            7.9965,
+            15.99817,
+            15.993
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            10.66633,
+            7.999,
+            15.99917,
+            15.9955
+          ],
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            10.66633,
+            7.999,
+            15.99917,
+            15.9955
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            10.66633,
+            7.999,
+            15.99917,
+            15.9955
+          ],
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            5.33283,
+            0,
+            10.6655,
+            15.9985
+          ],
+          "texture": "#0"
+        },
+        "down": {
+          "uv": [
+            10.66633,
+            0,
+            15.99917,
+            15.9985
+          ],
+          "texture": "#0"
+        }
+      }
+    }
+  ]
 }

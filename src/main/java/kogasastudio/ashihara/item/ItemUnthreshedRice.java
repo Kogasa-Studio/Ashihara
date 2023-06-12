@@ -16,23 +16,29 @@ import java.util.Objects;
 
 import static kogasastudio.ashihara.Ashihara.ASHIHARA;
 
-public class ItemUnthreshedRice extends Item {
-    public ItemUnthreshedRice() {
+public class ItemUnthreshedRice extends Item
+{
+    public ItemUnthreshedRice()
+    {
         super(new Properties().tab(ASHIHARA));
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext context) {
+    public InteractionResult useOn(UseOnContext context)
+    {
         ItemStack item = context.getItemInHand();
         Player player = context.getPlayer();
         Level worldIn = context.getLevel();
         BlockPos pos = context.getClickedPos().below();
         Direction facing = context.getClickedFace();
-        if (!item.isEmpty() && Objects.requireNonNull(player).mayUseItemAt(pos.relative(facing), facing, item)) {
+        if (!item.isEmpty() && Objects.requireNonNull(player).mayUseItemAt(pos.relative(facing), facing, item))
+        {
             BlockState state = worldIn.getBlockState(pos.above());
-            if (state.getBlock() == Blocks.FARMLAND && worldIn.getBlockState(pos.above(2)).getBlock() == Blocks.AIR) {
+            if (state.getBlock() == Blocks.FARMLAND && worldIn.getBlockState(pos.above(2)).getBlock() == Blocks.AIR)
+            {
                 worldIn.setBlockAndUpdate(pos.above(2), BlockRegistryHandler.IMMATURE_RICE.get().defaultBlockState());
-                if (!player.isCreative()) {
+                if (!player.isCreative())
+                {
                     item.shrink(1);
                 }
                 return InteractionResult.SUCCESS;

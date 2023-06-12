@@ -1,23 +1,89 @@
 {
-	"credit": "Made with Blockbench",
-	"parent": "minecraft:block/block",
-	"textures": {
-		"1": "ashihara:block/white_mud_wall",
-		"particle": "ashihara:block/woodcrafts/oak_fence"
-	},
-	"elements": [
-		{
-			"from": [7, 8, 0],
-			"to": [9, 12, 16],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 6, 8]},
-			"faces": {
-				"north": {"uv": [0, 4, 2, 8], "texture": "#1"},
-				"east": {"uv": [0, 4, 16, 8], "texture": "#1"},
-				"south": {"uv": [0, 4, 2, 8], "texture": "#1"},
-				"west": {"uv": [0, 4, 16, 8], "texture": "#1"},
-				"up": {"uv": [0, 0, 16, 2], "rotation": 270, "texture": "#1"},
-				"down": {"uv": [0, 0, 16, 2], "rotation": 90, "texture": "#1"}
-			}
-		}
-	]
+  "credit": "Made with Blockbench",
+  "parent": "minecraft:block/block",
+  "textures": {
+    "1": "ashihara:block/white_mud_wall",
+    "particle": "ashihara:block/woodcrafts/oak_fence"
+  },
+  "elements": [
+    {
+      "from": [
+        7,
+        8,
+        0
+      ],
+      "to": [
+        9,
+        12,
+        16
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          8,
+          6,
+          8
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            4,
+            2,
+            8
+          ],
+          "texture": "#1"
+        },
+        "east": {
+          "uv": [
+            0,
+            4,
+            16,
+            8
+          ],
+          "texture": "#1"
+        },
+        "south": {
+          "uv": [
+            0,
+            4,
+            2,
+            8
+          ],
+          "texture": "#1"
+        },
+        "west": {
+          "uv": [
+            0,
+            4,
+            16,
+            8
+          ],
+          "texture": "#1"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "rotation": 270,
+          "texture": "#1"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ],
+          "rotation": 90,
+          "texture": "#1"
+        }
+      }
+    }
+  ]
 }

@@ -46,10 +46,12 @@ import java.util.UUID;
 import static kogasastudio.ashihara.utils.AshiharaTags.CEREALS;
 import static kogasastudio.ashihara.utils.AshiharaTags.CEREAL_PROCESSED;
 
-public class BlockMortar extends Block implements EntityBlock {
+public class MortarBlock extends Block implements EntityBlock
+{
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
-    public BlockMortar() {
+    public MortarBlock()
+    {
         super
                 (
                         Properties.of(Material.WOOD)
@@ -61,20 +63,25 @@ public class BlockMortar extends Block implements EntityBlock {
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context)
+    {
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
         builder.add(FACING);
     }
 
     @Override
-    public void playerDestroy(Level worldIn, Player player, BlockPos pos, BlockState state, BlockEntity te, ItemStack stack) {
-        if (te instanceof MortarTE) {
+    public void playerDestroy(Level worldIn, Player player, BlockPos pos, BlockState state, BlockEntity te, ItemStack stack)
+    {
+        if (te instanceof MortarTE)
+        {
             NonNullList<ItemStack> stacks = NonNullList.create();
-            for (int i = 0; i < ((MortarTE) te).contents.getSlots(); i += 1) {
+            for (int i = 0; i < ((MortarTE) te).contents.getSlots(); i += 1)
+            {
                 ItemStack stackI = ((MortarTE) te).contents.getStackInSlot(i);
                 if (!stackI.isEmpty()) stacks.add(stackI);
             }
@@ -84,7 +91,8 @@ public class BlockMortar extends Block implements EntityBlock {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+    {
         VoxelShape bottom_1 = box(3.0d, 0.0d, 3.0d, 13.0d, 2.0d, 13.0d);
         VoxelShape bottom_2 = box(2.0d, 2.0d, 2.0d, 14.0d, 4.0d, 14.0d);
         VoxelShape n = box(1.5d, 4.0d, 1.5d, 14.5d, 16.0d, 3.5d);
@@ -95,19 +103,23 @@ public class BlockMortar extends Block implements EntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    {
         ItemStack stack = player.getItemInHand(handIn);
         MortarTE te = (MortarTE) worldIn.getBlockEntity(pos);
         if (te == null) return InteractionResult.FAIL;
 
         FluidTank tank = te.getTank().orElse(new FluidTank(0));
-        if (!stack.isEmpty() && FluidHelper.notifyFluidTankInteraction(player, handIn, stack, tank, worldIn, pos)) {
+        if (!stack.isEmpty() && FluidHelper.notifyFluidTankInteraction(player, handIn, stack, tank, worldIn, pos))
+        {
             player.getInventory().setChanged();
             te.notifyStateChanged();
             worldIn.sendBlockUpdated(pos, state, state, 3);
             return InteractionResult.SUCCESS;
-        } else if (handIn.equals(InteractionHand.MAIN_HAND)) {
-            if (stack.getItem().equals(ItemRegistryHandler.KOISHI.get())) {
+        } else if (handIn.equals(InteractionHand.MAIN_HAND))
+        {
+            if (stack.getItem().equals(ItemRegistryHandler.KOISHI.get()))
+            {
                 player.sendMessage
                         (
                                 new TranslatableComponent
@@ -125,18 +137,24 @@ public class BlockMortar extends Block implements EntityBlock {
                                 UUID.randomUUID()
                         );
             }
-            if (!player.isShiftKeyDown() && te.notifyInteraction(stack, worldIn, pos, player)) {
+            if (!player.isShiftKeyDown() && te.notifyInteraction(stack, worldIn, pos, player))
+            {
                 boolean isPowder = stack.is(CEREALS) || stack.is(CEREAL_PROCESSED);
                 boolean isTool = stack.getItem().equals(ItemRegistryHandler.PESTLE.get()) || stack.getItem() instanceof ItemOtsuchi;
-                if (!te.isWorking && !isTool) {
-                    if (isPowder) {
+                if (!te.isWorking && !isTool)
+                {
+                    if (isPowder)
+                    {
                         worldIn.playSound(player, pos, SoundEvents.SAND_PLACE, SoundSource.BLOCKS, 1.0f, 1.0f);
                     }
-                } else if (isTool) {
+                } else if (isTool)
+                {
                     worldIn.playSound(player, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
-                    if (te.recipeType == 0) {
+                    if (te.recipeType == 0)
+                    {
                         Random rand = worldIn.getRandom();
-                        for (int i = 0; i < 12; i += 1) {
+                        for (int i = 0; i < 12; i += 1)
+                        {
                             worldIn.addParticle
                                     (
                                             new GenericParticleData(new Vec3(0, 0, 0), 0, ParticleRegistryHandler.RICE.get()),
@@ -147,11 +165,13 @@ public class BlockMortar extends Block implements EntityBlock {
                                     );
                         }
                     }
-                } else {
+                } else
+                {
                     worldIn.playSound(player, pos, SoundEvents.ARMOR_EQUIP_GENERIC, SoundSource.BLOCKS, 1.0f, 1.0f);
                 }
                 worldIn.sendBlockUpdated(pos, state, state, 3);
-            } else if (!worldIn.isClientSide()) {
+            } else if (!worldIn.isClientSide())
+            {
                 NetworkHooks.openGui((ServerPlayer) player, te, (FriendlyByteBuf packerBuffer) -> packerBuffer.writeBlockPos(te.getBlockPos()));
             }
             return InteractionResult.SUCCESS;
@@ -161,7 +181,8 @@ public class BlockMortar extends Block implements EntityBlock {
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState)
+    {
         return new MortarTE(pPos, pState);
     }
 }

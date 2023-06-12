@@ -16,23 +16,29 @@ import java.util.Objects;
 
 import static kogasastudio.ashihara.Ashihara.ASHIHARA;
 
-public class ItemRiceSeedling extends Item {
-    public ItemRiceSeedling() {
+public class ItemRiceSeedling extends Item
+{
+    public ItemRiceSeedling()
+    {
         super(new Properties().tab(ASHIHARA));
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext context) {
+    public InteractionResult useOn(UseOnContext context)
+    {
         ItemStack item = context.getItemInHand();
         Player player = context.getPlayer();
         Level worldIn = context.getLevel();
         BlockPos pos = context.getClickedPos().below();
         Direction facing = context.getClickedFace();
-        if (!item.isEmpty() && Objects.requireNonNull(player).mayUseItemAt(pos.relative(facing), facing, item)) {
+        if (!item.isEmpty() && Objects.requireNonNull(player).mayUseItemAt(pos.relative(facing), facing, item))
+        {
             BlockState state = worldIn.getBlockState(pos.above());
-            if (state.is(BlockRegistryHandler.WATER_FIELD.get()) && worldIn.getBlockState(pos.above(2)).getBlock() == Blocks.AIR) {
+            if (state.is(BlockRegistryHandler.WATER_FIELD.get()) && worldIn.getBlockState(pos.above(2)).getBlock() == Blocks.AIR)
+            {
                 worldIn.setBlockAndUpdate(pos.above(2), BlockRegistryHandler.RICE_CROP.get().defaultBlockState());
-                if (!player.getAbilities().instabuild) {
+                if (!player.getAbilities().instabuild)
+                {
                     item.shrink(1);
                 }
                 return InteractionResult.SUCCESS;
