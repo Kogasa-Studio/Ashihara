@@ -2,10 +2,11 @@ package kogasastudio.ashihara.item;
 
 import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.block.tileentities.IFluidHandler;
-import kogasastudio.ashihara.block.trees.CherryBlossomTree;
+import kogasastudio.ashihara.block.trees.CherryBlossomTreeGrower;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
@@ -27,12 +28,7 @@ public class ItemMinatoAqua extends Item
 {
     public ItemMinatoAqua()
     {
-        super
-                (
-                        new Properties()
-                                .tab(CreativeModeTab.TAB_MATERIALS)
-                                .food(new FoodProperties.Builder().nutrition(8).build())
-                );
+        super(new Properties().food(new FoodProperties.Builder().nutrition(8).build()));
     }
 
     @Override
@@ -44,8 +40,8 @@ public class ItemMinatoAqua extends Item
         Player playerIn = context.getPlayer();
         ItemStack item = context.getItemInHand();
         Direction direction = context.getClickedFace();
-        var tree = new CherryBlossomTree();
-        Random rand = context.getLevel().getRandom();
+        var tree = new CherryBlossomTreeGrower();
+        RandomSource rand = context.getLevel().getRandom();
 
         if (te instanceof IFluidHandler)
         {

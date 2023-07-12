@@ -133,7 +133,7 @@ public class MillRecipes extends ModGenRecipes
         MillRecipe recipe = new MillRecipe(new ResourceLocation(Ashihara.MODID, name),
                 "test_group", inputCostsIn, NonNullList.of(ItemStack.EMPTY, outputs),
                 inFluid, outFluid, roundIn, roundTicksIn, expIn);
-        recipe.type = RecipeSerializers.MILL.get().getRegistryName().toString();
+        recipe.type = RecipeSerializers.MILL.getId().getPath();
         addRecipe(recipe.getId(), baseRecipe(recipe), "mill");
     }
 }

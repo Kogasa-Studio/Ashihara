@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -19,7 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -38,7 +39,8 @@ public class TatamiBlock extends Block
     {
         super
                 (
-                        Properties.of(Material.BAMBOO_SAPLING)
+                        Properties.of()
+                                .mapColor(MapColor.COLOR_YELLOW)
                                 .strength(0.3F)
                                 .sound(SoundType.BAMBOO_SAPLING)
                 );
@@ -114,9 +116,10 @@ public class TatamiBlock extends Block
             {
                 worldIn.setBlockAndUpdate(pos, state.setValue(LOCKED, !state.getValue(LOCKED)));
                 worldIn.playSound(player, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
+                RandomSource random = worldIn.getRandom();
                 for (byte b = 0; b < 12; b += 1)
                 {
-                    worldIn.addParticle(new GenericParticleData(new Vec3(0, 0, 0), 0, ParticleRegistryHandler.RICE.get()), (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, RANDOM.nextFloat() / 2.0F, 5.0E-5D, RANDOM.nextFloat() / 2.0F);
+                    worldIn.addParticle(new GenericParticleData(new Vec3(0, 0, 0), 0, ParticleRegistryHandler.RICE.get()), (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, random.nextFloat() / 2.0F, 5.0E-5D, random.nextFloat() / 2.0F);
                 }
                 return InteractionResult.SUCCESS;
             } else if (player.getItemInHand(handIn).getItem() instanceof ShearsItem && !player.isShiftKeyDown())

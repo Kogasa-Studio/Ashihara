@@ -7,6 +7,7 @@ import kogasastudio.ashihara.interaction.recipes.register.RecipeSerializers;
 import kogasastudio.ashihara.interaction.recipes.register.RecipeTypes;
 import kogasastudio.ashihara.utils.CuttingBoardToolType;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -62,7 +63,7 @@ public class CuttingBoardRecipe extends BaseRecipe
     }
 
     @Override
-    public ItemStack getResultItem()
+    public ItemStack getResultItem(RegistryAccess registryAccess)
     {
         return this.result.get(0);
     }

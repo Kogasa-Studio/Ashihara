@@ -9,10 +9,11 @@ import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -29,7 +30,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -40,8 +41,6 @@ import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.Random;
-import java.util.UUID;
 
 import static kogasastudio.ashihara.utils.AshiharaTags.CEREALS;
 import static kogasastudio.ashihara.utils.AshiharaTags.CEREAL_PROCESSED;
@@ -54,7 +53,8 @@ public class MortarBlock extends Block implements EntityBlock
     {
         super
                 (
-                        Properties.of(Material.WOOD)
+                        Properties.of()
+                                .mapColor(MapColor.WOOD)
                                 .strength(3.0F)
                                 // todo tag .harvestTool(ToolType.AXE)
                                 .sound(SoundType.WOOD)
@@ -120,9 +120,9 @@ public class MortarBlock extends Block implements EntityBlock
         {
             if (stack.getItem().equals(ItemRegistryHandler.KOISHI.get()))
             {
-                player.sendMessage
+                player.sendSystemMessage
                         (
-                                new TranslatableComponent
+                                Component.translatable
                                         (
                                                 "\n{\n    te_contents: " + te.contents.toString()
                                                         + ";\n    te_contained_output: " + te.output.toString()
@@ -133,8 +133,7 @@ public class MortarBlock extends Block implements EntityBlock
                                                         + ";\n    te_sequence: " + Arrays.toString(te.sequence)
                                                         + ";\n    te_next_step: " + te.nextStep
                                                         + ";\n    te_working_statement_code: " + te.isWorking
-                                        ),
-                                UUID.randomUUID()
+                                        )
                         );
             }
             if (!player.isShiftKeyDown() && te.notifyInteraction(stack, worldIn, pos, player))
@@ -152,7 +151,7 @@ public class MortarBlock extends Block implements EntityBlock
                     worldIn.playSound(player, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
                     if (te.recipeType == 0)
                     {
-                        Random rand = worldIn.getRandom();
+                        RandomSource rand = worldIn.getRandom();
                         for (int i = 0; i < 12; i += 1)
                         {
                             worldIn.addParticle
@@ -172,7 +171,7 @@ public class MortarBlock extends Block implements EntityBlock
                 worldIn.sendBlockUpdated(pos, state, state, 3);
             } else if (!worldIn.isClientSide())
             {
-                NetworkHooks.openGui((ServerPlayer) player, te, (FriendlyByteBuf packerBuffer) -> packerBuffer.writeBlockPos(te.getBlockPos()));
+                NetworkHooks.openScreen((ServerPlayer) player, te, (FriendlyByteBuf packerBuffer) -> packerBuffer.writeBlockPos(te.getBlockPos()));
             }
             return InteractionResult.SUCCESS;
         }

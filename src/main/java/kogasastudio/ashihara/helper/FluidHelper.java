@@ -8,10 +8,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.common.SoundActions;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
@@ -37,7 +38,7 @@ public class FluidHelper
 
     public static ItemStack fillContainer(ItemStack itemStack, Fluid fluid)
     {
-        if (fluid != null && !itemStack.isEmpty() && CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY != null && FluidUtil.getFluidHandler(itemStack) != null)
+        if (fluid != null && !itemStack.isEmpty() && ForgeCapabilities.FLUID_HANDLER_ITEM != null && FluidUtil.getFluidHandler(itemStack) != null)
         {
             ItemStack itemStack1 = itemStack.copy();
             FluidUtil.getFluidHandler(itemStack1).ifPresent
@@ -106,7 +107,7 @@ public class FluidHelper
             {
                 if (!fluidTank.isEmpty())
                 {
-                    SoundEvent event = fluidTank.getFluid().getFluid().getAttributes().getFillSound();
+                    SoundEvent event = fluidTank.getFluid().getFluid().getFluidType().getSound(SoundActions.BUCKET_FILL);
                     int filled = handler.fill(fluidTank.getFluid(), player.isCreative() ? SIMULATE : EXECUTE);
                     ItemStack container = handler.getContainer();
                     if (filled > 0)
@@ -170,7 +171,7 @@ public class FluidHelper
                     {
                         if (world != null)
                         {
-                            SoundEvent event = drained.getFluid().getAttributes().getEmptySound();
+                            SoundEvent event = drained.getFluid().getFluidType().getSound(SoundActions.BUCKET_EMPTY);
                             world.playSound(null, pos, event, BLOCKS, 1.0f, 1.0f);
                         }
                         fluidTank.fill(drained, EXECUTE);
@@ -212,7 +213,7 @@ public class FluidHelper
                 if (!outStack.isEmpty()) return false;
                 if (!fluidTank.isEmpty())
                 {
-                    SoundEvent event = fluidTank.getFluid().getFluid().getAttributes().getFillSound();
+                    SoundEvent event = fluidTank.getFluid().getFluid().getFluidType().getSound(SoundActions.BUCKET_FILL);
                     int filled = handler.fill(fluidTank.getFluid(), EXECUTE);
                     ItemStack container = handler.getContainer();
                     if (filled > 0)
@@ -238,7 +239,7 @@ public class FluidHelper
                 sim.drain(new FluidStack(fluidInItem, filledAmount), EXECUTE);
                 boolean outEmpty = outStack.isEmpty();
                 boolean canOutStack =
-                        storedAmount == filledAmount && sim.getContainer().sameItem(outStack) && outStack.getCount() + 1 <= outStack.getMaxStackSize();
+                        storedAmount == filledAmount && sim.getContainer().equals(outStack, false) && outStack.getCount() + 1 <= outStack.getMaxStackSize();
                 if (!(outEmpty || canOutStack)) return false;
                 FluidStack drained = handler.drain(new FluidStack(fluidInItem, filledAmount), EXECUTE);
                 if (!drained.isEmpty())
@@ -254,7 +255,7 @@ public class FluidHelper
                     }
                     if (world != null)
                     {
-                        SoundEvent event = drained.getFluid().getAttributes().getEmptySound();
+                        SoundEvent event = drained.getFluid().getFluidType().getSound(SoundActions.BUCKET_EMPTY);
                         world.playSound(null, pos, event, BLOCKS, 1.0f, 1.0f);
                     }
                     fluidTank.fill(drained, EXECUTE);

@@ -55,11 +55,11 @@ public class RiceParticle extends TextureSheetParticle
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class RiceParticleFactory implements ParticleProvider<GenericParticleData>
+    public static class RiceParticleProvider implements ParticleProvider<GenericParticleData>
     {
         private final SpriteSet spriteSet;
 
-        public RiceParticleFactory(SpriteSet spriteSet)
+        public RiceParticleProvider(SpriteSet spriteSet)
         {
             this.spriteSet = spriteSet;
         }

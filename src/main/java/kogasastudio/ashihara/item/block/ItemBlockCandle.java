@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-import static kogasastudio.ashihara.Ashihara.BUILDING_BLOCKS;
 import static kogasastudio.ashihara.block.BlockRegistryHandler.CANDLE;
 import static kogasastudio.ashihara.block.tileentities.TERegistryHandler.CANDLE_TE;
 import static net.minecraft.world.level.block.Blocks.AIR;
@@ -22,7 +21,7 @@ public class ItemBlockCandle extends BlockItem
 {
     public ItemBlockCandle()
     {
-        super(CANDLE.get(), new Properties().tab(BUILDING_BLOCKS));
+        super(CANDLE.get(), new Properties());
     }
 
     @Override

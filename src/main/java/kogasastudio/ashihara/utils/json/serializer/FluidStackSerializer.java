@@ -51,7 +51,7 @@ public class FluidStackSerializer implements BaseSerializer<FluidStack>
     public JsonElement serialize(FluidStack src, Type typeOfSrc, JsonSerializationContext context)
     {
         var result = new JsonObject();
-        result.addProperty("fluid", src.getFluid().getRegistryName().toString());
+        result.addProperty("fluid", src.getTranslationKey());
         result.addProperty("amount", src.getAmount());
 
         if (src.getTag() != null)

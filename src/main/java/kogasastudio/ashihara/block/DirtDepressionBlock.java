@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -24,7 +24,8 @@ public class DirtDepressionBlock extends Block implements SimpleWaterloggedBlock
     {
         super
                 (
-                        Properties.of(Material.DIRT)
+                        Properties.of()
+                                .mapColor(MapColor.DIRT)
                                 .strength(0.5F)
                                 // todo tag .harvestTool(ToolType.SHOVEL)
                                 // todo tag .harvestLevel(2)

@@ -1,8 +1,8 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.block.trees.CherryBlossomTree;
-import kogasastudio.ashihara.block.trees.RedMapleTree;
+import kogasastudio.ashihara.block.trees.CherryBlossomTreeGrower;
+import kogasastudio.ashihara.block.trees.RedMapleTreeGrower;
 import kogasastudio.ashihara.block.woodcrafts.*;
 import kogasastudio.ashihara.client.particles.GenericParticleType;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -29,10 +29,10 @@ public class BlockRegistryHandler
     public static final RegistryObject<Block> RICE_CROP = BLOCKS.register("rice_crop", RiceCropBlock::new);
     public static final RegistryObject<Block> DIRT_DEPRESSION = BLOCKS.register("dirt_depression", DirtDepressionBlock::new);
     public static final RegistryObject<Block> TETSUSENCHI = BLOCKS.register("tetsusenchi", TetsusenchiBlock::new);
-    public static final RegistryObject<Block> CHERRY_SAPLING = BLOCKS.register("cherry_sapling", () -> new SaplingBlock(new CherryBlossomTree(), BlockBehaviour.Properties.of(Material.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
-    public static final RegistryObject<Block> POTTED_CHERRY_SAPLING = BLOCKS.register("potted_cherry_sapling", () -> new FlowerPotBlock(BlockRegistryHandler.CHERRY_SAPLING.get(), BlockBehaviour.Properties.of(Material.DECORATION).instabreak().noOcclusion()));
-    public static final RegistryObject<Block> RED_MAPLE_SAPLING = BLOCKS.register("red_maple_sapling", () -> new SaplingBlock(new RedMapleTree(), BlockBehaviour.Properties.of(Material.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
-    public static final RegistryObject<Block> POTTED_RED_MAPLE_SAPLING = BLOCKS.register("potted_red_maple_sapling", () -> new FlowerPotBlock(BlockRegistryHandler.RED_MAPLE_SAPLING.get(), BlockBehaviour.Properties.of(Material.DECORATION).instabreak().noOcclusion()));
+    public static final RegistryObject<Block> CHERRY_SAPLING = BLOCKS.register("cherry_sapling", () -> new SaplingBlock(new CherryBlossomTreeGrower(), BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
+    public static final RegistryObject<Block> POTTED_CHERRY_SAPLING = BLOCKS.register("potted_cherry_sapling", () -> new FlowerPotBlock(BlockRegistryHandler.CHERRY_SAPLING.get(), BlockBehaviour.Properties.of().instabreak().noOcclusion()));
+    public static final RegistryObject<Block> RED_MAPLE_SAPLING = BLOCKS.register("red_maple_sapling", () -> new SaplingBlock(new RedMapleTreeGrower(), BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
+    public static final RegistryObject<Block> POTTED_RED_MAPLE_SAPLING = BLOCKS.register("potted_red_maple_sapling", () -> new FlowerPotBlock(BlockRegistryHandler.RED_MAPLE_SAPLING.get(), BlockBehaviour.Properties.of().instabreak().noOcclusion()));
     public static final RegistryObject<Block> MORTAR = BLOCKS.register("mortar", MortarBlock::new);
     public static final RegistryObject<Block> IMMATURE_RICE = BLOCKS.register("immature_rice", ImmatureRiceCropBlock::new);
     public static final RegistryObject<Block> CHRYSANTHEMUM = BLOCKS.register("chrysanthemum", ChrysanthemumBushBlock::new);
@@ -179,7 +179,7 @@ public class BlockRegistryHandler
     public static final RegistryObject<Block> RED_KAWAKI = BLOCKS.register("red_kawaki", () -> new KawakiBlock(AshiharaWoodTypes.RED));
 
     public static final RegistryObject<LiquidBlock> SOY_MILK_BLOCK = BLOCKS.register("soy_milk", () ->
-            new LiquidBlock(FluidRegistryHandler.SOY_MILK, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
+            new LiquidBlock(FluidRegistryHandler.SOY_MILK, Block.Properties.of().mapColor(MapColor.SNOW).noCollission().strength(100.0F).noLootTable()));
     public static final RegistryObject<LiquidBlock> OIL_BLOCK = BLOCKS.register("oil", () ->
-            new LiquidBlock(FluidRegistryHandler.OIL, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
+            new LiquidBlock(FluidRegistryHandler.OIL, Block.Properties.of().mapColor(MapColor.COLOR_YELLOW).noCollission().strength(100.0F).noLootTable()));
 }

@@ -1,20 +1,22 @@
 package kogasastudio.ashihara.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 
-import java.util.Random;
-
-public class HydrangeaBushBlock extends Block implements BonemealableBlock
+public class HydrangeaBushBlock extends BushBlock implements BonemealableBlock
 {
     public static final BooleanProperty BLOOMED = BooleanProperty.create("bloomed");
 
@@ -22,7 +24,8 @@ public class HydrangeaBushBlock extends Block implements BonemealableBlock
     {
         super
                 (
-                        Properties.of(Material.LEAVES)
+                        Properties.of()
+                                .mapColor(MapColor.PLANT)
                                 .strength(0.05F)
                                 .sound(SoundType.GRASS)
                                 .noOcclusion()
@@ -45,7 +48,7 @@ public class HydrangeaBushBlock extends Block implements BonemealableBlock
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random)
+    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random)
     {
         if (random.nextInt(3) == 1 && this.isValidBonemealTarget(worldIn, pos, state, false))
         {
@@ -60,20 +63,20 @@ public class HydrangeaBushBlock extends Block implements BonemealableBlock
     }
 
     @Override
-    public boolean isValidBonemealTarget(BlockGetter worldIn, BlockPos pos, BlockState state, boolean isClient)
+    public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state, boolean isClient)
     {
         BlockState down = worldIn.getBlockState(pos);
-        return down.getMaterial() == Material.DIRT && !state.getValue(BLOOMED);
+        return down.getBlock().canSustainPlant(down, worldIn, pos, Direction.UP, this) && !state.getValue(BLOOMED);
     }
 
     @Override
-    public boolean isBonemealSuccess(Level worldIn, Random rand, BlockPos pos, BlockState state)
+    public boolean isBonemealSuccess(Level worldIn, RandomSource rand, BlockPos pos, BlockState state)
     {
         return !state.getValue(BLOOMED);
     }
 
     @Override
-    public void performBonemeal(ServerLevel worldIn, Random rand, BlockPos pos, BlockState state)
+    public void performBonemeal(ServerLevel worldIn, RandomSource rand, BlockPos pos, BlockState state)
     {
         worldIn.setBlockAndUpdate(pos, state.setValue(BLOOMED, true));
     }

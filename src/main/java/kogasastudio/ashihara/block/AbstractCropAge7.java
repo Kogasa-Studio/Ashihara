@@ -6,7 +6,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -28,7 +28,8 @@ public class AbstractCropAge7 extends CropBlock
     {
         super
                 (
-                        Properties.of(Material.PLANT)
+                        Properties.of()
+                                .mapColor(MapColor.PLANT)
                                 .noCollission()
                                 .randomTicks()
                                 .instabreak()

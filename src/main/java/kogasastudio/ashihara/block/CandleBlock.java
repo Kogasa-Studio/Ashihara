@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -25,7 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -33,8 +34,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Random;
 
 import static kogasastudio.ashihara.block.tileentities.TERegistryHandler.CANDLE_TE;
 import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
@@ -48,7 +47,8 @@ public class CandleBlock extends Block implements EntityBlock
     {
         super
                 (
-                        Properties.of(Material.TOP_SNOW)
+                        Properties.of()
+                                .mapColor(MapColor.SNOW)
                                 .strength(0.05F)
                                 .sound(SoundType.SNOW)
                                 .lightLevel(getLightValueLit(15))
@@ -100,7 +100,7 @@ public class CandleBlock extends Block implements EntityBlock
                 player.setItemInHand(handIn, new ItemStack(ItemRegistryHandler.CANDLE.get(), amount));
                 return InteractionResult.SUCCESS;
             }
-            Random random = worldIn.getRandom();
+            RandomSource random = worldIn.getRandom();
             Boolean instantState = worldIn.getBlockState(pos).getValue(LIT);
             worldIn.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
             worldIn.setBlockAndUpdate(pos, state.setValue(LIT, !instantState));
@@ -110,7 +110,7 @@ public class CandleBlock extends Block implements EntityBlock
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand)
+    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand)
     {
         if (stateIn.getValue(LIT))
         {

@@ -6,6 +6,7 @@ import kogasastudio.ashihara.interaction.recipes.base.BaseRecipe;
 import kogasastudio.ashihara.interaction.recipes.register.RecipeSerializers;
 import kogasastudio.ashihara.interaction.recipes.register.RecipeTypes;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -133,7 +134,7 @@ public class MillRecipe extends BaseRecipe
 
     //这个也没啥用
     @Override
-    public ItemStack getResultItem()
+    public ItemStack getResultItem(RegistryAccess registryAccess)
     {
         return output.size() > 0 ? this.output.get(0).copy() : ItemStack.EMPTY;
     }

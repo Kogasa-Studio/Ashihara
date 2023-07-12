@@ -3,6 +3,7 @@ package kogasastudio.ashihara.block;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -10,9 +11,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-
-import java.util.Random;
+import net.minecraft.world.level.material.MapColor;
 
 import static kogasastudio.ashihara.block.PaddyFieldBlock.LEVEL;
 
@@ -22,7 +21,8 @@ public class RiceCropBlock extends CropBlock
     {
         super
                 (
-                        Properties.of(Material.PLANT)
+                        Properties.of()
+                                .mapColor(MapColor.PLANT)
                                 .noCollission()
                                 .randomTicks()
                                 .instabreak()
@@ -31,7 +31,7 @@ public class RiceCropBlock extends CropBlock
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random)
+    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random)
     {
         if (!worldIn.isAreaLoaded(pos, 1))
         {
@@ -66,7 +66,7 @@ public class RiceCropBlock extends CropBlock
     }
 
     @Override
-    public boolean isValidBonemealTarget(BlockGetter worldIn, BlockPos pos, BlockState state, boolean isClient)
+    public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state, boolean isClient)
     {
         boolean flag = false;
         if (worldIn.getBlockState(pos.below()).is(BlockRegistryHandler.WATER_FIELD.get()))
@@ -83,7 +83,7 @@ public class RiceCropBlock extends CropBlock
     }
 
     @Override
-    public boolean isBonemealSuccess(Level worldIn, Random rand, BlockPos pos, BlockState state)
+    public boolean isBonemealSuccess(Level worldIn, RandomSource rand, BlockPos pos, BlockState state)
     {
         return this.isValidBonemealTarget(worldIn, pos, state, true);
     }

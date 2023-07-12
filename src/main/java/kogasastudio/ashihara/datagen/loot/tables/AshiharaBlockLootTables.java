@@ -1,20 +1,8 @@
-package kogasastudio.ashihara.datagen;
+package kogasastudio.ashihara.datagen.loot.tables;
 
 import kogasastudio.ashihara.block.BlockRegistryHandler;
-import kogasastudio.ashihara.item.ItemRegistryHandler;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
-import net.minecraft.world.level.storage.loot.predicates.MatchTool;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -22,16 +10,16 @@ import java.util.function.Supplier;
 /**
  * @author DustW
  **/
-public class ModLootTables extends BaseLootTableProvider
+public class AshiharaBlockLootTables extends BaseLootTableProvider
 {
 
-    public ModLootTables(DataGenerator dataGeneratorIn)
+    public AshiharaBlockLootTables()
     {
-        super(dataGeneratorIn);
+        super();
     }
 
     @Override
-    protected void addTables()
+    protected void generate()
     {
         leaves(BlockRegistryHandler.MAPLE_LEAVES_RED, BlockRegistryHandler.RED_MAPLE_SAPLING);
         leaves(BlockRegistryHandler.CHERRY_BLOSSOM, BlockRegistryHandler.CHERRY_SAPLING/*, builder ->

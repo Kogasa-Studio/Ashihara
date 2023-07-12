@@ -6,10 +6,9 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-
-import java.util.Random;
 
 import static kogasastudio.ashihara.helper.MathHelper.simplifyDouble;
 
@@ -39,7 +38,7 @@ public class CandleTE extends AshiharaMachineTE
         return true;
     }
 
-    public boolean addCurrentCandle(double x, double z, Random rand)
+    public boolean addCurrentCandle(double x, double z, RandomSource rand)
     {
         return this.addCurrentCandle(x, 0 - (0.4d * rand.nextDouble()), z);
     }

@@ -10,15 +10,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import static kogasastudio.ashihara.Ashihara.ASHIHARA;
-
 public class ItemSujikaButo extends ArmorItem
 {
     private static final ResourceLocation TEXTURE = new ResourceLocation(Ashihara.MODID, "textures/armors/sujikabuto.png");
 
     public ItemSujikaButo()
     {
-        super(ArmorMaterials.NETHERITE, EquipmentSlot.HEAD, new Properties().tab(ASHIHARA));
+        super(ArmorMaterials.NETHERITE, Type.HELMET, new Properties());
     }
 
     // todo 这个方法没了？

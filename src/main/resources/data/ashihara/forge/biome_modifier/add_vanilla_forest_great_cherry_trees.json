@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#minecraft:is_forest",
+  "features": "ashihara:vanilla_forest_great_cherry_trees",
+  "step": "vegetal_decoration"
+}

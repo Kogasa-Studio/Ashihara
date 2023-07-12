@@ -6,7 +6,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 
 public class SimplePlanksBlock extends Block
 {
@@ -14,7 +14,8 @@ public class SimplePlanksBlock extends Block
     {
         super
                 (
-                        Properties.of(Material.WOOD)
+                        Properties.of()
+                                .mapColor(MapColor.WOOD)
                                 .strength(2.0F, 3.0F)
                                 .sound(SoundType.WOOD)
                 );

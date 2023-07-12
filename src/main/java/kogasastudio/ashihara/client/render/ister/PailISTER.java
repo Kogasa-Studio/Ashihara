@@ -3,8 +3,6 @@ package kogasastudio.ashihara.client.render.ister;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.block.tileentities.PailTE;
 import kogasastudio.ashihara.client.models.PailItemModel;
@@ -14,15 +12,18 @@ import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
+import org.joml.Matrix4f;
 
+import static com.mojang.math.Axis.XP;
 import static kogasastudio.ashihara.helper.RenderHelper.buildMatrix;
 
 public class PailISTER extends BlockEntityWithoutLevelRenderer
@@ -37,7 +38,7 @@ public class PailISTER extends BlockEntityWithoutLevelRenderer
     }
 
     @Override
-    public void renderByItem(ItemStack stack, ItemTransforms.TransformType p_239207_2_, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay)
+    public void renderByItem(ItemStack stack, ItemDisplayContext context, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay)
     {
         ResourceLocation PAIL = new ResourceLocation("ashihara:textures/block/pail_multiple.png");
 
@@ -60,7 +61,7 @@ public class PailISTER extends BlockEntityWithoutLevelRenderer
                                                 .getBlockRenderer()
                                                 .getBlockModelShaper()
                                                 .getParticleIcon(fluid.getFluid().defaultFluidState().createLegacyBlock());
-                                int color = fluid.getFluid().getAttributes().getColor();
+                                int color = IClientFluidTypeExtensions.of(fluid.getFluid()).getTintColor();
                                 float height = ((float) fluid.getAmount() / bucket.getCapacity()) * 0.5f;
 
                                 matrixStack.pushPose();
@@ -80,7 +81,7 @@ public class PailISTER extends BlockEntityWithoutLevelRenderer
                 );
         matrixStack.pushPose();
         matrixStack.translate(0.5f, 1.5f, 0.5f);
-        matrixStack.mulPose(Vector3f.XP.rotationDegrees(180));
+        matrixStack.mulPose(XP.rotationDegrees(180));
         model.renderToBuffer(matrixStack, builder1, combinedLight, combinedOverlay, 1.0f, 1.0f, 1.0f, 1.0f);
         matrixStack.popPose();
     }

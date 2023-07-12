@@ -7,14 +7,13 @@ import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -25,18 +24,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.UUID;
 
 import static kogasastudio.ashihara.item.ItemRegistryHandler.MINATO_AQUA;
 import static kogasastudio.ashihara.item.ItemRegistryHandler.PAIL;
@@ -52,7 +48,8 @@ public class PailBlock extends Block implements EntityBlock
     {
         super
                 (
-                        Properties.of(Material.WOOD)
+                        Properties.of()
+                                .mapColor(MapColor.WOOD)
                                 .strength(3.0F)
                                 // todo tag .harvestTool(ToolType.AXE)
                                 .sound(SoundType.WOOD)
@@ -102,10 +99,7 @@ public class PailBlock extends Block implements EntityBlock
             FluidStack fluid = te.getTank().orElse(new FluidTank(0)).getFluid();
             if (!fluid.isEmpty())
             {
-                FluidAttributes fluidAttributes = fluid.getFluid().getAttributes();
-                ambientLight = Math.max(ambientLight, level instanceof BlockAndTintGetter btg
-                        ? fluidAttributes.getLuminosity(btg, pos)
-                        : fluidAttributes.getLuminosity(fluid));
+                ambientLight = fluid.getFluid().getFluidType().getLightLevel();
             }
         }
         return ambientLight;
@@ -153,20 +147,20 @@ public class PailBlock extends Block implements EntityBlock
         {
             if (!worldIn.isClientSide())
             {
-                player.sendMessage
+                player.sendSystemMessage
                         (
-                                new TranslatableComponent
+                                Component.translatable
                                         (
-                                                "\n{\n    fluid: " + bucket.getFluid().getFluid().getRegistryName()
+                                                "\n{\n    fluid: " + bucket.getFluid().getDisplayName()
                                                         + ";\n    amount: " + bucket.getFluidAmount() + ";\n}"
-                                        ), UUID.randomUUID()
+                                        )
                         );
             }
             return InteractionResult.SUCCESS;
         }
         if (stack.getItem().equals(MINATO_AQUA.get()) && !worldIn.isClientSide())
         {
-            player.sendMessage(new TranslatableComponent("Debu!"), UUID.randomUUID());
+            player.sendSystemMessage(Component.literal("Debu!"));
             return InteractionResult.SUCCESS;
         }
 

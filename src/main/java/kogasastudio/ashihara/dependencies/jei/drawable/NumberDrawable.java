@@ -1,10 +1,10 @@
 package kogasastudio.ashihara.dependencies.jei.drawable;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.gui.drawable.IDrawable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
 
 import java.util.function.Supplier;
 
@@ -35,8 +35,8 @@ public class NumberDrawable implements IDrawable
     }
 
     @Override
-    public void draw(PoseStack poseStack, int xOffset, int yOffset)
+    public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset)
     {
-        font.drawShadow(poseStack, new TextComponent(numberSupplier.get().toString()), xOffset, yOffset, 0xFFFFFFFF);
+        guiGraphics.drawString(font, Component.translatable(numberSupplier.get().toString()), xOffset, yOffset, 0xFFFFFFFF);
     }
 }

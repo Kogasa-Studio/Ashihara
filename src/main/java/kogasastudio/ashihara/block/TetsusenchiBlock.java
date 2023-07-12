@@ -4,6 +4,7 @@ import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.sounds.SoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -18,12 +19,10 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import java.util.Random;
 
 public class TetsusenchiBlock extends Block
 {
@@ -33,7 +32,8 @@ public class TetsusenchiBlock extends Block
     {
         super
                 (
-                        Properties.of(Material.WOOD)
+                        Properties.of()
+                                .mapColor(MapColor.WOOD)
                                 .strength(2.0F)
                                 // todo tag .harvestTool(ToolType.AXE)
                                 .sound(SoundType.WOOD)
@@ -67,7 +67,7 @@ public class TetsusenchiBlock extends Block
         {
             if (!player.getCooldowns().isOnCooldown(item.getItem()))
             {
-                Random rand = worldIn.getRandom();
+                RandomSource rand = worldIn.getRandom();
                 worldIn.playSound(player, pos, SoundEvents.UNTHRESH.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
                 Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemRegistryHandler.STRAW.get()));
                 Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemRegistryHandler.PADDY.get(), rand.nextInt(2) + 1));

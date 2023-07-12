@@ -3,9 +3,8 @@ package kogasastudio.ashihara.world;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
 import net.minecraft.core.BlockPos;
-import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -20,19 +19,18 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlac
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.OptionalInt;
 
 public class WorldGenEventRegistryHandler
 {
     public static final DeferredRegister<ConfiguredFeature<?, ?>> CONFIGURED_FEATURE =
-            DeferredRegister.create(BuiltinRegistries.CONFIGURED_FEATURE.key(), Ashihara.MODID);
+            DeferredRegister.create(Registries.CONFIGURED_FEATURE.registry(), Ashihara.MODID);
 
     public static final DeferredRegister<PlacedFeature> PLACED_FEATURE =
-            DeferredRegister.create(BuiltinRegistries.PLACED_FEATURE.key(), Ashihara.MODID);
+            DeferredRegister.create(Registries.PLACED_FEATURE.registry(), Ashihara.MODID);
+
+    private static final PlacementModifier TREE_THRESHOLD = SurfaceWaterDepthFilter.forMaxDepth(0);
 
     public static final RegistryObject<ConfiguredFeature<?, ?>> FANCY_CHERRY =
             CONFIGURED_FEATURE.register
@@ -79,7 +77,7 @@ public class WorldGenEventRegistryHandler
                         (
                                 PlacementUtils.countExtra(baseAmount, extraProbability, extraAmount),
                                 InSquarePlacement.spread(),
-                                VegetationPlacements.TREE_THRESHOLD,
+                                TREE_THRESHOLD,
                                 PlacementUtils.HEIGHTMAP_OCEAN_FLOOR,
                                 PlacementUtils.filteredByBlockSurvival(BlockRegistryHandler.CHERRY_SAPLING.get()),
                                 BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(BlockRegistryHandler.CHERRY_SAPLING.get().defaultBlockState(), BlockPos.ZERO)),

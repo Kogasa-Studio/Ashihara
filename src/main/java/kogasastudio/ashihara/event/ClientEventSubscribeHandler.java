@@ -25,14 +25,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import java.util.Map;
-import java.util.Objects;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientEventSubscribeHandler
@@ -86,12 +85,12 @@ public class ClientEventSubscribeHandler
 
     //注册粒子
     @SubscribeEvent
-    public static void onParticleFactoryRegister(ParticleFactoryRegisterEvent event)
+    public static void onParticleFactoryRegister(RegisterParticleProvidersEvent event)
     {
         ParticleEngine manager = Minecraft.getInstance().particleEngine;
-        manager.register(ParticleRegistryHandler.RICE.get(), RiceParticle.RiceParticleFactory::new);
-        manager.register(ParticleRegistryHandler.SAKURA.get(), SakuraParticle.SakuraParticleFactory::new);
-        manager.register(ParticleRegistryHandler.MAPLE_LEAF.get(), MapleLeafParticle.MapleLeafParticleFactory::new);
+        manager.register(ParticleRegistryHandler.RICE.get(), RiceParticle.RiceParticleProvider::new);
+        manager.register(ParticleRegistryHandler.SAKURA.get(), SakuraParticle.SakuraParticleProvider::new);
+        manager.register(ParticleRegistryHandler.MAPLE_LEAF.get(), MapleLeafParticle.MapleLeafParticleProvider::new);
     }
 
     //绑定TER
@@ -107,22 +106,22 @@ public class ClientEventSubscribeHandler
     }
 
     @SubscribeEvent
-    public static void onModelBaked(ModelBakeEvent event)
+    public static void onModelBaked(ModelEvent.ModifyBakingResult event)
     {
-        Map<ResourceLocation, BakedModel> modelRegistry = event.getModelRegistry();
+        Map<ResourceLocation, BakedModel> modelRegistry = event.getModels();
         ModelResourceLocation location = new ModelResourceLocation
-                (Objects.requireNonNull(ItemRegistryHandler.PAIL.get().getRegistryName()), "inventory");
+                (ItemRegistryHandler.PAIL.getId(), "inventory");
         BakedModel existingModel = modelRegistry.get(location);
         if (existingModel == null)
         {
             throw new RuntimeException("Did not find Obsidian Hidden in registry");
         } else if (existingModel instanceof PailModel)
         {
-            throw new RuntimeException("Tried to replaceObsidian Hidden twice");
+            throw new RuntimeException("Tried to replace Obsidian Hidden twice");
         } else
         {
             PailModel model = new PailModel(existingModel);
-            event.getModelRegistry().put(location, model);
+            modelRegistry.put(location, model);
         }
     }
 

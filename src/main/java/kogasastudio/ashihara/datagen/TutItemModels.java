@@ -19,7 +19,7 @@ public class TutItemModels extends ItemModelProvider
 
     public TutItemModels(DataGenerator generator, ExistingFileHelper existingFileHelper)
     {
-        super(generator, DataGenerators.MOD_ID, existingFileHelper);
+        super(generator.getPackOutput(), DataGenerators.MOD_ID, existingFileHelper);
     }
 
     @Override
@@ -27,11 +27,11 @@ public class TutItemModels extends ItemModelProvider
     {
         ForgeRegistries.ITEMS.forEach(item ->
         {
-            if (item.getRegistryName().getNamespace().equals(DataGenerators.MOD_ID))
+            if (item.toString().equals(DataGenerators.MOD_ID))
             {
                 if (item instanceof BlockItem)
                 {
-                    withExistingParent(item.getRegistryName().getPath(), modLoc("block/" + item.getRegistryName().getPath()));
+                    withExistingParent(item.toString(), modLoc("block/" + item.toString()));
                 } else
                 {
                     simpleTexture(() -> item);
@@ -42,7 +42,7 @@ public class TutItemModels extends ItemModelProvider
 
     void simpleTexture(Supplier<Item> itemSupplier)
     {
-        String name = itemSupplier.get().getRegistryName().getPath();
+        String name = itemSupplier.get().getName(itemSupplier.get().getDefaultInstance()).getString();
 
         try
         {

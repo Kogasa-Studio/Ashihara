@@ -36,7 +36,7 @@ public class MillContainer extends AshiharaCommonContainer
 
     public MillContainer(int id, Inventory inventory, MillTE te)
     {
-        this(id, inventory, inventory.player.level, te.getBlockPos(), te.millData);
+        this(id, inventory, inventory.player.level(), te.getBlockPos(), te.millData);
     }
 
     public MillTE getBe()

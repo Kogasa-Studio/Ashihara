@@ -78,7 +78,7 @@ public class CuttingBoardRecipes extends ModGenRecipes
                 NonNullList.of(ItemStack.EMPTY, itemStacks),
                 type
         );
-        recipe.type = RecipeSerializers.CUTTING_BOARD.get().getRegistryName().toString();
+        recipe.type = RecipeSerializers.CUTTING_BOARD.getId().getPath();
         addRecipe(recipe.getId(), baseRecipe(recipe), "cutting");
     }
 }

@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 
 public class ShoujiBeamBlock extends Block implements IVariable<AshiharaWoodTypes>
 {
@@ -26,7 +26,8 @@ public class ShoujiBeamBlock extends Block implements IVariable<AshiharaWoodType
     {
         super
                 (
-                        Properties.of(Material.WOOD)
+                        Properties.of()
+                                .mapColor(MapColor.WOOD)
                                 .strength(0.3F)
                                 .sound(SoundType.WOOD)
                 );

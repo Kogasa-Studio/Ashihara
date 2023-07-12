@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -20,15 +21,14 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import static kogasastudio.ashihara.helper.BlockActionHelper.fourWaysFluidsIncludesWater;
 import static kogasastudio.ashihara.helper.BlockActionHelper.getMarkedBlockPosAround;
@@ -41,7 +41,8 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
     public PaddyFieldBlock()
     {
         super
-                (Properties.of(Material.DIRT)
+                (Properties.of()
+                         .mapColor(MapColor.DIRT)
                         .strength(0.5F)
                         // todo tag .harvestTool(ToolType.SHOVEL)
                         // todo tag .harvestLevel(2)
@@ -104,7 +105,7 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) //设置掉落物品为2土球
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) //设置掉落物品为2土球
     {
         List<ItemStack> list = new LinkedList<>();
         list.add(new ItemStack(ItemRegistryHandler.DIRT_BALL.get(), 2));
@@ -252,7 +253,7 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
     }
 
     @Override
-    public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, Random rand)
+    public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource rand)
     {
         BlockState n = worldIn.getBlockState(pos.north());
         BlockState e = worldIn.getBlockState(pos.east());

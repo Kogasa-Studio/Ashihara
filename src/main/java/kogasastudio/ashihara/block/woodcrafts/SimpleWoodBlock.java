@@ -6,7 +6,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 
 public class SimpleWoodBlock extends RotatedPillarBlock
 {
@@ -14,7 +14,8 @@ public class SimpleWoodBlock extends RotatedPillarBlock
     {
         super
                 (
-                        Properties.of(Material.WOOD)
+                        Properties.of()
+                                .mapColor(MapColor.WOOD)
                                 .strength(0.2F, 0.3F)
                                 .sound(SoundType.WOOD)
                 );

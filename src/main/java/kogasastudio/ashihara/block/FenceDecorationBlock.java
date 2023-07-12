@@ -15,8 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -33,7 +32,8 @@ public class FenceDecorationBlock extends Block
     {
         super
                 (
-                        Properties.of(Material.METAL, MaterialColor.GOLD)
+                        Properties.of()
+                                .mapColor(MapColor.GOLD)
                                 .strength(0.2F)
                                 .sound(SoundType.LANTERN)
                                 .noOcclusion()

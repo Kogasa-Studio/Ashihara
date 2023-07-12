@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -15,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.BushBlock;
@@ -25,14 +27,12 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import java.util.Random;
 
 import static kogasastudio.ashihara.item.ItemRegistryHandler.*;
 import static net.minecraft.world.item.Items.BONE_MEAL;
@@ -50,7 +50,8 @@ public class TeaTreeBlock extends BushBlock implements BonemealableBlock
     {
         super
                 (
-                        BlockBehaviour.Properties.of(Material.PLANT)
+                        BlockBehaviour.Properties.of()
+                                .mapColor(MapColor.PLANT)
                                 .noCollission()
                                 .randomTicks()
                                 .strength(0.2F)
@@ -118,7 +119,7 @@ public class TeaTreeBlock extends BushBlock implements BonemealableBlock
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random)
+    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random)
     {
         int age = state.getValue(AGE);
         if (age < 4 && worldIn.getRawBrightness(pos.above(), 0) >= 9 && onCropsGrowPre(worldIn, pos, state, random.nextInt(7) == 0))
@@ -163,19 +164,19 @@ public class TeaTreeBlock extends BushBlock implements BonemealableBlock
     }
 
     @Override
-    public boolean isValidBonemealTarget(BlockGetter worldIn, BlockPos pos, BlockState state, boolean isClient)
+    public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state, boolean isClient)
     {
         return state.getValue(AGE) < 4;
     }
 
     @Override
-    public boolean isBonemealSuccess(Level worldIn, Random rand, BlockPos pos, BlockState state)
+    public boolean isBonemealSuccess(Level worldIn, RandomSource rand, BlockPos pos, BlockState state)
     {
         return state.getValue(AGE) < 4;
     }
 
     @Override
-    public void performBonemeal(ServerLevel worldIn, Random rand, BlockPos pos, BlockState state)
+    public void performBonemeal(ServerLevel worldIn, RandomSource rand, BlockPos pos, BlockState state)
     {
         worldIn.setBlockAndUpdate(pos, state.setValue(AGE, state.getValue(AGE) + 1));
     }

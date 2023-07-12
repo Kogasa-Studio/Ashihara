@@ -1,6 +1,5 @@
 package kogasastudio.ashihara.dependencies.jei.category;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.dependencies.jei.JeiPlugin;
 import kogasastudio.ashihara.interaction.recipes.CuttingBoardRecipe;
@@ -11,12 +10,10 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.common.util.ImmutableRect2i;
-import mezz.jei.common.util.MathUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -27,8 +24,12 @@ public class CuttingBoardRecipeCategory extends BaseRecipeCategory<CuttingBoardR
 {
     protected static final ResourceLocation BACKGROUND =
             new ResourceLocation(Ashihara.MODID, "textures/gui/jei/cutting_board.png");
-    private final ImmutableRect2i textArea =
-            new ImmutableRect2i(40, 1, 60, 34);
+
+    //text area scale:(x: 40, y: 1, width: 60, height: 34);
+    private int x = 40;
+    private int y = 1;
+    private int width = 60;
+    private int height = 34;
 
     public CuttingBoardRecipeCategory(IGuiHelper helper)
     {
@@ -38,13 +39,12 @@ public class CuttingBoardRecipeCategory extends BaseRecipeCategory<CuttingBoardR
     }
 
     @Override
-    public void draw(CuttingBoardRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY)
+    public void draw(CuttingBoardRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY)
     {
         Minecraft minecraft = Minecraft.getInstance();
         Font font = minecraft.font;
-        Component toolName = new TextComponent(recipe.getTool().getName());
-        ImmutableRect2i centerArea = MathUtil.centerTextArea(this.textArea, font, toolName);
-        font.draw(stack, toolName, centerArea.getX(), centerArea.getY(), 0xFF808080);
+        Component toolName = Component.translatable(recipe.getTool().getName());
+        guiGraphics.drawString(font, toolName, Math.round((this.x - font.width(toolName)) / 2f), Math.round((this.y - font.lineHeight) / 2f), 0xFF808080);
     }
 
     @Override

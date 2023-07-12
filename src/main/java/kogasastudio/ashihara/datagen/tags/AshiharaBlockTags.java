@@ -1,24 +1,27 @@
-package kogasastudio.ashihara.datagen;
+package kogasastudio.ashihara.datagen.tags;
 
 import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.datagen.DataGenerators;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.tags.VanillaBlockTagsProvider;
 import net.minecraft.tags.BlockTags;
-import net.minecraftforge.common.data.ExistingFileHelper;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author DustW
  **/
-public class TutBlockTags extends BlockTagsProvider
+public class AshiharaBlockTags extends VanillaBlockTagsProvider
 {
 
-    public TutBlockTags(DataGenerator generator, ExistingFileHelper helper)
+    public AshiharaBlockTags(DataGenerator generator, CompletableFuture<HolderLookup.Provider> future)
     {
-        super(generator, DataGenerators.MOD_ID, helper);
+        super(generator.getPackOutput(), future);
     }
 
     @Override
-    protected void addTags()
+    protected void addTags(HolderLookup.Provider provider)
     {
         // todo 就用类似这样的方式给 block 添加 tag
         tag(BlockTags.MINEABLE_WITH_SHOVEL)

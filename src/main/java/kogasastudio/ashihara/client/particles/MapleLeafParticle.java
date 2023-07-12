@@ -54,11 +54,11 @@ public class MapleLeafParticle extends TextureSheetParticle
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class MapleLeafParticleFactory implements ParticleProvider<GenericParticleData>
+    public static class MapleLeafParticleProvider implements ParticleProvider<GenericParticleData>
     {
         private final SpriteSet spriteSet;
 
-        public MapleLeafParticleFactory(SpriteSet spriteSet)
+        public MapleLeafParticleProvider(SpriteSet spriteSet)
         {
             this.spriteSet = spriteSet;
         }

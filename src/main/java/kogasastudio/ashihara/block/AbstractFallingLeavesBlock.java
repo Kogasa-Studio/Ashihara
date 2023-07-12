@@ -6,24 +6,26 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static net.minecraft.world.level.block.Blocks.AIR;
 
@@ -40,7 +42,8 @@ public class AbstractFallingLeavesBlock extends LeavesBlock
     {
         super
                 (
-                        BlockBehaviour.Properties.of(Material.LEAVES)
+                        BlockBehaviour.Properties.of()
+                                .mapColor(MapColor.PLANT)
                                 .strength(0.05F)
                                 .randomTicks()
                                 .sound(SoundType.GRASS)
@@ -66,13 +69,13 @@ public class AbstractFallingLeavesBlock extends LeavesBlock
     }
 
     @Override
-    public void destroy(LevelAccessor pLevel, BlockPos pPos, BlockState pState)
+    public void playerDestroy(Level pLevel, Player player, BlockPos pPos, BlockState pState, @Nullable BlockEntity te, ItemStack item)
     {
-        if (!this.getBonusResource().isEmpty())
+        if (!player.isCreative() && !this.getBonusResource().isEmpty())
         {
             this.getBonusResource().forEach(itemStack -> popResource((Level) pLevel, pPos, itemStack));
         }
-        super.destroy(pLevel, pPos, pState);
+        super.playerDestroy(pLevel, player, pPos, pState, te, item);
     }
 
     @Override
@@ -82,7 +85,7 @@ public class AbstractFallingLeavesBlock extends LeavesBlock
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random)
+    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random)
     {
         //原版代码
         if (!state.getValue(PERSISTENT) && state.getValue(DISTANCE) == 7)
@@ -118,7 +121,7 @@ public class AbstractFallingLeavesBlock extends LeavesBlock
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand)
+    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand)
     {
         BlockPos blockpos = pos.below();
         BlockState blockstate = worldIn.getBlockState(blockpos);

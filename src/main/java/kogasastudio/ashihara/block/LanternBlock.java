@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -43,7 +44,7 @@ public class LanternBlock extends Block
     {
         if (player.getItemInHand(handIn).getItem() == Items.AIR)
         {
-            Random random = worldIn.getRandom();
+            RandomSource random = worldIn.getRandom();
             Boolean instantState = worldIn.getBlockState(pos).getValue(LIT);
             worldIn.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
             worldIn.setBlockAndUpdate(pos, state.setValue(LIT, !instantState));

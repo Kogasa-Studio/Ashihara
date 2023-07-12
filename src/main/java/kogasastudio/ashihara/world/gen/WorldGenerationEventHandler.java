@@ -1,3 +1,4 @@
+/*
 package kogasastudio.ashihara.world.gen;
 
 import kogasastudio.ashihara.Ashihara;
@@ -7,7 +8,8 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.event.level.BiomeLoadingEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -16,7 +18,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class WorldGenerationEventHandler
 {
     @SubscribeEvent
-    public static void onTreesGenerate(BiomeLoadingEvent event)
+    public static void onTreesGenerate(LevelEvent event)
     {
         Biome.BiomeCategory category = event.getCategory();
         if (category.equals(Biome.BiomeCategory.PLAINS) || category.equals(Biome.BiomeCategory.EXTREME_HILLS))
@@ -35,3 +37,4 @@ public class WorldGenerationEventHandler
         // }
     }
 }
+*/

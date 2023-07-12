@@ -9,7 +9,7 @@ import kogasastudio.ashihara.inventory.container.MillContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -21,6 +21,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.common.util.RecipeMatcher;
 import net.minecraftforge.fluids.FluidStack;
@@ -33,7 +34,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE;
 
@@ -329,7 +329,7 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap)
     {
-        if (!this.isRemoved() && cap.equals(FLUID_HANDLER_CAPABILITY))
+        if (!this.isRemoved() && cap.equals(ForgeCapabilities.FLUID_HANDLER))
         {
             return this.tankIn.cast();
         }
@@ -451,9 +451,9 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
     }
 
     @Override
-    public TranslatableComponent getDisplayName()
+    public Component getDisplayName()
     {
-        return new TranslatableComponent("gui." + Ashihara.MODID + ".mill");
+        return Component.translatable("gui." + Ashihara.MODID + ".mill");
     }
 
     @Nullable

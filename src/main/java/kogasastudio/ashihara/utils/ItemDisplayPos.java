@@ -1,16 +1,16 @@
 package kogasastudio.ashihara.utils;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import kogasastudio.ashihara.item.IHasCustomModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
@@ -87,11 +87,11 @@ public class ItemDisplayPos
             stackIn.scale(scale, scale, scale);
             if (!isBlock)
             {
-                stackIn.mulPose(Vector3f.XP.rotationDegrees(90.0f));
-                stackIn.mulPose(Vector3f.ZP.rotationDegrees(facing.toYRot()));
+                stackIn.mulPose(Axis.XP.rotationDegrees(90.0f));
+                stackIn.mulPose(Axis.ZP.rotationDegrees(facing.toYRot()));
             } else
             {
-                stackIn.mulPose(Vector3f.YP.rotationDegrees(facing.toYRot()));
+                stackIn.mulPose(Axis.YP.rotationDegrees(facing.toYRot()));
             }
 
             ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
@@ -101,7 +101,7 @@ public class ItemDisplayPos
                 {
                     stackIn.translate(XTP(0.0f), XTP(isBlock ? (1.0f / scale) * 4.0f : 0.0f), XTP(isBlock ? 0.0f : -1.2f));
                 }
-                renderer.renderStatic(stack, ItemTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, stackIn, bufferIn, 0);
+                renderer.renderStatic(stack, ItemDisplayContext.FIXED, combinedLightIn, combinedOverlayIn, stackIn, bufferIn, null, 0);
             }
         }
         stackIn.popPose();

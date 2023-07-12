@@ -4,10 +4,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-
-import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
 public class PailTE extends AshiharaMachineTE implements IFluidHandler
 {
@@ -21,7 +20,7 @@ public class PailTE extends AshiharaMachineTE implements IFluidHandler
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap)
     {
-        if (!this.isRemoved() && cap.equals(FLUID_HANDLER_CAPABILITY))
+        if (!this.isRemoved() && cap.equals(ForgeCapabilities.FLUID_HANDLER))
         {
             return this.bucket.cast();
         }

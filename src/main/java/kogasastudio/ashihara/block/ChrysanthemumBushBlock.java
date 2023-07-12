@@ -6,7 +6,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
@@ -19,7 +19,8 @@ public class ChrysanthemumBushBlock extends BushBlock implements IForgeShearable
     {
         super
                 (
-                        Properties.of(Material.PLANT)
+                        Properties.of()
+                                .mapColor(MapColor.PLANT)
                                 .noCollission()
                                 .instabreak()
                                 .sound(SoundType.GRASS)

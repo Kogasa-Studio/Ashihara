@@ -107,7 +107,7 @@ public class MortarRecipes extends ModGenRecipes
                 NonNullList.of(Ingredient.EMPTY, inputs),
                 NonNullList.of(ItemStack.EMPTY, outputs),
                 fluidCostIn, progressIn, recipeTypeIn, sequenceIn);
-        recipe.type = RecipeSerializers.MORTAR.get().getRegistryName().toString();
+        recipe.type = RecipeSerializers.MORTAR.getId().getPath();
         addRecipe(recipe.getId(), baseRecipe(recipe), "mortar");
     }
 }

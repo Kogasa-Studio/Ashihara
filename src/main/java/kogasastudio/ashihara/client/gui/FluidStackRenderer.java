@@ -2,16 +2,16 @@ package kogasastudio.ashihara.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
 
 /**
  * @author DustW
@@ -28,7 +28,7 @@ public class FluidStackRenderer
 
     public FluidStackRenderer()
     {
-        this(FluidAttributes.BUCKET_VOLUME, 16, 16);
+        this(1000, 16, 16);
     }
 
     public FluidStackRenderer(int capacityMb, int width, int height)
@@ -72,8 +72,7 @@ public class FluidStackRenderer
 
         TextureAtlasSprite fluidStillSprite = getStillFluidSprite(fluidStack);
 
-        FluidAttributes attributes = fluid.getAttributes();
-        int fluidColor = attributes.getColor(fluidStack);
+        int fluidColor = IClientFluidTypeExtensions.of(fluidStack.getFluid()).getTintColor(fluidStack);
 
         int amount = fluidStack.getAmount();
         int scaledAmount = (amount * height) / capacityMb;
@@ -125,8 +124,7 @@ public class FluidStackRenderer
     {
         Minecraft minecraft = Minecraft.getInstance();
         Fluid fluid = fluidStack.getFluid();
-        FluidAttributes attributes = fluid.getAttributes();
-        ResourceLocation fluidStill = attributes.getStillTexture(fluidStack);
+        ResourceLocation fluidStill = IClientFluidTypeExtensions.of(fluid).getStillTexture(fluidStack);
         return minecraft.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
     }
 
@@ -151,14 +149,14 @@ public class FluidStackRenderer
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
 
-        Tesselator tessellator = Tesselator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.getBuilder();
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder bufferBuilder = tesselator.getBuilder();
         bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         bufferBuilder.vertex(matrix, xCoord, yCoord + 16, zLevel).uv(uMin, vMax).endVertex();
         bufferBuilder.vertex(matrix, xCoord + 16 - maskRight, yCoord + 16, zLevel).uv(uMax, vMax).endVertex();
         bufferBuilder.vertex(matrix, xCoord + 16 - maskRight, yCoord + maskTop, zLevel).uv(uMax, vMin).endVertex();
         bufferBuilder.vertex(matrix, xCoord, yCoord + maskTop, zLevel).uv(uMin, vMin).endVertex();
-        tessellator.end();
+        tesselator.end();
     }
 
     public int getWidth()

@@ -14,13 +14,11 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Objects;
 
-import static kogasastudio.ashihara.Ashihara.ASHIHARA;
-
 public class ItemRiceSeedling extends Item
 {
     public ItemRiceSeedling()
     {
-        super(new Properties().tab(ASHIHARA));
+        super(new Properties());
     }
 
     @Override

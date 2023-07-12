@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -21,7 +22,6 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 //import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
 
@@ -54,7 +54,7 @@ public class CuttingBoardTE extends AshiharaMachineTE
         this.level.playSound(null, this.worldPosition, event, SoundSource.BLOCKS, 1.0f, 1.0f);
         if (this.level.isClientSide())
         {
-            Random random = this.level.getRandom();
+            RandomSource random = this.level.getRandom();
             ParticleOptions data = this.content.getItem() instanceof BlockItem
                     ? new BlockParticleOption(ParticleTypes.BLOCK, ((BlockItem) this.content.getItem()).getBlock().defaultBlockState())
                     : new ItemParticleOption(ParticleTypes.ITEM, this.content);

@@ -26,7 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -44,7 +44,8 @@ public class MillBlock extends Block implements EntityBlock
     {
         super
                 (
-                        Properties.of(Material.STONE)
+                        Properties.of()
+                                .mapColor(MapColor.STONE)
                                 .strength(2.0F, 6.0F)
                                 // todo tag .harvestTool(ToolType.PICKAXE)
                                 .requiresCorrectToolForDrops()
@@ -102,7 +103,7 @@ public class MillBlock extends Block implements EntityBlock
                 return InteractionResult.SUCCESS;
             } else if (!worldIn.isClientSide && handIn == InteractionHand.MAIN_HAND)
             {
-                NetworkHooks.openGui((ServerPlayer) player, te, (FriendlyByteBuf packerBuffer) -> packerBuffer.writeBlockPos(te.getBlockPos()));
+                NetworkHooks.openScreen((ServerPlayer) player, te, (FriendlyByteBuf packerBuffer) -> packerBuffer.writeBlockPos(te.getBlockPos()));
                 return InteractionResult.SUCCESS;
             } else return InteractionResult.SUCCESS;
         }

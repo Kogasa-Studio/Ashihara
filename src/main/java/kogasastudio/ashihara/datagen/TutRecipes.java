@@ -1,11 +1,14 @@
 package kogasastudio.ashihara.datagen;
 
+import com.google.common.hash.HashCode;
 import kogasastudio.ashihara.datagen.recipes.MillRecipes;
 import kogasastudio.ashihara.datagen.recipes.ModGenRecipes;
 import kogasastudio.ashihara.datagen.recipes.CuttingBoardRecipes;
 import kogasastudio.ashihara.datagen.recipes.MortarRecipes;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.HashCache;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 /**
@@ -26,9 +30,9 @@ import java.util.function.Consumer;
 public class TutRecipes extends RecipeProvider
 {
 
-    public TutRecipes(DataGenerator generatorIn)
+    public TutRecipes(PackOutput packOutputIn)
     {
-        super(generatorIn);
+        super(packOutputIn);
     }
 
     protected List<ModGenRecipes> recipes = new ArrayList<>();
@@ -40,28 +44,28 @@ public class TutRecipes extends RecipeProvider
         recipes.add(new MortarRecipes());
     }
 
-    @Override
-    public void run(HashCache pCache)
+    /*@Override
+    public CompletableFuture<?> run(CachedOutput pCache)
     {
-        super.run(pCache);
-
         recipes.forEach(recipes ->
-        {
-            recipes.getRecipes().forEach((name, entry) -> save(pCache, name, entry));
-        });
+                        {
+                            recipes.getRecipes().forEach((name, entry) -> save(pCache, name, entry));
+                        });
+
+        return super.run(pCache);
     }
 
-    protected void save(HashCache pCache, ResourceLocation name, Map.Entry<String, String> entry)
+    protected void save(CachedOutput pCache, ResourceLocation name, Map.Entry<String, String> entry)
     {
         String json = entry.getKey();
         String subPath = entry.getValue();
 
-        Path path = this.generator.getOutputFolder();
+        Path path = this.getOutputFolder();
 
         saveRecipe(pCache, json, path.resolve("data/" + name.getNamespace() + "/recipes/" + subPath + "/" + name.getPath() + ".json"));
     }
 
-    private static void saveRecipe(HashCache pCache, String recipe, Path pPath)
+    private static void saveRecipe(CachedOutput pCache, String recipe, Path pPath)
     {
         try
         {
@@ -90,12 +94,12 @@ public class TutRecipes extends RecipeProvider
                 bufferedwriter.close();
             }
 
-            pCache.putNew(pPath, s1);
+            pCache.writeIfNeeded(pPath, null, HashCode.fromInt(recipe.hashCode())).putNew(pPath, s1);
         } catch (IOException ignored) {}
-    }
+    }*/
 
     @Override
-    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
+    protected void buildRecipes(Consumer<FinishedRecipe> consumer)
     {
         addCustomRecipes();
     }

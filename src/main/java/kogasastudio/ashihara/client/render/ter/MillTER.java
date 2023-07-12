@@ -2,7 +2,7 @@ package kogasastudio.ashihara.client.render.ter;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import kogasastudio.ashihara.block.tileentities.MillTE;
 import kogasastudio.ashihara.client.models.MillStoneModel;
 import kogasastudio.ashihara.client.render.LayerRegistryHandler;
@@ -30,9 +30,9 @@ public class MillTER implements BlockEntityRenderer<MillTE>
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.5D, 1.5D, 0.5D);
         float facing = tileEntityIn.getBlockState().getValue(FACING).toYRot();
-        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180));
-        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(facing));
-        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(tileEntityIn.getMillStoneRotation()));
+        matrixStackIn.mulPose(Axis.XP.rotationDegrees(180));
+        matrixStackIn.mulPose(Axis.YP.rotationDegrees(facing));
+        matrixStackIn.mulPose(Axis.YP.rotationDegrees(tileEntityIn.getMillStoneRotation()));
         VertexConsumer buffer = bufferIn.getBuffer(RenderType.entitySolid(tex));
         millStone.renderToBuffer(matrixStackIn, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
         matrixStackIn.popPose();

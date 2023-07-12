@@ -7,12 +7,12 @@ import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
@@ -23,14 +23,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Objects;
-import java.util.Random;
-import java.util.UUID;
 
 public class ItemKoishi extends Item
 {
     public ItemKoishi()
     {
-        super(new Properties().tab(CreativeModeTab.TAB_MATERIALS));
+        super(new Properties());
     }
 
     @Override
@@ -63,11 +61,11 @@ public class ItemKoishi extends Item
             } else if (te != null)
             {
                 CompoundTag nbt = te.serializeNBT();
-                player.sendMessage(new TranslatableComponent((worldIn.isClientSide() ? "client: " : "server: ") + nbt.toString()), UUID.randomUUID());
+                player.sendSystemMessage(Component.translatable((worldIn.isClientSide() ? "client: " : "server: ") + nbt.toString()));
                 return InteractionResult.SUCCESS;
             } else
             {
-                Random rand = context.getLevel().getRandom();
+                RandomSource rand = context.getLevel().getRandom();
                 for (int i = 0; i < 8; i += 1)
                 {
                     worldIn.addParticle(new GenericParticleData(new Vec3(0, 0, 0), 0, ParticleRegistryHandler.SAKURA.get()), (double) pos.getX() + 0.5D, (double) pos.getY() + 2.1D, (double) pos.getZ() + 0.5D, rand.nextFloat() / 2.0F, 0, rand.nextFloat() / 2.0F);

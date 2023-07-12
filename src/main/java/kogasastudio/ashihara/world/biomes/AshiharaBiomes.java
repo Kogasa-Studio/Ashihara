@@ -1,3 +1,4 @@
+/*
 package kogasastudio.ashihara.world.biomes;
 
 import kogasastudio.ashihara.world.WorldGenEventRegistryHandler;
@@ -41,7 +42,7 @@ public class AshiharaBiomes
 
         // Music music = Musics.createGameMusic(SoundEvents.MUSIC_BIOME_DRIPSTONE_CAVES);
         return new Biome.BiomeBuilder()
-                .precipitation(Biome.Precipitation.RAIN)
+        (Biome.Precipitation.RAIN)
                 .biomeCategory(Biome.BiomeCategory.FOREST)
                 //.depth(0.1F)
                 //.scale(2.0F)
@@ -161,9 +162,11 @@ public class AshiharaBiomes
         return builder;
     }
 
-    /**
+    */
+/**
      * @see net.minecraft.data.worldgen.biome.OverworldBiomes
-     */
+     *//*
+
     private static void globalOverworldGeneration(BiomeGenerationSettings.Builder builder)
     {
         BiomeDefaultFeatures.addDefaultCarversAndLakes(builder);
@@ -201,3 +204,4 @@ public class AshiharaBiomes
                 .generationSettings(biomeBuilder.build()).build();
     }
 }
+*/

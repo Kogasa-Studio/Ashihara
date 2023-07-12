@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.interaction.recipes.base;
 
 import com.google.gson.annotations.Expose;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -29,7 +30,7 @@ public abstract class BaseRecipe implements Recipe<Container>
     }
 
     @Override
-    public ItemStack assemble(Container pContainer)
+    public ItemStack assemble(Container container, RegistryAccess registryAccess)
     {
         return ItemStack.EMPTY;
     }

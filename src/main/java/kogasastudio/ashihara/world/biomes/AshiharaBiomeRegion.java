@@ -1,3 +1,5 @@
+//todo: 以后不适用依赖，自己mixin
+/*
 package kogasastudio.ashihara.world.biomes;
 
 import com.mojang.datafixers.util.Pair;
@@ -15,9 +17,11 @@ import java.util.function.Consumer;
 import static net.minecraft.world.level.biome.Climate.Parameter.point;
 import static net.minecraft.world.level.biome.Climate.Parameter.span;
 
+*/
 /**
  * @author DustW
- **/
+ **//*
+
 public class AshiharaBiomeRegion extends Region
 {
     public AshiharaBiomeRegion(ResourceLocation name, int weight)
@@ -30,7 +34,8 @@ public class AshiharaBiomeRegion extends Region
     @Override
     public void addBiomes(Registry<Biome> registry, Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> mapper)
     {
-        /*addBiome
+        */
+/*addBiome
         (
             mapper,
             //参数在 https://yaossg.com/biome/1-introduction/1.4-properties-of-biome.html 可以看到是什么意思
@@ -60,8 +65,10 @@ public class AshiharaBiomeRegion extends Region
                 0
             ),
             BiomeRegistryHandler.RED_MAPLE_FOREST.getKey()
-        );*/
+        );*//*
+
         addBiomeSimilar(mapper, Biomes.FLOWER_FOREST, BiomeRegistryHandler.JUNIOR_CHERRY_FOREST.getKey());
         addBiomeSimilar(mapper, Biomes.DARK_FOREST, BiomeRegistryHandler.RED_MAPLE_FOREST.getKey());
     }
 }
+*/

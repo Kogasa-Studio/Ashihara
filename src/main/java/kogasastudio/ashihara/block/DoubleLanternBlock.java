@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,8 +25,6 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
-
-import java.util.Random;
 
 public class DoubleLanternBlock extends Block implements SimpleWaterloggedBlock
 {
@@ -86,7 +85,7 @@ public class DoubleLanternBlock extends Block implements SimpleWaterloggedBlock
     {
         if (player.getItemInHand(handIn).getItem() == Items.AIR && state.getValue(HALF) == DoubleBlockHalf.UPPER)
         {
-            Random random = worldIn.getRandom();
+            RandomSource random = worldIn.getRandom();
             Boolean instantState = worldIn.getBlockState(pos).getValue(LIT);
             worldIn.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
             worldIn.setBlockAndUpdate(pos, state.setValue(LIT, !instantState));

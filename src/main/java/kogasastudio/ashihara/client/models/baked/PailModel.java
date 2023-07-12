@@ -3,14 +3,14 @@ package kogasastudio.ashihara.client.models.baked;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
-import java.util.Random;
 
 public class PailModel implements BakedModel
 {
@@ -22,7 +22,7 @@ public class PailModel implements BakedModel
     }
 
     @Override
-    public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand)
+    public List<BakedQuad> getQuads(BlockState state, Direction side, RandomSource rand)
     {
         return this.existingModel.getQuads(state, side, rand);
     }
@@ -64,8 +64,8 @@ public class PailModel implements BakedModel
     }
 
     @Override
-    public BakedModel handlePerspective(ItemTransforms.TransformType cameraTransformType, PoseStack mat)
+    public BakedModel applyTransform(ItemDisplayContext transformType, PoseStack poseStack, boolean applyLeftHandTransform)
     {
-        return existingModel.handlePerspective(cameraTransformType, mat);
+        return existingModel.applyTransform(transformType, poseStack, applyLeftHandTransform);
     }
 }

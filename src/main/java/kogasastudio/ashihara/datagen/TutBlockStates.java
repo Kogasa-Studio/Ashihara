@@ -12,7 +12,7 @@ public class TutBlockStates extends BlockStateProvider
 
     public TutBlockStates(DataGenerator gen, ExistingFileHelper helper)
     {
-        super(gen, DataGenerators.MOD_ID, helper);
+        super(gen.getPackOutput(), DataGenerators.MOD_ID, helper);
     }
 
     @Override

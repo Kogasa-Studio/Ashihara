@@ -1,3 +1,4 @@
+/*
 package kogasastudio.ashihara.world.biomes;
 
 import kogasastudio.ashihara.Ashihara;
@@ -43,4 +44,4 @@ public class BiomeRegistryHandler
         BiomeManager.addBiome(type, new BiomeManager.BiomeEntry(biome.getKey(), weight));
         return biome;
     }
-}
+}*/

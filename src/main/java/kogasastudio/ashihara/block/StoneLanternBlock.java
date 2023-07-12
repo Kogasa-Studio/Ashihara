@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -19,15 +20,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import java.util.Random;
 
 import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 import static net.minecraft.world.item.Items.GLASS_PANE;
@@ -41,7 +40,8 @@ public class StoneLanternBlock extends DoubleLanternBlock
     {
         super
                 (
-                        Properties.of(Material.STONE)
+                        Properties.of()
+                                .mapColor(MapColor.STONE)
                                 .strength(4.0F)
                                 .sound(SoundType.STONE)
                                 .lightLevel(getLightValueLit(15))
@@ -58,7 +58,7 @@ public class StoneLanternBlock extends DoubleLanternBlock
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand)
+    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand)
     {
         if (stateIn.getValue(LIT) && stateIn.getValue(HALF) == DoubleBlockHalf.UPPER)
         {
@@ -112,7 +112,7 @@ public class StoneLanternBlock extends DoubleLanternBlock
                 return InteractionResult.SUCCESS;
             } else if (!state.getValue(WATERLOGGED) || state.getValue(SEALED))
             {
-                Random random = worldIn.getRandom();
+                RandomSource random = worldIn.getRandom();
                 Boolean instantState = worldIn.getBlockState(pos).getValue(LIT);
                 worldIn.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
                 worldIn.setBlockAndUpdate(pos, state.setValue(LIT, !instantState));
@@ -169,7 +169,7 @@ public class StoneLanternBlock extends DoubleLanternBlock
         {
             return;
         }
-        Random random = worldIn.getRandom();
+        RandomSource random = worldIn.getRandom();
         if (random.nextInt(10) <= 5)
         {
             BlockPos offset = state.getValue(HALF).equals(DoubleBlockHalf.LOWER) ? pos.above() : pos.below();

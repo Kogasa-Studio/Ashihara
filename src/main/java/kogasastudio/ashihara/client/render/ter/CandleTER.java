@@ -3,7 +3,7 @@ package kogasastudio.ashihara.client.render.ter;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import kogasastudio.ashihara.block.tileentities.CandleTE;
 import kogasastudio.ashihara.client.models.CandleModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -36,7 +36,7 @@ public class CandleTER implements BlockEntityRenderer<CandleTE>
             matrixStackIn.pushPose();
             GlStateManager._enableBlend();
             matrixStackIn.translate(x, y + 1.5d, z);
-            matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180));
+            matrixStackIn.mulPose(Axis.XP.rotationDegrees(180));
             candleSingle.renderToBuffer(matrixStackIn, builder, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
             matrixStackIn.popPose();
         }

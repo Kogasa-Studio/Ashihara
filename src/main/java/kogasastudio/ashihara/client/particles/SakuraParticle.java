@@ -54,11 +54,11 @@ public class SakuraParticle extends TextureSheetParticle
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class SakuraParticleFactory implements ParticleProvider<GenericParticleData>
+    public static class SakuraParticleProvider implements ParticleProvider<GenericParticleData>
     {
         private final SpriteSet spriteSet;
 
-        public SakuraParticleFactory(SpriteSet spriteSet)
+        public SakuraParticleProvider(SpriteSet spriteSet)
         {
             this.spriteSet = spriteSet;
         }

@@ -13,7 +13,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -24,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
@@ -31,7 +32,6 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import java.util.Optional;
 
 import static kogasastudio.ashihara.utils.AshiharaTags.MASHABLE;
-import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
 public class MortarTE extends AshiharaMachineTE implements MenuProvider, IFluidHandler
 {
@@ -78,7 +78,7 @@ public class MortarTE extends AshiharaMachineTE implements MenuProvider, IFluidH
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap)
     {
-        if (!this.isRemoved() && cap.equals(FLUID_HANDLER_CAPABILITY))
+        if (!this.isRemoved() && cap.equals(ForgeCapabilities.FLUID_HANDLER))
         {
             return this.tank.cast();
         }
@@ -333,9 +333,9 @@ public class MortarTE extends AshiharaMachineTE implements MenuProvider, IFluidH
     }
 
     @Override
-    public TranslatableComponent getDisplayName()
+    public Component getDisplayName()
     {
-        return new TranslatableComponent("gui." + Ashihara.MODID + ".mortar");
+        return Component.translatable("gui." + Ashihara.MODID + ".mortar");
     }
 
     @Override

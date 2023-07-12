@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 
 public class SimpleFenceBlock extends FenceBlock
 {
@@ -15,7 +15,8 @@ public class SimpleFenceBlock extends FenceBlock
     {
         super
                 (
-                        BlockBehaviour.Properties.of(Material.WOOD)
+                        BlockBehaviour.Properties.of()
+                                .mapColor(MapColor.WOOD)
                                 .strength(2.0F, 3.0F)
                                 .sound(SoundType.WOOD)
                 );

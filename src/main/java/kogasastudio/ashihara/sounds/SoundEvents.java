@@ -15,6 +15,6 @@ public class SoundEvents
 
     private static RegistryObject<SoundEvent> register(String key)
     {
-        return SOUNDS.register(key, () -> new SoundEvent(new ResourceLocation(Ashihara.MODID, key)));
+        return SOUNDS.register(key, () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(Ashihara.MODID, key)));
     }
 }

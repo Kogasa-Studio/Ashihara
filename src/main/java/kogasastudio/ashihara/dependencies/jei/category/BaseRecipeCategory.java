@@ -4,14 +4,12 @@ import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 
 /**
  * @author DustW
  **/
-public class BaseRecipeCategory<T extends Recipe<?>> implements IRecipeCategory<T>
+public abstract class BaseRecipeCategory<T extends Recipe<?>> implements IRecipeCategory<T>
 {
     protected final RecipeType<T> type;
     protected String translateKey;
@@ -33,7 +31,7 @@ public class BaseRecipeCategory<T extends Recipe<?>> implements IRecipeCategory<
     @Override
     public Component getTitle()
     {
-        return new TranslatableComponent(translateKey == null ? translateKey = defaultTranslateKey() : translateKey);
+        return Component.translatable(translateKey == null ? translateKey = defaultTranslateKey() : translateKey);
     }
 
     @Override
@@ -52,17 +50,5 @@ public class BaseRecipeCategory<T extends Recipe<?>> implements IRecipeCategory<
     public RecipeType<T> getRecipeType()
     {
         return type;
-    }
-
-    @Override
-    public ResourceLocation getUid()
-    {
-        return type.getUid();
-    }
-
-    @Override
-    public Class<? extends T> getRecipeClass()
-    {
-        return type.getRecipeClass();
     }
 }

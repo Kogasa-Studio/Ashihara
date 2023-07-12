@@ -3,9 +3,9 @@ package kogasastudio.ashihara.helper;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix4f;
 import kogasastudio.ashihara.block.tileentities.IFluidHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -13,13 +13,13 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
+import org.joml.Matrix4f;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -151,7 +151,7 @@ public class RenderHelper
      * 渲染tooltip
      *
      * @param gui    目标Screen
-     * @param matrix 渲染矩阵
+     * @param guiGraphics 渲染矩阵
      * @param mouseX 鼠标所指x
      * @param mouseY 鼠标所指y
      * @param x      鼠标悬停在上会渲染渲染tooltip的区域的起始x
@@ -160,27 +160,27 @@ public class RenderHelper
      * @param height 区域高度
      * @param list   渲染文本列表
      */
-    public static void drawTooltip(Screen gui, PoseStack matrix, int mouseX, int mouseY, int x, int y, int weight, int height, List<Component> list)
+    public static void drawTooltip(Screen gui, GuiGraphics guiGraphics, int mouseX, int mouseY, int x, int y, int weight, int height, List<Component> list)
     {
         if ((x <= mouseX && mouseX <= x + weight) && (y <= mouseY && mouseY <= y + height))
         {
-            gui.renderComponentTooltip(matrix, list, mouseX, mouseY);
+            guiGraphics.renderComponentTooltip(gui.getMinecraft().font, list, mouseX, mouseY);
         }
     }
 
-    public static void drawFluidToolTip(Screen gui, PoseStack matrix, int mouseX, int mouseY, int x, int y, int weight, int height, FluidStack stack, int Capacity)
+    public static void drawFluidToolTip(Screen gui, GuiGraphics guiGraphics, int mouseX, int mouseY, int x, int y, int weight, int height, FluidStack stack, int Capacity)
     {
         if (!stack.isEmpty())
         {
             ArrayList<Component> list = new ArrayList<>();
-            list.add(new TranslatableComponent("tooltip.ashihara.fluid_existence"));
-            list.add(new TextComponent
+            list.add(Component.translatable("tooltip.ashihara.fluid_existence"));
+            list.add(Component.translatable
                     (
                             "    " + I18n.get(stack.getTranslationKey())
                                     + ": " + stack.getAmount()
                                     + (Capacity > 0 ? (" mB / " + Capacity + " mB") : " mB")
                     ));
-            drawTooltip(gui, matrix, mouseX, mouseY, x, y, weight, height, list);
+            drawTooltip(gui, guiGraphics, mouseX, mouseY, x, y, weight, height, list);
         }
     }
 
@@ -204,12 +204,12 @@ public class RenderHelper
         TextureAtlasSprite FLUID =
                 Minecraft.getInstance()
                         .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                        .apply(fluid.getFluid().getAttributes().getStillTexture());
+                        .apply(IClientFluidTypeExtensions.of(fluid.getFluid()).getStillTexture());
 
         //绑atlas
         RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
 
-        int color = fluid.getFluid().getAttributes().getColor();
+        int color = IClientFluidTypeExtensions.of(fluid.getFluid()).getTintColor();
 
         /*
          * 获取横向和纵向层数
@@ -283,9 +283,9 @@ public class RenderHelper
                 .getTexture(fluidIn.getFluid().defaultFluidState().createLegacyBlock(), worldIn, posIn)
                 : Minecraft.getInstance()
                 .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                .apply(fluidIn.getFluid().getAttributes().getStillTexture());
+                .apply(IClientFluidTypeExtensions.of(fluidIn.getFluid()).getStillTexture());
 
-        int color = fluidIn.getFluid().getAttributes().getColor();
+        int color = IClientFluidTypeExtensions.of(fluidIn.getFluid()).getTintColor();
 
         stackIn.pushPose();
         GlStateManager._enableBlend();

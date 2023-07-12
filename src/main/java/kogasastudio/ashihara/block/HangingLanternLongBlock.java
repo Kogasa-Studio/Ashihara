@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -21,7 +22,7 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -29,8 +30,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Random;
 
 import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 
@@ -40,7 +39,8 @@ public class HangingLanternLongBlock extends LanternBlock implements EntityBlock
     {
         super
                 (
-                        Properties.of(Material.WOOL)
+                        Properties.of()
+                                .mapColor(MapColor.WOOL)
                                 .strength(1.0F)
                                 .sound(SoundType.BAMBOO_SAPLING)
                                 .lightLevel(getLightValueLit(15))
@@ -58,7 +58,7 @@ public class HangingLanternLongBlock extends LanternBlock implements EntityBlock
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand)
+    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand)
     {
         if (stateIn.getValue(LIT))
         {
@@ -85,7 +85,7 @@ public class HangingLanternLongBlock extends LanternBlock implements EntityBlock
     {
         if (player.getItemInHand(handIn).getItem() == Items.AIR)
         {
-            Random random = worldIn.getRandom();
+            RandomSource random = worldIn.getRandom();
             Boolean instantState = worldIn.getBlockState(pos).getValue(LIT);
             worldIn.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
             worldIn.setBlockAndUpdate(pos, state.setValue(LIT, !instantState));

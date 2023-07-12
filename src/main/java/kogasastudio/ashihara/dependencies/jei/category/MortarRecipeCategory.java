@@ -10,7 +10,6 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.common.util.ImmutableRect2i;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -23,8 +22,8 @@ public class MortarRecipeCategory extends BaseRecipeCategory<MortarRecipe>
 {
     protected static final ResourceLocation BACKGROUND =
             new ResourceLocation(Ashihara.MODID, "textures/gui/jei/mortar.png");
-    private final ImmutableRect2i textArea =
-            new ImmutableRect2i(40, 1, 60, 34);
+
+//    (40, 1, 60, 34);
 
     public MortarRecipeCategory(IGuiHelper helper)
     {

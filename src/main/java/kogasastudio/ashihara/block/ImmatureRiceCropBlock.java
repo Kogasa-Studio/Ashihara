@@ -7,8 +7,8 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.storage.loot.LootParams;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -20,7 +20,8 @@ public class ImmatureRiceCropBlock extends CropBlock
     {
         super
                 (
-                        BlockBehaviour.Properties.of(Material.PLANT)
+                        BlockBehaviour.Properties.of()
+                                .mapColor(MapColor.PLANT)
                                 .noCollission()
                                 .randomTicks()
                                 .instabreak()
@@ -41,7 +42,7 @@ public class ImmatureRiceCropBlock extends CropBlock
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
+    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
     {
         List<ItemStack> list = new LinkedList<>();
         if (this.getAge(state) == 2)

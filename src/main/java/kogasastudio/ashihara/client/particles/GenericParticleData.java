@@ -68,6 +68,6 @@ public class GenericParticleData implements ParticleOptions
     public String writeToString()
     {
         return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f",
-                this.getType().getRegistryName(), diameter, speed.x(), speed.y(), speed.z());
+                this.getType().toString(), diameter, speed.x(), speed.y(), speed.z());
     }
 }

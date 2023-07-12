@@ -2,7 +2,7 @@ package kogasastudio.ashihara.item;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -18,7 +18,7 @@ public interface IHasCustomModel
     {
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.5D, 1.5D, 0.5D);
-        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(180));
+        matrixStackIn.mulPose(Axis.XP.rotationDegrees(180));
         VertexConsumer buffer = bufferIn.getBuffer(RenderType.entitySolid(this.getTex()));
         this.getModel().renderToBuffer(matrixStackIn, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
         matrixStackIn.popPose();
