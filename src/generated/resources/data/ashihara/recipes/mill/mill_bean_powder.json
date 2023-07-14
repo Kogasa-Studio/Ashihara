@@ -1,13 +1,13 @@
 {
-  "inputCosts": [
-    [
-      {
-        "item": "ashihara:soy_bean"
-      },
-      1
-    ]
+  "inputCosts":
+  [
+    {
+      "item": "ashihara:soy_bean",
+      "count": 1
+    }
   ],
-  "output": [
+  "output":
+  [
     {
       "item": "ashihara:bean_powder",
       "count": 2

@@ -15,8 +15,7 @@ import java.lang.reflect.Type;
  **/
 public class FluidStackSerializer implements BaseSerializer<FluidStack>
 {
-    @Override
-    public FluidStack deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
+    public static FluidStack deserialize(JsonElement json)
     {
         var obj = json.getAsJsonObject();
         var fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(obj.get("fluid").getAsString()));
@@ -45,6 +44,12 @@ public class FluidStackSerializer implements BaseSerializer<FluidStack>
         {
             return new FluidStack(fluid, amount);
         }
+    }
+
+    @Override
+    public FluidStack deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
+    {
+        return deserialize(json);
     }
 
     @Override

@@ -6,10 +6,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.AtlasSet;
 import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -41,6 +42,7 @@ public class AshiharaAtlas
     //遍历资源包目录来收集Atlas的组成部分（小贴图）
     //纹理路径省略开头的 textures/ 和结尾的 .png ，mc会自动加上
 
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onAtlasGenerate(ModelEvent.ModifyBakingResult event)
     {

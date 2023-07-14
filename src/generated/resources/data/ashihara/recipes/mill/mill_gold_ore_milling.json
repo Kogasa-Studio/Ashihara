@@ -1,11 +1,9 @@
 {
   "inputCosts": [
-    [
       {
-        "item": "minecraft:raw_gold"
-      },
-      1
-    ]
+        "item": "minecraft:raw_gold",
+        "count": 1
+      }
   ],
   "output": [
     {

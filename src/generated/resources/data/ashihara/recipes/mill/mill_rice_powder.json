@@ -1,11 +1,9 @@
 {
   "inputCosts": [
-    [
       {
-        "item": "ashihara:rice"
-      },
-      1
-    ]
+        "item": "ashihara:rice",
+        "count": 1
+      }
   ],
   "output": [
     {

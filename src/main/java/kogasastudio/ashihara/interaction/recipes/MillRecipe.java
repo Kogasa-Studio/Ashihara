@@ -1,17 +1,25 @@
 package kogasastudio.ashihara.interaction.recipes;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.annotations.Expose;
 import kogasastudio.ashihara.helper.DataHelper;
 import kogasastudio.ashihara.interaction.recipes.base.BaseRecipe;
 import kogasastudio.ashihara.interaction.recipes.register.RecipeSerializers;
 import kogasastudio.ashihara.interaction.recipes.register.RecipeTypes;
+import kogasastudio.ashihara.utils.json.serializer.FluidStackSerializer;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.util.RecipeMatcher;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -19,6 +27,7 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -142,7 +151,7 @@ public class MillRecipe extends BaseRecipe
     //出结果的
     public NonNullList<ItemStack> getCraftingResult()
     {
-        return DataHelper.copyFrom(output);
+        return DataHelper.copyAndCast(output);
     }
 
     @Override
@@ -161,5 +170,73 @@ public class MillRecipe extends BaseRecipe
     public RecipeSerializer<?> getSerializer()
     {
         return RecipeSerializers.MILL.get();
+    }
+
+    public static class MillRecipeSerializer implements RecipeSerializer<MillRecipe>
+    {
+        @Override
+        public MillRecipe fromJson(ResourceLocation recipeLoc, JsonObject recipeJson, ICondition.IContext context)
+        {
+            return this.fromJson(recipeLoc, recipeJson);
+        }
+
+        @Override
+        public MillRecipe fromJson(ResourceLocation recipeLoc, JsonObject recipeJson)
+        {
+            JsonArray ingredients = recipeJson.getAsJsonArray("inputCosts");
+            JsonArray output = recipeJson.getAsJsonArray("output");
+            if (ingredients.isEmpty()) throw new JsonParseException("Ingredients is empty!");
+            else
+            {
+                Map<Ingredient, Byte> iMap = new HashMap<>();
+                NonNullList<ItemStack> oList = NonNullList.create();
+
+                for (JsonElement element : ingredients)
+                {
+                    Ingredient item = Ingredient.fromJson(element);
+                    byte count = element.getAsJsonObject().get("count").getAsByte();
+                    iMap.put(item, count);
+                }
+                for (JsonElement element : output)
+                {
+                    ItemStack item = CraftingHelper.getItemStack(element.getAsJsonObject(), true);
+                    oList.add(item);
+                }
+                FluidStack fluidIn = recipeJson.has("inputFluid") ? FluidStackSerializer.deserialize(recipeJson.get("inputFluid")) : FluidStack.EMPTY;
+                FluidStack fluidOut = recipeJson.has("outputFluid") ? FluidStackSerializer.deserialize(recipeJson.get("outputFluid")) : FluidStack.EMPTY;
+                byte round = recipeJson.get("round").getAsByte();
+                int roundTicks = recipeJson.get("roundTicks").getAsInt();
+                float exp = recipeJson.get("exp").getAsFloat();
+                String group = recipeJson.get("group").getAsString();
+                return new MillRecipe(recipeLoc, group, iMap, oList, fluidIn, fluidOut, round, roundTicks, exp);
+            }
+        }
+
+        @Override
+        public @Nullable MillRecipe fromNetwork(ResourceLocation rl, FriendlyByteBuf buffer)
+        {
+            String group = buffer.readUtf();
+            Map<Ingredient, Byte> iMap = buffer.readMap(Ingredient::fromNetwork, FriendlyByteBuf::readByte);
+            NonNullList<ItemStack> oList = DataHelper.copyAndCast(buffer.readList(FriendlyByteBuf::readItem));
+            FluidStack inputFluid = buffer.readFluidStack();
+            FluidStack outputFluid = buffer.readFluidStack();
+            byte round = buffer.readByte();
+            int roundTicks = buffer.readInt();
+            float exp = buffer.readFloat();
+            return new MillRecipe(rl, group, iMap, oList, inputFluid, outputFluid, round, roundTicks, exp);
+        }
+
+        @Override
+        public void toNetwork(FriendlyByteBuf buffer, MillRecipe recipe)
+        {
+            buffer.writeUtf(recipe.group);
+            buffer.writeMap(recipe.inputCosts, (friendlyByteBuf, ingredient) -> ingredient.toNetwork(friendlyByteBuf), (friendlyByteBuf, aByte) -> friendlyByteBuf.writeByte(aByte));
+            buffer.writeCollection(recipe.output, (FriendlyByteBuf::writeItem));
+            buffer.writeFluidStack(recipe.inputFluid);
+            buffer.writeFluidStack(recipe.outputFluid);
+            buffer.writeByte(recipe.round);
+            buffer.writeInt(recipe.roundTicks);
+            buffer.writeFloat(recipe.exp);
+        }
     }
 }

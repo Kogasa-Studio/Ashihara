@@ -1,11 +1,9 @@
 {
   "inputCosts": [
-    [
       {
-        "item": "ashihara:paddy"
-      },
-      1
-    ]
+        "item": "ashihara:paddy",
+        "count": 1
+      }
   ],
   "output": [
     {

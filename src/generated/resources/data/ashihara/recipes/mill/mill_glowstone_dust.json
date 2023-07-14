@@ -1,11 +1,9 @@
 {
   "inputCosts": [
-    [
       {
-        "item": "minecraft:glowstone"
-      },
-      2
-    ]
+        "item": "minecraft:glowstone",
+        "count": 2
+      }
   ],
   "output": [
     {

@@ -1,11 +1,9 @@
 {
   "inputCosts": [
-    [
       {
-        "item": "ashihara:dried_tea_leaf"
-      },
-      3
-    ]
+        "item": "ashihara:dried_tea_leaf",
+        "count": 3
+      }
   ],
   "output": [
     {

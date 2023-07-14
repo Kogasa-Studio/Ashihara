@@ -1,11 +1,9 @@
 {
   "inputCosts": [
-    [
       {
-        "item": "ashihara:bean_powder"
-      },
-      2
-    ]
+        "item": "ashihara:bean_powder",
+        "count": 2
+      }
   ],
   "output": [],
   "inputFluid": {

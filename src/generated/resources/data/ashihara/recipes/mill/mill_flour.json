@@ -1,11 +1,9 @@
 {
   "inputCosts": [
-    [
       {
-        "item": "minecraft:wheat"
-      },
-      2
-    ]
+        "item": "minecraft:wheat",
+        "count": 1
+      }
   ],
   "output": [
     {

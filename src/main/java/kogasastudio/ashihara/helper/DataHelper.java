@@ -1,21 +1,24 @@
 package kogasastudio.ashihara.helper;
 
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.ItemStack;
+
+import java.util.List;
 
 /**
  * @author DustW
  **/
 public class DataHelper
 {
-    public static NonNullList<ItemStack> copyFrom(NonNullList<ItemStack> list)
+    /**
+     * 创建目标List的Nonnull版复制品，同样可担当将List转换为NonnullList的功能
+     * @param list 输入的list
+     * @return 输出的NonNullList
+     */
+    public static <T> NonNullList<T> copyAndCast(List<T> list)
     {
-        NonNullList<ItemStack> result = NonNullList.withSize(list.size(), ItemStack.EMPTY);
+        NonNullList<T> result = NonNullList.create();
 
-        for (int i = 0; i < list.size(); i++)
-        {
-            result.set(i, list.get(i).copy());
-        }
+        for (T t : list) if (t != null) result.add(t);
 
         return result;
     }
