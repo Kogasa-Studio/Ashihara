@@ -99,19 +99,23 @@ public class FenceExpansionBlock extends Block implements IVariable<AshiharaWood
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
     {
-        VoxelShape n_down = box(6.5d, 6.0d, 8.0d, 9.5d, 9.0d, 16.0d);
-        VoxelShape n_up = box(6.5d, 12.0d, 8.0d, 9.5d, 15.0d, 16.0d);
-        VoxelShape w_down = box(8.0d, 6.0d, 6.5d, 16.0d, 9.0d, 9.5d);
-        VoxelShape w_up = box(8.0d, 12.0d, 6.5d, 16.0d, 15.0d, 9.5d);
-        VoxelShape s_down = box(6.5d, 6.0d, 0.0d, 9.5d, 9.0d, 8.0d);
-        VoxelShape s_up = box(6.5d, 12.0d, 0.0d, 9.5d, 15.0d, 8.0d);
-        VoxelShape e_down = box(0.0d, 6.0d, 6.5d, 8.0d, 9.0d, 9.5d);
-        VoxelShape e_up = box(0.0d, 12.0d, 6.5d, 8.0d, 15.0d, 9.5d);
+        VoxelShape n_down = box(5, 0, 8, 11, 3, 16);
+        VoxelShape n_mid = box(5, 6, 8, 11, 11, 16);
+        VoxelShape n_up = box(6.5, 11.5, 8, 9.5, 16, 16);
+        VoxelShape w_down = box(8, 0, 5, 16, 3, 11);
+        VoxelShape w_mid = box(8, 6, 5, 16, 11, 11);
+        VoxelShape w_up = box(8, 11.5, 6.5, 16, 16, 9.5);
+        VoxelShape s_down = box(5, 0, 0, 11, 3, 8);
+        VoxelShape s_mid = box(5, 6, 0, 11, 11, 8);
+        VoxelShape s_up = box(6.5, 11.5, 0, 9.5, 16, 8);
+        VoxelShape e_down = box(0, 0, 5, 8, 3, 11);
+        VoxelShape e_mid = box(0, 6, 5, 8, 11, 11);
+        VoxelShape e_up = box(0, 11.5, 6.5, 8, 16, 9.5);
 
-        VoxelShape n = Shapes.or(n_up, n_down);
-        VoxelShape w = Shapes.or(w_up, w_down);
-        VoxelShape s = Shapes.or(s_up, s_down);
-        VoxelShape e = Shapes.or(e_up, e_down);
+        VoxelShape n = Shapes.or(n_up, n_mid, n_down);
+        VoxelShape w = Shapes.or(w_up, w_mid, w_down);
+        VoxelShape s = Shapes.or(s_up, s_mid, s_down);
+        VoxelShape e = Shapes.or(e_up, e_mid, e_down);
 
         switch (state.getValue(FACING))
         {

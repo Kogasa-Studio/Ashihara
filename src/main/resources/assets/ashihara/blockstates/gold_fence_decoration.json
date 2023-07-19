@@ -20,6 +20,15 @@
     {
       "when": {
         "orb": "false",
+        "axis": "y"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/advanced_fence/decoration/gold_fence_decoration_cross"
+      }
+    },
+    {
+      "when": {
+        "orb": "false",
         "axis": "z"
       },
       "apply": {

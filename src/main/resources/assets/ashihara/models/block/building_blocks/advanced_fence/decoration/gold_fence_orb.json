@@ -2,7 +2,7 @@
   "credit": "Made with Blockbench",
   "parent": "minecraft:block/block",
   "textures": {
-    "0": "ashihara:block/gold_fence_decoration",
+    "0": "ashihara:block/gold_fence_orb",
     "particle": "ashihara:block/gold_fence_decoration"
   },
   "elements": [

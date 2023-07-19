@@ -4,6 +4,7 @@ import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -106,6 +107,7 @@ public class CreativeModeTabsRegistryHandler
                             "group_ashihara",
                             () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.group_ashihara"))
                                     .icon(() -> ItemRegistryHandler.ASHIHARA_ICON.get().getDefaultInstance())
+                                    .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
                                     .withTabsAfter(MATERIALS.getId(), BUILDING_BLOCKS.getId())
                                     .displayItems(((itemDisplayParameters, output) ->
                                     {

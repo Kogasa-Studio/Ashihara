@@ -13,19 +13,20 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import static kogasastudio.ashihara.block.AdvancedFenceBlock.*;
 import static kogasastudio.ashihara.utils.AshiharaTags.ADVANCED_FENCES;
-import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_AXIS;
 
 public class FenceDecorationBlock extends Block
 {
-    public static final EnumProperty<Direction.Axis> AXIS = HORIZONTAL_AXIS;
+    public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
     public static final BooleanProperty ORB = BooleanProperty.create("orb");
 
     public FenceDecorationBlock()
@@ -72,7 +73,9 @@ public class FenceDecorationBlock extends Block
             worldIn.setBlockAndUpdate(pos, state.setValue(ORB, true));
         } else
         {
-            if (fence.getValue(NORTH) && fence.getValue(SOUTH))
+            if (fence.getValue(NORTH) && fence.getValue(SOUTH) && fence.getValue(EAST) && fence.getValue(WEST))
+                worldIn.setBlockAndUpdate(pos, state.setValue(AXIS, Direction.Axis.Y));
+            else if (fence.getValue(NORTH) && fence.getValue(SOUTH))
                 worldIn.setBlockAndUpdate(pos, state.setValue(AXIS, Direction.Axis.Z));
             else if (fence.getValue(EAST) && fence.getValue(WEST))
                 worldIn.setBlockAndUpdate(pos, state.setValue(AXIS, Direction.Axis.X));
@@ -84,14 +87,15 @@ public class FenceDecorationBlock extends Block
     {
         // todo 前三是最小值
         //VoxelShape x = box(3.5d, -0.1d, 6.5d, 12.5d, -0.95d, 9.5d);
-        VoxelShape x = box(3.5d, -0.95d, 6.5d, 12.5d, -0.1d, 9.5d);
+        VoxelShape x = box(2.0d, -1.25d, 6.5d, 14.0d, -0.25d, 9.5d);
         // VoxelShape z = box(6.5d, -0.1d, 3.5d, 9.5d, -0.95d, 12.5d);
-        VoxelShape z = box(6.5d, -0.95d, 3.5d, 9.5d, -0.1d, 12.5d);
+        VoxelShape z = box(6.5d, -1.25d, 2.0d, 9.5d, -0.25d, 14.0d);
+        VoxelShape cross = Shapes.or(x, z);
 
         VoxelShape orb = box(5.5d, -1.0d, 5.5d, 10.5d, 9.5d, 10.5d);
 
         if (state.getValue(ORB)) return orb;
-        else return state.getValue(AXIS).equals(Direction.Axis.X) ? x : z;
+        else return state.getValue(AXIS).equals(Direction.Axis.X) ? x : state.getValue(AXIS).equals(Direction.Axis.Y) ? cross : z;
     }
 
     @Override
