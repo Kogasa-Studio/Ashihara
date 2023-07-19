@@ -1,6 +1,8 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.block.building.ColumnBlock;
+import kogasastudio.ashihara.block.building.WallBlock;
 import kogasastudio.ashihara.block.trees.CherryBlossomTreeGrower;
 import kogasastudio.ashihara.block.trees.RedMapleTreeGrower;
 import kogasastudio.ashihara.block.woodcrafts.*;
@@ -175,8 +177,10 @@ public class BlockRegistryHandler
         }
     });
     public static final RegistryObject<Block> GOLD_FENCE_DECORATION = BLOCKS.register("gold_fence_decoration", FenceDecorationBlock::new);
+    public static final RegistryObject<Block> RED_THICK_COLUMN = BLOCKS.register("red_thick_column", () -> new ColumnBlock(AshiharaWoodTypes.RED));
     public static final RegistryObject<Block> RED_KUMIMONO = BLOCKS.register("red_kumimono", () -> new KumimonoBlock(AshiharaWoodTypes.RED));
     public static final RegistryObject<Block> RED_KAWAKI = BLOCKS.register("red_kawaki", () -> new KawakiBlock(AshiharaWoodTypes.RED));
+    public static final RegistryObject<Block> THIN_WHITE_SOIL_WALL = BLOCKS.register("thin_white_soil_wall", WallBlock::new);
 
     public static final RegistryObject<LiquidBlock> SOY_MILK_BLOCK = BLOCKS.register("soy_milk", () ->
             new LiquidBlock(FluidRegistryHandler.SOY_MILK, Block.Properties.of().mapColor(MapColor.SNOW).noCollission().strength(100.0F).noLootTable()));

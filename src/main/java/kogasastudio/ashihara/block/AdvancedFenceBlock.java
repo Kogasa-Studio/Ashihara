@@ -291,23 +291,27 @@ public class AdvancedFenceBlock extends Block implements IVariable<AshiharaWoodT
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
     {
-        VoxelShape part_N_DOWN = box(6.5d, 6.0d, 0.0d, 9.5d, 9.0, 8.0d);
-        VoxelShape part_N_UP = box(6.5d, 12.0d, 0.0d, 9.5d, 15.0, 8.0d);
-        VoxelShape part_W_DOWN = box(0.0d, 6.0d, 6.5d, 8.0d, 9.0, 9.5d);
-        VoxelShape part_W_UP = box(0.0d, 12.0d, 6.5d, 8.0d, 15.0, 9.5d);
-        VoxelShape part_S_DOWN = box(6.5d, 6.0d, 8.0d, 9.5d, 9.0, 16.0d);
-        VoxelShape part_S_UP = box(6.5d, 12.0d, 8.0d, 9.5d, 15.0, 16.0d);
-        VoxelShape part_E_DOWN = box(8.0d, 6.0d, 6.5d, 16.0d, 9.0, 9.5d);
-        VoxelShape part_E_UP = box(8.0d, 12.0d, 6.5d, 16.0d, 15.0, 9.5d);
+        VoxelShape part_N_DOWN = box(5.0d, 0.0d, 0.0d, 11.0d, 3.0d, 8.0d);
+        VoxelShape part_N_MID = box(5.0d, 6.0d, 0.0d, 11.0d, 9.0d, 8.0d);
+        VoxelShape part_N_UP = box(6.5d, 11.5d, 0.0d, 9.5d, 14.5d, 8.0d);
+        VoxelShape part_W_DOWN = box(0.0d, 0.0d, 5.0d, 8.0d, 3.0d, 11.0d);
+        VoxelShape part_W_MID = box(0.0d, 6.0d, 5.0d, 8.0d, 9.0d, 11.0d);
+        VoxelShape part_W_UP = box(0.0d, 11.5d, 6.5d, 8.0d, 14.5d, 9.5d);
+        VoxelShape part_S_DOWN = box(5.0d, 0.0d, 8.0d, 11.0d, 3.0d, 16.0d);
+        VoxelShape part_S_MID = box(5.0d, 6.0d, 8.0d, 11.0d, 9.0d, 16.0d);
+        VoxelShape part_S_UP = box(6.5d, 11.5d, 8.0d, 9.5d, 14.5d, 16.0d);
+        VoxelShape part_E_DOWN = box(8.0d, 0.0d, 5.0d, 16.0d, 3.0d, 11.0d);
+        VoxelShape part_E_MID = box(8.0d, 6.0d, 5.0d, 16.0d, 9.0d, 11.0d);
+        VoxelShape part_E_UP = box(8.0d, 11.5d, 6.5d, 16.0d, 14.5d, 9.5d);
 
-        VoxelShape part_N = Shapes.or(part_N_UP, part_N_DOWN);
-        VoxelShape part_S = Shapes.or(part_S_UP, part_S_DOWN);
-        VoxelShape part_W = Shapes.or(part_W_UP, part_W_DOWN);
-        VoxelShape part_E = Shapes.or(part_E_UP, part_E_DOWN);
+        VoxelShape part_N = Shapes.or(part_N_UP, part_N_MID, part_N_DOWN);
+        VoxelShape part_S = Shapes.or(part_S_UP, part_S_MID, part_S_DOWN);
+        VoxelShape part_W = Shapes.or(part_W_UP, part_W_MID, part_W_DOWN);
+        VoxelShape part_E = Shapes.or(part_E_UP, part_E_MID, part_E_DOWN);
 
-        VoxelShape column_core = box(6.0d, 0.0d, 6.0d, 10.0d, 16.0d, 10.0d);
-        VoxelShape column_mid = box(6.0d, 0.0d, 6.0d, 10.0d, 13.5d, 10.0d);
-        VoxelShape column_short = box(6.0d, 0.0d, 6.0d, 10.0d, 7.5d, 10.0d);
+        VoxelShape column_core = box(4.0d, 0.0d, 4.0d, 12.0d, 16.0d, 12.0d);
+        VoxelShape column_mid = box(6.0d, 0.0d, 6.0d, 10.0d, 10.0d, 10.0d);
+        VoxelShape column_short = box(6.0d, 0.0d, 6.0d, 10.0d, 7.0d, 10.0d);
 
         VoxelShape column;
 

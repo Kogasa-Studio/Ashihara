@@ -1,0 +1,181 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "axis": "x"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/wall_thin_soil_white"
+      }
+    },
+    {
+      "when": {
+        "axis": "z"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/wall_thin_soil_white",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "l": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/expansions/tsw_l"
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "r": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/expansions/tsw_r"
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "u": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/expansions/tsw_u"
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "d": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/expansions/tsw_d"
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "l": "true",
+        "u": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/expansions/tsw_lu"
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "l": "true",
+        "d": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/expansions/tsw_ld"
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "r": "true",
+        "u": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/expansions/tsw_ru"
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "r": "true",
+        "d": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/expansions/tsw_rd"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "l": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/expansions/tsw_l",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "r": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/expansions/tsw_r",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "u": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/expansions/tsw_u",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "d": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/expansions/tsw_d",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "l": "true",
+        "u": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/expansions/tsw_lu",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "l": "true",
+        "d": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/expansions/tsw_ld",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "r": "true",
+        "u": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/expansions/tsw_ru",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "r": "true",
+        "d": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/expansions/tsw_rd",
+        "y": 90
+      }
+    }
+  ]
+}

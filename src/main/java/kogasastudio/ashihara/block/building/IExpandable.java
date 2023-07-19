@@ -1,40 +1,54 @@
 package kogasastudio.ashihara.block.building;
 
-import com.mojang.math.Axis;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 public interface IExpandable
 {
-    default void expand(Axis axis, LR lr)
+    BooleanProperty L = BooleanProperty.create("l");
+    BooleanProperty R = BooleanProperty.create("r");
+    BooleanProperty U = BooleanProperty.create("u");
+    BooleanProperty D = BooleanProperty.create("d");
+
+    default Direction getDirectionByAxis(Direction.Axis axis, RelativeDirection lrud)
     {
         Direction direction;
-        switch (lr)
+        switch (lrud)
         {
             case LEFT ->
             {
-                if (axis.equals(Axis.XP)) direction = Direction.NORTH;
-                else if (axis.equals(Axis.ZP)) direction = Direction.EAST;
-                else direction = Direction.DOWN;
+                if (axis.equals(Direction.Axis.X)) direction = Direction.EAST;
+                else if (axis.equals(Direction.Axis.Z)) direction = Direction.SOUTH;
+                else direction = Direction.UP;
             }
             case RIGHT ->
             {
-                if (axis.equals(Axis.XP)) direction = Direction.SOUTH;
-                else if (axis.equals(Axis.ZP)) direction = Direction.WEST;
-                else direction = Direction.UP;
+                if (axis.equals(Direction.Axis.X)) direction = Direction.WEST;
+                else if (axis.equals(Direction.Axis.Z)) direction = Direction.NORTH;
+                else direction = Direction.DOWN;
             }
+            case UP -> direction = Direction.UP;
+            case DOWN -> direction = Direction.DOWN;
             default -> throw new IllegalStateException("Given direction doesn't match anything existed!");
         }
-        this.expand(direction);
+        return direction;
     }
 
-    void expand(Direction direction);
+    default BlockState expand(RelativeDirection direction, BlockState stateIn, boolean flag)
+    {
+        if (direction.equals(RelativeDirection.LEFT)) stateIn = stateIn.setValue(L, flag);
+        if (direction.equals(RelativeDirection.RIGHT)) stateIn = stateIn.setValue(R, flag);
+        if (direction.equals(RelativeDirection.UP)) stateIn = stateIn.setValue(U, flag);
+        if (direction.equals(RelativeDirection.DOWN)) stateIn = stateIn.setValue(D, flag);
+        return stateIn;
+    }
 
-    /**
-     *
-     */
-    enum LR
+    enum RelativeDirection
     {
         LEFT,
-        RIGHT
+        RIGHT,
+        UP,
+        DOWN
     }
 }

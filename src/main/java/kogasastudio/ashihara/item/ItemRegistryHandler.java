@@ -116,8 +116,10 @@ public class ItemRegistryHandler
 
     public static final RegistryObject<Item> RED_ADVANCED_FENCE = ITEMS.register("advanced_red_fence", () -> new BlockItem(BlockRegistryHandler.RED_ADVANCED_FENCE.get(), new Item.Properties()));
     public static final RegistryObject<Item> SPRUCE_ADVANCED_FENCE = ITEMS.register("advanced_spruce_fence", () -> new BlockItem(BlockRegistryHandler.SPRUCE_ADVANCED_FENCE.get(), new Item.Properties()));
+    public static final RegistryObject<Item> RED_THICK_COLUMN = ITEMS.register("red_thick_column", () -> new BlockItem(BlockRegistryHandler.RED_THICK_COLUMN.get(), new Item.Properties()));
     public static final RegistryObject<Item> RED_KUMINONO = ITEMS.register("red_kumimono", () -> new BlockItem(BlockRegistryHandler.RED_KUMIMONO.get(), new Item.Properties()));
     public static final RegistryObject<Item> RED_KAWAKI = ITEMS.register("red_kawaki", () -> new BlockItem(BlockRegistryHandler.RED_KAWAKI.get(), new Item.Properties()));
+    public static final RegistryObject<Item> THIN_WHITE_SOIL_WALL = ITEMS.register("thin_white_soil_wall", () -> new BlockItem(BlockRegistryHandler.THIN_WHITE_SOIL_WALL.get(), new Item.Properties()));
 
     //灯具
     public static final RegistryObject<Item> LANTERN_LONG_WHITE = ITEMS.register("lantern_long_white", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), new Item.Properties()));
