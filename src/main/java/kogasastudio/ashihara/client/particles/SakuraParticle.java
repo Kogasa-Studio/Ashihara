@@ -7,13 +7,23 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class SakuraParticle extends TextureSheetParticle
 {
+    private float offsetSpeed;
+    private float timePointer;
+    private float rotSpeed;
+    private final float spinAcceleration;
     protected SakuraParticle(ClientLevel world, double x, double y, double z)
     {
         super(world, x, y, z, 0.0D, 0.0D, 0.0D);
-        this.xd *= 0.9F;
+        this.xd = 0;
         this.yd = 0;
-        this.zd *= 0.9F;
-        this.quadSize = 0.2F;
+        this.zd = 0;
+        this.timePointer = 0;
+        this.offsetSpeed = 0;
+        this.rotSpeed = (float) Math.toRadians(this.random.nextInt(25, 55) * (this.random.nextBoolean() ? 1 : -1));
+        this.spinAcceleration = (float)Math.toRadians(this.random.nextBoolean() ? -5.0D : 5.0D);
+        float f = (float) this.random.nextInt(20, 30) / 100;
+        this.quadSize = f;
+        this.setSize(f, f);
         this.lifetime = 200;
     }
 
@@ -40,11 +50,15 @@ public class SakuraParticle extends TextureSheetParticle
             this.xo = this.x;
             this.yo = this.y;
             this.zo = this.z;
+            this.oRoll = this.roll;
+            this.timePointer += 0.05;
+            if (onGround) this.offsetSpeed = 0; else this.offsetSpeed += 0.0036 * this.timePointer;
+            if (onGround) this.rotSpeed = 0; else this.rotSpeed += this.spinAcceleration / 20.0F;
+            this.roll += this.rotSpeed / 20;
+            this.xd = this.offsetSpeed / 20;
             this.yd -= 0.001D;
+            this.zd = this.offsetSpeed / 20;
             this.move(this.xd, this.yd, this.zd);
-            this.xd *= 0.7F;
-            this.yd *= 0.999F;
-            this.zd *= 0.7F;
             if (this.onGround)
             {
                 this.xd *= 0.5F;
