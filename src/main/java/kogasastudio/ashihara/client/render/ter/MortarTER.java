@@ -1,6 +1,5 @@
 package kogasastudio.ashihara.client.render.ter;
 
-import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -14,15 +13,10 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Matrix4f;
-
-import java.util.Map;
 
 import static kogasastudio.ashihara.block.MortarBlock.FACING;
 import static kogasastudio.ashihara.helper.RenderHelper.XTP;
@@ -30,11 +24,10 @@ import static kogasastudio.ashihara.helper.RenderHelper.buildMatrix;
 
 public class MortarTER implements BlockEntityRenderer<MortarTE>
 {
-    private static final Map<String, ResourceLocation> cookedTextures = assistanceMap();
     private static final String CEREALS = "cereals_level";
     private static final String PROCESSED = "processed_level";
 
-    public static Map<String, ResourceLocation> assistanceMap()
+    /*public static Map<String, ResourceLocation> assistanceMap()
     {
         ImmutableMap.Builder<String, ResourceLocation> builder = new ImmutableMap.Builder<>();
 
@@ -45,7 +38,7 @@ public class MortarTER implements BlockEntityRenderer<MortarTE>
         }
 
         return builder.build();
-    }
+    }*/
 
     public MortarTER(BlockEntityRendererProvider.Context rendererDispatcherIn)
     {
@@ -80,23 +73,17 @@ public class MortarTER implements BlockEntityRenderer<MortarTE>
                 {
                     String key = stack.is(AshiharaTags.CEREAL_PROCESSED) ? PROCESSED : CEREALS;
 
-                    RenderType ASSISTANCE = RenderType.entityCutout(AshiharaAtlas.ASSISTANCE_ATLAS);
-                    VertexConsumer builder = bufferIn.getBuffer(ASSISTANCE);
-                    TextureAtlasSprite level = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(cookedTextures.get(key));
-
-                    float u0 = level.getU0();
-                    float u1 = level.getU1();
-                    float v0 = level.getV0();
-                    float v1 = level.getV1();
+                    RenderType ASSISTANCE = RenderType.entityCutout(AshiharaAtlas.ALL_ASSISTANCE.get(key));
+                    VertexConsumer builder = bufferIn.getBuffer(ASSISTANCE);;
 
                     //主渲染
                     poseStackIn.pushPose();
                     poseStackIn.translate(0.0f, renderHeight, 0.0f);
                     Matrix4f wtf = poseStackIn.last().pose();
-                    buildMatrix(wtf, builder, XTP(3.5f), 0.0f, XTP(3.5f), u0, v0, combinedOverlayIn, combinedLightIn);
-                    buildMatrix(wtf, builder, XTP(3.5f), 0.0f, XTP(12.5f), u0, v1, combinedOverlayIn, combinedLightIn);
-                    buildMatrix(wtf, builder, XTP(12.5f), 0.0f, XTP(12.5f), u1, v1, combinedOverlayIn, combinedLightIn);
-                    buildMatrix(wtf, builder, XTP(12.5f), 0.0f, XTP(3.5f), u1, v0, combinedOverlayIn, combinedLightIn);
+                    buildMatrix(wtf, builder, XTP(3.5f), 0.0f, XTP(3.5f), 0, 0, combinedOverlayIn, combinedLightIn);
+                    buildMatrix(wtf, builder, XTP(3.5f), 0.0f, XTP(12.5f), 0, 1, combinedOverlayIn, combinedLightIn);
+                    buildMatrix(wtf, builder, XTP(12.5f), 0.0f, XTP(12.5f), 1, 1, combinedOverlayIn, combinedLightIn);
+                    buildMatrix(wtf, builder, XTP(12.5f), 0.0f, XTP(3.5f), 1, 0, combinedOverlayIn, combinedLightIn);
                 } else
                 {
                     poseStackIn.pushPose();

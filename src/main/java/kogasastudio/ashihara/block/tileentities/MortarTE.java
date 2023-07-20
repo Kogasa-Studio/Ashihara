@@ -171,7 +171,7 @@ public class MortarTE extends AshiharaMachineTE implements MenuProvider, IFluidH
         this.pointer = 0;
 
         this.recipeType = recipeIn.recipeType;
-        this.progressTotal = recipeIn.progress;
+        this.progressTotal = recipeIn.sequence.length;
         this.sequence = recipeIn.sequence;
         this.fluidCost = recipeIn.getFluidCost();
         this.nextStep = recipeIn.recipeType == 2 ? -1 : this.sequence[this.pointer];

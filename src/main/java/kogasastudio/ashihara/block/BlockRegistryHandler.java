@@ -92,7 +92,7 @@ public class BlockRegistryHandler
     public static final RegistryObject<Block> LANTERN_LONG_RED = BLOCKS.register("lantern_long_red", HangingLanternLongBlock::new);
     public static final RegistryObject<Block> CANDLE = BLOCKS.register("candle", CandleBlock::new);
     public static final RegistryObject<Block> TATAMI = BLOCKS.register("tatami", TatamiBlock::new);
-    public static final RegistryObject<Block> OAK_SHOUJI_BEAM_MUD = BLOCKS.register("oak_shouji_beam_mud", ShoujiBeamBlock::new);
+    //public static final RegistryObject<Block> OAK_SHOUJI_BEAM_MUD = BLOCKS.register("oak_shouji_beam_mud", ShoujiBeamBlock::new);
 
     //作物
     public static final RegistryObject<Block> SOY_BEANS = BLOCKS.register("soy_beans", () -> new AbstractCropAge7Pickable(7, 3)
@@ -183,7 +183,7 @@ public class BlockRegistryHandler
     public static final RegistryObject<Block> THIN_WHITE_SOIL_WALL = BLOCKS.register("thin_white_soil_wall", WallBlock::new);
 
     public static final RegistryObject<LiquidBlock> SOY_MILK_BLOCK = BLOCKS.register("soy_milk", () ->
-            new LiquidBlock(FluidRegistryHandler.SOY_MILK, Block.Properties.of().mapColor(MapColor.SNOW).noCollission().strength(100.0F).noLootTable()));
+            new LiquidBlock(FluidRegistryHandler.SOY_MILK, Block.Properties.of().mapColor(MapColor.SNOW).noCollission().strength(100.0F).replaceable().noLootTable()));
     public static final RegistryObject<LiquidBlock> OIL_BLOCK = BLOCKS.register("oil", () ->
-            new LiquidBlock(FluidRegistryHandler.OIL, Block.Properties.of().mapColor(MapColor.COLOR_YELLOW).noCollission().strength(100.0F).noLootTable()));
+            new LiquidBlock(FluidRegistryHandler.OIL, Block.Properties.of().mapColor(MapColor.COLOR_YELLOW).noCollission().strength(100.0F).replaceable().noLootTable()));
 }

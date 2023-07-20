@@ -15,10 +15,7 @@ import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -37,7 +34,7 @@ public class AshiharaAtlas
     public final AtlasSet atlasSet = new AtlasSet(ASHIHARA_ATLASES, Minecraft.getInstance().textureManager);
 
     public static final List<ResourceLocation> ALL_ICON = new ArrayList<>();
-    public static final List<ResourceLocation> ALL_ASSISTANCE = new ArrayList<>();
+    public static final Map<String, ResourceLocation> ALL_ASSISTANCE = new HashMap<>();
 
     //遍历资源包目录来收集Atlas的组成部分（小贴图）
     //纹理路径省略开头的 textures/ 和结尾的 .png ，mc会自动加上
@@ -49,14 +46,14 @@ public class AshiharaAtlas
         ALL_ICON.clear();
         ALL_ASSISTANCE.clear();
 
-        ALL_ICON.add(new ResourceLocation(Ashihara.MODID, "textures/icons/hanataki"));
-        ALL_ICON.add(new ResourceLocation(Ashihara.MODID, "textures/icons/tomoe"));
-        ALL_ICON.add(new ResourceLocation(Ashihara.MODID, "textures/icons/yamasakura"));
-        ALL_ICON.add(new ResourceLocation(Ashihara.MODID, "textures/icons/okatobe"));
-        ALL_ICON.add(new ResourceLocation(Ashihara.MODID, "textures/icons/reinakakobo"));
+        ALL_ICON.add(new ResourceLocation(Ashihara.MODID, "textures/icons/hanataki.png"));
+        ALL_ICON.add(new ResourceLocation(Ashihara.MODID, "textures/icons/tomoe.png"));
+        ALL_ICON.add(new ResourceLocation(Ashihara.MODID, "textures/icons/yamasakura.png"));
+        ALL_ICON.add(new ResourceLocation(Ashihara.MODID, "textures/icons/otakobe.png"));
+        ALL_ICON.add(new ResourceLocation(Ashihara.MODID, "textures/icons/reinakakobo.png"));
 
-        ALL_ASSISTANCE.add(new ResourceLocation(Ashihara.MODID, "textures/assistants/cereals_level"));
-        ALL_ASSISTANCE.add(new ResourceLocation(Ashihara.MODID, "textures/assistants/processed_level"));
+        ALL_ASSISTANCE.put("cereals_level", new ResourceLocation(Ashihara.MODID, "textures/assistants/cereals_level.png"));
+        ALL_ASSISTANCE.put("processed_level", new ResourceLocation(Ashihara.MODID, "textures/assistants/processed_level.png"));
         //用at拿到一个原版字段，用来将我们的小贴图丢进Atlas并把Atlas丢进游戏
         //纹章
         /*Map<ResourceLocation, Resource> icons = Minecraft.getInstance().getResourceManager().listResources("textures/icons/", s -> s.getPath().endsWith(".png"));

@@ -27,7 +27,7 @@
     "fluid": "minecraft:water",
     "amount": 2000
   },
-  "progress": 0,
+  "progress": 8,
   "recipeType": 1,
   "sequence": [
     2,

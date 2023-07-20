@@ -31,8 +31,8 @@ public class FluidRegistryHandler
             WATER_FLOW = new ResourceLocation("block/water_flow"),
             WATER_OVERLAY = new ResourceLocation("block/water_overlay");
 
-    public static final ResourceLocation MILK_STILL = new ResourceLocation(Ashihara.MODID, "fluid/milky_liquid_still");
-    public static final ResourceLocation MILK_FLOW = new ResourceLocation(Ashihara.MODID, "fluid/milky_liquid_flow");
+    public static final ResourceLocation MILK_STILL = new ResourceLocation(Ashihara.MODID, "textures/fluid/milky_liquid_still.png");
+    public static final ResourceLocation MILK_FLOW = new ResourceLocation(Ashihara.MODID, "textures/fluid/milky_liquid_flow.png");
 
     public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS, Ashihara.MODID);
 
@@ -58,7 +58,7 @@ public class FluidRegistryHandler
 
         public static final RegistryObject<FluidType> TYPE_SOY_MILK = TYPES.register
                 (
-                        "soy_milk", () -> createWaterLike("block.ashihara.soy_milk", MILK_STILL, MILK_FLOW, WATER_OVERLAY, UNDERWATER_LOCATION, FastColor.ARGB32.color(255, 255, 253, 225))
+                        "soy_milk", () -> createWaterLike("block.ashihara.soy_milk", WATER_STILL, WATER_FLOW, WATER_OVERLAY, UNDERWATER_LOCATION, FastColor.ARGB32.color(255, 255, 253, 225))
                 );
 
         public static final RegistryObject<FluidType> TYPE_OIL = TYPES.register

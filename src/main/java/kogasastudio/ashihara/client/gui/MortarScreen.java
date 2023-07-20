@@ -95,7 +95,6 @@ public class MortarScreen extends AbstractContainerScreen<MortarContainer>
                         {
                             if (!tank.isEmpty())
                             {
-                                guiGraphics.pose().pushPose();
                                 FluidStack fluid = tank.getFluid();
                                 renderer.render(guiGraphics.pose(), leftPos + 21, topPos + 15, fluid);
                             }

@@ -15,6 +15,8 @@ public class MillScreen extends AbstractContainerScreen<MillContainer>
 {
     private static final ResourceLocation GUI = new ResourceLocation("ashihara:textures/gui/mill.png");
     private int progress;
+    private final FluidStackRenderer inputRenderer = new FluidStackRenderer(4000, 16, 64);
+    private final FluidStackRenderer outputRenderer = new FluidStackRenderer(4000, 64, 6);
 
     public MillScreen(MillContainer container, Inventory inv, Component title)
     {
@@ -67,13 +69,14 @@ public class MillScreen extends AbstractContainerScreen<MillContainer>
                         {
                             if (!tank.isEmpty())
                             {
-                                gui.pose().pushPose();
-                                int capacity = tank.getCapacity();
+//                                gui.pose().pushPose();
+//                                int capacity = tank.getCapacity();
                                 FluidStack fluid = tank.getFluid();
-                                int fluidAmount = fluid.getAmount();
-                                int displayHeight = (int) (((float) fluidAmount / (float) capacity) * 64);
-                                RenderHelper.renderFluidStackInGUI(gui.pose().last().pose(), fluid, 16, displayHeight, i + 17, j + 77);
-                                gui.pose().popPose();
+//                                int fluidAmount = fluid.getAmount();
+//                                int displayHeight = (int) (((float) fluidAmount / (float) capacity) * 64);
+//                                RenderHelper.renderFluidStackInGUI(gui.pose().last().pose(), fluid, 16, displayHeight, i + 17, j + 77);
+//                                gui.pose().popPose();
+                                inputRenderer.render(gui.pose(), leftPos + 17, topPos + 13, fluid);
                             }
                         }
                 );
@@ -84,13 +87,14 @@ public class MillScreen extends AbstractContainerScreen<MillContainer>
                         {
                             if (!tank.isEmpty())
                             {
-                                gui.pose().pushPose();
-                                int capacity = tank.getCapacity();
+//                                gui.pose().pushPose();
+//                                int capacity = tank.getCapacity();
                                 FluidStack fluid = tank.getFluid();
-                                int fluidAmount = fluid.getAmount();
-                                int displayWidth = (int) (((float) fluidAmount / (float) capacity) * 64);
-                                RenderHelper.renderFluidStackInGUI(gui.pose().last().pose(), fluid, displayWidth, 6, i + 54, j + 105);
-                                gui.pose().popPose();
+                                outputRenderer.render(gui.pose(), i + 54, j + 99, fluid);
+//                                int fluidAmount = fluid.getAmount();
+//                                int displayWidth = (int) (((float) fluidAmount / (float) capacity) * 64);
+//                                RenderHelper.renderFluidStackInGUI(gui.pose().last().pose(), fluid, displayWidth, 6, i + 54, j + 105);
+//                                gui.pose().popPose();
                             }
                         }
                 );
