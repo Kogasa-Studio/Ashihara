@@ -155,11 +155,11 @@ public class KumimonoBlock extends Block implements IVariable<AshiharaWoodTypes>
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
     {
-        VoxelShape body = box(2.5d, 0.0d, 2.5d, 13.5d, 10.0d, 13.5d);
-        VoxelShape beam_n = box(5.0d, 6.0d, 0.0d, 11.0d, 16.0d, 8.0d);
-        VoxelShape beam_e = box(8.0d, 6.0d, 5.0d, 16.0d, 16.0d, 11.0d);
-        VoxelShape beam_s = box(5.0d, 6.0d, 8.0d, 11.0d, 16.0d, 16.0d);
-        VoxelShape beam_w = box(0.0d, 6.0d, 5.0d, 8.0d, 16.0d, 11.0d);
+        VoxelShape body = box(1.5d, 0.0d, 1.5d, 14.5d, 11.0d, 14.5d);
+        VoxelShape beam_n = box(6.0d, 8.0d, 0.0d, 10.0d, 16.0d, 8.0d);
+        VoxelShape beam_e = box(8.0d, 8.0d, 6.0d, 16.0d, 16.0d, 10.0d);
+        VoxelShape beam_s = box(6.0d, 8.0d, 8.0d, 10.0d, 16.0d, 16.0d);
+        VoxelShape beam_w = box(0.0d, 8.0d, 6.0d, 8.0d, 16.0d, 10.0d);
 
         if (state.getValue(BEAM_N)) body = Shapes.or(body, beam_n);
         if (state.getValue(BEAM_E)) body = Shapes.or(body, beam_e);

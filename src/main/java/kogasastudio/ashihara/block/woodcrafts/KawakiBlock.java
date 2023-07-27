@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class KawakiBlock extends Block implements IVariable<AshiharaWoodTypes>
@@ -95,27 +96,23 @@ public class KawakiBlock extends Block implements IVariable<AshiharaWoodTypes>
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
     {
-        VoxelShape n = box(5.0d, 6.0d, 4.5d, 11.0d, 16.0d, 16.0d);
-        VoxelShape e = box(0.0d, 6.0d, 5.0d, 11.5d, 16.0d, 11.0d);
-        VoxelShape s = box(5.0d, 6.0d, 0.0d, 11.0d, 16.0d, 11.5d);
-        VoxelShape w = box(4.5d, 6.0d, 5.0d, 16.0d, 16.0d, 11.0d);
-
-        VoxelShape long_X = box(0.0d, 6.0d, 5.0d, 16.0d, 16.0d, 11.0d);
-        VoxelShape long_Z = box(5.0d, 6.0d, 0.0d, 11.0d, 16.0d, 16.0d);
+        VoxelShape n = box(6.0d, 8.0d, 4.0d, 10.0d, 16.0d, 16.0d);
+        VoxelShape e = box(0.0d, 8.0d, 6.0d, 12.0d, 16.0d, 10.0d);
+        VoxelShape s = box(6.0d, 8.0d, 0.0d, 10.0d, 16.0d, 12d);
+        VoxelShape w = box(4.0d, 8.0d, 6.0d, 16.0d, 16.0d, 10.0d);
 
         if (state.getValue(ISLONG))
         {
-            if (state.getValue(FACING).getAxis().equals(Direction.Axis.X)) return long_X;
-            else return long_Z;
+            if (state.getValue(FACING).getAxis().equals(Direction.Axis.X)) return Shapes.or(e, w);
+            else return Shapes.or(n, s);
         } else
         {
             return switch (state.getValue(FACING))
             {
-                case NORTH -> n;
                 case EAST -> e;
                 case SOUTH -> s;
                 case WEST -> w;
-                default -> long_Z;
+                default -> n;
             };
         }
     }

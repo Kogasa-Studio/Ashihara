@@ -1,0 +1,6 @@
+{
+  "parent": "ashihara:block/building_blocks/kumimono/thick_beam_r",
+  "textures": {
+    "wood": "ashihara:block/woodcrafts/red_beam"
+  }
+}

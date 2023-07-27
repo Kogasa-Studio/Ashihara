@@ -2,7 +2,7 @@
   "multipart": [
     {
       "apply": {
-        "model": "ashihara:block/building_blocks/kumimono/red_kumimono"
+        "model": "ashihara:block/building_blocks/kumimono/red/kumimono"
       }
     },
     {
@@ -10,7 +10,7 @@
         "north": "true"
       },
       "apply": {
-        "model": "ashihara:block/building_blocks/kumimono/red_kumimono_beam_n"
+        "model": "ashihara:block/building_blocks/kumimono/red/thick_beam_l"
       }
     },
     {
@@ -18,7 +18,7 @@
         "east": "true"
       },
       "apply": {
-        "model": "ashihara:block/building_blocks/kumimono/red_kumimono_beam_n",
+        "model": "ashihara:block/building_blocks/kumimono/red/thick_beam_l",
         "y": 90
       }
     },
@@ -27,7 +27,7 @@
         "south": "true"
       },
       "apply": {
-        "model": "ashihara:block/building_blocks/kumimono/red_kumimono_beam_s"
+        "model": "ashihara:block/building_blocks/kumimono/red/thick_beam_r"
       }
     },
     {
@@ -35,7 +35,7 @@
         "west": "true"
       },
       "apply": {
-        "model": "ashihara:block/building_blocks/kumimono/red_kumimono_beam_s",
+        "model": "ashihara:block/building_blocks/kumimono/red/thick_beam_r",
         "y": 90
       }
     }

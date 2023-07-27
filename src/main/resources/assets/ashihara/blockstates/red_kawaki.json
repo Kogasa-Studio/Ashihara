@@ -1,32 +1,32 @@
 {
   "variants": {
     "facing=north,is_long=false": {
-      "model": "ashihara:block/building_blocks/kumimono/red_kawaki"
+      "model": "ashihara:block/building_blocks/kumimono/red/kawaki"
     },
     "facing=east,is_long=false": {
-      "model": "ashihara:block/building_blocks/kumimono/red_kawaki",
+      "model": "ashihara:block/building_blocks/kumimono/red/kawaki",
       "y": 90
     },
     "facing=south,is_long=false": {
-      "model": "ashihara:block/building_blocks/kumimono/red_kawaki",
+      "model": "ashihara:block/building_blocks/kumimono/red/kawaki",
       "y": 180
     },
     "facing=west,is_long=false": {
-      "model": "ashihara:block/building_blocks/kumimono/red_kawaki",
+      "model": "ashihara:block/building_blocks/kumimono/red/kawaki",
       "y": 270
     },
     "facing=north,is_long=true": {
-      "model": "ashihara:block/building_blocks/kumimono/red_kawaki_long_z"
+      "model": "ashihara:block/building_blocks/kumimono/red/kawaki_long_z"
     },
     "facing=east,is_long=true": {
-      "model": "ashihara:block/building_blocks/kumimono/red_kawaki_long_z",
+      "model": "ashihara:block/building_blocks/kumimono/red/kawaki_long_z",
       "y": 90
     },
     "facing=south,is_long=true": {
-      "model": "ashihara:block/building_blocks/kumimono/red_kawaki_long_z"
+      "model": "ashihara:block/building_blocks/kumimono/red/kawaki_long_z"
     },
     "facing=west,is_long=true": {
-      "model": "ashihara:block/building_blocks/kumimono/red_kawaki_long_z",
+      "model": "ashihara:block/building_blocks/kumimono/red/kawaki_long_z",
       "y": 90
     }
   }

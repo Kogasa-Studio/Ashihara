@@ -1,0 +1,6 @@
+{
+  "parent": "ashihara:block/building_blocks/kumimono/kawaki",
+  "textures": {
+    "wood": "ashihara:block/woodcrafts/red_beam"
+  }
+}
