@@ -28,7 +28,7 @@ public class MarkableLanternTE extends AshiharaMachineTE
     //用来循环更改纹章
     public void nextIcon()
     {
-        if (pointer == cookedTextures.size() - 1) pointer = 0;
+        if (pointer >= cookedTextures.size() - 1) pointer = 0;
         else pointer += 1;
         setChanged();
     }
