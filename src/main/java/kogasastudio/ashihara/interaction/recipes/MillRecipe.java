@@ -82,6 +82,11 @@ public class MillRecipe extends BaseRecipe
         this.exp = expIn;
     }
 
+    public MillRecipe copy()
+    {
+        return new MillRecipe(id, group, inputCosts, output, inputFluid, outputFluid, round, roundTicks, exp);
+    }
+
     public boolean testInputFluid(@Nullable FluidTank tank)
     {
         return tank == null ? getInputFluid().isEmpty() :

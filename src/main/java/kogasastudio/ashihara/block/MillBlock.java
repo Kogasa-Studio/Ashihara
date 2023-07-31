@@ -54,22 +54,30 @@ public class MillBlock extends Block implements EntityBlock
     }
 
     @Override
-    public void playerDestroy(Level worldIn, Player player, BlockPos pos, BlockState state, BlockEntity te, ItemStack stack)
+    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState state1, boolean b)
     {
+        BlockEntity te = worldIn.getBlockEntity(pos);
         if (te instanceof MillTE)
         {
             NonNullList<ItemStack> stacks = NonNullList.create();
             for (int i = 0; i < ((MillTE) te).getInput().getSlots(); i += 1)
             {
                 ItemStack stack1 = ((MillTE) te).getInput().getStackInSlot(i);
-                if (!stack.isEmpty())
+                if (!stack1.isEmpty())
                 {
                     stacks.add(stack1);
                 }
             }
             Containers.dropContents(worldIn, pos, stacks);
             Containers.dropContents(worldIn, pos, ((MillTE) te).getOutput().getContent());
+            worldIn.updateNeighbourForOutputSignal(pos, this);
         }
+        super.onRemove(state, worldIn, pos, state1, b);
+    }
+
+    @Override
+    public void playerDestroy(Level worldIn, Player player, BlockPos pos, BlockState state, BlockEntity te, ItemStack stack)
+    {
         super.playerDestroy(worldIn, player, pos, state, te, stack);
     }
 

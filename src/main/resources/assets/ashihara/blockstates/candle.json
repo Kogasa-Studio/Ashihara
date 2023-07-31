@@ -4,7 +4,7 @@
       "model": "ashihara:block/candle"
     },
     "multiple=true": {
-      "model": "minecraft:block/air"
+      "model": "ashihara:block/candle_air"
     }
   }
 }

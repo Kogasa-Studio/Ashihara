@@ -8,7 +8,6 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -42,13 +41,15 @@ public class CuttingBoardBlock extends Block implements EntityBlock
     }
 
     @Override
-    public void playerDestroy(Level worldIn, Player player, BlockPos pos, BlockState state, BlockEntity te, ItemStack stack)
+    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState state1, boolean b)
     {
+        BlockEntity te = worldIn.getBlockEntity(pos);
         if (te instanceof CuttingBoardTE)
         {
             Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), ((CuttingBoardTE) te).getContent());
+            worldIn.updateNeighbourForOutputSignal(pos, this);
         }
-        super.playerDestroy(worldIn, player, pos, state, te, stack);
+        super.onRemove(state, worldIn, pos, state1, b);
     }
 
     @Override

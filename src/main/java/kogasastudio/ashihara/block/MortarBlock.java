@@ -75,8 +75,9 @@ public class MortarBlock extends Block implements EntityBlock
     }
 
     @Override
-    public void playerDestroy(Level worldIn, Player player, BlockPos pos, BlockState state, BlockEntity te, ItemStack stack)
+    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState state1, boolean b)
     {
+        BlockEntity te = worldIn.getBlockEntity(pos);
         if (te instanceof MortarTE)
         {
             NonNullList<ItemStack> stacks = NonNullList.create();
@@ -86,8 +87,9 @@ public class MortarBlock extends Block implements EntityBlock
                 if (!stackI.isEmpty()) stacks.add(stackI);
             }
             Containers.dropContents(worldIn, pos, stacks);
+            worldIn.updateNeighbourForOutputSignal(pos, this);
         }
-        super.playerDestroy(worldIn, player, pos, state, te, stack);
+        super.onRemove(state, worldIn, pos, state1, b);
     }
 
     @Override

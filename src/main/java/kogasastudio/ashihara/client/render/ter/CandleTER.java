@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import kogasastudio.ashihara.block.tileentities.CandleTE;
 import kogasastudio.ashihara.client.models.CandleModel;
+import kogasastudio.ashihara.client.render.LayerRegistryHandler;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -15,11 +16,11 @@ import net.minecraft.resources.ResourceLocation;
 public class CandleTER implements BlockEntityRenderer<CandleTE>
 {
     private static final ResourceLocation tex = new ResourceLocation("ashihara:textures/block/candle_java.png");
-    private final CandleModel candleSingle = new CandleModel();
+    private final CandleModel candleSingle;
 
     public CandleTER(BlockEntityRendererProvider.Context dispatcherIn)
     {
-
+        this.candleSingle = new CandleModel(dispatcherIn.bakeLayer(LayerRegistryHandler.CANDLE));
     }
 
     @Override

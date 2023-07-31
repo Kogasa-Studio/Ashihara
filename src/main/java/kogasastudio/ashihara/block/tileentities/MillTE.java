@@ -7,7 +7,10 @@ import kogasastudio.ashihara.interaction.recipes.register.RecipeTypes;
 import kogasastudio.ashihara.inventory.container.GenericItemStackHandler;
 import kogasastudio.ashihara.inventory.container.MillContainer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -41,6 +44,8 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
 {
     public GenericItemStackHandler input = new GenericItemStackHandler(4);
     public GenericItemStackHandler output = new GenericItemStackHandler(4);
+
+    public NonNullList<ItemStack> outList = NonNullList.create();
     public GenericItemStackHandler fluidIO = new GenericItemStackHandler(3);
     public byte round; //现在已经转的圈数
     public byte roundTotal; //完成这个配方需要转的总圈数, 由所选配方决定
@@ -83,7 +88,6 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
             return 4;
         }
     };
-    private MillRecipe recipe;
 
     public MillTE(BlockPos pos, BlockState state)
     {
@@ -196,8 +200,12 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
         this.roundProgress = 0;
         this.roundTotal = recipeIn.round;
         this.roundTicks = recipeIn.roundTicks;
+        this.outList.clear();
+        for (ItemStack stack : recipeIn.getCraftingResult())
+        {
+            this.outList.add(stack.copy());
+        }
         this.exp = recipeIn.exp;
-        this.recipe = recipeIn;
         this.isWorking = true;
         this.sync();
         setChanged();
@@ -215,7 +223,7 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
         {
             if (recipeIn.getCraftingResult() != null)
             {
-                for (ItemStack stack : this.recipe.getCraftingResult())
+                for (ItemStack stack : this.outList)
                 {
                     output.addItem(stack);
                 }
@@ -287,7 +295,7 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
                         this.level.getBlockState(this.worldPosition), 3);
             }
         }
-        this.recipe = null;
+        this.outList.clear();
         this.sync();
         setChanged();
     }
@@ -364,6 +372,18 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
         this.output.deserializeNBT(nbt.getCompound("output"));
         this.tankIn.ifPresent(fluidTank -> fluidTank.readFromNBT(nbt.getCompound("tankIn")));
         this.tankOut.ifPresent(fluidTank -> fluidTank.readFromNBT(nbt.getCompound("tankOut")));
+
+        ListTag outputIn = nbt.getList("outList", Tag.TAG_COMPOUND);
+        for (int i = 0; i < outputIn.size(); i++)
+        {
+            CompoundTag itemTags = outputIn.getCompound(i);
+            int slot = itemTags.getInt("Slot");
+
+            if (slot >= 0)
+            {
+                this.outList.add(slot, ItemStack.of(itemTags));
+            }
+        }
         super.load(nbt);
     }
 
@@ -379,6 +399,19 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
         compound.put("output", this.output.serializeNBT());
         this.tankIn.ifPresent(fluidTank -> compound.put("tankIn", fluidTank.writeToNBT(new CompoundTag())));
         this.tankOut.ifPresent(fluidTank -> compound.put("tankOut", fluidTank.writeToNBT(new CompoundTag())));
+
+        ListTag outputIn = new ListTag();
+        for (int i = 0; i < this.outList.size(); i++)
+        {
+            if (!this.outList.get(i).isEmpty())
+            {
+                CompoundTag itemTag = new CompoundTag();
+                itemTag.putInt("Slot", i);
+                outputIn.add(this.outList.get(i).save(itemTag));
+            }
+        }
+        compound.put("outList", outputIn);
+
         super.saveAdditional(compound);
     }
 
@@ -410,14 +443,12 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
         {
             if (hasInput())
             {
+
                 boolean matchAny = false;
                 Optional<MillRecipe> recipeIn = tryMatchRecipe();
                 if (recipeIn.isPresent() && canProduce(recipeIn.get()))
                 {
-                    if (this.recipe == null || !this.recipe.equals(recipeIn.get()))
-                    {
-                        applyRecipe(recipeIn.get());
-                    }
+                    if (!isWorking) applyRecipe(recipeIn.get());
                     matchAny = true;
                 }
                 if (!matchAny)
@@ -426,9 +457,9 @@ public class MillTE extends AshiharaMachineTE implements TickableTileEntity, Men
                 }
                 if (isWorking)
                 {
-                    if (round == roundTotal)
+                    if (round >= roundTotal)
                     {
-                        finishReciping(recipe);
+                        finishReciping(recipeIn.get());
                     } else
                     {
                         if (roundProgress == roundTicks)

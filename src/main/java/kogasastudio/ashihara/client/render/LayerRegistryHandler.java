@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.client.render;
 
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.client.models.CandleModel;
 import kogasastudio.ashihara.client.models.MillStoneModel;
 import kogasastudio.ashihara.client.models.PailItemModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -17,12 +18,14 @@ public class LayerRegistryHandler
 {
     public static final ModelLayerLocation PAIL_ITEM = register("pail_item");
     public static final ModelLayerLocation MILL_STONE = register("mill_stone");
+    public static final ModelLayerLocation CANDLE = register("candle");
 
     @SubscribeEvent
     public static void registerLDs(EntityRenderersEvent.RegisterLayerDefinitions event)
     {
         event.registerLayerDefinition(PAIL_ITEM, PailItemModel::createBodyLayer);
         event.registerLayerDefinition(MILL_STONE, MillStoneModel::createBodyLayer);
+        event.registerLayerDefinition(CANDLE, CandleModel::createBodyLayer);
         LOGGER_MAIN.info("######## LAYERS REGISTERED ########");
     }
 
