@@ -1,8 +1,9 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.block.building.BeamBlock;
 import kogasastudio.ashihara.block.building.ColumnBlock;
-import kogasastudio.ashihara.block.building.WallBlock;
+import kogasastudio.ashihara.block.building.AbstractWallBlock;
 import kogasastudio.ashihara.block.trees.CherryBlossomTreeGrower;
 import kogasastudio.ashihara.block.trees.RedMapleTreeGrower;
 import kogasastudio.ashihara.block.woodcrafts.*;
@@ -11,6 +12,8 @@ import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.utils.AshiharaWoodTypes;
+import kogasastudio.ashihara.utils.WallTypes;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.*;
@@ -92,7 +95,14 @@ public class BlockRegistryHandler
     public static final RegistryObject<Block> LANTERN_LONG_RED = BLOCKS.register("lantern_long_red", HangingLanternLongBlock::new);
     public static final RegistryObject<Block> CANDLE = BLOCKS.register("candle", CandleBlock::new);
     public static final RegistryObject<Block> TATAMI = BLOCKS.register("tatami", TatamiBlock::new);
-    //public static final RegistryObject<Block> OAK_SHOUJI_BEAM_MUD = BLOCKS.register("oak_shouji_beam_mud", ShoujiBeamBlock::new);
+    public static final RegistryObject<Block> RED_BEAM = BLOCKS.register("red_beam", () -> new BeamBlock()
+    {
+        @Override
+        public Item getBeam()
+        {
+            return ItemRegistryHandler.RED_BEAM.get();
+        }
+    });
 
     //作物
     public static final RegistryObject<Block> SOY_BEANS = BLOCKS.register("soy_beans", () -> new AbstractCropAge7Pickable(7, 3)
@@ -180,7 +190,14 @@ public class BlockRegistryHandler
     public static final RegistryObject<Block> RED_THICK_COLUMN = BLOCKS.register("red_thick_column", () -> new ColumnBlock(AshiharaWoodTypes.RED));
     public static final RegistryObject<Block> RED_KUMIMONO = BLOCKS.register("red_kumimono", () -> new KumimonoBlock(AshiharaWoodTypes.RED));
     public static final RegistryObject<Block> RED_KAWAKI = BLOCKS.register("red_kawaki", () -> new KawakiBlock(AshiharaWoodTypes.RED));
-    public static final RegistryObject<Block> THIN_WHITE_SOIL_WALL = BLOCKS.register("thin_white_soil_wall", WallBlock::new);
+    public static final RegistryObject<Block> THIN_WHITE_SOIL_WALL = BLOCKS.register("thin_white_soil_wall", () -> new AbstractWallBlock()
+    {
+        @Override
+        public WallTypes getType()
+        {
+            return WallTypes.WHITE_SOIL;
+        }
+    });
 
     public static final RegistryObject<LiquidBlock> SOY_MILK_BLOCK = BLOCKS.register("soy_milk", () ->
             new LiquidBlock(FluidRegistryHandler.SOY_MILK, Block.Properties.of().mapColor(MapColor.SNOW).noCollission().strength(100.0F).replaceable().noLootTable()));

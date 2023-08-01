@@ -1,0 +1,3504 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "booo"
+          },
+          {
+            "axis": "x",
+            "combination": "bobo"
+          },
+          {
+            "axis": "x",
+            "combination": "boob"
+          },
+          {
+            "axis": "x",
+            "combination": "bono"
+          },
+          {
+            "axis": "x",
+            "combination": "boon"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/1"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "booo"
+          },
+          {
+            "axis": "z",
+            "combination": "bobo"
+          },
+          {
+            "axis": "z",
+            "combination": "boob"
+          },
+          {
+            "axis": "z",
+            "combination": "bono"
+          },
+          {
+            "axis": "z",
+            "combination": "boon"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "oboo"
+          },
+          {
+            "axis": "x",
+            "combination": "obob"
+          },
+          {
+            "axis": "x",
+            "combination": "obon"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/2"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "oboo"
+          },
+          {
+            "axis": "z",
+            "combination": "obob"
+          },
+          {
+            "axis": "z",
+            "combination": "obon"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "oobo"
+          },
+          {
+            "axis": "x",
+            "combination": "bobo"
+          },
+          {
+            "axis": "x",
+            "combination": "nobo"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/3"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "oobo"
+          },
+          {
+            "axis": "z",
+            "combination": "bobo"
+          },
+          {
+            "axis": "z",
+            "combination": "nobo"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "ooob"
+          },
+          {
+            "axis": "x",
+            "combination": "obob"
+          },
+          {
+            "axis": "x",
+            "combination": "boob"
+          },
+          {
+            "axis": "x",
+            "combination": "onob"
+          },
+          {
+            "axis": "x",
+            "combination": "noob"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/4"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "ooob"
+          },
+          {
+            "axis": "z",
+            "combination": "obob"
+          },
+          {
+            "axis": "z",
+            "combination": "boob"
+          },
+          {
+            "axis": "z",
+            "combination": "onob"
+          },
+          {
+            "axis": "z",
+            "combination": "noob"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "nooo"
+          },
+          {
+            "axis": "x",
+            "combination": "nobo"
+          },
+          {
+            "axis": "x",
+            "combination": "noob"
+          },
+          {
+            "axis": "x",
+            "combination": "nono"
+          },
+          {
+            "axis": "x",
+            "combination": "noon"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/n_1"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "nooo"
+          },
+          {
+            "axis": "z",
+            "combination": "nobo"
+          },
+          {
+            "axis": "z",
+            "combination": "noob"
+          },
+          {
+            "axis": "z",
+            "combination": "nono"
+          },
+          {
+            "axis": "z",
+            "combination": "noon"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/n_1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "onoo"
+          },
+          {
+            "axis": "x",
+            "combination": "onob"
+          },
+          {
+            "axis": "x",
+            "combination": "onon"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/n_2"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "onoo"
+          },
+          {
+            "axis": "z",
+            "combination": "onob"
+          },
+          {
+            "axis": "z",
+            "combination": "onon"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/n_2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "oono"
+          },
+          {
+            "axis": "x",
+            "combination": "bono"
+          },
+          {
+            "axis": "x",
+            "combination": "nono"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/n_3"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "oono"
+          },
+          {
+            "axis": "z",
+            "combination": "bono"
+          },
+          {
+            "axis": "z",
+            "combination": "nono"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/n_3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "ooon"
+          },
+          {
+            "axis": "x",
+            "combination": "obon"
+          },
+          {
+            "axis": "x",
+            "combination": "boon"
+          },
+          {
+            "axis": "x",
+            "combination": "onon"
+          },
+          {
+            "axis": "x",
+            "combination": "noon"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/n_4"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "ooon"
+          },
+          {
+            "axis": "z",
+            "combination": "obon"
+          },
+          {
+            "axis": "z",
+            "combination": "boon"
+          },
+          {
+            "axis": "z",
+            "combination": "onon"
+          },
+          {
+            "axis": "z",
+            "combination": "noon"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/n_4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "booo",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "bobo",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "boob",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "bono",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "boon",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/l_1"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "booo",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "bobo",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "boob",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "bono",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "boon",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/l_1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "oboo",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "obob",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "obon",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/l_2"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "oboo",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "obob",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "obon",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/l_2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "oobo",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "bobo",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nobo",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/l_3"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "oobo",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "bobo",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nobo",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/l_3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "ooob",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "obob",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "boob",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onob",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "noob",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/l_4"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "ooob",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "obob",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "boob",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onob",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "noob",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/l_4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "nooo",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nobo",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "noob",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nono",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "noon",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/n_l_1"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "nooo",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nobo",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "noob",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nono",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "noon",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/n_l_1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "onoo",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onob",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onon",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/n_l_2"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "onoo",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onob",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onon",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/n_l_2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "oono",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "bono",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nono",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/n_l_3"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "oono",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "bono",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nono",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/n_l_3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "ooon",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "obon",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "boon",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onon",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "noon",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/n_l_4"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "ooon",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "obon",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "boon",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onon",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "noon",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/n_l_4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "booo",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "bobo",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "boob",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "bono",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "boon",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/r_1"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "booo",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "bobo",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "boob",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "bono",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "boon",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/r_1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "oboo",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "obob",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "obon",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/r_2"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "oboo",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "obob",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "obon",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/r_2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "oobo",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "bobo",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nobo",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/r_3"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "oobo",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "bobo",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nobo",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/r_3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "ooob",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "obob",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "boob",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onob",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "noob",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/r_4"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "ooob",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "obob",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "boob",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onob",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "noob",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/r_4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "nooo",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nobo",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "noob",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nono",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "noon",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/n_r_1"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "nooo",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nobo",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "noob",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nono",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "noon",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/n_r_1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "onoo",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onob",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onon",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/n_r_2"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "onoo",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onob",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onon",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/n_r_2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "oono",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "bono",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nono",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/n_r_3"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "oono",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "bono",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nono",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/n_r_3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "ooon",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "obon",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "boon",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onon",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "noon",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/n_r_4"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "ooon",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "obon",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "boon",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onon",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "noon",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam/red/ex/n_r_4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "oboo",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "x",
+            "combination": "oobo",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "x",
+            "combination": "ooob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "onoo",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "x",
+            "combination": "oono",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "x",
+            "combination": "ooon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "obob",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "x",
+            "combination": "obon",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "x",
+            "combination": "onob",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "x",
+            "combination": "onon",
+            "wall": "white_soil",
+            "fill": "top|all"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/1"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "oboo",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "z",
+            "combination": "oobo",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "z",
+            "combination": "ooob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "onoo",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "z",
+            "combination": "oono",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "z",
+            "combination": "ooon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "obob",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "z",
+            "combination": "obon",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "z",
+            "combination": "onob",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "z",
+            "combination": "onon",
+            "wall": "white_soil",
+            "fill": "top|all"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "booo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "oobo",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "x",
+            "combination": "ooob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "nooo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "oono",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "x",
+            "combination": "ooon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "bobo",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "x",
+            "combination": "boob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "bono",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "x",
+            "combination": "nobo",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "x",
+            "combination": "nono",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "x",
+            "combination": "noon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "boon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "noob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/2"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "booo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "oobo",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "z",
+            "combination": "ooob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "nooo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "oono",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "z",
+            "combination": "ooon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "bobo",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "z",
+            "combination": "boob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "bono",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "z",
+            "combination": "nobo",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "z",
+            "combination": "nono",
+            "wall": "white_soil",
+            "fill": "top|all"
+          },
+          {
+            "axis": "z",
+            "combination": "noon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "boon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "noob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "booo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "oboo",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "ooob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "nooo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "onoo",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "ooon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "boob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "obob",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "noob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "boon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "noon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "onob",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "obon",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "onon",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/3"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "booo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "oboo",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "ooob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "nooo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "onoo",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "ooon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "boob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "obob",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "noob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "boon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "noon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "onob",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "obon",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "onon",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "booo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "oboo",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "oobo",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "nooo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "onoo",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "oono",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "bobo",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "nobo",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "bono",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "x",
+            "combination": "nono",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/4"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "booo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "oboo",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "oobo",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "nooo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "onoo",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "oono",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "bobo",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "nobo",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "bono",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          },
+          {
+            "axis": "z",
+            "combination": "nono",
+            "wall": "white_soil",
+            "fill": "bottom|all"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "oboo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "oobo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "ooob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onoo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "oono",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "ooon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "obob",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "obon",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onob",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onon",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/ex/l_1"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "oboo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "oobo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "ooob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onoo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "oono",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "ooon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "obob",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "obon",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onob",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onon",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/ex/l_1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "booo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "oobo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "ooob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nooo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "oono",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "ooon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "bobo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "boob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "bono",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nobo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nono",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "noon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "boon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "noob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/ex/l_2"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "booo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "oobo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "ooob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nooo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "oono",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "ooon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "bobo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "boob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "bono",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nobo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nono",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "noon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "boon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "noob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/ex/l_2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "booo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "oboo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "ooob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nooo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onoo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "ooon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "boob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "obob",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "noob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "boon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "noon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onob",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "obon",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onon",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/ex/l_3"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "booo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "oboo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "ooob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nooo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onoo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "ooon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "boob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "obob",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "noob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "boon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "noon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onob",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "obon",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onon",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/ex/l_3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "booo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "oboo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "oobo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nooo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onoo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "oono",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "bobo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nobo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "bono",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nono",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/ex/l_4"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "booo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "oboo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "oobo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nooo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onoo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "oono",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "bobo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nobo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "bono",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nono",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "l": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/ex/l_4",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "oboo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "oobo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "ooob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onoo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "oono",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "ooon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "obob",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "obon",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onob",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onon",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/ex/r_1"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "oboo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "oobo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "ooob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onoo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "oono",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "ooon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "obob",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "obon",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onob",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onon",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/ex/r_1",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "booo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "oobo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "ooob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nooo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "oono",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "ooon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "bobo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "boob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "bono",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nobo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nono",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "noon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "boon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "noob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/ex/r_2"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "booo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "oobo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "ooob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nooo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "oono",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "ooon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "bobo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "boob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "bono",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nobo",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nono",
+            "wall": "white_soil",
+            "fill": "top|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "noon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "boon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "noob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/ex/r_2",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "booo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "oboo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "ooob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nooo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onoo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "ooon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "boob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "obob",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "noob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "boon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "noon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onob",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "obon",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onon",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/ex/r_3"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "booo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "oboo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "ooob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nooo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onoo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "ooon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "boob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "obob",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "noob",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "boon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "noon",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onob",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "obon",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onon",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/ex/r_3",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "x",
+            "combination": "booo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "oboo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "oobo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nooo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "onoo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "oono",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "bobo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nobo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "bono",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "x",
+            "combination": "nono",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/ex/r_4"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {
+            "axis": "z",
+            "combination": "booo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "oboo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "oobo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nooo",
+            "wall": "white_soil",
+            "fill": "top|bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "onoo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "oono",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "bobo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nobo",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "bono",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          },
+          {
+            "axis": "z",
+            "combination": "nono",
+            "wall": "white_soil",
+            "fill": "bottom|all",
+            "r": "true"
+          }
+        ]
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/beam_wall/white_soil/ex/r_4",
+        "y": 90
+      }
+    }
+  ]
+}

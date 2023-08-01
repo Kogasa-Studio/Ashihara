@@ -1,6 +1,8 @@
 package kogasastudio.ashihara.block.building;
 
+import kogasastudio.ashihara.block.IVariable;
 import kogasastudio.ashihara.helper.ShapeHelper;
+import kogasastudio.ashihara.utils.WallTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.DyeColor;
@@ -22,7 +24,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-public class WallBlock extends Block implements SimpleWaterloggedBlock, IExpandable
+public abstract class AbstractWallBlock extends Block implements SimpleWaterloggedBlock, IExpandable, IVariable<WallTypes>
 {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
@@ -46,12 +48,12 @@ public class WallBlock extends Block implements SimpleWaterloggedBlock, IExpanda
     VoxelShape RU_Z = Block.box(7d, 16d, -8d, 9d, 24d, 0d);
     VoxelShape RD_Z = Block.box(7d, -8d, -8d, 9d, 0d, 0d);
 
-    public WallBlock(Properties p_49795_)
+    public AbstractWallBlock(Properties p_49795_)
     {
         super(p_49795_);
     }
 
-    public WallBlock()
+    public AbstractWallBlock()
     {
         this
         (

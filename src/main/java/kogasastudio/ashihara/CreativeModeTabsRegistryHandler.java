@@ -58,6 +58,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.RED_THICK_COLUMN.get());
                                         output.accept(ItemRegistryHandler.RED_KUMINONO.get());
                                         output.accept(ItemRegistryHandler.RED_KAWAKI.get());
+                                        output.accept(ItemRegistryHandler.RED_BEAM.get());
                                         output.accept(ItemRegistryHandler.THIN_WHITE_SOIL_WALL.get());
                                         output.accept(ItemRegistryHandler.LANTERN_LONG_WHITE.get());
                                         output.accept(ItemRegistryHandler.LANTERN_LONG_RED.get());

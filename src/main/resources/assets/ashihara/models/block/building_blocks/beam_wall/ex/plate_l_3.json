@@ -1,0 +1,22 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"0": "#wall",
+		"particle": "#wall"
+	},
+	"elements": [
+		{
+			"from": [16, 4, 7],
+			"to": [24, 8, 9],
+			"faces": {
+				"north": {"uv": [8, 8, 16, 12], "texture": "#0"},
+				"east": {"uv": [7, 8, 9, 12], "texture": "#0"},
+				"south": {"uv": [8, 8, 16, 12], "texture": "#0"},
+				"west": {"uv": [7, 8, 9, 12], "texture": "#0"},
+				"up": {"uv": [8, 7, 16, 9], "texture": "#0"},
+				"down": {"uv": [8, 7, 16, 9], "texture": "#0"}
+			}
+		}
+	]
+}

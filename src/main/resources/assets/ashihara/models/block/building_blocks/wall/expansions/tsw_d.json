@@ -1,6 +1,6 @@
 {
 	"parent": "ashihara:block/building_blocks/wall/expansions/ex_d",
 	"textures": {
-		"wall": "ashihara:block/bulding_blocks/walls/wall_soil_white"
+		"wall": "ashihara:block/building_blocks/walls/wall_soil_white"
 	}
 }

@@ -3,6 +3,7 @@ package kogasastudio.ashihara.item;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
+import kogasastudio.ashihara.item.block.ItemBlockBeam;
 import kogasastudio.ashihara.item.block.ItemBlockCandle;
 import kogasastudio.ashihara.item.block.ItemBlockPail;
 import kogasastudio.ashihara.item.foods.EasyFood;
@@ -120,6 +121,7 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> RED_KUMINONO = ITEMS.register("red_kumimono", () -> new BlockItem(BlockRegistryHandler.RED_KUMIMONO.get(), new Item.Properties()));
     public static final RegistryObject<Item> RED_KAWAKI = ITEMS.register("red_kawaki", () -> new BlockItem(BlockRegistryHandler.RED_KAWAKI.get(), new Item.Properties()));
     public static final RegistryObject<Item> THIN_WHITE_SOIL_WALL = ITEMS.register("thin_white_soil_wall", () -> new BlockItem(BlockRegistryHandler.THIN_WHITE_SOIL_WALL.get(), new Item.Properties()));
+    public static final RegistryObject<Item> RED_BEAM = ITEMS.register("red_beam", ItemBlockBeam::new);
 
     //灯具
     public static final RegistryObject<Item> LANTERN_LONG_WHITE = ITEMS.register("lantern_long_white", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), new Item.Properties()));
