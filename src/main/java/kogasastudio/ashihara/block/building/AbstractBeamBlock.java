@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BeamBlock extends Block implements IVariable<AshiharaWoodTypes>, IExpandable
+public abstract class AbstractBeamBlock extends Block implements IVariable<AshiharaWoodTypes>, IExpandable
 {
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
     public static final EnumProperty<WallTypes> WALL_TYPE = EnumProperty.create("wall", WallTypes.class);
@@ -42,7 +42,7 @@ public class BeamBlock extends Block implements IVariable<AshiharaWoodTypes>, IE
     public static final EnumProperty<Combination> COMBINATION = EnumProperty.create("combination", Combination.class);
     public static final Map<String, Combination> COMBINATIONS = new HashMap<>();
 
-    public BeamBlock()
+    public AbstractBeamBlock()
     {
         super
                 (
@@ -256,26 +256,6 @@ public class BeamBlock extends Block implements IVariable<AshiharaWoodTypes>, IE
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         builder.add(AXIS, L, R, WALL_TYPE, WALL_FILL_TYPE, COMBINATION);
-    }
-
-    @Override
-    public AshiharaWoodTypes getType()
-    {
-        return AshiharaWoodTypes.OAK;
-    }
-
-    protected class Serializer
-    {
-        boolean top = false;
-        boolean up = false;
-        boolean down = false;
-        boolean bottom = false;
-
-        void serialize(String s)
-        {
-            if (s.length() != 4) return;
-
-        }
     }
 
     public enum WallFillType implements StringRepresentable

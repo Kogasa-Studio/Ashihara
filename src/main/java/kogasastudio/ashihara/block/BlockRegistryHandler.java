@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.block.building.BeamBlock;
+import kogasastudio.ashihara.block.building.AbstractBeamBlock;
 import kogasastudio.ashihara.block.building.ColumnBlock;
 import kogasastudio.ashihara.block.building.AbstractWallBlock;
 import kogasastudio.ashihara.block.trees.CherryBlossomTreeGrower;
@@ -95,8 +95,14 @@ public class BlockRegistryHandler
     public static final RegistryObject<Block> LANTERN_LONG_RED = BLOCKS.register("lantern_long_red", HangingLanternLongBlock::new);
     public static final RegistryObject<Block> CANDLE = BLOCKS.register("candle", CandleBlock::new);
     public static final RegistryObject<Block> TATAMI = BLOCKS.register("tatami", TatamiBlock::new);
-    public static final RegistryObject<Block> RED_BEAM = BLOCKS.register("red_beam", () -> new BeamBlock()
+    public static final RegistryObject<Block> RED_BEAM = BLOCKS.register("red_beam", () -> new AbstractBeamBlock()
     {
+        @Override
+        public AshiharaWoodTypes getType()
+        {
+            return AshiharaWoodTypes.RED;
+        }
+
         @Override
         public Item getBeam()
         {
@@ -168,6 +174,11 @@ public class BlockRegistryHandler
     public static final RegistryObject<Block> MAPLE_FENCE = BLOCKS.register("maple_fence", SimpleFenceBlock::new);
     public static final RegistryObject<Block> MAPLE_FENCE_GATE = BLOCKS.register("maple_fence_gate", SimpleFenceGateBlock::new);
     public static final RegistryObject<Block> MAPLE_BUTTON = BLOCKS.register("maple_button", SimpleButtonBlock::new);
+
+
+    public static final RegistryObject<Block> CYPRESS_SKIN_BLOCK = BLOCKS.register("cypress_skin_block", SimplePlanksBlock::new);
+    public static final RegistryObject<Block> CYPRESS_SKIN_SLAB = BLOCKS.register("cypress_skin_slab", SimpleSlabBlock::new);
+    public static final RegistryObject<Block> CYPRESS_SKIN_STAIRS = BLOCKS.register("cypress_skin_stairs", SimpleStairsBlock::new);
     public static final RegistryObject<Block> RED_FENCE_EXPANSION = BLOCKS.register("red_fence_expansion", () -> new FenceExpansionBlock(AshiharaWoodTypes.RED));
     public static final RegistryObject<Block> RED_ADVANCED_FENCE = BLOCKS.register("advanced_red_fence", () -> new AdvancedFenceBlock(AshiharaWoodTypes.RED)
     {

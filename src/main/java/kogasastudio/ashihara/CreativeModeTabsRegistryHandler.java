@@ -52,6 +52,10 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.RED_SLAB.get());
                                         output.accept(ItemRegistryHandler.RED_FENCE.get());
                                         output.accept(ItemRegistryHandler.RED_FENCE_GATE.get());
+                                        //桧皮
+                                        output.accept(ItemRegistryHandler.CYPRESS_SKIN_BLOCK.get());
+                                        output.accept(ItemRegistryHandler.CYPRESS_SKIN_SLAB.get());
+                                        output.accept(ItemRegistryHandler.CYPRESS_SKIN_STAIRS.get());
 
                                         output.accept(ItemRegistryHandler.RED_ADVANCED_FENCE.get());
                                         output.accept(ItemRegistryHandler.SPRUCE_ADVANCED_FENCE.get());

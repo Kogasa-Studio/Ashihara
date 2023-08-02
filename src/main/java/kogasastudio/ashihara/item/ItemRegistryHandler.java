@@ -158,6 +158,12 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> MAPLE_FENCE_GATE = ITEMS.register("maple_fence_gate", () -> new BlockItem(BlockRegistryHandler.MAPLE_FENCE_GATE.get(), new Item.Properties()));
     public static final RegistryObject<Item> MAPLE_BUTTON = ITEMS.register("maple_button", () -> new BlockItem(BlockRegistryHandler.MAPLE_BUTTON.get(), new Item.Properties()));
 
+    public static final RegistryObject<Item> CYPRESS_SKIN_BLOCK = ITEMS.register("cypress_skin_block", () -> new BlockItem(BlockRegistryHandler.CYPRESS_SKIN_BLOCK.get(), new Item.Properties()));
+    public static final RegistryObject<Item> CYPRESS_SKIN_SLAB = ITEMS.register("cypress_skin_slab", () -> new BlockItem(BlockRegistryHandler.CYPRESS_SKIN_SLAB.get(), new Item.Properties()));
+
+    public static final RegistryObject<Item> CYPRESS_SKIN_STAIRS = ITEMS.register("cypress_skin_stairs", () -> new BlockItem(BlockRegistryHandler.CYPRESS_SKIN_STAIRS.get(), new Item.Properties()));
+
+
     //桶
     public static final RegistryObject<Item> SOY_MILK_BUCKET = ITEMS.register("soy_milk_bucket", () -> new BucketItem(FluidRegistryHandler.SOY_MILK, new Item.Properties()));
     public static final RegistryObject<Item> OIL_BUCKET = ITEMS.register("oil_bucket", () -> new BucketItem(FluidRegistryHandler.OIL, new Item.Properties()));

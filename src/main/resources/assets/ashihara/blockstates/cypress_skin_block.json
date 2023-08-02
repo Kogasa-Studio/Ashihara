@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "ashihara:block/cypress_blocks/cypress_skin_block"
+    }
+  }
+}

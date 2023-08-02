@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "ashihara:block/cypress_blocks/cypress_skin_slab"
+    },
+    "type=double": {
+      "model": "ashihara:block/cypress_blocks/cypress_skin_block"
+    },
+    "type=top": {
+      "model": "ashihara:block/cypress_blocks/cypress_skin_slab_top"
+    }
+  }
+}

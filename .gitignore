@@ -36,8 +36,4 @@ forge*changelog.txt
 /forge-1.20.1-47.0.35-mdk/src/main/resources/META-INF/mods.toml
 /forge-1.20.1-47.0.35-mdk/src/main/resources/pack.mcmeta
 /forge-1.20.1-47.0.35-mdk/README.txt
-/resource/stripped_acacia_log.png
-/resource/stripped_acacia_log_top.png
-/resource/deprecated/stripped_red_log.png
-/resource/deprecated/stripped_red_log_top.png
-/resource/调色数据.txt
+/resource/
