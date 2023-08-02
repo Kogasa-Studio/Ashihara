@@ -1,0 +1,6 @@
+{
+  "parent": "ashihara:block/building_blocks/beam/ex/ng_l_3",
+  "textures": {
+    "wood": "ashihara:block/woodcrafts/red_beam"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "ashihara:block/building_blocks/beam_wall/ex/plate_r_1",
+  "textures": {
+    "wall": "ashihara:block/building_blocks/walls/wall_soil_white"
+  }
+}
