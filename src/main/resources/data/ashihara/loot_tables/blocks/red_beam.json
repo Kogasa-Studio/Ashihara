@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "ashihara:advanced_red_beam"
+          "name": "ashihara:red_beam"
         }
       ],
       "conditions": [
