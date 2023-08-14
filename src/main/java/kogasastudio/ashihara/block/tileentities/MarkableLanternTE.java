@@ -22,7 +22,7 @@ public class MarkableLanternTE extends AshiharaMachineTE
 
     public ResourceLocation getIcon()
     {
-        return cookedTextures.get(pointer);
+        return pointer >= cookedTextures.size() ? cookedTextures.get(0) : cookedTextures.get(pointer);
     }
 
     //用来循环更改纹章
