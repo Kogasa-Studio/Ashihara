@@ -126,6 +126,7 @@ public class ItemRegistryHandler
     //灯具
     public static final RegistryObject<Item> LANTERN_LONG_WHITE = ITEMS.register("lantern_long_white", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), new Item.Properties()));
     public static final RegistryObject<Item> LANTERN_LONG_RED = ITEMS.register("lantern_long_red", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_RED.get(), new Item.Properties()));
+    public static final RegistryObject<Item> HOUSE_LIKE_HANGING_LANTERN = ITEMS.register("house_like_hanging_lantern", () -> new BlockItem(BlockRegistryHandler.HOUSE_LIKE_HANGING_LANTERN.get(), new Item.Properties()));
     public static final RegistryObject<Item> JINJA_LANTERN = ITEMS.register("jinja_lantern", () -> new BlockItem(BlockRegistryHandler.JINJA_LANTERN.get(), new Item.Properties()));
     public static final RegistryObject<Item> STONE_LANTERN = ITEMS.register("stone_lantern", () -> new BlockItem(BlockRegistryHandler.STONE_LANTERN.get(), new Item.Properties()));
     public static final RegistryObject<Item> CANDLE = ITEMS.register("candle", ItemBlockCandle::new);

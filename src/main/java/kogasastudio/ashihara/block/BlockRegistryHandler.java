@@ -93,6 +93,7 @@ public class BlockRegistryHandler
     public static final RegistryObject<Block> STONE_LANTERN = BLOCKS.register("stone_lantern", StoneLanternBlock::new);
     public static final RegistryObject<Block> LANTERN_LONG_WHITE = BLOCKS.register("lantern_long_white", HangingLanternLongBlock::new);
     public static final RegistryObject<Block> LANTERN_LONG_RED = BLOCKS.register("lantern_long_red", HangingLanternLongBlock::new);
+    public static final RegistryObject<Block> HOUSE_LIKE_HANGING_LANTERN = BLOCKS.register("house_like_hanging_lantern", HouseLikeHangingLanternBlock::new);
     public static final RegistryObject<Block> CANDLE = BLOCKS.register("candle", CandleBlock::new);
     public static final RegistryObject<Block> TATAMI = BLOCKS.register("tatami", TatamiBlock::new);
     public static final RegistryObject<Block> RED_BEAM = BLOCKS.register("red_beam", () -> new AbstractBeamBlock()

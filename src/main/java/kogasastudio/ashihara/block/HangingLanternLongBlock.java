@@ -5,23 +5,20 @@ import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -35,6 +32,7 @@ import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 
 public class HangingLanternLongBlock extends LanternBlock implements EntityBlock
 {
+    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public HangingLanternLongBlock()
     {
         super
@@ -45,6 +43,20 @@ public class HangingLanternLongBlock extends LanternBlock implements EntityBlock
                                 .sound(SoundType.BAMBOO_SAPLING)
                                 .lightLevel(getLightValueLit(15))
                 );
+        this.registerDefaultState(this.defaultBlockState().setValue(LIT, false).setValue(FACING, Direction.NORTH));
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context)
+    {
+        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
+        builder.add(FACING);
+        super.createBlockStateDefinition(builder);
     }
 
     @Override
@@ -83,14 +95,7 @@ public class HangingLanternLongBlock extends LanternBlock implements EntityBlock
     @Override
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
-        if (player.getItemInHand(handIn).getItem() == Items.AIR)
-        {
-            RandomSource random = worldIn.getRandom();
-            Boolean instantState = worldIn.getBlockState(pos).getValue(LIT);
-            worldIn.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
-            worldIn.setBlockAndUpdate(pos, state.setValue(LIT, !instantState));
-            return InteractionResult.SUCCESS;
-        } else if (player.getItemInHand(handIn).getItem() == ItemRegistryHandler.KOISHI.get())
+        if (player.getItemInHand(handIn).getItem() == ItemRegistryHandler.KOISHI.get())
         {
             MarkableLanternTE te = (MarkableLanternTE) worldIn.getBlockEntity(pos);
             if (te != null)
@@ -98,7 +103,7 @@ public class HangingLanternLongBlock extends LanternBlock implements EntityBlock
                 te.nextIcon();
                 return InteractionResult.SUCCESS;
             } else return InteractionResult.PASS;
-        } else return InteractionResult.PASS;
+        } else return super.use(state, worldIn, pos, player, handIn, hit);
     }
 
     @Nullable

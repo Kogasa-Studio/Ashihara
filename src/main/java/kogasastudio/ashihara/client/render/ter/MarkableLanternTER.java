@@ -4,17 +4,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import kogasastudio.ashihara.block.tileentities.MarkableLanternTE;
-import kogasastudio.ashihara.client.render.AshiharaAtlas;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import org.joml.Matrix4f;
 
-import static kogasastudio.ashihara.block.LanternBlock.FACING;
+import static kogasastudio.ashihara.block.HangingLanternLongBlock.FACING;
 import static kogasastudio.ashihara.helper.BlockActionHelper.getRotationByFacing;
 import static kogasastudio.ashihara.helper.RenderHelper.buildMatrix;
 
