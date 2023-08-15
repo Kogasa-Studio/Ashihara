@@ -27,6 +27,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.STRIPPED_CHERRY_LOG.get());
                                         output.accept(ItemRegistryHandler.CHERRY_BLOSSOM.get());
                                         output.accept(ItemRegistryHandler.FALLEN_SAKURA.get());
+                                        output.accept(ItemRegistryHandler.CHERRY_BLOSSOM_VINES.get());
                                         output.accept(ItemRegistryHandler.CHERRY_STAIRS.get());
                                         output.accept(ItemRegistryHandler.CHERRY_SLAB.get());
                                         output.accept(ItemRegistryHandler.CHERRY_FENCE.get());

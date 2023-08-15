@@ -93,20 +93,16 @@ public class AbstractFallingLeavesBlock extends LeavesBlock
             dropResources(state, worldIn, pos);
             worldIn.removeBlock(pos, false);
         }
-        //若樱花方块正下方50格以内有实心方块，且该方块上方为空气，则在该方块上方生成落樱毯
-        if (!(this.getFallenBlock() == AIR) && worldIn.isEmptyBlock(pos.below()))
+        //若樱花方块正下方25格以内有实心方块，且该方块上方为空气，则在该方块上方生成落樱毯
+        if (!(this.getFallenBlock().equals(AIR)) && (worldIn.isEmptyBlock(pos.below()) || worldIn.getBlockState(pos.below()).getBlock() instanceof CherryBlossomVinesBlock))
         {
             BlockPos pos1 = pos;
-            for (int j = 0; j < 50; j += 1)
+            for (int j = 0; j < 25; j += 1)
             {
                 pos1 = pos1.below();
-                BlockState state1 = worldIn.getBlockState(pos1);
-                if (state1.isFaceSturdy(worldIn, pos1, Direction.UP))
+                if (this.getFallenBlock().canSurvive(this.getFallenBlock().defaultBlockState(), worldIn, pos1.above()) && worldIn.isEmptyBlock(pos1.above()))
                 {
-                    if (worldIn.isEmptyBlock(pos1.above()))
-                    {
-                        worldIn.setBlockAndUpdate(pos1.above(), this.getFallenBlock().defaultBlockState());
-                    }
+                    worldIn.setBlockAndUpdate(pos1.above(), this.getFallenBlock().defaultBlockState());
                     break;
                 }
             }

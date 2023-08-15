@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "location=base": {
+      "model": "ashihara:block/cherry_blossom_vines_base"
+    },
+    "location=mid": {
+      "model": "ashihara:block/cherry_blossom_vines_mid"
+    },
+    "location=front": {
+      "model": "ashihara:block/cherry_blossom_vines_front"
+    },
+    "location=top": {
+      "model": "ashihara:block/cherry_blossom_vines_top"
+    }
+  }
+}

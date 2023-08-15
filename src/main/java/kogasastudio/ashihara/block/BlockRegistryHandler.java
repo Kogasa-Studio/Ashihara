@@ -49,6 +49,7 @@ public class BlockRegistryHandler
     public static final RegistryObject<Block> TEA_TREE = BLOCKS.register("tea_tree", TeaTreeBlock::new);
     public static final RegistryObject<Block> MEAL_TABLE = BLOCKS.register("meal_table", MealTableBlock::new);
     public static final RegistryObject<Block> CUTTING_BOARD = BLOCKS.register("cutting_board", CuttingBoardBlock::new);
+    public static final RegistryObject<Block> CHERRY_BLOSSOM_VINES = BLOCKS.register("cherry_blossom_vines", CherryBlossomVinesBlock::new);
     public static final RegistryObject<Block> FALLEN_SAKURA = BLOCKS.register("fallen_sakura", AbstractFallenLeavesBlock::new);
     //建筑
     public static final RegistryObject<Block> CHERRY_BLOSSOM = BLOCKS.register("cherry_blossom", () -> new AbstractFallingLeavesBlock(5, false)

@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -41,7 +42,7 @@ public class AbstractFallenLeavesBlock extends Block
     @Override
     public boolean canBeReplaced(BlockState state, BlockPlaceContext useContext)
     {
-        return useContext.getItemInHand().getItem() != ItemRegistryHandler.FALLEN_SAKURA.get();
+        return !useContext.getItemInHand().getItem().equals(this.asItem());
     }
 
     @Override
@@ -53,7 +54,8 @@ public class AbstractFallenLeavesBlock extends Block
     @Override
     public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos)
     {
-        return worldIn.getBlockState(pos.below()).canOcclude() || worldIn.getBlockState(pos.below()).isFaceSturdy(worldIn, pos.below(), Direction.UP);
+        BlockState below = worldIn.getBlockState(pos.below());
+        return below.canOcclude() || below.isFaceSturdy(worldIn, pos.below(), Direction.UP) || worldIn.getFluidState(pos.below()).is(Fluids.WATER);
     }
 
     @Override

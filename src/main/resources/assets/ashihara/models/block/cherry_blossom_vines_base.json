@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "ashihara:block/cherry_blossom_vines_base"
+  }
+}
