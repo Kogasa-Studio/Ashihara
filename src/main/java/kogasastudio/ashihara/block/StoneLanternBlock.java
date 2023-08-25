@@ -1,7 +1,6 @@
 package kogasastudio.ashihara.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -25,8 +24,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 import static net.minecraft.world.item.Items.GLASS_PANE;
@@ -44,7 +41,8 @@ public class StoneLanternBlock extends DoubleLanternBlock
                                 .mapColor(MapColor.STONE)
                                 .strength(4.0F)
                                 .sound(SoundType.STONE)
-                                .lightLevel(getLightValueLit(15))
+                                .lightLevel(getLightValueLit(15)),
+                        0.5d, 0.125d, 0.5d
                 );
         this.registerDefaultState(this.defaultBlockState().setValue(SEALED, false).setValue(MOSSY, false));
     }
@@ -54,19 +52,6 @@ public class StoneLanternBlock extends DoubleLanternBlock
     {
         super.createBlockStateDefinition(builder);
         builder.add(SEALED, MOSSY);
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand)
-    {
-        if (stateIn.getValue(LIT) && stateIn.getValue(HALF) == DoubleBlockHalf.UPPER)
-        {
-            double d0 = (double) pos.getX() + 0.5D;
-            double d1 = (double) pos.getY() + 0.125D;
-            double d2 = (double) pos.getZ() + 0.5D;
-            worldIn.addParticle(ParticleTypes.FLAME, d0, d1, d2, 0.0D, 0.0D, 0.0D);
-        }
     }
 
     @Override
@@ -99,7 +84,15 @@ public class StoneLanternBlock extends DoubleLanternBlock
     @Override
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
-        if (player.getItemInHand(handIn).getItem() == Items.AIR && state.getValue(HALF) == DoubleBlockHalf.UPPER)
+        if (state.getValue(HALF).equals(DoubleBlockHalf.LOWER)) return InteractionResult.PASS;
+        RandomSource random = worldIn.getRandom();
+        if (player.getItemInHand(handIn).getItem().equals(Items.FLINT_AND_STEEL) && !state.getValue(LIT) && (!state.getValue(WATERLOGGED) || state.getValue(SEALED)))
+        {
+            worldIn.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
+            worldIn.setBlockAndUpdate(pos, state.setValue(LIT, true));
+            return InteractionResult.SUCCESS;
+        }
+        else if (player.getItemInHand(handIn).getItem() == Items.AIR)
         {
             if (player.isShiftKeyDown() && state.getValue(SEALED))
             {
@@ -110,18 +103,16 @@ public class StoneLanternBlock extends DoubleLanternBlock
                     player.setItemInHand(handIn, new ItemStack(GLASS_PANE));
                 }
                 return InteractionResult.SUCCESS;
-            } else if (!state.getValue(WATERLOGGED) || state.getValue(SEALED))
+            } else if (state.getValue(LIT))
             {
-                RandomSource random = worldIn.getRandom();
-                Boolean instantState = worldIn.getBlockState(pos).getValue(LIT);
-                worldIn.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
-                worldIn.setBlockAndUpdate(pos, state.setValue(LIT, !instantState));
+                worldIn.playSound(player, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
+                worldIn.setBlockAndUpdate(pos, state.setValue(LIT, false));
                 return InteractionResult.SUCCESS;
             } else
             {
                 return InteractionResult.PASS;
             }
-        } else if (player.getItemInHand(handIn).getItem().equals(GLASS_PANE) && state.getValue(HALF).equals(DoubleBlockHalf.UPPER) && !state.getValue(SEALED))
+        } else if (player.getItemInHand(handIn).getItem().equals(GLASS_PANE) && !state.getValue(SEALED))
         {
             worldIn.playSound(player, pos, SoundEvents.GLASS_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
             worldIn.setBlockAndUpdate(pos, state.setValue(SEALED, true));

@@ -2,6 +2,7 @@ package kogasastudio.ashihara.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.BlockGetter;
@@ -31,6 +32,7 @@ public class CherryBlossomVinesBlock extends Block
                                 .sound(SoundType.PINK_PETALS)
                                 .noOcclusion()
                                 .noCollission()
+                                .forceSolidOn()
                 );
         this.registerDefaultState(this.defaultBlockState().setValue(LOCATION, LocationType.TOP));
     }
@@ -93,6 +95,12 @@ public class CherryBlossomVinesBlock extends Block
             default -> shape = top;
         }
         return shape;
+    }
+
+    @Override
+    public long getSeed(BlockState state, BlockPos pos)
+    {
+        return Mth.getSeed(pos.getX(), pos.getY(), pos.getZ());
     }
 
     private BlockState updateState(BlockState state, Level level, BlockPos pos)

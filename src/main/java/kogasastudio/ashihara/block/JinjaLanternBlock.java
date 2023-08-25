@@ -2,7 +2,9 @@ package kogasastudio.ashihara.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,9 +25,13 @@ public class JinjaLanternBlock extends DoubleLanternBlock
                                 .mapColor(MapColor.WOOD)
                                 .strength(0.5F)
                                 .sound(SoundType.WOOD)
-                                .lightLevel(getLightValueLit(15))
+                                .lightLevel(getLightValueLit(15)),
+                        0, 0, 0
                 );
     }
+
+    @Override
+    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand) {return;}
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)

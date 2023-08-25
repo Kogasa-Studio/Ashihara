@@ -2,15 +2,12 @@ package kogasastudio.ashihara.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -25,17 +22,18 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class DoubleLanternBlock extends Block implements SimpleWaterloggedBlock
+public class DoubleLanternBlock extends LanternBlock implements SimpleWaterloggedBlock
 {
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
-    public static final BooleanProperty LIT = BlockStateProperties.LIT;
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public DoubleLanternBlock(Properties properties)
+    public DoubleLanternBlock(Properties properties, double XIn, double YIn, double ZIn)
     {
-        super(properties);
+        super(properties, XIn, YIn, ZIn);
         this.registerDefaultState
                 (
                         this.stateDefinition.any()
@@ -83,14 +81,16 @@ public class DoubleLanternBlock extends Block implements SimpleWaterloggedBlock
     @Override
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
-        if (player.getItemInHand(handIn).getItem() == Items.AIR && state.getValue(HALF) == DoubleBlockHalf.UPPER)
-        {
-            RandomSource random = worldIn.getRandom();
-            Boolean instantState = worldIn.getBlockState(pos).getValue(LIT);
-            worldIn.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
-            worldIn.setBlockAndUpdate(pos, state.setValue(LIT, !instantState));
-            return InteractionResult.SUCCESS;
-        } else return InteractionResult.PASS;
+        if (state.getValue(HALF).equals(DoubleBlockHalf.LOWER)) return InteractionResult.PASS;
+        else return super.use(state, worldIn, pos, player, handIn, hit);
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand)
+    {
+        if (stateIn.getValue(HALF).equals(DoubleBlockHalf.LOWER)) return;
+        else super.animateTick(stateIn, worldIn, pos, rand);
     }
 
     //大部分是抄的原版

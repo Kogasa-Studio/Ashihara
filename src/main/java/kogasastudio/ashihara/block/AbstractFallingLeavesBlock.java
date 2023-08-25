@@ -105,6 +105,7 @@ public class AbstractFallingLeavesBlock extends LeavesBlock
                     worldIn.setBlockAndUpdate(pos1.above(), this.getFallenBlock().defaultBlockState());
                     break;
                 }
+                else if (worldIn.getBlockState(pos1.above()).is(this.getFallenBlock())) break;
             }
         }
     }

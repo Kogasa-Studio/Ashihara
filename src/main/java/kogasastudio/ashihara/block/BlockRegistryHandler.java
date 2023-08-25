@@ -13,18 +13,26 @@ import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.utils.AshiharaWoodTypes;
 import kogasastudio.ashihara.utils.WallTypes;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 
 public class BlockRegistryHandler
 {
@@ -90,11 +98,30 @@ public class BlockRegistryHandler
             return ParticleRegistryHandler.MAPLE_LEAF.get();
         }
     });
+
+    //灯具
     public static final RegistryObject<Block> JINJA_LANTERN = BLOCKS.register("jinja_lantern", JinjaLanternBlock::new);
     public static final RegistryObject<Block> STONE_LANTERN = BLOCKS.register("stone_lantern", StoneLanternBlock::new);
-    public static final RegistryObject<Block> LANTERN_LONG_WHITE = BLOCKS.register("lantern_long_white", HangingLanternLongBlock::new);
-    public static final RegistryObject<Block> LANTERN_LONG_RED = BLOCKS.register("lantern_long_red", HangingLanternLongBlock::new);
-    public static final RegistryObject<Block> HOUSE_LIKE_HANGING_LANTERN = BLOCKS.register("house_like_hanging_lantern", HouseLikeHangingLanternBlock::new);
+    public static final RegistryObject<Block> LANTERN_LONG_WHITE = BLOCKS.register("lantern_long_white", MarkableHangingLanternBlock::new);
+    public static final RegistryObject<Block> LANTERN_LONG_RED = BLOCKS.register("lantern_long_red", MarkableHangingLanternBlock::new);
+    public static final RegistryObject<Block> HOUSE_LIKE_HANGING_LANTERN = BLOCKS.register("house_like_hanging_lantern", () -> new LanternBlock.HangingLanternBlock
+            (
+                    BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.METAL)
+                    .strength(2.0F)
+                    .sound(SoundType.LANTERN)
+                    .lightLevel(getLightValueLit(15)),
+                    0.5d, 0.53125d, 0.5d
+            )
+    {
+        @Override
+        public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+        {
+            VoxelShape shape1 = Block.box(3,4.5,3,13,10,13);
+            VoxelShape shape2 = Block.box(0,10,0,16,15,16);
+            return Shapes.or(shape1, shape2);
+        }
+    });
     public static final RegistryObject<Block> CANDLE = BLOCKS.register("candle", CandleBlock::new);
     public static final RegistryObject<Block> TATAMI = BLOCKS.register("tatami", TatamiBlock::new);
     public static final RegistryObject<Block> RED_BEAM = BLOCKS.register("red_beam", () -> new AbstractBeamBlock()

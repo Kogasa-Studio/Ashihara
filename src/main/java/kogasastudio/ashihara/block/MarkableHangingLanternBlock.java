@@ -5,15 +5,12 @@ import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,16 +21,14 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 
-public class HangingLanternLongBlock extends LanternBlock implements EntityBlock
+public class MarkableHangingLanternBlock extends LanternBlock.HangingLanternBlock implements EntityBlock
 {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
-    public HangingLanternLongBlock()
+    public MarkableHangingLanternBlock()
     {
         super
                 (
@@ -41,7 +36,8 @@ public class HangingLanternLongBlock extends LanternBlock implements EntityBlock
                                 .mapColor(MapColor.WOOL)
                                 .strength(1.0F)
                                 .sound(SoundType.BAMBOO_SAPLING)
-                                .lightLevel(getLightValueLit(15))
+                                .lightLevel(getLightValueLit(15)),
+                        0.5d, 0.5d, 0.5d
                 );
         this.registerDefaultState(this.defaultBlockState().setValue(LIT, false).setValue(FACING, Direction.NORTH));
     }
@@ -69,30 +65,6 @@ public class HangingLanternLongBlock extends LanternBlock implements EntityBlock
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand)
-    {
-        if (stateIn.getValue(LIT))
-        {
-            double d0 = (double) pos.getX() + 0.5D;
-            double d1 = (double) pos.getY() + 0.5D;
-            double d2 = (double) pos.getZ() + 0.5D;
-            worldIn.addParticle(ParticleTypes.FLAME, d0, d1, d2, 0.0D, 0.0D, 0.0D);
-        }
-    }
-
-    @Override
-    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos)
-    {
-        return worldIn.getBlockState(pos.above()).getBlock() != Blocks.AIR;
-    }
-
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos)
-    {
-        return !this.canSurvive(stateIn, worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
-    }
-
-    @Override
     public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         if (player.getItemInHand(handIn).getItem() == ItemRegistryHandler.KOISHI.get())
@@ -101,6 +73,7 @@ public class HangingLanternLongBlock extends LanternBlock implements EntityBlock
             if (te != null)
             {
                 te.nextIcon();
+                te.setChanged();
                 return InteractionResult.SUCCESS;
             } else return InteractionResult.PASS;
         } else return super.use(state, worldIn, pos, player, handIn, hit);
