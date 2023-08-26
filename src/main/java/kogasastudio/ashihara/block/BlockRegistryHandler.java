@@ -10,7 +10,6 @@ import kogasastudio.ashihara.block.woodcrafts.*;
 import kogasastudio.ashihara.client.particles.GenericParticleType;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
-import kogasastudio.ashihara.helper.RenderHelper;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.utils.AshiharaWoodTypes;
 import kogasastudio.ashihara.utils.WallTypes;
@@ -116,7 +115,7 @@ public class BlockRegistryHandler
                     .strength(2.0F)
                     .sound(SoundType.LANTERN)
                     .lightLevel(getLightValueLit(15)),
-                    0.5d, RenderHelper.XTP(11f), 0.5d
+                    0.5d, 0.6875d, 0.5d
             )
     {
         @Override
@@ -134,7 +133,7 @@ public class BlockRegistryHandler
                             .strength(2.0F)
                             .sound(SoundType.LANTERN)
                             .lightLevel(getLightValueLit(15)),
-                    0.5d, RenderHelper.XTP(6f), 0.5d
+                    0.5d, 0.375d, 0.5d
             )
     {
         @Override
