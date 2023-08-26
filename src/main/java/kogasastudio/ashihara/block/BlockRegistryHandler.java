@@ -10,17 +10,21 @@ import kogasastudio.ashihara.block.woodcrafts.*;
 import kogasastudio.ashihara.client.particles.GenericParticleType;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
+import kogasastudio.ashihara.helper.RenderHelper;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.utils.AshiharaWoodTypes;
 import kogasastudio.ashihara.utils.WallTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -28,6 +32,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,7 +116,7 @@ public class BlockRegistryHandler
                     .strength(2.0F)
                     .sound(SoundType.LANTERN)
                     .lightLevel(getLightValueLit(15)),
-                    0.5d, 0.53125d, 0.5d
+                    0.5d, RenderHelper.XTP(11f), 0.5d
             )
     {
         @Override
@@ -119,6 +124,38 @@ public class BlockRegistryHandler
         {
             VoxelShape shape1 = Block.box(3,4.5,3,13,10,13);
             VoxelShape shape2 = Block.box(0,10,0,16,15,16);
+            return Shapes.or(shape1, shape2);
+        }
+    });
+    public static final RegistryObject<Block> HEXAGONAL_HANGING_LANTERN = BLOCKS.register("hexagonal_hanging_lantern", () -> new LanternBlock.HangingLanternBlock
+            (
+                    BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.METAL)
+                            .strength(2.0F)
+                            .sound(SoundType.LANTERN)
+                            .lightLevel(getLightValueLit(15)),
+                    0.5d, RenderHelper.XTP(6f), 0.5d
+            )
+    {
+        @Override
+        protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+        {
+            builder.add(BlockStateProperties.HORIZONTAL_AXIS);
+            super.createBlockStateDefinition(builder);
+        }
+
+        @Nullable
+        @Override
+        public BlockState getStateForPlacement(BlockPlaceContext context)
+        {
+            return this.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_AXIS, context.getHorizontalDirection().getAxis());
+        }
+
+        @Override
+        public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+        {
+            VoxelShape shape1 = Block.box(1,-3.5,1,15,12.5,15);
+            VoxelShape shape2 = Block.box(-1.5,12.5,-1.5,17.5,16,17.5);
             return Shapes.or(shape1, shape2);
         }
     });

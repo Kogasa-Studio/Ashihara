@@ -68,6 +68,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.LANTERN_LONG_WHITE.get());
                                         output.accept(ItemRegistryHandler.LANTERN_LONG_RED.get());
                                         output.accept(ItemRegistryHandler.HOUSE_LIKE_HANGING_LANTERN.get());
+                                        output.accept(ItemRegistryHandler.HEXAGONAL_HANGING_LANTERN.get());
                                         output.accept(ItemRegistryHandler.JINJA_LANTERN.get());
                                         output.accept(ItemRegistryHandler.STONE_LANTERN.get());
                                         output.accept(ItemRegistryHandler.TATAMI.get());
