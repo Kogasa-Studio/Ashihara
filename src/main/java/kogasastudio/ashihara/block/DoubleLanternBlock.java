@@ -28,7 +28,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class DoubleLanternBlock extends LanternBlock implements SimpleWaterloggedBlock
 {
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
-    public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public DoubleLanternBlock(Properties properties, double XIn, double YIn, double ZIn)
@@ -38,7 +37,6 @@ public class DoubleLanternBlock extends LanternBlock implements SimpleWaterlogge
                 (
                         this.stateDefinition.any()
                                 .setValue(LIT, false)
-                                .setValue(AXIS, Direction.Axis.X)
                                 .setValue(HALF, DoubleBlockHalf.LOWER)
                                 .setValue(WATERLOGGED, false)
                 );
@@ -73,7 +71,6 @@ public class DoubleLanternBlock extends LanternBlock implements SimpleWaterlogge
         BlockPos blockpos = context.getClickedPos();
         return blockpos.getY() < 255 && context.getLevel().getBlockState(blockpos.above()).canBeReplaced(context)
                 ? this.defaultBlockState()
-                .setValue(AXIS, context.getHorizontalDirection().getAxis())
                 .setValue(WATERLOGGED, context.getLevel().getFluidState(blockpos).getType().equals(Fluids.WATER))
                 : null;
     }
@@ -102,7 +99,6 @@ public class DoubleLanternBlock extends LanternBlock implements SimpleWaterlogge
                         pos.above(),
                         this.defaultBlockState()
                                 .setValue(HALF, DoubleBlockHalf.UPPER)
-                                .setValue(AXIS, state.getValue(AXIS))
                                 .setValue(WATERLOGGED, worldIn.getFluidState(pos.above()).getType().equals(Fluids.WATER))
                         , 3
                 );
@@ -111,13 +107,89 @@ public class DoubleLanternBlock extends LanternBlock implements SimpleWaterlogge
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(LIT, AXIS, HALF, WATERLOGGED);
+        builder.add(LIT, HALF, WATERLOGGED);
     }
 
     @Override
     public FluidState getFluidState(BlockState state)
     {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    //沿X/Z轴有变种的版本
+    public static class AxisAlignedVariant extends DoubleLanternBlock
+    {
+        public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
+        public AxisAlignedVariant(Properties properties, double XIn, double YIn, double ZIn)
+        {
+            super(properties, XIn, YIn, ZIn);
+            this.registerDefaultState(this.defaultBlockState().setValue(AXIS, Direction.Axis.X));
+        }
+
+        @Override
+        protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+        {
+            super.createBlockStateDefinition(builder);
+            builder.add(AXIS);
+        }
+
+        @Override
+        public BlockState getStateForPlacement(BlockPlaceContext context)
+        {
+            return super.getStateForPlacement(context).setValue(AXIS, context.getHorizontalDirection().getAxis());
+        }
+
+        @Override
+        public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack)
+        {
+            worldIn.setBlock
+                    (
+                            pos.above(),
+                            this.defaultBlockState()
+                                    .setValue(HALF, DoubleBlockHalf.UPPER)
+                                    .setValue(AXIS, state.getValue(AXIS))
+                                    .setValue(WATERLOGGED, worldIn.getFluidState(pos.above()).getType().equals(Fluids.WATER))
+                            , 3
+                    );
+        }
+    }
+
+    //沿水平方向都有变种的版本
+    public static class FourFacingVariant extends DoubleLanternBlock
+    {
+        public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
+        public FourFacingVariant(Properties properties, double XIn, double YIn, double ZIn)
+        {
+            super(properties, XIn, YIn, ZIn);
+            this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
+        }
+
+        @Override
+        protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+        {
+            super.createBlockStateDefinition(builder);
+            builder.add(FACING);
+        }
+
+        @Override
+        public BlockState getStateForPlacement(BlockPlaceContext context)
+        {
+            return super.getStateForPlacement(context).setValue(FACING, context.getHorizontalDirection().getOpposite());
+        }
+
+        @Override
+        public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack)
+        {
+            worldIn.setBlock
+                    (
+                            pos.above(),
+                            this.defaultBlockState()
+                                    .setValue(HALF, DoubleBlockHalf.UPPER)
+                                    .setValue(FACING, state.getValue(FACING))
+                                    .setValue(WATERLOGGED, worldIn.getFluidState(pos.above()).getType().equals(Fluids.WATER))
+                            , 3
+                    );
+        }
     }
 }
 

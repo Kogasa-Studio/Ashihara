@@ -131,6 +131,9 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> HEXAGONAL_HANGING_LANTERN = ITEMS.register("hexagonal_hanging_lantern", () -> new BlockItem(BlockRegistryHandler.HEXAGONAL_HANGING_LANTERN.get(), new Item.Properties()));
     public static final RegistryObject<Item> JINJA_LANTERN = ITEMS.register("jinja_lantern", () -> new BlockItem(BlockRegistryHandler.JINJA_LANTERN.get(), new Item.Properties()));
     public static final RegistryObject<Item> STONE_LANTERN = ITEMS.register("stone_lantern", () -> new BlockItem(BlockRegistryHandler.STONE_LANTERN.get(), new Item.Properties()));
+    public static final RegistryObject<Item> BONBURI_LAMP = ITEMS.register("bonburi_lamp", () -> new BlockItem(BlockRegistryHandler.BONBURI_LAMP.get(), new Item.Properties()));
+    public static final RegistryObject<Item> CANDLESTICK = ITEMS.register("candlestick", () -> new BlockItem(BlockRegistryHandler.CANDLESTICK.get(), new Item.Properties()));
+    public static final RegistryObject<Item> OIL_PLATE_STICK = ITEMS.register("oil_plate_stick", () -> new BlockItem(BlockRegistryHandler.OIL_PLATE_STICK.get(), new Item.Properties()));
     public static final RegistryObject<Item> CANDLE = ITEMS.register("candle", ItemBlockCandle::new);
 
     //木制品

@@ -27,9 +27,9 @@ public class LanternBlock extends Block
 {
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-    private final double flameX;
-    private final double flameY;
-    private final double flameZ;
+    protected final double flameX;
+    protected final double flameY;
+    protected final double flameZ;
 
     public LanternBlock(Properties properties, double XIn, double YIn, double ZIn)
     {
@@ -47,9 +47,9 @@ public class LanternBlock extends Block
     {
         if (stateIn.getValue(LIT))
         {
-            double x = (double) pos.getX() + this.flameX;//0.5D;
-            double y = (double) pos.getY() + this.flameY;//0.53125D;
-            double z = (double) pos.getZ() + this.flameZ;//0.5D;
+            double x = (double) pos.getX() + this.flameX;
+            double y = (double) pos.getY() + this.flameY;
+            double z = (double) pos.getZ() + this.flameZ;
             worldIn.addParticle(ParticleTypes.FLAME, x, y, z, 0.0D, 0.0D, 0.0D);
         }
     }

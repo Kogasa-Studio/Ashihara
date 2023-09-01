@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "wooden_stairs",
+  "pattern": [
+    " C ",
+    "###",
+    " S "
+  ],
+  "key": {
+    "C": {
+      "item": "ashihara:candle"
+    },
+    "#": {
+      "item": "minecraft:iron_nugget"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "ashihara:candlestick",
+    "count": 1
+  }
+}

@@ -100,12 +100,14 @@ public class AbstractFallingLeavesBlock extends LeavesBlock
             for (int j = 0; j < 25; j += 1)
             {
                 pos1 = pos1.below();
-                if (this.getFallenBlock().canSurvive(this.getFallenBlock().defaultBlockState(), worldIn, pos1.above()) && worldIn.isEmptyBlock(pos1.above()))
+                if (this.getFallenBlock().canSurvive(this.getFallenBlock().defaultBlockState(), worldIn, pos1.above()))
                 {
-                    worldIn.setBlockAndUpdate(pos1.above(), this.getFallenBlock().defaultBlockState());
+                    if (worldIn.isEmptyBlock(pos1.above()))
+                    {
+                        worldIn.setBlockAndUpdate(pos1.above(), this.getFallenBlock().defaultBlockState());
+                    }
                     break;
                 }
-                else if (worldIn.getBlockState(pos1.above()).is(this.getFallenBlock())) break;
             }
         }
     }

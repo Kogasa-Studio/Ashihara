@@ -71,6 +71,9 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.HEXAGONAL_HANGING_LANTERN.get());
                                         output.accept(ItemRegistryHandler.JINJA_LANTERN.get());
                                         output.accept(ItemRegistryHandler.STONE_LANTERN.get());
+                                        output.accept(ItemRegistryHandler.BONBURI_LAMP.get());
+                                        output.accept(ItemRegistryHandler.CANDLESTICK.get());
+                                        output.accept(ItemRegistryHandler.OIL_PLATE_STICK.get());
                                         output.accept(ItemRegistryHandler.TATAMI.get());
                                         output.accept(ItemRegistryHandler.DIRT_DEPRESSION.get());
                                         output.accept(ItemRegistryHandler.WATER_FIELD.get());

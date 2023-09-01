@@ -15,7 +15,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 
-public class JinjaLanternBlock extends DoubleLanternBlock
+public class JinjaLanternBlock extends DoubleLanternBlock.AxisAlignedVariant
 {
     public JinjaLanternBlock()
     {

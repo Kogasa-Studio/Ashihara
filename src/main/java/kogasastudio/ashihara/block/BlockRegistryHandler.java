@@ -14,20 +14,26 @@ import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.utils.AshiharaWoodTypes;
 import kogasastudio.ashihara.utils.WallTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -106,6 +112,125 @@ public class BlockRegistryHandler
     //灯具
     public static final RegistryObject<Block> JINJA_LANTERN = BLOCKS.register("jinja_lantern", JinjaLanternBlock::new);
     public static final RegistryObject<Block> STONE_LANTERN = BLOCKS.register("stone_lantern", StoneLanternBlock::new);
+    public static final RegistryObject<Block> BONBURI_LAMP = BLOCKS.register("bonburi_lamp", () -> new DoubleLanternBlock.AxisAlignedVariant
+            (
+                    BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.METAL)
+                            .strength(1F)
+                            .sound(SoundType.LANTERN)
+                            .lightLevel(getLightValueLit(15)),
+                            0.5d, 7.5d / 16d, 0.5d
+            )
+    {
+        @Override
+        public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context)
+        {
+            VoxelShape upper = Block.box(3,0,3,13,15,13);
+
+            VoxelShape lower1 = Block.box(5,0,5,11,2.25,11);
+            VoxelShape lower2 = Block.box(7,2.25,7,9,2.75,9);
+            VoxelShape lower3 = Block.box(7.25,2.75,7.25,8.75,3.75,8.75);
+            VoxelShape lower4 = Block.box(7.5,3.75,7.5,8.5,16,8.5);
+
+            VoxelShape lower = Shapes.or(lower1, lower2, lower3, lower4);
+
+            return state.getValue(HALF).equals(DoubleBlockHalf.UPPER) ? upper : lower;
+        }
+    });
+    public static final RegistryObject<Block> CANDLESTICK = BLOCKS.register("candlestick", () -> new DoubleLanternBlock
+            (
+                    BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.METAL)
+                            .strength(1F)
+                            .sound(SoundType.LANTERN)
+                            .lightLevel(getLightValueLit(15)),
+                    0.5d, 9d / 16d, 0.5d
+            )
+    {
+        @Override
+        public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context)
+        {
+            VoxelShape upper1 = Block.box(4.5,0,4.5,11.5,1.5,11.5);
+            VoxelShape upper2 = Block.box(7.4,1.5,7.4,8.6,6,8.6);
+
+            VoxelShape lower1 = Block.box(5,0,5,11,2.25,11);
+            VoxelShape lower2 = Block.box(7,2.25,7,9,2.75,9);
+            VoxelShape lower3 = Block.box(7.25,2.75,7.25,8.75,3.75,8.75);
+            VoxelShape lower4 = Block.box(7.5,3.75,7.5,8.5,16,8.5);
+
+            VoxelShape lower = Shapes.or(lower1, lower2, lower3, lower4);
+            VoxelShape upper = Shapes.or(upper1, upper2);
+
+            return state.getValue(HALF).equals(DoubleBlockHalf.UPPER) ? upper : lower;
+        }
+    });
+    public static final RegistryObject<Block> OIL_PLATE_STICK = BLOCKS.register("oil_plate_stick", () -> new DoubleLanternBlock.FourFacingVariant
+            (
+                    BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.METAL)
+                            .strength(1F)
+                            .sound(SoundType.LANTERN)
+                            .lightLevel(getLightValueLit(15)),
+                    12d, 9d / 16d, 0.5d
+            )
+    {
+
+        @Override
+        public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context)
+        {
+            VoxelShape upper = Block.box(4.5,0,4.5,11.5,4.5,11.5);
+
+            VoxelShape lower1 = Block.box(5,0,5,11,2.25,11);
+            VoxelShape lower2 = Block.box(7,2.25,7,9,2.75,9);
+            VoxelShape lower3 = Block.box(7.25,2.75,7.25,8.75,3.75,8.75);
+            VoxelShape lower4 = Block.box(7.5,3.75,7.5,8.5,16,8.5);
+
+            VoxelShape lower = Shapes.or(lower1, lower2, lower3, lower4);
+
+            return state.getValue(HALF).equals(DoubleBlockHalf.UPPER) ? upper : lower;
+        }
+
+        @Override
+        @OnlyIn(Dist.CLIENT)
+        public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand)
+        {
+            if (stateIn.getValue(HALF).equals(DoubleBlockHalf.LOWER)) return;
+            if (stateIn.getValue(LIT))
+            {
+                double xOffset;
+                double zOffset;
+
+                switch (stateIn.getValue(FACING))
+                {
+                    case SOUTH ->
+                    {
+                        xOffset = 4d;
+                        zOffset = 8d;
+                    }
+                    case EAST ->
+                    {
+                        xOffset = 8d;
+                        zOffset = 12d;
+                    }
+                    case WEST ->
+                    {
+                        xOffset = 8d;
+                        zOffset = 4d;
+                    }
+                    default ->
+                    {
+                        xOffset = 12d;
+                        zOffset = 8d;
+                    }
+                }
+
+                double x = (double) pos.getX() + xOffset / 16d;
+                double y = (double) pos.getY() + 7.5d / 16d;
+                double z = (double) pos.getZ() + zOffset / 16d;
+                worldIn.addParticle(ParticleTypes.FLAME, x, y, z, 0.0D, 0.0D, 0.0D);
+            }
+        }
+    });
     public static final RegistryObject<Block> LANTERN_LONG_WHITE = BLOCKS.register("lantern_long_white", MarkableHangingLanternBlock::new);
     public static final RegistryObject<Block> LANTERN_LONG_RED = BLOCKS.register("lantern_long_red", MarkableHangingLanternBlock::new);
     public static final RegistryObject<Block> HOUSE_LIKE_HANGING_LANTERN = BLOCKS.register("house_like_hanging_lantern", () -> new LanternBlock.HangingLanternBlock
