@@ -5,6 +5,7 @@ import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.item.block.ItemBlockBeam;
 import kogasastudio.ashihara.item.block.ItemBlockCandle;
+import kogasastudio.ashihara.item.block.ItemBlockDouble;
 import kogasastudio.ashihara.item.block.ItemBlockPail;
 import kogasastudio.ashihara.item.foods.EasyFood;
 import kogasastudio.ashihara.item.foods.ItemDirtBallDon;
@@ -122,6 +123,7 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> RED_KUMINONO = ITEMS.register("red_kumimono", () -> new BlockItem(BlockRegistryHandler.RED_KUMIMONO.get(), new Item.Properties()));
     public static final RegistryObject<Item> RED_KAWAKI = ITEMS.register("red_kawaki", () -> new BlockItem(BlockRegistryHandler.RED_KAWAKI.get(), new Item.Properties()));
     public static final RegistryObject<Item> THIN_WHITE_SOIL_WALL = ITEMS.register("thin_white_soil_wall", () -> new BlockItem(BlockRegistryHandler.THIN_WHITE_SOIL_WALL.get(), new Item.Properties()));
+    public static final RegistryObject<Item> STRAIGHT_BAR_WINDOW_GREEN = ITEMS.register("straight_bar_window_green", () -> new BlockItem(BlockRegistryHandler.STRAIGHT_BAR_WINDOW_GREEN.get(), new Item.Properties()));
     public static final RegistryObject<Item> RED_BEAM = ITEMS.register("red_beam", ItemBlockBeam::new);
 
     //灯具
@@ -129,11 +131,11 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> LANTERN_LONG_RED = ITEMS.register("lantern_long_red", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_RED.get(), new Item.Properties()));
     public static final RegistryObject<Item> HOUSE_LIKE_HANGING_LANTERN = ITEMS.register("house_like_hanging_lantern", () -> new BlockItem(BlockRegistryHandler.HOUSE_LIKE_HANGING_LANTERN.get(), new Item.Properties()));
     public static final RegistryObject<Item> HEXAGONAL_HANGING_LANTERN = ITEMS.register("hexagonal_hanging_lantern", () -> new BlockItem(BlockRegistryHandler.HEXAGONAL_HANGING_LANTERN.get(), new Item.Properties()));
-    public static final RegistryObject<Item> JINJA_LANTERN = ITEMS.register("jinja_lantern", () -> new BlockItem(BlockRegistryHandler.JINJA_LANTERN.get(), new Item.Properties()));
-    public static final RegistryObject<Item> STONE_LANTERN = ITEMS.register("stone_lantern", () -> new BlockItem(BlockRegistryHandler.STONE_LANTERN.get(), new Item.Properties()));
-    public static final RegistryObject<Item> BONBURI_LAMP = ITEMS.register("bonburi_lamp", () -> new BlockItem(BlockRegistryHandler.BONBURI_LAMP.get(), new Item.Properties()));
-    public static final RegistryObject<Item> CANDLESTICK = ITEMS.register("candlestick", () -> new BlockItem(BlockRegistryHandler.CANDLESTICK.get(), new Item.Properties()));
-    public static final RegistryObject<Item> OIL_PLATE_STICK = ITEMS.register("oil_plate_stick", () -> new BlockItem(BlockRegistryHandler.OIL_PLATE_STICK.get(), new Item.Properties()));
+    public static final RegistryObject<Item> JINJA_LANTERN = ITEMS.register("jinja_lantern", () -> new ItemBlockDouble(BlockRegistryHandler.JINJA_LANTERN.get(), new Item.Properties()));
+    public static final RegistryObject<Item> STONE_LANTERN = ITEMS.register("stone_lantern", () -> new ItemBlockDouble(BlockRegistryHandler.STONE_LANTERN.get(), new Item.Properties()));
+    public static final RegistryObject<Item> BONBURI_LAMP = ITEMS.register("bonburi_lamp", () -> new ItemBlockDouble(BlockRegistryHandler.BONBURI_LAMP.get(), new Item.Properties()));
+    public static final RegistryObject<Item> CANDLESTICK = ITEMS.register("candlestick", () -> new ItemBlockDouble(BlockRegistryHandler.CANDLESTICK.get(), new Item.Properties()));
+    public static final RegistryObject<Item> OIL_PLATE_STICK = ITEMS.register("oil_plate_stick", () -> new ItemBlockDouble(BlockRegistryHandler.OIL_PLATE_STICK.get(), new Item.Properties()));
     public static final RegistryObject<Item> CANDLE = ITEMS.register("candle", ItemBlockCandle::new);
 
     //木制品

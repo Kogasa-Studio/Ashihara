@@ -136,7 +136,8 @@ public class DoubleLanternBlock extends LanternBlock implements SimpleWaterlogge
         @Override
         public BlockState getStateForPlacement(BlockPlaceContext context)
         {
-            return super.getStateForPlacement(context).setValue(AXIS, context.getHorizontalDirection().getAxis());
+            BlockState stateS = super.getStateForPlacement(context);
+            return stateS == null ? null : stateS.setValue(AXIS, context.getHorizontalDirection().getAxis());
         }
 
         @Override
@@ -174,7 +175,8 @@ public class DoubleLanternBlock extends LanternBlock implements SimpleWaterlogge
         @Override
         public BlockState getStateForPlacement(BlockPlaceContext context)
         {
-            return super.getStateForPlacement(context).setValue(FACING, context.getHorizontalDirection().getOpposite());
+            BlockState stateS = super.getStateForPlacement(context);
+            return stateS == null ? null : stateS.setValue(FACING, context.getHorizontalDirection().getOpposite());
         }
 
         @Override

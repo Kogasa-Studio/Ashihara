@@ -4,6 +4,7 @@ import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.building.AbstractBeamBlock;
 import kogasastudio.ashihara.block.building.ColumnBlock;
 import kogasastudio.ashihara.block.building.AbstractWallBlock;
+import kogasastudio.ashihara.block.building.StraightBarWindowBlock;
 import kogasastudio.ashihara.block.trees.CherryBlossomTreeGrower;
 import kogasastudio.ashihara.block.trees.RedMapleTreeGrower;
 import kogasastudio.ashihara.block.woodcrafts.*;
@@ -16,6 +17,7 @@ import kogasastudio.ashihara.utils.WallTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -399,6 +401,7 @@ public class BlockRegistryHandler
             return WallTypes.WHITE_SOIL;
         }
     });
+    public static final RegistryObject<Block> STRAIGHT_BAR_WINDOW_GREEN = BLOCKS.register("straight_bar_window_green", () -> new StraightBarWindowBlock(BlockBehaviour.Properties.of().mapColor(DyeColor.GREEN).strength(1.5f).sound(SoundType.BAMBOO)));
 
     public static final RegistryObject<LiquidBlock> SOY_MILK_BLOCK = BLOCKS.register("soy_milk", () ->
             new LiquidBlock(FluidRegistryHandler.SOY_MILK, Block.Properties.of().mapColor(MapColor.SNOW).noCollission().strength(100.0F).replaceable().noLootTable()));

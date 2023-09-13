@@ -55,7 +55,7 @@ public class AbstractFallenLeavesBlock extends Block
     public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos)
     {
         BlockState below = worldIn.getBlockState(pos.below());
-        return below.canOcclude() || below.isFaceSturdy(worldIn, pos.below(), Direction.UP) || worldIn.getFluidState(pos.below()).is(Fluids.WATER);
+        return below.isFaceSturdy(worldIn, pos.below(), Direction.UP) || worldIn.getFluidState(pos.below()).is(Fluids.WATER);
     }
 
     @Override

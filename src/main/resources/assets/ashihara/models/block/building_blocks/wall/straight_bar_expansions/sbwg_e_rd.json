@@ -1,0 +1,6 @@
+{
+  "parent": "ashihara:block/building_blocks/wall/straight_bar_expansions/ex_e_rd",
+  "textures": {
+    "window": "ashihara:block/straight_bar_window_green"
+  }
+}

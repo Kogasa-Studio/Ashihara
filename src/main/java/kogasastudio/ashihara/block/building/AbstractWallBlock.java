@@ -107,7 +107,6 @@ public abstract class AbstractWallBlock extends Block implements SimpleWaterlogg
             if(state.getValue(L) && state.getValue(D)) shape = Shapes.or(shape, LD_X);
             if(state.getValue(R) && state.getValue(U)) shape = Shapes.or(shape, RU_X);
             if(state.getValue(R) && state.getValue(D)) shape = Shapes.or(shape, RD_X);
-            return shape;
         }
         else
         {
@@ -120,8 +119,8 @@ public abstract class AbstractWallBlock extends Block implements SimpleWaterlogg
             if(state.getValue(L) && state.getValue(D)) shape = Shapes.or(shape, LD_Z);
             if(state.getValue(R) && state.getValue(U)) shape = Shapes.or(shape, RU_Z);
             if(state.getValue(R) && state.getValue(D)) shape = Shapes.or(shape, RD_Z);
-            return shape;
         }
+        return shape;
     }
 
     @Override

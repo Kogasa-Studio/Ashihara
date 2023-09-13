@@ -1,0 +1,31 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"0": "#window",
+		"particle": "#window"
+	},
+	"elements": [
+		{
+			"from": [-8, 14.005, 7],
+			"to": [0, 16.005, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 14, 7]},
+			"faces": {
+				"north": {"uv": [4, 0, 6, 8], "rotation": 270, "texture": "#0"},
+				"east": {"uv": [4, 0, 6, 2], "rotation": 270, "texture": "#0"},
+				"south": {"uv": [4, 0, 6, 8], "rotation": 90, "texture": "#0"},
+				"west": {"uv": [4, 6, 6, 8], "rotation": 270, "texture": "#0"},
+				"up": {"uv": [4, 0, 6, 8], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [4, 0, 6, 8], "rotation": 90, "texture": "#0"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "edges",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0]
+		}
+	]
+}

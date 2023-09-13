@@ -65,6 +65,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.RED_KAWAKI.get());
                                         output.accept(ItemRegistryHandler.RED_BEAM.get());
                                         output.accept(ItemRegistryHandler.THIN_WHITE_SOIL_WALL.get());
+                                        output.accept(ItemRegistryHandler.STRAIGHT_BAR_WINDOW_GREEN.get());
                                         output.accept(ItemRegistryHandler.LANTERN_LONG_WHITE.get());
                                         output.accept(ItemRegistryHandler.LANTERN_LONG_RED.get());
                                         output.accept(ItemRegistryHandler.HOUSE_LIKE_HANGING_LANTERN.get());

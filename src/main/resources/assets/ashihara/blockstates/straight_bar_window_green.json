@@ -1,0 +1,181 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "axis": "x"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/sbw_green"
+      }
+    },
+    {
+      "when": {
+        "axis": "z"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/sbw_green",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "l": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/straight_bar_expansions/sbwg_l"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "l": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/straight_bar_expansions/sbwg_l",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "r": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/straight_bar_expansions/sbwg_r"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "r": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/straight_bar_expansions/sbwg_r",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "up": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/straight_bar_expansions/sbwg_e_u"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "up": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/straight_bar_expansions/sbwg_e_u",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "down": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/straight_bar_expansions/sbwg_e_d"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "down": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/straight_bar_expansions/sbwg_e_d",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "up": "true",
+        "l": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/straight_bar_expansions/sbwg_e_lu"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "up": "true",
+        "l": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/straight_bar_expansions/sbwg_e_lu",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "up": "true",
+        "r": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/straight_bar_expansions/sbwg_e_ru"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "up": "true",
+        "r": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/straight_bar_expansions/sbwg_e_ru",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "down": "true",
+        "l": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/straight_bar_expansions/sbwg_e_ld"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "down": "true",
+        "l": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/straight_bar_expansions/sbwg_e_ld",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "axis": "x",
+        "down": "true",
+        "r": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/straight_bar_expansions/sbwg_e_rd"
+      }
+    },
+    {
+      "when": {
+        "axis": "z",
+        "down": "true",
+        "r": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/building_blocks/wall/straight_bar_expansions/sbwg_e_rd",
+        "y": 90
+      }
+    }
+  ]
+}
