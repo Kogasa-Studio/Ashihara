@@ -1,4 +1,5 @@
 {
+  "replace": false,
   "values":
   [
     "ashihara:mill",
@@ -11,6 +12,6 @@
     "ashihara:candlestick",
     "ashihara:oil_plate_stick",
     "ashihara:house_like_hanging_lantern",
-    "ashihara:hexagonal_lantern"
+    "ashihara:hexagonal_hanging_lantern"
   ]
 }
