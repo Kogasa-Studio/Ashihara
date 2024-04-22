@@ -63,5 +63,9 @@ public class Ashihara
             event.accept(ItemRegistryHandler.KOISHI);
             event.accept(ItemRegistryHandler.MINATO_AQUA);
         }
+        else if (event.getTabKey().equals(CreativeModeTabs.FUNCTIONAL_BLOCKS))
+        {
+            event.accept(ItemRegistryHandler.CHARLOTTE);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block;
 
+import kogasastudio.ashihara.helper.ShapeHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -33,15 +34,13 @@ public class JinjaLanternBlock extends DoubleLanternBlock.AxisAlignedVariant
     @Override
     public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand) {return;}
 
+    VoxelShape UPPER_X = Block.box(1.8D, 0.0D, 3.2D, 14.2D, 13.1D, 12.9D);
+    VoxelShape UPPER_Z = ShapeHelper.rotateShape(UPPER_X, 90);
+    VoxelShape LOWER = Block.box(7.5D, 0.0D, 7.5D, 8.5D, 16.0D, 8.5D);
+
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
     {
-        // todo 前三个是最小值
-        //VoxelShape UPPER_X = Block.box(1.8D, 0.0D, 12.9D, 14.2D, 13.1D, 3.2D);
-        VoxelShape UPPER_X = Block.box(1.8D, 0.0D, 3.2D, 14.2D, 13.1D, 12.9D);
-        //VoxelShape UPPER_Z = Block.box(12.9D, 0.0D, 1.8D, 3.2D, 12.3D, 14.2D);
-        VoxelShape UPPER_Z = Block.box(3.2D, 0.0D, 1.8D, 12.9D, 12.3D, 14.2D);
-        VoxelShape LOWER = Block.box(7.5D, 0.0D, 7.5D, 8.5D, 16.0D, 8.5D);
         if (state.getValue(HALF) == DoubleBlockHalf.LOWER)
         {
             return LOWER;

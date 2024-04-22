@@ -6,7 +6,7 @@ plugins {
     //id 'org.spongepowered.mixin'
 }
 
-version = '0.0.0.12'
+version = '0.0.0.13'
 group = 'kogasastudio.ashihara'
 
 base {
@@ -177,7 +177,7 @@ tasks.named('processResources', ProcessResources).configure {
             minecraft_version: '1.20.1', minecraft_version_range: '[1.20.1,1.21)',
             forge_version: '47.0.35', forge_version_range: '[47,)',
             loader_version_range: '[47,)',
-            mod_id: "ashihara", mod_name: 'Ashihara', mod_license: 'GPL 3.0', mod_version: '0.0.0.1',
+            mod_id: "ashihara", mod_name: 'Ashihara', mod_license: 'GPL 3.0', mod_version: '0.0.0.13',
             mod_authors: 'KogasaStudio', mod_description: 'A mod which adds tons of japanese elements',
     ]
     inputs.properties replaceProperties

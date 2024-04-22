@@ -38,9 +38,63 @@ public class ShapeHelper
     {
         VoxelShape shape = supporter.getBlockSupportShape(getter, supportedPos);
         VoxelShape face = shape.getFaceShape(direction);
-        boolean f = !Shapes.joinIsNotEmpty(face, shapeNeeded, BooleanOp.ONLY_SECOND);
         //VoxelShape merged = Shapes.or(face, shapeNeeded);
         //boolean f = merged.equals(shapeNeeded);
-        return f;
+        return !Shapes.joinIsNotEmpty(face, shapeNeeded, BooleanOp.ONLY_SECOND);
+    }
+
+    public static VoxelShape rotateShape(VoxelShape shape, double rotation)
+    {
+        return rotateShape(shape, Direction.Axis.Y, rotation);
+    }
+
+    public static VoxelShape rotateShape(VoxelShape shape, Direction.Axis axis, double rotation)
+    {
+        return rotateShape(shape, axis, 0.5, 0.5, rotation);
+    }
+
+    public static VoxelShape rotateShape(VoxelShape shape, Direction.Axis axis, double pivotX, double pivotZ, double rotation)
+    {
+        double degree = Math.toRadians(rotation);
+        VoxelShape[] rotatedShape = new VoxelShape[1];
+        shape.forAllBoxes((x1, y1, z1, x2, y2, z2) ->
+                          {
+                              double rx1, ry1, rz1, rx2, ry2, rz2;
+                              switch (axis)
+                              {
+                                  case Y ->
+                                  {
+                                      rx1 = x1;
+                                      rx2 = x2;
+                                      rz1 = z1;
+                                      rz2 = z2;
+                                      ry1 = y1;
+                                      ry2 = y2;
+                                  }
+                                  case X ->
+                                  {
+                                      rx1 = z1;
+                                      rx2 = z2;
+                                      rz1 = y1;
+                                      rz2 = y2;
+                                      ry1 = x1;
+                                      ry2 = x2;
+                                  }
+                                  default ->
+                                  {
+                                      rx1 = x1;
+                                      rx2 = x2;
+                                      rz1 = y1;
+                                      rz2 = y2;
+                                      ry1 = z1;
+                                      ry2 = z2;
+                                  }
+                              }
+                              double[] rotatedP1 = MathHelper.rotatePoint(rx1, rz1, pivotX, pivotZ, degree);
+                              double[] rotatedP2 = MathHelper.rotatePoint(rx2, rz2, pivotX, pivotZ, degree);
+                              VoxelShape s = Shapes.box(rotatedP1[0], ry1, rotatedP1[1], rotatedP2[0], ry2, rotatedP2[1]);
+                              rotatedShape[0] = s;
+                          });
+        return rotatedShape[0];
     }
 }

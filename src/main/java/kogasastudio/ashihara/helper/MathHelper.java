@@ -6,4 +6,23 @@ public class MathHelper
     {
         return Math.round(d * Math.pow(10d, bit)) / Math.pow(10d, bit);
     }
+
+    /**
+     * 将平面上某给定点绕某一枢轴旋转一定角度
+     * @param x 给定点的x坐标
+     * @param z 给定点的z坐标
+     * @param pivotX 枢轴x坐标
+     * @param pivotZ 枢轴z坐标
+     * @param rotation 旋转的角度，需为弧度制
+     * @return 格式为{x, z}的旋转后点坐标
+     */
+    public static double[] rotatePoint(double x, double z, double pivotX, double pivotZ, double rotation)
+    {
+        double x_z_distance = Math.sqrt((Math.pow(x - pivotX, 2)) + (Math.pow(z - pivotZ, 2)));
+        if ((x - pivotX) < 0) x_z_distance = - x_z_distance;
+        double controlDegree = Math.abs(Math.atan((z - pivotZ) / (x - pivotX)) - rotation);
+        double nX = pivotX + x_z_distance * Math.cos(controlDegree);
+        double nZ = pivotZ + x_z_distance * Math.sin(controlDegree);
+        return new double[]{nX, nZ};
+    }
 }

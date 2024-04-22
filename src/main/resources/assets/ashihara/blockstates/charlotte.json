@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "ashihara:block/charlotte",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "ashihara:block/charlotte"
+    },
+    "facing=south": {
+      "model": "ashihara:block/charlotte",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "ashihara:block/charlotte",
+      "y": 270
+    }
+  }
+}

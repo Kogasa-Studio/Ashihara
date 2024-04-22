@@ -108,6 +108,7 @@ public class ItemRegistryHandler
     public static final RegistryObject<Item> PAIL = ITEMS.register("pail", ItemBlockPail::new);
     public static final RegistryObject<Item> MEAL_TABLE = ITEMS.register("meal_table", () -> new BlockItem(BlockRegistryHandler.MEAL_TABLE.get(), new Item.Properties()));
     public static final RegistryObject<Item> CUTTING_BOARD = ITEMS.register("cutting_board", () -> new BlockItem(BlockRegistryHandler.CUTTING_BOARD.get(), new Item.Properties()));
+    public static final RegistryObject<Item> CHARLOTTE = ITEMS.register("charlotte", () -> new BlockItem(BlockRegistryHandler.CHARLOTTE.get(), new Item.Properties()));
 
     //建筑方块
     public static final RegistryObject<Item> CHERRY_BLOSSOM = ITEMS.register("cherry_blossom", () -> new BlockItem(BlockRegistryHandler.CHERRY_BLOSSOM.get(), new Item.Properties()));

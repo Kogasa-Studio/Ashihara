@@ -135,17 +135,23 @@
   "block.ashihara.red_fence_expansion": "Red fence expansion",
   "block.ashihara.soy_milk": "Soy milk",
   "block.ashihara.oil": "Oil",
+  "block.ashihara.charlotte": "Charlotte",
+
   "fluid.ashihara.soy_milk": "Soy milk",
   "fluid.ashihara.soy_milk_flowing": "Flowing soy milk",
   "fluid.ashihara.oil": "Oil",
   "fluid.ashihara.oil_flowing": "Flowing oil",
+
   "itemGroup.group_ashihara": "Ashihara",
   "itemGroup.group_ash_materials": "Ashihara-materials",
   "itemGroup.group_ash_building_blocks": "Ashihara-building blocks",
+
   "gui.ashihara.mill": "Mill",
   "gui.ashihara.mortar": "Mortar",
+
   "item.ashihara.dirt_ball_don.projectile": "§d§l§oA strong and weird felling grows inside your heart while you are looking at it",
   "item.ashihara.dirt_ball_don.projectile_1": "§9§l§oI don't know why something like this exists",
+
   "tooltip.ashihara.pail_display": "§e§lPail: §n",
   "tooltip.ashihara.pail_empty_message": "    §7The pail is empty now",
   "tooltip.ashihara.pail_fluid_existence": "    §7Fluid: ",

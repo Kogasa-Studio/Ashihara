@@ -15,6 +15,7 @@ import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.utils.AshiharaWoodTypes;
 import kogasastudio.ashihara.utils.WallTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.DyeColor;
@@ -30,6 +31,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -402,6 +404,27 @@ public class BlockRegistryHandler
         }
     });
     public static final RegistryObject<Block> STRAIGHT_BAR_WINDOW_GREEN = BLOCKS.register("straight_bar_window_green", () -> new StraightBarWindowBlock(BlockBehaviour.Properties.of().mapColor(DyeColor.GREEN).strength(1.5f).sound(SoundType.BAMBOO)));
+    public static final RegistryObject<Block> CHARLOTTE = BLOCKS.register("charlotte", () -> new Block
+            (
+                    BlockBehaviour.Properties.of()
+                            .noOcclusion()
+                            .strength(1.0F)
+                            .mapColor(DyeColor.PINK)
+                            .sound(SoundType.WOOL)
+            )
+    {
+        public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
+
+        @Override
+        protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {builder.add(FACING);}
+
+        @Override
+        public float getShadeBrightness(BlockState p_60472_, BlockGetter p_60473_, BlockPos p_60474_) {return 1.0F;}
+
+        @Nullable
+        @Override
+        public BlockState getStateForPlacement(BlockPlaceContext context) {return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());}
+    });
 
     public static final RegistryObject<LiquidBlock> SOY_MILK_BLOCK = BLOCKS.register("soy_milk", () ->
             new LiquidBlock(FluidRegistryHandler.SOY_MILK, Block.Properties.of().mapColor(MapColor.SNOW).noCollission().strength(100.0F).replaceable().noLootTable()));
