@@ -1,9 +1,6 @@
 package kogasastudio.ashihara.inventory.container;
 
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.block.tileentities.MillTE;
-import kogasastudio.ashihara.block.tileentities.MortarTE;
-import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.fml.RegistryObject;
@@ -16,9 +13,9 @@ public class ContainerRegistryHandler
 
     public static final RegistryObject<ContainerType<MillContainer>> MILL_CONTAINER
     = CONTAINER_TYPES.register("mill_container",
-    () -> IForgeContainerType.create(((windowId, inv, data) -> new MillContainer(windowId, inv, Minecraft.getInstance().world, data.readBlockPos(), new MillTE().millData))));
+    () -> IForgeContainerType.create(MillContainer::new));
 
     public static final RegistryObject<ContainerType<MortarContainer>> MORTAR_CONTAINER
     = CONTAINER_TYPES.register("mortar_container",
-    () -> IForgeContainerType.create(((windowId, inv, data) -> new MortarContainer(windowId, inv, (MortarTE) Minecraft.getInstance().world.getTileEntity(data.readBlockPos())))));
+    () -> IForgeContainerType.create(MortarContainer::new));
 }

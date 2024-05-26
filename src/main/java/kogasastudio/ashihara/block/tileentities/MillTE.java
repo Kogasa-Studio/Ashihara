@@ -29,6 +29,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -239,7 +240,7 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     public LazyOptional<FluidTank> getTank() {return this.tankIn;}
 
     @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap)
+    public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap)
     {
         if (!this.isRemoved() && cap.equals(FLUID_HANDLER_CAPABILITY)) {return this.tankIn.cast();}
         return super.getCapability(cap);
@@ -342,7 +343,7 @@ public class MillTE extends AshiharaMachineTE implements ITickableTileEntity, IN
     public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_)
     {
         if (this.world == null) return null;
-        return new MillContainer(p_createMenu_1_, p_createMenu_2_, this.world, this.pos, this.millData);
+        return new MillContainer(p_createMenu_1_, p_createMenu_2_, this.millData, this.pos);
     }
 
     private void sync()

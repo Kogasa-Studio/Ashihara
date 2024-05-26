@@ -5,9 +5,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
+import net.minecraft.util.IntArray;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class MillContainer extends AshiharaCommonContainer
@@ -15,14 +16,14 @@ public class MillContainer extends AshiharaCommonContainer
     private final IIntArray millData;
     private final MillTE te;
 
-    public MillContainer(int id, PlayerInventory inventory, World worldIn, BlockPos posIn, IIntArray millDataIn)
+    public MillContainer(int id, PlayerInventory inventory, IIntArray millDataIn, BlockPos pos)
     {
         super(ContainerRegistryHandler.MILL_CONTAINER.get(), id);
         assertIntArraySize(millDataIn, 4);
         this.millData = millDataIn;
         trackIntArray(millDataIn);
         layoutPlayerInventorySlots(inventory, 8, 120);
-        MillTE teIn = (MillTE) worldIn.getTileEntity(posIn);
+        MillTE teIn = (MillTE) inventory.player.world.getTileEntity(pos);
         this.te = teIn;
         if (teIn != null)
         {
@@ -32,6 +33,11 @@ public class MillContainer extends AshiharaCommonContainer
             addSlot(new SlotItemHandler(te.fluidIO, 1, 122, 90));
             addSlot(new SlotItemHandler(te.fluidIO, 2, 152, 98));
         }
+    }
+
+    public MillContainer(int id, PlayerInventory inventory, PacketBuffer buffer)
+    {
+        this(id, inventory, new IntArray(4), buffer.readBlockPos());
     }
 
     public MillTE getTE() {return this.te;}

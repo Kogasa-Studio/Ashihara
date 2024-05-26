@@ -7,7 +7,6 @@ import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
-import net.minecraft.util.ColorHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
@@ -36,8 +35,8 @@ public class FluidRegistryHandler
     public static final RegistryObject<FlowingFluid> OIL = FLUIDS.register("oil", () -> new ForgeFlowingFluid.Source(FluidRegistryHandler.OIL_PROP));
     public static final RegistryObject<FlowingFluid> OIL_FLOWING = FLUIDS.register("oil_flowing", () -> new ForgeFlowingFluid.Flowing(FluidRegistryHandler.OIL_PROP));
 
-    public static ForgeFlowingFluid.Properties SOY_MILK_PROP = getBasicFluidProp(SOY_MILK, SOY_MILK_FLOWING, ColorHelper.PackedColor.packColor(255, 255, 253, 225), BlockRegistryHandler.SOY_MILK_BLOCK, ItemRegistryHandler.SOY_MILK_BUCKET, TEXTURE_MILK_STILL, TEXTURE_MILK_FLOW);
-    public static ForgeFlowingFluid.Properties OIL_PROP = getBasicFluidProp(OIL, OIL_FLOWING, ColorHelper.PackedColor.packColor(255, 246, 223, 12), BlockRegistryHandler.OIL_BLOCK, ItemRegistryHandler.OIL_BUCKET);
+    public static ForgeFlowingFluid.Properties SOY_MILK_PROP = getBasicFluidProp(SOY_MILK, SOY_MILK_FLOWING, 255 << 24 | 255 << 16 | 253 << 8 | 225, BlockRegistryHandler.SOY_MILK_BLOCK, ItemRegistryHandler.SOY_MILK_BUCKET, TEXTURE_MILK_STILL, TEXTURE_MILK_FLOW);
+    public static ForgeFlowingFluid.Properties OIL_PROP = getBasicFluidProp(OIL, OIL_FLOWING, 255 << 24 | 246 << 16 | 223 << 8 | 12, BlockRegistryHandler.OIL_BLOCK, ItemRegistryHandler.OIL_BUCKET);
     //oil 168 244 233 132
 
     private static ForgeFlowingFluid.Properties getBasicFluidProp(RegistryObject<FlowingFluid> source, RegistryObject<FlowingFluid> flowing, int color, Supplier<? extends FlowingFluidBlock> block, Supplier<? extends Item> bucket, ResourceLocation STILL, ResourceLocation FLOWING)

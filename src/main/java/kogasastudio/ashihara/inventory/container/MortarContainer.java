@@ -5,6 +5,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -48,6 +51,16 @@ public class MortarContainer extends AshiharaCommonContainer
             addSlot(new SlotItemHandler(teIn.fluidIO, 0, 21, 85));
             addSlot(new SlotItemHandler(teIn.fluidIO, 1, 148, 85));
         }
+    }
+
+    public MortarContainer(int id, PlayerInventory inv, PacketBuffer buffer)
+    {
+        this(id, inv, getTEFromPacket(inv.player.world, buffer));
+    }
+
+    private static MortarTE getTEFromPacket(World world, PacketBuffer buffer) {
+        TileEntity te = world.getTileEntity(buffer.readBlockPos());
+        return te instanceof MortarTE ? (MortarTE) te : null;
     }
 
     @Override
