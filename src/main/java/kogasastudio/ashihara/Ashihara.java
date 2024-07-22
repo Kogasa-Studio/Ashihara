@@ -5,23 +5,20 @@ import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.block.tileentities.TERegistryHandler;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
-//import kogasastudio.ashihara.interaction.loot.GLMRegistryHandler;
 import kogasastudio.ashihara.interaction.recipes.register.RecipeManager;
 import kogasastudio.ashihara.inventory.container.ContainerRegistryHandler;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.sounds.SoundEvents;
-import kogasastudio.ashihara.world.WorldGenEventRegistryHandler;
-//import kogasastudio.ashihara.world.biomes.BiomeRegistryHandler;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import org.slf4j.Logger;
 
 @Mod(Ashihara.MODID)
-@Mod.EventBusSubscriber(modid = Ashihara.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Ashihara.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class Ashihara
 {
     public static final String MODID = "ashihara";
@@ -32,13 +29,11 @@ public class Ashihara
 
     public static int getRandomBounded(int startIndex, int endIndex) {return RANDOM.nextInt(endIndex - startIndex) + startIndex;}
 
-    public Ashihara()
+    public Ashihara(IEventBus modEventBus, ModContainer modContainer)
     {
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        modEventBus.addListener(this::addCreative);
 
-        bus.addListener(this::addCreative);
-
-        ItemRegistryHandler.ITEMS.register(bus);
+        ItemRegistryHandler.ITEMS.register(modEventBus);
         BlockRegistryHandler.BLOCKS.register(bus);
         CreativeModeTabsRegistryHandler.TABS.register(bus);
         SoundEvents.SOUNDS.register(bus);
