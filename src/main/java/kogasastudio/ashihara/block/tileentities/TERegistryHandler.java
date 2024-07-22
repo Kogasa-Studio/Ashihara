@@ -60,4 +60,11 @@ public class TERegistryHandler
                             MealTableTE::new,
                             BlockRegistryHandler.MEAL_TABLE.get()
                     ).build(null));
+
+    public static final RegistryObject<BlockEntityType<CharlotteTE>> CHARLOTTE_TE = TILE_ENTITIES.register("charlotte_tileentity",
+             () -> BlockEntityType.Builder.of
+                    (
+                            CharlotteTE::new,
+                            BlockRegistryHandler.CHARLOTTE.get()
+                    ).build(null));
 }
