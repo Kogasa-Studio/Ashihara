@@ -1,0 +1,83 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"texture_size": [64, 64],
+	"textures": {
+		"1": "ashihara:block/crops/rice_crop_age1",
+		"particle": "ashihara:block/crops/rice_crop_age1"
+	},
+	"elements": [
+		{
+			"from": [8, -6, 2.5],
+			"to": [8, 12, 14.5],
+			"rotation": {"angle": -22.5, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"east": {"uv": [6, 4.5, 3, 9], "texture": "#1"},
+				"west": {"uv": [3, 4.5, 6, 9], "texture": "#1"}
+			}
+		},
+		{
+			"from": [2.5, -6, 8],
+			"to": [14.5, 12, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [3, 0, 0, 4.5], "texture": "#1"},
+				"south": {"uv": [0, 0, 3, 4.5], "texture": "#1"}
+			}
+		},
+		{
+			"from": [1.5, -6, 8],
+			"to": [13.5, 12, 8],
+			"rotation": {"angle": -45, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 4.5, 3, 9], "texture": "#1"},
+				"south": {"uv": [3, 4.5, 0, 9], "texture": "#1"}
+			}
+		},
+		{
+			"from": [7.42388, -6, 1.11732],
+			"to": [7.42388, 12, 9.11732],
+			"rotation": {"angle": 0, "axis": "y", "origin": [9, 0, 6]},
+			"faces": {
+				"east": {"uv": [6.25, 4.5, 8.25, 9], "texture": "#1"},
+				"west": {"uv": [8.25, 4.5, 6.25, 9], "texture": "#1"}
+			}
+		},
+		{
+			"from": [5.11732, -6, 7.57612],
+			"to": [13.11732, 12, 7.57612],
+			"rotation": {"angle": 22.5, "axis": "y", "origin": [8, 0, 6]},
+			"faces": {
+				"north": {"uv": [8.25, 0, 6.25, 4.5], "texture": "#1"},
+				"south": {"uv": [6.25, 0, 8.25, 4.5], "texture": "#1"}
+			}
+		},
+		{
+			"from": [8.82612, -6, 7.88268],
+			"to": [8.82612, 1, 10.88268],
+			"rotation": {"angle": 22.5, "axis": "y", "origin": [9, -4, 10]},
+			"faces": {
+				"east": {"uv": [11.5, 3.25, 10.75, 5], "texture": "#1"},
+				"west": {"uv": [10.75, 3.25, 11.5, 5], "texture": "#1"}
+			}
+		},
+		{
+			"from": [7.85195, -6, 4.78701],
+			"to": [7.85195, 1, 7.78701],
+			"rotation": {"angle": 22.5, "axis": "y", "origin": [8, -4, 7]},
+			"faces": {
+				"east": {"uv": [10.75, 1.25, 11.5, 3], "texture": "#1"},
+				"west": {"uv": [11.5, 1.25, 10.75, 3], "texture": "#1"}
+			}
+		},
+		{
+			"from": [4.03701, -6, 7.64805],
+			"to": [7.03701, 1, 7.64805],
+			"rotation": {"angle": 45, "axis": "y", "origin": [8, -4, 7]},
+			"faces": {
+				"north": {"uv": [10.75, 5.25, 11.5, 7], "texture": "#1"},
+				"south": {"uv": [11.5, 5.25, 10.75, 7], "texture": "#1"}
+			}
+		}
+	]
+}
