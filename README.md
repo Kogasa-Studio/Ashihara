@@ -1,27 +1,32 @@
+# 一个关于稻米，自然和极东之地那古老幻想的故事。
 
-Installation information
-=======
+## -----========序章========-----
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions at [github](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+这是一个十分庞大的企划的新生儿阶段。
+我们的玩家来到了一片奇异的土地，
+这里的人们以一种在水中生长的作物为主要食物，
+当祂看到那些盛大的祭典，那些承载着喜悦和感激的奉纳和御祝，
+祂不明白为什么人们对这种白白的小颗粒如此喜爱。
+祂更不明白为什么人们会仅仅对能够收获这些作物而对一些祂不太清楚是什么的存在表示感激与敬意。
+祂试着尝了一口，只觉得十分香甜。
+遥望着那些灯火下的祭典，听着风簌簌卷起落叶轻轻放进水中，
+祂的理解并不透彻。
+祂想，如果祂自己也参与到种植水稻的过程中，或许祂会明白。
+那些寄托着古老的恩惠，祝福与羁绊的无形之物，或许就会现身。
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
+终有一天，祂们就会现身。
 
-> **Note**: For Eclipse, use tasks in `Launch Group` instead of ones founds in `Java Application`. A preparation task must run before launching the game. NeoGradle uses launch groups to do these subsequently.
+## -----========芝之章========-----
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+玩家愈发理解了这里的人们的生活方式。
+所踏上之土地，其名为苇原中之国。
+人们所敬重之物，其名为产灵——亦为神。
+所谓产灵乃是连接，无论有形之物，亦或无形之物，
+一分一毫的羁绊，便是产灵。
+春播的新稻刚刚进入分蘗期，土地中抽出一丝丝崭新的油绿；
+古老的深林中，苔生的巨石仍埋藏着口口相传的记忆。
+玩家渐渐开始理解那自然中所诞生出的庞大力量，扭曲，缠绕，结合的那份产灵，
+彼乃万古神威，抑若愿为人遂？
+不管怎么说，先用起来就是。
 
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
-
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+MC百科介绍链接：https://www.mcmod.cn/class/4444.html
