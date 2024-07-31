@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.helper.RenderHelper;
 import kogasastudio.ashihara.inventory.container.MillContainer;
 import net.minecraft.client.gui.GuiGraphics;
@@ -8,12 +9,12 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
-public class MillScreen extends AbstractContainerScreen<MillContainer>
-{
-    private static final ResourceLocation GUI = new ResourceLocation("ashihara:textures/gui/mill.png");
+public class MillScreen //extends AbstractContainerScreen<MillContainer>
+{/*
+    private static final ResourceLocation GUI = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/gui/mill.png");
     private int progress;
     private final FluidStackRenderer inputRenderer = new FluidStackRenderer(4000, 16, 64);
     private final FluidStackRenderer outputRenderer = new FluidStackRenderer(4000, 64, 6);
@@ -32,9 +33,9 @@ public class MillScreen extends AbstractContainerScreen<MillContainer>
     @Override
     public void render(GuiGraphics gui, int mouseX, int mouseY, float partialTicks)
     {
-        renderBackground(gui);
-        super.render(gui, mouseX, mouseY, partialTicks);
+        renderBackground(gui, mouseX, mouseY, partialTicks);
         renderTooltip(gui, mouseX, mouseY);
+        super.render(gui, mouseX, mouseY, partialTicks);
     }
 
     @Override
@@ -46,10 +47,8 @@ public class MillScreen extends AbstractContainerScreen<MillContainer>
         FluidTank tankIn = this.menu.getBe().getTank().orElse(new FluidTank(0));
         FluidTank tankOut = this.menu.getBe().tankOut.orElse(new FluidTank(0));
 
-        RenderHelper.drawFluidToolTip
-                (this, gui, x, y, i + 17, j + 13, 16, 64, tankIn.getFluid(), tankIn.getCapacity());
-        RenderHelper.drawFluidToolTip
-                (this, gui, x, y, i + 54, j + 99, 64, 6, tankOut.getFluid(), tankOut.getCapacity());
+        RenderHelper.drawFluidToolTip(this, gui, x, y, i + 17, j + 13, 16, 64, tankIn.getFluid(), tankIn.getCapacity());
+        RenderHelper.drawFluidToolTip(this, gui, x, y, i + 54, j + 99, 64, 6, tankOut.getFluid(), tankOut.getCapacity());
     }
 
     @Override
@@ -69,13 +68,7 @@ public class MillScreen extends AbstractContainerScreen<MillContainer>
                         {
                             if (!tank.isEmpty())
                             {
-//                                gui.pose().pushPose();
-//                                int capacity = tank.getCapacity();
                                 FluidStack fluid = tank.getFluid();
-//                                int fluidAmount = fluid.getAmount();
-//                                int displayHeight = (int) (((float) fluidAmount / (float) capacity) * 64);
-//                                RenderHelper.renderFluidStackInGUI(gui.pose().last().pose(), fluid, 16, displayHeight, i + 17, j + 77);
-//                                gui.pose().popPose();
                                 inputRenderer.render(gui.pose(), leftPos + 17, topPos + 13, fluid);
                             }
                         }
@@ -87,16 +80,10 @@ public class MillScreen extends AbstractContainerScreen<MillContainer>
                         {
                             if (!tank.isEmpty())
                             {
-//                                gui.pose().pushPose();
-//                                int capacity = tank.getCapacity();
                                 FluidStack fluid = tank.getFluid();
                                 outputRenderer.render(gui.pose(), i + 54, j + 99, fluid);
-//                                int fluidAmount = fluid.getAmount();
-//                                int displayWidth = (int) (((float) fluidAmount / (float) capacity) * 64);
-//                                RenderHelper.renderFluidStackInGUI(gui.pose().last().pose(), fluid, displayWidth, 6, i + 54, j + 105);
-//                                gui.pose().popPose();
                             }
                         }
                 );
-    }
+    }*/
 }

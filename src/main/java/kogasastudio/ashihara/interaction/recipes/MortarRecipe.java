@@ -19,12 +19,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.util.RecipeMatcher;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,9 +26,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MortarRecipe extends BaseRecipe
+public class MortarRecipe //extends BaseRecipe
 {
-    @Expose
+    /*@Expose
     public final NonNullList<Ingredient> input;
     @Expose
     public final NonNullList<ItemStack> output;
@@ -206,5 +200,5 @@ public class MortarRecipe extends BaseRecipe
             buffer.writeByte(recipe.recipeType);
             buffer.writeByteArray(recipe.sequence);
         }
-    }
+    }*/
 }

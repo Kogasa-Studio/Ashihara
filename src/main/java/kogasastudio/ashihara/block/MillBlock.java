@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -31,12 +32,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 // todo Block 默认没有 BlockEntity 了，需要手动实现 EntityBlock
-public class MillBlock extends Block implements EntityBlock
+public class MillBlock extends Block // implements EntityBlock
 {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
@@ -56,7 +55,7 @@ public class MillBlock extends Block implements EntityBlock
     @Override
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState state1, boolean b)
     {
-        BlockEntity te = worldIn.getBlockEntity(pos);
+        /*BlockEntity te = worldIn.getBlockEntity(pos);
         if (te instanceof MillTE)
         {
             NonNullList<ItemStack> stacks = NonNullList.create();
@@ -71,14 +70,8 @@ public class MillBlock extends Block implements EntityBlock
             Containers.dropContents(worldIn, pos, stacks);
             Containers.dropContents(worldIn, pos, ((MillTE) te).getOutput().getContent());
             worldIn.updateNeighbourForOutputSignal(pos, this);
-        }
+        }*/
         super.onRemove(state, worldIn, pos, state1, b);
-    }
-
-    @Override
-    public void playerDestroy(Level worldIn, Player player, BlockPos pos, BlockState state, BlockEntity te, ItemStack stack)
-    {
-        super.playerDestroy(worldIn, player, pos, state, te, stack);
     }
 
     @Override
@@ -96,10 +89,9 @@ public class MillBlock extends Block implements EntityBlock
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
-        ItemStack stack = player.getItemInHand(handIn);
-        MillTE te = (MillTE) worldIn.getBlockEntity(pos);
+        /*MillTE te = (MillTE) worldIn.getBlockEntity(pos);
 
         if (te != null)
         {
@@ -114,9 +106,8 @@ public class MillBlock extends Block implements EntityBlock
                 NetworkHooks.openScreen((ServerPlayer) player, te, (FriendlyByteBuf packerBuffer) -> packerBuffer.writeBlockPos(te.getBlockPos()));
                 return InteractionResult.SUCCESS;
             } else return InteractionResult.SUCCESS;
-        }
-
-        return InteractionResult.PASS;
+        }*/
+        return super.useItemOn(stack, state, worldIn, pos, player, handIn, hit);
     }
 
     @Override
@@ -125,7 +116,7 @@ public class MillBlock extends Block implements EntityBlock
         builder.add(FACING);
     }
 
-    @org.jetbrains.annotations.Nullable
+    /*@org.jetbrains.annotations.Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
@@ -138,5 +129,5 @@ public class MillBlock extends Block implements EntityBlock
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_153212_, BlockState p_153213_, BlockEntityType<T> p_153214_)
     {
         return TickableTileEntity.orEmpty(p_153214_, TERegistryHandler.MILL_TE.get());
-    }
+    }*/
 }

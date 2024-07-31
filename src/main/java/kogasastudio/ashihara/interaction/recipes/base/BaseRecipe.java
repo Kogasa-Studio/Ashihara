@@ -1,19 +1,19 @@
 package kogasastudio.ashihara.interaction.recipes.base;
 
 import com.google.gson.annotations.Expose;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
 import java.util.List;
 
 /**
  * @author DustW
  **/
-public abstract class BaseRecipe implements Recipe<Container>
+public abstract class BaseRecipe implements Recipe<RecipeWrapper>
 {
     protected ResourceLocation id;
     @Expose
@@ -24,13 +24,13 @@ public abstract class BaseRecipe implements Recipe<Container>
     public abstract boolean matches(List<ItemStack> inputs);
 
     @Override
-    public boolean matches(Container pContainer, Level pLevel)
+    public boolean matches(RecipeWrapper wrapper, Level pLevel)
     {
         return false;
     }
 
     @Override
-    public ItemStack assemble(Container container, RegistryAccess registryAccess)
+    public ItemStack assemble(RecipeWrapper wrapper, HolderLookup.Provider provider)
     {
         return ItemStack.EMPTY;
     }
@@ -53,7 +53,6 @@ public abstract class BaseRecipe implements Recipe<Container>
         return (T) this;
     }
 
-    @Override
     public ResourceLocation getId()
     {
         return id;

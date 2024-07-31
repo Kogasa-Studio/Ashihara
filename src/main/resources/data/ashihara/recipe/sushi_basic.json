@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "ashihara:cooked_rice"
+    },
+    {
+      "item": "minecraft:dried_kelp"
+    },
+    {
+      "item": "minecraft:carrot"
+    },
+    {
+      "tag": "forge:cooked_fishes"
+    }
+  ],
+  "result": {
+    "id": "ashihara:sushi_basic",
+    "count": 6
+  }
+}

@@ -1,5 +1,6 @@
 package com.example.examplemod;
 
+import kogasastudio.ashihara.Config;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -35,7 +36,6 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
-@Mod(ExampleMod.MODID)
 public class ExampleMod
 {
     // Define mod id in a common place for everything to reference

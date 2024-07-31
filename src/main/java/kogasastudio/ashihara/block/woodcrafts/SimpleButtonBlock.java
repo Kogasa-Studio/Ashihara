@@ -11,12 +11,13 @@ public class SimpleButtonBlock extends ButtonBlock
     public SimpleButtonBlock()
     {
         super
-                (
-                        BlockBehaviour.Properties.of()
-                                .noCollission()
-                                .pushReaction(PushReaction.DESTROY)
-                                .strength(0.5F),
-                        BlockSetType.OAK, 30, true
-                );
+        (
+            BlockSetType.OAK,
+            30,
+            BlockBehaviour.Properties.of()
+            .noCollission()
+            .pushReaction(PushReaction.DESTROY)
+            .strength(0.5F)
+        );
     }
 }

@@ -1,58 +1,26 @@
 package kogasastudio.ashihara.helper;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.common.SoundActions;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.common.SoundActions;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 import java.util.Optional;
 
 import static net.minecraft.sounds.SoundSource.BLOCKS;
-import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
-import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE;
-import static net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack.FLUID_NBT_KEY;
+import static net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
+import static net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE;
 
 public class FluidHelper
 {
-    public static ItemStack fillContainer(ItemStack itemStack, Fluid fluid, int capacity)
-    {
-        ItemStack itemStack1 = itemStack.copy();
-        CompoundTag fluidTag = new CompoundTag();
-        new FluidStack(fluid, capacity).writeToNBT(fluidTag);
-        itemStack1.getOrCreateTag().put(FLUID_NBT_KEY, fluidTag);
-        return itemStack1;
-    }
-
-    public static ItemStack fillContainer(ItemStack itemStack, Fluid fluid)
-    {
-        if (fluid != null && !itemStack.isEmpty() && ForgeCapabilities.FLUID_HANDLER_ITEM != null && FluidUtil.getFluidHandler(itemStack) != null)
-        {
-            ItemStack itemStack1 = itemStack.copy();
-            FluidUtil.getFluidHandler(itemStack1).ifPresent
-                    (data ->
-                    {
-                        CompoundTag fluidTag = new CompoundTag();
-                        new FluidStack(fluid, data.getTankCapacity(0)).writeToNBT(fluidTag);
-                        itemStack1.getOrCreateTag().put(FLUID_NBT_KEY, fluidTag);
-                    });
-            return itemStack1;
-        }
-        return itemStack;
-    }
-
     /**
      * 判断特定流体是否能被添加进FluidTank
      *
@@ -62,12 +30,7 @@ public class FluidHelper
      */
     public static boolean canFluidAddToTank(FluidStack fluidIn, FluidTank tank)
     {
-        return (tank.isEmpty() || fluidIn.isFluidEqual(tank.getFluid())) && fluidIn.getAmount() + tank.getFluid().getAmount() <= tank.getCapacity();
-    }
-
-    public static boolean canFluidAddToTank(FluidStack fluidIn, LazyOptional<FluidTank> tank)
-    {
-        return canFluidAddToTank(fluidIn, tank.orElse(new FluidTank(0)));
+        return (tank.isEmpty() || fluidIn.is((tank.getFluid().getFluid()))) && fluidIn.getAmount() + tank.getFluid().getAmount() <= tank.getCapacity();
     }
 
     /**
@@ -75,19 +38,14 @@ public class FluidHelper
      */
     public static boolean canFluidExtractFromTank(FluidStack fluidIn, FluidTank tank)
     {
-        return fluidIn.isFluidEqual(tank.getFluid()) && tank.getFluid().getAmount() >= fluidIn.getAmount();
-    }
-
-    public static boolean canFluidExtractFromTank(FluidStack fluidIn, LazyOptional<FluidTank> tank)
-    {
-        return canFluidExtractFromTank(fluidIn, tank.orElse(new FluidTank(0)));
+        return fluidIn.is(tank.getFluid().getFluid()) && tank.getFluid().getAmount() >= fluidIn.getAmount();
     }
 
     public static boolean notifyFluidTankInteraction(Player player, InteractionHand hand, ItemStack stackIn, FluidTank fluidTank, Level world, BlockPos pos)
     {
         ItemStack stack = stackIn.copy();
         stack.setCount(1);
-        Optional<IFluidHandlerItem> fluidHandlerItem = FluidUtil.getFluidHandler(stack).resolve();
+        Optional<IFluidHandlerItem> fluidHandlerItem = FluidUtil.getFluidHandler(stack);
         if (fluidHandlerItem.isPresent())
         {
             IFluidHandlerItem handler = fluidHandlerItem.get();
@@ -98,10 +56,10 @@ public class FluidHelper
                 fluidInItem = handler.drain(Integer.MAX_VALUE, SIMULATE);
             } else
             {
-                //Otherwise, try draining the same type of fluid we have stored
+                // Otherwise, try draining the same type of fluid we have stored
                 // We do this to better support multiple tanks in case the fluid we have stored we could pull out of a block's
                 // second tank but just asking to drain a specific amount
-                fluidInItem = handler.drain(new FluidStack(fluidTank.getFluid(), Integer.MAX_VALUE), SIMULATE);
+                fluidInItem = handler.drain(new FluidStack(fluidTank.getFluid().getFluid(), Integer.MAX_VALUE), SIMULATE);
             }
             if (fluidInItem.isEmpty())
             {
@@ -140,7 +98,7 @@ public class FluidHelper
 
                 int filledAmount = Math.min(capacity - remainder, storedAmount);
                 boolean filled = false;
-                FluidStack drained = handler.drain(new FluidStack(fluidInItem, filledAmount), player.isCreative() ? SIMULATE : EXECUTE);
+                FluidStack drained = handler.drain(new FluidStack(fluidInItem.getFluid(), filledAmount), player.isCreative() ? SIMULATE : EXECUTE);
                 if (!drained.isEmpty())
                 {
                     ItemStack container = handler.getContainer();
@@ -190,12 +148,12 @@ public class FluidHelper
         ItemStack simStack = stackIn.copy();
         ItemStack outStack = itemHandler.getStackInSlot(out);
         stack.setCount(1);
-        Optional<IFluidHandlerItem> fluidHandlerItem = FluidUtil.getFluidHandler(stack).resolve();
-        Optional<IFluidHandlerItem> simItem = FluidUtil.getFluidHandler(simStack).resolve();
-        if (fluidHandlerItem.isPresent())
+        Optional<IFluidHandlerItem> fluidHandlerItem = FluidUtil.getFluidHandler(stack);
+        Optional<IFluidHandlerItem> simItem = FluidUtil.getFluidHandler(simStack);
+        if (fluidHandlerItem.isPresent() && simItem.isPresent())
         {
             IFluidHandlerItem handler = fluidHandlerItem.get();
-            IFluidHandlerItem sim = simItem.orElse(new FluidHandlerItemStack(handler.getContainer(), handler.getTankCapacity(handler.getTanks())));
+            IFluidHandlerItem sim = simItem.get();
             FluidStack fluidInItem;
             if (fluidTank.isEmpty())
             {
@@ -206,7 +164,7 @@ public class FluidHelper
                 //Otherwise, try draining the same type of fluid we have stored
                 // We do this to better support multiple tanks in case the fluid we have stored we could pull out of a block's
                 // second tank but just asking to drain a specific amount
-                fluidInItem = handler.drain(new FluidStack(fluidTank.getFluid(), Integer.MAX_VALUE), SIMULATE);
+                fluidInItem = handler.drain(new FluidStack(fluidTank.getFluid().getFluid(), Integer.MAX_VALUE), SIMULATE);
             }
             if (fluidInItem.isEmpty()) //抽取流体
             {
@@ -236,12 +194,11 @@ public class FluidHelper
                 int capacity = fluidTank.getCapacity();
 
                 int filledAmount = Math.min(capacity - remainder, storedAmount);
-                sim.drain(new FluidStack(fluidInItem, filledAmount), EXECUTE);
+                sim.drain(new FluidStack(fluidInItem.getFluid(), filledAmount), EXECUTE);
                 boolean outEmpty = outStack.isEmpty();
-                boolean canOutStack =
-                        storedAmount == filledAmount && sim.getContainer().equals(outStack, false) && outStack.getCount() + 1 <= outStack.getMaxStackSize();
+                boolean canOutStack = storedAmount == filledAmount && sim.getContainer().equals(outStack) && outStack.getCount() + 1 <= outStack.getMaxStackSize();
                 if (!(outEmpty || canOutStack)) return false;
-                FluidStack drained = handler.drain(new FluidStack(fluidInItem, filledAmount), EXECUTE);
+                FluidStack drained = handler.drain(new FluidStack(fluidInItem.getFluid(), filledAmount), EXECUTE);
                 if (!drained.isEmpty())
                 {
                     ItemStack container = handler.getContainer();

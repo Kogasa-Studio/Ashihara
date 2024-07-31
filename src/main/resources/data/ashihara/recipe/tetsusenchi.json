@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AAA",
+    "IOI",
+    "I I"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:iron_ingot"
+    },
+    "I": {
+      "item": "minecraft:stick"
+    },
+    "O": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "result": {
+    "id": "ashihara:tetsusenchi",
+    "count": 1
+  }
+}

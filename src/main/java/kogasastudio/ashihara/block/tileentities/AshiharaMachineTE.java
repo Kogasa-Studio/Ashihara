@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.block.tileentities;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -20,27 +21,21 @@ public class AshiharaMachineTE extends BlockEntity
     }
 
     @Override
-    public CompoundTag getUpdateTag()
+    public CompoundTag getUpdateTag(HolderLookup.Provider pRegistries)
     {
         var result = new CompoundTag();
-        this.saveAdditional(result);
+        this.saveAdditional(result, pRegistries);
         return result;
     }
 
     // todo 将子类的 sync 提上来
     protected final void sync()
     {
-        if (this.level == null || this.level.isClientSide())
-        {
-            return;
-        }
-        //                                                                  todo create 的单参调用 getUpdateTag
+        if (this.level == null || this.level.isClientSide()) return;
         var packet = ClientboundBlockEntityDataPacket.create(this);
-        ((ServerLevel) this.level).getChunkSource().chunkMap.getPlayers(new ChunkPos(this.worldPosition), false)
-                .forEach(k -> k.connection.send(packet));
+        ((ServerLevel) this.level).getChunkSource().chunkMap.getPlayers(new ChunkPos(this.worldPosition), false).forEach(k -> k.connection.send(packet));
     }
 
-    // todo handleUpdateTag / handlePacket 是默认实现，所以删了
 
     @Override
     public Packet<ClientGamePacketListener> getUpdatePacket()

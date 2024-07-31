@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "planks",
+  "ingredients": [
+    {
+      "tag": "ashihara:cherry_logs"
+    }
+  ],
+  "result": {
+    "id": "ashihara:cherry_planks",
+    "count": 4
+  }
+}

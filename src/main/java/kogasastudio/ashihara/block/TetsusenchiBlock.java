@@ -8,6 +8,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -60,7 +61,7 @@ public class TetsusenchiBlock extends Block
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         ItemStack item = player.getItemInHand(handIn);
         if (item.getItem() == ItemRegistryHandler.RICE_CROP.get())
@@ -73,14 +74,9 @@ public class TetsusenchiBlock extends Block
                 Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemRegistryHandler.PADDY.get(), rand.nextInt(2) + 1));
                 player.getCooldowns().addCooldown(item.getItem(), 8);
                 item.shrink(1);
-                return InteractionResult.SUCCESS;
-            } else
-            {
-                return InteractionResult.PASS;
+                return ItemInteractionResult.SUCCESS;
             }
-        } else
-        {
-            return InteractionResult.PASS;
         }
+        return super.useItemOn(stack, state, worldIn, pos, player, handIn, hit);
     }
 }

@@ -7,7 +7,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -65,14 +67,13 @@ public class CuttingBoardBlock extends Block implements EntityBlock
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public ItemInteractionResult useItemOn(ItemStack pStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         BlockEntity teIn = worldIn.getBlockEntity(pos);
-        if (teIn == null || !teIn.getType().equals(TERegistryHandler.CUTTING_BOARD_TE.get()))
-            return InteractionResult.FAIL;
+        if (teIn == null || !teIn.getType().equals(TERegistryHandler.CUTTING_BOARD_TE.get())) return ItemInteractionResult.FAIL;
         CuttingBoardTE te = (CuttingBoardTE) teIn;
-        if (te.handleInteraction(player, handIn, worldIn, pos)) return InteractionResult.SUCCESS;
-        return InteractionResult.PASS;
+        if (te.handleInteraction(player, handIn, worldIn, pos)) return ItemInteractionResult.SUCCESS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     @Override

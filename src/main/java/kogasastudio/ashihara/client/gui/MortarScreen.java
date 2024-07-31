@@ -9,11 +9,9 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 
-public class MortarScreen extends AbstractContainerScreen<MortarContainer>
-{
+public class MortarScreen //extends AbstractContainerScreen<MortarContainer>
+{/*
     private static final ResourceLocation GUI = new ResourceLocation("ashihara:textures/gui/mortar.png");
     private int progress;
     private int stepStateCode;
@@ -125,5 +123,5 @@ public class MortarScreen extends AbstractContainerScreen<MortarContainer>
             this.width = widthIn;
             this.height = heightIn;
         }
-    }
+    }*/
 }

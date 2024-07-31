@@ -7,7 +7,6 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class ItemDirtBallDon extends FoodBowled
     private static final Component PROJECTILE_1 = Component.translatable("item.ashihara.dirt_ball_don.projectile_1");
 
     @Override
-    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn)
+    public void appendHoverText(ItemStack stack, TooltipContext pContext, List<Component> tooltip, TooltipFlag flagIn)
     {
         tooltip.add(PROJECTILE);
         tooltip.add(PROJECTILE_1);

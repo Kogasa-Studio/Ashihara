@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "wooden_stairs",
+  "pattern": [
+    " # ",
+    "#C#",
+    "# #"
+  ],
+  "key": {
+    "C": {
+      "item": "ashihara:candle"
+    },
+    "#": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "result": {
+    "id": "ashihara:house_like_hanging_lantern",
+    "count": 1
+  }
+}

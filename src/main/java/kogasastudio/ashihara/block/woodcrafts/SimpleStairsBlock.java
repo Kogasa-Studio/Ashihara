@@ -13,10 +13,10 @@ public class SimpleStairsBlock extends StairBlock
     public SimpleStairsBlock()
     {
         super
-                (
-                        BlockRegistryHandler.CHERRY_PLANKS.get().defaultBlockState(),
-                        BlockBehaviour.Properties.copy(BlockRegistryHandler.CHERRY_PLANKS.get())
-                );
+        (
+            BlockRegistryHandler.CHERRY_PLANKS.get().defaultBlockState(),
+            BlockBehaviour.Properties.ofFullCopy(BlockRegistryHandler.CHERRY_PLANKS.get())
+        );
     }
 
     @Override

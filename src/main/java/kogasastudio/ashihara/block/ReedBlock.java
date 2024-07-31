@@ -3,9 +3,9 @@ package kogasastudio.ashihara.block;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.common.IForgeShearable;
+import net.neoforged.neoforge.common.IShearable;
 
-public class ReedBlock extends DoublePlantBlock implements IForgeShearable
+public class ReedBlock extends DoublePlantBlock implements IShearable
 {
     public ReedBlock()
     {

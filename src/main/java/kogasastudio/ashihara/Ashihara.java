@@ -9,16 +9,16 @@ import kogasastudio.ashihara.interaction.recipes.register.RecipeManager;
 import kogasastudio.ashihara.inventory.container.ContainerRegistryHandler;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.sounds.SoundEvents;
+import kogasastudio.ashihara.world.WorldGenEventRegistryHandler;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import org.slf4j.Logger;
 
 @Mod(Ashihara.MODID)
-@EventBusSubscriber(modid = Ashihara.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class Ashihara
 {
     public static final String MODID = "ashihara";
@@ -34,22 +34,22 @@ public class Ashihara
         modEventBus.addListener(this::addCreative);
 
         ItemRegistryHandler.ITEMS.register(modEventBus);
-        BlockRegistryHandler.BLOCKS.register(bus);
-        CreativeModeTabsRegistryHandler.TABS.register(bus);
-        SoundEvents.SOUNDS.register(bus);
-        ParticleRegistryHandler.PARTICLE_TYPES.register(bus);
-        TERegistryHandler.TILE_ENTITIES.register(bus);
-        ContainerRegistryHandler.CONTAINER_TYPES.register(bus);
+        BlockRegistryHandler.BLOCKS.register(modEventBus);
+        FluidRegistryHandler.FLUIDS.register(modEventBus);
+        FluidRegistryHandler.AshiharaFluidTypes.TYPES.register(modEventBus);
+        CreativeModeTabsRegistryHandler.TABS.register(modEventBus);
+        SoundEvents.SOUNDS.register(modEventBus);
+        ParticleRegistryHandler.PARTICLE_TYPES.register(modEventBus);
+        TERegistryHandler.TILE_ENTITIES.register(modEventBus);
+        ContainerRegistryHandler.CONTAINER_TYPES.register(modEventBus);
         // RecipeTypesRegistryHandler.RECIPES.register(bus);
-        FluidRegistryHandler.FLUIDS.register(bus);
-        FluidRegistryHandler.AshiharaFluidTypes.TYPES.register(bus);
 //        GLMRegistryHandler.MODIFIERS.register(bus);
 
 //        BiomeRegistryHandler.BIOMES.register(bus);
-//        WorldGenEventRegistryHandler.PLACED_FEATURE.register(bus);
-//        WorldGenEventRegistryHandler.CONFIGURED_FEATURE.register(bus);
+        WorldGenEventRegistryHandler.PLACED_FEATURE.register(modEventBus);
+        WorldGenEventRegistryHandler.CONFIGURED_FEATURE.register(modEventBus);
 
-        RecipeManager.register(bus);
+        RecipeManager.register(modEventBus);
     }
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {

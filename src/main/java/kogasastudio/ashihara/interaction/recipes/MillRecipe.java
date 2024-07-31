@@ -18,12 +18,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.util.RecipeMatcher;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,9 +28,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class MillRecipe extends BaseRecipe
+public class MillRecipe //extends BaseRecipe
 {
-    private NonNullList<Ingredient> input;
+    /*private NonNullList<Ingredient> input;
 
     private NonNullList<Ingredient> input()
     {
@@ -87,7 +83,7 @@ public class MillRecipe extends BaseRecipe
         return new MillRecipe(id, group, inputCosts, output, inputFluid, outputFluid, round, roundTicks, exp);
     }
 
-    public boolean testInputFluid(@Nullable FluidTank tank)
+    public boolean testInputFluid(FluidTank tank)
     {
         return tank == null ? getInputFluid().isEmpty() :
                 getInputFluid().isEmpty() ||
@@ -243,5 +239,5 @@ public class MillRecipe extends BaseRecipe
             buffer.writeInt(recipe.roundTicks);
             buffer.writeFloat(recipe.exp);
         }
-    }
+    }*/
 }

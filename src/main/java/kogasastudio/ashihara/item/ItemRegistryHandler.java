@@ -13,8 +13,12 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.Tool;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.List;
 
 @SuppressWarnings("unused")
 public class ItemRegistryHandler
@@ -36,7 +40,7 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> SUJIKABUTO = ITEMS.register("sujikabuto", ItemSujikaButo::new);
 
     //食物
-    public static final DeferredItem<Item> SAKURAMOCHI = ITEMS.register("sakuramochi", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationMod(1).effect(() -> new MobEffectInstance(MobEffects.HEAL, 1, 2), 1.0F).build())));
+    public static final DeferredItem<Item> SAKURAMOCHI = ITEMS.register("sakuramochi", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(1).effect(() -> new MobEffectInstance(MobEffects.HEAL, 1, 2), 1.0F).build())));
     public static final DeferredItem<Item> COOKED_RICE = ITEMS.register("cooked_rice", () -> new EasyFood(5));
     public static final DeferredItem<Item> DIRT_BALL_DON = ITEMS.register("dirt_ball_don", ItemDirtBallDon::new);
     public static final DeferredItem<Item> SUSHI_BASIC = ITEMS.register("sushi_basic", () -> new EasyFood(5));
@@ -60,7 +64,7 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> DANGO_MITARASHI = ITEMS.register("dango_mitarashi", () -> new EasyFood(6));
 
     //工具
-    public static final DeferredItem<Item> TACHI = ITEMS.register("tachi", () -> new SwordItem(Tiers.DIAMOND, 15, 4.0f, new Item.Properties()));
+    public static final DeferredItem<Item> TACHI = ITEMS.register("tachi", () -> new SwordItem(Tiers.DIAMOND, new Item.Properties(), new Tool(List.of(Tool.Rule.overrideSpeed(List.of(Blocks.COBWEB), 15f)), 4f, 15)));
 
     public static final DeferredItem<Item> WOOD_OTSUCHI = ITEMS.register("wood_otsuchi", () -> new ItemOtsuchi(Tiers.WOOD, 16, -3.4d));
     public static final DeferredItem<Item> IRON_OTSUCHI = ITEMS.register("iron_otsuchi", () -> new ItemOtsuchi(Tiers.IRON, 16, -3.5d));
@@ -173,8 +177,8 @@ public class ItemRegistryHandler
 
 
     //桶
-    public static final DeferredItem<Item> SOY_MILK_BUCKET = ITEMS.register("soy_milk_bucket", () -> new BucketItem(FluidRegistryHandler.SOY_MILK, new Item.Properties()));
-    public static final DeferredItem<Item> OIL_BUCKET = ITEMS.register("oil_bucket", () -> new BucketItem(FluidRegistryHandler.OIL, new Item.Properties()));
+    public static final DeferredItem<Item> SOY_MILK_BUCKET = ITEMS.register("soy_milk_bucket", () -> new BucketItem(FluidRegistryHandler.SOY_MILK.get(), new Item.Properties()));
+    public static final DeferredItem<Item> OIL_BUCKET = ITEMS.register("oil_bucket", () -> new BucketItem(FluidRegistryHandler.OIL.get(), new Item.Properties()));
 
     private static class AshiharaItem extends Item
     {

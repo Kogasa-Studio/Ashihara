@@ -8,9 +8,9 @@ import java.lang.reflect.Type;
 /**
  * @author DustW
  **/
-public class IngredientSerializer implements BaseSerializer<Ingredient>
+public class IngredientSerializer //implements BaseSerializer<Ingredient>
 {
-    @Override
+    /*@Override
     public Ingredient deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
     {
         return Ingredient.fromJson(json);
@@ -20,5 +20,5 @@ public class IngredientSerializer implements BaseSerializer<Ingredient>
     public JsonElement serialize(Ingredient src, Type typeOfSrc, JsonSerializationContext context)
     {
         return src.toJson();
-    }
+    }*/
 }

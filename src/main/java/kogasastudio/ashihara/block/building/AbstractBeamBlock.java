@@ -13,7 +13,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -28,7 +28,6 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
@@ -99,7 +98,7 @@ public abstract class AbstractBeamBlock extends Block implements IVariable<Ashih
 
     //高级障子壁构筑主要逻辑
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
         ItemStack item = player.getItemInHand(hand);
         boolean isBeam = item.getItem().equals(this.getBeam());
@@ -147,18 +146,17 @@ public abstract class AbstractBeamBlock extends Block implements IVariable<Ashih
                     level.setBlockAndUpdate(pos, state);
                     level.playSound(player, pos, event, SoundSource.BLOCKS, 1.0f, 1.0f);
                     if (isAxe) ParticleHelper.spawnBlockDestruction(level, hitResult.getLocation().x(), hitResult.getLocation().y(), hitResult.getLocation().z(), state, 10);
-                    return InteractionResult.SUCCESS;
+                    return ItemInteractionResult.SUCCESS;
                 }
-                else if (replaced.equals("oooo") && !state.getValue(WALL_FILL_TYPE).equals(WallFillType.NONE) && state.getValue(WALL_TYPE).getBlock() instanceof AbstractWallBlock)
+                else if (replaced.equals("oooo") && !state.getValue(WALL_FILL_TYPE).equals(WallFillType.NONE) && state.getValue(WALL_TYPE).getBlock() instanceof AbstractWallBlock wall)
                 {
-                    AbstractWallBlock wall = (AbstractWallBlock) state.getValue(WALL_TYPE).getBlock();
                     state = wall.defaultBlockState().setValue(AXIS, hitResult.getDirection().getAxis().equals(Direction.Axis.X) ? Direction.Axis.Z : Direction.Axis.X);
                     state = wall.updateState(level, pos, state);
                     level.setBlockAndUpdate(pos, state);
                     level.playSound(player, pos, SoundEvents.WOOD_BREAK, SoundSource.BLOCKS, 1.0f, 1.0f);
                     ParticleHelper.spawnBlockDestruction(level, hitResult.getLocation().x(), hitResult.getLocation().y(), hitResult.getLocation().z(), state, 10);
                     if (!player.isCreative()) Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, this.getBeam().getDefaultInstance());
-                    return InteractionResult.SUCCESS;
+                    return ItemInteractionResult.SUCCESS;
                 }
             }
         }
@@ -206,8 +204,8 @@ public abstract class AbstractBeamBlock extends Block implements IVariable<Ashih
             if (changed)
             {
                 SoundType type = isWall
-                        ? ((BlockItem) item.getItem()).getBlock().getSoundType(((BlockItem) item.getItem()).getBlock().defaultBlockState())
-                        : state.getValue(WALL_TYPE).getBlock().getSoundType(state.getValue(WALL_TYPE).getBlock().defaultBlockState());
+                        ? ((BlockItem) item.getItem()).getBlock().defaultBlockState().getSoundType()
+                        : state.getValue(WALL_TYPE).getBlock().defaultBlockState().getSoundType();
                 SoundEvent event = isWall ? type.getPlaceSound() : type.getBreakSound();
                 level.setBlockAndUpdate(pos, state);
                 level.playSound(player, pos, event, SoundSource.BLOCKS, 1.0f, 1.0f);
@@ -216,10 +214,10 @@ public abstract class AbstractBeamBlock extends Block implements IVariable<Ashih
                     ParticleHelper.spawnBlockDestruction(level, pos.getX(), pos.getY(), pos.getZ(), state.getValue(WALL_TYPE).getBlock().defaultBlockState(), 10);
                     if (!player.isCreative()) Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, state.getValue(WALL_TYPE).getBlock().asItem().getDefaultInstance());
                 }
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
         }
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     public BlockState updateState(Level level, BlockPos pos, BlockState state)

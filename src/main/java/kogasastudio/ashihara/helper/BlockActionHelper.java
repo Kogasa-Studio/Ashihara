@@ -180,18 +180,13 @@ public class BlockActionHelper
      */
     public static int getRotationByFacing(Direction dir)
     {
-        switch (dir)
+        return switch (dir)
         {
-            case NORTH:
-                return 180;
-            case SOUTH:
-                return 0;
-            case WEST:
-                return 90;
-            case EAST:
-                return -90;
-        }
-        return 0;
+            case NORTH -> 180;
+            case WEST -> 90;
+            case EAST -> -90;
+            default -> 0;
+        };
     }
 
     public static boolean typeMatches(BlockState state, BlockState toBeChecked)

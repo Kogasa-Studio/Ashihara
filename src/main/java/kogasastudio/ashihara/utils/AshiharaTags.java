@@ -23,21 +23,21 @@ public class AshiharaTags
 
     private static TagKey<Item> tag(String name)
     {
-        return ItemTags.create(new ResourceLocation(Ashihara.MODID, name));
+        return ItemTags.create(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, name));
     }
 
     private static TagKey<Item> tagForge(String name)
     {
-        return ItemTags.create(new ResourceLocation("forge", name));
+        return ItemTags.create(ResourceLocation.fromNamespaceAndPath("forge", name));
     }
 
     private static TagKey<Block> tagBlock(String name)
     {
-        return BlockTags.create(new ResourceLocation(Ashihara.MODID, name));
+        return BlockTags.create(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, name));
     }
 
     private static TagKey<Block> tagForgeBlock(String name)
     {
-        return BlockTags.create(new ResourceLocation("forge", name));
+        return BlockTags.create(ResourceLocation.fromNamespaceAndPath("forge", name));
     }
 }

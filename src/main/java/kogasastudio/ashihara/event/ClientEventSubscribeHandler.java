@@ -23,17 +23,17 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 
 import java.util.Map;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientEventSubscribeHandler
 {
     private static void setRenderType(Block block, RenderType type, FMLClientSetupEvent event)
@@ -105,19 +105,18 @@ public class ClientEventSubscribeHandler
     public static void onTERBind(EntityRenderersEvent.RegisterRenderers event)
     {
         event.registerBlockEntityRenderer(TERegistryHandler.MARKABLE_LANTERN_TE.get(), MarkableLanternTER::new);
-        event.registerBlockEntityRenderer(TERegistryHandler.MILL_TE.get(), MillTER::new);
+        //event.registerBlockEntityRenderer(TERegistryHandler.MILL_TE.get(), MillTER::new);
         event.registerBlockEntityRenderer(TERegistryHandler.PAIL_TE.get(), PailTER::new);
         event.registerBlockEntityRenderer(TERegistryHandler.CANDLE_TE.get(), CandleTER::new);
-        event.registerBlockEntityRenderer(TERegistryHandler.MORTAR_TE.get(), MortarTER::new);
+        //event.registerBlockEntityRenderer(TERegistryHandler.MORTAR_TE.get(), MortarTER::new);
         event.registerBlockEntityRenderer(TERegistryHandler.CUTTING_BOARD_TE.get(), CuttingBoardTER::new);
     }
 
     @SubscribeEvent
     public static void onModelBaked(ModelEvent.ModifyBakingResult event)
     {
-        Map<ResourceLocation, BakedModel> modelRegistry = event.getModels();
-        ModelResourceLocation location = new ModelResourceLocation
-                (ItemRegistryHandler.PAIL.getId(), "inventory");
+        Map<ModelResourceLocation, BakedModel> modelRegistry = event.getModels();
+        ModelResourceLocation location = new ModelResourceLocation(ItemRegistryHandler.PAIL.getId(), "inventory");
         BakedModel existingModel = modelRegistry.get(location);
         if (existingModel == null)
         {
@@ -138,8 +137,8 @@ public class ClientEventSubscribeHandler
     {
         event.enqueueWork(() ->
         {
-            MenuScreens.register(ContainerRegistryHandler.MILL_CONTAINER.get(), MillScreen::new);
-            MenuScreens.register(ContainerRegistryHandler.MORTAR_CONTAINER.get(), MortarScreen::new);
+            //MenuScreens.register(ContainerRegistryHandler.MILL_CONTAINER.get(), MillScreen::new);
+            //MenuScreens.register(ContainerRegistryHandler.MORTAR_CONTAINER.get(), MortarScreen::new);
         });
     }
 

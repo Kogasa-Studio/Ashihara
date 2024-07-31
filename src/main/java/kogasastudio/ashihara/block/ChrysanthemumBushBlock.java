@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.BlockGetter;
@@ -9,11 +10,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.IForgeShearable;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.IShearable;
 
-public class ChrysanthemumBushBlock extends BushBlock implements IForgeShearable
+public class ChrysanthemumBushBlock extends BushBlock implements IShearable
 {
     public ChrysanthemumBushBlock()
     {
@@ -38,5 +39,11 @@ public class ChrysanthemumBushBlock extends BushBlock implements IForgeShearable
     public long getSeed(BlockState state, BlockPos pos)
     {
         return Mth.getSeed(pos.getX(), pos.getY(), pos.getZ());
+    }
+
+    @Override
+    protected MapCodec<? extends BushBlock> codec()
+    {
+        return simpleCodec(p -> new ChrysanthemumBushBlock());
     }
 }

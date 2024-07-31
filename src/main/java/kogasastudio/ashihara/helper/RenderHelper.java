@@ -10,15 +10,15 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import org.joml.Matrix4f;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_COLOR_TEX;
+import static com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_TEX_COLOR;
 
 public class RenderHelper
 {
@@ -85,7 +85,7 @@ public class RenderHelper
         {
             //这里还是用幻数
             String path = location.getPath().substring(9, location.getPath().length() - 4);
-            cooked.add(new ResourceLocation(location.getNamespace(), path));
+            cooked.add(ResourceLocation.fromNamespaceAndPath(location.getNamespace(), path));
         }
         return cooked;
     }
@@ -98,7 +98,7 @@ public class RenderHelper
             //这里还是用幻数
             String path = location.getPath().substring(9, location.getPath().length() - 4);
             String name = path.substring(path.lastIndexOf("/") + 1);
-            cooked.put(name, new ResourceLocation(location.getNamespace(), path));
+            cooked.put(name, ResourceLocation.fromNamespaceAndPath(location.getNamespace(), path));
         }
         return cooked;
     }
@@ -122,13 +122,12 @@ public class RenderHelper
         float green = ((RGBA >> 8) & 0xFF) / 255f;
         float blue = ((RGBA) & 0xFF) / 255f;
 
-        builder.vertex(matrix, x, y, z)
-                .color(red, green, blue, alpha)
-                .uv(u, v)
-                .overlayCoords(overlay)
-                .uv2(light)
-                .normal(0f, 1f, 0f)
-                .endVertex();
+        builder.addVertex(matrix, x, y, z)
+                .setColor(red, green, blue, alpha)
+                .setUv(u, v)
+                .setOverlay(overlay)
+                .setLight(light)
+                .setNormal(0f, 1f, 0f);
     }
 
     /**
@@ -141,10 +140,9 @@ public class RenderHelper
         int blue = FastColor.ARGB32.blue(RGBA);
         int alpha = FastColor.ARGB32.alpha(RGBA);
 
-        builder.vertex(matrix, x, y, z)
-                .color(red, green, blue, alpha)
-                .uv(u, v)
-                .endVertex();
+        builder.addVertex(matrix, x, y, z)
+                .setColor(red, green, blue, alpha)
+                .setUv(u, v);
     }
 
     /**
@@ -176,7 +174,7 @@ public class RenderHelper
             list.add(Component.translatable("tooltip.ashihara.fluid_existence"));
             list.add(Component.translatable
                     (
-                            "    " + I18n.get(stack.getTranslationKey())
+                            "    " + stack.getHoverName()
                                     + ": " + stack.getAmount()
                                     + (Capacity > 0 ? (" mB / " + Capacity + " mB") : " mB")
                     ));
@@ -225,7 +223,7 @@ public class RenderHelper
         float v0 = FLUID.getV0();
 
         Tesselator tessellator = Tesselator.getInstance();
-        BufferBuilder builder = tessellator.getBuilder();
+        BufferBuilder builder = tessellator.begin(VertexFormat.Mode.QUADS, POSITION_TEX_COLOR);
 
         /*
          * 渲染循环
@@ -254,12 +252,11 @@ public class RenderHelper
                 float u1 = j == 0 ? FLUID.getU0() + ((FLUID.getU1() - u0) * ((float) extraWidth / 16f)) : FLUID.getU1();
 
                 //渲染主代码
-                builder.begin(VertexFormat.Mode.QUADS, POSITION_COLOR_TEX);
                 buildMatrix(matrix, builder, xStart, yStart - yOffset, 0.0f, u0, v0, color);
                 buildMatrix(matrix, builder, xStart, yStart, 0.0f, u0, v1, color);
                 buildMatrix(matrix, builder, xStart + xOffset, yStart, 0.0f, u1, v1, color);
                 buildMatrix(matrix, builder, xStart + xOffset, yStart - yOffset, 0.0f, u1, v0, color);
-                tessellator.end();
+                tessellator.clear();
             }
         }
         RenderSystem.disableBlend();
@@ -274,7 +271,7 @@ public class RenderHelper
                     Level worldIn, BlockPos posIn
             )
     {
-        VertexConsumer builder = bufferIn.getBuffer(RenderType.translucentNoCrumbling());
+        VertexConsumer builder = bufferIn.getBuffer(RenderType.translucent());
 
         TextureAtlasSprite FLUID = (worldIn != null && posIn != null)
                 ? Minecraft.getInstance()
@@ -311,18 +308,13 @@ public class RenderHelper
                     Level worldIn, BlockPos posIn
             )
     {
-        teIn.getTank().ifPresent
-                (
-                        bucket ->
-                        {
-                            if (!bucket.isEmpty())
-                            {
-                                FluidStack fluid = bucket.getFluid();
-                                float height = minHeight + ((float) fluid.getAmount() / bucket.getCapacity()) * (maxHeight - minHeight);
+        FluidTank bucket = teIn.getTank();
+        if (!bucket.isEmpty())
+        {
+            FluidStack fluid = bucket.getFluid();
+            float height = minHeight + ((float) fluid.getAmount() / bucket.getCapacity()) * (maxHeight - minHeight);
 
-                                renderLeveledFluidStack(fluid, stackIn, bufferIn, combinedLightIn, combinedOverlayIn, xStart, height, zStart, xEnd, zEnd, worldIn, posIn);
-                            }
-                        }
-                );
+            renderLeveledFluidStack(fluid, stackIn, bufferIn, combinedLightIn, combinedOverlayIn, xStart, height, zStart, xEnd, zEnd, worldIn, posIn);
+        }
     }
 }

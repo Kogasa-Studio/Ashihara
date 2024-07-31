@@ -1,7 +1,6 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.block.tileentities.MortarTE;
-import kogasastudio.ashihara.client.particles.GenericParticleData;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.helper.FluidHelper;
 import kogasastudio.ashihara.item.ItemOtsuchi;
@@ -17,6 +16,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -36,8 +36,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -45,7 +43,7 @@ import java.util.Arrays;
 import static kogasastudio.ashihara.utils.AshiharaTags.CEREALS;
 import static kogasastudio.ashihara.utils.AshiharaTags.CEREAL_PROCESSED;
 
-public class MortarBlock extends Block implements EntityBlock
+public class MortarBlock extends Block // implements EntityBlock
 {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
@@ -77,7 +75,7 @@ public class MortarBlock extends Block implements EntityBlock
     @Override
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState state1, boolean b)
     {
-        BlockEntity te = worldIn.getBlockEntity(pos);
+        /*BlockEntity te = worldIn.getBlockEntity(pos);
         if (te instanceof MortarTE)
         {
             NonNullList<ItemStack> stacks = NonNullList.create();
@@ -88,7 +86,7 @@ public class MortarBlock extends Block implements EntityBlock
             }
             Containers.dropContents(worldIn, pos, stacks);
             worldIn.updateNeighbourForOutputSignal(pos, this);
-        }
+        }*/
         super.onRemove(state, worldIn, pos, state1, b);
     }
 
@@ -105,10 +103,9 @@ public class MortarBlock extends Block implements EntityBlock
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
-        ItemStack stack = player.getItemInHand(handIn);
-        MortarTE te = (MortarTE) worldIn.getBlockEntity(pos);
+        /*MortarTE te = (MortarTE) worldIn.getBlockEntity(pos);
         if (te == null) return InteractionResult.FAIL;
 
         FluidTank tank = te.getTank().orElse(new FluidTank(0));
@@ -176,14 +173,14 @@ public class MortarBlock extends Block implements EntityBlock
                 NetworkHooks.openScreen((ServerPlayer) player, te, (FriendlyByteBuf packerBuffer) -> packerBuffer.writeBlockPos(te.getBlockPos()));
             }
             return InteractionResult.SUCCESS;
-        }
-        return InteractionResult.PASS;
+        }*/
+        return super.useItemOn(stack, state, worldIn, pos, player, handIn, hit);
     }
 
-    @Nullable
+    /*@Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState)
     {
         return new MortarTE(pPos, pState);
-    }
+    }*/
 }

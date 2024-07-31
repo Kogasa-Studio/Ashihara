@@ -3,6 +3,7 @@ package kogasastudio.ashihara.world;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.util.valueproviders.ConstantInt;
@@ -17,22 +18,21 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 import net.minecraft.world.level.levelgen.feature.trunkplacers.FancyTrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import net.minecraft.world.level.levelgen.placement.*;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
 import java.util.List;
 import java.util.OptionalInt;
+import java.util.function.Supplier;
 
 public class WorldGenEventRegistryHandler
 {
-    public static final DeferredRegister<ConfiguredFeature<?, ?>> CONFIGURED_FEATURE =
-            DeferredRegister.create(Registries.CONFIGURED_FEATURE.registry(), Ashihara.MODID);
+    public static final DeferredRegister<ConfiguredFeature<?, ?>> CONFIGURED_FEATURE = DeferredRegister.create(Registries.CONFIGURED_FEATURE.registry(), Ashihara.MODID);
 
-    public static final DeferredRegister<PlacedFeature> PLACED_FEATURE =
-            DeferredRegister.create(Registries.PLACED_FEATURE.registry(), Ashihara.MODID);
+    public static final DeferredRegister<PlacedFeature> PLACED_FEATURE = DeferredRegister.create(Registries.PLACED_FEATURE.registry(), Ashihara.MODID);
 
     private static final PlacementModifier TREE_THRESHOLD = SurfaceWaterDepthFilter.forMaxDepth(0);
 
-    public static final RegistryObject<ConfiguredFeature<?, ?>> FANCY_CHERRY =
+    public static final Supplier<ConfiguredFeature<?, ?>> FANCY_CHERRY =
             CONFIGURED_FEATURE.register
                     ("fancy_cherry", () -> new ConfiguredFeature<>
                             (
@@ -50,7 +50,7 @@ public class WorldGenEventRegistryHandler
                             )
                     );
 
-    public static final RegistryObject<ConfiguredFeature<?, ?>> RED_MAPLE =
+    public static final Supplier<ConfiguredFeature<?, ?>> RED_MAPLE =
             CONFIGURED_FEATURE.register
                     (
                             "red_maple", () -> new ConfiguredFeature<>
@@ -85,32 +85,32 @@ public class WorldGenEventRegistryHandler
                         );
     }
 
-    public static final RegistryObject<PlacedFeature> FOREST_CHERRY_TREES =
+    public static final Supplier<PlacedFeature> FOREST_CHERRY_TREES =
             PLACED_FEATURE.register
                     (
                             "forest_cherry_trees",
-                            () -> new PlacedFeature(FANCY_CHERRY.getHolder().get(), DefaultTreeModifiers(8, 0.1F, Ashihara.getRandomBounded(1, 3)))
+                            () -> new PlacedFeature(Holder.direct(FANCY_CHERRY.get()), DefaultTreeModifiers(8, 0.1F, Ashihara.getRandomBounded(1, 3)))
                     );
 
-    public static final RegistryObject<PlacedFeature> FOREST_RED_MAPLE_TREES =
+    public static final Supplier<PlacedFeature> FOREST_RED_MAPLE_TREES =
             PLACED_FEATURE.register
                     (
                             "forest_red_maple_trees",
-                            () -> new PlacedFeature(RED_MAPLE.getHolder().get(), DefaultTreeModifiers(10, 0.1F, 1))
+                            () -> new PlacedFeature(Holder.direct(RED_MAPLE.get()), DefaultTreeModifiers(10, 0.1F, 1))
                     );
 
-    public static final RegistryObject<PlacedFeature> PLAIN_CHERRY_TREES =
+    public static final Supplier<PlacedFeature> PLAIN_CHERRY_TREES =
             PLACED_FEATURE.register
                     (
                             "plain_cherry_trees",
-                            () -> new PlacedFeature(FANCY_CHERRY.getHolder().get(), DefaultTreeModifiers(0, 0.05F, 1))
+                            () -> new PlacedFeature(Holder.direct(FANCY_CHERRY.get()), DefaultTreeModifiers(0, 0.05F, 1))
                     );
 
-    public static final RegistryObject<PlacedFeature> PLAIN_RED_MAPLE_TREES =
+    public static final Supplier<PlacedFeature> PLAIN_RED_MAPLE_TREES =
             PLACED_FEATURE.register
                     (
                             "plain_red_maple_trees",
-                            () -> new PlacedFeature(RED_MAPLE.getHolder().get(), DefaultTreeModifiers(0, 0.05F, 1))
+                            () -> new PlacedFeature(Holder.direct(RED_MAPLE.get()), DefaultTreeModifiers(0, 0.05F, 1))
                     );
 
 

@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -50,7 +51,7 @@ public class HydrangeaBushBlock extends BushBlock implements BonemealableBlock
     @Override
     public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random)
     {
-        if (random.nextInt(3) == 1 && this.isValidBonemealTarget(worldIn, pos, state, false))
+        if (random.nextInt(3) == 1 && this.isValidBonemealTarget(worldIn, pos, state))
         {
             this.performBonemeal(worldIn, random, pos, state);
         }
@@ -63,10 +64,10 @@ public class HydrangeaBushBlock extends BushBlock implements BonemealableBlock
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state, boolean isClient)
+    public boolean isValidBonemealTarget(LevelReader pLevel, BlockPos pPos, BlockState pState)
     {
-        BlockState down = worldIn.getBlockState(pos);
-        return down.getBlock().canSustainPlant(down, worldIn, pos, Direction.UP, this) && !state.getValue(BLOOMED);
+        BlockState down = pLevel.getBlockState(pPos);
+        return down.canSustainPlant(pLevel, pPos, Direction.UP, this.defaultBlockState()).isTrue() && !pState.getValue(BLOOMED);
     }
 
     @Override
@@ -79,5 +80,11 @@ public class HydrangeaBushBlock extends BushBlock implements BonemealableBlock
     public void performBonemeal(ServerLevel worldIn, RandomSource rand, BlockPos pos, BlockState state)
     {
         worldIn.setBlockAndUpdate(pos, state.setValue(BLOOMED, true));
+    }
+
+    @Override
+    protected MapCodec<? extends BushBlock> codec()
+    {
+        return simpleCodec(p -> new HydrangeaBushBlock(false));
     }
 }

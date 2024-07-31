@@ -6,6 +6,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -82,48 +83,49 @@ public class StoneLanternBlock extends DoubleLanternBlock
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    protected InteractionResult useWithoutItem(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, BlockHitResult pHitResult)
     {
-        if (state.getValue(HALF).equals(DoubleBlockHalf.LOWER)) return InteractionResult.PASS;
+        if (pPlayer.isShiftKeyDown() && pState.getValue(SEALED))
+        {
+            pLevel.playSound(pPlayer, pPos, SoundEvents.GLASS_HIT, SoundSource.BLOCKS, 1.0F, 1.0F);
+            pLevel.setBlockAndUpdate(pPos, pState.setValue(SEALED, false));
+            if (!pPlayer.isCreative())
+            {
+                pPlayer.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(GLASS_PANE));
+            }
+            return InteractionResult.SUCCESS;
+        } else if (pState.getValue(LIT))
+        {
+            pLevel.playSound(pPlayer, pPos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, pLevel.getRandom().nextFloat() * 0.4F + 0.8F);
+            pLevel.setBlockAndUpdate(pPos, pState.setValue(LIT, false));
+            return InteractionResult.SUCCESS;
+        }
+        return super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult);
+    }
+
+    @Override
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    {
+        if (state.getValue(HALF).equals(DoubleBlockHalf.LOWER)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         RandomSource random = worldIn.getRandom();
-        if (player.getItemInHand(handIn).getItem().equals(Items.FLINT_AND_STEEL) && !state.getValue(LIT) && (!state.getValue(WATERLOGGED) || state.getValue(SEALED)))
+        if (stack.getItem().equals(Items.FLINT_AND_STEEL) && !state.getValue(LIT) && (!state.getValue(WATERLOGGED) || state.getValue(SEALED)))
         {
             worldIn.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
             worldIn.setBlockAndUpdate(pos, state.setValue(LIT, true));
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
-        else if (player.getItemInHand(handIn).getItem() == Items.AIR)
-        {
-            if (player.isShiftKeyDown() && state.getValue(SEALED))
-            {
-                worldIn.playSound(player, pos, SoundEvents.GLASS_HIT, SoundSource.BLOCKS, 1.0F, 1.0F);
-                worldIn.setBlockAndUpdate(pos, state.setValue(SEALED, false));
-                if (!player.isCreative())
-                {
-                    player.setItemInHand(handIn, new ItemStack(GLASS_PANE));
-                }
-                return InteractionResult.SUCCESS;
-            } else if (state.getValue(LIT))
-            {
-                worldIn.playSound(player, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
-                worldIn.setBlockAndUpdate(pos, state.setValue(LIT, false));
-                return InteractionResult.SUCCESS;
-            } else
-            {
-                return InteractionResult.PASS;
-            }
-        } else if (player.getItemInHand(handIn).getItem().equals(GLASS_PANE) && !state.getValue(SEALED))
+        else if (stack.getItem().equals(GLASS_PANE) && !state.getValue(SEALED))
         {
             worldIn.playSound(player, pos, SoundEvents.GLASS_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
             worldIn.setBlockAndUpdate(pos, state.setValue(SEALED, true));
             if (!player.isCreative())
             {
-                player.getItemInHand(handIn).shrink(1);
+                stack.shrink(1);
             }
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         } else
         {
-            return InteractionResult.PASS;
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
     }
 

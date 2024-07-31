@@ -3,6 +3,8 @@ package kogasastudio.ashihara.block.tileentities;
 import kogasastudio.ashihara.interaction.recipes.CuttingBoardRecipe;
 import kogasastudio.ashihara.interaction.recipes.register.RecipeTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -17,10 +19,13 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
-import java.util.List;
 import java.util.Optional;
 
 //import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
@@ -28,10 +33,12 @@ import java.util.Optional;
 public class CuttingBoardTE extends AshiharaMachineTE
 {
     private ItemStack content = ItemStack.EMPTY;
+    private final RecipeManager.CachedCheck<RecipeWrapper, CuttingBoardRecipe> quickCheck;
 
     public CuttingBoardTE(BlockPos pos, BlockState state)
     {
         super(TERegistryHandler.CUTTING_BOARD_TE.get(), pos, state);
+        this.quickCheck = RecipeManager.createCheck(RecipeTypes.CUTTING_BOARD.get());
     }
 
     public ItemStack getContent()
@@ -39,12 +46,11 @@ public class CuttingBoardTE extends AshiharaMachineTE
         return this.content.copy();
     }
 
-    public Optional<CuttingBoardRecipe> tryMatchRecipe()
+    public Optional<RecipeHolder<CuttingBoardRecipe>> tryMatchRecipe(RecipeWrapper wrapper)
     {
         if (this.level == null) return Optional.empty();
 
-        return this.level.getRecipeManager().getAllRecipesFor(RecipeTypes.CUTTING_BOARD.get())
-                .stream().filter(r -> r.matches(List.of(content))).findFirst();
+        return this.quickCheck.getRecipeFor(wrapper, this.level);
     }
 
     public void cut(CuttingBoardRecipe recipe)
@@ -61,15 +67,15 @@ public class CuttingBoardTE extends AshiharaMachineTE
             for (int i = 0; i < 10; i += 1)
             {
                 this.level.addParticle
-                        (
-                                data,
-                                (double) this.worldPosition.getX() + 0.5D,
-                                (double) this.worldPosition.getY() + 0.7D,
-                                (double) this.worldPosition.getZ() + 0.5D,
-                                ((double) random.nextFloat() - 0.5D) * 0.2D,
-                                ((double) random.nextFloat() - 0.5D) * 0.2D,
-                                ((double) random.nextFloat() - 0.5D) * 0.2D
-                        );
+                (
+                    data,
+                    (double) this.worldPosition.getX() + 0.5D,
+                    (double) this.worldPosition.getY() + 0.7D,
+                    (double) this.worldPosition.getZ() + 0.5D,
+                    ((double) random.nextFloat() - 0.5D) * 0.2D,
+                    ((double) random.nextFloat() - 0.5D) * 0.2D,
+                    ((double) random.nextFloat() - 0.5D) * 0.2D
+                );
             }
         }
         for (int i = 0; i < this.content.getCount(); i += 1)
@@ -100,7 +106,7 @@ public class CuttingBoardTE extends AshiharaMachineTE
                 return true;
             } else
             {
-                Optional<CuttingBoardRecipe> recipe = tryMatchRecipe();
+                Optional<RecipeHolder<CuttingBoardRecipe>> recipe = tryMatchRecipe(new RecipeWrapper(new ItemStackHandler(NonNullList.of(this.content))));
 //                LOGGER_MAIN.info
 //                (
 //                    "\n{\n    inv: " + inv.serializeNBT()
@@ -109,11 +115,11 @@ public class CuttingBoardTE extends AshiharaMachineTE
 //                    + ";\n    tool_matches: " + (recipe.isPresent() ? recipe.get().getTool().toolMatches(stack) : "not provided")
 //                    + ";\n}"
 //                );
-                if (recipe.isPresent() && recipe.get().getTool().toolMatches(stack))
+                if (recipe.isPresent() && recipe.get().value().getTool().toolMatches(stack))
                 {
-                    this.cut(recipe.get());
+                    this.cut(recipe.get().value());
                     if (!playerIn.isCreative())
-                        stack.hurtAndBreak(1, playerIn, player -> player.broadcastBreakEvent(handIn));
+                        stack.hurtAndBreak(1, playerIn, stack.getEquipmentSlot());
                     return true;
                 }
             }
@@ -128,16 +134,16 @@ public class CuttingBoardTE extends AshiharaMachineTE
     }
 
     @Override
-    public void load(CompoundTag nbt)
+    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries)
     {
-        super.load(nbt);
-        this.content = ItemStack.of(nbt.getCompound("content"));
+        super.loadAdditional(nbt, registries);
+        this.content = ItemStack.parseOptional(registries, nbt.getCompound("content"));
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound)
+    protected void saveAdditional(CompoundTag compound, HolderLookup.Provider registries)
     {
-        compound.put("content", this.content.save(new CompoundTag()));
-        super.saveAdditional(compound);
+        compound.put("content", this.content.save(registries));
+        super.saveAdditional(compound, registries);
     }
 }

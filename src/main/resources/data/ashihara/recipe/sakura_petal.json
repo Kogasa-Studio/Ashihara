@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "ashihara:sakura"
+    }
+  ],
+  "result": {
+    "id": "ashihara:sakura_petal",
+    "count": 5
+  }
+}

@@ -23,37 +23,32 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 
 import java.util.Optional;
 
 import static kogasastudio.ashihara.utils.AshiharaTags.MASHABLE;
 
-public class MortarTE extends AshiharaMachineTE implements MenuProvider, IFluidHandler
+public class MortarTE // extends AshiharaMachineTE implements MenuProvider, IFluidHandler
 {
-    public MortarInventory contents = new MortarInventory(4);
+    /*public MortarInventory contents = new MortarInventory(4);
     public GenericItemStackHandler fluidIO = new GenericItemStackHandler(2);
     public LazyOptional<FluidTank> tank = LazyOptional.of(this::createTank);
     public NonNullList<ItemStack> output = NonNullList.create();
     public FluidStack fluidCost = FluidStack.EMPTY;
     public int progress;
     public int progressTotal;
-    /**
+    *//**
      * 0: 脱谷
      * 1: 打麻糬
      * 2: 制酱
-     */
+     *//*
     public byte recipeType = -1;
     public byte pointer = -1;
-    /**
+    *//**
      * 0: 手
      * 1: 杵
      * 2: 大槌
-     */
+     *//*
     public byte nextStep = -1;
     public byte[] sequence = new byte[0];
     public boolean isWorking;
@@ -360,5 +355,5 @@ public class MortarTE extends AshiharaMachineTE implements MenuProvider, IFluidH
         {
             return 1;
         }
-    }
+    }*/
 }

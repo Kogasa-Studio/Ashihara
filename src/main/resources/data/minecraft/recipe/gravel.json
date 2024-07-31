@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "oo",
+    "oo"
+  ],
+  "key": {
+    "o": {
+      "item": "ashihara:stone_shatter"
+    }
+  },
+  "result": {
+    "id": "minecraft:gravel",
+    "count": 2
+  }
+}

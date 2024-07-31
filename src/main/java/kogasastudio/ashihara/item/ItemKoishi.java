@@ -2,7 +2,6 @@ package kogasastudio.ashihara.item;
 
 import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.block.PaddyFieldBlock;
-import kogasastudio.ashihara.client.particles.GenericParticleData;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,7 +19,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.Objects;
 
@@ -60,7 +58,7 @@ public class ItemKoishi extends Item
                 return InteractionResult.SUCCESS;
             } else if (te != null)
             {
-                CompoundTag nbt = te.serializeNBT();
+                CompoundTag nbt = te.getPersistentData();
                 player.sendSystemMessage(Component.translatable((worldIn.isClientSide() ? "client: " : "server: ") + nbt.toString()));
                 return InteractionResult.SUCCESS;
             } else
@@ -68,7 +66,7 @@ public class ItemKoishi extends Item
                 RandomSource rand = context.getLevel().getRandom();
                 for (int i = 0; i < 8; i += 1)
                 {
-                    worldIn.addParticle(new GenericParticleData(new Vec3(0, 0, 0), 0, ParticleRegistryHandler.SAKURA.get()), (double) pos.getX() + 0.5D, (double) pos.getY() + 2.1D, (double) pos.getZ() + 0.5D, rand.nextFloat() / 2.0F, 0, rand.nextFloat() / 2.0F);
+                    worldIn.addParticle(ParticleRegistryHandler.SAKURA.get(), (double) pos.getX() + 0.5D, (double) pos.getY() + 2.1D, (double) pos.getZ() + 0.5D, rand.nextFloat() / 2.0F, 0, rand.nextFloat() / 2.0F);
                 }
                 return InteractionResult.SUCCESS;
             }

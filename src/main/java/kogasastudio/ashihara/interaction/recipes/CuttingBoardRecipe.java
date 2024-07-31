@@ -1,26 +1,23 @@
 package kogasastudio.ashihara.interaction.recipes;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.google.gson.annotations.Expose;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import kogasastudio.ashihara.helper.DataHelper;
 import kogasastudio.ashihara.interaction.recipes.base.BaseRecipe;
 import kogasastudio.ashihara.interaction.recipes.register.RecipeSerializers;
 import kogasastudio.ashihara.interaction.recipes.register.RecipeTypes;
 import kogasastudio.ashihara.utils.CuttingBoardToolType;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,12 +31,12 @@ public class CuttingBoardRecipe extends BaseRecipe
     @Expose
     private final CuttingBoardToolType tool;
 
-    public CuttingBoardRecipe(ResourceLocation idIn, Ingredient inputIn, NonNullList<ItemStack> outputIn, CuttingBoardToolType typeIn)
+    public CuttingBoardRecipe(ResourceLocation idIn, Ingredient inputIn, NonNullList<ItemStack> outputIn, String typeIn)
     {
         this.id = idIn;
         this.ingredient = inputIn;
         this.result = outputIn;
-        this.tool = typeIn;
+        this.tool = CuttingBoardToolType.nameMatches(typeIn);
     }
 
     public String getInfo()
@@ -55,7 +52,7 @@ public class CuttingBoardRecipe extends BaseRecipe
     @Override
     public boolean matches(List<ItemStack> inputs)
     {
-        return ingredient.test(inputs.get(0));
+        return ingredient.test(inputs.getFirst());
     }
 
     @Override
@@ -71,14 +68,14 @@ public class CuttingBoardRecipe extends BaseRecipe
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess registryAccess)
+    public ItemStack getResultItem(HolderLookup.Provider pRegistries)
     {
-        return this.result.get(0);
+        return this.result.getFirst();
     }
 
-    public NonNullList<ItemStack> getOutput()
+    public Ingredient getInput()
     {
-        return DataHelper.copyAndCast(this.result);
+        return ingredient;
     }
 
     public CuttingBoardToolType getTool()
@@ -86,21 +83,15 @@ public class CuttingBoardRecipe extends BaseRecipe
         return this.tool;
     }
 
-    @Override
-    public ResourceLocation getId()
+    public NonNullList<ItemStack> getOutput()
     {
-        return this.id;
+        return DataHelper.copyAndCast(this.result);
     }
 
     @Override
     public RecipeType<?> getType()
     {
         return RecipeTypes.CUTTING_BOARD.get();
-    }
-
-    public Ingredient getInput()
-    {
-        return ingredient;
     }
 
     @Override
@@ -111,42 +102,48 @@ public class CuttingBoardRecipe extends BaseRecipe
 
     public static class CuttingBoardRecipeSerializer implements RecipeSerializer<CuttingBoardRecipe>
     {
-        @Override
-        public CuttingBoardRecipe fromJson(ResourceLocation recipeLoc, JsonObject recipeJson, ICondition.IContext context)
+        private static final MapCodec<CuttingBoardRecipe> CODEC = RecordCodecBuilder.mapCodec
+        (
+            instance ->
+            instance.group
+            (
+                ResourceLocation.CODEC.fieldOf("id").forGetter(CuttingBoardRecipe::getId),
+                Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(CuttingBoardRecipe::getInput),
+                NonNullList.codecOf(ItemStack.CODEC).fieldOf("output").forGetter(CuttingBoardRecipe::getOutput),
+                Codec.STRING.fieldOf("tool").forGetter(recipe -> recipe.getTool().getName())
+            ).apply(instance, CuttingBoardRecipe::new)
+        );
+
+        private static final StreamCodec<RegistryFriendlyByteBuf, CuttingBoardRecipe> STREAM_CODEC = StreamCodec.of(CuttingBoardRecipeSerializer::toNetwork, CuttingBoardRecipeSerializer::fromNetwork);
+
+        public static CuttingBoardRecipe fromNetwork(RegistryFriendlyByteBuf buffer)
         {
-            return this.fromJson(recipeLoc, recipeJson);
+            ResourceLocation id = ResourceLocation.STREAM_CODEC.decode(buffer);
+            Ingredient ingredientN = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
+            String toolTypeN = buffer.readUtf();
+            NonNullList<ItemStack> outputN = DataHelper.copyAndCast(ItemStack.LIST_STREAM_CODEC.decode(buffer));
+
+            return new CuttingBoardRecipe(id, ingredientN, outputN, toolTypeN);
         }
 
-        @Override
-        public CuttingBoardRecipe fromJson(ResourceLocation rl, JsonObject json)
+        public static void toNetwork(RegistryFriendlyByteBuf buffer, CuttingBoardRecipe recipe)
         {
-            CuttingBoardToolType toolTypeIn = CuttingBoardToolType.nameMatches(json.get("tool").getAsString());
-            if (toolTypeIn.isEmpty()) throw new JsonParseException("Invalid tool type!");
-            JsonArray outputRaw = json.get("result").getAsJsonArray();
-
-            Ingredient ingredientIn = Ingredient.fromJson(json.get("ingredient"));
-            NonNullList<ItemStack> outputIn = NonNullList.create();
-            for (JsonElement element : outputRaw) outputIn.add(CraftingHelper.getItemStack(element.getAsJsonObject(), true));
-
-            return new CuttingBoardRecipe(rl, ingredientIn, outputIn, toolTypeIn);
-        }
-
-        @Override
-        public @Nullable CuttingBoardRecipe fromNetwork(ResourceLocation rl, FriendlyByteBuf buffer)
-        {
-            Ingredient ingredientN = Ingredient.fromNetwork(buffer);
-            CuttingBoardToolType toolTypeN = CuttingBoardToolType.nameMatches(buffer.readUtf());
-            NonNullList<ItemStack> outputN = DataHelper.copyAndCast(buffer.readList(FriendlyByteBuf::readItem));
-
-            return new CuttingBoardRecipe(rl, ingredientN, outputN, toolTypeN);
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer, CuttingBoardRecipe recipe)
-        {
-            recipe.ingredient.toNetwork(buffer);
+            ResourceLocation.STREAM_CODEC.encode(buffer, recipe.id);
+            Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
             buffer.writeUtf(recipe.tool.getName());
-            buffer.writeCollection(recipe.result, FriendlyByteBuf::writeItem);
+            ItemStack.LIST_STREAM_CODEC.encode(buffer, recipe.result);
+        }
+
+        @Override
+        public MapCodec<CuttingBoardRecipe> codec()
+        {
+            return CODEC;
+        }
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, CuttingBoardRecipe> streamCodec()
+        {
+            return STREAM_CODEC;
         }
     }
 }

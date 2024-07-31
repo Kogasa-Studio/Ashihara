@@ -2,7 +2,9 @@ package kogasastudio.ashihara.block.tileentities;
 
 import kogasastudio.ashihara.client.render.AshiharaAtlas;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -34,16 +36,16 @@ public class MarkableLanternTE extends AshiharaMachineTE
     }
 
     @Override
-    public void load(CompoundTag nbt)
+    protected void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries)
     {
-        pointer = nbt.getInt("pointer");
-        super.load(nbt);
+        pointer = pTag.getInt("pointer");
+        super.loadAdditional(pTag, pRegistries);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound)
+    protected void saveAdditional(CompoundTag compound, HolderLookup.Provider pRegistries)
     {
         compound.putInt("pointer", pointer);
-        super.saveAdditional(compound);
+        super.saveAdditional(compound, pRegistries);
     }
 }

@@ -13,7 +13,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -22,7 +21,7 @@ import static kogasastudio.ashihara.helper.RenderHelper.XTP;
 
 public class ItemDisplayPos
 {
-    public final ItemStackHandler handler;
+    /*public final ItemStackHandler handler;
     public int slot;
 
     private float range;
@@ -156,5 +155,5 @@ public class ItemDisplayPos
     public void applyPos(float[] posIn)
     {
         this.pos = posIn;
-    }
+    }*/
 }

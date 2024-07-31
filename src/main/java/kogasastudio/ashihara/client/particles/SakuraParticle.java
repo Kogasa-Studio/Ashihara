@@ -2,8 +2,9 @@ package kogasastudio.ashihara.client.particles;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class SakuraParticle extends TextureSheetParticle
 {
@@ -68,7 +69,7 @@ public class SakuraParticle extends TextureSheetParticle
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class SakuraParticleProvider implements ParticleProvider<GenericParticleData>
+    public static class SakuraParticleProvider implements ParticleProvider<SimpleParticleType>
     {
         private final SpriteSet spriteSet;
 
@@ -78,7 +79,7 @@ public class SakuraParticle extends TextureSheetParticle
         }
 
         @Override
-        public Particle createParticle(GenericParticleData typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
+        public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
         {
             SakuraParticle sakuraParticle = new SakuraParticle(worldIn, x, y, z);
             sakuraParticle.pickSprite(this.spriteSet);

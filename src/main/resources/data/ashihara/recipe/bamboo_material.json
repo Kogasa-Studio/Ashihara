@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "ashihara:dried_bamboo"
+    }
+  ],
+  "result": {
+    "id": "ashihara:bamboo_material",
+    "count": 4
+  }
+}

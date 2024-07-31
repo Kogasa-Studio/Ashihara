@@ -6,6 +6,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -38,11 +39,11 @@ public class AbstractCropAge7Pickable extends AbstractCropAge7
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public ItemInteractionResult useItemOn(ItemStack pStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         int age = state.getValue(AGE);
         ItemStack stack = player.getItemInHand(handIn);
-        if (age < this.ageAvailable && stack.getItem().equals(BONE_MEAL)) return InteractionResult.PASS;
+        if (age < this.ageAvailable && stack.getItem().equals(BONE_MEAL)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         if (age == this.ageAvailable)
         {
             if (!worldIn.isClientSide())
@@ -54,8 +55,8 @@ public class AbstractCropAge7Pickable extends AbstractCropAge7
             }
             worldIn.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + worldIn.random.nextFloat() * 0.4F);
             worldIn.setBlockAndUpdate(pos, state.setValue(AGE, this.ageTurnIn));
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
-        return super.use(state, worldIn, pos, player, handIn, hit);
+        return super.useItemOn(pStack, state, worldIn, pos, player, handIn, hit);
     }
 }

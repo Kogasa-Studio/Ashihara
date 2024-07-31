@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " A ",
+    " i ",
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:cobblestone"
+    },
+    "i": {
+      "item": "minecraft:honeycomb"
+    }
+  },
+  "result": {
+    "id": "ashihara:stone_lantern",
+    "count": 2
+  }
+}

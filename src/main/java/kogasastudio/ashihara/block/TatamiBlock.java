@@ -1,6 +1,5 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.client.particles.GenericParticleData;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -9,7 +8,9 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -22,7 +23,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_AXIS;
 
@@ -106,36 +106,41 @@ public class TatamiBlock extends Block
         return updateState(this.defaultBlockState(), worldIn, pos).setValue(AXIS, context.getHorizontalDirection().getAxis());
     }
 
+    @Override
+    protected InteractionResult useWithoutItem(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, BlockHitResult pHitResult)
+    {
+        if (pPlayer.isShiftKeyDown())
+        {
+            pLevel.setBlockAndUpdate(pPos, pState.setValue(LOCKED, !pState.getValue(LOCKED)));
+            pLevel.playSound(pPlayer, pPos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
+            RandomSource random = pLevel.getRandom();
+            for (byte b = 0; b < 12; b += 1)
+            {
+                pLevel.addParticle(ParticleRegistryHandler.RICE.get(), (double) pPos.getX() + 0.5D, (double) pPos.getY() + 0.5D, (double) pPos.getZ() + 0.5D, random.nextFloat() / 2.0F, 5.0E-5D, random.nextFloat() / 2.0F);
+            }
+            return InteractionResult.SUCCESS;
+        }
+        return super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult);
+    }
+
     //空手shift右键锁定，剪刀右键加中央边缘权重（剪开或合上）
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
-        if (state.is(BlockRegistryHandler.TATAMI.get()))
+        if (stack.getItem() instanceof ShearsItem && !player.isShiftKeyDown())
         {
-            if (player.getItemInHand(handIn).isEmpty() && player.isShiftKeyDown())
+            Direction direction = player.getDirection();
+            if (direction.getAxis().equals(Direction.Axis.X))
             {
-                worldIn.setBlockAndUpdate(pos, state.setValue(LOCKED, !state.getValue(LOCKED)));
-                worldIn.playSound(player, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
-                RandomSource random = worldIn.getRandom();
-                for (byte b = 0; b < 12; b += 1)
-                {
-                    worldIn.addParticle(new GenericParticleData(new Vec3(0, 0, 0), 0, ParticleRegistryHandler.RICE.get()), (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, random.nextFloat() / 2.0F, 5.0E-5D, random.nextFloat() / 2.0F);
-                }
-                return InteractionResult.SUCCESS;
-            } else if (player.getItemInHand(handIn).getItem() instanceof ShearsItem && !player.isShiftKeyDown())
+                worldIn.setBlockAndUpdate(pos, state.setValue(XCUT, !state.getValue(XCUT)));
+                worldIn.playSound(player, pos, SoundEvents.BAMBOO_SAPLING_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
+            } else if (direction.getAxis().equals(Direction.Axis.Z))
             {
-                Direction direction = player.getDirection();
-                if (direction.getAxis().equals(Direction.Axis.X))
-                {
-                    worldIn.setBlockAndUpdate(pos, state.setValue(XCUT, !state.getValue(XCUT)));
-                    worldIn.playSound(player, pos, SoundEvents.BAMBOO_SAPLING_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
-                } else if (direction.getAxis().equals(Direction.Axis.Z))
-                {
-                    worldIn.setBlockAndUpdate(pos, state.setValue(ZCUT, !state.getValue(ZCUT)));
-                    worldIn.playSound(player, pos, SoundEvents.BAMBOO_SAPLING_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
-                }
-                return InteractionResult.SUCCESS;
-            } else return InteractionResult.PASS;
-        } else return InteractionResult.PASS;
+                worldIn.setBlockAndUpdate(pos, state.setValue(ZCUT, !state.getValue(ZCUT)));
+                worldIn.playSound(player, pos, SoundEvents.BAMBOO_SAPLING_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
+            }
+            return ItemInteractionResult.SUCCESS;
+        }
+        return super.useItemOn(stack, state, worldIn, pos, player, handIn, hit);
     }
 }

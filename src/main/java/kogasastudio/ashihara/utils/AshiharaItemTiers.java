@@ -1,9 +1,11 @@
 package kogasastudio.ashihara.utils;
 
+import cpw.mods.util.Lazy;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.util.Lazy;
+import net.minecraft.world.level.block.Block;
 
 import java.util.function.Supplier;
 
@@ -53,9 +55,9 @@ public enum AshiharaItemTiers implements Tier
     }
 
     @Override
-    public int getLevel()
+    public TagKey<Block> getIncorrectBlocksForDrops()
     {
-        return 0;
+        return null;
     }
 
     @Override

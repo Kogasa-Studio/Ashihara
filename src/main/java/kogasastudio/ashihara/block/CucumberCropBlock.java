@@ -6,7 +6,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -14,10 +14,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.neoforge.common.CommonHooks;
 
 import static net.minecraft.world.item.Items.BONE_MEAL;
 import static net.minecraft.world.level.block.Blocks.FARMLAND;
-import static net.minecraftforge.common.ForgeHooks.onCropsGrowPre;
 
 public class CucumberCropBlock extends AbstractCropAge7
 {
@@ -30,7 +30,7 @@ public class CucumberCropBlock extends AbstractCropAge7
     @Override
     public boolean isBonemealSuccess(Level worldIn, RandomSource rand, BlockPos pos, BlockState state)
     {
-        return this.isValidBonemealTarget(worldIn, pos, state, false);
+        return this.isValidBonemealTarget(worldIn, pos, state);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class CucumberCropBlock extends AbstractCropAge7
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state, boolean isClient)
+    public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state)
     {
         int age = state.getValue(AGE);
         BlockState downState = worldIn.getBlockState(pos.below());
@@ -56,7 +56,7 @@ public class CucumberCropBlock extends AbstractCropAge7
         {
             return age < 5;
         }
-        return super.isValidBonemealTarget(worldIn, pos, state, isClient);
+        return super.isValidBonemealTarget(worldIn, pos, state);
     }
 
     @Override
@@ -100,24 +100,23 @@ public class CucumberCropBlock extends AbstractCropAge7
             boolean canGrowUp = !isUpper && worldIn.getBlockState(pos.above()).isAir() && age > 5;
             if (age < validAge || canGrowUp)
             {
-                float f = getGrowthSpeed(this, worldIn, pos);
+                float f = getGrowthSpeed(state, worldIn, pos);
 
-                if (canGrowUp &&
-                        onCropsGrowPre(worldIn, pos.above(), this.getStateForAge(0), random.nextInt((int) (25.0F / f) + 1) == 0))
+                if (canGrowUp && CommonHooks.canCropGrow(worldIn, pos.above(), this.getStateForAge(0), random.nextInt((int) (25.0F / f) + 1) == 0))
                 {
                     worldIn.setBlockAndUpdate(pos.above(), this.getStateForAge(0));
-                    net.minecraftforge.common.ForgeHooks.onCropsGrowPost(worldIn, pos.above(), this.getStateForAge(0));
-                } else if (age < validAge && onCropsGrowPre(worldIn, pos, state, random.nextInt((int) (25.0F / f) + 1) == 0))
+                    CommonHooks.fireCropGrowPost(worldIn, pos.above(), this.getStateForAge(0));
+                } else if (age < validAge && CommonHooks.canCropGrow(worldIn, pos, state, random.nextInt((int) (25.0F / f) + 1) == 0))
                 {
                     worldIn.setBlock(pos, this.getStateForAge(age + (!isUpper && age == 4 ? 2 : 1)), 2);
-                    net.minecraftforge.common.ForgeHooks.onCropsGrowPost(worldIn, pos, state);
+                    CommonHooks.fireCropGrowPost(worldIn, pos, state);
                 }
             }
         }
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         BlockState downState = worldIn.getBlockState(pos.below());
         boolean isUpper = downState.is(BlockRegistryHandler.CUCUMBERS.get());
@@ -125,8 +124,7 @@ public class CucumberCropBlock extends AbstractCropAge7
         int age = state.getValue(AGE);
         int ageAvailable = isUpper ? 5 : 7;
         int ageTurnIn = isUpper ? 4 : 6;
-        ItemStack stack = player.getItemInHand(handIn);
-        if (age < ageAvailable && stack.getItem().equals(BONE_MEAL)) return InteractionResult.PASS;
+        if (age < ageAvailable && stack.getItem().equals(BONE_MEAL)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         if (age == ageAvailable)
         {
             if (!worldIn.isClientSide())
@@ -138,8 +136,8 @@ public class CucumberCropBlock extends AbstractCropAge7
             }
             worldIn.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + worldIn.random.nextFloat() * 0.4F);
             worldIn.setBlockAndUpdate(pos, this.getStateForAge(ageTurnIn));
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
-        return super.use(state, worldIn, pos, player, handIn, hit);
+        return super.useItemOn(stack, state, worldIn, pos, player, handIn, hit);
     }
 }

@@ -33,21 +33,17 @@ public class RiceCropBlock extends CropBlock
     @Override
     public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random)
     {
-        if (!worldIn.isAreaLoaded(pos, 1))
-        {
-            // Forge: prevent loading unloaded chunks when checking neighbor's light
-            return;
-        }
+        if (!worldIn.isAreaLoaded(pos, 1)) return; // Forge: prevent loading unloaded chunks when checking neighbor's light
         if (worldIn.getRawBrightness(pos, 0) >= 9)
         {
             int i = this.getAge(state);
-            if (i < this.getMaxAge() && this.isValidBonemealTarget(worldIn, pos, state, true))
+            if (i < this.getMaxAge() && this.isValidBonemealTarget(worldIn, pos, state))
             {
-                float f = random.nextInt(3) + 22;
-                if (net.minecraftforge.common.ForgeHooks.onCropsGrowPre(worldIn, pos, state, random.nextInt((int) (25.0F / f) + 1) == 0))
+                float f = getGrowthSpeed(state, worldIn, pos);
+                if (net.neoforged.neoforge.common.CommonHooks.canCropGrow(worldIn, pos, state, random.nextInt((int)(25.0F / f) + 1) == 0))
                 {
                     worldIn.setBlock(pos, this.getStateForAge(i + 1), 2);
-                    net.minecraftforge.common.ForgeHooks.onCropsGrowPost(worldIn, pos, state);
+                    net.neoforged.neoforge.common.CommonHooks.fireCropGrowPost(worldIn, pos, state);
                 }
             }
         }
@@ -66,7 +62,7 @@ public class RiceCropBlock extends CropBlock
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state, boolean isClient)
+    public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state)
     {
         boolean flag = false;
         if (worldIn.getBlockState(pos.below()).is(BlockRegistryHandler.WATER_FIELD.get()))
@@ -85,6 +81,6 @@ public class RiceCropBlock extends CropBlock
     @Override
     public boolean isBonemealSuccess(Level worldIn, RandomSource rand, BlockPos pos, BlockState state)
     {
-        return this.isValidBonemealTarget(worldIn, pos, state, true);
+        return this.isValidBonemealTarget(worldIn, pos, state);
     }
 }

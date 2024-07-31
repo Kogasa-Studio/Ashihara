@@ -8,7 +8,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.BlockItem;
@@ -56,7 +56,7 @@ public class KumimonoBlock extends Block implements IVariable<AshiharaWoodTypes>
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public ItemInteractionResult useItemOn(ItemStack pStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         ItemStack stack = player.getItemInHand(handIn);
 
@@ -74,17 +74,16 @@ public class KumimonoBlock extends Block implements IVariable<AshiharaWoodTypes>
             {
                 case NORTH:
                 {
-                    dir = BEAM_N;
                     if (state.getValue(BEAM_S) != isBeam)
                     {
                         worldIn.setBlockAndUpdate(pos, state.setValue(BEAM_S, isBeam));
                         worldIn.playSound(player, pos, event, SoundSource.BLOCKS, 1.0f, 1.0f);
-                        return InteractionResult.SUCCESS;
+                        return ItemInteractionResult.SUCCESS;
                     } else if (state.getValue(BEAM_N) != isBeam)
                     {
                         worldIn.setBlockAndUpdate(pos, state.setValue(BEAM_N, isBeam));
                         worldIn.playSound(player, pos, event, SoundSource.BLOCKS, 1.0f, 1.0f);
-                        return InteractionResult.SUCCESS;
+                        return ItemInteractionResult.SUCCESS;
                     }
                     break;
                 }
@@ -94,12 +93,12 @@ public class KumimonoBlock extends Block implements IVariable<AshiharaWoodTypes>
                     {
                         worldIn.setBlockAndUpdate(pos, state.setValue(BEAM_W, isBeam));
                         worldIn.playSound(player, pos, event, SoundSource.BLOCKS, 1.0f, 1.0f);
-                        return InteractionResult.SUCCESS;
+                        return ItemInteractionResult.SUCCESS;
                     } else if (state.getValue(BEAM_E) != isBeam)
                     {
                         worldIn.setBlockAndUpdate(pos, state.setValue(BEAM_E, isBeam));
                         worldIn.playSound(player, pos, event, SoundSource.BLOCKS, 1.0f, 1.0f);
-                        return InteractionResult.SUCCESS;
+                        return ItemInteractionResult.SUCCESS;
                     }
                     dir = BEAM_E;
                     break;
@@ -110,12 +109,12 @@ public class KumimonoBlock extends Block implements IVariable<AshiharaWoodTypes>
                     {
                         worldIn.setBlockAndUpdate(pos, state.setValue(BEAM_N, isBeam));
                         worldIn.playSound(player, pos, event, SoundSource.BLOCKS, 1.0f, 1.0f);
-                        return InteractionResult.SUCCESS;
+                        return ItemInteractionResult.SUCCESS;
                     } else if (state.getValue(BEAM_S) != isBeam)
                     {
                         worldIn.setBlockAndUpdate(pos, state.setValue(BEAM_S, isBeam));
                         worldIn.playSound(player, pos, event, SoundSource.BLOCKS, 1.0f, 1.0f);
-                        return InteractionResult.SUCCESS;
+                        return ItemInteractionResult.SUCCESS;
                     }
                     dir = BEAM_S;
                     break;
@@ -126,12 +125,12 @@ public class KumimonoBlock extends Block implements IVariable<AshiharaWoodTypes>
                     {
                         worldIn.setBlockAndUpdate(pos, state.setValue(BEAM_E, isBeam));
                         worldIn.playSound(player, pos, event, SoundSource.BLOCKS, 1.0f, 1.0f);
-                        return InteractionResult.SUCCESS;
+                        return ItemInteractionResult.SUCCESS;
                     } else if (state.getValue(BEAM_W) != isBeam)
                     {
                         worldIn.setBlockAndUpdate(pos, state.setValue(BEAM_W, isBeam));
                         worldIn.playSound(player, pos, event, SoundSource.BLOCKS, 1.0f, 1.0f);
-                        return InteractionResult.SUCCESS;
+                        return ItemInteractionResult.SUCCESS;
                     }
                     dir = BEAM_W;
                 }
@@ -146,10 +145,10 @@ public class KumimonoBlock extends Block implements IVariable<AshiharaWoodTypes>
             {
                 worldIn.setBlockAndUpdate(pos.relative(player.getDirection().getOpposite()), expandedState.setValue(dir, true));
                 worldIn.playSound(player, pos, event, SoundSource.BLOCKS, 1.0f, 1.0f);
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
         }
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     @Override

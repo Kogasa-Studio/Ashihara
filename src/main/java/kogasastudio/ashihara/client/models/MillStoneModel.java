@@ -44,9 +44,9 @@ public class MillStoneModel extends Model
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
+    public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, int color)
     {
-        stone.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        handle.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        stone.render(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, color);
+        handle.render(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, color);
     }
 }

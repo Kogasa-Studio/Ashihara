@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -25,6 +26,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -121,40 +123,40 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
     /**
      * 自身附近有水源？
      * 是：
-     * 自身bool为false?
-     * 是：自身bool设为true
-     * 否：不做更改
-     * 加入计划刻
+     *  自身bool为false?
+     *  是：自身bool设为true
+     *  否：不做更改
+     *  加入计划刻
      * 否：
-     * 自身bool为true？
-     * 是：
-     * 自身附近有出口？
-     * 是：加入计划刻
-     * 否：不做更改
-     * 自身设为false
-     * 否：不做更改
+     *  自身bool为true？
+     *  是：
+     *      自身附近有出口？
+     *      是：加入计划刻
+     *      否：不做更改
+     *      自身设为false
+     *  否：不做更改
      * 发生变更的方块是水田？
      * 是：
-     * 两者bool不相同？
-     * 是：
-     * 来者bool为false？
-     * 是：
-     * 自身附近有水源？
-     * 是：将来者bool设为true
-     * 否：自身设为false
-     * 否：自身设为true
-     * 否：不做更改
+     *     两者bool不相同？
+     *     是：
+     *         来者bool为false？
+     *         是：
+     *             自身附近有水源？
+     *             是：将来者bool设为true
+     *             否：自身设为false
+     *         否：自身设为true
+     *     否：不做更改
      * 两者水位不相同？
      * 是：
-     * 来者 > 自身？
-     * 是：自身水位设为来者水位
-     * 否：
-     * 来者 < 自身？
-     * 是：
-     * 自身附近有水源？
-     * 是：来者水位设为自身水位
-     * 否：自身水位设为来者水位
-     * 否：不做更改
+     *  来者 > 自身？
+     *  是：自身水位设为来者水位
+     *  否：
+     *      来者 < 自身？
+     *      是：
+     *          自身附近有水源？
+     *          是：来者水位设为自身水位
+     *          否：自身水位设为来者水位
+     *      否：不做更改
      * 否：不做更改
      *
      * @param state    2
@@ -380,9 +382,9 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
     }
 
     @Override
-    public boolean canPlaceLiquid(BlockGetter worldIn, BlockPos pos, BlockState state, Fluid fluidIn)
+    public boolean canPlaceLiquid(@Nullable Player pPlayer, BlockGetter pLevel, BlockPos pPos, BlockState pState, Fluid pFluid)
     {
-        return state.getValue(LEVEL) < 8 && (fluidIn == Fluids.FLOWING_WATER || fluidIn == Fluids.WATER);
+        return pState.getValue(LEVEL) < 8 && (pFluid == Fluids.FLOWING_WATER || pFluid == Fluids.WATER);
     }
 
     @Override
@@ -402,7 +404,7 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
     }
 
     @Override
-    public ItemStack pickupBlock(LevelAccessor pLevel, BlockPos pPos, BlockState pState)
+    public ItemStack pickupBlock(@Nullable Player pPlayer, LevelAccessor pLevel, BlockPos pPos, BlockState pState)
     {
         return pState.getValue(LEVEL) == 8 ? Items.WATER_BUCKET.getDefaultInstance() : ItemStack.EMPTY;
     }

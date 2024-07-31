@@ -8,7 +8,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.BlockItem;
@@ -163,9 +163,8 @@ public class AdvancedFenceBlock extends Block implements IVariable<AshiharaWoodT
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
-        ItemStack stack = player.getItemInHand(handIn);
         if (stack.getItem().equals(Items.GOLD_INGOT))
         {
             if (hit.getDirection().equals(Direction.UP) && worldIn.getBlockState(pos.above()).isAir())
@@ -181,7 +180,7 @@ public class AdvancedFenceBlock extends Block implements IVariable<AshiharaWoodT
                 worldIn.playSound(player, pos, SoundEvents.LANTERN_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
                 if (!player.isCreative()) player.getItemInHand(handIn).shrink(1);
 
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
         } else if
         (
@@ -193,7 +192,7 @@ public class AdvancedFenceBlock extends Block implements IVariable<AshiharaWoodT
             worldIn.setBlockAndUpdate(pos, state);
             worldIn.playSound(player, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
 
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         } else if
         (
                 stack.getItem() instanceof AxeItem
@@ -206,10 +205,10 @@ public class AdvancedFenceBlock extends Block implements IVariable<AshiharaWoodT
             worldIn.setBlockAndUpdate(pos, this.updateState(worldIn, pos));
             worldIn.playSound(player, pos, SoundEvents.WOOD_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
 
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         } else if (!state.getValue(COLUMN).equals(ColumnType.SHORT) && stack.getItem().equals(Items.STICK) && (player.isCreative() || stack.getCount() >= 3))
         {
-            if (!(this.getExpansion() instanceof FenceExpansionBlock)) return InteractionResult.PASS;
+            if (!(this.getExpansion() instanceof FenceExpansionBlock)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             Direction direction = hit.getDirection();
             if (direction.getAxis().isHorizontal() && worldIn.getBlockState(pos.relative(direction)).isAir())
             {
@@ -219,10 +218,10 @@ public class AdvancedFenceBlock extends Block implements IVariable<AshiharaWoodT
                 worldIn.playSound(player, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
                 if (!player.isCreative()) player.getItemInHand(handIn).shrink(3);
 
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
         }
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     @Override

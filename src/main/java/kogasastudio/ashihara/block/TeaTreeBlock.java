@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -7,7 +8,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -33,12 +34,11 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.common.CommonHooks;
 
 import static kogasastudio.ashihara.item.ItemRegistryHandler.*;
 import static net.minecraft.world.item.Items.BONE_MEAL;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_AXIS;
-import static net.minecraftforge.common.ForgeHooks.onCropsGrowPost;
-import static net.minecraftforge.common.ForgeHooks.onCropsGrowPre;
 
 public class TeaTreeBlock extends BushBlock implements BonemealableBlock
 {
@@ -122,7 +122,7 @@ public class TeaTreeBlock extends BushBlock implements BonemealableBlock
     public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random)
     {
         int age = state.getValue(AGE);
-        if (age < 4 && worldIn.getRawBrightness(pos.above(), 0) >= 9 && onCropsGrowPre(worldIn, pos, state, random.nextInt(7) == 0))
+        if (age < 4 && worldIn.getRawBrightness(pos.above(), 0) >= 9 && CommonHooks.canCropGrow(worldIn, pos, state, random.nextInt(7) == 0))
         {
             if (age == 2)
             {
@@ -132,25 +132,24 @@ public class TeaTreeBlock extends BushBlock implements BonemealableBlock
                 state = state.setValue(BLOOMED, false);
             }
             worldIn.setBlockAndUpdate(pos, state.setValue(AGE, age + 1));
-            onCropsGrowPost(worldIn, pos, state);
+            CommonHooks.fireCropGrowPost(worldIn, pos, state);
         }
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         int age = state.getValue(AGE);
-        ItemStack stack = player.getItemInHand(handIn);
         if (age < 4 && stack.getItem().equals(BONE_MEAL))
         {
-            return InteractionResult.PASS;
+            return super.useItemOn(stack, state, worldIn, pos, player, handIn, hit);
         }
         if (state.getValue(BLOOMED))
         {
             popResource(worldIn, pos, new ItemStack(TEA_FLOWER.get(), 1 + worldIn.random.nextInt(2)));
             worldIn.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + worldIn.random.nextFloat() * 0.4F);
             worldIn.setBlockAndUpdate(pos, state.setValue(BLOOMED, false));
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
         if (age == 4)
         {
@@ -158,13 +157,13 @@ public class TeaTreeBlock extends BushBlock implements BonemealableBlock
             popResource(worldIn, pos, new ItemStack(TEA_SEED.get(), 1 + worldIn.random.nextInt(2)));
             worldIn.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + worldIn.random.nextFloat() * 0.4F);
             worldIn.setBlockAndUpdate(pos, state.setValue(AGE, 2));
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
-        return InteractionResult.PASS;
+        return super.useItemOn(stack, state, worldIn, pos, player, handIn, hit);
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state, boolean isClient)
+    public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state)
     {
         return state.getValue(AGE) < 4;
     }
@@ -179,5 +178,11 @@ public class TeaTreeBlock extends BushBlock implements BonemealableBlock
     public void performBonemeal(ServerLevel worldIn, RandomSource rand, BlockPos pos, BlockState state)
     {
         worldIn.setBlockAndUpdate(pos, state.setValue(AGE, state.getValue(AGE) + 1));
+    }
+
+    @Override
+    protected MapCodec<? extends BushBlock> codec()
+    {
+        return simpleCodec(p -> new TeaTreeBlock());
     }
 }

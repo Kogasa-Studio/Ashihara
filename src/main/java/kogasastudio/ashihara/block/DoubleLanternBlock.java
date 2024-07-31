@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -22,8 +22,8 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class DoubleLanternBlock extends LanternBlock implements SimpleWaterloggedBlock
 {
@@ -76,18 +76,17 @@ public class DoubleLanternBlock extends LanternBlock implements SimpleWaterlogge
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
-        if (state.getValue(HALF).equals(DoubleBlockHalf.LOWER)) return InteractionResult.PASS;
-        else return super.use(state, worldIn, pos, player, handIn, hit);
+        if (state.getValue(HALF).equals(DoubleBlockHalf.LOWER)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        else return super.useItemOn(stack, state, worldIn, pos, player, handIn, hit);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand)
     {
-        if (stateIn.getValue(HALF).equals(DoubleBlockHalf.LOWER)) return;
-        else super.animateTick(stateIn, worldIn, pos, rand);
+        if (!stateIn.getValue(HALF).equals(DoubleBlockHalf.LOWER)) {super.animateTick(stateIn, worldIn, pos, rand);}
     }
 
     //大部分是抄的原版

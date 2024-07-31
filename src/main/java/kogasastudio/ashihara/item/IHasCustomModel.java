@@ -20,7 +20,7 @@ public interface IHasCustomModel
         matrixStackIn.translate(0.5D, 1.5D, 0.5D);
         matrixStackIn.mulPose(Axis.XP.rotationDegrees(180));
         VertexConsumer buffer = bufferIn.getBuffer(RenderType.entitySolid(this.getTex()));
-        this.getModel().renderToBuffer(matrixStackIn, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.getModel().renderToBuffer(matrixStackIn, buffer, combinedLightIn, combinedOverlayIn, 0xFFFFFF);
         matrixStackIn.popPose();
     }
 

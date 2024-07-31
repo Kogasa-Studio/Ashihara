@@ -5,14 +5,12 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
 
 import static kogasastudio.ashihara.utils.AshiharaTags.MASHABLE;
 
-public class MortarContainer extends AshiharaCommonContainer
+public class MortarContainer //extends AshiharaCommonContainer
 {
-    private final MortarTE te;
+    /*private final MortarTE te;
 
     public MortarContainer(int id, Inventory inv, MortarTE teIn)
     {
@@ -46,13 +44,13 @@ public class MortarContainer extends AshiharaCommonContainer
         return true;
     }
 
-    /**
+    *//**
      * 玩家在gui中shift点击时会调用的方法
      *
      * @param playerIn 玩家
      * @param index    玩家点击的物品栏的id
      * @return 玩家右键的物品
-     */
+     *//*
     @Override
     public ItemStack quickMoveStack(Player playerIn, int index)
     {
@@ -147,5 +145,5 @@ public class MortarContainer extends AshiharaCommonContainer
         {
             return stack.is(MASHABLE);
         }
-    }
+    }*/
 }

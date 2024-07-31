@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:grass"
+    },
+    {
+      "item": "ashihara:mochi"
+    },
+    {
+      "item": "ashihara:soy_bean"
+    }
+  ],
+  "result": {
+    "id": "ashihara:daifuku_kusa",
+    "count": 1
+  }
+}

@@ -3,17 +3,16 @@ package kogasastudio.ashihara.utils.json.serializer;
 import com.google.gson.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.crafting.CraftingHelper;
 
 import java.lang.reflect.Type;
 
 /**
  * @author DustW
  **/
-public class ItemStackSerializer implements BaseSerializer<ItemStack>
+public class ItemStackSerializer //implements BaseSerializer<ItemStack>
 {
 
-    @Override
+    /*@Override
     public ItemStack deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
     {
         return CraftingHelper.getItemStack(json.getAsJsonObject(), true);
@@ -44,5 +43,5 @@ public class ItemStackSerializer implements BaseSerializer<ItemStack>
         result.addProperty("count", src.getCount());
 
         return result;
-    }
+    }*/
 }

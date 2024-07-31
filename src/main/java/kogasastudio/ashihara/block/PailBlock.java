@@ -4,12 +4,14 @@ import kogasastudio.ashihara.block.tileentities.PailTE;
 import kogasastudio.ashihara.block.tileentities.TERegistryHandler;
 import kogasastudio.ashihara.helper.FluidHelper;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.item.block.ItemBlockPail;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -23,21 +25,17 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.Nullable;
 
 import static kogasastudio.ashihara.item.ItemRegistryHandler.MINATO_AQUA;
 import static kogasastudio.ashihara.item.ItemRegistryHandler.PAIL;
-import static net.minecraft.world.item.Items.GLASS_BOTTLE;
-import static net.minecraft.world.item.Items.POTION;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_AXIS;
 
 public class PailBlock extends Block implements EntityBlock
@@ -61,13 +59,10 @@ public class PailBlock extends Block implements EntityBlock
     {
         PailTE te = (PailTE) worldIn.getBlockEntity(pos);
         ItemStack stack = new ItemStack(PAIL.get());
-        if (te != null && !worldIn.isClientSide() && !te.getTank().orElse(new FluidTank(0)).isEmpty())
+        if (te != null && !worldIn.isClientSide() && !te.getTank().isEmpty())
         {
-            CompoundTag nbt = te.serializeNBT();
-            if (!nbt.isEmpty())
-            {
-                stack.addTagElement("BlockEntityTag", nbt);
-            }
+            CompoundTag nbt = te.getPersistentData();
+            ItemBlockPail.setBlockEntityData(stack, TERegistryHandler.PAIL_TE.get(), nbt);
         }
         return stack;
     }
@@ -96,7 +91,7 @@ public class PailBlock extends Block implements EntityBlock
         if (tileEntity != null && tileEntity.getType().equals(TERegistryHandler.PAIL_TE.get()))
         {
             PailTE te = (PailTE) tileEntity;
-            FluidStack fluid = te.getTank().orElse(new FluidTank(0)).getFluid();
+            FluidStack fluid = te.getTank().getFluid();
             if (!fluid.isEmpty())
             {
                 ambientLight = fluid.getFluid().getFluidType().getLightLevel();
@@ -106,7 +101,7 @@ public class PailBlock extends Block implements EntityBlock
     }
 
     @Override
-    public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player)
+    public BlockState playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player)
     {
         if (!player.isCreative())
         {
@@ -115,32 +110,37 @@ public class PailBlock extends Block implements EntityBlock
             ItemEntity entity = new ItemEntity(worldIn, (double) pos.getX() + 0.5d, (double) pos.getY() + 0.5d, pos.getZ() + 0.5d, stack);
             entity.setDefaultPickUpDelay();
             worldIn.addFreshEntity(entity);
+            return state;
         }
-        super.playerWillDestroy(worldIn, pos, state, player);
+        return super.playerWillDestroy(worldIn, pos, state, player);
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    protected InteractionResult useWithoutItem(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, BlockHitResult pHitResult)
     {
-        ItemStack stack = player.getItemInHand(handIn);
-        PailTE te = (PailTE) worldIn.getBlockEntity(pos);
-
-        if (te == null) return InteractionResult.FAIL;
-
-        FluidTank bucket = te.getTank().orElse(new FluidTank(0));
-        if (!stack.isEmpty() && FluidHelper.notifyFluidTankInteraction(player, handIn, stack, bucket, worldIn, pos))
+        if (!pPlayer.isShiftKeyDown())
         {
-            player.getInventory().setChanged();
-            worldIn.sendBlockUpdated(pos, state, state, 3);
+            ItemStack item = getIdentifiedItem(pLevel, pPos);
+            pPlayer.setItemInHand(InteractionHand.MAIN_HAND, item);
+            pLevel.removeBlock(pPos, false);
             return InteractionResult.SUCCESS;
         }
 
-        if (stack.isEmpty() && !player.isShiftKeyDown())
+        return super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult);
+    }
+
+    @Override
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    {
+        PailTE te = (PailTE) worldIn.getBlockEntity(pos);
+        if (te == null) return ItemInteractionResult.FAIL;
+        FluidTank bucket = te.getTank();
+
+        if (FluidHelper.notifyFluidTankInteraction(player, handIn, stack, bucket, worldIn, pos))
         {
-            ItemStack item = getIdentifiedItem(worldIn, pos);
-            player.setItemInHand(handIn, item);
-            worldIn.removeBlock(pos, false);
-            return InteractionResult.SUCCESS;
+            player.getInventory().setChanged();
+            worldIn.sendBlockUpdated(pos, state, state, 3);
+            return ItemInteractionResult.SUCCESS;
         }
 
         if (stack.getItem().equals(ItemRegistryHandler.KOISHI.get()))
@@ -151,20 +151,21 @@ public class PailBlock extends Block implements EntityBlock
                         (
                                 Component.translatable
                                         (
-                                                "\n{\n    fluid: " + bucket.getFluid().getDisplayName()
+                                                "\n{\n    fluid: " + bucket.getFluid().getHoverName()
                                                         + ";\n    amount: " + bucket.getFluidAmount() + ";\n}"
                                         )
                         );
             }
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
+
         if (stack.getItem().equals(MINATO_AQUA.get()) && !worldIn.isClientSide())
         {
             player.sendSystemMessage(Component.literal("Debu!"));
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
 
-        if (!bucket.isEmpty())
+        /*if (!bucket.isEmpty())
         {
             if (stack.getItem().equals(GLASS_BOTTLE) && bucket.getFluid().getFluid() == Fluids.WATER)
             {
@@ -172,15 +173,16 @@ public class PailBlock extends Block implements EntityBlock
                 {
                     player.setItemInHand(handIn, new ItemStack(POTION));
                     bucket.drain(250, IFluidHandler.FluidAction.EXECUTE);
-                    return InteractionResult.SUCCESS;
-                } else return InteractionResult.PASS;
-            } else if (stack.isEmpty() && player.isShiftKeyDown())
+                    return ItemInteractionResult.SUCCESS;
+                } else return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            }
+            else if (stack.isEmpty() && player.isShiftKeyDown())
             {
                 bucket.drain(bucket.getFluidAmount(), IFluidHandler.FluidAction.EXECUTE);
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
-        }
-        return InteractionResult.PASS;
+        }*/
+        return super.useItemOn(stack, state, worldIn, pos, player, handIn, hit);
     }
 
     @Override

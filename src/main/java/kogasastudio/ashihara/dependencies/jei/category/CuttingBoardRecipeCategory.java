@@ -22,8 +22,7 @@ import net.minecraft.world.item.ItemStack;
  **/
 public class CuttingBoardRecipeCategory extends BaseRecipeCategory<CuttingBoardRecipe>
 {
-    protected static final ResourceLocation BACKGROUND =
-            new ResourceLocation(Ashihara.MODID, "textures/gui/jei/cutting_board.png");
+    protected static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/gui/jei/cutting_board.png");
 
     //text area scale:(x: 40, y: 1, width: 60, height: 34);
     private int x = 40;

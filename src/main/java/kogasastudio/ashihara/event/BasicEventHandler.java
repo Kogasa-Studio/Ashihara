@@ -16,11 +16,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
-@Mod.EventBusSubscriber(modid = Ashihara.MODID)
+@EventBusSubscriber(modid = Ashihara.MODID)
 public class BasicEventHandler
 {
     @SubscribeEvent
@@ -43,7 +43,7 @@ public class BasicEventHandler
                 Containers.dropItemStack(world, pos.getX(), pos.getY() + 0.5F, pos.getZ(), new ItemStack(ItemRegistryHandler.DIRT_BALL.get()));
                 if (!player.getAbilities().instabuild)
                 {
-                    item.hurtAndBreak(1, player, (playerEntity) -> player.broadcastBreakEvent(event.getHand()));
+                    item.hurtAndBreak(1, player, item.getEquipmentSlot());
                 }
                 return;
             }
@@ -65,7 +65,7 @@ public class BasicEventHandler
                     player.swing(event.getHand());
                     if (!player.getAbilities().instabuild)
                     {
-                        item.hurtAndBreak(1, player, (playerEntity) -> player.broadcastBreakEvent(event.getHand()));
+                        item.hurtAndBreak(1, player, item.getEquipmentSlot());
                     }
                 }
             }

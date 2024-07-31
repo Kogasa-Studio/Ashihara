@@ -9,6 +9,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -25,6 +26,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -74,26 +76,32 @@ public class FenceExpansionBlock extends Block implements IVariable<AshiharaWood
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    protected InteractionResult useWithoutItem(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, BlockHitResult pHitResult)
     {
-        ItemStack stack = player.getItemInHand(handIn);
+        if (!pState.getValue(DECORATION).equals(DecorationTypes.NONE))
+        {
+            pPlayer.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.GOLD_INGOT));
+            pLevel.setBlockAndUpdate(pPos, pState.setValue(DECORATION, DecorationTypes.NONE));
 
-        if (state.getValue(DECORATION).equals(DecorationTypes.NONE) && stack.getItem().equals(Items.GOLD_INGOT))
+            return InteractionResult.SUCCESS;
+        }
+
+        return super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult);
+    }
+
+    @Override
+    public ItemInteractionResult useItemOn(ItemStack pStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    {
+        if (state.getValue(DECORATION).equals(DecorationTypes.NONE) && pStack.getItem().equals(Items.GOLD_INGOT))
         {
             worldIn.setBlockAndUpdate(pos, state.setValue(DECORATION, DecorationTypes.GOLD));
             worldIn.playSound(player, pos, SoundEvents.LANTERN_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
             if (!player.isCreative()) player.getItemInHand(handIn).shrink(1);
 
-            return InteractionResult.SUCCESS;
-        } else if (!state.getValue(DECORATION).equals(DecorationTypes.NONE) && stack.isEmpty())
-        {
-            player.setItemInHand(handIn, new ItemStack(Items.GOLD_INGOT));
-            worldIn.setBlockAndUpdate(pos, state.setValue(DECORATION, DecorationTypes.NONE));
-
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
 
-        return InteractionResult.PASS;
+        return super.useItemOn(pStack, state, worldIn, pos, player, handIn, hit);
     }
 
     @Override
@@ -131,7 +139,7 @@ public class FenceExpansionBlock extends Block implements IVariable<AshiharaWood
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockGetter worldIn, BlockPos pos, BlockState state)
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player)
     {
         return new ItemStack(Items.STICK);
     }

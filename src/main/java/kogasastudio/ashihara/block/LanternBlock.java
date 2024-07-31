@@ -8,7 +8,9 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -20,8 +22,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class LanternBlock extends Block
 {
@@ -55,23 +57,29 @@ public class LanternBlock extends Block
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    protected InteractionResult useWithoutItem(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, BlockHitResult pHitResult)
+    {
+        RandomSource random = pLevel.getRandom();
+        if (pState.getValue(LIT))
+        {
+            pLevel.playSound(pPlayer, pPos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
+            pLevel.setBlockAndUpdate(pPos, pState.setValue(LIT, false));
+            return InteractionResult.SUCCESS;
+        }
+        return super.useWithoutItem(pState, pLevel, pPos, pPlayer, pHitResult);
+    }
+
+    @Override
+    public ItemInteractionResult useItemOn(ItemStack pStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         RandomSource random = worldIn.getRandom();
-        Boolean instantState = state.getValue(LIT);
-        if (player.getItemInHand(handIn).getItem().equals(Items.FLINT_AND_STEEL) && !instantState)
+        if (player.getItemInHand(handIn).getItem().equals(Items.FLINT_AND_STEEL) && !state.getValue(LIT))
         {
             worldIn.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
             worldIn.setBlockAndUpdate(pos, state.setValue(LIT, true));
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
-        else if (player.getItemInHand(handIn).getItem().equals(Items.AIR) && instantState)
-        {
-            worldIn.playSound(player, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
-            worldIn.setBlockAndUpdate(pos, state.setValue(LIT, false));
-            return InteractionResult.SUCCESS;
-        }
-        else return InteractionResult.PASS;
+        return super.useItemOn(pStack, state, worldIn, pos, player, handIn, hit);
     }
 
     @Override

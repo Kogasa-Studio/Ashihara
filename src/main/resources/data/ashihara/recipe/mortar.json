@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "# #",
+    "# #",
+    "___"
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:stripped_logs"
+    },
+    "_": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "result": {
+    "id": "ashihara:mortar",
+    "count": 1
+  }
+}

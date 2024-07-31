@@ -14,9 +14,9 @@ import net.minecraft.resources.ResourceLocation;
 
 import static kogasastudio.ashihara.block.MillBlock.FACING;
 
-public class MillTER implements BlockEntityRenderer<MillTE>
+public class MillTER //implements BlockEntityRenderer<MillTE>
 {
-    private static final ResourceLocation tex = new ResourceLocation("ashihara:textures/block/mill_stone.png");
+    /*private static final ResourceLocation tex = new ResourceLocation("ashihara:textures/block/mill_stone.png");
     private final MillStoneModel millStone;
 
     public MillTER(BlockEntityRendererProvider.Context rendererDispatcherIn)
@@ -36,5 +36,5 @@ public class MillTER implements BlockEntityRenderer<MillTE>
         VertexConsumer buffer = bufferIn.getBuffer(RenderType.entitySolid(tex));
         millStone.renderToBuffer(matrixStackIn, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
         matrixStackIn.popPose();
-    }
+    }*/
 }

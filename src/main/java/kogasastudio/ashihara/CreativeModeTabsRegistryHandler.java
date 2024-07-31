@@ -3,19 +3,25 @@ package kogasastudio.ashihara;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.function.Supplier;
 
 public class CreativeModeTabsRegistryHandler
 {
+    public static final String BUILDING_BLOCKS_TAB_NAME = "group_ash_building_blocks";
+    public static final String MATERIALS_TAB_NAME = "group_ash_materials";
+    public static final String ASHIHARA_MAIN_TAB_NAME = "group_ashihara";
+
     public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Ashihara.MODID);
 
-    public static final RegistryObject<CreativeModeTab> BUILDING_BLOCKS =
+    public static final Supplier<CreativeModeTab> BUILDING_BLOCKS =
             TABS.register
                     (
-                            "group_ash_building_blocks",
+                            BUILDING_BLOCKS_TAB_NAME,
                             () -> CreativeModeTab.builder()
                                     .title(Component.translatable("itemGroup.group_ash_building_blocks"))
                                     .icon(() -> ItemRegistryHandler.RED_ADVANCED_FENCE.get().getDefaultInstance())
@@ -80,10 +86,10 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.WATER_FIELD.get());
                                     })).build()
                     );
-    public static final RegistryObject<CreativeModeTab> MATERIALS =
+    public static final Supplier<CreativeModeTab> MATERIALS =
             TABS.register
                     (
-                            "group_ash_materials",
+                            MATERIALS_TAB_NAME,
                             () -> CreativeModeTab.builder()
                                     .title(Component.translatable("itemGroup.group_ash_materials"))
                                     .icon(() -> ItemRegistryHandler.SAKURA.get().getDefaultInstance())
@@ -113,14 +119,14 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.SOY_MILK_BUCKET.get());
                                     })).build()
                     );
-    public static final RegistryObject<CreativeModeTab> ASHIHARA =
+    public static final Supplier<CreativeModeTab> ASHIHARA =
             TABS.register
                     (
-                            "group_ashihara",
+                            ASHIHARA_MAIN_TAB_NAME,
                             () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.group_ashihara"))
                                     .icon(() -> ItemRegistryHandler.ASHIHARA_ICON.get().getDefaultInstance())
                                     .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
-                                    .withTabsAfter(MATERIALS.getId(), BUILDING_BLOCKS.getId())
+                                    .withTabsAfter(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, MATERIALS_TAB_NAME), ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, BUILDING_BLOCKS_TAB_NAME))
                                     .displayItems(((itemDisplayParameters, output) ->
                                     {
                                         output.accept(ItemRegistryHandler.RICE_SEEDLING.get());

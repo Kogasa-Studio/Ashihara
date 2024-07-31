@@ -5,9 +5,9 @@ import kogasastudio.ashihara.dependencies.jei.JeiPlugin;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.core.NonNullList;
@@ -18,10 +18,9 @@ import net.minecraft.world.item.crafting.Ingredient;
 /**
  * @author DustW
  **/
-public class MortarRecipeCategory extends BaseRecipeCategory<MortarRecipe>
+public class MortarRecipeCategory //extends BaseRecipeCategory<MortarRecipe>
 {
-    protected static final ResourceLocation BACKGROUND =
-            new ResourceLocation(Ashihara.MODID, "textures/gui/jei/mortar.png");
+    /*protected static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/gui/jei/mortar.png");
 
 //    (40, 1, 60, 34);
 
@@ -54,8 +53,8 @@ public class MortarRecipeCategory extends BaseRecipeCategory<MortarRecipe>
         if (recipe.fluidCost != null)
         {
             builder.addSlot(RecipeIngredientRole.INPUT, 21, 15)
-                    .addIngredient(ForgeTypes.FLUID_STACK, recipe.fluidCost)
+                    .addIngredient(NeoForgeTypes.FLUID_STACK, recipe.fluidCost)
                     .setFluidRenderer(4000, true, 37 - 21, 79 - 15);
         }
-    }
+    }*/
 }

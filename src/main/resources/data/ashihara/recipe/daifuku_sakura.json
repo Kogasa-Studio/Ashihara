@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "ashihara:mochi"
+    },
+    {
+      "item": "ashihara:macha_powder"
+    },
+    {
+      "item": "ashihara:sakura_petal"
+    }
+  ],
+  "result": {
+    "id": "ashihara:daifuku_sakura",
+    "count": 1
+  }
+}

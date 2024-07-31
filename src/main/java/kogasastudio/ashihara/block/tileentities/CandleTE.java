@@ -2,6 +2,7 @@ package kogasastudio.ashihara.block.tileentities;
 
 import kogasastudio.ashihara.block.BlockRegistryHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -78,10 +79,10 @@ public class CandleTE extends AshiharaMachineTE
     }
 
     @Override
-    public void load(CompoundTag nbt)
+    protected void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries)
     {
-        super.load(nbt);
-        ListTag poses = nbt.getList("posList", Tag.TAG_COMPOUND);
+        super.loadAdditional(pTag, pRegistries);
+        ListTag poses = pTag.getList("posList", Tag.TAG_COMPOUND);
         for (int i = 0; i < poses.size(); i += 1)
         {
             CompoundTag array = poses.getCompound(i);
@@ -93,9 +94,9 @@ public class CandleTE extends AshiharaMachineTE
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound)
+    protected void saveAdditional(CompoundTag compound, HolderLookup.Provider pRegistries)
     {
-        super.saveAdditional(compound);
+        super.saveAdditional(compound, pRegistries);
         ListTag nbt = new ListTag();
         for (double[] d : this.posList)
         {

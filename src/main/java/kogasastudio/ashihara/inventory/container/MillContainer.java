@@ -8,11 +8,10 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.items.SlotItemHandler;
 
-public class MillContainer extends AshiharaCommonContainer
+public class MillContainer //extends AshiharaCommonContainer
 {
-    private final ContainerData millData;
+    /*private final ContainerData millData;
     private final MillTE te;
 
     public MillContainer(int id, Inventory inventory, Level worldIn, BlockPos posIn, ContainerData millDataIn)
@@ -50,13 +49,13 @@ public class MillContainer extends AshiharaCommonContainer
         return true;
     }
 
-    /**
+    *//**
      * 玩家在gui中shift点击时会调用的方法
      *
      * @param playerIn 玩家
      * @param index    玩家右键的物品栏的id
      * @return 玩家右键的物品
-     */
+     *//*
     @Override
     public ItemStack quickMoveStack(Player playerIn, int index)
     {
@@ -116,5 +115,5 @@ public class MillContainer extends AshiharaCommonContainer
         int p = (roundTotal * roundTicks);
         float progress = p != 0 ? (float) (round * roundTicks + roundProgress) / p : 0;
         return (int) (progress * 33);
-    }
+    }*/
 }

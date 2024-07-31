@@ -5,6 +5,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
@@ -29,7 +30,7 @@ public class StrippableLogBlock extends SimpleLogBlock
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public ItemInteractionResult useItemOn(ItemStack pStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         if (player.getItemInHand(handIn).getItem() instanceof AxeItem)
         {
@@ -45,11 +46,11 @@ public class StrippableLogBlock extends SimpleLogBlock
                 }
                 if (!player.isCreative())
                 {
-                    player.getItemInHand(handIn).hurtAndBreak(1, player, (playerIn) -> playerIn.broadcastBreakEvent(handIn));
+                    player.getItemInHand(handIn).hurtAndBreak(1, player, player.getItemInHand(handIn).getEquipmentSlot());
                 }
             }
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 }

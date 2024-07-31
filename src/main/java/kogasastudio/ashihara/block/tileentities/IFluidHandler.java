@@ -1,7 +1,6 @@
 package kogasastudio.ashihara.block.tileentities;
 
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
 public interface IFluidHandler
 {
@@ -12,5 +11,5 @@ public interface IFluidHandler
         return this.createTank();
     }
 
-    LazyOptional<FluidTank> getTank();
+    FluidTank getTank();
 }

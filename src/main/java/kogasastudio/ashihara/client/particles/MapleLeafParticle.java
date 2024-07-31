@@ -2,8 +2,9 @@ package kogasastudio.ashihara.client.particles;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class MapleLeafParticle extends TextureSheetParticle
 {
@@ -54,7 +55,7 @@ public class MapleLeafParticle extends TextureSheetParticle
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class MapleLeafParticleProvider implements ParticleProvider<GenericParticleData>
+    public static class MapleLeafParticleProvider implements ParticleProvider<SimpleParticleType>
     {
         private final SpriteSet spriteSet;
 
@@ -64,7 +65,7 @@ public class MapleLeafParticle extends TextureSheetParticle
         }
 
         @Override
-        public Particle createParticle(GenericParticleData typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
+        public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
         {
             MapleLeafParticle maple = new MapleLeafParticle(worldIn, x, y, z);
             maple.pickSprite(this.spriteSet);

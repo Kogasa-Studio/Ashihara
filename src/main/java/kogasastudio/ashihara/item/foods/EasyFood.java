@@ -7,6 +7,6 @@ public class EasyFood extends Item
 {
     public EasyFood(int hunger)
     {
-        super(new Item.Properties().food(new FoodProperties.Builder().nutrition(hunger).saturationMod(1).build()));
+        super(new Item.Properties().food(new FoodProperties.Builder().nutrition(hunger).saturationModifier(1).build()));
     }
 }

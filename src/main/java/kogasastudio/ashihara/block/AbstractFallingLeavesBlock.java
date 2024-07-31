@@ -1,10 +1,9 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.client.particles.GenericParticleData;
-import kogasastudio.ashihara.client.particles.GenericParticleType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
@@ -19,9 +18,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -59,7 +57,7 @@ public class AbstractFallingLeavesBlock extends LeavesBlock
         return AIR;
     }
 
-    protected GenericParticleType getParticle()
+    protected SimpleParticleType getParticle()
     {
         return null;
     }
@@ -100,7 +98,7 @@ public class AbstractFallingLeavesBlock extends LeavesBlock
             for (int j = 0; j < 25; j += 1)
             {
                 pos1 = pos1.below();
-                if (this.getFallenBlock().canSurvive(this.getFallenBlock().defaultBlockState(), worldIn, pos1.above()))
+                if (this.getFallenBlock().defaultBlockState().canSurvive(worldIn, pos1.above()))
                 {
                     if (worldIn.isEmptyBlock(pos1.above()))
                     {
@@ -124,9 +122,9 @@ public class AbstractFallingLeavesBlock extends LeavesBlock
     {
         BlockPos blockpos = pos.below();
         BlockState blockstate = worldIn.getBlockState(blockpos);
-        if (this.getParticle() != null && rand.nextInt(30) == 1 && (blockstate.isPathfindable(worldIn, blockpos, PathComputationType.AIR)))
+        if (this.getParticle() != null && rand.nextInt(30) == 1 && (blockstate.isPathfindable(PathComputationType.AIR)))
         {
-            worldIn.addParticle(new GenericParticleData(new Vec3(0, 0, 0), 0, this.getParticle()), (double) pos.getX() + 0.5, (double) pos.getY() - 0.1D, (double) pos.getZ() + 0.5, rand.nextInt(10) / 200.0F, 0, rand.nextInt(10) / 200.0F);
+            worldIn.addParticle(this.getParticle(), (double) pos.getX() + 0.5, (double) pos.getY() - 0.1D, (double) pos.getZ() + 0.5, rand.nextInt(10) / 200.0F, 0, rand.nextInt(10) / 200.0F);
         }
         if (worldIn.isRainingAt(pos.above()))
         {

@@ -22,12 +22,12 @@ import static kogasastudio.ashihara.block.MortarBlock.FACING;
 import static kogasastudio.ashihara.helper.RenderHelper.XTP;
 import static kogasastudio.ashihara.helper.RenderHelper.buildMatrix;
 
-public class MortarTER implements BlockEntityRenderer<MortarTE>
+public class MortarTER //implements BlockEntityRenderer<MortarTE>
 {
-    private static final String CEREALS = "cereals_level";
+    /*private static final String CEREALS = "cereals_level";
     private static final String PROCESSED = "processed_level";
 
-    /*public static Map<String, ResourceLocation> assistanceMap()
+    *//*public static Map<String, ResourceLocation> assistanceMap()
     {
         ImmutableMap.Builder<String, ResourceLocation> builder = new ImmutableMap.Builder<>();
 
@@ -38,7 +38,7 @@ public class MortarTER implements BlockEntityRenderer<MortarTE>
         }
 
         return builder.build();
-    }*/
+    }*//*
 
     public MortarTER(BlockEntityRendererProvider.Context rendererDispatcherIn)
     {
@@ -98,5 +98,5 @@ public class MortarTER implements BlockEntityRenderer<MortarTE>
                 poseStackIn.popPose();
             }
         }
-    }
+    }*/
 }

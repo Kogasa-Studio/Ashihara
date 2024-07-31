@@ -10,6 +10,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.FlintAndSteelItem;
@@ -32,8 +33,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 import static kogasastudio.ashihara.block.tileentities.TERegistryHandler.CANDLE_TE;
@@ -89,31 +90,36 @@ public class CandleBlock extends Block implements EntityBlock
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    protected InteractionResult useWithoutItem(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, BlockHitResult pHitResult)
     {
-        CandleTE te = checkCandle(worldIn, pos);
-        RandomSource random = worldIn.getRandom();
-        boolean purposedState = state.getValue(LIT);
+        CandleTE te = checkCandle(pLevel, pPos);
+        RandomSource random = pLevel.getRandom();
+        if (pPlayer.isShiftKeyDown() && te != null)
+        {
+            int amount = te.pickCandle(false, pLevel, pPos);
+            if (amount == 0) return InteractionResult.PASS;
+            pPlayer.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ItemRegistryHandler.CANDLE.get(), amount));
+        }
+        else
+        {
+            pLevel.playSound(pPlayer, pPos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
+            pLevel.setBlockAndUpdate(pPos, pState.setValue(LIT, true));
+        }
+        return InteractionResult.SUCCESS;
+    }
 
-        if (player.getItemInHand(handIn).getItem() instanceof FlintAndSteelItem) purposedState = true;
-        else if (player.getItemInHand(handIn).isEmpty())
+    @Override
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    {
+        RandomSource random = worldIn.getRandom();
+
+        if (!state.getValue(LIT) && player.getItemInHand(handIn).getItem() instanceof FlintAndSteelItem)
         {
-            if (player.isShiftKeyDown() && te != null)
-            {
-                int amount = te.pickCandle(false, worldIn, pos);
-                if (amount == 0) return InteractionResult.PASS;
-                player.setItemInHand(handIn, new ItemStack(ItemRegistryHandler.CANDLE.get(), amount));
-                return InteractionResult.SUCCESS;
-            }
-            else purposedState = false;
+            worldIn.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
+            worldIn.setBlockAndUpdate(pos, state.setValue(LIT, true));
+            return ItemInteractionResult.SUCCESS;
         }
-        if (purposedState != state.getValue(LIT))
-        {
-            worldIn.playSound(player, pos, purposedState ? SoundEvents.FLINTANDSTEEL_USE : SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
-            worldIn.setBlockAndUpdate(pos, state.setValue(LIT, purposedState));
-            return InteractionResult.SUCCESS;
-        }
-        else return InteractionResult.PASS;
+        else return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     @Override
