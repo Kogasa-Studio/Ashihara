@@ -40,7 +40,7 @@ public class Charlotte extends Block
     {
         if (level.isClientSide())
         {
-            Minecraft.getInstance().setScreen(new CharlotteScreen());
+            //Minecraft.getInstance().setScreen(new CharlotteScreen());
             return InteractionResult.SUCCESS;
         }
         else return InteractionResult.PASS;

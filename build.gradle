@@ -7,7 +7,7 @@ plugins {
     //id 'org.spongepowered.mixin'
 }
 
-version = '0.0.0.13'
+version = '0.0.0.14'
 group = 'kogasastudio.ashihara'
 
 base {
