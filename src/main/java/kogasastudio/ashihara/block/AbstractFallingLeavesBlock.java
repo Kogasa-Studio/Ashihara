@@ -92,7 +92,7 @@ public class AbstractFallingLeavesBlock extends LeavesBlock
             worldIn.removeBlock(pos, false);
         }
         //若樱花方块正下方25格以内有实心方块，且该方块上方为空气，则在该方块上方生成落樱毯
-        if (!(this.getFallenBlock().equals(AIR)) && (worldIn.isEmptyBlock(pos.below()) || worldIn.getBlockState(pos.below()).getBlock() instanceof CherryBlossomVinesBlock))
+        if (!(this.getFallenBlock().equals(AIR)) && (worldIn.isEmptyBlock(pos.below()) || worldIn.getBlockState(pos.below()).getBlock() instanceof CherryVinesBlock))
         {
             BlockPos pos1 = pos;
             for (int j = 0; j < 25; j += 1)

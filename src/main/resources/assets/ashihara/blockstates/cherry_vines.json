@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "location=base": {
+      "model": "ashihara:block/cherry_vines"
+    },
+    "location=top": {
+      "model": "ashihara:block/cherry_vines_top"
+    }
+  }
+}

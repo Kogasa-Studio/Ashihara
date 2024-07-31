@@ -116,7 +116,7 @@ public class ItemRegistryHandler
     //建筑方块
     public static final DeferredItem<Item> CHERRY_BLOSSOM = ITEMS.register("cherry_blossom", () -> new BlockItem(BlockRegistryHandler.CHERRY_BLOSSOM.get(), new Item.Properties()));
     public static final DeferredItem<Item> MAPLE_LEAVES_RED = ITEMS.register("maple_leaves_red", () -> new BlockItem(BlockRegistryHandler.MAPLE_LEAVES_RED.get(), new Item.Properties()));
-    public static final DeferredItem<Item> CHERRY_BLOSSOM_VINES = ITEMS.register("cherry_blossom_vines", () -> new BlockItem(BlockRegistryHandler.CHERRY_BLOSSOM_VINES.get(), new Item.Properties()));
+    public static final DeferredItem<Item> CHERRY_VINES = ITEMS.register("cherry_vines", () -> new BlockItem(BlockRegistryHandler.CHERRY_VINES.get(), new Item.Properties()));
     public static final DeferredItem<Item> FALLEN_SAKURA = ITEMS.register("fallen_sakura", () -> new BlockItem(BlockRegistryHandler.FALLEN_SAKURA.get(), new Item.Properties()));
     public static final DeferredItem<Item> FALLEN_MAPLE_LEAVES_RED = ITEMS.register("fallen_maple_leaves_red", () -> new BlockItem(BlockRegistryHandler.FALLEN_MAPLE_LEAVES_RED.get(), new Item.Properties()));
     public static final DeferredItem<Item> TATAMI = ITEMS.register("tatami", () -> new BlockItem(BlockRegistryHandler.TATAMI.get(), new Item.Properties()));
