@@ -66,6 +66,7 @@ public class ClientEventSubscribeHandler
         setRenderType(BlockRegistryHandler.HOUSE_LIKE_HANGING_LANTERN.get(), RenderType.cutoutMipped(), event);
         setRenderType(BlockRegistryHandler.HEXAGONAL_HANGING_LANTERN.get(), RenderType.cutoutMipped(), event);
         setRenderType(BlockRegistryHandler.CHRYSANTHEMUM.get(), RenderType.cutoutMipped(), event);
+        setRenderType(BlockRegistryHandler.WILD_RICE.get(), RenderType.cutoutMipped(), event);
         setRenderType(BlockRegistryHandler.REED.get(), RenderType.cutoutMipped(), event);
         setRenderType(BlockRegistryHandler.SHORTER_REED.get(), RenderType.cutoutMipped(), event);
         setRenderType(BlockRegistryHandler.HYDRANGEA_BUSH.get(), RenderType.cutoutMipped(), event);

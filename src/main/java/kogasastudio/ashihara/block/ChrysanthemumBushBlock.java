@@ -21,10 +21,11 @@ public class ChrysanthemumBushBlock extends BushBlock implements IShearable
         super
                 (
                         Properties.of()
-                                .mapColor(MapColor.PLANT)
-                                .noCollission()
-                                .instabreak()
-                                .sound(SoundType.GRASS)
+                        .mapColor(MapColor.PLANT)
+                        .noCollission()
+                        .instabreak()
+                        .sound(SoundType.GRASS)
+                        .offsetType(OffsetType.XZ)
                 );
     }
 

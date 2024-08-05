@@ -8,8 +8,9 @@ import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.interaction.recipes.register.RecipeManager;
 import kogasastudio.ashihara.inventory.container.ContainerRegistryHandler;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.registry.Features;
 import kogasastudio.ashihara.sounds.SoundEvents;
-import kogasastudio.ashihara.world.WorldGenEventRegistryHandler;
+import kogasastudio.ashihara.registry.WorldGenEventRegistryHandler;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.bus.api.IEventBus;
@@ -46,6 +47,7 @@ public class Ashihara
 //        GLMRegistryHandler.MODIFIERS.register(bus);
 
 //        BiomeRegistryHandler.BIOMES.register(bus);
+        Features.FEATURES.register(modEventBus);
         WorldGenEventRegistryHandler.PLACED_FEATURE.register(modEventBus);
         WorldGenEventRegistryHandler.CONFIGURED_FEATURE.register(modEventBus);
 

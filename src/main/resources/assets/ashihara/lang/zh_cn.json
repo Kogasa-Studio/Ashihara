@@ -136,22 +136,18 @@
   "block.ashihara.soy_milk": "豆浆",
   "block.ashihara.oil": "油",
   "block.ashihara.charlotte": "蓓蓓",
-
+  "block.ashihara.wild_rice": "野生稻",
   "fluid.ashihara.soy_milk": "豆浆",
   "fluid.ashihara.soy_milk_flowing": "流动的豆浆",
   "fluid.ashihara.oil": "油",
   "fluid.ashihara.oil_flowing": "流动的油",
-
   "itemGroup.group_ashihara": "苇原",
   "itemGroup.group_ash_materials": "苇原-材料",
   "itemGroup.group_ash_building_blocks": "苇原-建筑方块",
-
   "gui.ashihara.mill": "石磨",
   "gui.ashihara.mortar": "舂",
-
   "item.ashihara.dirt_ball_don.projectile": "§d§l§o这东西散发着一种不可思议的气场",
   "item.ashihara.dirt_ball_don.projectile_1": "§9§l§o§m别把这事告诉4z（",
-
   "tooltip.ashihara.pail_display": "§e§l提桶: §n",
   "tooltip.ashihara.pail_empty_message": "    §7桶现在是空的",
   "tooltip.ashihara.pail_fluid_existence": "    §7流体: ",

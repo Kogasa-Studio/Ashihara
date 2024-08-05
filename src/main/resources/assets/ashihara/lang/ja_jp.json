@@ -136,22 +136,18 @@
   "block.ashihara.soy_milk": "豆乳",
   "block.ashihara.oil": "油",
   "block.ashihara.charlotte": "べべ",
-
+  "block.ashihara.wild_rice": "野生の稲",
   "fluid.ashihara.soy_milk": "豆乳",
   "fluid.ashihara.soy_milk_flowing": "流れ豆乳",
   "fluid.ashihara.oil": "油",
   "fluid.ashihara.oil_flowing": "流れ油",
-
   "itemGroup.group_ashihara": "葦原",
   "itemGroup.group_ash_materials": "葦原-材料",
   "itemGroup.group_ash_building_blocks": "葦原-築造",
-
   "gui.ashihara.mill": "石臼",
   "gui.ashihara.mortar": "臼",
-
   "item.ashihara.dirt_ball_don.projectile": "§d§l§o これ何...",
   "item.ashihara.dirt_ball_don.projectile_1": "§9§l§o丼でしょか...ならばこちは食べるいいかなぁ...",
-
   "tooltip.ashihara.pail_display": "§e§l樽: §n",
   "tooltip.ashihara.pail_empty_message": "    §7樽はまだ空です",
   "tooltip.ashihara.pail_fluid_existence": "    §7液体: ",

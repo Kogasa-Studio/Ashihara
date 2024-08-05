@@ -1,0 +1,6 @@
+{
+  "parent": "ashihara:block/cross",
+  "textures": {
+    "cross": "ashihara:block/wild_rice"
+  }
+}

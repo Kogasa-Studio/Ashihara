@@ -105,6 +105,7 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> MORTAR = ITEMS.register("mortar", () -> new BlockItem(BlockRegistryHandler.MORTAR.get(), new Item.Properties()));
     public static final DeferredItem<Item> MILL = ITEMS.register("mill", () -> new BlockItem(BlockRegistryHandler.MILL.get(), new Item.Properties()));
     public static final DeferredItem<Item> CHRYSANTHEMUM = ITEMS.register("chrysanthemum", () -> new BlockItem(BlockRegistryHandler.CHRYSANTHEMUM.get(), new Item.Properties()));
+    public static final DeferredItem<Item> WILD_RICE = ITEMS.register("wild_rice", () -> new BlockItem(BlockRegistryHandler.WILD_RICE.get(), new Item.Properties()));
     public static final DeferredItem<Item> REED = ITEMS.register("reed", () -> new BlockItem(BlockRegistryHandler.REED.get(), new Item.Properties()));
     public static final DeferredItem<Item> SHORTER_REED = ITEMS.register("shorter_reed", () -> new BlockItem(BlockRegistryHandler.SHORTER_REED.get(), new Item.Properties()));
     public static final DeferredItem<Item> HYDRANGEA_BUSH = ITEMS.register("hydrangea_bush", () -> new BlockItem(BlockRegistryHandler.HYDRANGEA_BUSH.get(), new Item.Properties()));

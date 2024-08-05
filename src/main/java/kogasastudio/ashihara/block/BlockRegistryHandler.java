@@ -64,6 +64,14 @@ public class BlockRegistryHandler
     public static final DeferredBlock<Block> MORTAR = BLOCKS.register("mortar", MortarBlock::new);
     public static final DeferredBlock<Block> IMMATURE_RICE = BLOCKS.register("immature_rice", ImmatureRiceCropBlock::new);
     public static final DeferredBlock<Block> CHRYSANTHEMUM = BLOCKS.register("chrysanthemum", ChrysanthemumBushBlock::new);
+    public static final DeferredBlock<Block> WILD_RICE = BLOCKS.register("wild_rice", () -> new ChrysanthemumBushBlock()
+    {
+        @Override
+        public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+        {
+            return box(2,0,2,14,16,14);
+        }
+    });
     public static final DeferredBlock<Block> REED = BLOCKS.register("reed", ReedBlock::new);
     public static final DeferredBlock<Block> SHORTER_REED = BLOCKS.register("shorter_reed", ShorterReedBlock::new);
     public static final DeferredBlock<Block> MILL = BLOCKS.register("mill", MillBlock::new);

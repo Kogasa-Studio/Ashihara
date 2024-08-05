@@ -1,4 +1,4 @@
-package kogasastudio.ashihara.world;
+package kogasastudio.ashihara.registry;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
