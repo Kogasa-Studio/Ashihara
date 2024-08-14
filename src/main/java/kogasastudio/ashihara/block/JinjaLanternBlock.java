@@ -31,9 +31,6 @@ public class JinjaLanternBlock extends DoubleLanternBlock.AxisAlignedVariant
                 );
     }
 
-    @Override
-    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand) {return;}
-
     VoxelShape UPPER_X = Block.box(1.8D, 0.0D, 3.2D, 14.2D, 13.1D, 12.9D);
     VoxelShape UPPER_Z = ShapeHelper.rotateShape(UPPER_X, 90);
     VoxelShape LOWER = Block.box(7.5D, 0.0D, 7.5D, 8.5D, 16.0D, 8.5D);

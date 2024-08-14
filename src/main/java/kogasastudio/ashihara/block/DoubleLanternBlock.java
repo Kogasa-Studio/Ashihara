@@ -69,9 +69,8 @@ public class DoubleLanternBlock extends LanternBlock implements SimpleWaterlogge
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         BlockPos blockpos = context.getClickedPos();
-        return blockpos.getY() < 255 && context.getLevel().getBlockState(blockpos.above()).canBeReplaced(context)
-                ? this.defaultBlockState()
-                .setValue(WATERLOGGED, context.getLevel().getFluidState(blockpos).getType().equals(Fluids.WATER))
+        return /*blockpos.getY() < 255 && */context.getLevel().getBlockState(blockpos.above()).canBeReplaced(context)
+                ? this.defaultBlockState().setValue(WATERLOGGED, context.getLevel().getFluidState(blockpos).getType().equals(Fluids.WATER))
                 : null;
     }
 

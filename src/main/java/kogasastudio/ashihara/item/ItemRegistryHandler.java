@@ -33,6 +33,7 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> MINATO_AQUA = ITEMS.register("aqua", ItemMinatoAqua::new);
     public static final DeferredItem<Item> RICE_SEEDLING = ITEMS.register("rice_seedling", ItemRiceSeedling::new);
     public static final DeferredItem<Item> RICE_CROP = ITEMS.register("rice_crop_item", AshiharaItem::new);
+    public static final DeferredItem<Item> DRIED_RICE_CROP = ITEMS.register("dried_rice_crop", AshiharaItem::new);
     public static final DeferredItem<Item> PADDY = ITEMS.register("paddy", ItemUnthreshedRice::new);
     public static final DeferredItem<Item> STRAW = ITEMS.register("straw", AshiharaItem::new);
     public static final DeferredItem<Item> RICE = ITEMS.register("rice", AshiharaItem::new);
@@ -102,6 +103,7 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> CHERRY_SAPLING = ITEMS.register("cherry_sapling", () -> new BlockItem(BlockRegistryHandler.CHERRY_SAPLING.get(), new Item.Properties()));
     public static final DeferredItem<Item> RED_MAPLE_SAPLING = ITEMS.register("red_maple_sapling", () -> new BlockItem(BlockRegistryHandler.RED_MAPLE_SAPLING.get(), new Item.Properties()));
     public static final DeferredItem<Item> TETSUSENCHI = ITEMS.register("tetsusenchi", () -> new BlockItem(BlockRegistryHandler.TETSUSENCHI.get(), new Item.Properties()));
+    public static final DeferredItem<Item> RICE_DRYING_STICKS = ITEMS.register("rice_drying_sticks", () -> new BlockItem(BlockRegistryHandler.RICE_DRYING_STICKS.get(), new Item.Properties()));
     public static final DeferredItem<Item> MORTAR = ITEMS.register("mortar", () -> new BlockItem(BlockRegistryHandler.MORTAR.get(), new Item.Properties()));
     public static final DeferredItem<Item> MILL = ITEMS.register("mill", () -> new BlockItem(BlockRegistryHandler.MILL.get(), new Item.Properties()));
     public static final DeferredItem<Item> CHRYSANTHEMUM = ITEMS.register("chrysanthemum", () -> new BlockItem(BlockRegistryHandler.CHRYSANTHEMUM.get(), new Item.Properties()));

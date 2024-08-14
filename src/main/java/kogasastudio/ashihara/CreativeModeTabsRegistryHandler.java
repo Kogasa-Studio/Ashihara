@@ -133,6 +133,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.RICE_SEEDLING.get());
                                         output.accept(ItemRegistryHandler.PADDY.get());
                                         output.accept(ItemRegistryHandler.RICE_CROP.get());
+                                        output.accept(ItemRegistryHandler.DRIED_RICE_CROP.get());
                                         output.accept(ItemRegistryHandler.STRAW.get());
                                         output.accept(ItemRegistryHandler.RICE.get());
                                         output.accept(ItemRegistryHandler.COOKED_RICE.get());
@@ -169,6 +170,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.MILL.get());
                                         output.accept(ItemRegistryHandler.MORTAR.get());
                                         output.accept(ItemRegistryHandler.TETSUSENCHI.get());
+                                        output.accept(ItemRegistryHandler.RICE_DRYING_STICKS.get());
                                         output.accept(ItemRegistryHandler.CUTTING_BOARD.get());
                                         output.accept(ItemRegistryHandler.PAIL.get());
                                         output.accept(ItemRegistryHandler.CANDLE.get());

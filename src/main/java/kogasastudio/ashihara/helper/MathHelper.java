@@ -18,11 +18,8 @@ public class MathHelper
      */
     public static double[] rotatePoint(double x, double z, double pivotX, double pivotZ, double rotation)
     {
-        double x_z_distance = Math.sqrt((Math.pow(x - pivotX, 2)) + (Math.pow(z - pivotZ, 2)));
-        if ((x - pivotX) < 0) x_z_distance = - x_z_distance;
-        double controlDegree = Math.abs(Math.atan((z - pivotZ) / (x - pivotX)) - rotation);
-        double nX = pivotX + x_z_distance * Math.cos(controlDegree);
-        double nZ = pivotZ + x_z_distance * Math.sin(controlDegree);
+        double nX = (x - pivotX) * Math.cos(rotation) - (z - pivotZ) * Math.sin(rotation) + pivotX;
+        double nZ = (z - pivotZ) * Math.cos(rotation) + (x - pivotX) * Math.sin(rotation) + pivotZ;
         return new double[]{nX, nZ};
     }
 }

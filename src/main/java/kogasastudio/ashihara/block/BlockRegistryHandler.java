@@ -57,6 +57,7 @@ public class BlockRegistryHandler
     public static final DeferredBlock<Block> RICE_CROP = BLOCKS.register("rice_crop", RiceCropBlock::new);
     public static final DeferredBlock<Block> DIRT_DEPRESSION = BLOCKS.register("dirt_depression", DirtDepressionBlock::new);
     public static final DeferredBlock<Block> TETSUSENCHI = BLOCKS.register("tetsusenchi", TetsusenchiBlock::new);
+    public static final DeferredBlock<Block> RICE_DRYING_STICKS = BLOCKS.register("rice_drying_sticks", RiceDryingSticksBlock::new);
     public static final DeferredBlock<Block> CHERRY_SAPLING = BLOCKS.register("cherry_sapling", () -> new SaplingBlock(TreeGrowers.CHERRY_BLOSSOM, BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
     public static final DeferredBlock<Block> POTTED_CHERRY_SAPLING = BLOCKS.register("potted_cherry_sapling", () -> new FlowerPotBlock(BlockRegistryHandler.CHERRY_SAPLING.get(), BlockBehaviour.Properties.of().instabreak().noOcclusion()));
     public static final DeferredBlock<Block> RED_MAPLE_SAPLING = BLOCKS.register("red_maple_sapling", () -> new SaplingBlock(TreeGrowers.RED_MAPLE, BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));

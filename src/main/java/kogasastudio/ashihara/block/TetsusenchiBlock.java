@@ -64,7 +64,7 @@ public class TetsusenchiBlock extends Block
     public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         ItemStack item = player.getItemInHand(handIn);
-        if (item.getItem() == ItemRegistryHandler.RICE_CROP.get())
+        if (item.getItem() == ItemRegistryHandler.DRIED_RICE_CROP.get())
         {
             if (!player.getCooldowns().isOnCooldown(item.getItem()))
             {

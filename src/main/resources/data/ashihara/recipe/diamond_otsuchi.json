@@ -10,7 +10,7 @@
       "item": "minecraft:diamond"
     },
     "O": {
-      "tag": "forge:stripped_logs"
+      "tag": "neoforge:stripped_logs"
     },
     "I": {
       "item": "minecraft:stick"

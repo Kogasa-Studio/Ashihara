@@ -129,16 +129,17 @@ public class StoneLanternBlock extends DoubleLanternBlock
         }
     }
 
+    VoxelShape v1 = Block.box(2.0d, 0.0d, 2.0d, 14.0d, 8.0d, 14.0d);
+    VoxelShape v2 = Block.box(3.0d, 8.0d, 3.0d, 13.0d, 16.0d, 13.0d);
+    VoxelShape LOWER = Shapes.or(v1, v2);
+    VoxelShape v3 = Block.box(5.0d, 0.0d, 5.0d, 11.0d, 5.0d, 11.0d);
+    VoxelShape v4 = Block.box(2.0d, 5.0d, 2.0d, 14.0d, 11.25d, 14.0d);
+    VoxelShape v5 = Block.box(7.0d, 11.25d, 7.0d, 9.0d, 13.25d, 9.0d);
+    VoxelShape UPPER = Shapes.or(v3, v4, v5);
+
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
     {
-        VoxelShape v1 = Block.box(2.0d, 0.0d, 2.0d, 14.0d, 8.0d, 14.0d);
-        VoxelShape v2 = Block.box(3.0d, 8.0d, 3.0d, 13.0d, 16.0d, 13.0d);
-        VoxelShape LOWER = Shapes.or(v1, v2);
-        VoxelShape v3 = Block.box(5.0d, 0.0d, 5.0d, 11.0d, 5.0d, 11.0d);
-        VoxelShape v4 = Block.box(2.0d, 5.0d, 2.0d, 14.0d, 11.25d, 14.0d);
-        VoxelShape v5 = Block.box(7.0d, 11.25d, 7.0d, 9.0d, 13.25d, 9.0d);
-        VoxelShape UPPER = Shapes.or(v3, v4, v5);
         if (state.getValue(HALF) == DoubleBlockHalf.LOWER)
         {
             return LOWER;

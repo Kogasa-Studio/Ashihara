@@ -3,7 +3,9 @@
   "ingredient": {
     "item": "minecraft:bamboo"
   },
-  "result": "ashihara:dried_bamboo",
+  "result": {
+    "id": "ashihara:dried_bamboo"
+  },
   "experience": 0.35,
   "cookingtime": 200
 }

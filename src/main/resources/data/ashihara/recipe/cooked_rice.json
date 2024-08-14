@@ -3,7 +3,9 @@
   "ingredient": {
     "item": "ashihara:rice"
   },
-  "result": "ashihara:cooked_rice",
+  "cookingtime": 200,
   "experience": 0.35,
-  "cookingtime": 200
+  "result": {
+    "id": "ashihara:cooked_rice"
+  }
 }

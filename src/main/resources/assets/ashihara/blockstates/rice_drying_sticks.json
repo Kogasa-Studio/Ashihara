@@ -1,0 +1,152 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "l_r_type": "single",
+        "half": "lower",
+        "axis": "x"
+      },
+      "apply": {
+        "model": "ashihara:block/rice_drying_sticks_single"
+      }
+    },
+    {
+      "when": {
+        "l_r_type": "single",
+        "half": "lower",
+        "axis": "z"
+      },
+      "apply": {
+        "model": "ashihara:block/rice_drying_sticks_single",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "l_r_type": "left",
+        "half": "lower",
+        "axis": "x"
+      },
+      "apply": {
+        "model": "ashihara:block/rice_drying_sticks_multiple",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "l_r_type": "left",
+        "half": "lower",
+        "axis": "z"
+      },
+      "apply": {
+        "model": "ashihara:block/rice_drying_sticks_multiple",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "l_r_type": "right",
+        "half": "lower",
+        "axis": "x"
+      },
+      "apply": {
+        "model": "ashihara:block/rice_drying_sticks_multiple"
+      }
+    },
+    {
+      "when": {
+        "l_r_type": "right",
+        "half": "lower",
+        "axis": "z"
+      },
+      "apply": {
+        "model": "ashihara:block/rice_drying_sticks_multiple",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "drying_state": "wet",
+        "half": "lower",
+        "axis": "x"
+      },
+      "apply": {
+        "model": "ashihara:block/drying_rice_wet"
+      }
+    },
+    {
+      "when": {
+        "drying_state": "wet",
+        "half": "lower",
+        "axis": "z"
+      },
+      "apply": {
+        "model": "ashihara:block/drying_rice_wet",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "drying_state": "dry",
+        "half": "lower",
+        "axis": "x"
+      },
+      "apply": {
+        "model": "ashihara:block/drying_rice_dry"
+      }
+    },
+    {
+      "when": {
+        "drying_state": "dry",
+        "half": "lower",
+        "axis": "z"
+      },
+      "apply": {
+        "model": "ashihara:block/drying_rice_dry",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "drying_state": "wet",
+        "half": "upper",
+        "axis": "x"
+      },
+      "apply": {
+        "model": "ashihara:block/drying_rice_wet_upper"
+      }
+    },
+    {
+      "when": {
+        "drying_state": "wet",
+        "half": "upper",
+        "axis": "z"
+      },
+      "apply": {
+        "model": "ashihara:block/drying_rice_wet_upper",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "drying_state": "dry",
+        "half": "upper",
+        "axis": "x"
+      },
+      "apply": {
+        "model": "ashihara:block/drying_rice_dry_upper"
+      }
+    },
+    {
+      "when": {
+        "drying_state": "dry",
+        "half": "upper",
+        "axis": "z"
+      },
+      "apply": {
+        "model": "ashihara:block/drying_rice_dry_upper",
+        "y": 90
+      }
+    }
+  ]
+}
