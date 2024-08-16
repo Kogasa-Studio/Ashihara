@@ -179,11 +179,11 @@ public class RiceDryingSticksBlock extends Block implements SimpleWaterloggedBlo
     }
 
     @Override
-    public void destroy(LevelAccessor pLevel, BlockPos pPos, BlockState pState)
+    protected void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston)
     {
         if (!pState.getValue(DRYING_STATE).equals(RiceDryingState.NONE))
-            popResource((Level) pLevel, pPos, new ItemStack(pState.getValue(DRYING_STATE).equals(RiceDryingState.WET) ? ItemRegistryHandler.RICE_CROP.asItem() : ItemRegistryHandler.DRIED_RICE_CROP.asItem()));
-        super.destroy(pLevel, pPos, pState);
+            popResource(pLevel, pPos, new ItemStack(pState.getValue(DRYING_STATE).equals(RiceDryingState.WET) ? ItemRegistryHandler.RICE_CROP.asItem() : ItemRegistryHandler.DRIED_RICE_CROP.asItem()));
+        super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
     }
 
     @Override
