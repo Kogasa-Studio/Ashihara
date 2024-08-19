@@ -1,0 +1,76 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"texture_size": [8, 8],
+	"textures": {
+		"0": "ashihara:block/crops/sweet_potatoes_age0",
+		"particle": "minecraft:block/azalea_leaves"
+	},
+	"elements": [
+		{
+			"from": [6.25, -1, 8.25],
+			"to": [8.25, 2, 8.25],
+			"rotation": {"angle": -22.5, "axis": "y", "origin": [8.25, -1, 8.25]},
+			"faces": {
+				"north": {"uv": [0, 0, 4, 6], "texture": "#0"},
+				"south": {"uv": [4, 0, 0, 6], "texture": "#0"}
+			}
+		},
+		{
+			"from": [8.25, -1, 8.25],
+			"to": [8.25, 1, 10.25],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.25, -1, 8.25]},
+			"faces": {
+				"east": {"uv": [8, 2, 4, 6], "texture": "#0"},
+				"west": {"uv": [4, 2, 8, 6], "texture": "#0"}
+			}
+		},
+		{
+			"from": [8.25, -1, 8.25],
+			"to": [10.25, 1, 8.25],
+			"rotation": {"angle": 22.5, "axis": "y", "origin": [8.25, -1, 8.25]},
+			"faces": {
+				"north": {"uv": [8, 2, 4, 6], "texture": "#0"},
+				"south": {"uv": [4, 2, 8, 6], "texture": "#0"}
+			}
+		},
+		{
+			"from": [9.5, 1, 6.75],
+			"to": [12.5, 1, 9.75],
+			"rotation": {"angle": 22.5, "axis": "y", "origin": [8.25, -1, 8.25]},
+			"faces": {
+				"up": {"uv": [0, 6, 6, 12], "rotation": 270, "texture": "#0"},
+				"down": {"uv": [0, 12, 6, 6], "rotation": 90, "texture": "#0"}
+			}
+		},
+		{
+			"from": [4, 2.25, 7.5],
+			"to": [7, 2.25, 10.5],
+			"rotation": {"angle": -45, "axis": "y", "origin": [8.25, -1, 8.25]},
+			"faces": {
+				"up": {"uv": [0, 6, 6, 12], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [0, 12, 6, 6], "rotation": 270, "texture": "#0"}
+			}
+		},
+		{
+			"from": [6.75, 1.25, 9.75],
+			"to": [9.25, 1.25, 12.25],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.25, -1, 8.25]},
+			"faces": {
+				"up": {"uv": [0, 6, 6, 12], "texture": "#0"},
+				"down": {"uv": [0, 12, 6, 6], "texture": "#0"}
+			}
+		}
+	],
+	"groups": [
+		0,
+		1,
+		2,
+		{
+			"name": "group",
+			"origin": [8, 0, 8],
+			"color": 0,
+			"children": [3, 4, 5]
+		}
+	]
+}

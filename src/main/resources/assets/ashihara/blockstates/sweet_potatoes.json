@@ -1,28 +1,172 @@
 {
   "variants": {
-    "age=0": {
-      "model": "ashihara:block/crops/sweet_potatoes_stage0"
-    },
-    "age=1": {
-      "model": "ashihara:block/crops/sweet_potatoes_stage0"
-    },
-    "age=2": {
-      "model": "ashihara:block/crops/sweet_potatoes_stage1"
-    },
-    "age=3": {
-      "model": "ashihara:block/crops/sweet_potatoes_stage1"
-    },
-    "age=4": {
-      "model": "ashihara:block/crops/sweet_potatoes_stage2"
-    },
-    "age=5": {
-      "model": "ashihara:block/crops/sweet_potatoes_stage2"
-    },
-    "age=6": {
-      "model": "ashihara:block/crops/sweet_potatoes_stage2"
-    },
-    "age=7": {
-      "model": "ashihara:block/crops/sweet_potatoes_stage3"
-    }
+    "age=0": [
+      {
+        "model": "ashihara:block/sweet_potatoes_age0_1",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age0_1",
+        "y": 90,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age0_1",
+        "y": 180,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age0_1",
+        "y": 270,
+        "weight": 1
+      }
+    ],
+    "age=1": [
+      {
+        "model": "ashihara:block/sweet_potatoes_age0_1",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age0_1",
+        "y": 90,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age0_1",
+        "y": 180,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age0_1",
+        "y": 270,
+        "weight": 1
+      }
+    ],
+    "age=2": [
+      {
+        "model": "ashihara:block/sweet_potatoes_age1_1",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age1_1",
+        "y": 90,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age1_1",
+        "y": 180,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age1_1",
+        "y": 270,
+        "weight": 1
+      }
+    ],
+    "age=3": [
+      {
+        "model": "ashihara:block/sweet_potatoes_age1_1",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age1_1",
+        "y": 90,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age1_1",
+        "y": 180,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age1_1",
+        "y": 270,
+        "weight": 1
+      }
+    ],
+    "age=4": [
+      {
+        "model": "ashihara:block/sweet_potatoes_age2_1",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age2_1",
+        "y": 90,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age2_1",
+        "y": 180,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age2_1",
+        "y": 270,
+        "weight": 1
+      }
+    ],
+    "age=5": [
+      {
+        "model": "ashihara:block/sweet_potatoes_age2_1",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age2_1",
+        "y": 90,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age2_1",
+        "y": 180,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age2_1",
+        "y": 270,
+        "weight": 1
+      }
+    ],
+    "age=6": [
+      {
+        "model": "ashihara:block/sweet_potatoes_age2_1",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age2_1",
+        "y": 90,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age2_1",
+        "y": 180,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age2_1",
+        "y": 270,
+        "weight": 1
+      }
+    ],
+    "age=7": [
+      {
+        "model": "ashihara:block/sweet_potatoes_age3_1",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age3_1",
+        "y": 90,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age3_1",
+        "y": 180,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/sweet_potatoes_age3_1",
+        "y": 270,
+        "weight": 1
+      }
+    ]
   }
 }
