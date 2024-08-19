@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.common.CommonHooks;
@@ -100,7 +101,7 @@ public class CucumberCropBlock extends AbstractCropAge7
             boolean canGrowUp = !isUpper && worldIn.getBlockState(pos.above()).isAir() && age > 5;
             if (age < validAge || canGrowUp)
             {
-                float f = getGrowthSpeed(state, worldIn, pos);
+                float f = getGrowSpeed(state, worldIn, pos);
 
                 if (canGrowUp && CommonHooks.canCropGrow(worldIn, pos.above(), this.getStateForAge(0), random.nextInt((int) (25.0F / f) + 1) == 0))
                 {
@@ -113,6 +114,52 @@ public class CucumberCropBlock extends AbstractCropAge7
                 }
             }
         }
+    }
+
+    private float getGrowSpeed(BlockState blockState, BlockGetter level, BlockPos pos) {
+        Block block = blockState.getBlock();
+        float f = 1.0F;
+        BlockPos blockpos = pos.below();
+
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                float f1 = 0.0F;
+                BlockState blockstate = level.getBlockState(blockpos.offset(i, 0, j));
+                net.neoforged.neoforge.common.util.TriState soilDecision = blockstate.canSustainPlant(level, blockpos.offset(i, 0, j), net.minecraft.core.Direction.UP, blockState);
+                if (soilDecision.isDefault() ? blockstate.getBlock() instanceof net.minecraft.world.level.block.FarmBlock : soilDecision.isTrue()) {
+                    f1 = 1.0F;
+                    if (blockstate.isFertile(level, pos.offset(i, 0, j)) || blockstate.is(this)) {
+                        f1 = 3.0F;
+                    }
+                }
+
+                if (i != 0 || j != 0) {
+                    f1 /= 4.0F;
+                }
+
+                f += f1;
+            }
+        }
+
+        BlockPos blockpos1 = pos.north();
+        BlockPos blockpos2 = pos.south();
+        BlockPos blockpos3 = pos.west();
+        BlockPos blockpos4 = pos.east();
+        boolean flag = level.getBlockState(blockpos3).is(block) || level.getBlockState(blockpos4).is(block);
+        boolean flag1 = level.getBlockState(blockpos1).is(block) || level.getBlockState(blockpos2).is(block);
+        if (flag && flag1) {
+            f /= 2.0F;
+        } else {
+            boolean flag2 = level.getBlockState(blockpos3.north()).is(block)
+            || level.getBlockState(blockpos4.north()).is(block)
+            || level.getBlockState(blockpos4.south()).is(block)
+            || level.getBlockState(blockpos3.south()).is(block);
+            if (flag2) {
+                f /= 2.0F;
+            }
+        }
+
+        return f;
     }
 
     @Override

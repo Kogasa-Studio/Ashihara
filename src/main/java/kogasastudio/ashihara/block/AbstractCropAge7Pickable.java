@@ -25,15 +25,7 @@ public class AbstractCropAge7Pickable extends AbstractCropAge7
 
     public AbstractCropAge7Pickable(int max, int turn)
     {
-        super
-                (
-                        BlockBehaviour.Properties.of()
-                                .mapColor(MapColor.PLANT)
-                                .noCollission()
-                                .randomTicks()
-                                .strength(0.2F)
-                                .sound(SoundType.CROP)
-                );
+        super();
         this.ageAvailable = max;
         this.ageTurnIn = turn;
     }

@@ -4,7 +4,7 @@
 	"texture_size": [32, 32],
 	"textures": {
 		"1": "ashihara:block/crops/soy_beans_age1",
-		"particle": "minecraft:block/short_grass"
+		"particle": "minecraft:block/azalea_leaves"
 	},
 	"elements": [
 		{

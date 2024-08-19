@@ -1,28 +1,116 @@
 {
   "variants": {
-    "age=0": {
-      "model": "ashihara:block/crops/cucumbers_stage0"
-    },
-    "age=1": {
-      "model": "ashihara:block/crops/cucumbers_stage0"
-    },
-    "age=2": {
-      "model": "ashihara:block/crops/cucumbers_stage1"
-    },
-    "age=3": {
-      "model": "ashihara:block/crops/cucumbers_stage1"
-    },
-    "age=4": {
-      "model": "ashihara:block/crops/cucumbers_stage2"
-    },
-    "age=5": {
-      "model": "ashihara:block/crops/cucumbers_stage2_full"
-    },
-    "age=6": {
-      "model": "ashihara:block/crops/cucumbers_stage3"
-    },
-    "age=7": {
-      "model": "ashihara:block/crops/cucumbers_stage3_full"
-    }
+    "age=0": [
+      {
+        "model": "ashihara:block/cucumbers_age0_1",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/cucumbers_age0_2",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/cucumbers_age0_3",
+        "weight": 1
+      }
+    ],
+    "age=1": [
+      {
+        "model": "ashihara:block/cucumbers_age0_1",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/cucumbers_age0_2",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/cucumbers_age0_3",
+        "weight": 1
+      }
+    ],
+    "age=2": [
+      {
+        "model": "ashihara:block/cucumbers_age1_1",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/cucumbers_age1_2",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/cucumbers_age1_3",
+        "weight": 1
+      }
+    ],
+    "age=3": [
+      {
+        "model": "ashihara:block/cucumbers_age1_1",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/cucumbers_age1_2",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/cucumbers_age1_3",
+        "weight": 1
+      }
+    ],
+    "age=4": [
+      {
+        "model": "ashihara:block/cucumbers_age2_1",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/cucumbers_age2_2",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/cucumbers_age2_3",
+        "weight": 1
+      }
+    ],
+    "age=5": [
+      {
+        "model": "ashihara:block/cucumbers_age2_1_with_fruits",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/cucumbers_age2_2_with_fruits",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/cucumbers_age2_3_with_fruits",
+        "weight": 1
+      }
+    ],
+    "age=6": [
+      {
+        "model": "ashihara:block/cucumbers_age3_1",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/cucumbers_age3_2",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/cucumbers_age3_3",
+        "weight": 1
+      }
+    ],
+    "age=7": [
+      {
+        "model": "ashihara:block/cucumbers_age3_1_with_fruits",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/cucumbers_age3_2_with_fruits",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/cucumbers_age3_3_with_fruits",
+        "weight": 1
+      }
+    ]
   }
 }

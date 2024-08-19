@@ -3,7 +3,7 @@
 	"parent": "minecraft:block/block",
 	"textures": {
 		"0": "ashihara:block/crops/soy_beans_age0",
-		"particle": "minecraft:block/short_grass"
+		"particle": "minecraft:block/azalea_leaves"
 	},
 	"elements": [
 		{

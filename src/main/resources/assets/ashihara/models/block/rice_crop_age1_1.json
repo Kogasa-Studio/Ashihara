@@ -4,7 +4,7 @@
 	"texture_size": [64, 64],
 	"textures": {
 		"1": "ashihara:block/crops/rice_crop_age1",
-		"particle": "ashihara:block/crops/rice_crop_age1"
+		"particle": "minecraft:block/azalea_leaves"
 	},
 	"elements": [
 		{

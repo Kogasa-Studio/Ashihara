@@ -1,0 +1,28 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"0": "ashihara:block/crops/cucumbers_age0",
+		"particle": "minecraft:block/azalea_leaves"
+	},
+	"elements": [
+		{
+			"from": [5, -1, 7.75],
+			"to": [12, 4, 7.75],
+			"rotation": {"angle": 45, "axis": "y", "origin": [8.5, 1.5, 7.75]},
+			"faces": {
+				"north": {"uv": [0, 0, 7, 5], "texture": "#0"},
+				"south": {"uv": [7, 0, 0, 5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [5, -1, 7.75],
+			"to": [12, 4, 7.75],
+			"rotation": {"angle": -45, "axis": "y", "origin": [8.5, 1.5, 7.75]},
+			"faces": {
+				"north": {"uv": [0, 5, 7, 10], "texture": "#0"},
+				"south": {"uv": [7, 5, 0, 10], "texture": "#0"}
+			}
+		}
+	]
+}
