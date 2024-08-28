@@ -30,14 +30,14 @@ public class PailTE extends AshiharaMachineTE implements IFluidHandler
     @Override
     protected void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries)
     {
-        this.bucket = bucket.readFromNBT(pRegistries, pTag);
         super.loadAdditional(pTag, pRegistries);
+        this.bucket = bucket.readFromNBT(pRegistries, pTag);
     }
 
     @Override
     protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
     {
-        compound.put("bucket", bucket.writeToNBT(provider, compound));
         super.saveAdditional(compound, provider);
+        bucket.writeToNBT(provider, compound);
     }
 }

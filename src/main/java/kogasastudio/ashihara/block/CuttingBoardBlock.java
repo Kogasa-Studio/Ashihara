@@ -72,7 +72,11 @@ public class CuttingBoardBlock extends Block implements EntityBlock
         BlockEntity teIn = worldIn.getBlockEntity(pos);
         if (teIn == null || !teIn.getType().equals(TERegistryHandler.CUTTING_BOARD_TE.get())) return ItemInteractionResult.FAIL;
         CuttingBoardTE te = (CuttingBoardTE) teIn;
-        if (te.handleInteraction(player, handIn, worldIn, pos)) return ItemInteractionResult.SUCCESS;
+        if (te.handleInteraction(player, handIn, worldIn, pos))
+        {
+            worldIn.sendBlockUpdated(pos, state, state, UPDATE_ALL);
+            return ItemInteractionResult.SUCCESS;
+        }
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 

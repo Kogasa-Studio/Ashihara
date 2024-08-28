@@ -1,7 +1,7 @@
-package kogasastudio.ashihara.dependencies.jei.category;
+package kogasastudio.ashihara.compat.jei.category;
 
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.dependencies.jei.JeiPlugin;
+import kogasastudio.ashihara.compat.jei.JeiPlugin;
 import kogasastudio.ashihara.interaction.recipes.CuttingBoardRecipe;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import mezz.jei.api.constants.VanillaTypes;

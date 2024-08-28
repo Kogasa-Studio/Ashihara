@@ -137,13 +137,13 @@ public class CuttingBoardTE extends AshiharaMachineTE
     public void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries)
     {
         super.loadAdditional(nbt, registries);
-        this.content = ItemStack.parseOptional(registries, nbt.getCompound("content"));
+        this.content = ItemStack.parse(registries, nbt.getCompound("Content")).orElse(ItemStack.EMPTY);
     }
 
     @Override
     protected void saveAdditional(CompoundTag compound, HolderLookup.Provider registries)
     {
-        compound.put("content", this.content.save(registries));
         super.saveAdditional(compound, registries);
+        if (!this.content.isEmpty()) compound.put("Content", this.content.save(registries));
     }
 }

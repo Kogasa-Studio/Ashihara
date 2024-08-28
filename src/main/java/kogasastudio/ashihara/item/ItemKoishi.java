@@ -58,8 +58,8 @@ public class ItemKoishi extends Item
                 return InteractionResult.SUCCESS;
             } else if (te != null)
             {
-                CompoundTag nbt = te.getPersistentData();
-                player.sendSystemMessage(Component.translatable((worldIn.isClientSide() ? "client: " : "server: ") + nbt.toString()));
+                CompoundTag nbt = te.getUpdateTag(worldIn.registryAccess());
+                player.sendSystemMessage(Component.translatable((worldIn.isClientSide() ? "client: " : "server: ") + nbt));
                 return InteractionResult.SUCCESS;
             } else
             {

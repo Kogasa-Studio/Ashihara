@@ -2,6 +2,7 @@ package kogasastudio.ashihara.client.models;// Made with Blockbench 3.5.4
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import kogasastudio.ashihara.client.render.AshiharaRenderTypes;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -10,11 +11,11 @@ import net.minecraft.client.renderer.RenderType;
 
 public class CandleModel extends Model
 {
-    private final ModelPart candle;
+    public final ModelPart candle;
 
     public CandleModel(ModelPart root)
     {
-        super(RenderType::entitySolid);
+        super(t -> AshiharaRenderTypes.CANDLE);
         this.candle = root.getChild("candle");
     }
 

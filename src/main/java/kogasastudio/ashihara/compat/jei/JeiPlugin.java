@@ -1,9 +1,7 @@
-package kogasastudio.ashihara.dependencies.jei;
+package kogasastudio.ashihara.compat.jei;
 
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.dependencies.jei.category.CuttingBoardRecipeCategory;
-import kogasastudio.ashihara.dependencies.jei.category.MillRecipeCategory;
-import kogasastudio.ashihara.dependencies.jei.category.MortarRecipeCategory;
+import kogasastudio.ashihara.compat.jei.category.CuttingBoardRecipeCategory;
 import kogasastudio.ashihara.interaction.recipes.CuttingBoardRecipe;
 import kogasastudio.ashihara.interaction.recipes.MillRecipe;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;

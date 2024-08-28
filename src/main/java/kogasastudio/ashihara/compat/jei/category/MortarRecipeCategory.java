@@ -1,19 +1,4 @@
-package kogasastudio.ashihara.dependencies.jei.category;
-
-import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.dependencies.jei.JeiPlugin;
-import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
-import kogasastudio.ashihara.item.ItemRegistryHandler;
-import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
-import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.neoforge.NeoForgeTypes;
-import mezz.jei.api.recipe.IFocusGroup;
-import mezz.jei.api.recipe.RecipeIngredientRole;
-import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
+package kogasastudio.ashihara.compat.jei.category;
 
 /**
  * @author DustW

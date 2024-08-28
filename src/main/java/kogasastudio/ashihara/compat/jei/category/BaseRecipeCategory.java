@@ -1,4 +1,4 @@
-package kogasastudio.ashihara.dependencies.jei.category;
+package kogasastudio.ashihara.compat.jei.category;
 
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.recipe.RecipeType;

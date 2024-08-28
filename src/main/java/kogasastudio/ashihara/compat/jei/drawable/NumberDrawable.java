@@ -1,4 +1,4 @@
-package kogasastudio.ashihara.dependencies.jei.drawable;
+package kogasastudio.ashihara.compat.jei.drawable;
 
 import mezz.jei.api.gui.drawable.IDrawable;
 import net.minecraft.client.Minecraft;

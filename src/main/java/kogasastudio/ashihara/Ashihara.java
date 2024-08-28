@@ -53,14 +53,14 @@ public class Ashihara
 
         RecipeManager.register(modEventBus);
     }
+
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS)
         {
             event.accept(ItemRegistryHandler.KOISHI);
             event.accept(ItemRegistryHandler.MINATO_AQUA);
-        }
-        else if (event.getTabKey().equals(CreativeModeTabs.FUNCTIONAL_BLOCKS))
+        } else if (event.getTabKey().equals(CreativeModeTabs.FUNCTIONAL_BLOCKS))
         {
             event.accept(ItemRegistryHandler.CHARLOTTE);
         }

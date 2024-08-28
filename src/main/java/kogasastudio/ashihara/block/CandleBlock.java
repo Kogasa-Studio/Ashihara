@@ -69,9 +69,8 @@ public class CandleBlock extends Block implements EntityBlock
     @Override
     public void playerDestroy(Level worldIn, Player player, BlockPos pos, BlockState state, BlockEntity te, ItemStack stack)
     {
-        if (state.getValue(MULTIPLE) && te instanceof CandleTE)
+        if (state.getValue(MULTIPLE) && te instanceof CandleTE candle)
         {
-            CandleTE candle = (CandleTE) te;
             int amount = candle.pickCandle(true, worldIn, pos);
             if (amount == 0) return;
 
@@ -100,10 +99,10 @@ public class CandleBlock extends Block implements EntityBlock
             if (amount == 0) return InteractionResult.PASS;
             pPlayer.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ItemRegistryHandler.CANDLE.get(), amount));
         }
-        else
+        else if (pState.getValue(LIT))
         {
             pLevel.playSound(pPlayer, pPos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
-            pLevel.setBlockAndUpdate(pPos, pState.setValue(LIT, true));
+            pLevel.setBlockAndUpdate(pPos, pState.setValue(LIT, false));
         }
         return InteractionResult.SUCCESS;
     }
