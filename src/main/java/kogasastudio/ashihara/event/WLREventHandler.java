@@ -57,10 +57,10 @@ public class WLREventHandler
                 if (blockEntity == null) continue;
 
                 BlockEntityRenderDispatcher dispatcher = Minecraft.getInstance().getBlockEntityRenderDispatcher();
-                //BlockEntityRenderer<BlockEntity> renderer = dispatcher.getRenderer(blockEntity);
+                BlockEntityRenderer<BlockEntity> renderer = dispatcher.getRenderer(blockEntity);
                 Vec3 cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
 
-                if (blockEntity instanceof WithLevelRenderer<?> r /*&& r.needRender(cast(blockEntity), cameraPos)*/)
+                if (renderer instanceof WithLevelRenderer<?> r /*&& r.needRender(cast(blockEntity), cameraPos)*/)
                 {
                     r.renderStatic(new SectionRenderContext(region, pos, blockEntity, context.getPoseStack(), null, null, null, null, context::getOrCreateChunkBuffer));
                 }

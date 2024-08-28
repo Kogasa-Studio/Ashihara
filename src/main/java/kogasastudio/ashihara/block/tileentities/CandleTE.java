@@ -38,11 +38,10 @@ import net.neoforged.neoforge.client.event.AddSectionGeometryEvent;
 
 import static kogasastudio.ashihara.helper.MathHelper.simplifyDouble;
 
-public class CandleTE extends AshiharaMachineTE implements WithLevelRenderer<CandleTE>
+public class CandleTE extends AshiharaMachineTE
 {
     private final NonNullList<double[]> posList = NonNullList.create();
     private final BlockState state = BlockRegistryHandler.CANDLE.get().defaultBlockState();
-    public static final CandleModel candleSingle = new CandleModel(Minecraft.getInstance().getEntityModels().bakeLayer(LayerRegistryHandler.CANDLE));
 
     public CandleTE(BlockPos pos, BlockState state)
     {
@@ -146,59 +145,5 @@ public class CandleTE extends AshiharaMachineTE implements WithLevelRenderer<Can
     public NonNullList<double[]> getPosList()
     {
         return this.posList;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public void renderStatic(SectionRenderContext context)
-    {
-        BlockEntity be = context.blockEntity();
-        if (!(be instanceof CandleTE tileEntityIn)) return;
-        BlockPos pos = context.pos();
-
-        //RandomSource pRandom = tileEntityIn.getLevel() == null ? Ashihara.getRandom() : be.getLevel().getRandom();
-        //BlockState pState = tileEntityIn.getBlockState();
-        //long pSeed = pState.getSeed(pos);
-        PoseStack matrixStackIn = context.poseStack();
-
-        int combinedLightIn = getPackedLight();
-
-        for (double[] d : tileEntityIn.getPosList())
-        {
-            double x = d[0];
-            double z = d[1];
-            double y = d[2];
-
-            matrixStackIn.pushPose();
-            resetToBlock000(AshiharaRenderTypes.CANDLE, matrixStackIn);
-            //GlStateManager._enableBlend();
-            matrixStackIn.translate(x, y + 1.5d, z);
-            matrixStackIn.mulPose(Axis.XP.rotationDegrees(180));
-            VertexConsumer consumer = context.consumerFunction() == null ? createMultiBufferSource(context, AshiharaRenderTypes.CANDLE).getBuffer(AshiharaRenderTypes.CANDLE) : context.consumerFunction().apply(AshiharaRenderTypes.CANDLE);//createMultiBufferSource(RenderType.solid()).getBuffer(RenderType.solid());
-            //BakedModel model = BakedModels.bake(new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "builtin"), "candle"), new UnbakedModelPart(candleSingle.candle, new Material(InventoryMenu.BLOCK_ATLAS, ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "block/candle_java"))));
-            /*if (ModList.get().isLoaded("sodium"))
-            {
-            }*/
-            //TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "block/candle_java"));
-            //consumer = sprite.wrap(consumer);
-
-            /*QuadLighter lighter = context.getQuadLighter(true);
-            lighter.setup(context.getRegion(), pos, pState);
-            for (Direction direction : DIRECTIONS)
-            {
-                pRandom.setSeed(pSeed);
-                List<BakedQuad> list = model.getQuads(pState, direction, pRandom, ModelData.EMPTY, RenderType.solid());
-                if (!list.isEmpty())
-                {
-                    list.forEach(bakedQuad -> lighter.process(consumer, matrixStackIn.last(), bakedQuad, OverlayTexture.NO_OVERLAY));
-                }
-            }*/
-
-            //Minecraft.getInstance().getBlockRenderer().getModelRenderer().tesselateWithoutAO(context.getRegion(), model, be.getBlockState(), pos, matrixStackIn, consumer, true, be.getLevel().random, be.getBlockState().getSeed(pos), OverlayTexture.NO_OVERLAY, ModelData.EMPTY, RenderType.solid());
-            //BakedModels.render(matrixStackIn.last(), consumer, model, RenderType.solid(), be.getBlockState(), combinedLightIn);
-            //LightPipelineAwareModelBlockRenderer.render(consumer, lighter, context.getRegion(), model, pState, pos, matrixStackIn, true, pRandom, pSeed, OverlayTexture.NO_OVERLAY, ModelData.EMPTY, RenderType.solid());
-            candleSingle.renderToBuffer(matrixStackIn, consumer, combinedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFF);
-            matrixStackIn.popPose();
-        }
     }
 }

@@ -23,14 +23,11 @@ public interface WithLevelRenderer<T extends BlockEntity>
         return false;
     }
 
-    default int getPackedLight()
+    default int getPackedLight(BlockEntity be)
     {
-        T be = cast();
         if (be == null || be.getLevel() == null) return 0;
         return LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos());
     }
-
-    default T cast() {return (T)this;}
 
     default MultiBufferSource createMultiBufferSource(SectionRenderContext context, RenderType... types)
     {
@@ -71,9 +68,9 @@ public interface WithLevelRenderer<T extends BlockEntity>
     }
 
     @OnlyIn(Dist.CLIENT)
-    default void resetToBlock000(RenderType renderType, PoseStack poseStack)
+    default void resetToBlock000(BlockEntity be, RenderType renderType, PoseStack poseStack)
     {
-        resetToBlock000(cast().getBlockPos(), renderType, poseStack);
+        resetToBlock000(be.getBlockPos(), renderType, poseStack);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -83,8 +80,7 @@ public interface WithLevelRenderer<T extends BlockEntity>
         if (isBasicRenderType(renderType) || ModList.get().isLoaded("sodium"))
         {
             poseStack.translate(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
-        }
-        else
+        } else
         {
             poseStack.translate(pos.getX(), pos.getY(), pos.getZ());
         }
