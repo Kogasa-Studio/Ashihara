@@ -1,6 +1,7 @@
 package kogasastudio.ashihara;
 
 import com.mojang.logging.LogUtils;
+//import io.github.tt432.eyelib.client.render.visitor.BuiltInBrModelRenderVisitors;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.block.tileentities.TERegistryHandler;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
@@ -52,6 +53,8 @@ public class Ashihara
         WorldGenEventRegistryHandler.CONFIGURED_FEATURE.register(modEventBus);
 
         RecipeManager.register(modEventBus);
+
+        //BuiltInBrModelRenderVisitors.VISITORS.register(modEventBus);
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event)

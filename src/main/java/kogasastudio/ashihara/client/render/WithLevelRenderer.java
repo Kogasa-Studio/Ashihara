@@ -29,34 +29,6 @@ public interface WithLevelRenderer<T extends BlockEntity>
         return LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos());
     }
 
-    default MultiBufferSource createMultiBufferSource(SectionRenderContext context, RenderType... types)
-    {
-        SimpleMultiBufferSource multiBufferSource = new SimpleMultiBufferSource();
-        for (RenderType type : types)
-        {
-            multiBufferSource.putBuffer(getBufferBuilder(context, type), type);
-        }
-        return multiBufferSource;
-    }
-
-    default BufferBuilder getBufferBuilder(SectionRenderContext context, RenderType type)
-    {
-        return getOrBeginLayer(context.bufferBuilders(), context.builderPack(), type);
-    }
-
-    default BufferBuilder getOrBeginLayer(Map<RenderType, BufferBuilder> map, SectionBufferBuilderPack pack, RenderType type)
-    {
-        BufferBuilder bufferbuilder = map.get(type);
-        if (bufferbuilder == null)
-        {
-            ByteBufferBuilder bytebufferbuilder = pack.buffer(type);
-            bufferbuilder = new BufferBuilder(bytebufferbuilder, type.mode(), type.format());
-            map.put(type, bufferbuilder);
-        }
-
-        return bufferbuilder;
-    }
-
     @OnlyIn(Dist.CLIENT)
     static boolean isBasicRenderType(RenderType renderType)
     {

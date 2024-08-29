@@ -25,7 +25,23 @@ public class MixinDefaultTerrainRenderPasses
     @Inject(method = "<clinit>", at = @At(value = "FIELD", target = "Lnet/caffeinemc/mods/sodium/client/render/chunk/terrain/DefaultTerrainRenderPasses;SOLID:Lnet/caffeinemc/mods/sodium/client/render/chunk/terrain/TerrainRenderPass;"))
     private static void onInit(CallbackInfo ci)
     {
+        for (RenderType type : AshiharaRenderTypes.AFTER_SKY)
+        {
+            ASHIHARA_PASSES.put(type, new TerrainRenderPass(type, false, false));
+        }
         for (RenderType type : AshiharaRenderTypes.AFTER_ENTITIES)
+        {
+            ASHIHARA_PASSES.put(type, new TerrainRenderPass(type, false, false));
+        }
+        for (RenderType type : AshiharaRenderTypes.AFTER_BLOCK_ENTITIES)
+        {
+            ASHIHARA_PASSES.put(type, new TerrainRenderPass(type, false, true));
+        }
+        for (RenderType type : AshiharaRenderTypes.AFTER_PARTICLES)
+        {
+            ASHIHARA_PASSES.put(type, new TerrainRenderPass(type, true, false));
+        }
+        for (RenderType type : AshiharaRenderTypes.AFTER_WEATHER)
         {
             ASHIHARA_PASSES.put(type, new TerrainRenderPass(type, false, false));
         }

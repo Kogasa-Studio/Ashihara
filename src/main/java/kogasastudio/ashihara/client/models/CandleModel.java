@@ -7,7 +7,6 @@ import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.RenderType;
 
 public class CandleModel extends Model
 {
@@ -15,7 +14,7 @@ public class CandleModel extends Model
 
     public CandleModel(ModelPart root)
     {
-        super(t -> AshiharaRenderTypes.CANDLE);
+        super(t -> AshiharaRenderTypes.CHUNK_ENTITY_SOLID);
         this.candle = root.getChild("candle");
     }
 

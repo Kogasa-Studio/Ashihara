@@ -15,10 +15,12 @@ import java.io.IOException;
 public class Shaders
 {
     public static ShaderInstance CHUNK_ENTITY_SOLID;
+    public static ShaderInstance CHUNK_ENTITY_CUTOUT_TRANSLUCENT;
 
     @SubscribeEvent
     public static void onRegisterShaders(RegisterShadersEvent event) throws IOException
     {
         event.registerShader(new ShaderInstance(event.getResourceProvider(), ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "chunk_entity_solid"), DefaultVertexFormat.BLOCK), shaderInstance -> CHUNK_ENTITY_SOLID = shaderInstance);
+        event.registerShader(new ShaderInstance(event.getResourceProvider(), ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "chunk_entity_cutout_translucent"), DefaultVertexFormat.BLOCK), shaderInstance -> CHUNK_ENTITY_CUTOUT_TRANSLUCENT = shaderInstance);
     }
 }

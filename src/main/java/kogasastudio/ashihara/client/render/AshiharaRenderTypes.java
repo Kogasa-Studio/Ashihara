@@ -3,11 +3,8 @@ package kogasastudio.ashihara.client.render;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.registry.Shaders;
-import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 
 import java.util.HashMap;
@@ -18,18 +15,50 @@ import static net.minecraft.client.renderer.RenderStateShard.*;
 
 public class AshiharaRenderTypes
 {
-    public static final RenderType CANDLE = RenderType.create
+    public static final RenderType CHUNK_ENTITY_SOLID = RenderType.create
     (
-        "chick",
+        "chunk_entity_solid",
         DefaultVertexFormat.BLOCK,
         VertexFormat.Mode.QUADS,
-        786432,
+        4194304,
         false,
         true,
         RenderType.CompositeState.builder()
         .setLightmapState(LIGHTMAP)
         .setShaderState(new ShaderStateShard(() -> Shaders.CHUNK_ENTITY_SOLID))
-        .setTextureState(new RenderStateShard.TextureStateShard(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/block/candle_java.png"), false, false))
+        .setTextureState(BLOCK_SHEET_MIPPED/*new RenderStateShard.TextureStateShard(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/block/candle_java.png"), false, false)*/)
+        .createCompositeState(true)
+    );
+
+    public static final RenderType CHUNK_ENTITY_CUTOUT_MIPPED = RenderType.create
+    (
+        "chunk_cutout_mipped",
+        DefaultVertexFormat.BLOCK,
+        VertexFormat.Mode.QUADS,
+        4194304,
+        true,
+        false,
+        RenderType.CompositeState.builder()
+        .setLightmapState(LIGHTMAP)
+        .setShaderState(new ShaderStateShard(() -> Shaders.CHUNK_ENTITY_CUTOUT_TRANSLUCENT))
+        .setTextureState(BLOCK_SHEET_MIPPED)
+        .createCompositeState(true)
+    );
+
+    public static final RenderType CHUNK_ENTITY_TRANSLUCENT = RenderType.create
+    (
+        "chunk_cutout_translucent",
+        DefaultVertexFormat.BLOCK,
+        VertexFormat.Mode.QUADS,
+        786432,
+        true,
+        true,
+        RenderType.CompositeState.builder()
+        .setLightmapState(LIGHTMAP)
+        .setShaderState(new ShaderStateShard(() -> Shaders.CHUNK_ENTITY_CUTOUT_TRANSLUCENT))
+        .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+        .setTextureState(BLOCK_SHEET_MIPPED)
+        .setOutputState(TRANSLUCENT_TARGET)
         .createCompositeState(true)
     );
 
@@ -44,7 +73,11 @@ public class AshiharaRenderTypes
 
     static
     {
-        AFTER_ENTITIES.add(CANDLE);
+        AFTER_ENTITIES.add(CHUNK_ENTITY_SOLID);
+
+        AFTER_BLOCK_ENTITIES.add(CHUNK_ENTITY_CUTOUT_MIPPED);
+
+        AFTER_PARTICLES.add(CHUNK_ENTITY_TRANSLUCENT);
 
         ALL.addAll(AFTER_SKY);
         ALL.addAll(AFTER_ENTITIES);
