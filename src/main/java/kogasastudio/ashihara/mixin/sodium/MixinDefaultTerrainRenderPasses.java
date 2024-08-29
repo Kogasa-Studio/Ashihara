@@ -22,28 +22,34 @@ public class MixinDefaultTerrainRenderPasses
 {
     @Mutable @Shadow @Final public static TerrainRenderPass[] ALL;
 
+    @Shadow @Final public static TerrainRenderPass SOLID;
+
+    @Shadow @Final public static TerrainRenderPass CUTOUT;
+
+    @Shadow @Final public static TerrainRenderPass TRANSLUCENT;
+
     @Inject(method = "<clinit>", at = @At(value = "FIELD", target = "Lnet/caffeinemc/mods/sodium/client/render/chunk/terrain/DefaultTerrainRenderPasses;SOLID:Lnet/caffeinemc/mods/sodium/client/render/chunk/terrain/TerrainRenderPass;"))
     private static void onInit(CallbackInfo ci)
     {
         for (RenderType type : AshiharaRenderTypes.AFTER_SKY)
         {
-            ASHIHARA_PASSES.put(type, new TerrainRenderPass(type, false, false));
+            ASHIHARA_PASSES.put(type, SOLID/*new TerrainRenderPass(type, false, false)*/);
         }
         for (RenderType type : AshiharaRenderTypes.AFTER_ENTITIES)
         {
-            ASHIHARA_PASSES.put(type, new TerrainRenderPass(type, false, false));
+            ASHIHARA_PASSES.put(type, SOLID/*new TerrainRenderPass(type, false, false)*/);
         }
         for (RenderType type : AshiharaRenderTypes.AFTER_BLOCK_ENTITIES)
         {
-            ASHIHARA_PASSES.put(type, new TerrainRenderPass(type, false, true));
+            ASHIHARA_PASSES.put(type, CUTOUT/*new TerrainRenderPass(type, false, true)*/);
         }
         for (RenderType type : AshiharaRenderTypes.AFTER_PARTICLES)
         {
-            ASHIHARA_PASSES.put(type, new TerrainRenderPass(type, true, false));
+            ASHIHARA_PASSES.put(type, TRANSLUCENT/*new TerrainRenderPass(type, true, false)*/);
         }
         for (RenderType type : AshiharaRenderTypes.AFTER_WEATHER)
         {
-            ASHIHARA_PASSES.put(type, new TerrainRenderPass(type, false, false));
+            ASHIHARA_PASSES.put(type, TRANSLUCENT/*new TerrainRenderPass(type, false, false)*/);
         }
     }
 
