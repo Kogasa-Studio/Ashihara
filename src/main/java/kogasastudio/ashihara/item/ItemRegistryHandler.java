@@ -3,12 +3,10 @@ package kogasastudio.ashihara.item;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
-import kogasastudio.ashihara.item.block.ItemBlockBeam;
-import kogasastudio.ashihara.item.block.ItemBlockCandle;
-import kogasastudio.ashihara.item.block.ItemBlockDouble;
-import kogasastudio.ashihara.item.block.ItemBlockPail;
+import kogasastudio.ashihara.item.block.*;
 import kogasastudio.ashihara.item.foods.EasyFood;
 import kogasastudio.ashihara.item.foods.ItemDirtBallDon;
+import kogasastudio.ashihara.registry.BuildingComponents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
@@ -127,11 +125,14 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> RED_ADVANCED_FENCE = ITEMS.register("advanced_red_fence", () -> new BlockItem(BlockRegistryHandler.RED_ADVANCED_FENCE.get(), new Item.Properties()));
     public static final DeferredItem<Item> SPRUCE_ADVANCED_FENCE = ITEMS.register("advanced_spruce_fence", () -> new BlockItem(BlockRegistryHandler.SPRUCE_ADVANCED_FENCE.get(), new Item.Properties()));
     public static final DeferredItem<Item> RED_THICK_COLUMN = ITEMS.register("red_thick_column", () -> new BlockItem(BlockRegistryHandler.RED_THICK_COLUMN.get(), new Item.Properties()));
+    public static final DeferredItem<Item> RED_THIN_BEAM = ITEMS.register("red_thin_beam", ItemBlockBeam::new);
     public static final DeferredItem<Item> RED_KUMINONO = ITEMS.register("red_kumimono", () -> new BlockItem(BlockRegistryHandler.RED_KUMIMONO.get(), new Item.Properties()));
     public static final DeferredItem<Item> RED_KAWAKI = ITEMS.register("red_kawaki", () -> new BlockItem(BlockRegistryHandler.RED_KAWAKI.get(), new Item.Properties()));
     public static final DeferredItem<Item> THIN_WHITE_SOIL_WALL = ITEMS.register("thin_white_soil_wall", () -> new BlockItem(BlockRegistryHandler.THIN_WHITE_SOIL_WALL.get(), new Item.Properties()));
     public static final DeferredItem<Item> STRAIGHT_BAR_WINDOW_GREEN = ITEMS.register("straight_bar_window_green", () -> new BlockItem(BlockRegistryHandler.STRAIGHT_BAR_WINDOW_GREEN.get(), new Item.Properties()));
-    public static final DeferredItem<Item> RED_BEAM = ITEMS.register("red_beam", ItemBlockBeam::new);
+
+    public static final DeferredItem<Item> MULTI_RED_THICK_COLUMN = ITEMS.register("multi_red_thick_column", () -> new BuildingComponentItem(BuildingComponents.RED_THICK_COLUMN));
+    public static final DeferredItem<Item> RED_BEAM = ITEMS.register("red_beam", () -> new BuildingComponentItem(BuildingComponents.RED_BEAM));
 
     //灯具
     public static final DeferredItem<Item> LANTERN_LONG_WHITE = ITEMS.register("lantern_long_white", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), new Item.Properties()));

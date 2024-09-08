@@ -69,6 +69,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.RED_THICK_COLUMN.get());
                                         output.accept(ItemRegistryHandler.RED_KUMINONO.get());
                                         output.accept(ItemRegistryHandler.RED_KAWAKI.get());
+                                        output.accept(ItemRegistryHandler.RED_THIN_BEAM.get());
                                         output.accept(ItemRegistryHandler.RED_BEAM.get());
                                         output.accept(ItemRegistryHandler.THIN_WHITE_SOIL_WALL.get());
                                         output.accept(ItemRegistryHandler.STRAIGHT_BAR_WINDOW_GREEN.get());
@@ -82,6 +83,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.CANDLESTICK.get());
                                         output.accept(ItemRegistryHandler.OIL_PLATE_STICK.get());
                                         output.accept(ItemRegistryHandler.TATAMI.get());
+                                        output.accept(ItemRegistryHandler.MULTI_RED_THICK_COLUMN.get());
                                         output.accept(ItemRegistryHandler.DIRT_DEPRESSION.get());
                                         output.accept(ItemRegistryHandler.WATER_FIELD.get());
                                     })).build()

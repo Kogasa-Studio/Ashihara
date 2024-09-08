@@ -32,14 +32,13 @@ public class ColumnBlock extends Block implements IVariable<AshiharaWoodTypes>, 
 
     public ColumnBlock(AshiharaWoodTypes typeIn)
     {
-
         this
         (
-                Properties.of()
-                        .mapColor(MapColor.WOOD)
-                        .strength(1.5F)
-                        .sound(SoundType.WOOD),
-                typeIn
+            Properties.of()
+            .mapColor(MapColor.WOOD)
+            .strength(1.5F)
+            .sound(SoundType.WOOD),
+            typeIn
         );
     }
 

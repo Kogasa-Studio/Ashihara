@@ -1,25 +1,5 @@
 package kogasastudio.ashihara.client.render.ter;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
-import kogasastudio.ashihara.block.tileentities.MortarTE;
-import kogasastudio.ashihara.client.render.AshiharaAtlas;
-import kogasastudio.ashihara.helper.RenderHelper;
-import kogasastudio.ashihara.utils.AshiharaTags;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.item.ItemStack;
-import org.joml.Matrix4f;
-
-import static kogasastudio.ashihara.block.MortarBlock.FACING;
-import static kogasastudio.ashihara.helper.RenderHelper.XTP;
 import static kogasastudio.ashihara.helper.RenderHelper.buildMatrix;
 
 public class MortarTER //implements BlockEntityRenderer<MortarTE>

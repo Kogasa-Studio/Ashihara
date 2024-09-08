@@ -1,0 +1,32 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"0": "ashihara:block/woodcrafts/red_beam",
+		"particle": "ashihara:block/woodcrafts/red_beam"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 5],
+			"to": [16, 8, 11],
+			"faces": {
+				"north": {"uv": [4, 0, 12, 16], "rotation": 90, "texture": "#0"},
+				"south": {"uv": [4, 0, 12, 16], "rotation": 90, "texture": "#0"},
+				"west": {"uv": [5, 4, 11, 12], "texture": "#0"},
+				"up": {"uv": [5, 0, 11, 16], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [5, 0, 11, 16], "rotation": 90, "texture": "#0"}
+			}
+		},
+		{
+			"from": [16, 0, 5],
+			"to": [24, 8, 11],
+			"faces": {
+				"north": {"uv": [4, 0, 12, 8], "rotation": 90, "texture": "#0"},
+				"east": {"uv": [5, 0, 11, 8], "texture": "#0"},
+				"south": {"uv": [4, 0, 12, 8], "rotation": 90, "texture": "#0"},
+				"up": {"uv": [5, 0, 11, 8], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [5, 0, 11, 8], "rotation": 90, "texture": "#0"}
+			}
+		}
+	]
+}

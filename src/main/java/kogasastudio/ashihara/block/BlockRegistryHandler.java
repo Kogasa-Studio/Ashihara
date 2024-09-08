@@ -1,10 +1,7 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.block.building.AbstractBeamBlock;
-import kogasastudio.ashihara.block.building.ColumnBlock;
-import kogasastudio.ashihara.block.building.AbstractWallBlock;
-import kogasastudio.ashihara.block.building.StraightBarWindowBlock;
+import kogasastudio.ashihara.block.building.*;
 import kogasastudio.ashihara.block.trees.TreeGrowers;
 import kogasastudio.ashihara.block.woodcrafts.*;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
@@ -299,7 +296,7 @@ public class BlockRegistryHandler
     });
     public static final DeferredBlock<Block> CANDLE = BLOCKS.register("candle", CandleBlock::new);
     public static final DeferredBlock<Block> TATAMI = BLOCKS.register("tatami", TatamiBlock::new);
-    public static final DeferredBlock<Block> RED_BEAM = BLOCKS.register("red_beam", () -> new AbstractBeamBlock()
+    public static final DeferredBlock<Block> RED_THIN_BEAM = BLOCKS.register("red_thin_beam", () -> new AbstractBeamBlock()
     {
         @Override
         public AshiharaWoodTypes getType()
@@ -310,9 +307,10 @@ public class BlockRegistryHandler
         @Override
         public Item getBeam()
         {
-            return ItemRegistryHandler.RED_BEAM.get();
+            return ItemRegistryHandler.RED_THIN_BEAM.get();
         }
     });
+    public static final DeferredBlock<Block> MULTI_BUILT_BLOCK = BLOCKS.register("multi_built_block", BaseMultiBuiltBlock::new);
 
     //作物
     public static final DeferredBlock<Block> SOY_BEANS = BLOCKS.register("soy_beans", () -> new AbstractCropAge7Pickable(7, 3)

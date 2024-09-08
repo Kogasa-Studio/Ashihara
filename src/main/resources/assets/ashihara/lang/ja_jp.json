@@ -61,6 +61,7 @@
   "item.ashihara.diamond_otsuchi": "鑽石の大槌",
   "item.ashihara.soy_milk_bucket": "豆乳の樽",
   "item.ashihara.oil_bucket": "油の樽",
+  "item.ashihara.red_beam": "赤い梁",
   "block.ashihara.water_field": "水田",
   "block.ashihara.dirt_depression": "漥",
   "block.ashihara.immature_rice": "もやし",
@@ -125,7 +126,7 @@
   "block.ashihara.red_thick_column": "朱木の柱",
   "block.ashihara.red_kumimono": "朱木の組物",
   "block.ashihara.red_kawaki": "朱木の替木",
-  "block.ashihara.red_beam": "朱木の障子壁",
+  "block.ashihara.red_thin_beam": "高級障子壁",
   "block.ashihara.thin_white_soil_wall": "竹小舞土壁",
   "block.ashihara.straight_bar_window_green": "緑の縦桟窓",
   "block.ashihara.cypress_skin_block": "桧皮葺の塊",
@@ -139,6 +140,7 @@
   "block.ashihara.charlotte": "べべ",
   "block.ashihara.wild_rice": "野生の稲",
   "block.ashihara.rice_drying_sticks": "稲架",
+  "block.ashihara.multi_built_block": "建物の部件",
   "fluid.ashihara.soy_milk": "豆乳",
   "fluid.ashihara.soy_milk_flowing": "流れ豆乳",
   "fluid.ashihara.oil": "油",
@@ -153,5 +155,6 @@
   "tooltip.ashihara.pail_display": "§e§l樽: §n",
   "tooltip.ashihara.pail_empty_message": "    §7樽はまだ空です",
   "tooltip.ashihara.pail_fluid_existence": "    §7液体: ",
-  "tooltip.ashihara.fluid_existence": "液体: "
+  "tooltip.ashihara.fluid_existence": "液体: ",
+  "block.ashihara.red_beam": "朱木の障子壁"
 }

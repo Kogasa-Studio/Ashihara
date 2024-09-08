@@ -30,41 +30,6 @@ import static com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_TEX_COLOR;
 
 public class RenderHelper
 {
-    /**
-     * 将像素坐标转换为方块内坐标
-     *
-     * @param pixels 像素坐标数值, 如5, 13
-     * @return 方块内坐标数值, 如0.625,  0.25
-     */
-    public static float XTP(float pixels)
-    {
-        return pixels / 16f;
-    }
-
-    /**
-     * 将方块内坐标转换为像素坐标
-     */
-    public static double PTX(double pos)
-    {
-        return pos * 16d;
-    }
-
-    /**
-     * 将世界内坐标转换为方块内坐标
-     */
-    public static double ATP(double absolutePos)
-    {
-        return absolutePos - Math.abs(absolutePos);
-    }
-
-    /**
-     * 将世界内坐标转换为像素坐标
-     */
-    public static double ATX(double absolutePos)
-    {
-        return PTX(ATP(absolutePos));
-    }
-
     //贴图半透明部分渲染黑色
     public static void buildMatrix(Matrix4f matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int overlay, int light)
     {

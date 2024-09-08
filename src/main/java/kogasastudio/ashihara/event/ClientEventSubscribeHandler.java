@@ -120,6 +120,7 @@ public class ClientEventSubscribeHandler
         //event.registerBlockEntityRenderer(TERegistryHandler.MILL_TE.get(), MillTER::new);
         event.registerBlockEntityRenderer(TERegistryHandler.PAIL_TE.get(), PailTER::new);
         event.registerBlockEntityRenderer(TERegistryHandler.CANDLE_TE.get(), CandleTER::new);
+        event.registerBlockEntityRenderer(TERegistryHandler.MULTI_BUILT_BLOCKENTITY.get(), MultiBuiltBlockRenderer::new);
         //event.registerBlockEntityRenderer(TERegistryHandler.MORTAR_TE.get(), MortarTER::new);
         event.registerBlockEntityRenderer(TERegistryHandler.CUTTING_BOARD_TE.get(), CuttingBoardTER::new);
     }
@@ -156,13 +157,19 @@ public class ClientEventSubscribeHandler
 
     // Register client extensions, changed due to the deprecation of initializeClient in NeoForge 1.21.
     @SubscribeEvent
-    public static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
-        event.registerItem(new IClientItemExtensions() {
-            @Override
-            public @NotNull BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                return new PailISTER(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
-            }
-        }, ItemRegistryHandler.PAIL.get());
+    public static void onRegisterClientExtensions(RegisterClientExtensionsEvent event)
+    {
+        event.registerItem
+        (
+            new IClientItemExtensions()
+            {
+                @Override
+                public @NotNull BlockEntityWithoutLevelRenderer getCustomRenderer()
+                {
+                    return new PailISTER(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
+                }
+            }, ItemRegistryHandler.PAIL.get()
+        );
 
         event.registerItem(new IClientItemExtensions() {
             @Override
@@ -180,11 +187,13 @@ public class ClientEventSubscribeHandler
         event.registerFluidType(createClientFluidTypeExtension(FastColor.ARGB32.color(255, 246, 223, 12)), FluidRegistryHandler.AshiharaFluidTypes.TYPE_OIL.get());
     }
 
-    private static IClientFluidTypeExtensions createClientFluidTypeExtension(int color) {
+    private static IClientFluidTypeExtensions createClientFluidTypeExtension(int color)
+    {
         return createClientFluidTypeExtension(FluidRegistryHandler.WATER_STILL, FluidRegistryHandler.WATER_FLOW, FluidRegistryHandler.WATER_OVERLAY, FluidRegistryHandler.UNDERWATER_LOCATION, color);
     }
 
-    private static IClientFluidTypeExtensions createClientFluidTypeExtension(@Nullable ResourceLocation still, @Nullable ResourceLocation flowing, @Nullable ResourceLocation overlay, @Nullable ResourceLocation renderOverlay, int color) {
+    private static IClientFluidTypeExtensions createClientFluidTypeExtension(@Nullable ResourceLocation still, @Nullable ResourceLocation flowing, @Nullable ResourceLocation overlay, @Nullable ResourceLocation renderOverlay, int color)
+    {
         return new IClientFluidTypeExtensions() {
             @Override
             public int getTintColor() {

@@ -17,7 +17,7 @@ public class ItemBlockBeam extends BlockItem
 {
     public ItemBlockBeam()
     {
-        super(BlockRegistryHandler.RED_BEAM.get(), new Properties());
+        super(BlockRegistryHandler.RED_THIN_BEAM.get(), new Properties());
     }
 
     @Override

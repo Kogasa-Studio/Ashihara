@@ -55,6 +55,16 @@ public class TERegistryHandler
                     BlockRegistryHandler.CUTTING_BOARD.get()
                 ).build(null));
 
+    public static final Supplier<BlockEntityType<MultiBuiltBlockEntity>> MULTI_BUILT_BLOCKENTITY = TILE_ENTITIES.register
+    (
+        "multi_built_blockentity",
+        () -> BlockEntityType.Builder.of
+        (
+            MultiBuiltBlockEntity::new,
+            BlockRegistryHandler.CUTTING_BOARD.get()
+        ).build(null)
+    );
+
     /*public static final Supplier<BlockEntityType<MealTableTE>> MEAL_TABLE_TE = TILE_ENTITIES.register("meal_table_tileentity",
             () -> BlockEntityType.Builder.of
                 (

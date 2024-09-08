@@ -2,6 +2,9 @@ package kogasastudio.ashihara.helper;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -120,5 +123,38 @@ public class ShapeHelper
             }
         );
         return operated[0];
+    }
+
+    public static VoxelShape readNBT(CompoundTag tag)
+    {
+        VoxelShape shape = Shapes.empty();
+        ListTag shapeTag = tag.getList("shape", 10);
+        for (Tag t : shapeTag)
+        {
+            CompoundTag c = (CompoundTag) t;
+            shape = Shapes.or(shape, Shapes.box(c.getDouble("x0"), c.getDouble("y0"), c.getDouble("z0"), c.getDouble("x1"), c.getDouble("y1"), c.getDouble("z1")));
+        }
+        return shape;
+    }
+
+    public static CompoundTag saveNBT(CompoundTag tag, VoxelShape shape)
+    {
+        ListTag shapeTag = new ListTag();
+        shape.forAllBoxes
+        (
+            (pMinX, pMinY, pMinZ, pMaxX, pMaxY, pMaxZ) ->
+            {
+                CompoundTag c = new CompoundTag();
+                c.putDouble("x0", pMinX);
+                c.putDouble("y0", pMinY);
+                c.putDouble("z0", pMinZ);
+                c.putDouble("x1", pMaxX);
+                c.putDouble("y1", pMaxY);
+                c.putDouble("z1", pMaxZ);
+                shapeTag.add(c);
+            }
+        );
+        tag.put("shape", shapeTag);
+        return tag;
     }
 }

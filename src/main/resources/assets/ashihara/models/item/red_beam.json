@@ -1,6 +1,3 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "ashihara:item/red_beam"
-  }
+  "parent": "ashihara:block/components/red_beam"
 }

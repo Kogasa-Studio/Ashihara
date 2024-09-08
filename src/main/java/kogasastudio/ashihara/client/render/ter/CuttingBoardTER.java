@@ -2,36 +2,25 @@ package kogasastudio.ashihara.client.render.ter;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.mojang.math.MatrixUtil;
 import kogasastudio.ashihara.block.tileentities.CuttingBoardTE;
-import kogasastudio.ashihara.block.tileentities.TERegistryHandler;
 import kogasastudio.ashihara.client.render.AshiharaRenderTypes;
 import kogasastudio.ashihara.client.render.SectionRenderContext;
 import kogasastudio.ashihara.client.render.WithLevelRenderer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.client.event.AddSectionGeometryEvent;
-
-import java.util.Optional;
 
 import static kogasastudio.ashihara.block.CuttingBoardBlock.FACING;
-import static kogasastudio.ashihara.helper.RenderHelper.XTP;
+import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 
 public class CuttingBoardTER implements BlockEntityRenderer<CuttingBoardTE>, WithLevelRenderer<CuttingBoardTE>
 {
