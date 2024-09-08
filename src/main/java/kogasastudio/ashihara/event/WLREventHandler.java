@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
@@ -52,6 +53,7 @@ public class WLREventHandler
 
             for (BlockPos pos : BlockPos.betweenClosed(posSource, posTarget))
             {
+                if (Minecraft.getInstance().level == null || !Minecraft.getInstance().level.isLoaded(pos)) continue;
                 BlockEntity blockEntity = region.getBlockEntity(pos);
 
                 if (blockEntity == null) continue;
