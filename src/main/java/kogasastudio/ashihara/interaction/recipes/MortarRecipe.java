@@ -7,7 +7,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import kogasastudio.ashihara.helper.DataHelper;
-import kogasastudio.ashihara.interaction.recipes.base.BaseRecipe;
+import kogasastudio.ashihara.interaction.recipes.base.WrappedRecipe;
 import kogasastudio.ashihara.interaction.recipes.register.RecipeSerializers;
 import kogasastudio.ashihara.interaction.recipes.register.RecipeTypes;
 import kogasastudio.ashihara.utils.json.serializer.FluidStackSerializer;

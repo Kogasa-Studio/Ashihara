@@ -1,44 +1,112 @@
 package kogasastudio.ashihara.block.tileentities;
 
-import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.helper.FluidHelper;
-import kogasastudio.ashihara.interaction.recipes.MillRecipe;
-import kogasastudio.ashihara.interaction.recipes.register.RecipeTypes;
-import kogasastudio.ashihara.inventory.container.GenericItemStackHandler;
-import kogasastudio.ashihara.inventory.container.MillContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
-import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+public class MillTE extends AshiharaMachineTE implements IItemHandler, IFluidHandler {
 
-import static net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE;
+    public MillTE(BlockEntityType<?> type, BlockPos pos, BlockState blockState) {
+        super(type, pos, blockState);
+    }
 
-public class MillTE // extends AshiharaMachineTE implements TickableTileEntity, MenuProvider, IFluidHandler
-{
+    private final static int INVENTORY_CAPACITY = 3;
+    private final static int MILLSTONE_SLOT_ID = 0;
+    private final static int INPUT_SLOT_ID = 1;
+    private final static int OUTPUT_SLOT_ID = 2;
+
+    private final static int TANK_CAPACITY = 2;
+    private final static int INPUT_TANK_ID = 0;
+    private final static int OUTPUT_TANK_ID = 1;
+
+    private final static float MAX_ANGULAR_VELOCITY = 5;
+
+    private boolean working = false;
+
+    private ItemStackHandler inventory = new ItemStackHandler(INVENTORY_CAPACITY);
+
+    private FluidStack inputTank = FluidStack.EMPTY;
+    private FluidStack outputTank = FluidStack.EMPTY;
+
+    private float angularVelocity = 0;
+    private float circle = 0;
+
+    @Override
+    public int getSlots() {
+        return inventory.getSlots();
+    }
+
+    @Override
+    public @NotNull ItemStack getStackInSlot(int slot) {
+        return inventory.getStackInSlot(slot);
+    }
+
+    @Override
+    public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+        return inventory.insertItem(slot, stack, simulate);
+    }
+
+    @Override
+    public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
+        return inventory.extractItem(slot, amount, simulate);
+    }
+
+    @Override
+    public int getSlotLimit(int slot) {
+        return inventory.getSlotLimit(slot);
+    }
+
+    @Override
+    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+        return inventory.isItemValid(slot, stack);
+    }
+
+    @Override
+    public int getTanks() {
+        return TANK_CAPACITY;
+    }
+
+    @Override
+    public @NotNull FluidStack getFluidInTank(int tank) {
+        return switch (tank) {
+            case INPUT_SLOT_ID -> inputTank;
+            default -> throw new IllegalStateException("Unexpected value: " + tank);
+        };
+    }
+
+    @Override
+    public int getTankCapacity(int tank) {
+        return 0;
+    }
+
+    @Override
+    public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
+        return false;
+    }
+
+    @Override
+    public int fill(@NotNull FluidStack resource, @NotNull FluidAction action) {
+        return 0;
+    }
+
+    @Override
+    public @NotNull FluidStack drain(@NotNull FluidStack resource, @NotNull FluidAction action) {
+        return null;
+    }
+
+    @Override
+    public @NotNull FluidStack drain(int maxDrain, @NotNull FluidAction action) {
+        return null;
+    }
+
     /*public GenericItemStackHandler input = new GenericItemStackHandler(4);
     public GenericItemStackHandler output = new GenericItemStackHandler(4);
 
