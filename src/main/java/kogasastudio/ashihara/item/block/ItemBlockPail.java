@@ -29,19 +29,6 @@ public class ItemBlockPail extends BlockItem
     }
 
     @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer)
-    {
-        consumer.accept(new IClientItemExtensions()
-        {
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer()
-            {
-                return new PailISTER(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
-            }
-        });
-    }
-
-    @Override
     public void appendHoverText(ItemStack stack, TooltipContext pContext, List<Component> tooltip, TooltipFlag flagIn)
     {
         super.appendHoverText(stack, pContext, tooltip, flagIn);

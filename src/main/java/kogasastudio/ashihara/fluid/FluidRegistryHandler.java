@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 
 public class FluidRegistryHandler
 {
-    private static final ResourceLocation UNDERWATER_LOCATION = ResourceLocation.withDefaultNamespace("textures/misc/underwater.png"),
+    public static final ResourceLocation UNDERWATER_LOCATION = ResourceLocation.withDefaultNamespace("textures/misc/underwater.png"),
             WATER_STILL = ResourceLocation.withDefaultNamespace("block/water_still"),
             WATER_FLOW = ResourceLocation.withDefaultNamespace("block/water_flow"),
             WATER_OVERLAY = ResourceLocation.withDefaultNamespace("block/water_overlay");
@@ -52,70 +52,33 @@ public class FluidRegistryHandler
     public static BaseFlowingFluid.Properties OIL_PROP = getBasicFluidProp(AshiharaFluidTypes.TYPE_OIL, OIL, OIL_FLOWING, BlockRegistryHandler.OIL_BLOCK, ItemRegistryHandler.OIL_BUCKET);
     //oil 168 244 233 132
 
-    public class AshiharaFluidTypes
+    public static class AshiharaFluidTypes
     {
         public static final DeferredRegister<FluidType> TYPES = DeferredRegister.create(NeoForgeRegistries.Keys.FLUID_TYPES, Ashihara.MODID);
 
-        public static final Supplier<FluidType> TYPE_SOY_MILK = TYPES.register
-                (
-                        "soy_milk", () -> createWaterLike("block.ashihara.soy_milk", WATER_STILL, WATER_FLOW, WATER_OVERLAY, UNDERWATER_LOCATION, FastColor.ARGB32.color(255, 255, 253, 225))
-                );
+        public static final Supplier<FluidType> TYPE_SOY_MILK = TYPES.register("soy_milk", () -> createWaterLike("block.ashihara.soy_milk"));
 
-        public static final Supplier<FluidType> TYPE_OIL = TYPES.register
-                (
-                        "oil", () -> createStandard("block.ashihara.oil", 970, 512, false, WATER_STILL, WATER_FLOW, WATER_OVERLAY, UNDERWATER_LOCATION, FastColor.ARGB32.color(255, 246, 223, 12))
-                );
+        public static final Supplier<FluidType> TYPE_OIL = TYPES.register("oil", () -> createStandard("block.ashihara.oil", 970, 512, false));
 
-        private static FluidType createWaterLike(String description, @Nullable ResourceLocation still, @Nullable ResourceLocation flowing, @Nullable ResourceLocation overlay, @Nullable ResourceLocation renderOverlay, int color)
+        private static FluidType createWaterLike(String description)
         {
-            return createStandard(description, 1024, 1024, true, still, flowing, overlay, renderOverlay, color);
+            return createStandard(description, 1024, 1024, true);
         }
 
-        private static FluidType createStandard(String description, int density, int viscosity, boolean canExtinguish, @Nullable ResourceLocation still, @Nullable ResourceLocation flowing, @Nullable ResourceLocation overlay, @Nullable ResourceLocation renderOverlay, int color)
+        private static FluidType createStandard(String description, int density, int viscosity, boolean canExtinguish)
         {
-            return new FluidType
-                (
-                        FluidType.Properties.create()
-                                .descriptionId(description)
-                                .density(density)
-                                .viscosity(viscosity)
-                                .canExtinguish(canExtinguish)
-                                .fallDistanceModifier(0f)
-                                .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
-                                .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
-                                .sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH)
-                                .canHydrate(false)
-                                .supportsBoating(true)
-                )
-            {
-                @Override
-                public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer)
-                {
-                    consumer.accept
-                    (
-                        new IClientFluidTypeExtensions()
-                        {
-                            @Override
-                            public int getTintColor() {return color;}
-
-                            @Override
-                            public ResourceLocation getStillTexture() {return still == null ? IClientFluidTypeExtensions.super.getStillTexture() : still;}
-
-                            @Override
-                            public ResourceLocation getFlowingTexture() {return flowing == null ? IClientFluidTypeExtensions.super.getFlowingTexture() : flowing;}
-
-                            @Override
-                            public @Nullable ResourceLocation getOverlayTexture() {return overlay == null ? IClientFluidTypeExtensions.super.getOverlayTexture() : overlay;}
-
-                            @Override
-                            public @Nullable ResourceLocation getRenderOverlayTexture(Minecraft mc)
-                            {
-                                return renderOverlay == null ? IClientFluidTypeExtensions.super.getRenderOverlayTexture(mc) : renderOverlay;
-                            }
-                        }
-                    );
-                }
-            };
+            return new FluidType(
+                    FluidType.Properties.create()
+                            .descriptionId(description)
+                            .density(density)
+                            .viscosity(viscosity)
+                            .canExtinguish(canExtinguish)
+                            .fallDistanceModifier(0f)
+                            .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
+                            .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)
+                            .sound(SoundActions.FLUID_VAPORIZE, SoundEvents.FIRE_EXTINGUISH)
+                            .canHydrate(false)
+                            .supportsBoating(true));
         }
     }
 }
