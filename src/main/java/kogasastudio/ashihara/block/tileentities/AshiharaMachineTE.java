@@ -11,35 +11,37 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
-public class AshiharaMachineTE extends BlockEntity
-{
+public abstract class AshiharaMachineTE extends BlockEntity {
 
-    public AshiharaMachineTE(BlockEntityType<?> type, BlockPos pos, BlockState state)
-    {
+    public AshiharaMachineTE(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
     @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider pRegistries)
-    {
+    public @NotNull CompoundTag getUpdateTag(@NotNull HolderLookup.Provider registries) {
         var result = new CompoundTag();
-        this.saveAdditional(result, pRegistries);
+        this.saveAdditional(result, registries);
         return result;
     }
 
-    // todo 将子类的 sync 提上来
-    protected final void sync()
-    {
-        if (this.level == null || this.level.isClientSide()) return;
-        var packet = ClientboundBlockEntityDataPacket.create(this);
-        ((ServerLevel) this.level).getChunkSource().chunkMap.getPlayers(new ChunkPos(this.worldPosition), false).forEach(k -> k.connection.send(packet));
+    /**
+     * Send update tag to client.
+     */
+    protected final void sync() {
+        if (this.level == null
+                || this.level.isClientSide()
+                || !(this.level instanceof ServerLevel serverLevel)) {
+            return;
+        }
+        var packet = this.getUpdatePacket();
+        serverLevel.getChunkSource().chunkMap.getPlayers(new ChunkPos(this.worldPosition), false)
+                .forEach(k -> k.connection.send(packet));
     }
 
-
     @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket()
-    {
+    public @NotNull Packet<ClientGamePacketListener> getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 }

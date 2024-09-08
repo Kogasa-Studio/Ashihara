@@ -3,7 +3,7 @@ package kogasastudio.ashihara.compat.jei;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.compat.jei.category.CuttingBoardRecipeCategory;
 import kogasastudio.ashihara.interaction.recipes.CuttingBoardRecipe;
-import kogasastudio.ashihara.interaction.recipes.MillRecipe;
+import kogasastudio.ashihara.interaction.recipes.mill.MillRecipe;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
 import kogasastudio.ashihara.interaction.recipes.register.RecipeTypes;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
