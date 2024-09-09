@@ -147,7 +147,7 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
         reloadShape();
         reloadOccupation();
         setChanged();
-        this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
+        if (this.hasLevel()) this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
     }
 
     public VoxelShape getShape()
@@ -163,28 +163,9 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
         ListTag models = pTag.getList("models", 10);
         for (Tag tag : models)
         {
-            CompoundTag model = (CompoundTag) tag;
-            BuildingComponent component = BuildingComponents.COMPONENTS.getOrDefault(model.getString("component"), null);
-            if (component == null) throw new RuntimeException("Error loading component: Component \"" + model.getString("component") + "\" does not exist!");
-            CompoundTag posTag = model.getCompound("inBlockPos");
-            Vec3 inBlockPos = new Vec3(posTag.getDouble("x"), posTag.getDouble("y"), posTag.getDouble("z"));
-            float rotation = model.getFloat("rotation");
-            VoxelShape shape = ShapeHelper.readNBT(model);
-            CompoundTag modelTag = model.getCompound("model");
-            BuildingComponentModelResourceLocation modelRL = new BuildingComponentModelResourceLocation(ResourceLocation.parse(modelTag.getString("id")), modelTag.getString("variant"));
-            List<Occupation> occupations = new ArrayList<>();
-            ListTag occupation = model.getList("occupation", 10);
-            for (Tag occupationTag : occupation)
-            {
-                CompoundTag occTag = (CompoundTag) occupationTag;
-                occupations.add(Occupation.OCCUPATION_MAP.get(occTag.getString("value")));
-            }
-            this.MODEL_STATES.add(new ModelStateDefinition(component, inBlockPos, rotation, shape, modelRL, occupations));
+            this.MODEL_STATES.add(ModelStateDefinition.deserializeNBT((CompoundTag) tag));
         }
-        reloadShape();
-        reloadOccupation();
-        setChanged();
-        if (this.hasLevel()) this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
+        refresh();
     }
 
     @Override
@@ -193,28 +174,7 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
         ListTag listTag = new ListTag();
         for (ModelStateDefinition definition : this.MODEL_STATES)
         {
-            CompoundTag tag = new CompoundTag();
-            tag.putString("component", definition.component().id);
-            CompoundTag posTag = new CompoundTag();
-            posTag.putDouble("x", definition.inBlockPos().x());
-            posTag.putDouble("y", definition.inBlockPos().y());
-            posTag.putDouble("z", definition.inBlockPos().z());
-            tag.put("inBlockPos", posTag);
-            tag.putFloat("rotation", definition.rotation());
-            ShapeHelper.saveNBT(tag, definition.shape());
-            ListTag occupationTag = new ListTag();
-            for (Occupation occupation : definition.occupation())
-            {
-                CompoundTag occTag = new CompoundTag();
-                occTag.putString("value", occupation.getId());
-                occupationTag.add(occTag);
-            }
-            CompoundTag modelTag = new CompoundTag();
-            modelTag.putString("id", definition.model().id().toString());
-            modelTag.putString("variant", definition.model().variant());
-            tag.put("model", modelTag);
-            tag.put("occupation", occupationTag);
-            listTag.add(tag);
+            listTag.add(definition.serializeNBT());
         }
         pTag.put("models", listTag);
         super.saveAdditional(pTag, pRegistries);
