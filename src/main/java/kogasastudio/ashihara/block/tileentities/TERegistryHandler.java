@@ -61,7 +61,7 @@ public class TERegistryHandler
         () -> BlockEntityType.Builder.of
         (
             MultiBuiltBlockEntity::new,
-            BlockRegistryHandler.CUTTING_BOARD.get()
+            BlockRegistryHandler.MULTI_BUILT_BLOCK.get()
         ).build(null)
     );
 
