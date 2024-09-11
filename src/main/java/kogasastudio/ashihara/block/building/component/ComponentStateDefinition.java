@@ -11,7 +11,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public record ComponentStateDefinition(BuildingComponent component, Vec3 inBlockPos, float rotation, VoxelShape shape, BuildingComponentModelResourceLocation model, List<Occupation> occupation)
@@ -69,7 +68,7 @@ public record ComponentStateDefinition(BuildingComponent component, Vec3 inBlock
         boolean componentEqual = component().equals(definition.component());
         boolean rotationEqual = rotation() == definition.rotation();
         boolean shapeEqual = definition.shape().bounds().equals(shape().bounds());
-        boolean occupationEqual = new HashSet<>(occupation()).containsAll(definition.occupation()) && new HashSet<>(definition.occupation()).containsAll(occupation());
+        boolean occupationEqual = occupation().hashCode() == definition.occupation().hashCode();
         return componentEqual && rotationEqual && shapeEqual && occupationEqual;
     }
 }

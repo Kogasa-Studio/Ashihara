@@ -57,7 +57,12 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
         {
             if (component instanceof AdditionalComponent additionalComponent)
             {
-                if (getComponentByPosition(inBlockVec(context.getClickLocation()), OPCODE_ADDITIONAL) == null || !getComponentByPosition(inBlockVec(context.getClickLocation()), OPCODE_ADDITIONAL).equals(definition))
+                boolean canAppend = true;
+                for (ComponentStateDefinition def : ADDITIONAL_COMPONENTS)
+                {
+                    if (def.occupation().hashCode() == definition.occupation().hashCode() && def.equals(definition)) canAppend = false;
+                }
+                if (canAppend)
                 {
                     this.ADDITIONAL_COMPONENTS.add(definition);
                     flag = true;

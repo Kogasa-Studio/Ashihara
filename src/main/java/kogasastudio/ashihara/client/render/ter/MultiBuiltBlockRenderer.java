@@ -28,11 +28,6 @@ public class MultiBuiltBlockRenderer implements BlockEntityRenderer<MultiBuiltBl
     }
 
     @Override
-    public void render(MultiBuiltBlockEntity tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
-    {
-    }
-
-    @Override
     public void renderStatic(SectionRenderContext context)
     {
         BlockEntity be = context.blockEntity();
@@ -62,6 +57,17 @@ public class MultiBuiltBlockRenderer implements BlockEntityRenderer<MultiBuiltBl
                 matrixStackIn.popPose();
             }
         }
+    }
+
+    @Override
+    public void render(MultiBuiltBlockEntity tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
+    {
+    }
+
+    @Override
+    public boolean shouldRender(MultiBuiltBlockEntity pBlockEntity, Vec3 pCameraPos)
+    {
+        return false;
     }
 
     private void translateCoordinateSystem(MultiBuiltBlockEntity be, PoseStack poseStack)
