@@ -6,7 +6,6 @@ import kogasastudio.ashihara.registry.BuildingComponents;
 import kogasastudio.ashihara.utils.BuildingComponentModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -15,7 +14,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
-import java.util.Map;
 
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 
@@ -50,7 +48,7 @@ public class Beam extends BuildingComponent implements Connectable
     }
 
     @Override
-    public ModelStateDefinition getModelDefinition(MultiBuiltBlockEntity beIn, UseOnContext context)
+    public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)
     {
         Direction direction = context.getHorizontalDirection();
         direction = beIn.fromAbsolute(direction);
@@ -77,7 +75,7 @@ public class Beam extends BuildingComponent implements Connectable
         if (r == 90) shape = ShapeHelper.rotateShape(shape, 90);
         if (y == XTP(8)) shape = ShapeHelper.offsetShape(shape, 0, 0.5, 0);
 
-        ModelStateDefinition init = new ModelStateDefinition
+        ComponentStateDefinition init = new ComponentStateDefinition
         (
             BuildingComponents.RED_BEAM,
             new Vec3(0, y, 0),
@@ -90,7 +88,7 @@ public class Beam extends BuildingComponent implements Connectable
     }
 
     @Override
-    public ModelStateDefinition applyConnection(MultiBuiltBlockEntity be, ModelStateDefinition definition)
+    public ComponentStateDefinition applyConnection(MultiBuiltBlockEntity be, ComponentStateDefinition definition)
     {
         if (be.getLevel() == null) return definition;
         if (!(definition.component() instanceof Beam)) throw new IllegalStateException("Wrong component type for connection");
@@ -136,6 +134,6 @@ public class Beam extends BuildingComponent implements Connectable
         if (r == 90) shape = ShapeHelper.rotateShape(shape, -90);
         if (definition.inBlockPos().y() == XTP(8)) shape = ShapeHelper.offsetShape(shape, 0, 0.5, 0);
 
-        return new ModelStateDefinition(definition.component(), definition.inBlockPos(), r, shape, rl, definition.occupation());
+        return new ComponentStateDefinition(definition.component(), definition.inBlockPos(), r, shape, rl, definition.occupation());
     }
 }

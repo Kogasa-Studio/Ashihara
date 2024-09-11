@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
-import kogasastudio.ashihara.block.building.component.ModelStateDefinition;
+import kogasastudio.ashihara.block.building.component.ComponentStateDefinition;
 import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.client.models.baked.BakedModels;
 import kogasastudio.ashihara.client.render.AshiharaRenderTypes;
@@ -42,7 +42,7 @@ public class MultiBuiltBlockRenderer implements BlockEntityRenderer<MultiBuiltBl
 
         int combinedLightIn = getPackedLight(be);
 
-        for (ModelStateDefinition model : tileEntityIn.getModels())
+        for (ComponentStateDefinition model : tileEntityIn.getComponents(MultiBuiltBlockEntity.OPCODE_READALL))
         {
             if (model.component().type.equals(BuildingComponents.Type.BAKED_MODEL))
             {

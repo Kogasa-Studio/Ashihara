@@ -1,10 +1,7 @@
 package kogasastudio.ashihara.block.tileentities;
 
 import kogasastudio.ashihara.block.building.*;
-import kogasastudio.ashihara.block.building.component.BuildingComponent;
-import kogasastudio.ashihara.block.building.component.Connectable;
-import kogasastudio.ashihara.block.building.component.ModelStateDefinition;
-import kogasastudio.ashihara.block.building.component.Occupation;
+import kogasastudio.ashihara.block.building.component.*;
 import kogasastudio.ashihara.helper.MathHelper;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
@@ -38,7 +35,12 @@ import static kogasastudio.ashihara.block.building.BaseMultiBuiltBlock.FACING;
 @SuppressWarnings("all")
 public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBuiltBlock
 {
-    public List<ModelStateDefinition> MODEL_STATES = new ArrayList<>();
+    public static final int OPCODE_COMPONENT = 0;
+    public static final int OPCODE_ADDITIONAL = 1;
+    public static final int OPCODE_READALL = 2;
+
+    public List<ComponentStateDefinition> COMPONENTS = new ArrayList<>();
+    public List<ComponentStateDefinition> ADDITIONAL_COMPONENTS = new ArrayList<>();
     private VoxelShape shapeCache = Shapes.empty();
     public List<Occupation> occupationCache = new ArrayList<>();
 
@@ -49,10 +51,26 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
 
     public boolean tryPlace(UseOnContext context, BuildingComponent component)
     {
-        ModelStateDefinition definition = component.getModelDefinition(this, context);
-        if (definition != null && Occupation.join(definition.occupation(), this.occupationCache))
+        boolean flag = false;
+        ComponentStateDefinition definition = component.definite(this, context);
+        if (definition != null)
         {
-            this.MODEL_STATES.add(definition);
+            if (component instanceof AdditionalComponent additionalComponent)
+            {
+                if (getComponentByPosition(inBlockVec(context.getClickLocation()), OPCODE_ADDITIONAL) == null || !getComponentByPosition(inBlockVec(context.getClickLocation()), OPCODE_ADDITIONAL).equals(definition))
+                {
+                    this.ADDITIONAL_COMPONENTS.add(definition);
+                    flag = true;
+                }
+            }
+            else if (Occupation.join(definition.occupation(), this.occupationCache))
+            {
+                this.COMPONENTS.add(definition);
+                flag = true;
+            }
+        }
+        if (flag)
+        {
             refresh();
             SoundEvent event = definition.component().getSoundType().getPlaceSound();
             this.level.playSound(null, this.worldPosition, event, SoundSource.BLOCKS, 1.0f, 1.0f);
@@ -66,24 +84,22 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
         ItemStack stack = context.getItemInHand();
         Vec3 vec = context.getClickLocation();
         BlockPos pos = context.getClickedPos();
-        double x = vec.x() - pos.getX();
-        double y = vec.y() - pos.getY();
-        double z = vec.z() - pos.getZ();
-        Vec3 inBlockVec = transformVec3(new Vec3(x, y, z));
-        if (stack.is(ItemRegistryHandler.WOODEN_HAMMER) || stack.is(ItemRegistryHandler.CHISEL))
+        Vec3 inBlockVec = transformVec3(inBlockVec(vec));
+        int opcode = stack.is(ItemRegistryHandler.WOODEN_HAMMER) ? OPCODE_COMPONENT : stack.is(ItemRegistryHandler.CHISEL) ? OPCODE_ADDITIONAL : -1;
+        if (opcode == OPCODE_COMPONENT || opcode == OPCODE_ADDITIONAL)
         {
-            ModelStateDefinition definition = getComponentByPosition(inBlockVec);
+            ComponentStateDefinition definition = getComponentByPosition(inBlockVec, opcode);
             if (definition != null)
             {
-                return breakComponent(definition, context.getPlayer());
+                return breakComponent(definition, context.getPlayer(), opcode);
             }
         }
         return false;
     }
 
-    public boolean breakComponent(ModelStateDefinition definition, @Nullable Player player)
+    public boolean breakComponent(ComponentStateDefinition definition, @Nullable Player player, int opcode)
     {
-        if (this.MODEL_STATES.contains(definition))
+        if (this.getComponents(opcode).contains(definition))
         {
             SoundEvent event = definition.component().getSoundType().getBreakSound();
             List<ItemStack> drops = definition.component().drops;
@@ -115,7 +131,7 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
                     this.level.addFreshEntity(entity);
                 }
             }
-            this.MODEL_STATES.remove(definition);
+            this.getComponents(opcode).remove(definition);
             refresh();
             return true;
         }
@@ -125,7 +141,11 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
     public void reloadShape()
     {
         VoxelShape shape = Shapes.empty();
-        for (ModelStateDefinition definition : this.MODEL_STATES)
+        for (ComponentStateDefinition definition : this.COMPONENTS)
+        {
+            shape = Shapes.or(shape, definition.shape());
+        }
+        for (ComponentStateDefinition definition : this.ADDITIONAL_COMPONENTS)
         {
             shape = Shapes.or(shape, definition.shape());
         }
@@ -143,7 +163,7 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
     public void reloadOccupation()
     {
         this.occupationCache.clear();
-        for (ModelStateDefinition definition : this.MODEL_STATES)
+        for (ComponentStateDefinition definition : this.COMPONENTS)
         {
             this.occupationCache.addAll(definition.occupation());
         }
@@ -152,12 +172,12 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
     public boolean checkConnection()
     {
         boolean flag = false;
-        for (int i = 0; i < this.MODEL_STATES.size(); i++)
+        for (int i = 0; i < this.COMPONENTS.size(); i++)
         {
-            ModelStateDefinition definition = this.MODEL_STATES.get(i);
+            ComponentStateDefinition definition = this.COMPONENTS.get(i);
             if (definition.component() instanceof Connectable comp)
             {
-                this.MODEL_STATES.set(i, comp.applyConnection(this, definition));
+                this.COMPONENTS.set(i, comp.applyConnection(this, definition));
                 flag = true;
             }
         }
@@ -165,9 +185,9 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
         return flag;
     }
 
-    public ModelStateDefinition getComponentByPosition(Vec3 vec3)
+    public ComponentStateDefinition getComponentByPosition(Vec3 vec3, int opcode)
     {
-        for (ModelStateDefinition m : this.MODEL_STATES)
+        for (ComponentStateDefinition m : this.getComponents(opcode))
         {
             if (m.shape().bounds().distanceToSqr(vec3) <= 0) return m;
         }
@@ -200,6 +220,14 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
         };
     }
 
+    public Vec3 inBlockVec(Vec3 vec)
+    {
+        double x = vec.x() - this.getBlockPos().getX();
+        double y = vec.y() - this.getBlockPos().getY();
+        double z = vec.z() - this.getBlockPos().getZ();
+        return new Vec3(x, y, z);
+    }
+
     public Vec3 transformVec3(Vec3 vec3)
     {
         double rotation = switch (this.getBlockState().getValue(FACING))
@@ -230,7 +258,12 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
     @Override
     public void setRemoved()
     {
-        for (ModelStateDefinition model : this.getModels())
+        for (ComponentStateDefinition model : this.getComponents(OPCODE_COMPONENT))
+        {
+            SoundEvent event = model.component().getSoundType().getBreakSound();
+            this.level.playSound(null, this.getBlockPos(), event, SoundSource.BLOCKS, 1.0f, 1.0f);
+        }
+        for (ComponentStateDefinition model : this.getComponents(OPCODE_ADDITIONAL))
         {
             SoundEvent event = model.component().getSoundType().getBreakSound();
             this.level.playSound(null, this.getBlockPos(), event, SoundSource.BLOCKS, 1.0f, 1.0f);
@@ -242,11 +275,17 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
     protected void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries)
     {
         super.loadAdditional(pTag, pRegistries);
-        this.MODEL_STATES.clear();
+        this.COMPONENTS.clear();
+        this.ADDITIONAL_COMPONENTS.clear();
         ListTag models = pTag.getList("models", 10);
         for (Tag tag : models)
         {
-            this.MODEL_STATES.add(ModelStateDefinition.deserializeNBT((CompoundTag) tag));
+            this.COMPONENTS.add(ComponentStateDefinition.deserializeNBT((CompoundTag) tag));
+        }
+        ListTag additional_models = pTag.getList("additional_models", 10);
+        for (Tag tag : additional_models)
+        {
+            this.ADDITIONAL_COMPONENTS.add(ComponentStateDefinition.deserializeNBT((CompoundTag) tag));
         }
         refresh();
     }
@@ -255,17 +294,35 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
     protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries)
     {
         ListTag listTag = new ListTag();
-        for (ModelStateDefinition definition : this.MODEL_STATES)
+        for (ComponentStateDefinition definition : this.COMPONENTS)
         {
             listTag.add(definition.serializeNBT());
         }
         pTag.put("models", listTag);
+        ListTag additionalListTag = new ListTag();
+        for (ComponentStateDefinition definition : this.ADDITIONAL_COMPONENTS)
+        {
+            additionalListTag.add(definition.serializeNBT());
+        }
+        pTag.put("additional_models", additionalListTag);
         super.saveAdditional(pTag, pRegistries);
     }
 
     @Override
-    public List<ModelStateDefinition> getModels()
+    public List<ComponentStateDefinition> getComponents(int opcode)
     {
-        return this.MODEL_STATES;
+        if (opcode == OPCODE_READALL)
+        {
+            List<ComponentStateDefinition> components = new ArrayList<>();
+            components.addAll(COMPONENTS);
+            components.addAll(ADDITIONAL_COMPONENTS);
+            return components;
+        }
+        return switch (opcode)
+        {
+            case OPCODE_COMPONENT -> this.COMPONENTS;
+            case OPCODE_ADDITIONAL -> this.ADDITIONAL_COMPONENTS;
+            default -> List.of();
+        };
     }
 }

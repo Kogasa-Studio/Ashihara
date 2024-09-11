@@ -24,6 +24,10 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation RED_BEAM_R = register("block/components/red_beam_r");
     public static final BuildingComponentModelResourceLocation RED_BEAM_A = register("block/components/red_beam_a");
 
+    public static final BuildingComponentModelResourceLocation BASE_STONE_0 = register("block/components/base_stone_0");
+    public static final BuildingComponentModelResourceLocation BASE_STONE_1 = register("block/components/base_stone_1");
+    public static final BuildingComponentModelResourceLocation BASE_STONE_2 = register("block/components/base_stone_2");
+
     @SubscribeEvent
     public static void onRegisterAdditionalModels(ModelEvent.RegisterAdditional event)
     {

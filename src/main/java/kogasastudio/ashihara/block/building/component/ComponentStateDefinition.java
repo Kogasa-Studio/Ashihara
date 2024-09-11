@@ -3,7 +3,6 @@ package kogasastudio.ashihara.block.building.component;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.BuildingComponents;
 import kogasastudio.ashihara.utils.BuildingComponentModelResourceLocation;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -12,9 +11,10 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
-public record ModelStateDefinition(BuildingComponent component, Vec3 inBlockPos, float rotation, VoxelShape shape, BuildingComponentModelResourceLocation model, List<Occupation> occupation)
+public record ComponentStateDefinition(BuildingComponent component, Vec3 inBlockPos, float rotation, VoxelShape shape, BuildingComponentModelResourceLocation model, List<Occupation> occupation)
 {
     public CompoundTag serializeNBT()
     {
@@ -42,7 +42,7 @@ public record ModelStateDefinition(BuildingComponent component, Vec3 inBlockPos,
         return tag;
     }
 
-    public static ModelStateDefinition deserializeNBT(CompoundTag model)
+    public static ComponentStateDefinition deserializeNBT(CompoundTag model)
     {
         BuildingComponent component = BuildingComponents.COMPONENTS.getOrDefault(model.getString("component"), null);
         if (component == null) throw new RuntimeException("Error loading component: Component \"" + model.getString("component") + "\" does not exist!");
@@ -59,6 +59,17 @@ public record ModelStateDefinition(BuildingComponent component, Vec3 inBlockPos,
             CompoundTag occTag = (CompoundTag) occupationTag;
             occupations.add(Occupation.OCCUPATION_MAP.get(occTag.getString("value")));
         }
-        return new ModelStateDefinition(component, inBlockPos, rotation, shape, modelRL, occupations);
+        return new ComponentStateDefinition(component, inBlockPos, rotation, shape, modelRL, occupations);
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (!(obj instanceof ComponentStateDefinition definition)) return false;
+        boolean componentEqual = component().equals(definition.component());
+        boolean rotationEqual = rotation() == definition.rotation();
+        boolean shapeEqual = definition.shape().bounds().equals(shape().bounds());
+        boolean occupationEqual = new HashSet<>(occupation()).containsAll(definition.occupation()) && new HashSet<>(definition.occupation()).containsAll(occupation());
+        return componentEqual && rotationEqual && shapeEqual && occupationEqual;
     }
 }

@@ -4,5 +4,5 @@ import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 
 public interface Connectable
 {
-    ModelStateDefinition applyConnection(MultiBuiltBlockEntity be, ModelStateDefinition definition);
+    ComponentStateDefinition applyConnection(MultiBuiltBlockEntity be, ComponentStateDefinition definition);
 }

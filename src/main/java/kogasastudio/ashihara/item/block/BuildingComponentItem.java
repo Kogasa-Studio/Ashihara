@@ -40,4 +40,10 @@ public abstract class BuildingComponentItem extends BlockItem
         if (blockEntity instanceof MultiBuiltBlockEntity be && be.tryPlace(pContext, this.getComponent())) b = InteractionResult.SUCCESS;
         return b;
     }
+
+    @Override
+    public String getDescriptionId()
+    {
+        return this.getOrCreateDescriptionId();
+    }
 }

@@ -144,6 +144,11 @@ public class ItemRegistryHandler
         @Override
         public BuildingComponent getComponent() {return BuildingComponents.RED_BEAM;}
     });
+    public static final DeferredItem<Item> BASE_STONE = ITEMS.register("base_stone", () -> new BuildingComponentItem()
+    {
+        @Override
+        public BuildingComponent getComponent() {return BuildingComponents.BASE_STONE;}
+    });
 
     //灯具
     public static final DeferredItem<Item> LANTERN_LONG_WHITE = ITEMS.register("lantern_long_white", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), new Item.Properties()));

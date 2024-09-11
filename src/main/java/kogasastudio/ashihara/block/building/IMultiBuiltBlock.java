@@ -1,10 +1,10 @@
 package kogasastudio.ashihara.block.building;
 
-import kogasastudio.ashihara.block.building.component.ModelStateDefinition;
+import kogasastudio.ashihara.block.building.component.ComponentStateDefinition;
 
 import java.util.List;
 
 public interface IMultiBuiltBlock
 {
-    List<ModelStateDefinition> getModels();
+    List<ComponentStateDefinition> getComponents(int opcode);
 }
