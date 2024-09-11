@@ -18,7 +18,7 @@ public class BuildingComponents
 
     public static final BuildingComponent RED_THICK_COLUMN = register(new Column("red_thick_column", Type.BAKED_MODEL, List.of(ItemRegistryHandler.RED_THICK_COLUMN.toStack())));
 
-    public static final BuildingComponent RED_BEAM = register(new Beam("red_beam", Type.BAKED_MODEL, AdditionalModels.RED_BEAM, RED_BEAM_L, RED_BEAM_R, RED_BEAM_A, List.of(ItemRegistryHandler.RED_THIN_BEAM.toStack())));
+    public static final BuildingComponent RED_BEAM = register(new Beam("red_beam", Type.BAKED_MODEL, AdditionalModels.RED_BEAM, RED_BEAM_L, RED_BEAM_R, RED_BEAM_A, List.of(ItemRegistryHandler.RED_BEAM.toStack())));
 
     static
     {

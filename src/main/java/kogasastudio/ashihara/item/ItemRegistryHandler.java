@@ -2,6 +2,7 @@ package kogasastudio.ashihara.item;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.block.building.component.BuildingComponent;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.item.block.*;
 import kogasastudio.ashihara.item.foods.EasyFood;
@@ -68,31 +69,33 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> WOOD_OTSUCHI = ITEMS.register("wood_otsuchi", () -> new ItemOtsuchi(Tiers.WOOD, 16, -3.4d));
     public static final DeferredItem<Item> IRON_OTSUCHI = ITEMS.register("iron_otsuchi", () -> new ItemOtsuchi(Tiers.IRON, 16, -3.5d));
     public static final DeferredItem<Item> DIAMOND_OTSUCHI = ITEMS.register("diamond_otsuchi", () -> new ItemOtsuchi(Tiers.DIAMOND, 16, -3.55d));
+    public static final DeferredItem<Item> WOODEN_HAMMER = ITEMS.register("wooden_hammer", AshiharaItem::new);
+    public static final DeferredItem<Item> CHISEL = ITEMS.register("chisel", AshiharaItem::new);
 
     //材料
     public static final DeferredItem<Item> SAKURA = ITEMS.register("sakura", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(1).effect(() -> new MobEffectInstance(MobEffects.HEAL, 1, 1), 1.0F).build())));
-    public static final DeferredItem<Item> SAKURA_PETAL = ITEMS.register("sakura_petal", AshiharaMaterial::new);
+    public static final DeferredItem<Item> SAKURA_PETAL = ITEMS.register("sakura_petal", AshiharaItem::new);
     public static final DeferredItem<Item> DIRT_BALL = ITEMS.register("dirt_ball", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).effect(() -> new MobEffectInstance(MobEffects.CONFUSION, 400, 2), 1.0F).build())));
-    public static final DeferredItem<Item> CHRYSANTHEMUM_FLOWER = ITEMS.register("chrysanthemum_flower", AshiharaMaterial::new);
-    public static final DeferredItem<Item> IRON_ORE_SHATTER = ITEMS.register("iron_ore_shatter", AshiharaMaterial::new);
-    public static final DeferredItem<Item> GOLD_ORE_SHATTER = ITEMS.register("gold_ore_shatter", AshiharaMaterial::new);
-    public static final DeferredItem<Item> STONE_SHATTER = ITEMS.register("stone_shatter", AshiharaMaterial::new);
-    public static final DeferredItem<Item> COAL_POWDER = ITEMS.register("coal_powder", AshiharaMaterial::new);
-    public static final DeferredItem<Item> SALT = ITEMS.register("salt", AshiharaMaterial::new);
-    public static final DeferredItem<Item> FLOUR = ITEMS.register("flour", AshiharaMaterial::new);
-    public static final DeferredItem<Item> RICE_POWDER = ITEMS.register("rice_powder", AshiharaMaterial::new);
-    public static final DeferredItem<Item> BEAN_POWDER = ITEMS.register("bean_powder", AshiharaMaterial::new);
+    public static final DeferredItem<Item> CHRYSANTHEMUM_FLOWER = ITEMS.register("chrysanthemum_flower", AshiharaItem::new);
+    public static final DeferredItem<Item> IRON_ORE_SHATTER = ITEMS.register("iron_ore_shatter", AshiharaItem::new);
+    public static final DeferredItem<Item> GOLD_ORE_SHATTER = ITEMS.register("gold_ore_shatter", AshiharaItem::new);
+    public static final DeferredItem<Item> STONE_SHATTER = ITEMS.register("stone_shatter", AshiharaItem::new);
+    public static final DeferredItem<Item> COAL_POWDER = ITEMS.register("coal_powder", AshiharaItem::new);
+    public static final DeferredItem<Item> SALT = ITEMS.register("salt", AshiharaItem::new);
+    public static final DeferredItem<Item> FLOUR = ITEMS.register("flour", AshiharaItem::new);
+    public static final DeferredItem<Item> RICE_POWDER = ITEMS.register("rice_powder", AshiharaItem::new);
+    public static final DeferredItem<Item> BEAN_POWDER = ITEMS.register("bean_powder", AshiharaItem::new);
     public static final DeferredItem<Item> SOY_BEAN = ITEMS.register("soy_bean", () -> new ItemNameBlockItem(BlockRegistryHandler.SOY_BEANS.get(), new Item.Properties()));
-    public static final DeferredItem<Item> COTTON = ITEMS.register("cotton", AshiharaMaterial::new);
-    public static final DeferredItem<Item> TEA_LEAF = ITEMS.register("tea_leaf", AshiharaMaterial::new);
-    public static final DeferredItem<Item> DRIED_TEA_LEAF = ITEMS.register("dried_tea_leaf", AshiharaMaterial::new);
-    public static final DeferredItem<Item> MACHA_POWDER = ITEMS.register("macha_powder", AshiharaMaterial::new);
-    public static final DeferredItem<Item> TEA_FLOWER = ITEMS.register("tea_flower", AshiharaMaterial::new);
+    public static final DeferredItem<Item> COTTON = ITEMS.register("cotton", AshiharaItem::new);
+    public static final DeferredItem<Item> TEA_LEAF = ITEMS.register("tea_leaf", AshiharaItem::new);
+    public static final DeferredItem<Item> DRIED_TEA_LEAF = ITEMS.register("dried_tea_leaf", AshiharaItem::new);
+    public static final DeferredItem<Item> MACHA_POWDER = ITEMS.register("macha_powder", AshiharaItem::new);
+    public static final DeferredItem<Item> TEA_FLOWER = ITEMS.register("tea_flower", AshiharaItem::new);
     public static final DeferredItem<Item> TEA_SEED = ITEMS.register("tea_seeds", () -> new ItemNameBlockItem(BlockRegistryHandler.TEA_TREE.get(), (new Item.Properties())));
-    public static final DeferredItem<Item> DRIED_BAMBOO = ITEMS.register("dried_bamboo", AshiharaMaterial::new);
-    public static final DeferredItem<Item> BAMBOO_MATERIAL = ITEMS.register("bamboo_material", AshiharaMaterial::new);
-    public static final DeferredItem<Item> BAMBOO_STICK = ITEMS.register("bamboo_stick", AshiharaMaterial::new);
-    public static final DeferredItem<Item> BAMBOO_STRIPS = ITEMS.register("bamboo_strips", AshiharaMaterial::new);
+    public static final DeferredItem<Item> DRIED_BAMBOO = ITEMS.register("dried_bamboo", AshiharaItem::new);
+    public static final DeferredItem<Item> BAMBOO_MATERIAL = ITEMS.register("bamboo_material", AshiharaItem::new);
+    public static final DeferredItem<Item> BAMBOO_STICK = ITEMS.register("bamboo_stick", AshiharaItem::new);
+    public static final DeferredItem<Item> BAMBOO_STRIPS = ITEMS.register("bamboo_strips", AshiharaItem::new);
 
     //以下为方块
     //TODO: public static final DeferredItem<Item>  = ITEMS.register("", () -> new BlockItem(BlockRegistryHandler. .get(), new Item.Properties().group(ASHIHARA)));
@@ -131,8 +134,16 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> THIN_WHITE_SOIL_WALL = ITEMS.register("thin_white_soil_wall", () -> new BlockItem(BlockRegistryHandler.THIN_WHITE_SOIL_WALL.get(), new Item.Properties()));
     public static final DeferredItem<Item> STRAIGHT_BAR_WINDOW_GREEN = ITEMS.register("straight_bar_window_green", () -> new BlockItem(BlockRegistryHandler.STRAIGHT_BAR_WINDOW_GREEN.get(), new Item.Properties()));
 
-    public static final DeferredItem<Item> MULTI_RED_THICK_COLUMN = ITEMS.register("multi_red_thick_column", () -> new BuildingComponentItem(BuildingComponents.RED_THICK_COLUMN));
-    public static final DeferredItem<Item> RED_BEAM = ITEMS.register("red_beam", () -> new BuildingComponentItem(BuildingComponents.RED_BEAM));
+    public static final DeferredItem<Item> MULTI_RED_THICK_COLUMN = ITEMS.register("multi_red_thick_column", () -> new BuildingComponentItem()
+    {
+        @Override
+        public BuildingComponent getComponent() {return BuildingComponents.RED_THICK_COLUMN;}
+    });
+    public static final DeferredItem<Item> RED_BEAM = ITEMS.register("red_beam", () -> new BuildingComponentItem()
+    {
+        @Override
+        public BuildingComponent getComponent() {return BuildingComponents.RED_BEAM;}
+    });
 
     //灯具
     public static final DeferredItem<Item> LANTERN_LONG_WHITE = ITEMS.register("lantern_long_white", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), new Item.Properties()));
@@ -187,14 +198,6 @@ public class ItemRegistryHandler
     private static class AshiharaItem extends Item
     {
         public AshiharaItem()
-        {
-            super(new Properties());
-        }
-    }
-
-    private static class AshiharaMaterial extends Item
-    {
-        public AshiharaMaterial()
         {
             super(new Properties());
         }

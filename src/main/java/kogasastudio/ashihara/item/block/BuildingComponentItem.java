@@ -9,15 +9,14 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class BuildingComponentItem extends BlockItem
+public abstract class BuildingComponentItem extends BlockItem
 {
-    public final BuildingComponent component;
-
-    public BuildingComponentItem(BuildingComponent componentIn)
+    public BuildingComponentItem()
     {
         super(BlockRegistryHandler.MULTI_BUILT_BLOCK.get(), new Properties());
-        this.component = componentIn;
     }
+
+    public abstract BuildingComponent getComponent();
 
     @Override
     protected boolean canPlace(BlockPlaceContext pContext, BlockState pState)
@@ -25,7 +24,7 @@ public class BuildingComponentItem extends BlockItem
         if (pContext.getLevel().getBlockState(pContext.getClickedPos()).is(this.getBlock()))
         {
             BlockEntity blockEntity = pContext.getLevel().getBlockEntity(pContext.getClickedPos());
-            if (blockEntity instanceof MultiBuiltBlockEntity be && be.tryPlace(pContext, this.component))
+            if (blockEntity instanceof MultiBuiltBlockEntity be && be.tryPlace(pContext, this.getComponent()))
             {
                 return false;
             }
@@ -37,11 +36,8 @@ public class BuildingComponentItem extends BlockItem
     public InteractionResult place(BlockPlaceContext pContext)
     {
         InteractionResult b = super.place(pContext);
-        if (b != InteractionResult.FAIL && b != InteractionResult.PASS)
-        {
-            BlockEntity blockEntity = pContext.getLevel().getBlockEntity(pContext.getClickedPos());
-            if (blockEntity instanceof MultiBuiltBlockEntity be) be.tryPlace(pContext, this.component);
-        }
+        BlockEntity blockEntity = pContext.getLevel().getBlockEntity(pContext.getClickedPos());
+        if (blockEntity instanceof MultiBuiltBlockEntity be && be.tryPlace(pContext, this.getComponent())) b = InteractionResult.SUCCESS;
         return b;
     }
 }

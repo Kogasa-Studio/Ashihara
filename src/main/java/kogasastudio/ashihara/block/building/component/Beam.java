@@ -6,6 +6,7 @@ import kogasastudio.ashihara.registry.BuildingComponents;
 import kogasastudio.ashihara.utils.BuildingComponentModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -14,6 +15,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
+import java.util.Map;
 
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 
@@ -110,14 +112,14 @@ public class Beam extends BuildingComponent implements Connectable
         {
             connectL = !mbe.occupationCache.contains(Occupation.getEdged(mbe.fromAbsolute(right)).get(definition.inBlockPos().y < XTP(8) ? 0 : 2));
         }
-        else connectL = !level.getBlockState(pos.relative(left)).isAir() && level.getBlockState(pos.relative(left)).isFaceSturdy(level, pos.relative(left), right);
+        else connectL = !level.getBlockState(pos.relative(left)).isAir() && !level.getBlockState(pos.relative(left)).isFaceSturdy(level, pos.relative(left), right);
 
 
         if (level.getBlockEntity(pos.relative(right)) instanceof MultiBuiltBlockEntity mbe)
         {
             connectR = !mbe.occupationCache.contains(Occupation.getEdged(mbe.fromAbsolute(left)).get(definition.inBlockPos().y < XTP(8) ? 0 : 2));
         }
-        else connectR = !level.getBlockState(pos.relative(right)).isAir() && level.getBlockState(pos.relative(right)).isFaceSturdy(level, pos.relative(right), left);
+        else connectR = !level.getBlockState(pos.relative(right)).isAir() && !level.getBlockState(pos.relative(right)).isFaceSturdy(level, pos.relative(right), left);
 
         BuildingComponentModelResourceLocation rl;
         VoxelShape shape;

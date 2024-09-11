@@ -180,6 +180,8 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.WOOD_OTSUCHI.get());
                                         output.accept(ItemRegistryHandler.IRON_OTSUCHI.get());
                                         output.accept(ItemRegistryHandler.DIAMOND_OTSUCHI.get());
+                                        output.accept(ItemRegistryHandler.WOODEN_HAMMER.get());
+                                        output.accept(ItemRegistryHandler.CHISEL.get());
                                         output.accept(ItemRegistryHandler.TACHI.get());
                                         output.accept(ItemRegistryHandler.SUJIKABUTO.get());
                                     })).build()
