@@ -2,7 +2,6 @@ package kogasastudio.ashihara.event;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.client.render.AshiharaRenderTypes;
 import kogasastudio.ashihara.client.render.SectionRenderContext;
 import kogasastudio.ashihara.client.render.WithLevelRenderer;
@@ -12,9 +11,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
@@ -40,20 +37,19 @@ public class WLREventHandler
      */
     public static final class WithLevelRendererAdditionalSectionRenderer implements AddSectionGeometryEvent.AdditionalSectionRenderer
     {
-        private final AddSectionGeometryEvent event;
+        private final BlockPos origin;
 
-        public WithLevelRendererAdditionalSectionRenderer(AddSectionGeometryEvent event) {this.event = event;}
+        public WithLevelRendererAdditionalSectionRenderer(AddSectionGeometryEvent event) {this.origin = event.getSectionOrigin().immutable();}
 
         @Override
         public void render(AddSectionGeometryEvent.SectionRenderingContext context)
         {
             BlockAndTintGetter region = context.getRegion();
-            BlockPos posSource = event.getSectionOrigin();
+            BlockPos posSource = this.origin;
             BlockPos posTarget = posSource.offset(15, 15, 15);
 
             for (BlockPos pos : BlockPos.betweenClosed(posSource, posTarget))
             {
-                if (Minecraft.getInstance().level == null || !Minecraft.getInstance().level.isLoaded(pos)) continue;
                 BlockEntity blockEntity = region.getBlockEntity(pos);
 
                 if (blockEntity == null) continue;
