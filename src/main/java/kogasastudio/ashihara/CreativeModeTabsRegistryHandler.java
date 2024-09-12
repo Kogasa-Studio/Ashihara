@@ -84,6 +84,9 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.TATAMI.get());
                                         output.accept(ItemRegistryHandler.MULTI_RED_THICK_COLUMN.get());
                                         output.accept(ItemRegistryHandler.RED_BEAM.get());
+                                        output.accept(ItemRegistryHandler.RED_HIJIKI.get());
+                                        output.accept(ItemRegistryHandler.RED_BIG_TOU.get());
+                                        output.accept(ItemRegistryHandler.RED_TOU.get());
                                         output.accept(ItemRegistryHandler.BASE_STONE.get());
                                         output.accept(ItemRegistryHandler.DIRT_DEPRESSION.get());
                                         output.accept(ItemRegistryHandler.WATER_FIELD.get());

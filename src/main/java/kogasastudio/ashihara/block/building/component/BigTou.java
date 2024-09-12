@@ -1,0 +1,60 @@
+package kogasastudio.ashihara.block.building.component;
+
+import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
+import kogasastudio.ashihara.helper.ShapeHelper;
+import kogasastudio.ashihara.registry.AdditionalModels;
+import kogasastudio.ashihara.registry.BuildingComponents;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+
+import java.util.List;
+
+import static kogasastudio.ashihara.helper.PositionHelper.XTP;
+
+public class BigTou extends BuildingComponent
+{
+    private VoxelShape SHAPE;
+
+    public BigTou(String idIn, BuildingComponents.Type typeIn, List<ItemStack> dropsIn)
+    {
+        super(idIn, typeIn, dropsIn);
+        initShape();
+    }
+
+    protected void initShape()
+    {
+        this.SHAPE = Shapes.box(0.1875, 0, 0.1875, 0.8125, 0.40625, 0.8125);
+    }
+
+    @Override
+    public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)
+    {
+        Vec3 inBlockPos = beIn.transformVec3(beIn.inBlockVec(context.getClickLocation()));
+
+        double y = inBlockPos.y();
+        if (context.getClickedFace().equals(Direction.UP))
+        {
+            y = (y >= 0 && y < XTP(8)) ? 0 : XTP(8);
+        }
+        else y = (y > 0 && y <= XTP(8)) ? 0 : XTP(8);
+
+        int floor = y == 0 ? 0 : 2;
+
+        VoxelShape shape = SHAPE;
+        shape = ShapeHelper.offsetShape(shape, 0, y, 0);
+
+        return new ComponentStateDefinition
+        (
+            BuildingComponents.RED_BIG_TOU,
+            new Vec3(0, y, 0),
+            0,
+            shape,
+            AdditionalModels.RED_BIG_TOU,
+            List.of(Occupation.CENTER_ALL.get(floor))
+        );
+    }
+}

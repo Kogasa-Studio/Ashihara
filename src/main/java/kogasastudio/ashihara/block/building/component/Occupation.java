@@ -116,9 +116,9 @@ public enum Occupation
 
     public static Occupation mapPosition(double x, double y, double z)
     {
-        int xIndex = (int) Math.floor(x * 3);
-        int yIndex = (int) Math.floor(y * 3);
-        int zIndex = (int) Math.floor(z * 3);
+        int xIndex = (int) Math.clamp(Math.floor(x * 3), 0, 2);
+        int yIndex = (int) Math.clamp(Math.floor(y * 4), 0, 3);
+        int zIndex = (int) Math.clamp(Math.floor(z * 3), 0, 2);
 
         return MESHED_OCCUPATIONS[yIndex][zIndex][xIndex];
     }

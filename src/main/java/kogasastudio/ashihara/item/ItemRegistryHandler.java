@@ -144,6 +144,21 @@ public class ItemRegistryHandler
         @Override
         public BuildingComponent getComponent() {return BuildingComponents.RED_BEAM;}
     });
+    public static final DeferredItem<Item> RED_HIJIKI = ITEMS.register("red_hijiki", () -> new BuildingComponentItem()
+    {
+        @Override
+        public BuildingComponent getComponent() {return BuildingComponents.RED_HIJIKI;}
+    });
+    public static final DeferredItem<Item> RED_TOU = ITEMS.register("red_tou", () -> new BuildingComponentItem()
+    {
+        @Override
+        public BuildingComponent getComponent() {return BuildingComponents.RED_TOU;}
+    });
+    public static final DeferredItem<Item> RED_BIG_TOU = ITEMS.register("red_big_tou", () -> new BuildingComponentItem()
+    {
+        @Override
+        public BuildingComponent getComponent() {return BuildingComponents.RED_BIG_TOU;}
+    });
     public static final DeferredItem<Item> BASE_STONE = ITEMS.register("base_stone", () -> new BuildingComponentItem()
     {
         @Override

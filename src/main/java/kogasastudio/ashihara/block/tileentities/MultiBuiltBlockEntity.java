@@ -237,6 +237,20 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
     {
         double rotation = switch (this.getBlockState().getValue(FACING))
         {
+            case WEST -> 90;
+            case SOUTH -> 180;
+            case EAST -> 270;
+            default -> 0;
+        };
+        rotation = Math.toRadians(rotation);
+        double[] transformed = MathHelper.rotatePoint(vec3.x(), vec3.z(), 0.5, 0.5, rotation);
+        return new Vec3(transformed[0], vec3.y(), transformed[1]);
+    }
+
+    public Vec3 outLayVec3(Vec3 vec3)
+    {
+        double rotation = switch (this.getBlockState().getValue(FACING))
+        {
             case WEST -> -90;
             case SOUTH -> -180;
             case EAST -> -270;

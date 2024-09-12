@@ -45,12 +45,13 @@ public class MultiBuiltBlockRenderer implements BlockEntityRenderer<MultiBuiltBl
                 resetToBlock000(be, AshiharaRenderTypes.CHUNK_ENTITY_SOLID, matrixStackIn);
                 translateCoordinateSystem(tileEntityIn, matrixStackIn);
 
+                Vec3 pos = model.inBlockPos();
+                matrixStackIn.translate(pos.x, pos.y, pos.z);
+
                 matrixStackIn.translate(0.5, 0, 0.5);
                 matrixStackIn.mulPose(Axis.YP.rotationDegrees(model.rotation()));
                 matrixStackIn.translate(-0.5, 0, -0.5);
 
-                Vec3 pos = model.inBlockPos();
-                matrixStackIn.translate(pos.x, pos.y, pos.z);
                 VertexConsumer consumer = context.consumerFunction().apply(AshiharaRenderTypes.CHUNK_ENTITY_SOLID);
                 BakedModel bakedModel = Minecraft.getInstance().getModelManager().getModel(model.model().toModelResourceLocation());
                 if (!(bakedModel instanceof MultiPartBakedModel)) BakedModels.render(matrixStackIn.last(), consumer, bakedModel, AshiharaRenderTypes.CHUNK_ENTITY_SOLID, be.getBlockState(), combinedLightIn);

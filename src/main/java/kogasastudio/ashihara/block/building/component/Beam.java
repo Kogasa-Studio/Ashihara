@@ -52,11 +52,12 @@ public class Beam extends BuildingComponent implements Connectable
     {
         Direction direction = context.getHorizontalDirection();
         direction = beIn.fromAbsolute(direction);
-        Vec3 clickLocation = context.getClickLocation();
-        clickLocation = beIn.transformVec3(clickLocation);
 
         float r = direction.getAxis().equals(Direction.Axis.X) ? 0 : 90;
-        double y = clickLocation.y() - context.getClickedPos().getY();
+
+        Vec3 inBlockPos = beIn.transformVec3(beIn.inBlockVec(context.getClickLocation()));
+        double y = inBlockPos.y();
+
         if (context.getClickedFace().equals(Direction.UP))
         {
             y = (y >= 0 && y < XTP(8)) ? 0 : XTP(8);
@@ -73,7 +74,7 @@ public class Beam extends BuildingComponent implements Connectable
 
         VoxelShape shape = SHAPE_NONE_CONNECTED;
         if (r == 90) shape = ShapeHelper.rotateShape(shape, 90);
-        if (y == XTP(8)) shape = ShapeHelper.offsetShape(shape, 0, 0.5, 0);
+        shape = ShapeHelper.offsetShape(shape, 0, y, 0);
 
         ComponentStateDefinition init = new ComponentStateDefinition
         (
