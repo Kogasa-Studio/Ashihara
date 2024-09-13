@@ -27,13 +27,38 @@ public class Hijiki extends BuildingComponent implements Connectable
     private VoxelShape SHAPE_RIGHT_CONNECTED;
     private VoxelShape SHAPE_BOTH_CONNECTED;
 
-    public Hijiki(String idIn, BuildingComponents.Type typeIn, BuildingComponentModelResourceLocation l, BuildingComponentModelResourceLocation r, BuildingComponentModelResourceLocation a, List<ItemStack> dropsIn)
+    public Hijiki
+    (
+        String idIn,
+        BuildingComponents.Type typeIn,
+        BuildingComponentModelResourceLocation l,
+        BuildingComponentModelResourceLocation r,
+        BuildingComponentModelResourceLocation a,
+        List<ItemStack> dropsIn)
     {
         super(idIn, typeIn, dropsIn);
         this.LEFT_CONNECTED = l;
         this.RIGHT_CONNECTED = r;
         this.BOTH_CONNECTED = a;
         initShape();
+    }
+
+    public Hijiki
+    (
+        String idIn,
+        BuildingComponents.Type typeIn,
+        BuildingComponentModelResourceLocation l,
+        BuildingComponentModelResourceLocation r,
+        BuildingComponentModelResourceLocation a,
+        VoxelShape shape_l,
+        VoxelShape shape_r,
+        VoxelShape shape_a,
+        List<ItemStack> dropsIn)
+    {
+        this(idIn, typeIn, l, r, a, dropsIn);
+        this.SHAPE_LEFT_CONNECTED = shape_l;
+        this.SHAPE_RIGHT_CONNECTED = shape_r;
+        this.SHAPE_BOTH_CONNECTED = shape_a;
     }
 
     protected void initShape()
@@ -108,7 +133,7 @@ public class Hijiki extends BuildingComponent implements Connectable
 
         ComponentStateDefinition init = new ComponentStateDefinition
         (
-            BuildingComponents.RED_HIJIKI,
+            BuildingComponents.get(this.id),
             new Vec3(x, y, z),
             r,
             shape,

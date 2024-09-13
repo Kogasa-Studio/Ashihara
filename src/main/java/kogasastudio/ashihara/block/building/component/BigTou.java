@@ -49,7 +49,7 @@ public class BigTou extends BuildingComponent
 
         return new ComponentStateDefinition
         (
-            BuildingComponents.RED_BIG_TOU,
+            BuildingComponents.get(this.id),
             new Vec3(0, y, 0),
             0,
             shape,

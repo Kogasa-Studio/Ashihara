@@ -9,14 +9,22 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-public abstract class BuildingComponentItem extends BlockItem
+import java.util.function.Supplier;
+
+public class BuildingComponentItem extends BlockItem
 {
-    public BuildingComponentItem()
+    private final Supplier<? extends BuildingComponent> component;
+
+    public BuildingComponentItem(Supplier<? extends BuildingComponent> componentIn)
     {
         super(BlockRegistryHandler.MULTI_BUILT_BLOCK.get(), new Properties());
+        this.component = componentIn;
     }
 
-    public abstract BuildingComponent getComponent();
+    public BuildingComponent getComponent()
+    {
+        return this.component.get();
+    }
 
     @Override
     protected boolean canPlace(BlockPlaceContext pContext, BlockState pState)

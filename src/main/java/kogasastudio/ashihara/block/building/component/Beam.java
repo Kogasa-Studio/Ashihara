@@ -29,7 +29,16 @@ public class Beam extends BuildingComponent implements Connectable
     private VoxelShape SHAPE_RIGHT_CONNECTED;
     private VoxelShape SHAPE_BOTH_CONNECTED;
 
-    public Beam(String idIn, BuildingComponents.Type typeIn, BuildingComponentModelResourceLocation n, BuildingComponentModelResourceLocation l, BuildingComponentModelResourceLocation r, BuildingComponentModelResourceLocation a, List<ItemStack> dropsIn)
+    public Beam
+    (
+        String idIn,
+        BuildingComponents.Type typeIn,
+        BuildingComponentModelResourceLocation n,
+        BuildingComponentModelResourceLocation l,
+        BuildingComponentModelResourceLocation r,
+        BuildingComponentModelResourceLocation a,
+        List<ItemStack> dropsIn
+    )
     {
         super(idIn, typeIn, dropsIn);
         this.NONE_CONNECTED = n;
@@ -78,7 +87,7 @@ public class Beam extends BuildingComponent implements Connectable
 
         ComponentStateDefinition init = new ComponentStateDefinition
         (
-            BuildingComponents.RED_BEAM,
+        BuildingComponents.get(this.id),
             new Vec3(0, y, 0),
             r,
             shape,

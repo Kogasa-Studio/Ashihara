@@ -22,7 +22,7 @@ public class Column extends BuildingComponent
     {
         return new ComponentStateDefinition
         (
-            BuildingComponents.RED_THICK_COLUMN,
+            BuildingComponents.get(this.id),
             new Vec3(0, 0, 0),
             0,
             Block.box(3d, 0d, 3d, 13d, 16d, 13d),

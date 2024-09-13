@@ -35,7 +35,7 @@ public class BaseStone extends AdditionalComponent
 
         return new ComponentStateDefinition
         (
-            BuildingComponents.BASE_STONE,
+            BuildingComponents.get(this.id),
             new Vec3(0, 0, 0),
             0,
             Shapes.box(0.0625, -0.1875, 0.0625, 0.9375, 0.3125, 0.9375),

@@ -134,36 +134,15 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> THIN_WHITE_SOIL_WALL = ITEMS.register("thin_white_soil_wall", () -> new BlockItem(BlockRegistryHandler.THIN_WHITE_SOIL_WALL.get(), new Item.Properties()));
     public static final DeferredItem<Item> STRAIGHT_BAR_WINDOW_GREEN = ITEMS.register("straight_bar_window_green", () -> new BlockItem(BlockRegistryHandler.STRAIGHT_BAR_WINDOW_GREEN.get(), new Item.Properties()));
 
-    public static final DeferredItem<Item> MULTI_RED_THICK_COLUMN = ITEMS.register("multi_red_thick_column", () -> new BuildingComponentItem()
-    {
-        @Override
-        public BuildingComponent getComponent() {return BuildingComponents.RED_THICK_COLUMN;}
-    });
-    public static final DeferredItem<Item> RED_BEAM = ITEMS.register("red_beam", () -> new BuildingComponentItem()
-    {
-        @Override
-        public BuildingComponent getComponent() {return BuildingComponents.RED_BEAM;}
-    });
-    public static final DeferredItem<Item> RED_HIJIKI = ITEMS.register("red_hijiki", () -> new BuildingComponentItem()
-    {
-        @Override
-        public BuildingComponent getComponent() {return BuildingComponents.RED_HIJIKI;}
-    });
-    public static final DeferredItem<Item> RED_TOU = ITEMS.register("red_tou", () -> new BuildingComponentItem()
-    {
-        @Override
-        public BuildingComponent getComponent() {return BuildingComponents.RED_TOU;}
-    });
-    public static final DeferredItem<Item> RED_BIG_TOU = ITEMS.register("red_big_tou", () -> new BuildingComponentItem()
-    {
-        @Override
-        public BuildingComponent getComponent() {return BuildingComponents.RED_BIG_TOU;}
-    });
-    public static final DeferredItem<Item> BASE_STONE = ITEMS.register("base_stone", () -> new BuildingComponentItem()
-    {
-        @Override
-        public BuildingComponent getComponent() {return BuildingComponents.BASE_STONE;}
-    });
+    public static final DeferredItem<Item> MULTI_RED_THICK_COLUMN = ITEMS.register("multi_red_thick_column", () -> new BuildingComponentItem(() -> BuildingComponents.RED_THICK_COLUMN));
+    public static final DeferredItem<Item> RED_BEAM = ITEMS.register("red_beam", () -> new BuildingComponentItem(() -> BuildingComponents.RED_BEAM));
+    public static final DeferredItem<Item> RED_HIJIKI = ITEMS.register("red_hijiki", () -> new BuildingComponentItem(() -> BuildingComponents.RED_HIJIKI));
+    public static final DeferredItem<Item> RED_HIJIKI_SUPPORTER = ITEMS.register("red_hijiki_supporter", () -> new BuildingComponentItem(() -> BuildingComponents.RED_HIJIKI_SUPPORTER));
+    public static final DeferredItem<Item> RED_HIJIKI_CONNECTOR = ITEMS.register("red_hijiki_connector", () -> new BuildingComponentItem(() -> BuildingComponents.RED_HIJIKI_CONNECTOR));
+    public static final DeferredItem<Item> RED_HIJIKI_LONG = ITEMS.register("red_hijiki_long", () -> new BuildingComponentItem(() -> BuildingComponents.RED_HIJIKI_LONG));
+    public static final DeferredItem<Item> RED_TOU = ITEMS.register("red_tou", () -> new BuildingComponentItem(() -> BuildingComponents.RED_TOU));
+    public static final DeferredItem<Item> RED_BIG_TOU = ITEMS.register("red_big_tou", () -> new BuildingComponentItem(() -> BuildingComponents.RED_BIG_TOU));
+    public static final DeferredItem<Item> BASE_STONE = ITEMS.register("base_stone", () -> new BuildingComponentItem(() -> BuildingComponents.BASE_STONE));
 
     //灯具
     public static final DeferredItem<Item> LANTERN_LONG_WHITE = ITEMS.register("lantern_long_white", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), new Item.Properties()));
