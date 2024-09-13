@@ -17,6 +17,7 @@ public class AdditionalModels
     public static final String STANDALONE_VARIANT = "standalone";
     private static final List<BuildingComponentModelResourceLocation> models = new ArrayList<>();
 
+    //Structural
     public static final BuildingComponentModelResourceLocation RED_THICK_COLUMN = register("block/building_blocks/column/column_thick_red");
 
     public static final BuildingComponentModelResourceLocation RED_BEAM = register("block/components/red_beam");
@@ -34,9 +35,14 @@ public class AdditionalModels
 
     public static final BuildingComponentModelResourceLocation RED_BIG_TOU = register("block/components/red_big_tou");
 
+    //Additional
     public static final BuildingComponentModelResourceLocation BASE_STONE_0 = register("block/components/base_stone_0");
     public static final BuildingComponentModelResourceLocation BASE_STONE_1 = register("block/components/base_stone_1");
     public static final BuildingComponentModelResourceLocation BASE_STONE_2 = register("block/components/base_stone_2");
+
+    public static final BuildingComponentModelResourceLocation BAMBOO_WALL_BONES = register("block/components/bamboo_wall_bones");
+    public static final BuildingComponentModelResourceLocation RAMMED_SOIL_WALL = register("block/components/rammed_soil_wall");
+    public static final BuildingComponentModelResourceLocation WHITE_SOIL_WALL = register("block/components/white_soil_wall");
 
     @SubscribeEvent
     public static void onRegisterAdditionalModels(ModelEvent.RegisterAdditional event)

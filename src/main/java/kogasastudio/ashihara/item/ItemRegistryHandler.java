@@ -96,6 +96,8 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> BAMBOO_MATERIAL = ITEMS.register("bamboo_material", AshiharaItem::new);
     public static final DeferredItem<Item> BAMBOO_STICK = ITEMS.register("bamboo_stick", AshiharaItem::new);
     public static final DeferredItem<Item> BAMBOO_STRIPS = ITEMS.register("bamboo_strips", AshiharaItem::new);
+    public static final DeferredItem<Item> RAMMED_SOIL = ITEMS.register("rammed_soil", AshiharaItem::new);
+    public static final DeferredItem<Item> LIME_POWDER = ITEMS.register("lime_powder", AshiharaItem::new);
 
     //以下为方块
     //TODO: public static final DeferredItem<Item>  = ITEMS.register("", () -> new BlockItem(BlockRegistryHandler. .get(), new Item.Properties().group(ASHIHARA)));
@@ -143,6 +145,9 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> RED_TOU = ITEMS.register("red_tou", () -> new BuildingComponentItem(() -> BuildingComponents.RED_TOU));
     public static final DeferredItem<Item> RED_BIG_TOU = ITEMS.register("red_big_tou", () -> new BuildingComponentItem(() -> BuildingComponents.RED_BIG_TOU));
     public static final DeferredItem<Item> BASE_STONE = ITEMS.register("base_stone", () -> new BuildingComponentItem(() -> BuildingComponents.BASE_STONE));
+    public static final DeferredItem<Item> WHITE_SOIL_WALL = ITEMS.register("white_soil_wall", () -> new BuildingComponentItem(() -> BuildingComponents.WHITE_SOIL_WALL));
+    public static final DeferredItem<Item> RAMMED_SOIL_WALL = ITEMS.register("rammed_soil_wall", () -> new BuildingComponentItem(() -> BuildingComponents.RAMMED_SOIL_WALL));
+    public static final DeferredItem<Item> BAMBOO_WALL_BONES = ITEMS.register("bamboo_wall_bones", () -> new BuildingComponentItem(() -> BuildingComponents.BAMBOO_WALL_BONES));
 
     //灯具
     public static final DeferredItem<Item> LANTERN_LONG_WHITE = ITEMS.register("lantern_long_white", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), new Item.Properties()));

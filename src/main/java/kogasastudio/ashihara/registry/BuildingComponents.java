@@ -2,6 +2,7 @@ package kogasastudio.ashihara.registry;
 
 import kogasastudio.ashihara.block.building.component.*;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.phys.shapes.Shapes;
 
 import java.util.HashMap;
@@ -106,6 +107,56 @@ public class BuildingComponents
             "base_stone",
             Type.BAKED_MODEL,
             List.of(ItemRegistryHandler.BASE_STONE.toStack())
+        )
+    );
+    public static final AdditionalComponent WHITE_SOIL_WALL = (AdditionalComponent) register
+    (
+    new Wall
+        (
+            "white_soil_wall",
+            Type.BAKED_MODEL,
+            AdditionalModels.WHITE_SOIL_WALL,
+            Shapes.box(0, 0, 0.40625, 1, 1, 0.59375),
+            List.of(ItemRegistryHandler.BAMBOO_WALL_BONES.toStack(), ItemRegistryHandler.RAMMED_SOIL.toStack(), ItemRegistryHandler.LIME_POWDER.toStack()),
+            null,
+            null,
+            null,
+            null,
+            SoundType.DEEPSLATE
+        )
+    );
+    public static final AdditionalComponent RAMMED_SOIL_WALL = (AdditionalComponent) register
+    (
+        new Wall
+        (
+            "rammed_soil_wall",
+            Type.BAKED_MODEL,
+            AdditionalModels.RAMMED_SOIL_WALL,
+            Shapes.box(0, 0, 0.40625, 1, 1, 0.59375),
+            List.of(ItemRegistryHandler.BAMBOO_WALL_BONES.toStack(), ItemRegistryHandler.RAMMED_SOIL.toStack()),
+            ItemRegistryHandler.LIME_POWDER::toStack,
+            () -> WHITE_SOIL_WALL,
+            Shapes.box(0, 0, 0.40625, 1, 1, 0.59375),
+            AdditionalModels.WHITE_SOIL_WALL,
+            SoundType.DRIPSTONE_BLOCK,
+            SoundType.SOUL_SAND
+        )
+    );
+    public static final AdditionalComponent BAMBOO_WALL_BONES = (AdditionalComponent) register
+    (
+        new Wall
+        (
+            "bamboo_wall_bones",
+            Type.BAKED_MODEL,
+            AdditionalModels.BAMBOO_WALL_BONES,
+            Shapes.box(0, 0, 0.4375, 1, 1, 0.5625),
+            List.of(ItemRegistryHandler.BAMBOO_WALL_BONES.toStack()),
+            ItemRegistryHandler.RAMMED_SOIL::toStack,
+            () -> RAMMED_SOIL_WALL,
+            Shapes.box(0, 0, 0.40625, 1, 1, 0.59375),
+            AdditionalModels.RAMMED_SOIL_WALL,
+            SoundType.BAMBOO,
+            SoundType.DRIPSTONE_BLOCK
         )
     );
 

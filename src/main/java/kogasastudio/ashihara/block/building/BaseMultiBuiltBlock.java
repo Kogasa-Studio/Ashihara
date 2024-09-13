@@ -84,6 +84,7 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
         BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
         if (blockEntity instanceof MultiBuiltBlockEntity be)
         {
+            if (be.tryInteract(context)) return ItemInteractionResult.SUCCESS;
             if (pStack.getItem() instanceof BuildingComponentItem componentItem && be.tryPlace(context, componentItem.getComponent())) return ItemInteractionResult.SUCCESS;
             else if ((pStack.is(ItemRegistryHandler.WOODEN_HAMMER) || pStack.is(ItemRegistryHandler.CHISEL)) && be.tryBreak(context))
             {

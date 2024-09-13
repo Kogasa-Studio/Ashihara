@@ -108,22 +108,23 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
         {
             SoundEvent event = definition.component().getSoundType().getBreakSound();
             List<ItemStack> drops = definition.component().drops;
+            Vec3 vec = transformVec3(definition.inBlockPos());
             this.level.playSound(null, this.worldPosition, event, SoundSource.BLOCKS, 1.0f, 1.0f);
             if (this.level.isClientSide() && !drops.get(0).isEmpty())
             {
                 RandomSource random = this.level.getRandom();
                 ParticleOptions data = new ItemParticleOption(ParticleTypes.ITEM, drops.get(0));
-                for (int i = 0; i < 10; i += 1)
+                for (int i = 0; i < 20; i += 1)
                 {
                     this.level.addParticle
                     (
-                    data,
-                    (double) this.worldPosition.getX() + 0.5D,
-                    (double) this.worldPosition.getY() + 0.7D,
-                    (double) this.worldPosition.getZ() + 0.5D,
-                    ((double) random.nextFloat() - 0.5D) * 0.2D,
-                    ((double) random.nextFloat() - 0.5D) * 0.2D,
-                    ((double) random.nextFloat() - 0.5D) * 0.2D
+                        data,
+                        vec.x,
+                        vec.y,
+                        vec.z,
+                        ((double) random.nextFloat() - 0.5D) * 0.2D,
+                        ((double) random.nextFloat() - 0.5D) * 0.2D,
+                        ((double) random.nextFloat() - 0.5D) * 0.2D
                     );
                 }
             }
@@ -190,11 +191,39 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
         return flag;
     }
 
+    public boolean tryInteract(UseOnContext context)
+    {
+        int opcode = OPCODE_COMPONENT;
+        Vec3 vec = context.getClickLocation();
+        Vec3 inBlockPos = transformVec3(inBlockVec(vec));
+        ComponentStateDefinition definition = getComponentByPosition(inBlockPos, opcode);
+        if (definition == null)
+        {
+            opcode = OPCODE_ADDITIONAL;
+            definition = getComponentByPosition(inBlockPos, opcode);
+        }
+        if (definition == null) return false;
+        for (int i = 0; i < this.getComponents(opcode).size(); i++)
+        {
+            ComponentStateDefinition def = this.getComponents(opcode).get(i);
+            if (def == definition && definition.component() instanceof Interactable comp)
+            {
+                ComponentStateDefinition interacted = comp.handleInteraction(context, def);
+                if (interacted == def) return false;
+                this.getComponents(opcode).set(i, interacted);
+                this.level.playSound(null, this.worldPosition, comp.getInteractSound().getPlaceSound(), SoundSource.BLOCKS, 1.0f, 1.0f);
+                refresh();
+                return true;
+            }
+        }
+        return false;
+    }
+
     public ComponentStateDefinition getComponentByPosition(Vec3 vec3, int opcode)
     {
         for (ComponentStateDefinition m : this.getComponents(opcode))
         {
-            if (m.shape().bounds().distanceToSqr(vec3) <= 0) return m;
+            if (m.shape().bounds().distanceToSqr(vec3) <= 0.00001) return m;
         }
         return null;
     }

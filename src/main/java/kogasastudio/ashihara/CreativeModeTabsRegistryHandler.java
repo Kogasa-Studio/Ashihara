@@ -91,6 +91,9 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.RED_BIG_TOU.get());
                                         output.accept(ItemRegistryHandler.RED_TOU.get());
                                         output.accept(ItemRegistryHandler.BASE_STONE.get());
+                                        output.accept(ItemRegistryHandler.WHITE_SOIL_WALL.get());
+                                        output.accept(ItemRegistryHandler.RAMMED_SOIL_WALL.get());
+                                        output.accept(ItemRegistryHandler.BAMBOO_WALL_BONES.get());
                                         output.accept(ItemRegistryHandler.DIRT_DEPRESSION.get());
                                         output.accept(ItemRegistryHandler.WATER_FIELD.get());
                                     })).build()
@@ -110,6 +113,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.BAMBOO_MATERIAL.get());
                                         output.accept(ItemRegistryHandler.BAMBOO_STRIPS.get());
                                         output.accept(ItemRegistryHandler.BAMBOO_STICK.get());
+                                        output.accept(ItemRegistryHandler.LIME_POWDER.get());
                                         output.accept(ItemRegistryHandler.SALT.get());
                                         output.accept(ItemRegistryHandler.COAL_POWDER.get());
                                         output.accept(ItemRegistryHandler.RICE_POWDER.get());
@@ -124,6 +128,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.TEA_FLOWER.get());
                                         output.accept(ItemRegistryHandler.TAMAGO.get());
                                         output.accept(ItemRegistryHandler.DIRT_BALL.get());
+                                        output.accept(ItemRegistryHandler.RAMMED_SOIL.get());
                                         output.accept(ItemRegistryHandler.OIL_BUCKET.get());
                                         output.accept(ItemRegistryHandler.SOY_MILK_BUCKET.get());
                                     })).build()

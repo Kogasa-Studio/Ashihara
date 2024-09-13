@@ -36,6 +36,8 @@
   "item.ashihara.gold_ore_shatter": "金矿碎块",
   "item.ashihara.stone_shatter": "碎石",
   "item.ashihara.coal_powder": "煤粉",
+  "item.ashihara.rammed_soil": "混入藁切的夯土",
+  "item.ashihara.lime_powder": "石灰粉",
   "item.ashihara.salt": "盐",
   "item.ashihara.flour": "面粉",
   "item.ashihara.rice_powder": "米粉",
@@ -72,6 +74,9 @@
   "item.ashihara.red_tou": "朱木斗",
   "item.ashihara.red_big_tou": "朱木大斗",
   "item.ashihara.base_stone": "础石",
+  "item.ashihara.bamboo_wall_bones": "竹小舞",
+  "item.ashihara.rammed_soil_wall": "夯土壁",
+  "item.ashihara.white_soil_wall": "白粉壁",
   "block.ashihara.water_field": "水田",
   "block.ashihara.dirt_depression": "土洼",
   "block.ashihara.immature_rice": "水稻幼芽",
@@ -165,6 +170,5 @@
   "tooltip.ashihara.pail_display": "§e§l提桶: §n",
   "tooltip.ashihara.pail_empty_message": "    §7桶现在是空的",
   "tooltip.ashihara.pail_fluid_existence": "    §7流体: ",
-  "tooltip.ashihara.fluid_existence": "流体: ",
-  "block.ashihara.red_beam": "朱木障子壁"
+  "tooltip.ashihara.fluid_existence": "流体: "
 }
