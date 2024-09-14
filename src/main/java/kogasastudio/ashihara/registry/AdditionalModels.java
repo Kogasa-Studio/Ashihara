@@ -41,8 +41,11 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation BASE_STONE_2 = register("block/components/base_stone_2");
 
     public static final BuildingComponentModelResourceLocation BAMBOO_WALL_BONES = register("block/components/bamboo_wall_bones");
+    public static final BuildingComponentModelResourceLocation BAMBOO_WALL_BONES_QUARTER = register("block/components/bamboo_wall_bones_quarter");
     public static final BuildingComponentModelResourceLocation RAMMED_SOIL_WALL = register("block/components/rammed_soil_wall");
+    public static final BuildingComponentModelResourceLocation RAMMED_SOIL_WALL_QUARTER = register("block/components/rammed_soil_wall_quarter");
     public static final BuildingComponentModelResourceLocation WHITE_SOIL_WALL = register("block/components/white_soil_wall");
+    public static final BuildingComponentModelResourceLocation WHITE_SOIL_WALL_QUARTER = register("block/components/white_soil_wall_quarter");
 
     @SubscribeEvent
     public static void onRegisterAdditionalModels(ModelEvent.RegisterAdditional event)

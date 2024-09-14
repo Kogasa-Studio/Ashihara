@@ -117,7 +117,23 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.WHITE_SOIL_WALL,
             Shapes.box(0, 0, 0.40625, 1, 1, 0.59375),
-            List.of(ItemRegistryHandler.BAMBOO_WALL_BONES.toStack(), ItemRegistryHandler.RAMMED_SOIL.toStack(), ItemRegistryHandler.LIME_POWDER.toStack()),
+            List.of(ItemRegistryHandler.BAMBOO_WALL_BONES.toStack(), ItemRegistryHandler.RAMMED_SOIL.toStack(4), ItemRegistryHandler.LIME_POWDER.toStack(4)),
+            null,
+            null,
+            null,
+            null,
+            SoundType.DEEPSLATE
+        )
+    );
+    public static final AdditionalComponent WHITE_SOIL_WALL_QUARTER = (AdditionalComponent) register
+    (
+        new QuarterWall
+        (
+            "white_soil_wall_quarter",
+            Type.BAKED_MODEL,
+            AdditionalModels.WHITE_SOIL_WALL_QUARTER,
+            Shapes.box(0.25, 0, 0.40625, 0.75, 0.5, 0.59375),
+            List.of(ItemRegistryHandler.BAMBOO_WALL_BONES_QUARTER.toStack(), ItemRegistryHandler.RAMMED_SOIL.toStack(), ItemRegistryHandler.LIME_POWDER.toStack()),
             null,
             null,
             null,
@@ -133,11 +149,28 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.RAMMED_SOIL_WALL,
             Shapes.box(0, 0, 0.40625, 1, 1, 0.59375),
-            List.of(ItemRegistryHandler.BAMBOO_WALL_BONES.toStack(), ItemRegistryHandler.RAMMED_SOIL.toStack()),
-            ItemRegistryHandler.LIME_POWDER::toStack,
+            List.of(ItemRegistryHandler.BAMBOO_WALL_BONES.toStack(), ItemRegistryHandler.RAMMED_SOIL.toStack(4)),
+            () -> ItemRegistryHandler.LIME_POWDER.toStack(4),
             () -> WHITE_SOIL_WALL,
             Shapes.box(0, 0, 0.40625, 1, 1, 0.59375),
             AdditionalModels.WHITE_SOIL_WALL,
+            SoundType.DRIPSTONE_BLOCK,
+            SoundType.SOUL_SAND
+        )
+    );
+    public static final AdditionalComponent RAMMED_SOIL_WALL_QUARTER = (AdditionalComponent) register
+    (
+        new QuarterWall
+        (
+            "rammed_soil_wall_quarter",
+            Type.BAKED_MODEL,
+            AdditionalModels.RAMMED_SOIL_WALL_QUARTER,
+            Shapes.box(0.25, 0, 0.40625, 0.75, 0.5, 0.59375),
+            List.of(ItemRegistryHandler.BAMBOO_WALL_BONES_QUARTER.toStack(), ItemRegistryHandler.RAMMED_SOIL.toStack()),
+            ItemRegistryHandler.LIME_POWDER::toStack,
+            () -> WHITE_SOIL_WALL_QUARTER,
+            Shapes.box(0.25, 0, 0.40625, 0.75, 0.5, 0.59375),
+            AdditionalModels.WHITE_SOIL_WALL_QUARTER,
             SoundType.DRIPSTONE_BLOCK,
             SoundType.SOUL_SAND
         )
@@ -151,10 +184,27 @@ public class BuildingComponents
             AdditionalModels.BAMBOO_WALL_BONES,
             Shapes.box(0, 0, 0.4375, 1, 1, 0.5625),
             List.of(ItemRegistryHandler.BAMBOO_WALL_BONES.toStack()),
-            ItemRegistryHandler.RAMMED_SOIL::toStack,
+            () -> ItemRegistryHandler.RAMMED_SOIL.toStack(4),
             () -> RAMMED_SOIL_WALL,
             Shapes.box(0, 0, 0.40625, 1, 1, 0.59375),
             AdditionalModels.RAMMED_SOIL_WALL,
+            SoundType.BAMBOO,
+            SoundType.DRIPSTONE_BLOCK
+        )
+    );
+    public static final AdditionalComponent BAMBOO_WALL_BONES_QUARTER = (AdditionalComponent) register
+    (
+        new QuarterWall
+        (
+            "bamboo_wall_bones_quarter",
+            Type.BAKED_MODEL,
+            AdditionalModels.BAMBOO_WALL_BONES_QUARTER,
+            Shapes.box(0.25, 0, 0.4375, 0.75, 0.5, 0.5625),
+            List.of(ItemRegistryHandler.BAMBOO_WALL_BONES_QUARTER.toStack()),
+            ItemRegistryHandler.RAMMED_SOIL::toStack,
+            () -> RAMMED_SOIL_WALL_QUARTER,
+            Shapes.box(0.25, 0, 0.40625, 0.75, 0.5, 0.59375),
+            AdditionalModels.RAMMED_SOIL_WALL_QUARTER,
             SoundType.BAMBOO,
             SoundType.DRIPSTONE_BLOCK
         )

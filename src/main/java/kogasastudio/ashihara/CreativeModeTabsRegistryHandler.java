@@ -94,6 +94,9 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.WHITE_SOIL_WALL.get());
                                         output.accept(ItemRegistryHandler.RAMMED_SOIL_WALL.get());
                                         output.accept(ItemRegistryHandler.BAMBOO_WALL_BONES.get());
+                                        output.accept(ItemRegistryHandler.WHITE_SOIL_WALL_QUARTER.get());
+                                        output.accept(ItemRegistryHandler.RAMMED_SOIL_WALL_QUARTER.get());
+                                        output.accept(ItemRegistryHandler.BAMBOO_WALL_BONES_QUARTER.get());
                                         output.accept(ItemRegistryHandler.DIRT_DEPRESSION.get());
                                         output.accept(ItemRegistryHandler.WATER_FIELD.get());
                                     })).build()

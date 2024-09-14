@@ -146,8 +146,11 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> RED_BIG_TOU = ITEMS.register("red_big_tou", () -> new BuildingComponentItem(() -> BuildingComponents.RED_BIG_TOU));
     public static final DeferredItem<Item> BASE_STONE = ITEMS.register("base_stone", () -> new BuildingComponentItem(() -> BuildingComponents.BASE_STONE));
     public static final DeferredItem<Item> WHITE_SOIL_WALL = ITEMS.register("white_soil_wall", () -> new BuildingComponentItem(() -> BuildingComponents.WHITE_SOIL_WALL));
+    public static final DeferredItem<Item> WHITE_SOIL_WALL_QUARTER = ITEMS.register("white_soil_wall_quarter", () -> new BuildingComponentItem(() -> BuildingComponents.WHITE_SOIL_WALL_QUARTER));
     public static final DeferredItem<Item> RAMMED_SOIL_WALL = ITEMS.register("rammed_soil_wall", () -> new BuildingComponentItem(() -> BuildingComponents.RAMMED_SOIL_WALL));
+    public static final DeferredItem<Item> RAMMED_SOIL_WALL_QUARTER = ITEMS.register("rammed_soil_wall_quarter", () -> new BuildingComponentItem(() -> BuildingComponents.RAMMED_SOIL_WALL_QUARTER));
     public static final DeferredItem<Item> BAMBOO_WALL_BONES = ITEMS.register("bamboo_wall_bones", () -> new BuildingComponentItem(() -> BuildingComponents.BAMBOO_WALL_BONES));
+    public static final DeferredItem<Item> BAMBOO_WALL_BONES_QUARTER = ITEMS.register("bamboo_wall_bones_quarter", () -> new BuildingComponentItem(() -> BuildingComponents.BAMBOO_WALL_BONES_QUARTER));
 
     //灯具
     public static final DeferredItem<Item> LANTERN_LONG_WHITE = ITEMS.register("lantern_long_white", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), new Item.Properties()));
