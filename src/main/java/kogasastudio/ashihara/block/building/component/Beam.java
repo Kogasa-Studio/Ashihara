@@ -16,6 +16,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.List;
 
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
+import static kogasastudio.ashihara.helper.PositionHelper.coordsInRangeFixed;
 
 public class Beam extends BuildingComponent implements Connectable
 {
@@ -67,11 +68,7 @@ public class Beam extends BuildingComponent implements Connectable
         Vec3 inBlockPos = beIn.transformVec3(beIn.inBlockVec(context.getClickLocation()));
         double y = inBlockPos.y();
 
-        if (context.getClickedFace().equals(Direction.UP))
-        {
-            y = (y >= 0 && y < XTP(8)) ? 0 : XTP(8);
-        }
-        else y = (y > 0 && y <= XTP(8)) ? 0 : XTP(8);
+        y = coordsInRangeFixed(context.getClickedFace(), y, 0, XTP(8)) ? 0 : XTP(8);
 
         int floor = y == 0 ? 0 : 2;
         Direction left = r == 0 ? Direction.WEST : Direction.NORTH;

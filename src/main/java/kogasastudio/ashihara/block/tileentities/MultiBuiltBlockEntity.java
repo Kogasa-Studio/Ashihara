@@ -31,8 +31,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static kogasastudio.ashihara.block.building.BaseMultiBuiltBlock.FACING;
+import static kogasastudio.ashihara.helper.PositionHelper.coordsInRangeFixed;
 
-@SuppressWarnings("all")
+@SuppressWarnings("NullableProblems")
 public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBuiltBlock
 {
     public static final int OPCODE_COMPONENT = 0;
@@ -55,7 +56,7 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
         ComponentStateDefinition definition = component.definite(this, context);
         if (definition != null)
         {
-            if (component instanceof AdditionalComponent additionalComponent)
+            if (component instanceof AdditionalComponent)
             {
                 boolean canAppend = true;
                 for (ComponentStateDefinition def : ADDITIONAL_COMPONENTS)
@@ -88,7 +89,6 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
     {
         ItemStack stack = context.getItemInHand();
         Vec3 vec = context.getClickLocation();
-        BlockPos pos = context.getClickedPos();
         Vec3 inBlockVec = transformVec3(inBlockVec(vec));
         int opcode = stack.is(ItemRegistryHandler.WOODEN_HAMMER) ? OPCODE_COMPONENT : stack.is(ItemRegistryHandler.CHISEL) ? OPCODE_ADDITIONAL : -1;
         if (opcode == OPCODE_COMPONENT || opcode == OPCODE_ADDITIONAL)
@@ -110,10 +110,10 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
             List<ItemStack> drops = definition.component().drops;
             Vec3 vec = transformVec3(definition.inBlockPos());
             this.level.playSound(null, this.worldPosition, event, SoundSource.BLOCKS, 1.0f, 1.0f);
-            if (this.level.isClientSide() && !drops.get(0).isEmpty())
+            if (this.level.isClientSide() && !drops.getFirst().isEmpty())
             {
                 RandomSource random = this.level.getRandom();
-                ParticleOptions data = new ItemParticleOption(ParticleTypes.ITEM, drops.get(0));
+                ParticleOptions data = new ItemParticleOption(ParticleTypes.ITEM, drops.getFirst());
                 for (int i = 0; i < 20; i += 1)
                 {
                     this.level.addParticle
@@ -175,7 +175,7 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
         }
     }
 
-    public boolean checkConnection()
+    public void checkConnection()
     {
         boolean flag = false;
         for (int i = 0; i < this.COMPONENTS.size(); i++)
@@ -188,7 +188,6 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
             }
         }
         if (flag) refresh();
-        return flag;
     }
 
     public boolean tryInteract(UseOnContext context)

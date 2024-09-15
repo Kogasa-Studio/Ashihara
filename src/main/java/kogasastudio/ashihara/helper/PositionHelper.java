@@ -1,5 +1,7 @@
 package kogasastudio.ashihara.helper;
 
+import net.minecraft.core.Direction;
+
 public class PositionHelper
 {
     /**
@@ -35,5 +37,17 @@ public class PositionHelper
     public static double ATX(double absolutePos)
     {
         return PTX(ATP(absolutePos));
+    }
+
+    public static boolean coordsInRangeFixed(Direction clickDir, double coords, double min, double max)
+    {
+        Direction includesMin = switch (clickDir.getAxis())
+        {
+            case Y -> Direction.UP;
+            case Z -> Direction.SOUTH;
+            default -> Direction.EAST;
+        };
+        if (clickDir == includesMin) return (coords >= min && coords < max);
+        else return (coords > min && coords <= max);
     }
 }

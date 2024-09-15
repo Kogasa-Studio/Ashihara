@@ -28,12 +28,15 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static kogasastudio.ashihara.helper.PositionHelper.coordsInRangeFixed;
 
 public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWaterloggedBlock
 {
@@ -88,8 +91,14 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
         BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
         if (blockEntity instanceof MultiBuiltBlockEntity be)
         {
+            Vec3 vec = be.inBlockVec(context.getClickLocation());
             if (be.tryInteract(context)) return ItemInteractionResult.SUCCESS;
-            if (pStack.getItem() instanceof BuildingComponentItem componentItem && be.tryPlace(context, componentItem.getComponent())) return ItemInteractionResult.SUCCESS;
+            if
+            (
+                pStack.getItem() instanceof BuildingComponentItem componentItem
+                && (coordsInRangeFixed(context.getClickedFace(), vec.x(), 0, 1) && coordsInRangeFixed(context.getClickedFace(), vec.y(), 0, 1) && coordsInRangeFixed(context.getClickedFace(), vec.z(), 0, 1))
+                && be.tryPlace(context, componentItem.getComponent())
+            ) return ItemInteractionResult.SUCCESS;
             else if ((pStack.is(ItemRegistryHandler.WOODEN_HAMMER) || pStack.is(ItemRegistryHandler.CHISEL)) && be.tryBreak(context))
             {
                 if (be.getComponents(MultiBuiltBlockEntity.OPCODE_COMPONENT).isEmpty() && be.getComponents(MultiBuiltBlockEntity.OPCODE_ADDITIONAL).isEmpty()) pLevel.removeBlock(pPos, false);
