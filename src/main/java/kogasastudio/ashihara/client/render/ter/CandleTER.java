@@ -34,7 +34,7 @@ public class CandleTER implements BlockEntityRenderer<CandleTE>, WithLevelRender
     }
 
     @Override
-    public void renderStatic(SectionRenderContext context)
+    public void renderStatic(SectionRenderContext context, ModelRenderer renderer)
     {
         BlockEntity be = context.blockEntity();
         if (!(be instanceof CandleTE tileEntityIn)) return;

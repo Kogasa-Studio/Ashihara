@@ -15,10 +15,12 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.MultiPartBakedModel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.client.model.data.ModelData;
 
 public class MultiBuiltBlockRenderer implements BlockEntityRenderer<MultiBuiltBlockEntity>, WithLevelRenderer<MultiBuiltBlockEntity>
 {
@@ -27,7 +29,7 @@ public class MultiBuiltBlockRenderer implements BlockEntityRenderer<MultiBuiltBl
     }
 
     @Override
-    public void renderStatic(SectionRenderContext context)
+    public void renderStatic(SectionRenderContext context, ModelRenderer modelRenderer)
     {
         BlockEntity be = context.blockEntity();
         if (!(be instanceof MultiBuiltBlockEntity tileEntityIn) || tileEntityIn.getLevel() == null) return;
@@ -38,7 +40,6 @@ public class MultiBuiltBlockRenderer implements BlockEntityRenderer<MultiBuiltBl
             if (model.component().type.equals(BuildingComponents.Type.BAKED_MODEL))
             {
                 matrixStackIn.pushPose();
-                resetToBlock000(be, RenderType.cutoutMipped(), matrixStackIn);
                 translateCoordinateSystem(tileEntityIn, matrixStackIn);
 
                 Vec3 pos = model.inBlockPos();
@@ -48,9 +49,9 @@ public class MultiBuiltBlockRenderer implements BlockEntityRenderer<MultiBuiltBl
                 matrixStackIn.mulPose(Axis.YP.rotationDegrees(model.rotation()));
                 matrixStackIn.translate(-0.5, 0, -0.5);
 
-                VertexConsumer consumer = context.consumerFunction().apply(RenderType.cutoutMipped());
                 BakedModel bakedModel = Minecraft.getInstance().getModelManager().getModel(model.model().toModelResourceLocation());
-                if (!(bakedModel instanceof MultiPartBakedModel)) BakedModels.render(bakedModel, consumer, context.lighter(), matrixStackIn, tileEntityIn.getLevel(), tileEntityIn.getBlockState(), tileEntityIn.getBlockPos(), RenderType.cutoutMipped());
+                if (!(bakedModel instanceof MultiPartBakedModel)) modelRenderer.renderModel(bakedModel, matrixStackIn, RenderType.cutoutMipped(), OverlayTexture.NO_OVERLAY, ModelData.EMPTY);
+                    //if (!(bakedModel instanceof MultiPartBakedModel)) BakedModels.render(bakedModel, consumer, context.lighter(), matrixStackIn, tileEntityIn.getLevel(), tileEntityIn.getBlockState(), tileEntityIn.getBlockPos(), RenderType.cutoutMipped());
                 matrixStackIn.popPose();
             }
         }

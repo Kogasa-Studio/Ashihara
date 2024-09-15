@@ -34,7 +34,7 @@ public class CuttingBoardTER implements BlockEntityRenderer<CuttingBoardTE>, Wit
     }
 
     @Override
-    public void renderStatic(SectionRenderContext context)
+    public void renderStatic(SectionRenderContext context, ModelRenderer modelRenderer)
     {
         BlockEntity blockEntity = context.blockEntity();
         if (!(blockEntity instanceof CuttingBoardTE be) || be.getContent().isEmpty()) return;

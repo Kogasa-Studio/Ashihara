@@ -2,6 +2,8 @@ package kogasastudio.ashihara.event;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.client.models.baked.TransformedBakedModel;
 import kogasastudio.ashihara.client.render.AshiharaRenderTypes;
 import kogasastudio.ashihara.client.render.SectionRenderContext;
 import kogasastudio.ashihara.client.render.WithLevelRenderer;
@@ -10,9 +12,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -20,6 +25,8 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.AddSectionGeometryEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.lighting.LightPipelineAwareModelBlockRenderer;
 
 import java.util.List;
 
@@ -56,11 +63,22 @@ public class WLREventHandler
 
                 BlockEntityRenderDispatcher dispatcher = Minecraft.getInstance().getBlockEntityRenderDispatcher();
                 BlockEntityRenderer<BlockEntity> renderer = dispatcher.getRenderer(blockEntity);
-                Vec3 cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
 
                 if (renderer instanceof WithLevelRenderer<?> r /*&& r.needRender(cast(blockEntity), cameraPos)*/)
                 {
-                    r.renderStatic(new SectionRenderContext(region, pos, blockEntity, context.getPoseStack(), context::getOrCreateChunkBuffer, context.getQuadLighter(false)));
+                    context.getPoseStack().pushPose();
+                    context.getPoseStack().translate(pos.getX() - posSource.getX(), pos.getY() - posSource.getY(), pos.getZ() - posSource.getZ());
+
+                    r.renderStatic
+                    (
+                        new SectionRenderContext(region, pos, blockEntity, new PoseStack(), context::getOrCreateChunkBuffer, context.getQuadLighter(true)),
+                        (model, stack, renderType, overlay, modelData) -> LightPipelineAwareModelBlockRenderer.render
+                        (
+                            context.getOrCreateChunkBuffer(renderType), context.getQuadLighter(true), context.getRegion(), new TransformedBakedModel(model, stack), context.getRegion().getBlockState(pos), pos, context.getPoseStack(), false, Ashihara.getRandom(), 42L, OverlayTexture.NO_OVERLAY, ModelData.EMPTY, renderType
+                        )
+                    );
+
+                    context.getPoseStack().popPose();
                 }
             }
         }

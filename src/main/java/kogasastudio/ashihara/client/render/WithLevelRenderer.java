@@ -6,12 +6,15 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.SectionBufferBuilderPack;
 import net.minecraft.client.renderer.chunk.SectionCompiler;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.client.model.data.ModelData;
 
 import java.util.Map;
 
@@ -59,5 +62,10 @@ public interface WithLevelRenderer<T extends BlockEntity>
     }
 
     @OnlyIn(Dist.CLIENT)
-    void renderStatic(SectionRenderContext context);
+    void renderStatic(SectionRenderContext context, ModelRenderer renderer);
+
+    interface ModelRenderer
+    {
+        void renderModel(BakedModel model, PoseStack stack, RenderType renderType, int overlay, ModelData modelData);
+    }
 }
