@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/air",
+  "parent": "minecraft:block/block",
   "textures": {
     "particle": "minecraft:block/oak_planks"
   }

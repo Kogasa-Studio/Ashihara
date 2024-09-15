@@ -8,6 +8,7 @@ import kogasastudio.ashihara.client.render.SectionRenderContext;
 import kogasastudio.ashihara.client.render.WithLevelRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -18,6 +19,7 @@ import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.client.model.data.ModelData;
 
 import static kogasastudio.ashihara.block.CuttingBoardBlock.FACING;
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
@@ -47,7 +49,7 @@ public class CuttingBoardTER implements BlockEntityRenderer<CuttingBoardTE>, Wit
         if (!stack.isEmpty())
         {
             matrixStackIn.pushPose();
-            resetToBlock000(be, AshiharaRenderTypes.CHUNK_ENTITY_TRANSLUCENT, matrixStackIn);
+            //resetToBlock000(be, AshiharaRenderTypes.CHUNK_ENTITY_TRANSLUCENT, matrixStackIn);
 
             Direction facing = be.getBlockState().getValue(FACING);
             boolean isBlock = stack.getItem() instanceof BlockItem && !(stack.getItem() instanceof ItemNameBlockItem);
@@ -67,7 +69,8 @@ public class CuttingBoardTER implements BlockEntityRenderer<CuttingBoardTE>, Wit
             for (int i = 0; i < stack.getCount(); i += 1)
             {
                 if (i != 0) matrixStackIn.translate(XTP(0.0f), XTP(isBlock ? 16.0f : 0.0f), XTP(isBlock ? 0.0f : 1.2f));
-                renderer.renderModelLists
+                modelRenderer.renderModel(renderer.getModel(stack, level, null, 0), matrixStackIn, RenderType.translucent(), OverlayTexture.NO_OVERLAY, ModelData.EMPTY);
+                /*renderer.renderModelLists
                 (
                     renderer.getModel(stack, level, null, 0),
                     stack,
@@ -75,7 +78,7 @@ public class CuttingBoardTER implements BlockEntityRenderer<CuttingBoardTE>, Wit
                     OverlayTexture.NO_OVERLAY,
                     matrixStackIn,
                     context.consumerFunction().apply(AshiharaRenderTypes.CHUNK_ENTITY_TRANSLUCENT)
-                );
+                );*/
             }
             matrixStackIn.popPose();
         }
