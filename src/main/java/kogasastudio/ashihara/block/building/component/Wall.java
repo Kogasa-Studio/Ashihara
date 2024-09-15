@@ -107,7 +107,7 @@ public class Wall extends AdditionalComponent implements Interactable
         (
             BuildingComponents.get(this.id),
             new Vec3(0, 0, 0),
-            r,
+            0, r, 0,
             shape,
             MODEL,
             occupations
@@ -120,8 +120,8 @@ public class Wall extends AdditionalComponent implements Interactable
         if (this.itemPredicate != null && this.itemPredicate.get().is(context.getItemInHand().getItem()))
         {
             VoxelShape shape = newShape;
-            if (definition.rotation() == 90) shape = ShapeHelper.rotateShape(shape, 90);
-            return new ComponentStateDefinition(this.newComponent.get(), definition.inBlockPos(), definition.rotation(), shape, this.newModel, definition.occupation());
+            if (definition.rotationY() == 90) shape = ShapeHelper.rotateShape(shape, 90);
+            return new ComponentStateDefinition(this.newComponent.get(), definition.inBlockPos(), definition.rotationX(), definition.rotationY(), definition.rotationZ(), shape, this.newModel, definition.occupation());
         }
         return definition;
     }

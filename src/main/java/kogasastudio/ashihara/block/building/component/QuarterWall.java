@@ -131,7 +131,7 @@ public class QuarterWall extends AdditionalComponent implements Interactable
         (
             BuildingComponents.get(this.id),
             new Vec3(x, y, z),
-            r,
+            0, r, 0,
             shape,
             MODEL,
             List.of(occupation)
@@ -144,10 +144,10 @@ public class QuarterWall extends AdditionalComponent implements Interactable
         if (this.itemPredicate != null && this.itemPredicate.get().is(context.getItemInHand().getItem()))
         {
             VoxelShape shape = newShape;
-            if (definition.rotation() == 90) shape = ShapeHelper.rotateShape(shape, 90);
+            if (definition.rotationY() == 90) shape = ShapeHelper.rotateShape(shape, 90);
             Vec3 vec = definition.inBlockPos();
             shape = ShapeHelper.offsetShape(shape, vec.x(), vec.y(), vec.z());
-            return new ComponentStateDefinition(this.newComponent.get(), definition.inBlockPos(), definition.rotation(), shape, this.newModel, definition.occupation());
+            return new ComponentStateDefinition(this.newComponent.get(), definition.inBlockPos(), definition.rotationX(), definition.rotationY(), definition.rotationZ(), shape, this.newModel, definition.occupation());
         }
         return definition;
     }

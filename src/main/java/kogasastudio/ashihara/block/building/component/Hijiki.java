@@ -135,7 +135,7 @@ public class Hijiki extends BuildingComponent implements Connectable
         (
             BuildingComponents.get(this.id),
             new Vec3(x, y, z),
-            r,
+            0, r, 0,
             shape,
             RIGHT_CONNECTED,
             List.of(occupation)
@@ -152,7 +152,7 @@ public class Hijiki extends BuildingComponent implements Connectable
         Level level = be.getLevel();
         BlockPos pos = be.getBlockPos();
         Vec3 inBlockPos = definition.inBlockPos();
-        float r = definition.rotation();
+        float r = definition.rotationY();
 
         Direction direction;
         Vec3 expected;
@@ -208,6 +208,6 @@ public class Hijiki extends BuildingComponent implements Connectable
         shape = ShapeHelper.rotateShape(shape, -r);
         shape = ShapeHelper.offsetShape(shape, inBlockPos.x(), inBlockPos.y(), inBlockPos.z());
 
-        return new ComponentStateDefinition(definition.component(), definition.inBlockPos(), r, shape, rl, definition.occupation());
+        return new ComponentStateDefinition(definition.component(), definition.inBlockPos(), definition.rotationX(), r, definition.rotationZ(), shape, rl, definition.occupation());
     }
 }

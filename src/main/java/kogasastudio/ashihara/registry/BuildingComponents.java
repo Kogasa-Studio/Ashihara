@@ -81,6 +81,17 @@ public class BuildingComponents
             List.of(ItemRegistryHandler.RED_HIJIKI_LONG.toStack())
         )
     );
+    public static final BuildingComponent RED_HANGING_STICKER = register
+    (
+        new HangingSticker
+        (
+            "red_hanging_sticker",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_HANGING_STICKER,
+            RED_HANGING_STICKER_END,
+            List.of(ItemRegistryHandler.RED_HIJIKI_LONG.toStack())
+        )
+    );
     public static final BuildingComponent RED_TOU = register
     (
         new Tou

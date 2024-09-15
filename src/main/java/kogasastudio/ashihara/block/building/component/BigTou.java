@@ -4,7 +4,6 @@ import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.AdditionalModels;
 import kogasastudio.ashihara.registry.BuildingComponents;
-import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.phys.Vec3;
@@ -49,7 +48,7 @@ public class BigTou extends BuildingComponent
         (
             BuildingComponents.get(this.id),
             new Vec3(0, y, 0),
-            0,
+            0, 0, 0,
             shape,
             AdditionalModels.RED_BIG_TOU,
             List.of(Occupation.CENTER_ALL.get(floor))

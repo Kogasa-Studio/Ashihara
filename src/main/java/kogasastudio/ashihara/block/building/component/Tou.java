@@ -6,7 +6,6 @@ import kogasastudio.ashihara.registry.AdditionalModels;
 import kogasastudio.ashihara.registry.BuildingComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -55,7 +54,7 @@ public class Tou extends BuildingComponent
         (
             BuildingComponents.RED_TOU,
             new Vec3(x, y, z),
-            0,
+            0, 0, 0,
             shape,
             AdditionalModels.RED_TOU,
             List.of(occupation)

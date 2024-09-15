@@ -24,7 +24,7 @@ public class Column extends BuildingComponent
         (
             BuildingComponents.get(this.id),
             new Vec3(0, 0, 0),
-            0,
+            0, 0, 0,
             Block.box(3d, 0d, 3d, 13d, 16d, 13d),
             AdditionalModels.RED_THICK_COLUMN,
             Occupation.CENTER_ALL

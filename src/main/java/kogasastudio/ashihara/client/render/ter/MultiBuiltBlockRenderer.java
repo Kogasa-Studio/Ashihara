@@ -1,12 +1,10 @@
 package kogasastudio.ashihara.client.render.ter;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.building.component.ComponentStateDefinition;
 import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
-import kogasastudio.ashihara.client.models.baked.BakedModels;
 import kogasastudio.ashihara.client.render.SectionRenderContext;
 import kogasastudio.ashihara.client.render.WithLevelRenderer;
 import kogasastudio.ashihara.registry.BuildingComponents;
@@ -46,7 +44,9 @@ public class MultiBuiltBlockRenderer implements BlockEntityRenderer<MultiBuiltBl
                 matrixStackIn.translate(pos.x, pos.y, pos.z);
 
                 matrixStackIn.translate(0.5, 0, 0.5);
-                matrixStackIn.mulPose(Axis.YP.rotationDegrees(model.rotation()));
+                matrixStackIn.mulPose(Axis.YP.rotationDegrees(model.rotationY()));
+                matrixStackIn.mulPose(Axis.XP.rotationDegrees(model.rotationX()));
+                matrixStackIn.mulPose(Axis.ZP.rotationDegrees(model.rotationZ()));
                 matrixStackIn.translate(-0.5, 0, -0.5);
 
                 BakedModel bakedModel = Minecraft.getInstance().getModelManager().getModel(model.model().toModelResourceLocation());

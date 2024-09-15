@@ -86,7 +86,7 @@ public class Beam extends BuildingComponent implements Connectable
         (
         BuildingComponents.get(this.id),
             new Vec3(0, y, 0),
-            r,
+            0, r, 0,
             shape,
             NONE_CONNECTED,
             List.of(leftOccupation, centerOccupation, rightOccupation)
@@ -102,7 +102,7 @@ public class Beam extends BuildingComponent implements Connectable
 
         Level level = be.getLevel();
         BlockPos pos = be.getBlockPos();
-        float r = definition.rotation();
+        float r = definition.rotationY();
 
         Direction left;
         Direction right;
@@ -141,6 +141,6 @@ public class Beam extends BuildingComponent implements Connectable
         if (r == 90) shape = ShapeHelper.rotateShape(shape, -90);
         if (definition.inBlockPos().y() == XTP(8)) shape = ShapeHelper.offsetShape(shape, 0, 0.5, 0);
 
-        return new ComponentStateDefinition(definition.component(), definition.inBlockPos(), r, shape, rl, definition.occupation());
+        return new ComponentStateDefinition(definition.component(), definition.inBlockPos(), definition.rotationX(), r, definition.rotationZ(), shape, rl, definition.occupation());
     }
 }

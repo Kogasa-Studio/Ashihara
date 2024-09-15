@@ -1,0 +1,35 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"0": "ashihara:block/components/red_beam",
+		"particle": "ashihara:block/components/red_beam"
+	},
+	"elements": [
+		{
+			"from": [5.9, -1.5, -0.9444],
+			"to": [10.1, 4.5, 16.9444],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, -3, 0]},
+			"faces": {
+				"north": {"uv": [6, 5, 10, 11], "texture": "#0"},
+				"east": {"uv": [5, 0, 11, 16], "rotation": 90, "texture": "#0"},
+				"south": {"uv": [6, 5, 10, 11], "texture": "#0"},
+				"west": {"uv": [5, 0, 11, 16], "rotation": 90, "texture": "#0"},
+				"up": {"uv": [6, 0, 10, 16], "texture": "#0"},
+				"down": {"uv": [6, 0, 10, 16], "texture": "#0"}
+			}
+		},
+		{
+			"from": [5.905, -1.78978, -8.48758],
+			"to": [10.095, 4.71022, -1.59878],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [-0.005, -3.28978, -0.54318]},
+			"faces": {
+				"north": {"uv": [6, 5, 10, 11], "texture": "#0"},
+				"east": {"uv": [6, 4, 10, 12], "rotation": 90, "texture": "#0"},
+				"west": {"uv": [5, 4, 11, 12], "rotation": 90, "texture": "#0"},
+				"up": {"uv": [6, 4, 10, 12], "texture": "#0"},
+				"down": {"uv": [6, 4, 10, 12], "texture": "#0"}
+			}
+		}
+	]
+}

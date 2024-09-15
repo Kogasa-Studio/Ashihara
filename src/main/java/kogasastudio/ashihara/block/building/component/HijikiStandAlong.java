@@ -111,7 +111,7 @@ public class HijikiStandAlong extends BuildingComponent
         (
             BuildingComponents.get(this.id),
             new Vec3(x, y, z),
-            r,
+            0, r, 0,
             shape,
             MODEL,
             List.of(occupation)

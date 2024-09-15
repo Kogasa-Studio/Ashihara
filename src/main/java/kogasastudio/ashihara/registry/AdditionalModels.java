@@ -31,6 +31,9 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation RED_HIJIKI_SUPPORTER = register("block/components/red_hijiki_supporter");
     public static final BuildingComponentModelResourceLocation RED_HIJIKI_LONG = register("block/components/red_hijiki_long");
 
+    public static final BuildingComponentModelResourceLocation RED_HANGING_STICKER = register("block/components/red_hanging_sticker");
+    public static final BuildingComponentModelResourceLocation RED_HANGING_STICKER_END = register("block/components/red_hanging_sticker_end");
+
     public static final BuildingComponentModelResourceLocation RED_TOU = register("block/components/red_tou");
 
     public static final BuildingComponentModelResourceLocation RED_BIG_TOU = register("block/components/red_big_tou");

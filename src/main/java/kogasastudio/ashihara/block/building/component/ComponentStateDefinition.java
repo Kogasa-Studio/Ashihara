@@ -13,7 +13,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.ArrayList;
 import java.util.List;
 
-public record ComponentStateDefinition(BuildingComponent component, Vec3 inBlockPos, float rotation, VoxelShape shape, BuildingComponentModelResourceLocation model, List<Occupation> occupation)
+public record ComponentStateDefinition(BuildingComponent component, Vec3 inBlockPos, float rotationX, float rotationY, float rotationZ, VoxelShape shape, BuildingComponentModelResourceLocation model, List<Occupation> occupation)
 {
     public CompoundTag serializeNBT()
     {
@@ -24,7 +24,9 @@ public record ComponentStateDefinition(BuildingComponent component, Vec3 inBlock
         posTag.putDouble("y", inBlockPos().y());
         posTag.putDouble("z", inBlockPos().z());
         tag.put("inBlockPos", posTag);
-        tag.putFloat("rotation", rotation());
+        tag.putFloat("rotationX", rotationX());
+        tag.putFloat("rotationY", rotationY());
+        tag.putFloat("rotationZ", rotationZ());
         ShapeHelper.saveNBT(tag, shape());
         ListTag occupationTag = new ListTag();
         for (Occupation occupation : occupation())
@@ -47,7 +49,9 @@ public record ComponentStateDefinition(BuildingComponent component, Vec3 inBlock
         if (component == null) throw new RuntimeException("Error loading component: Component \"" + model.getString("component") + "\" does not exist!");
         CompoundTag posTag = model.getCompound("inBlockPos");
         Vec3 inBlockPos = new Vec3(posTag.getDouble("x"), posTag.getDouble("y"), posTag.getDouble("z"));
-        float rotation = model.getFloat("rotation");
+        float rotationX = model.getFloat("rotationX");
+        float rotationY = model.getFloat("rotationY");
+        float rotationZ = model.getFloat("rotationZ");
         VoxelShape shape = ShapeHelper.readNBT(model);
         CompoundTag modelTag = model.getCompound("model");
         BuildingComponentModelResourceLocation modelRL = new BuildingComponentModelResourceLocation(ResourceLocation.parse(modelTag.getString("id")), modelTag.getString("variant"));
@@ -58,7 +62,7 @@ public record ComponentStateDefinition(BuildingComponent component, Vec3 inBlock
             CompoundTag occTag = (CompoundTag) occupationTag;
             occupations.add(Occupation.OCCUPATION_MAP.get(occTag.getString("value")));
         }
-        return new ComponentStateDefinition(component, inBlockPos, rotation, shape, modelRL, occupations);
+        return new ComponentStateDefinition(component, inBlockPos, rotationX, rotationY, rotationZ, shape, modelRL, occupations);
     }
 
     @Override
@@ -66,7 +70,7 @@ public record ComponentStateDefinition(BuildingComponent component, Vec3 inBlock
     {
         if (!(obj instanceof ComponentStateDefinition definition)) return false;
         boolean componentEqual = component().equals(definition.component());
-        boolean rotationEqual = rotation() == definition.rotation();
+        boolean rotationEqual = rotationY() == definition.rotationY();
         boolean shapeEqual = definition.shape().bounds().equals(shape().bounds());
         boolean occupationEqual = occupation().hashCode() == definition.occupation().hashCode();
         return componentEqual && rotationEqual && shapeEqual && occupationEqual;

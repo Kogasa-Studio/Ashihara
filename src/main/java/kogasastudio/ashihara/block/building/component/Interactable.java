@@ -9,6 +9,6 @@ public interface Interactable
 
     default SoundType getInteractSound()
     {
-        return SoundType.EMPTY;
+        return SoundType.WOOD;
     }
 }
