@@ -6,6 +6,8 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.client.model.lighting.QuadLighter;
+
 import java.util.function.Function;
 
 public record SectionRenderContext
@@ -14,7 +16,8 @@ public record SectionRenderContext
     BlockPos pos,
     BlockEntity blockEntity,
     PoseStack poseStack,
-    Function<RenderType, VertexConsumer> consumerFunction
+    Function<RenderType, VertexConsumer> consumerFunction,
+    QuadLighter lighter
 )
 {
 }

@@ -7,17 +7,16 @@ import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.building.component.ComponentStateDefinition;
 import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.client.models.baked.BakedModels;
-import kogasastudio.ashihara.client.render.AshiharaRenderTypes;
 import kogasastudio.ashihara.client.render.SectionRenderContext;
 import kogasastudio.ashihara.client.render.WithLevelRenderer;
 import kogasastudio.ashihara.registry.BuildingComponents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.MultiPartBakedModel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 
@@ -33,16 +32,13 @@ public class MultiBuiltBlockRenderer implements BlockEntityRenderer<MultiBuiltBl
         BlockEntity be = context.blockEntity();
         if (!(be instanceof MultiBuiltBlockEntity tileEntityIn) || tileEntityIn.getLevel() == null) return;
         PoseStack matrixStackIn = context.poseStack();
-        RandomSource random = tileEntityIn.getLevel().getRandom();
-
-        int combinedLightIn = getPackedLight(be);
 
         for (ComponentStateDefinition model : tileEntityIn.getComponents(MultiBuiltBlockEntity.OPCODE_READALL))
         {
             if (model.component().type.equals(BuildingComponents.Type.BAKED_MODEL))
             {
                 matrixStackIn.pushPose();
-                resetToBlock000(be, AshiharaRenderTypes.CHUNK_ENTITY_SOLID, matrixStackIn);
+                resetToBlock000(be, RenderType.cutoutMipped(), matrixStackIn);
                 translateCoordinateSystem(tileEntityIn, matrixStackIn);
 
                 Vec3 pos = model.inBlockPos();
@@ -52,9 +48,9 @@ public class MultiBuiltBlockRenderer implements BlockEntityRenderer<MultiBuiltBl
                 matrixStackIn.mulPose(Axis.YP.rotationDegrees(model.rotation()));
                 matrixStackIn.translate(-0.5, 0, -0.5);
 
-                VertexConsumer consumer = context.consumerFunction().apply(AshiharaRenderTypes.CHUNK_ENTITY_SOLID);
+                VertexConsumer consumer = context.consumerFunction().apply(RenderType.cutoutMipped());
                 BakedModel bakedModel = Minecraft.getInstance().getModelManager().getModel(model.model().toModelResourceLocation());
-                if (!(bakedModel instanceof MultiPartBakedModel)) BakedModels.render(matrixStackIn.last(), consumer, bakedModel, AshiharaRenderTypes.CHUNK_ENTITY_SOLID, be.getBlockState(), combinedLightIn);
+                if (!(bakedModel instanceof MultiPartBakedModel)) BakedModels.render(bakedModel, consumer, context.lighter(), matrixStackIn, tileEntityIn.getLevel(), tileEntityIn.getBlockState(), tileEntityIn.getBlockPos(), RenderType.cutoutMipped());
                 matrixStackIn.popPose();
             }
         }

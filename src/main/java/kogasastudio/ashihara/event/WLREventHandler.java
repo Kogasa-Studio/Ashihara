@@ -60,7 +60,7 @@ public class WLREventHandler
 
                 if (renderer instanceof WithLevelRenderer<?> r /*&& r.needRender(cast(blockEntity), cameraPos)*/)
                 {
-                    r.renderStatic(new SectionRenderContext(region, pos, blockEntity, context.getPoseStack(), context::getOrCreateChunkBuffer));
+                    r.renderStatic(new SectionRenderContext(region, pos, blockEntity, context.getPoseStack(), context::getOrCreateChunkBuffer, context.getQuadLighter(false)));
                 }
             }
         }
