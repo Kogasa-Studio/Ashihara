@@ -1,0 +1,23 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"0": "ashihara:block/components/column_thick_red",
+		"1": "ashihara:block/components/column_thick_red_top",
+		"particle": "ashihara:block/components/column_thick_red"
+	},
+	"elements": [
+		{
+			"from": [3, 4, 3],
+			"to": [13, 12, 13],
+			"faces": {
+				"north": {"uv": [3, 4, 13, 12], "texture": "#0"},
+				"east": {"uv": [3, 4, 13, 12], "texture": "#0"},
+				"south": {"uv": [3, 4, 13, 12], "texture": "#0"},
+				"west": {"uv": [3, 4, 13, 12], "texture": "#0"},
+				"up": {"uv": [3, 3, 13, 13], "texture": "#1"},
+				"down": {"uv": [3, 3, 13, 13], "texture": "#1"}
+			}
+		}
+	]
+}

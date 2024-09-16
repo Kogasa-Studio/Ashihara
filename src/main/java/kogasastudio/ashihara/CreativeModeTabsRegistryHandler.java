@@ -83,7 +83,11 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.OIL_PLATE_STICK.get());
                                         output.accept(ItemRegistryHandler.TATAMI.get());
                                         output.accept(ItemRegistryHandler.MULTI_RED_THICK_COLUMN.get());
+                                        output.accept(ItemRegistryHandler.RED_THICK_COLUMN_SHORT.get());
+                                        output.accept(ItemRegistryHandler.RED_COLUMN.get());
+                                        output.accept(ItemRegistryHandler.RED_COLUMN_SHORT.get());
                                         output.accept(ItemRegistryHandler.RED_BEAM.get());
+                                        output.accept(ItemRegistryHandler.RED_RAFTER_STICKING_BEAM.get());
                                         output.accept(ItemRegistryHandler.RED_HIJIKI.get());
                                         output.accept(ItemRegistryHandler.RED_HIJIKI_SUPPORTER.get());
                                         output.accept(ItemRegistryHandler.RED_HIJIKI_CONNECTOR.get());
@@ -103,6 +107,11 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.WHITE_SOIL_WALL_QUARTER.get());
                                         output.accept(ItemRegistryHandler.RAMMED_SOIL_WALL_QUARTER.get());
                                         output.accept(ItemRegistryHandler.BAMBOO_WALL_BONES_QUARTER.get());
+                                        output.accept(ItemRegistryHandler.RED_PLANKS_FLOOR.get());
+                                        output.accept(ItemRegistryHandler.RED_PLANKS_FLOOR_QUARTER.get());
+                                        output.accept(ItemRegistryHandler.RED_LATTICED_CEILING_WHITE.get());
+                                        output.accept(ItemRegistryHandler.RED_LATTICED_CEILING_WHITE_QUARTER.get());
+                                        output.accept(ItemRegistryHandler.RED_BENDED_STICKERS.get());
                                         output.accept(ItemRegistryHandler.DIRT_DEPRESSION.get());
                                         output.accept(ItemRegistryHandler.WATER_FIELD.get());
                                     })).build()

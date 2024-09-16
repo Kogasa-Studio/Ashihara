@@ -19,6 +19,9 @@ public class AdditionalModels
 
     //Structural
     public static final BuildingComponentModelResourceLocation RED_THICK_COLUMN = register("block/building_blocks/column/column_thick_red");
+    public static final BuildingComponentModelResourceLocation RED_THICK_COLUMN_SHORT = register("block/components/red_thick_column_short");
+    public static final BuildingComponentModelResourceLocation RED_COLUMN = register("block/components/red_column");
+    public static final BuildingComponentModelResourceLocation RED_COLUMN_SHORT = register("block/components/red_column_short");
 
     public static final BuildingComponentModelResourceLocation RED_BEAM = register("block/components/red_beam");
     public static final BuildingComponentModelResourceLocation RED_BEAM_L = register("block/components/red_beam_l");
@@ -33,6 +36,8 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation RED_HIJIKI_CORNER_NORMAL = register("block/components/red_hijiki_cornered_normal");
     public static final BuildingComponentModelResourceLocation RED_HIJIKI_CORNER_NORMAL_LONG = register("block/components/red_hijiki_cornered_normal_long");
     public static final BuildingComponentModelResourceLocation RED_HIJIKI_CORNER_LONG = register("block/components/red_hijiki_cornered_long");
+
+    public static final BuildingComponentModelResourceLocation RED_RAFTER_STICKING_BEAM = register("block/components/red_rafter_sticking_beam");
 
     public static final BuildingComponentModelResourceLocation RED_TOU = register("block/components/red_tou");
     public static final BuildingComponentModelResourceLocation RED_BIG_TOU = register("block/components/red_big_tou");
@@ -54,6 +59,13 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation RED_HANGING_STICKER_END = register("block/components/red_hanging_sticker_end");
     public static final BuildingComponentModelResourceLocation RED_HANGING_STICKER_CORNER = register("block/components/red_hanging_sticker_corner");
     public static final BuildingComponentModelResourceLocation RED_HANGING_STICKER_END_CORNER = register("block/components/red_hanging_sticker_end_corner");
+
+    public static final BuildingComponentModelResourceLocation RED_PLANKS_FLOOR = register("block/components/red_planks_floor");
+    public static final BuildingComponentModelResourceLocation RED_PLANKS_FLOOR_QUARTER = register("block/components/red_planks_floor_quarter");
+    public static final BuildingComponentModelResourceLocation RED_LATTICED_CEILING_WHITE = register("block/components/red_latticed_ceiling_white");
+    public static final BuildingComponentModelResourceLocation RED_LATTICED_CEILING_WHITE_QUARTER = register("block/components/red_latticed_ceiling_white_quarter");
+
+    public static final BuildingComponentModelResourceLocation RED_BENDED_STICKERS = register("block/components/red_bended_stickers");
 
     @SubscribeEvent
     public static void onRegisterAdditionalModels(ModelEvent.RegisterAdditional event)

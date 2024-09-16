@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 import static kogasastudio.ashihara.registry.AdditionalModels.*;
 
 public class BuildingComponents
@@ -22,7 +23,40 @@ public class BuildingComponents
         (
             "red_thick_column",
             Type.BAKED_MODEL,
+            AdditionalModels.RED_THICK_COLUMN,
             List.of(ItemRegistryHandler.RED_THICK_COLUMN.toStack())
+        )
+    );
+    public static final BuildingComponent RED_THICK_COLUMN_SHORT = register
+    (
+        new ShortColumn
+        (
+            "red_thick_column_short",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_THICK_COLUMN_SHORT,
+            List.of(ItemRegistryHandler.RED_THICK_COLUMN_SHORT.toStack())
+        )
+    );
+    public static final BuildingComponent RED_COLUMN = register
+    (
+        new Column
+        (
+            "red_column",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_COLUMN,
+            Shapes.box(0.34375, 0, 0.34375, 0.65625, 1, 0.65625),
+            List.of(ItemRegistryHandler.RED_COLUMN.toStack())
+        )
+    );
+    public static final BuildingComponent RED_COLUMN_SHORT = register
+    (
+        new ShortColumn
+        (
+            "red_column_short",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_COLUMN_SHORT,
+            Shapes.box(0.34375, 0, 0.34375, 0.65625, 0.5, 0.65625),
+            List.of(ItemRegistryHandler.RED_COLUMN_SHORT.toStack())
         )
     );
     public static final BuildingComponent RED_BEAM = register
@@ -36,6 +70,16 @@ public class BuildingComponents
             RED_BEAM_R,
             RED_BEAM_A,
             List.of(ItemRegistryHandler.RED_BEAM.toStack())
+        )
+    );
+    public static final BuildingComponent RED_RAFTER_STICKING_BEAM = register
+    (
+        new RafterStickingBeam
+        (
+            "red_rafter_sticking_beam",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_RAFTER_STICKING_BEAM,
+            List.of(ItemRegistryHandler.RED_RAFTER_STICKING_BEAM.toStack())
         )
     );
     public static final BuildingComponent RED_HIJIKI = register
@@ -113,28 +157,6 @@ public class BuildingComponents
             List.of(ItemRegistryHandler.RED_HIJIKI_CORNER_LONG.toStack())//
         )
     );
-    public static final BuildingComponent RED_HANGING_STICKER = register
-    (
-        new HangingSticker
-        (
-            "red_hanging_sticker",
-            Type.BAKED_MODEL,
-            AdditionalModels.RED_HANGING_STICKER,
-            RED_HANGING_STICKER_END,
-            List.of(ItemRegistryHandler.RED_HANGING_STICKER.toStack())
-        )
-    );
-    public static final BuildingComponent RED_HANGING_STICKER_CORNER = register
-    (
-        new HangingStickerOblique
-        (
-            "red_hanging_sticker_corner",
-            Type.BAKED_MODEL,
-            AdditionalModels.RED_HANGING_STICKER_CORNER,
-            RED_HANGING_STICKER_END_CORNER,
-            List.of(ItemRegistryHandler.RED_HANGING_STICKER_CORNER.toStack())
-        )
-    );
     public static final BuildingComponent RED_TOU = register
     (
         new Tou
@@ -175,6 +197,7 @@ public class BuildingComponents
         )
     );
 
+    //Additional
     public static final AdditionalComponent BASE_STONE = (AdditionalComponent) register
     (
         new BaseStone
@@ -282,6 +305,80 @@ public class BuildingComponents
             AdditionalModels.RAMMED_SOIL_WALL_QUARTER,
             SoundType.BAMBOO,
             SoundType.DRIPSTONE_BLOCK
+        )
+    );
+    public static final BuildingComponent RED_HANGING_STICKER = register
+    (
+        new HangingSticker
+        (
+            "red_hanging_sticker",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_HANGING_STICKER,
+            RED_HANGING_STICKER_END,
+            List.of(ItemRegistryHandler.RED_HANGING_STICKER.toStack())
+        )
+    );
+    public static final BuildingComponent RED_HANGING_STICKER_CORNER = register
+    (
+        new HangingStickerOblique
+        (
+            "red_hanging_sticker_corner",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_HANGING_STICKER_CORNER,
+            RED_HANGING_STICKER_END_CORNER,
+            List.of(ItemRegistryHandler.RED_HANGING_STICKER_CORNER.toStack())
+        )
+    );
+    public static final BuildingComponent RED_PLANKS_FLOOR = register
+        (
+        new Floor
+        (
+            "red_planks_floor",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_PLANKS_FLOOR,
+            List.of(ItemRegistryHandler.RED_PLANKS_FLOOR.toStack())
+        )
+    );
+    public static final BuildingComponent RED_PLANKS_FLOOR_QUARTER = register
+    (
+        new QuarterFloor
+        (
+            "red_planks_floor_quarter",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_PLANKS_FLOOR_QUARTER,
+            List.of(ItemRegistryHandler.RED_PLANKS_FLOOR_QUARTER.toStack())
+        )
+    );
+    public static final BuildingComponent RED_LATTICED_CEILING_WHITE = register
+        (
+        new Floor
+        (
+            "red_latticed_ceiling_white",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_LATTICED_CEILING_WHITE,
+            Shapes.box(0, XTP(2), 0, 1, 0.25625, 1),
+            List.of(ItemRegistryHandler.RED_LATTICED_CEILING_WHITE.toStack())
+        )
+    );
+    public static final BuildingComponent RED_LATTICED_CEILING_WHITE_QUARTER = register
+    (
+        new QuarterFloor
+        (
+            "red_latticed_ceiling_white_quarter",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_LATTICED_CEILING_WHITE_QUARTER,
+            Shapes.box(0.25, XTP(2), 0.25, 0.75, 0.25625, 0.75),
+            List.of(ItemRegistryHandler.RED_LATTICED_CEILING_WHITE_QUARTER.toStack())
+        )
+    );
+    public static final BuildingComponent RED_BENDED_STICKERS = register
+    (
+        new BendedSticker
+        (
+            "red_bended_stickers",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_BENDED_STICKERS,
+            List.of(ItemRegistryHandler.RED_BENDED_STICKERS.toStack())
         )
     );
 

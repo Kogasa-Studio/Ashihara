@@ -2,7 +2,6 @@ package kogasastudio.ashihara.item;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
-import kogasastudio.ashihara.block.building.component.BuildingComponent;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.item.block.*;
 import kogasastudio.ashihara.item.foods.EasyFood;
@@ -137,7 +136,11 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> STRAIGHT_BAR_WINDOW_GREEN = ITEMS.register("straight_bar_window_green", () -> new BlockItem(BlockRegistryHandler.STRAIGHT_BAR_WINDOW_GREEN.get(), new Item.Properties()));
 
     public static final DeferredItem<Item> MULTI_RED_THICK_COLUMN = ITEMS.register("multi_red_thick_column", () -> new BuildingComponentItem(() -> BuildingComponents.RED_THICK_COLUMN));
+    public static final DeferredItem<Item> RED_THICK_COLUMN_SHORT = ITEMS.register("red_thick_column_short", () -> new BuildingComponentItem(() -> BuildingComponents.RED_THICK_COLUMN_SHORT));
+    public static final DeferredItem<Item> RED_COLUMN = ITEMS.register("red_column", () -> new BuildingComponentItem(() -> BuildingComponents.RED_COLUMN));
+    public static final DeferredItem<Item> RED_COLUMN_SHORT = ITEMS.register("red_column_short", () -> new BuildingComponentItem(() -> BuildingComponents.RED_COLUMN_SHORT));
     public static final DeferredItem<Item> RED_BEAM = ITEMS.register("red_beam", () -> new BuildingComponentItem(() -> BuildingComponents.RED_BEAM));
+    public static final DeferredItem<Item> RED_RAFTER_STICKING_BEAM = ITEMS.register("red_rafter_sticking_beam", () -> new BuildingComponentItem(() -> BuildingComponents.RED_RAFTER_STICKING_BEAM));
     public static final DeferredItem<Item> RED_HIJIKI = ITEMS.register("red_hijiki", () -> new BuildingComponentItem(() -> BuildingComponents.RED_HIJIKI));
     public static final DeferredItem<Item> RED_HIJIKI_SUPPORTER = ITEMS.register("red_hijiki_supporter", () -> new BuildingComponentItem(() -> BuildingComponents.RED_HIJIKI_SUPPORTER));
     public static final DeferredItem<Item> RED_HIJIKI_CONNECTOR = ITEMS.register("red_hijiki_connector", () -> new BuildingComponentItem(() -> BuildingComponents.RED_HIJIKI_CONNECTOR));
@@ -157,6 +160,11 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> RAMMED_SOIL_WALL_QUARTER = ITEMS.register("rammed_soil_wall_quarter", () -> new BuildingComponentItem(() -> BuildingComponents.RAMMED_SOIL_WALL_QUARTER));
     public static final DeferredItem<Item> BAMBOO_WALL_BONES = ITEMS.register("bamboo_wall_bones", () -> new BuildingComponentItem(() -> BuildingComponents.BAMBOO_WALL_BONES));
     public static final DeferredItem<Item> BAMBOO_WALL_BONES_QUARTER = ITEMS.register("bamboo_wall_bones_quarter", () -> new BuildingComponentItem(() -> BuildingComponents.BAMBOO_WALL_BONES_QUARTER));
+    public static final DeferredItem<Item> RED_PLANKS_FLOOR = ITEMS.register("red_planks_floor", () -> new BuildingComponentItem(() -> BuildingComponents.RED_PLANKS_FLOOR));
+    public static final DeferredItem<Item> RED_PLANKS_FLOOR_QUARTER = ITEMS.register("red_planks_floor_quarter", () -> new BuildingComponentItem(() -> BuildingComponents.RED_PLANKS_FLOOR_QUARTER));
+    public static final DeferredItem<Item> RED_LATTICED_CEILING_WHITE = ITEMS.register("red_latticed_ceiling_white", () -> new BuildingComponentItem(() -> BuildingComponents.RED_LATTICED_CEILING_WHITE));
+    public static final DeferredItem<Item> RED_LATTICED_CEILING_WHITE_QUARTER = ITEMS.register("red_latticed_ceiling_white_quarter", () -> new BuildingComponentItem(() -> BuildingComponents.RED_LATTICED_CEILING_WHITE_QUARTER));
+    public static final DeferredItem<Item> RED_BENDED_STICKERS = ITEMS.register("red_bended_stickers", () -> new BuildingComponentItem(() -> BuildingComponents.RED_BENDED_STICKERS));
 
     //灯具
     public static final DeferredItem<Item> LANTERN_LONG_WHITE = ITEMS.register("lantern_long_white", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), new Item.Properties()));
