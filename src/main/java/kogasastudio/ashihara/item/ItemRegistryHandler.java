@@ -143,6 +143,7 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> RED_HIJIKI_CONNECTOR = ITEMS.register("red_hijiki_connector", () -> new BuildingComponentItem(() -> BuildingComponents.RED_HIJIKI_CONNECTOR));
     public static final DeferredItem<Item> RED_HIJIKI_LONG = ITEMS.register("red_hijiki_long", () -> new BuildingComponentItem(() -> BuildingComponents.RED_HIJIKI_LONG));
     public static final DeferredItem<Item> RED_HANGING_STICKER = ITEMS.register("red_hanging_sticker", () -> new BuildingComponentItem(() -> BuildingComponents.RED_HANGING_STICKER));
+    public static final DeferredItem<Item> RED_HANGING_STICKER_CORNER = ITEMS.register("red_hanging_sticker_corner", () -> new BuildingComponentItem(() -> BuildingComponents.RED_HANGING_STICKER_CORNER));
     public static final DeferredItem<Item> RED_TOU = ITEMS.register("red_tou", () -> new BuildingComponentItem(() -> BuildingComponents.RED_TOU));
     public static final DeferredItem<Item> RED_BIG_TOU = ITEMS.register("red_big_tou", () -> new BuildingComponentItem(() -> BuildingComponents.RED_BIG_TOU));
     public static final DeferredItem<Item> BASE_STONE = ITEMS.register("base_stone", () -> new BuildingComponentItem(() -> BuildingComponents.BASE_STONE));

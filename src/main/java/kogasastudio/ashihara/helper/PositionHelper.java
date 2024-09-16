@@ -39,15 +39,35 @@ public class PositionHelper
         return PTX(ATP(absolutePos));
     }
 
-    public static boolean coordsInRangeFixed(Direction clickDir, double coords, double min, double max)
+    public static boolean coordsInRangeFixedX(Direction clickDir, double coords, double min, double max)
     {
-        Direction includesMin = switch (clickDir.getAxis())
-        {
-            case Y -> Direction.UP;
-            case Z -> Direction.SOUTH;
-            default -> Direction.EAST;
-        };
-        if (clickDir == includesMin) return (coords >= min && coords < max);
+        if (clickDir == Direction.EAST) return (coords >= min && coords < max);
         else return (coords > min && coords <= max);
+    }
+
+    public static boolean coordsInRangeFixedY(Direction clickDir, double coords, double min, double max)
+    {
+        if (clickDir == Direction.UP) return (coords >= min && coords < max);
+        else return (coords > min && coords <= max);
+    }
+
+    public static boolean coordsInRangeFixedZ(Direction clickDir, double coords, double min, double max)
+    {
+        if (clickDir == Direction.SOUTH) return (coords >= min && coords < max);
+        else return (coords > min && coords <= max);
+    }
+
+    /**
+     * 将斜向的旋转角度化整为45的倍数
+     */
+    public static float transformObliqueDegree(float degrees)
+    {
+        do {degrees += 360;} while (degrees < 0);
+        do {degrees -= 360;} while (degrees > 360);
+
+        if (degrees >= 0 && degrees < 90) return 45;
+        else if (degrees >= 90 && degrees < 180) return 135;
+        else if (degrees >= 180 && degrees < 270) return 225;
+        else return 315;
     }
 }

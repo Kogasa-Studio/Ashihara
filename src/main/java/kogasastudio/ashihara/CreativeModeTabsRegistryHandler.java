@@ -89,6 +89,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.RED_HIJIKI_CONNECTOR.get());
                                         output.accept(ItemRegistryHandler.RED_HIJIKI_LONG.get());
                                         output.accept(ItemRegistryHandler.RED_HANGING_STICKER.get());
+                                        output.accept(ItemRegistryHandler.RED_HANGING_STICKER_CORNER.get());
                                         output.accept(ItemRegistryHandler.RED_BIG_TOU.get());
                                         output.accept(ItemRegistryHandler.RED_TOU.get());
                                         output.accept(ItemRegistryHandler.BASE_STONE.get());

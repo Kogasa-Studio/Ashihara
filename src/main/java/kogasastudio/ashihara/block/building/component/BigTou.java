@@ -13,7 +13,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.List;
 
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
-import static kogasastudio.ashihara.helper.PositionHelper.coordsInRangeFixed;
+import static kogasastudio.ashihara.helper.PositionHelper.coordsInRangeFixedY;
 
 public class BigTou extends BuildingComponent
 {
@@ -37,7 +37,7 @@ public class BigTou extends BuildingComponent
 
         double y = inBlockPos.y();
 
-        y = coordsInRangeFixed(context.getClickedFace(), y, 0, XTP(8)) ? 0 : XTP(8);
+        y = coordsInRangeFixedY(context.getClickedFace(), y, 0, XTP(8)) ? 0 : XTP(8);
 
         int floor = y == 0 ? 0 : 2;
 

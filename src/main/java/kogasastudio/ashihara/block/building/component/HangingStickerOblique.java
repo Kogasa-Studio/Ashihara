@@ -9,21 +9,21 @@ import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
 
-import static kogasastudio.ashihara.helper.PositionHelper.XTP;
-import static kogasastudio.ashihara.helper.PositionHelper.coordsInRangeFixedY;
+import static kogasastudio.ashihara.helper.PositionHelper.*;
 
-public class HangingSticker extends AdditionalComponent implements Interactable
+public class HangingStickerOblique extends AdditionalComponent implements Interactable
 {
     private VoxelShape SHAPE;
     private final BuildingComponentModelResourceLocation model;
     private final BuildingComponentModelResourceLocation endModel;
 
-    public HangingSticker(String idIn, BuildingComponents.Type typeIn, BuildingComponentModelResourceLocation modelIn, BuildingComponentModelResourceLocation endModelIn, List<ItemStack> dropsIn)
+    public HangingStickerOblique(String idIn, BuildingComponents.Type typeIn, BuildingComponentModelResourceLocation modelIn, BuildingComponentModelResourceLocation endModelIn, List<ItemStack> dropsIn)
     {
         super(idIn, typeIn, dropsIn);
         this.model = modelIn;
@@ -33,12 +33,12 @@ public class HangingSticker extends AdditionalComponent implements Interactable
 
     protected void initShape()
     {
-        this.SHAPE = Shapes.or
-        (
-            Shapes.box(0.34375, 0, -0.125, 0.65625, 0.5, 1.125),
-            Shapes.box(0.34375, 0.5, 0.4375, 0.65625, 0.75, 1.125),
-            Shapes.box(0.34375, -0.25, -0.125, 0.65625, 0, 0.5625)
-        );
+        VoxelShape shape = Shapes.empty();
+        shape = Shapes.join(shape, Shapes.box(-0.1875, -0.3125, -0.1875, 0.3125, 0.21875, 0.3125), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.125, -0.1875, 0.125, 0.625, 0.34375, 0.625), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.375, -0.03125, 0.375, 0.875, 0.5, 0.875), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.6875, 0.0625, 0.6875, 1.1875, 0.59375, 1.1875), BooleanOp.OR);
+        this.SHAPE = shape;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class HangingSticker extends AdditionalComponent implements Interactable
             case SOUTH -> 0;
             case EAST -> 90;
             default -> 180;
-        };
+        } + 45;
 
         double y = inBlockPos.y();
 
@@ -63,14 +63,14 @@ public class HangingSticker extends AdditionalComponent implements Interactable
         int floor = y == 0 ? 0 : 2;
 
         VoxelShape shape = SHAPE;
-        shape = ShapeHelper.rotateShape(shape, -r);
+        shape = ShapeHelper.rotateShape(shape, r - 45);
         shape = ShapeHelper.offsetShape(shape, 0, y, 0);
 
         return new ComponentStateDefinition
         (
             BuildingComponents.get(this.id),
             new Vec3(0, y + XTP(4), 0),
-            -26.5651f, r, 0,
+            -19.4712f, r, 0,
             shape,
             this.model,
             List.of(Occupation.CENTER_ALL.get(floor))

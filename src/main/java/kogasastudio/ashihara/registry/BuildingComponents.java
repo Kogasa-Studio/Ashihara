@@ -89,7 +89,18 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.RED_HANGING_STICKER,
             RED_HANGING_STICKER_END,
-            List.of(ItemRegistryHandler.RED_HIJIKI_LONG.toStack())
+            List.of(ItemRegistryHandler.RED_HANGING_STICKER.toStack())
+        )
+    );
+    public static final BuildingComponent RED_HANGING_STICKER_CORNER = register
+    (
+        new HangingStickerOblique
+        (
+            "red_hanging_sticker_corner",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_HANGING_STICKER_CORNER,
+            RED_HANGING_STICKER_END_CORNER,
+            List.of(ItemRegistryHandler.RED_HANGING_STICKER_CORNER.toStack())
         )
     );
     public static final BuildingComponent RED_TOU = register

@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static kogasastudio.ashihara.helper.PositionHelper.coordsInRangeFixed;
+import static kogasastudio.ashihara.helper.PositionHelper.*;
 
 public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWaterloggedBlock
 {
@@ -96,7 +96,7 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
             if
             (
                 pStack.getItem() instanceof BuildingComponentItem componentItem
-                && (coordsInRangeFixed(context.getClickedFace(), vec.x(), 0, 1) && coordsInRangeFixed(context.getClickedFace(), vec.y(), 0, 1) && coordsInRangeFixed(context.getClickedFace(), vec.z(), 0, 1))
+                && (coordsInRangeFixedX(context.getClickedFace(), vec.x(), 0, 1) && coordsInRangeFixedY(context.getClickedFace(), vec.y(), 0, 1) && coordsInRangeFixedZ(context.getClickedFace(), vec.z(), 0, 1))
                 && be.tryPlace(context, componentItem.getComponent())
             ) return ItemInteractionResult.SUCCESS;
             else if ((pStack.is(ItemRegistryHandler.WOODEN_HAMMER) || pStack.is(ItemRegistryHandler.CHISEL)) && be.tryBreak(context))

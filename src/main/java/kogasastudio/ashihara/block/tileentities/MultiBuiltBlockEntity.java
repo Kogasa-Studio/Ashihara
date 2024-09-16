@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static kogasastudio.ashihara.block.building.BaseMultiBuiltBlock.FACING;
-import static kogasastudio.ashihara.helper.PositionHelper.coordsInRangeFixed;
 
 @SuppressWarnings("NullableProblems")
 public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBuiltBlock
@@ -108,7 +107,7 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
         {
             SoundEvent event = definition.component().getSoundType().getBreakSound();
             List<ItemStack> drops = definition.component().drops;
-            Vec3 vec = transformVec3(definition.inBlockPos());
+            Vec3 vec = outLayVec3(definition.inBlockPos());
             this.level.playSound(null, this.worldPosition, event, SoundSource.BLOCKS, 1.0f, 1.0f);
             if (this.level.isClientSide() && !drops.getFirst().isEmpty())
             {
@@ -119,9 +118,9 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
                     this.level.addParticle
                     (
                         data,
-                        vec.x,
-                        vec.y,
-                        vec.z,
+                        this.getBlockPos().getX() + vec.x,
+                        this.getBlockPos().getY() + vec.y,
+                        this.getBlockPos().getZ() + vec.z,
                         ((double) random.nextFloat() - 0.5D) * 0.2D,
                         ((double) random.nextFloat() - 0.5D) * 0.2D,
                         ((double) random.nextFloat() - 0.5D) * 0.2D
@@ -287,6 +286,28 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
         rotation = Math.toRadians(rotation);
         double[] transformed = MathHelper.rotatePoint(vec3.x(), vec3.z(), 0.5, 0.5, rotation);
         return new Vec3(transformed[0], vec3.y(), transformed[1]);
+    }
+
+    public float transformRotation(float r)
+    {
+        return r + switch (this.getBlockState().getValue(FACING))
+        {
+            case WEST -> 90;
+            case SOUTH -> 180;
+            case EAST -> 270;
+            default -> 0;
+        };
+    }
+
+    public float outLayRotation(float r)
+    {
+        return r + switch (this.getBlockState().getValue(FACING))
+        {
+            case WEST -> -90;
+            case SOUTH -> -180;
+            case EAST -> -270;
+            default -> 0;
+        };
     }
 
     public void refresh()
