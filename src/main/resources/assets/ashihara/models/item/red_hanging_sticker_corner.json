@@ -3,6 +3,7 @@
 	"parent": "minecraft:block/block",
 	"textures": {
 		"0": "ashihara:block/components/red_beam",
+		"c": "ashihara:block/components/corner_mark",
 		"particle": "ashihara:block/components/red_beam"
 	},
 	"elements": [
@@ -17,6 +18,15 @@
 				"west": {"uv": [6, 5, 10, 11], "texture": "#0"},
 				"up": {"uv": [6, 0, 10, 16], "rotation": 270, "texture": "#0"},
 				"down": {"uv": [6, 0, 10, 16], "rotation": 90, "texture": "#0"}
+			}
+		},
+		{
+			"from": [16, -3, -7],
+			"to": [16, 4, -1],
+			"rotation": {"angle": 45, "axis": "y", "origin": [10, 0, 0]},
+			"faces": {
+				"east": {"uv": [0, 0, 12, 14], "texture": "#c"},
+				"west": {"uv": [0, 0, 12, 14], "texture": "#c"}
 			}
 		}
 	]

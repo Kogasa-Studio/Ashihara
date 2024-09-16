@@ -88,10 +88,14 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.RED_HIJIKI_SUPPORTER.get());
                                         output.accept(ItemRegistryHandler.RED_HIJIKI_CONNECTOR.get());
                                         output.accept(ItemRegistryHandler.RED_HIJIKI_LONG.get());
+                                        output.accept(ItemRegistryHandler.RED_HIJIKI_CORNER_NORMAL.get());
+                                        output.accept(ItemRegistryHandler.RED_HIJIKI_CORNER_LONG.get());
                                         output.accept(ItemRegistryHandler.RED_HANGING_STICKER.get());
                                         output.accept(ItemRegistryHandler.RED_HANGING_STICKER_CORNER.get());
                                         output.accept(ItemRegistryHandler.RED_BIG_TOU.get());
                                         output.accept(ItemRegistryHandler.RED_TOU.get());
+                                        output.accept(ItemRegistryHandler.RED_TOU_OBLIQUE.get());
+                                        output.accept(ItemRegistryHandler.RED_ONI_TOU.get());
                                         output.accept(ItemRegistryHandler.BASE_STONE.get());
                                         output.accept(ItemRegistryHandler.WHITE_SOIL_WALL.get());
                                         output.accept(ItemRegistryHandler.RAMMED_SOIL_WALL.get());

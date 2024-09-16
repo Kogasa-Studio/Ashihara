@@ -81,6 +81,38 @@ public class BuildingComponents
             List.of(ItemRegistryHandler.RED_HIJIKI_LONG.toStack())
         )
     );
+    public static final BuildingComponent RED_HIJIKI_CORNER_NORMAL = register
+    (
+        new HijikiCornered
+        (
+            "red_hijiki_corner_normal",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_HIJIKI_CORNER_NORMAL,
+            RED_HIJIKI_CORNER_NORMAL_LONG,
+            ItemRegistryHandler.RED_HIJIKI_CORNER_NORMAL::toStack,
+            List.of(ItemRegistryHandler.RED_HIJIKI_CORNER_NORMAL.toStack())//
+        )
+    );
+    public static final BuildingComponent RED_HIJIKI_CORNER_LONG = register
+    (
+        new HijikiCornered
+        (
+            "red_hijiki_corner_long",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_HIJIKI_CORNER_LONG,
+            null,
+            Shapes.or
+            (
+                Shapes.box(0.625, -0.03125, 0.625, 1.125, 0.25, 1.125),
+                Shapes.box(0.375, -0.03125, 0.375, 0.875, 0.25, 0.875),
+                Shapes.box(-0.125, -0.03125, -0.125, 0.375, 0.25, 0.375),
+                Shapes.box(0.125, -0.03125, 0.125, 0.625, 0.25, 0.625)
+            ),
+            Shapes.empty(),
+            ItemRegistryHandler.RED_HIJIKI_CORNER_LONG::toStack,
+            List.of(ItemRegistryHandler.RED_HIJIKI_CORNER_LONG.toStack())//
+        )
+    );
     public static final BuildingComponent RED_HANGING_STICKER = register
     (
         new HangingSticker
@@ -109,7 +141,28 @@ public class BuildingComponents
         (
             "red_tou",
             Type.BAKED_MODEL,
+            AdditionalModels.RED_TOU,
             List.of(ItemRegistryHandler.RED_TOU.toStack())
+        )
+    );
+    public static final BuildingComponent RED_TOU_OBLIQUE = register
+    (
+        new TouOblique
+        (
+            "red_tou_oblique",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_TOU,
+            List.of(ItemRegistryHandler.RED_TOU_OBLIQUE.toStack())//
+        )
+    );
+    public static final BuildingComponent RED_ONI_TOU = register
+    (
+        new TouOblique
+        (
+            "red_oni_tou",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_ONI_TOU,
+            List.of(ItemRegistryHandler.RED_ONI_TOU.toStack())//
         )
     );
     public static final BuildingComponent RED_BIG_TOU = register

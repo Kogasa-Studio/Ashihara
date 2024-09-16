@@ -30,15 +30,13 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation RED_HIJIKI_A = register("block/components/red_hijiki_a");
     public static final BuildingComponentModelResourceLocation RED_HIJIKI_SUPPORTER = register("block/components/red_hijiki_supporter");
     public static final BuildingComponentModelResourceLocation RED_HIJIKI_LONG = register("block/components/red_hijiki_long");
-
-    public static final BuildingComponentModelResourceLocation RED_HANGING_STICKER = register("block/components/red_hanging_sticker");
-    public static final BuildingComponentModelResourceLocation RED_HANGING_STICKER_END = register("block/components/red_hanging_sticker_end");
-    public static final BuildingComponentModelResourceLocation RED_HANGING_STICKER_CORNER = register("block/components/red_hanging_sticker_corner");
-    public static final BuildingComponentModelResourceLocation RED_HANGING_STICKER_END_CORNER = register("block/components/red_hanging_sticker_end_corner");
+    public static final BuildingComponentModelResourceLocation RED_HIJIKI_CORNER_NORMAL = register("block/components/red_hijiki_cornered_normal");
+    public static final BuildingComponentModelResourceLocation RED_HIJIKI_CORNER_NORMAL_LONG = register("block/components/red_hijiki_cornered_normal_long");
+    public static final BuildingComponentModelResourceLocation RED_HIJIKI_CORNER_LONG = register("block/components/red_hijiki_cornered_long");
 
     public static final BuildingComponentModelResourceLocation RED_TOU = register("block/components/red_tou");
-
     public static final BuildingComponentModelResourceLocation RED_BIG_TOU = register("block/components/red_big_tou");
+    public static final BuildingComponentModelResourceLocation RED_ONI_TOU = register("block/components/red_tou_oni");
 
     //Additional
     public static final BuildingComponentModelResourceLocation BASE_STONE_0 = register("block/components/base_stone_0");
@@ -51,6 +49,11 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation RAMMED_SOIL_WALL_QUARTER = register("block/components/rammed_soil_wall_quarter");
     public static final BuildingComponentModelResourceLocation WHITE_SOIL_WALL = register("block/components/white_soil_wall");
     public static final BuildingComponentModelResourceLocation WHITE_SOIL_WALL_QUARTER = register("block/components/white_soil_wall_quarter");
+
+    public static final BuildingComponentModelResourceLocation RED_HANGING_STICKER = register("block/components/red_hanging_sticker");
+    public static final BuildingComponentModelResourceLocation RED_HANGING_STICKER_END = register("block/components/red_hanging_sticker_end");
+    public static final BuildingComponentModelResourceLocation RED_HANGING_STICKER_CORNER = register("block/components/red_hanging_sticker_corner");
+    public static final BuildingComponentModelResourceLocation RED_HANGING_STICKER_END_CORNER = register("block/components/red_hanging_sticker_end_corner");
 
     @SubscribeEvent
     public static void onRegisterAdditionalModels(ModelEvent.RegisterAdditional event)

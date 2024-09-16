@@ -2,6 +2,7 @@ package kogasastudio.ashihara.block.building.component;
 
 import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.helper.ShapeHelper;
+import kogasastudio.ashihara.registry.AdditionalModels;
 import kogasastudio.ashihara.registry.BuildingComponents;
 import kogasastudio.ashihara.utils.BuildingComponentModelResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -12,21 +13,17 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
 
-public class Tou extends BuildingComponent
+public class TouOblique extends Tou
 {
-    protected VoxelShape SHAPE;
-    protected final BuildingComponentModelResourceLocation model;
-
-    public Tou(String idIn, BuildingComponents.Type typeIn, BuildingComponentModelResourceLocation modelIn, List<ItemStack> dropsIn)
+    public TouOblique(String idIn, BuildingComponents.Type typeIn, BuildingComponentModelResourceLocation modelIn, List<ItemStack> dropsIn)
     {
-        super(idIn, typeIn, dropsIn);
-        this.model = modelIn;
-        initShape();
+        super(idIn, typeIn, modelIn, dropsIn);
     }
 
+    @Override
     protected void initShape()
     {
-        this.SHAPE = Shapes.box(0.3125, 0, 0.3125, 0.6875, 0.3125, 0.6875);
+        this.SHAPE = Shapes.box(0.296875, 0, 0.296875, 0.703125, 0.3125, 0.703125);
     }
 
     @Override
@@ -56,9 +53,9 @@ public class Tou extends BuildingComponent
         (
             BuildingComponents.get(this.id),
             new Vec3(x, y, z),
-            0, 0, 0,
+            0, 45, 0,
             shape,
-            model,
+            this.model,
             List.of(occupation)
         );
     }
