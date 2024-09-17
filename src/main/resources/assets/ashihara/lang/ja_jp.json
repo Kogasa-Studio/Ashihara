@@ -95,6 +95,12 @@
   "item.ashihara.red_latticed_ceiling_white": "白塗心板朱木平闇",
   "item.ashihara.red_latticed_ceiling_white_quarter": "四半期の白塗心板朱木平闇",
   "item.ashihara.red_bended_stickers": "朱木支輪",
+  "item.ashihara.red_steep_rafter": "急朱木垂木",
+  "item.ashihara.red_smooth_rafter": "緩朱木垂木",
+  "item.ashihara.red_rafter_end": "朱木垂木の尾",
+  "item.ashihara.red_rafter_connector": "朱木広小舞",
+  "item.ashihara.spruce_rafter_planks": "素木地板",
+  "item.ashihara.white_rafter_planks": "白粉地板",
   "block.ashihara.water_field": "水田",
   "block.ashihara.dirt_depression": "漥",
   "block.ashihara.immature_rice": "もやし",
@@ -188,6 +194,5 @@
   "tooltip.ashihara.pail_display": "§e§l樽: §n",
   "tooltip.ashihara.pail_empty_message": "    §7樽はまだ空です",
   "tooltip.ashihara.pail_fluid_existence": "    §7液体: ",
-  "tooltip.ashihara.fluid_existence": "液体: ",
-  "block.ashihara.red_beam": "朱木の障子壁"
+  "tooltip.ashihara.fluid_existence": "液体: "
 }

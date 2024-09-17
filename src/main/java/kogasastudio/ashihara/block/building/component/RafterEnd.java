@@ -14,35 +14,42 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.List;
 
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
-import static kogasastudio.ashihara.helper.PositionHelper.coordsInRangeFixedY;
 
-public class RafterStickingBeam extends BuildingComponent
+public class RafterEnd extends AdditionalComponent
 {
     private final BuildingComponentModelResourceLocation MODEL;
 
-    private final VoxelShape SHAPE;
+    protected VoxelShape SHAPE;
 
-    public RafterStickingBeam
+    public RafterEnd
     (
         String idIn,
         BuildingComponents.Type typeIn,
         BuildingComponentModelResourceLocation model,
-        VoxelShape shape_a,
-        List<ItemStack> dropsIn)
+        VoxelShape shape,
+        List<ItemStack> dropsIn
+    )
     {
         super(idIn, typeIn, dropsIn);
         this.MODEL = model;
-        this.SHAPE = shape_a;
+        this.SHAPE = shape;
     }
 
-    public RafterStickingBeam
+    public RafterEnd
     (
         String idIn,
         BuildingComponents.Type typeIn,
         BuildingComponentModelResourceLocation model,
-        List<ItemStack> dropsIn)
+        List<ItemStack> dropsIn
+    )
     {
-        this(idIn, typeIn, model, Shapes.box(0.1875, 0, 0, 0.8125, 0.5, 1), dropsIn);
+        this(idIn, typeIn, model, null, dropsIn);
+        initShape();
+    }
+
+    private void initShape()
+    {
+        this.SHAPE = Shapes.box(0.25, 0, 0.5, 0.75, 0.5, 1);
     }
 
     @Override
@@ -52,37 +59,28 @@ public class RafterStickingBeam extends BuildingComponent
         direction = beIn.fromAbsolute(direction);
         Vec3 inBlockPos = beIn.transformVec3(beIn.inBlockVec(context.getClickLocation()));
 
-        float r = direction.getAxis().equals(Direction.Axis.X) ? 90 : 0;
-
-        double x = inBlockPos.x();
-        double z = inBlockPos.z();
+        float r;
+        double x;
         double y = inBlockPos.y();
+        double z;
 
-        y = coordsInRangeFixedY(context.getClickedFace(), y, 0, XTP(8)) ? 0 : XTP(8);
+        int floor = (int) Math.clamp(Math.floor(y * 4), 0, 3);
 
-        int floor = y == 0 ? 0 : 2;
-
-        Direction left = r == 0 ? Direction.WEST : Direction.NORTH;
-        Direction right = left.getOpposite();
-
-        Occupation leftOccupation = Occupation.getEdged(left).get(floor);
-        Occupation rightOccupation = Occupation.getEdged(right).get(floor);
-        Occupation centerOccupation = Occupation.CENTER_ALL.get(floor);
-
-        if (direction.getAxis() == Direction.Axis.Z)
+        y = XTP((float) (floor * 4));
+        if (direction.getAxis().equals(Direction.Axis.Z))
         {
-            if (x >= 0 && x < XTP(4)) {x = -0.5;}
-            else if (x >= XTP(4) && x < XTP(12)) {x = 0;}
-            else {x = 0.5;}
-            z = 0;
+            x = 0;
+            z = inBlockPos.z() <= XTP(8) ? XTP(-8) : XTP(0);
+            r = 0;
         }
         else
         {
-            if (z >= 0 && z < XTP(4)) {z = -0.5;}
-            else if (z >= XTP(4) && z < XTP(12)) {z = 0;}
-            else {z = 0.5;}
-            x = 0;
+            z = 0;
+            x = inBlockPos.x() <= XTP(8) ? XTP(-8) : XTP(0);
+            r = 90;
         }
+
+        Occupation occupation = Occupation.CENTER_ALL.get(floor);
 
         VoxelShape shape = SHAPE;
         shape = ShapeHelper.rotateShape(shape, -r);
@@ -95,7 +93,7 @@ public class RafterStickingBeam extends BuildingComponent
             0, r, 0,
             shape,
             MODEL,
-            List.of(leftOccupation, centerOccupation, rightOccupation)
+            List.of(occupation)
         );
     }
 }

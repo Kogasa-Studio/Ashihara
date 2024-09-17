@@ -381,6 +381,68 @@ public class BuildingComponents
             List.of(ItemRegistryHandler.RED_BENDED_STICKERS.toStack())
         )
     );
+    public static final BuildingComponent RED_STEEP_RAFTER = register
+    (
+        new SteepRafter
+        (
+            "red_steep_rafter",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_STEEP_RAFTER,
+            List.of(ItemRegistryHandler.RED_STEEP_RAFTER.toStack())
+        )
+    );
+    public static final BuildingComponent RED_SMOOTH_RAFTER = register
+    (
+        new SmoothRafter
+        (
+            "red_smooth_rafter",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_SMOOTH_RAFTER,
+            List.of(ItemRegistryHandler.RED_SMOOTH_RAFTER.toStack())
+        )
+    );
+    public static final BuildingComponent RED_RAFTER_END = register
+    (
+        new RafterEnd
+        (
+            "red_rafter_end",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_RAFTER_END,
+            List.of(ItemRegistryHandler.RED_RAFTER_END.toStack())
+        )
+    );
+
+    public static final BuildingComponent SPRUCE_RAFTER_PLANKS = register
+    (
+        new RafterPlanks
+        (
+            "spruce_rafter_planks",
+            Type.BAKED_MODEL,
+            AdditionalModels.SPRUCE_RAFTER_PLANKS,
+            List.of(ItemRegistryHandler.SPRUCE_RAFTER_PLANKS.toStack())
+        )
+    );
+    public static final BuildingComponent WHITE_RAFTER_PLANKS = register
+    (
+        new RafterPlanks
+        (
+            "white_rafter_planks",
+            Type.BAKED_MODEL,
+            AdditionalModels.WHITE_RAFTER_PLANKS,
+            List.of(ItemRegistryHandler.WHITE_RAFTER_PLANKS.toStack())
+        )
+    );
+    public static final BuildingComponent RED_RAFTER_CONNECTOR = register
+    (
+        new SmoothRafter
+        (
+            "red_rafter_connector",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_RAFTER_CONNECTOR,
+            Shapes.box(0, 0, 0.375, 1, 0.75, 0.625),
+            List.of(ItemRegistryHandler.RED_SMOOTH_RAFTER.toStack())
+        )
+    );
 
     static
     {

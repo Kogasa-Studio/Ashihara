@@ -165,6 +165,12 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> RED_LATTICED_CEILING_WHITE = ITEMS.register("red_latticed_ceiling_white", () -> new BuildingComponentItem(() -> BuildingComponents.RED_LATTICED_CEILING_WHITE));
     public static final DeferredItem<Item> RED_LATTICED_CEILING_WHITE_QUARTER = ITEMS.register("red_latticed_ceiling_white_quarter", () -> new BuildingComponentItem(() -> BuildingComponents.RED_LATTICED_CEILING_WHITE_QUARTER));
     public static final DeferredItem<Item> RED_BENDED_STICKERS = ITEMS.register("red_bended_stickers", () -> new BuildingComponentItem(() -> BuildingComponents.RED_BENDED_STICKERS));
+    public static final DeferredItem<Item> RED_STEEP_RAFTER = ITEMS.register("red_steep_rafter", () -> new BuildingComponentItem(() -> BuildingComponents.RED_STEEP_RAFTER));
+    public static final DeferredItem<Item> RED_SMOOTH_RAFTER = ITEMS.register("red_smooth_rafter", () -> new BuildingComponentItem(() -> BuildingComponents.RED_SMOOTH_RAFTER));
+    public static final DeferredItem<Item> RED_RAFTER_END = ITEMS.register("red_rafter_end", () -> new BuildingComponentItem(() -> BuildingComponents.RED_RAFTER_END));
+    public static final DeferredItem<Item> RED_RAFTER_CONNECTOR = ITEMS.register("red_rafter_connector", () -> new BuildingComponentItem(() -> BuildingComponents.RED_RAFTER_CONNECTOR));
+    public static final DeferredItem<Item> SPRUCE_RAFTER_PLANKS = ITEMS.register("spruce_rafter_planks", () -> new BuildingComponentItem(() -> BuildingComponents.SPRUCE_RAFTER_PLANKS));
+    public static final DeferredItem<Item> WHITE_RAFTER_PLANKS = ITEMS.register("white_rafter_planks", () -> new BuildingComponentItem(() -> BuildingComponents.WHITE_RAFTER_PLANKS));
 
     //灯具
     public static final DeferredItem<Item> LANTERN_LONG_WHITE = ITEMS.register("lantern_long_white", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), new Item.Properties()));

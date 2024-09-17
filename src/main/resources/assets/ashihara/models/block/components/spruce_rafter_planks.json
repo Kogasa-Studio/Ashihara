@@ -1,0 +1,6 @@
+{
+	"parent": "ashihara:block/components/templates/rafter_planks",
+	"textures": {
+		"planks": "minecraft:block/spruce_planks"
+	}
+}

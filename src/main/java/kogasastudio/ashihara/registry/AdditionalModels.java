@@ -67,6 +67,14 @@ public class AdditionalModels
 
     public static final BuildingComponentModelResourceLocation RED_BENDED_STICKERS = register("block/components/red_bended_stickers");
 
+    public static final BuildingComponentModelResourceLocation RED_STEEP_RAFTER = register("block/components/red_steep_rafter");
+    public static final BuildingComponentModelResourceLocation RED_SMOOTH_RAFTER = register("block/components/red_smooth_rafter");
+    public static final BuildingComponentModelResourceLocation RED_RAFTER_END = register("block/components/red_rafter_end");
+
+    public static final BuildingComponentModelResourceLocation SPRUCE_RAFTER_PLANKS = register("block/components/spruce_rafter_planks");
+    public static final BuildingComponentModelResourceLocation WHITE_RAFTER_PLANKS = register("block/components/white_rafter_planks");
+    public static final BuildingComponentModelResourceLocation RED_RAFTER_CONNECTOR = register("block/components/red_rafter_connector");
+
     @SubscribeEvent
     public static void onRegisterAdditionalModels(ModelEvent.RegisterAdditional event)
     {
