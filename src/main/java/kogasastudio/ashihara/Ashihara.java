@@ -25,7 +25,7 @@ public class Ashihara
 {
     public static final String MODID = "ashihara";
     public static final Logger LOGGER_MAIN = LogUtils.getLogger();
-    public static final RandomSource RANDOM = RandomSource.create();
+    public static final RandomSource RANDOM = RandomSource.createThreadSafe();
 
     public static RandomSource getRandom() {return RANDOM;}
 
