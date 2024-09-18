@@ -5,12 +5,6 @@
   "compatibilityLevel": "JAVA_21",
   "refmap": "ashihara.refmap.json",
   "mixins": [
-    "MixinRenderType",
-    "iris.MixinSodiumPrograms",
-    "iris.MixinWorldRenderingPhase",
-    "sodium.MixinDefaultMaterials",
-    "sodium.MixinDefaultTerrainRenderPasses",
-    "sodium.MixinSodiumWorldRenderer"
   ],
   "client": [
   ],

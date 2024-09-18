@@ -90,7 +90,7 @@ public class WLREventHandler
         event.addRenderer(new WithLevelRendererAdditionalSectionRenderer(event));
     }
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public static void onRenderSectionRenderType(RenderLevelStageEvent event)
     {
         List<RenderType> types = AshiharaRenderTypes.STAGE_TO_TYPE.get(event.getStage());
@@ -114,5 +114,5 @@ public class WLREventHandler
             event.getLevelRenderer().renderBuffers.bufferSource().endBatch(type);
             poseStack.popPose();
         }
-    }
+    }*/
 }
