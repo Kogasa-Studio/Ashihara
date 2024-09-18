@@ -4,6 +4,7 @@ import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.BuildingComponents;
 import kogasastudio.ashihara.utils.BuildingComponentModelResourceLocation;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.phys.Vec3;
@@ -12,16 +13,15 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
 
-import static kogasastudio.ashihara.block.building.BaseMultiBuiltBlock.FACING;
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 
-public class Floor extends AdditionalComponent
+public class QuarterOrientedFloor extends AdditionalComponent
 {
     private final BuildingComponentModelResourceLocation MODEL;
 
     private VoxelShape SHAPE;
 
-    public Floor
+    public QuarterOrientedFloor
     (
         String idIn,
         BuildingComponents.Type typeIn,
@@ -35,7 +35,7 @@ public class Floor extends AdditionalComponent
         this.SHAPE = shape;
     }
 
-    public Floor
+    public QuarterOrientedFloor
     (
         String idIn,
         BuildingComponents.Type typeIn,
@@ -49,20 +49,22 @@ public class Floor extends AdditionalComponent
 
     private void initShape()
     {
-        this.SHAPE = Shapes.box(0, 0, 0, 1, 0.25625, 1);
+        this.SHAPE = Shapes.box(0.25, 0, 0.25, 0.75, 0.25625, 0.75);
     }
 
     @Override
     public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)
     {
+        Direction direction = context.getHorizontalDirection();
+        direction = beIn.fromAbsolute(direction);
         Vec3 inBlockPos = beIn.transformVec3(beIn.inBlockVec(context.getClickLocation()));
 
-        float r = switch (beIn.getBlockState().getValue(FACING))
+        float r = switch (direction)
         {
-            case WEST -> -90;
-            case SOUTH -> -180;
-            case EAST -> -270;
-            default -> 0;
+            case WEST -> 270;
+            case SOUTH -> 0;
+            case EAST -> 90;
+            default -> 180;
         };
         double y = inBlockPos.y();
 
@@ -70,16 +72,19 @@ public class Floor extends AdditionalComponent
 
         y = XTP((float) (floor * 4));
 
-        Occupation occupation = Occupation.CENTER_ALL.get(floor);
+        double x = inBlockPos.x() <= XTP(8) ? XTP(-4) : XTP(4);
+        double z = inBlockPos.z() <= XTP(8) ? XTP(-4) : XTP(4);
+
+        Occupation occupation = Occupation.mapPosition(x + XTP(8), y, z + XTP(8));
 
         VoxelShape shape = SHAPE;
         shape = ShapeHelper.rotateShape(shape, -r);
-        shape = ShapeHelper.offsetShape(shape, 0, y, 0);
+        shape = ShapeHelper.offsetShape(shape, x, y, z);
 
         return new ComponentStateDefinition
         (
             BuildingComponents.get(this.id),
-            new Vec3(0, y, 0),
+            new Vec3(x, y, z),
             0, r, 0,
             shape,
             MODEL,

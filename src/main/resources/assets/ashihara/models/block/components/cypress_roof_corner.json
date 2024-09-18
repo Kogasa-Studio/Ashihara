@@ -1,0 +1,23 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"1": "ashihara:block/components/cypress_skin",
+		"2": "ashihara:block/components/cypress_skin_corner",
+		"particle": "ashihara:block/components/cypress_skin"
+	},
+	"elements": [
+		{
+			"from": [-0.025, 0, -0.025],
+			"to": [16.025, 4, 16.025],
+			"faces": {
+				"north": {"uv": [0, 12, 16, 16], "texture": "#1"},
+				"east": {"uv": [0, 12, 16, 16], "texture": "#1"},
+				"south": {"uv": [0, 12, 16, 16], "texture": "#1"},
+				"west": {"uv": [0, 12, 16, 16], "texture": "#1"},
+				"up": {"uv": [1, 0, 16, 15], "rotation": 180, "texture": "#2"},
+				"down": {"uv": [0, 0, 16, 15], "texture": "#1"}
+			}
+		}
+	]
+}

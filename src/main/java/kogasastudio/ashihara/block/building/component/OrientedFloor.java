@@ -4,6 +4,7 @@ import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.BuildingComponents;
 import kogasastudio.ashihara.utils.BuildingComponentModelResourceLocation;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.phys.Vec3;
@@ -15,13 +16,13 @@ import java.util.List;
 import static kogasastudio.ashihara.block.building.BaseMultiBuiltBlock.FACING;
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 
-public class Floor extends AdditionalComponent
+public class OrientedFloor extends AdditionalComponent
 {
     private final BuildingComponentModelResourceLocation MODEL;
 
     private VoxelShape SHAPE;
 
-    public Floor
+    public OrientedFloor
     (
         String idIn,
         BuildingComponents.Type typeIn,
@@ -35,7 +36,7 @@ public class Floor extends AdditionalComponent
         this.SHAPE = shape;
     }
 
-    public Floor
+    public OrientedFloor
     (
         String idIn,
         BuildingComponents.Type typeIn,
@@ -55,14 +56,16 @@ public class Floor extends AdditionalComponent
     @Override
     public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)
     {
+        Direction direction = context.getHorizontalDirection();
+        direction = beIn.fromAbsolute(direction);
         Vec3 inBlockPos = beIn.transformVec3(beIn.inBlockVec(context.getClickLocation()));
 
-        float r = switch (beIn.getBlockState().getValue(FACING))
+        float r = switch (direction)
         {
-            case WEST -> -90;
-            case SOUTH -> -180;
-            case EAST -> -270;
-            default -> 0;
+            case WEST -> 270;
+            case SOUTH -> 0;
+            case EAST -> 90;
+            default -> 180;
         };
         double y = inBlockPos.y();
 

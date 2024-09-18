@@ -171,6 +171,13 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> RED_RAFTER_CONNECTOR = ITEMS.register("red_rafter_connector", () -> new BuildingComponentItem(() -> BuildingComponents.RED_RAFTER_CONNECTOR));
     public static final DeferredItem<Item> SPRUCE_RAFTER_PLANKS = ITEMS.register("spruce_rafter_planks", () -> new BuildingComponentItem(() -> BuildingComponents.SPRUCE_RAFTER_PLANKS));
     public static final DeferredItem<Item> WHITE_RAFTER_PLANKS = ITEMS.register("white_rafter_planks", () -> new BuildingComponentItem(() -> BuildingComponents.WHITE_RAFTER_PLANKS));
+    public static final DeferredItem<Item> CYPRESS_ROOF = ITEMS.register("cypress_roof", () -> new BuildingComponentItem(() -> BuildingComponents.CYPRESS_ROOF));
+    public static final DeferredItem<Item> CYPRESS_ROOF_CORNER = ITEMS.register("cypress_roof_corner", () -> new BuildingComponentItem(() -> BuildingComponents.CYPRESS_ROOF_CORNER));
+    public static final DeferredItem<Item> CYPRESS_ROOF_EDGE = ITEMS.register("cypress_roof_edge", () -> new BuildingComponentItem(() -> BuildingComponents.CYPRESS_ROOF_EDGE));
+    public static final DeferredItem<Item> CYPRESS_ROOF_EDGE_CORNER = ITEMS.register("cypress_roof_edge_corner", () -> new BuildingComponentItem(() -> BuildingComponents.CYPRESS_ROOF_EDGE_CORNER));
+    public static final DeferredItem<Item> CYPRESS_ROOF_HALF = ITEMS.register("cypress_roof_half", () -> new BuildingComponentItem(() -> BuildingComponents.CYPRESS_ROOF_HALF));
+    public static final DeferredItem<Item> CYPRESS_ROOF_QUARTER = ITEMS.register("cypress_roof_quarter", () -> new BuildingComponentItem(() -> BuildingComponents.CYPRESS_ROOF_QUARTER));
+    public static final DeferredItem<Item> CYPRESS_ROOF_QUARTER_CORNER = ITEMS.register("cypress_roof_quarter_corner", () -> new BuildingComponentItem(() -> BuildingComponents.CYPRESS_ROOF_QUARTER_CORNER));
 
     //灯具
     public static final DeferredItem<Item> LANTERN_LONG_WHITE = ITEMS.register("lantern_long_white", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), new Item.Properties()));

@@ -118,6 +118,13 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.RED_RAFTER_CONNECTOR.get());
                                         output.accept(ItemRegistryHandler.SPRUCE_RAFTER_PLANKS.get());
                                         output.accept(ItemRegistryHandler.WHITE_RAFTER_PLANKS.get());
+                                        output.accept(ItemRegistryHandler.CYPRESS_ROOF.get());
+                                        output.accept(ItemRegistryHandler.CYPRESS_ROOF_CORNER.get());
+                                        output.accept(ItemRegistryHandler.CYPRESS_ROOF_QUARTER.get());
+                                        output.accept(ItemRegistryHandler.CYPRESS_ROOF_QUARTER_CORNER.get());
+                                        output.accept(ItemRegistryHandler.CYPRESS_ROOF_EDGE.get());
+                                        output.accept(ItemRegistryHandler.CYPRESS_ROOF_EDGE_CORNER.get());
+                                        output.accept(ItemRegistryHandler.CYPRESS_ROOF_HALF.get());
                                         output.accept(ItemRegistryHandler.DIRT_DEPRESSION.get());
                                         output.accept(ItemRegistryHandler.WATER_FIELD.get());
                                     })).build()

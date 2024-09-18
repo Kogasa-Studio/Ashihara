@@ -70,10 +70,18 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation RED_STEEP_RAFTER = register("block/components/red_steep_rafter");
     public static final BuildingComponentModelResourceLocation RED_SMOOTH_RAFTER = register("block/components/red_smooth_rafter");
     public static final BuildingComponentModelResourceLocation RED_RAFTER_END = register("block/components/red_rafter_end");
+    public static final BuildingComponentModelResourceLocation RED_RAFTER_CONNECTOR = register("block/components/red_rafter_connector");
 
     public static final BuildingComponentModelResourceLocation SPRUCE_RAFTER_PLANKS = register("block/components/spruce_rafter_planks");
     public static final BuildingComponentModelResourceLocation WHITE_RAFTER_PLANKS = register("block/components/white_rafter_planks");
-    public static final BuildingComponentModelResourceLocation RED_RAFTER_CONNECTOR = register("block/components/red_rafter_connector");
+
+    public static final BuildingComponentModelResourceLocation CYPRESS_ROOF = register("block/components/cypress_roof");
+    public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_CORNER = register("block/components/cypress_roof_corner");
+    public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_EDGE = register("block/components/cypress_roof_edge");
+    public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_EDGE_CORNER = register("block/components/cypress_roof_edge_corner");
+    public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_HALF = register("block/components/cypress_roof_half");
+    public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_QUARTER = register("block/components/cypress_roof_quarter");
+    public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_QUARTER_CORNER = register("block/components/cypress_roof_quarter_corner");
 
     @SubscribeEvent
     public static void onRegisterAdditionalModels(ModelEvent.RegisterAdditional event)

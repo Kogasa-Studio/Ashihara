@@ -411,6 +411,17 @@ public class BuildingComponents
             List.of(ItemRegistryHandler.RED_RAFTER_END.toStack())
         )
     );
+    public static final BuildingComponent RED_RAFTER_CONNECTOR = register
+    (
+        new SmoothRafter
+        (
+            "red_rafter_connector",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_RAFTER_CONNECTOR,
+            Shapes.box(0, 0, 0.375, 1, 0.75, 0.625),
+            List.of(ItemRegistryHandler.RED_SMOOTH_RAFTER.toStack())
+        )
+    );
 
     public static final BuildingComponent SPRUCE_RAFTER_PLANKS = register
     (
@@ -432,15 +443,76 @@ public class BuildingComponents
             List.of(ItemRegistryHandler.WHITE_RAFTER_PLANKS.toStack())
         )
     );
-    public static final BuildingComponent RED_RAFTER_CONNECTOR = register
+    public static final BuildingComponent CYPRESS_ROOF = register
     (
-        new SmoothRafter
+        new OrientedFloor
         (
-            "red_rafter_connector",
+            "cypress_roof",
             Type.BAKED_MODEL,
-            AdditionalModels.RED_RAFTER_CONNECTOR,
-            Shapes.box(0, 0, 0.375, 1, 0.75, 0.625),
-            List.of(ItemRegistryHandler.RED_SMOOTH_RAFTER.toStack())
+            AdditionalModels.CYPRESS_ROOF,
+            List.of(ItemRegistryHandler.CYPRESS_ROOF.toStack())
+        )
+    );
+    public static final BuildingComponent CYPRESS_ROOF_CORNER = register
+    (
+        new OrientedFloor
+        (
+            "cypress_roof_corner",
+            Type.BAKED_MODEL,
+            AdditionalModels.CYPRESS_ROOF_CORNER,
+            List.of(ItemRegistryHandler.CYPRESS_ROOF_CORNER.toStack())
+        )
+    );
+    public static final BuildingComponent CYPRESS_ROOF_EDGE = register
+    (
+        new OrientedFloor
+        (
+            "cypress_roof_edge",
+            Type.BAKED_MODEL,
+            AdditionalModels.CYPRESS_ROOF_EDGE,
+            Shapes.box(0, 0, 0.5, 1, 0.5, 1),
+            List.of(ItemRegistryHandler.CYPRESS_ROOF_EDGE.toStack())
+        )
+    );
+    public static final BuildingComponent CYPRESS_ROOF_EDGE_CORNER = register
+    (
+        new OrientedFloor
+        (
+            "cypress_roof_edge_corner",
+            Type.BAKED_MODEL,
+            AdditionalModels.CYPRESS_ROOF_EDGE_CORNER,
+            Shapes.box(0.5, 0, 0.5, 1, 0.5, 1),
+            List.of(ItemRegistryHandler.CYPRESS_ROOF_EDGE_CORNER.toStack())
+        )
+    );
+    public static final BuildingComponent CYPRESS_ROOF_HALF = register
+    (
+        new RafterPlanks
+        (
+            "cypress_roof",
+            Type.BAKED_MODEL,
+            AdditionalModels.CYPRESS_ROOF_HALF,
+            List.of(ItemRegistryHandler.CYPRESS_ROOF_HALF.toStack())
+        )
+    );
+    public static final BuildingComponent CYPRESS_ROOF_QUARTER = register
+    (
+        new QuarterOrientedFloor
+        (
+            "cypress_roof_quarter",
+            Type.BAKED_MODEL,
+            AdditionalModels.CYPRESS_ROOF_QUARTER,
+            List.of(ItemRegistryHandler.CYPRESS_ROOF_QUARTER.toStack())
+        )
+    );
+    public static final BuildingComponent CYPRESS_ROOF_QUARTER_CORNER = register
+    (
+        new QuarterOrientedFloor
+        (
+            "cypress_roof_quarter_corner",
+            Type.BAKED_MODEL,
+            AdditionalModels.CYPRESS_ROOF_QUARTER_CORNER,
+            List.of(ItemRegistryHandler.CYPRESS_ROOF_QUARTER_CORNER.toStack())
         )
     );
 
