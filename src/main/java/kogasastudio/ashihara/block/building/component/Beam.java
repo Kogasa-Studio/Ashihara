@@ -2,6 +2,7 @@ package kogasastudio.ashihara.block.building.component;
 
 import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.helper.ShapeHelper;
+import kogasastudio.ashihara.item.block.BuildingComponentItem;
 import kogasastudio.ashihara.registry.BuildingComponents;
 import kogasastudio.ashihara.utils.BuildingComponentModelResourceLocation;
 import net.minecraft.core.BlockPos;
@@ -9,21 +10,25 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 import static kogasastudio.ashihara.helper.PositionHelper.coordsInRangeFixedY;
 
-public class Beam extends BuildingComponent implements Connectable
+public class Beam extends BuildingComponent implements Connectable, Interactable
 {
     private final BuildingComponentModelResourceLocation NONE_CONNECTED;
     private final BuildingComponentModelResourceLocation LEFT_CONNECTED;
     private final BuildingComponentModelResourceLocation RIGHT_CONNECTED;
     private final BuildingComponentModelResourceLocation BOTH_CONNECTED;
+
+    private final Supplier<BuildingComponent> clamp;
 
     private VoxelShape SHAPE_NONE_CONNECTED;
     private VoxelShape SHAPE_LEFT_CONNECTED;
@@ -38,6 +43,7 @@ public class Beam extends BuildingComponent implements Connectable
         BuildingComponentModelResourceLocation l,
         BuildingComponentModelResourceLocation r,
         BuildingComponentModelResourceLocation a,
+        Supplier<BuildingComponent> clampIn,
         List<ItemStack> dropsIn
     )
     {
@@ -46,6 +52,7 @@ public class Beam extends BuildingComponent implements Connectable
         this.LEFT_CONNECTED = l;
         this.RIGHT_CONNECTED = r;
         this.BOTH_CONNECTED = a;
+        this.clamp = clampIn;
         initShape();
     }
 
@@ -142,5 +149,14 @@ public class Beam extends BuildingComponent implements Connectable
         if (definition.inBlockPos().y() == XTP(8)) shape = ShapeHelper.offsetShape(shape, 0, 0.5, 0);
 
         return new ComponentStateDefinition(definition.component(), definition.inBlockPos(), definition.rotationX(), r, definition.rotationZ(), shape, rl, definition.occupation());
+    }
+
+    @Override
+    public ComponentStateDefinition handleInteraction(UseOnContext context, ComponentStateDefinition definition)
+    {
+        BlockEntity be = context.getLevel().getBlockEntity(context.getClickedPos());
+        if (!(be instanceof MultiBuiltBlockEntity mbe)) return definition;
+        if (context.getItemInHand().getItem() instanceof BuildingComponentItem componentItem && componentItem.getComponent() == this.clamp.get()) return this.clamp.get().definite(mbe, context);
+        return definition;
     }
 }

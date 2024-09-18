@@ -28,6 +28,9 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation RED_BEAM_R = register("block/components/red_beam_r");
     public static final BuildingComponentModelResourceLocation RED_BEAM_A = register("block/components/red_beam_a");
 
+    public static final BuildingComponentModelResourceLocation RED_CLAMP = register("block/components/red_clamp");
+    public static final BuildingComponentModelResourceLocation RED_CLAMP_JOINT = register("block/components/red_clamp_joint");
+
     public static final BuildingComponentModelResourceLocation RED_HIJIKI_L = register("block/components/red_hijiki_l");
     public static final BuildingComponentModelResourceLocation RED_HIJIKI_R = register("block/components/red_hijiki_r");
     public static final BuildingComponentModelResourceLocation RED_HIJIKI_A = register("block/components/red_hijiki_a");

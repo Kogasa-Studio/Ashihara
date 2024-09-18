@@ -87,6 +87,8 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.RED_COLUMN.get());
                                         output.accept(ItemRegistryHandler.RED_COLUMN_SHORT.get());
                                         output.accept(ItemRegistryHandler.RED_BEAM.get());
+                                        output.accept(ItemRegistryHandler.RED_CLAMP.get());
+                                        output.accept(ItemRegistryHandler.RED_CLAMP_JOINT.get());
                                         output.accept(ItemRegistryHandler.RED_RAFTER_STICKING_BEAM.get());
                                         output.accept(ItemRegistryHandler.RED_HIJIKI.get());
                                         output.accept(ItemRegistryHandler.RED_HIJIKI_SUPPORTER.get());

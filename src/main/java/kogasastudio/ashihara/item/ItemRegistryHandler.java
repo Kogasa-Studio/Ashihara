@@ -140,6 +140,8 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> RED_COLUMN = ITEMS.register("red_column", () -> new BuildingComponentItem(() -> BuildingComponents.RED_COLUMN));
     public static final DeferredItem<Item> RED_COLUMN_SHORT = ITEMS.register("red_column_short", () -> new BuildingComponentItem(() -> BuildingComponents.RED_COLUMN_SHORT));
     public static final DeferredItem<Item> RED_BEAM = ITEMS.register("red_beam", () -> new BuildingComponentItem(() -> BuildingComponents.RED_BEAM));
+    public static final DeferredItem<Item> RED_CLAMP = ITEMS.register("red_clamp", () -> new BuildingComponentItem(() -> BuildingComponents.RED_CLAMP));
+    public static final DeferredItem<Item> RED_CLAMP_JOINT = ITEMS.register("red_clamp_joint", () -> new BuildingComponentItem(() -> BuildingComponents.RED_CLAMP_JOINT));
     public static final DeferredItem<Item> RED_RAFTER_STICKING_BEAM = ITEMS.register("red_rafter_sticking_beam", () -> new BuildingComponentItem(() -> BuildingComponents.RED_RAFTER_STICKING_BEAM));
     public static final DeferredItem<Item> RED_HIJIKI = ITEMS.register("red_hijiki", () -> new BuildingComponentItem(() -> BuildingComponents.RED_HIJIKI));
     public static final DeferredItem<Item> RED_HIJIKI_SUPPORTER = ITEMS.register("red_hijiki_supporter", () -> new BuildingComponentItem(() -> BuildingComponents.RED_HIJIKI_SUPPORTER));

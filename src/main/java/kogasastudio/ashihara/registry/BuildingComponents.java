@@ -59,6 +59,26 @@ public class BuildingComponents
             List.of(ItemRegistryHandler.RED_COLUMN_SHORT.toStack())
         )
     );
+    public static final BuildingComponent RED_CLAMP = register
+    (
+        new Clamp
+        (
+            "red_clamp",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_CLAMP,
+            List.of(ItemRegistryHandler.RED_CLAMP.toStack())
+        )
+    );
+    public static final BuildingComponent RED_CLAMP_JOINT = register
+    (
+        new ClampJoint
+        (
+            "red_clamp_joint",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_CLAMP_JOINT,
+            List.of(ItemRegistryHandler.RED_CLAMP_JOINT.toStack())
+        )
+    );
     public static final BuildingComponent RED_BEAM = register
     (
         new Beam
@@ -69,6 +89,7 @@ public class BuildingComponents
             RED_BEAM_L,
             RED_BEAM_R,
             RED_BEAM_A,
+            () -> RED_CLAMP,
             List.of(ItemRegistryHandler.RED_BEAM.toStack())
         )
     );
