@@ -186,6 +186,15 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
                 flag = true;
             }
         }
+        for (int i = 0; i < this.ADDITIONAL_COMPONENTS.size(); i++)
+        {
+            ComponentStateDefinition definition = this.ADDITIONAL_COMPONENTS.get(i);
+            if (definition.component() instanceof Connectable comp)
+            {
+                this.ADDITIONAL_COMPONENTS.set(i, comp.applyConnection(this, definition));
+                flag = true;
+            }
+        }
         if (flag) refresh();
     }
 

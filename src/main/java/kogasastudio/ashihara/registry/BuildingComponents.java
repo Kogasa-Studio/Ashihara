@@ -328,6 +328,34 @@ public class BuildingComponents
             SoundType.DRIPSTONE_BLOCK
         )
     );
+    public static final BuildingComponent GREEN_STRAIGHT_BAR_WINDOW = register
+    (
+        new StraightBarWindow
+        (
+            "green_straight_bar_window",
+            Type.BAKED_MODEL,
+            List.of(ItemRegistryHandler.GREEN_STRAIGHT_BAR_WINDOW.toStack()),
+            GREEN_STRAIGHT_BAR_WINDOW_ALL,
+            GREEN_STRAIGHT_BAR_WINDOW_DOWN,
+            GREEN_STRAIGHT_BAR_WINDOW_UP,
+            AdditionalModels.GREEN_STRAIGHT_BAR_WINDOW,
+            "green_straight_bar_window_quarter"
+        )
+    );
+    public static final BuildingComponent GREEN_STRAIGHT_BAR_WINDOW_QUARTER = register
+    (
+        new QuarterStraightBarWindow
+        (
+            "green_straight_bar_window_quarter",
+            Type.BAKED_MODEL,
+            List.of(ItemRegistryHandler.GREEN_STRAIGHT_BAR_WINDOW_QUARTER.toStack()),
+            GREEN_STRAIGHT_BAR_WINDOW_ALL_QUARTER,
+            GREEN_STRAIGHT_BAR_WINDOW_DOWN_QUARTER,
+            GREEN_STRAIGHT_BAR_WINDOW_UP_QUARTER,
+            AdditionalModels.GREEN_STRAIGHT_BAR_WINDOW_QUARTER,
+            "green_straight_bar_window"
+        )
+    );
     public static final BuildingComponent RED_HANGING_STICKER = register
     (
         new HangingSticker
