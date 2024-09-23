@@ -116,6 +116,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.RED_LATTICED_CEILING_WHITE.get());
                                         output.accept(ItemRegistryHandler.RED_LATTICED_CEILING_WHITE_QUARTER.get());
                                         output.accept(ItemRegistryHandler.RED_BENDED_STICKERS.get());
+                                        output.accept(ItemRegistryHandler.RED_FROG_LEGS_LIKED_STICKER.get());
                                         output.accept(ItemRegistryHandler.RED_STEEP_RAFTER.get());
                                         output.accept(ItemRegistryHandler.RED_SMOOTH_RAFTER.get());
                                         output.accept(ItemRegistryHandler.RED_RAFTER_END.get());

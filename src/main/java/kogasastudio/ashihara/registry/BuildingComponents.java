@@ -430,6 +430,22 @@ public class BuildingComponents
             List.of(ItemRegistryHandler.RED_BENDED_STICKERS.toStack())
         )
     );
+    public static final AdditionalComponent RED_FROG_LEGS_LIKED_STICKER = (AdditionalComponent) register
+    (
+        new Wall
+        (
+            "red_frog_legs_liked_sticker",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_FROG_LEGS_LIKED_STICKER,
+            Shapes.or(Shapes.box(0.075, 0.1875, 0.375, 0.925, 0.5, 0.625), Shapes.box(-0.25, 0, 0.375, 1.25, 0.1875, 0.625)),
+            List.of(ItemRegistryHandler.RED_FROG_LEGS_LIKED_STICKER.toStack()),
+            null,
+            null,
+            null,
+            null,
+            SoundType.WOOD
+        )
+    );
     public static final BuildingComponent RED_STEEP_RAFTER = register
     (
         new SteepRafter

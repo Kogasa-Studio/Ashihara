@@ -169,6 +169,7 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> RED_LATTICED_CEILING_WHITE = ITEMS.register("red_latticed_ceiling_white", () -> new BuildingComponentItem(() -> BuildingComponents.RED_LATTICED_CEILING_WHITE));
     public static final DeferredItem<Item> RED_LATTICED_CEILING_WHITE_QUARTER = ITEMS.register("red_latticed_ceiling_white_quarter", () -> new BuildingComponentItem(() -> BuildingComponents.RED_LATTICED_CEILING_WHITE_QUARTER));
     public static final DeferredItem<Item> RED_BENDED_STICKERS = ITEMS.register("red_bended_stickers", () -> new BuildingComponentItem(() -> BuildingComponents.RED_BENDED_STICKERS));
+    public static final DeferredItem<Item> RED_FROG_LEGS_LIKED_STICKER = ITEMS.register("red_frog_legs_liked_sticker", () -> new BuildingComponentItem(() -> BuildingComponents.RED_FROG_LEGS_LIKED_STICKER));
     public static final DeferredItem<Item> RED_STEEP_RAFTER = ITEMS.register("red_steep_rafter", () -> new BuildingComponentItem(() -> BuildingComponents.RED_STEEP_RAFTER));
     public static final DeferredItem<Item> RED_SMOOTH_RAFTER = ITEMS.register("red_smooth_rafter", () -> new BuildingComponentItem(() -> BuildingComponents.RED_SMOOTH_RAFTER));
     public static final DeferredItem<Item> RED_RAFTER_END = ITEMS.register("red_rafter_end", () -> new BuildingComponentItem(() -> BuildingComponents.RED_RAFTER_END));

@@ -78,6 +78,7 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation RED_LATTICED_CEILING_WHITE_QUARTER = register("block/components/red_latticed_ceiling_white_quarter");
 
     public static final BuildingComponentModelResourceLocation RED_BENDED_STICKERS = register("block/components/red_bended_stickers");
+    public static final BuildingComponentModelResourceLocation RED_FROG_LEGS_LIKED_STICKER = register("block/components/red_frog_legs_liked_sticker");
 
     public static final BuildingComponentModelResourceLocation RED_STEEP_RAFTER = register("block/components/red_steep_rafter");
     public static final BuildingComponentModelResourceLocation RED_SMOOTH_RAFTER = register("block/components/red_smooth_rafter");
