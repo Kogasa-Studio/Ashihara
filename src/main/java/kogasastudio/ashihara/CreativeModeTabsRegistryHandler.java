@@ -111,6 +111,8 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.BAMBOO_WALL_BONES_QUARTER.get());
                                         output.accept(ItemRegistryHandler.GREEN_STRAIGHT_BAR_WINDOW.get());
                                         output.accept(ItemRegistryHandler.GREEN_STRAIGHT_BAR_WINDOW_QUARTER.get());
+                                        output.accept(ItemRegistryHandler.RED_LATTICED_WINDOW.get());
+                                        output.accept(ItemRegistryHandler.RED_LATTICED_WINDOW_QUARTER.get());
                                         output.accept(ItemRegistryHandler.RED_PLANKS_FLOOR.get());
                                         output.accept(ItemRegistryHandler.RED_PLANKS_FLOOR_QUARTER.get());
                                         output.accept(ItemRegistryHandler.RED_LATTICED_CEILING_WHITE.get());

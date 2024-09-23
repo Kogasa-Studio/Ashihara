@@ -356,6 +356,38 @@ public class BuildingComponents
             "green_straight_bar_window"
         )
     );
+    public static final AdditionalComponent RED_LATTICED_WINDOW = (AdditionalComponent) register
+    (
+        new Wall
+        (
+            "red_latticed_window",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_LATTICED_WINDOW,
+            Shapes.box(0, 0, 0.4375, 1, 1, 0.5625),
+            List.of(ItemRegistryHandler.RED_LATTICED_WINDOW.toStack()),
+            null,
+            null,
+            null,
+            null,
+            SoundType.WOOD
+        )
+    );
+    public static final AdditionalComponent RED_LATTICED_WINDOW_QUARTER = (AdditionalComponent) register
+    (
+        new QuarterWall
+        (
+            "red_latticed_window_quarter",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_LATTICED_WINDOW_QUARTER,
+            Shapes.box(0.25, 0, 0.4375, 0.75, 0.5, 0.5625),
+            List.of(ItemRegistryHandler.RED_LATTICED_WINDOW_QUARTER.toStack()),
+            null,
+            null,
+            null,
+            null,
+            SoundType.WOOD
+        )
+    );
     public static final BuildingComponent RED_HANGING_STICKER = register
     (
         new HangingSticker

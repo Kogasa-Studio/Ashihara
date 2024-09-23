@@ -67,6 +67,9 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation GREEN_STRAIGHT_BAR_WINDOW_DOWN = register("block/components/green_straight_bar_window_down");
     public static final BuildingComponentModelResourceLocation GREEN_STRAIGHT_BAR_WINDOW_DOWN_QUARTER = register("block/components/green_straight_bar_window_down_quarter");
 
+    public static final BuildingComponentModelResourceLocation RED_LATTICED_WINDOW = register("block/components/red_latticed_window");
+    public static final BuildingComponentModelResourceLocation RED_LATTICED_WINDOW_QUARTER = register("block/components/red_latticed_window_quarter");
+
     public static final BuildingComponentModelResourceLocation RED_HANGING_STICKER = register("block/components/red_hanging_sticker");
     public static final BuildingComponentModelResourceLocation RED_HANGING_STICKER_END = register("block/components/red_hanging_sticker_end");
     public static final BuildingComponentModelResourceLocation RED_HANGING_STICKER_CORNER = register("block/components/red_hanging_sticker_corner");
