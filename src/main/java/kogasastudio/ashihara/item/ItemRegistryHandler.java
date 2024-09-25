@@ -140,6 +140,7 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> RED_COLUMN = ITEMS.register("red_column", () -> new BuildingComponentItem(() -> BuildingComponents.RED_COLUMN));
     public static final DeferredItem<Item> RED_COLUMN_SHORT = ITEMS.register("red_column_short", () -> new BuildingComponentItem(() -> BuildingComponents.RED_COLUMN_SHORT));
     public static final DeferredItem<Item> RED_BEAM = ITEMS.register("red_beam", () -> new BuildingComponentItem(() -> BuildingComponents.RED_BEAM));
+    public static final DeferredItem<Item> RED_BEAM_CORNER = ITEMS.register("red_beam_corner", () -> new BuildingComponentItem(() -> BuildingComponents.RED_BEAM_CORNER));
     public static final DeferredItem<Item> RED_CLAMP = ITEMS.register("red_clamp", () -> new BuildingComponentItem(() -> BuildingComponents.RED_CLAMP));
     public static final DeferredItem<Item> RED_CLAMP_JOINT = ITEMS.register("red_clamp_joint", () -> new BuildingComponentItem(() -> BuildingComponents.RED_CLAMP_JOINT));
     public static final DeferredItem<Item> RED_RAFTER_STICKING_BEAM = ITEMS.register("red_rafter_sticking_beam", () -> new BuildingComponentItem(() -> BuildingComponents.RED_RAFTER_STICKING_BEAM));
@@ -162,6 +163,8 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> RAMMED_SOIL_WALL_QUARTER = ITEMS.register("rammed_soil_wall_quarter", () -> new BuildingComponentItem(() -> BuildingComponents.RAMMED_SOIL_WALL_QUARTER));
     public static final DeferredItem<Item> BAMBOO_WALL_BONES = ITEMS.register("bamboo_wall_bones", () -> new BuildingComponentItem(() -> BuildingComponents.BAMBOO_WALL_BONES));
     public static final DeferredItem<Item> BAMBOO_WALL_BONES_QUARTER = ITEMS.register("bamboo_wall_bones_quarter", () -> new BuildingComponentItem(() -> BuildingComponents.BAMBOO_WALL_BONES_QUARTER));
+    public static final DeferredItem<Item> RED_PLANKS_WALL = ITEMS.register("red_planks_wall", () -> new BuildingComponentItem(() -> BuildingComponents.RED_PLANKS_WALL));
+    public static final DeferredItem<Item> RED_PLANKS_WALL_QUARTER = ITEMS.register("red_planks_wall_quarter", () -> new BuildingComponentItem(() -> BuildingComponents.RED_PLANKS_WALL_QUARTER));
     public static final DeferredItem<Item> GREEN_STRAIGHT_BAR_WINDOW = ITEMS.register("green_straight_bar_window", () -> new BuildingComponentItem(() -> BuildingComponents.GREEN_STRAIGHT_BAR_WINDOW));
     public static final DeferredItem<Item> GREEN_STRAIGHT_BAR_WINDOW_QUARTER = ITEMS.register("green_straight_bar_window_quarter", () -> new BuildingComponentItem(() -> BuildingComponents.GREEN_STRAIGHT_BAR_WINDOW_QUARTER));
     public static final DeferredItem<Item> RED_LATTICED_WINDOW = ITEMS.register("red_latticed_window", () -> new BuildingComponentItem(() -> BuildingComponents.RED_LATTICED_WINDOW));

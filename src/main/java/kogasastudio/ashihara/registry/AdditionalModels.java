@@ -27,6 +27,7 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation RED_BEAM_L = register("block/components/red_beam_l");
     public static final BuildingComponentModelResourceLocation RED_BEAM_R = register("block/components/red_beam_r");
     public static final BuildingComponentModelResourceLocation RED_BEAM_A = register("block/components/red_beam_a");
+    public static final BuildingComponentModelResourceLocation RED_BEAM_CORNER = register("block/components/red_beam_corner");
 
     public static final BuildingComponentModelResourceLocation RED_CLAMP = register("block/components/red_clamp");
     public static final BuildingComponentModelResourceLocation RED_CLAMP_JOINT = register("block/components/red_clamp_joint");
@@ -57,6 +58,8 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation RAMMED_SOIL_WALL_QUARTER = register("block/components/rammed_soil_wall_quarter");
     public static final BuildingComponentModelResourceLocation WHITE_SOIL_WALL = register("block/components/white_soil_wall");
     public static final BuildingComponentModelResourceLocation WHITE_SOIL_WALL_QUARTER = register("block/components/white_soil_wall_quarter");
+    public static final BuildingComponentModelResourceLocation RED_PLANKS_WALL = register("block/components/red_planks_wall");
+    public static final BuildingComponentModelResourceLocation RED_PLANKS_WALL_QUARTER = register("block/components/red_planks_wall_quarter");
 
     public static final BuildingComponentModelResourceLocation GREEN_STRAIGHT_BAR_WINDOW = register("block/components/green_straight_bar_window");
     public static final BuildingComponentModelResourceLocation GREEN_STRAIGHT_BAR_WINDOW_QUARTER = register("block/components/green_straight_bar_window_quarter");

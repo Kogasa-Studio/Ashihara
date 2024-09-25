@@ -93,6 +93,16 @@ public class BuildingComponents
             List.of(ItemRegistryHandler.RED_BEAM.toStack())
         )
     );
+    public static final BuildingComponent RED_BEAM_CORNER = register
+    (
+        new BeamOblique
+        (
+            "red_beam",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_BEAM_CORNER,
+            List.of(ItemRegistryHandler.RED_BEAM_CORNER.toStack())
+        )
+    );
     public static final BuildingComponent RED_RAFTER_STICKING_BEAM = register
     (
         new RafterStickingBeam
@@ -326,6 +336,38 @@ public class BuildingComponents
             AdditionalModels.RAMMED_SOIL_WALL_QUARTER,
             SoundType.BAMBOO,
             SoundType.DRIPSTONE_BLOCK
+        )
+    );
+    public static final AdditionalComponent RED_PLANKS_WALL = (AdditionalComponent) register
+    (
+        new Wall
+        (
+            "red_planks_wall",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_PLANKS_WALL,
+            Shapes.box(0, 0, 0.40625, 1, 1, 0.59375),
+            List.of(ItemRegistryHandler.RED_PLANKS_WALL.toStack()),
+            null,
+            null,
+            null,
+            null,
+            SoundType.WOOD
+        )
+    );
+    public static final AdditionalComponent RED_PLANKS_WALL_QUARTER = (AdditionalComponent) register
+    (
+        new QuarterWall
+        (
+            "red_planks_wall_quarter",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_PLANKS_WALL_QUARTER,
+            Shapes.box(0.25, 0, 0.40625, 0.75, 0.5, 0.59375),
+            List.of(ItemRegistryHandler.RED_PLANKS_WALL_QUARTER.toStack()),
+            null,
+            null,
+            null,
+            null,
+            SoundType.WOOD
         )
     );
     public static final BuildingComponent GREEN_STRAIGHT_BAR_WINDOW = register

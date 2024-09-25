@@ -1,6 +1,6 @@
 {
 	"parent": "ashihara:block/components/templates/flat_wall_quarter",
 	"textures": {
-		"tex": "ashihara:block/components/rammed_soil"
+		"tex": "ashihara:block/components/red_planks"
 	}
 }

@@ -87,6 +87,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.RED_COLUMN.get());
                                         output.accept(ItemRegistryHandler.RED_COLUMN_SHORT.get());
                                         output.accept(ItemRegistryHandler.RED_BEAM.get());
+                                        output.accept(ItemRegistryHandler.RED_BEAM_CORNER.get());
                                         output.accept(ItemRegistryHandler.RED_CLAMP.get());
                                         output.accept(ItemRegistryHandler.RED_CLAMP_JOINT.get());
                                         output.accept(ItemRegistryHandler.RED_RAFTER_STICKING_BEAM.get());
@@ -106,9 +107,11 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.WHITE_SOIL_WALL.get());
                                         output.accept(ItemRegistryHandler.RAMMED_SOIL_WALL.get());
                                         output.accept(ItemRegistryHandler.BAMBOO_WALL_BONES.get());
+                                        output.accept(ItemRegistryHandler.RED_PLANKS_WALL.get());
                                         output.accept(ItemRegistryHandler.WHITE_SOIL_WALL_QUARTER.get());
                                         output.accept(ItemRegistryHandler.RAMMED_SOIL_WALL_QUARTER.get());
                                         output.accept(ItemRegistryHandler.BAMBOO_WALL_BONES_QUARTER.get());
+                                        output.accept(ItemRegistryHandler.RED_PLANKS_WALL_QUARTER.get());
                                         output.accept(ItemRegistryHandler.GREEN_STRAIGHT_BAR_WINDOW.get());
                                         output.accept(ItemRegistryHandler.GREEN_STRAIGHT_BAR_WINDOW_QUARTER.get());
                                         output.accept(ItemRegistryHandler.RED_LATTICED_WINDOW.get());
