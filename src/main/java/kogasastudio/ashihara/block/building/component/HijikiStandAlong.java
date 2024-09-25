@@ -15,7 +15,7 @@ import java.util.List;
 
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 
-public class HijikiStandAlong extends BuildingComponent
+public class HijikiStandAlong extends AdditionalComponent
 {
     private final BuildingComponentModelResourceLocation MODEL;
 

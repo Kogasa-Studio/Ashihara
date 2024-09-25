@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 
-public class HijikiCornered extends BuildingComponent implements Interactable
+public class HijikiCornered extends AdditionalComponent implements Interactable
 {
     private final BuildingComponentModelResourceLocation MODEL;
     private final BuildingComponentModelResourceLocation LONG_MODEL;

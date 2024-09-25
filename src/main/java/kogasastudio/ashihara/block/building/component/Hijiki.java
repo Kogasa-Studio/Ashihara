@@ -17,7 +17,7 @@ import java.util.List;
 
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 
-public class Hijiki extends BuildingComponent implements Connectable
+public class Hijiki extends AdditionalComponent implements Connectable
 {
     private final BuildingComponentModelResourceLocation LEFT_CONNECTED;
     private final BuildingComponentModelResourceLocation RIGHT_CONNECTED;
@@ -189,9 +189,11 @@ public class Hijiki extends BuildingComponent implements Connectable
         if (level.getBlockEntity(pos.relative(pointed)) instanceof MultiBuiltBlockEntity mbe)
         {
             relExpected = mbe.transformVec3(relExpected);
-            connectL = mbe.occupationCache.contains(Occupation.mapPosition(relExpected.x(), relExpected.y(), relExpected.z()));
+            Vec3 vec = relExpected;
+            connectL = mbe.getComponents(MultiBuiltBlockEntity.OPCODE_ADDITIONAL).stream().anyMatch(m -> m.component() == definition.component() && m.occupation().contains(Occupation.mapPosition(vec.x(), vec.y(), vec.z())));
         }
-        connectR = be.occupationCache.contains(Occupation.mapPosition(expected.x(), expected.y(), expected.z()));
+        Vec3 vec = relExpected;
+        connectR = be.getComponents(MultiBuiltBlockEntity.OPCODE_ADDITIONAL).stream().anyMatch(m -> m.component() == definition.component() && m.occupation().contains(Occupation.mapPosition(vec.x(), vec.y(), vec.z())));
 
         BuildingComponentModelResourceLocation rl;
         VoxelShape shape;
