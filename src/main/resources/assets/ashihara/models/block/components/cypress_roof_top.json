@@ -1,0 +1,34 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"1": "ashihara:block/components/cypress_skin",
+		"particle": "ashihara:block/components/cypress_skin"
+	},
+	"elements": [
+		{
+			"from": [-0.025, 0, -0.025],
+			"to": [16.025, 8, 16.025],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 8], "texture": "#1"},
+				"east": {"uv": [0, 0, 16, 8], "texture": "#1"},
+				"south": {"uv": [0, 0, 16, 8], "texture": "#1"},
+				"west": {"uv": [0, 0, 16, 8], "texture": "#1"},
+				"up": {"uv": [0, 0, 16, 16], "rotation": 180, "texture": "#1"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#1"}
+			}
+		},
+		{
+			"from": [-0.025, 8, 3.975],
+			"to": [16.025, 16, 12.025],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 8], "texture": "#1"},
+				"east": {"uv": [0, 0, 8.05, 8], "texture": "#1"},
+				"south": {"uv": [0, 0, 16, 8], "texture": "#1"},
+				"west": {"uv": [0, 0, 8.05, 8], "texture": "#1"},
+				"up": {"uv": [0, 0, 16, 8.05], "rotation": 180, "texture": "#1"},
+				"down": {"uv": [0, 0, 16, 8.05], "texture": "#1"}
+			}
+		}
+	]
+}

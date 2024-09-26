@@ -105,7 +105,6 @@ public class Beam extends BuildingComponent implements Connectable, Interactable
     public ComponentStateDefinition applyConnection(MultiBuiltBlockEntity be, ComponentStateDefinition definition)
     {
         if (be.getLevel() == null) return definition;
-        if (!(definition.component() instanceof Beam)) throw new IllegalStateException("Wrong component type for connection");
 
         Level level = be.getLevel();
         BlockPos pos = be.getBlockPos();

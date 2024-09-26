@@ -187,7 +187,10 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> CYPRESS_ROOF_EDGE_CORNER = ITEMS.register("cypress_roof_edge_corner", () -> new BuildingComponentItem(() -> BuildingComponents.CYPRESS_ROOF_EDGE_CORNER));
     public static final DeferredItem<Item> CYPRESS_ROOF_HALF = ITEMS.register("cypress_roof_half", () -> new BuildingComponentItem(() -> BuildingComponents.CYPRESS_ROOF_HALF));
     public static final DeferredItem<Item> CYPRESS_ROOF_QUARTER = ITEMS.register("cypress_roof_quarter", () -> new BuildingComponentItem(() -> BuildingComponents.CYPRESS_ROOF_QUARTER));
+    public static final DeferredItem<Item> CYPRESS_ROOF_EDGE_LAYER_BOTTOM = ITEMS.register("cypress_roof_edge_layer_bottom", () -> new BuildingComponentItem(() -> BuildingComponents.CYPRESS_ROOF_EDGE_LAYER_BOTTOM));
+    public static final DeferredItem<Item> CYPRESS_ROOF_EDGE_LAYER_TOP = ITEMS.register("cypress_roof_edge_layer_top", () -> new BuildingComponentItem(() -> BuildingComponents.CYPRESS_ROOF_EDGE_LAYER_TOP));
     public static final DeferredItem<Item> CYPRESS_ROOF_QUARTER_CORNER = ITEMS.register("cypress_roof_quarter_corner", () -> new BuildingComponentItem(() -> BuildingComponents.CYPRESS_ROOF_QUARTER_CORNER));
+    public static final DeferredItem<Item> CYPRESS_ROOF_TOP = ITEMS.register("cypress_roof_top", () -> new BuildingComponentItem(() -> BuildingComponents.CYPRESS_ROOF_TOP));
 
     //灯具
     public static final DeferredItem<Item> LANTERN_LONG_WHITE = ITEMS.register("lantern_long_white", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), new Item.Properties()));
