@@ -132,7 +132,7 @@ dependencies {
     // implementation "blank:coolmod-${mc_version}:${coolmod_version}"
 
     // Example mod dependency using a file as dependency
-    runtimeOnly files("libs/worldedit-mod-7.3.6.jar")
+    implementation files("libs/worldedit-mod-7.3.6.jar")
     runtimeOnly files("libs/worldeditcui-forge-1.21.1+01-SNAPSHOT-neoforge.jar")
 
     // Example project dependency using a sister or child project:

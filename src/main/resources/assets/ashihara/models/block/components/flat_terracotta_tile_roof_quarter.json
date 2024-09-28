@@ -1,0 +1,22 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"0": "ashihara:block/components/flat_terracotta_tile",
+		"particle": "ashihara:block/components/flat_terracotta_tile"
+	},
+	"elements": [
+		{
+			"from": [3.975, 0, 3.975],
+			"to": [12.025, 4, 12.025],
+			"faces": {
+				"north": {"uv": [4, 1, 12, 5], "texture": "#0"},
+				"east": {"uv": [4, 1, 12, 5], "texture": "#0"},
+				"south": {"uv": [4, 1, 12, 5], "texture": "#0"},
+				"west": {"uv": [4, 1, 12, 5], "texture": "#0"},
+				"up": {"uv": [8, 8, 0, 0], "texture": "#0"},
+				"down": {"uv": [8, 0, 0, 8], "texture": "#0"}
+			}
+		}
+	]
+}

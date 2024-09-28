@@ -684,6 +684,434 @@ public class BuildingComponents
             List.of(ItemRegistryHandler.CYPRESS_ROOF_TOP.toStack())
         )
     );
+    public static final BuildingComponent FLAT_TERRACOTTA_TILE_ROOF = register
+    (
+        new OrientedFloor
+        (
+            "flat_terracotta_tile_roof",
+            Type.BAKED_MODEL,
+            AdditionalModels.FLAT_TERRACOTTA_TILE_ROOF,
+            List.of(ItemRegistryHandler.FLAT_TERRACOTTA_TILE_ROOF.toStack())
+        ).setSound(SoundType.DEEPSLATE_TILES)
+    );
+    public static final BuildingComponent FLAT_TERRACOTTA_TILE_ROOF_HALF = register
+    (
+        new RafterPlanks
+        (
+            "flat_terracotta_tile_roof_half",
+            Type.BAKED_MODEL,
+            AdditionalModels.FLAT_TERRACOTTA_TILE_ROOF_HALF,
+            List.of(ItemRegistryHandler.FLAT_TERRACOTTA_TILE_ROOF_HALF.toStack())
+        ).setSound(SoundType.DEEPSLATE_TILES)
+    );
+    public static final BuildingComponent FLAT_TERRACOTTA_TILE_ROOF_QUARTER = register
+    (
+        new QuarterOrientedFloor
+        (
+            "flat_terracotta_tile_roof_quarter",
+            Type.BAKED_MODEL,
+            AdditionalModels.FLAT_TERRACOTTA_TILE_ROOF_QUARTER,
+            List.of(ItemRegistryHandler.FLAT_TERRACOTTA_TILE_ROOF_QUARTER.toStack())
+        ).setSound(SoundType.DEEPSLATE_TILES)
+    );
+    public static final BuildingComponent ROUND_TERRACOTTA_TILE_1_1 = register
+    (
+        new RoundTile
+        (
+            "round_terracotta_tile_1_1",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROUND_TERRACOTTA_TILE_1_1,
+            Shapes.box(0.25, 0.125, 0.125, 0.75, 0.875, 0.875),
+            y -> 0,
+            45,
+            0,
+            XTP(8),
+            List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_1_1.toStack())
+        )
+    );
+    public static final BuildingComponent ROUND_TERRACOTTA_TILE_1_1_OBLIQUE = register
+    (
+        new RoundTile
+        (
+            "round_terracotta_tile_1_1_oblique",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROUND_TERRACOTTA_TILE_1_1_OBLIQUE,
+            Shapes.or(Shapes.box(-0.375, -0.5, -0.375, 0.5, 0, 0.5), Shapes.box(0.1875, 0, 0.1875, 1, 0.5, 1)),
+            y -> 0,
+            35.2644f,
+            -45,
+            XTP(8),
+            List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_1_1_OBLIQUE.toStack())
+        )
+    );
+    public static final BuildingComponent ROUND_TERRACOTTA_TILE_1_1_HALF = register
+    (
+        new RoundTileHalf
+        (
+            "round_terracotta_tile_1_1_half",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROUND_TERRACOTTA_TILE_1_1_HALF,
+            Shapes.box(0.25, -0.0015625, 0.14644375, 0.75, 0.4984375, 0.85355625),
+            y -> (int) Math.clamp(Math.floor(y * 4), 0, 3),
+            45,
+            0,
+            XTP(-4),
+            List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_1_1_HALF.toStack())
+        )
+    );
+    public static final BuildingComponent ROUND_TERRACOTTA_TILE_1_2 = register
+    (
+        new RoundTile
+        (
+            "round_terracotta_tile_1_2",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROUND_TERRACOTTA_TILE_1_2,
+            Shapes.box(0.25, 0.0625, 0.1875, 0.75, 0.6875, 0.8125),
+            y -> y <= XTP(8) ? 0 : 2,
+            26.5651f,
+            0,
+            XTP(-4),
+            List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_1_2.toStack())
+        )
+    );
+    public static final BuildingComponent ROUND_TERRACOTTA_TILE_1_2_OBLIQUE = register
+    (
+        new RoundTile
+        (
+            "round_terracotta_tile_1_2_oblique",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROUND_TERRACOTTA_TILE_1_2_OBLIQUE,
+            Shapes.or(Shapes.box(-0.3125, 0, -0.3125, 0.5, 0.75, 0.5), Shapes.box(0.1875, 0, 0.1875, 1, 0.75, 1)),
+            y -> y <= XTP(8) ? 0 : 2,
+            19.4712f,
+            -45,
+            XTP(-4),
+            List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_1_2_OBLIQUE.toStack())
+        )
+    );
+    public static final BuildingComponent ROUND_TERRACOTTA_TILE_1_2_HALF = register
+    (
+        new RoundTileHalf
+        (
+            "round_terracotta_tile_1_2_half",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROUND_TERRACOTTA_TILE_1_2_HALF,
+            Shapes.box(0.25, -0.0015625, 0.22049375, 0.75, 0.4984375, 0.77950625),
+            y -> y <= XTP(8) ? 0 : 2,
+            26.5651f,
+            0,
+            XTP(-4),
+            List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_1_2_HALF.toStack())
+        )
+    );
+    public static final BuildingComponent ROUND_TERRACOTTA_TILE_1_4 = register
+    (
+        new RoundTile
+        (
+            "round_terracotta_tile_1_4",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROUND_TERRACOTTA_TILE_1_4,
+            Shapes.box(0.25, 0.0625, 0.21875, 0.75, 0.625, 0.78125),
+            y -> (int) Math.clamp(Math.floor(y * 4), 0, 3),
+            14.0362f,
+            0,
+            XTP(-6),
+            List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_1_4.toStack())
+        )
+    );
+    public static final BuildingComponent ROUND_TERRACOTTA_TILE_1_4_OBLIQUE = register
+    (
+        new RoundTile
+        (
+            "round_terracotta_tile_1_4_oblique",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROUND_TERRACOTTA_TILE_1_4_OBLIQUE,
+            Shapes.or(Shapes.box(-0.25, 0, -0.25, 0.5625, 0.625, 0.5625), Shapes.box(0.1875, 0, 0.1875, 1, 0.625, 1)),
+            y -> (int) Math.clamp(Math.floor(y * 4), 0, 3),
+            10.025f,
+            -45,
+            XTP(-6),
+            List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_1_4_OBLIQUE.toStack())
+        )
+    );
+    public static final BuildingComponent ROUND_TERRACOTTA_TILE_1_4_HALF = register
+    (
+        new RoundTileHalf
+        (
+            "round_terracotta_tile_1_4_half",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROUND_TERRACOTTA_TILE_1_4_HALF,
+            Shapes.box(0.25, -0.0015625, 0.24230625, 0.75, 0.4984375, 0.75769375),
+            y -> (int) Math.clamp(Math.floor(y * 4), 0, 3),
+            14.0362f,
+            0,
+            XTP(-4),
+            List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_1_4_HALF.toStack())
+        )
+    );
+    public static final BuildingComponent ROUND_TERRACOTTA_TILE_FLAT = register
+    (
+        new RoundTile
+        (
+            "round_terracotta_tile_flat",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROUND_TERRACOTTA_TILE_FLAT,
+            Shapes.box(0.25, 0, 0, 0.75, 0.5, 1),
+            y -> (int) Math.clamp(Math.floor(y * 4), 0, 3),
+            0,
+            0,
+            XTP(-4),
+            List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_FLAT.toStack())
+        )
+    );
+    public static final BuildingComponent ROUND_TERRACOTTA_TILE_FLAT_OBLIQUE = register
+    (
+        new RoundTile
+        (
+            "round_terracotta_tile_flat_oblique",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROUND_TERRACOTTA_TILE_FLAT_OBLIQUE,
+            Shapes.or(Shapes.box(-0.1875, 0, -0.1875, 0.625, 0.5, 0.625), Shapes.box(0.25, 0, 0.25, 1, 0.5, 1)),
+            y -> (int) Math.clamp(Math.floor(y * 4), 0, 3),
+            0,
+            -45,
+            XTP(-4),
+            List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_FLAT_OBLIQUE.toStack())
+        )
+    );
+    public static final BuildingComponent ROUND_TERRACOTTA_TILE_FLAT_HALF = register
+    (
+        new RoundTileHalf
+        (
+            "round_terracotta_tile_flat_half",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROUND_TERRACOTTA_TILE_FLAT_HALF,
+            Shapes.box(0.25, -0.0015625, 0.25, 0.75, 0.4984375, 0.75),
+            y -> (int) Math.clamp(Math.floor(y * 4), 0, 3),
+            0,
+            0,
+            XTP(-4),
+            List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_FLAT_HALF.toStack())
+        )
+    );
+    public static final BuildingComponent TERRACOTTA_TILE_ROOF_EDGE = register
+    (
+        new OrientedFloor
+        (
+            "terracotta_tile_roof_edge",
+            Type.BAKED_MODEL,
+            AdditionalModels.TERRACOTTA_TILE_ROOF_EDGE,
+            Shapes.box(0, 0, 0.4375, 1, 0.5625, 1),
+            List.of(ItemRegistryHandler.TERRACOTTA_TILE_ROOF_EDGE.toStack())
+        ).setSound(SoundType.DEEPSLATE_TILES)
+    );
+    public static final BuildingComponent TERRACOTTA_TILE_ROOF_EDGE_CORNER = register
+    (
+        new OrientedFloor
+        (
+            "terracotta_tile_roof_edge_corner",
+            Type.BAKED_MODEL,
+            AdditionalModels.TERRACOTTA_TILE_ROOF_EDGE_CORNER,
+            Shapes.box(0, 0, 0.1875, 0.8125, 0.5625, 1),
+            List.of(ItemRegistryHandler.TERRACOTTA_TILE_ROOF_EDGE_CORNER.toStack())
+        ).setSound(SoundType.DEEPSLATE_TILES)
+    );
+    public static final BuildingComponent ROUND_TERRACOTTA_TILE_END = register
+    (
+        new RoundTileHalf
+        (
+            "round_terracotta_tile_end",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROUND_TERRACOTTA_TILE_END,
+            Shapes.box(0.21875, -0.0484375, 0.0625, 0.78125, 0.5296875, 0.75),
+            y -> (int) Math.clamp(Math.floor(y * 4), 0, 3),
+            0,
+            0,
+            XTP(-4),
+            List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_END.toStack())
+        ).setSound(SoundType.DEEPSLATE_TILES)
+    );
+    public static final BuildingComponent TERRACOTTA_TILE_ROOF_TOP = register
+    (
+        new SmoothRafter
+        (
+            "terracotta_tile_roof_top",
+            Type.BAKED_MODEL,
+            AdditionalModels.TERRACOTTA_TILE_ROOF_TOP,
+            Shapes.or
+            (
+                Shapes.box(0, 0, 0, 1, 0.5, 1),
+                Shapes.box(0, 0.5, 0.25, 1, 1, 0.75),
+                Shapes.box(0.25, 0, 0.0625, 0.75, 0.9375, 0.9375)
+            ),
+            List.of(ItemRegistryHandler.TERRACOTTA_TILE_ROOF_TOP.toStack())
+        ).setSound(SoundType.DEEPSLATE_TILES)
+    );
+    public static final BuildingComponent ROOF_TOP_TILES_PILE_1_1 = register
+    (
+        new RoundTile
+        (
+            "roof_top_tiles_pile_1_1",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROOF_TOP_TILES_PILE_1_1,
+            Shapes.box(0.25, 0.125, 0.125, 0.75, 0.875, 0.875),
+            y -> 0,
+            45,
+            0,
+            XTP(0),
+            List.of(ItemRegistryHandler.ROOF_TOP_TILES_PILE_1_1.toStack())
+        )
+    );
+    public static final BuildingComponent ROOF_TOP_TILES_PILE_1_1_OBLIQUE = register
+    (
+        new RoundTile
+        (
+            "roof_top_tiles_pile_1_1_oblique",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROOF_TOP_TILES_PILE_1_1_OBLIQUE,
+            Shapes.or(Shapes.box(-0.375, -0.5, -0.375, 0.5, 0, 0.5), Shapes.box(0.1875, 0, 0.1875, 1, 0.5, 1)),
+            y -> 0,
+            35.2644f,
+            -45,
+            XTP(0),
+            List.of(ItemRegistryHandler.ROOF_TOP_TILES_PILE_1_1_OBLIQUE.toStack())
+        )
+    );
+    public static final BuildingComponent ROOF_TOP_TILES_PILE_1_2 = register
+    (
+        new RoundTile
+        (
+            "roof_top_tiles_pile_1_2",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROOF_TOP_TILES_PILE_1_2,
+            Shapes.box(0.25, 0.0625, 0.1875, 0.75, 0.6875, 0.8125),
+            y -> y <= XTP(8) ? 0 : 2,
+            26.5651f,
+            0,
+            XTP(4),
+            List.of(ItemRegistryHandler.ROOF_TOP_TILES_PILE_1_2.toStack())
+        )
+    );
+    public static final BuildingComponent ROOF_TOP_TILES_PILE_1_2_OBLIQUE = register
+    (
+        new RoundTile
+        (
+            "roof_top_tiles_pile_1_2_oblique",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROOF_TOP_TILES_PILE_1_2_OBLIQUE,
+            Shapes.or(Shapes.box(-0.3125, 0, -0.3125, 0.5, 0.75, 0.5), Shapes.box(0.1875, 0, 0.1875, 1, 0.75, 1)),
+            y -> y <= XTP(8) ? 0 : 2,
+            19.4712f,
+            -45,
+            XTP(4),
+            List.of(ItemRegistryHandler.ROOF_TOP_TILES_PILE_1_2_OBLIQUE.toStack())
+        )
+    );
+    public static final BuildingComponent ROOF_TOP_TILES_PILE_1_4 = register
+    (
+        new RoundTile
+        (
+            "roof_top_tiles_pile_1_4",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROOF_TOP_TILES_PILE_1_4,
+            Shapes.box(0.25, 0.0625, 0.21875, 0.75, 0.625, 0.78125),
+            y -> (int) Math.clamp(Math.floor(y * 4), 0, 3),
+            14.0362f,
+            0,
+            XTP(-2),
+            List.of(ItemRegistryHandler.ROOF_TOP_TILES_PILE_1_4.toStack())
+        )
+    );
+    public static final BuildingComponent ROOF_TOP_TILES_PILE_1_4_OBLIQUE = register
+    (
+        new RoundTile
+        (
+            "roof_top_tiles_pile_1_4_oblique",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROOF_TOP_TILES_PILE_1_4_OBLIQUE,
+            Shapes.or(Shapes.box(-0.25, 0, -0.25, 0.5625, 0.625, 0.5625), Shapes.box(0.1875, 0, 0.1875, 1, 0.625, 1)),
+            y -> (int) Math.clamp(Math.floor(y * 4), 0, 3),
+            10.025f,
+            -45,
+            XTP(-2),
+            List.of(ItemRegistryHandler.ROOF_TOP_TILES_PILE_1_4_OBLIQUE.toStack())
+        )
+    );
+    public static final BuildingComponent ROOF_TOP_TILES_PILE_FLAT = register
+    (
+        new RoundTile
+        (
+            "roof_top_tiles_pile_flat",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROOF_TOP_TILES_PILE_FLAT,
+            Shapes.box(0.25, 0, 0, 0.75, 0.5, 1),
+            y -> (int) Math.clamp(Math.floor(y * 4), 0, 3),
+            0,
+            0,
+            XTP(4),
+            List.of(ItemRegistryHandler.ROOF_TOP_TILES_PILE_FLAT.toStack())
+        )
+    );
+    public static final BuildingComponent ROOF_TOP_TILES_PILE_FLAT_OBLIQUE= register
+    (
+        new RoundTile
+        (
+            "roof_top_tiles_pile_flat_oblique",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROOF_TOP_TILES_PILE_FLAT_OBLIQUE,
+            Shapes.or(Shapes.box(-0.1875, 0, -0.1875, 0.625, 0.5, 0.625), Shapes.box(0.25, 0, 0.25, 1, 0.5, 1)),
+            y -> (int) Math.clamp(Math.floor(y * 4), 0, 3),
+            0,
+            -45,
+            XTP(4),
+            List.of(ItemRegistryHandler.ROOF_TOP_TILES_PILE_FLAT_OBLIQUE.toStack())
+        )
+    );
+    public static final BuildingComponent ROOF_TOP_TILES_PILE_START = register
+    (
+        new RoundTile
+        (
+            "roof_top_tiles_pile_start",
+            Type.BAKED_MODEL,
+            AdditionalModels.ROOF_TOP_TILES_PILE_START,
+            Shapes.box(0.25, 0.125, 0.125, 0.75, 0.875, 0.875),
+            y -> 0,
+            45,
+            0,
+            XTP(0),
+            List.of(ItemRegistryHandler.ROOF_TOP_TILES_PILE_START.toStack())
+        )
+    );
+    public static final BuildingComponent ONI_TILE_1 = register
+    (
+        new RoundTile
+        (
+            "oni_tile_1",
+            Type.BAKED_MODEL,
+            AdditionalModels.ONI_TILE_1,
+            Shapes.box(0, 0, 0.4375, 1, 0.5625, 1),
+            y -> (int) Math.clamp(Math.floor(y * 4), 0, 3),
+            0,
+            0,
+            XTP(4),
+            List.of(ItemRegistryHandler.ONI_TILE_1.toStack())
+        ).setSound(SoundType.DEEPSLATE_TILES)
+    );
+    public static final BuildingComponent ONI_TILE_1_OBLIQUE= register
+    (
+        new RoundTile
+        (
+            "oni_tile_1_oblique",
+            Type.BAKED_MODEL,
+            AdditionalModels.ONI_TILE_1_OBLIQUE,
+            Shapes.box(0, 0, 0.1875, 0.8125, 0.5625, 1),
+            y -> (int) Math.clamp(Math.floor(y * 4), 0, 3),
+            0,
+            -45,
+            XTP(4),
+            List.of(ItemRegistryHandler.ONI_TILE_1_OBLIQUE.toStack())
+        ).setSound(SoundType.DEEPSLATE_TILES)
+    );
 
     static
     {

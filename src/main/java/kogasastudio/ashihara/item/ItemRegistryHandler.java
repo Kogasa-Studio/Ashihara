@@ -191,6 +191,36 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> CYPRESS_ROOF_EDGE_LAYER_TOP = ITEMS.register("cypress_roof_edge_layer_top", () -> new BuildingComponentItem(() -> BuildingComponents.CYPRESS_ROOF_EDGE_LAYER_TOP));
     public static final DeferredItem<Item> CYPRESS_ROOF_QUARTER_CORNER = ITEMS.register("cypress_roof_quarter_corner", () -> new BuildingComponentItem(() -> BuildingComponents.CYPRESS_ROOF_QUARTER_CORNER));
     public static final DeferredItem<Item> CYPRESS_ROOF_TOP = ITEMS.register("cypress_roof_top", () -> new BuildingComponentItem(() -> BuildingComponents.CYPRESS_ROOF_TOP));
+    public static final DeferredItem<Item> FLAT_TERRACOTTA_TILE_ROOF = ITEMS.register("flat_terracotta_tile_roof", () -> new BuildingComponentItem(() -> BuildingComponents.FLAT_TERRACOTTA_TILE_ROOF));
+    public static final DeferredItem<Item> FLAT_TERRACOTTA_TILE_ROOF_HALF = ITEMS.register("flat_terracotta_tile_roof_half", () -> new BuildingComponentItem(() -> BuildingComponents.FLAT_TERRACOTTA_TILE_ROOF_HALF));
+    public static final DeferredItem<Item> FLAT_TERRACOTTA_TILE_ROOF_QUARTER = ITEMS.register("flat_terracotta_tile_roof_quarter", () -> new BuildingComponentItem(() -> BuildingComponents.FLAT_TERRACOTTA_TILE_ROOF_QUARTER));
+    public static final DeferredItem<Item> ROUND_TERRACOTTA_TILE_1_1 = ITEMS.register("round_terracotta_tile_1_1", () -> new BuildingComponentItem(() -> BuildingComponents.ROUND_TERRACOTTA_TILE_1_1));
+    public static final DeferredItem<Item> ROUND_TERRACOTTA_TILE_1_1_HALF = ITEMS.register("round_terracotta_tile_1_1_half", () -> new BuildingComponentItem(() -> BuildingComponents.ROUND_TERRACOTTA_TILE_1_1_HALF));
+    public static final DeferredItem<Item> ROUND_TERRACOTTA_TILE_1_1_OBLIQUE = ITEMS.register("round_terracotta_tile_1_1_oblique", () -> new BuildingComponentItem(() -> BuildingComponents.ROUND_TERRACOTTA_TILE_1_1_OBLIQUE));
+    public static final DeferredItem<Item> ROUND_TERRACOTTA_TILE_1_2 = ITEMS.register("round_terracotta_tile_1_2", () -> new BuildingComponentItem(() -> BuildingComponents.ROUND_TERRACOTTA_TILE_1_2));
+    public static final DeferredItem<Item> ROUND_TERRACOTTA_TILE_1_2_HALF = ITEMS.register("round_terracotta_tile_1_2_half", () -> new BuildingComponentItem(() -> BuildingComponents.ROUND_TERRACOTTA_TILE_1_2_HALF));
+    public static final DeferredItem<Item> ROUND_TERRACOTTA_TILE_1_2_OBLIQUE = ITEMS.register("round_terracotta_tile_1_2_oblique", () -> new BuildingComponentItem(() -> BuildingComponents.ROUND_TERRACOTTA_TILE_1_2_OBLIQUE));
+    public static final DeferredItem<Item> ROUND_TERRACOTTA_TILE_1_4 = ITEMS.register("round_terracotta_tile_1_4", () -> new BuildingComponentItem(() -> BuildingComponents.ROUND_TERRACOTTA_TILE_1_4));
+    public static final DeferredItem<Item> ROUND_TERRACOTTA_TILE_1_4_HALF = ITEMS.register("round_terracotta_tile_1_4_half", () -> new BuildingComponentItem(() -> BuildingComponents.ROUND_TERRACOTTA_TILE_1_4_HALF));
+    public static final DeferredItem<Item> ROUND_TERRACOTTA_TILE_1_4_OBLIQUE = ITEMS.register("round_terracotta_tile_1_4_oblique", () -> new BuildingComponentItem(() -> BuildingComponents.ROUND_TERRACOTTA_TILE_1_4_OBLIQUE));
+    public static final DeferredItem<Item> ROUND_TERRACOTTA_TILE_FLAT = ITEMS.register("round_terracotta_tile_flat", () -> new BuildingComponentItem(() -> BuildingComponents.ROUND_TERRACOTTA_TILE_FLAT));
+    public static final DeferredItem<Item> ROUND_TERRACOTTA_TILE_FLAT_HALF = ITEMS.register("round_terracotta_tile_flat_half", () -> new BuildingComponentItem(() -> BuildingComponents.ROUND_TERRACOTTA_TILE_FLAT_HALF));
+    public static final DeferredItem<Item> ROUND_TERRACOTTA_TILE_FLAT_OBLIQUE = ITEMS.register("round_terracotta_tile_flat_oblique", () -> new BuildingComponentItem(() -> BuildingComponents.ROUND_TERRACOTTA_TILE_FLAT_OBLIQUE));
+    public static final DeferredItem<Item> TERRACOTTA_TILE_ROOF_EDGE = ITEMS.register("terracotta_tile_roof_edge", () -> new BuildingComponentItem(() -> BuildingComponents.TERRACOTTA_TILE_ROOF_EDGE));
+    public static final DeferredItem<Item> TERRACOTTA_TILE_ROOF_EDGE_CORNER = ITEMS.register("terracotta_tile_roof_edge_corner", () -> new BuildingComponentItem(() -> BuildingComponents.TERRACOTTA_TILE_ROOF_EDGE_CORNER));
+    public static final DeferredItem<Item> ROUND_TERRACOTTA_TILE_END = ITEMS.register("round_terracotta_tile_end", () -> new BuildingComponentItem(() -> BuildingComponents.ROUND_TERRACOTTA_TILE_END));
+    public static final DeferredItem<Item> TERRACOTTA_TILE_ROOF_TOP = ITEMS.register("terracotta_tile_roof_top", () -> new BuildingComponentItem(() -> BuildingComponents.TERRACOTTA_TILE_ROOF_TOP));
+    public static final DeferredItem<Item> ROOF_TOP_TILES_PILE_1_1 = ITEMS.register("roof_top_tiles_pile_1_1", () -> new BuildingComponentItem(() -> BuildingComponents.ROOF_TOP_TILES_PILE_1_1));
+    public static final DeferredItem<Item> ROOF_TOP_TILES_PILE_1_1_OBLIQUE = ITEMS.register("roof_top_tiles_pile_1_1_oblique", () -> new BuildingComponentItem(() -> BuildingComponents.ROOF_TOP_TILES_PILE_1_1_OBLIQUE));
+    public static final DeferredItem<Item> ROOF_TOP_TILES_PILE_1_2 = ITEMS.register("roof_top_tiles_pile_1_2", () -> new BuildingComponentItem(() -> BuildingComponents.ROOF_TOP_TILES_PILE_1_2));
+    public static final DeferredItem<Item> ROOF_TOP_TILES_PILE_1_2_OBLIQUE = ITEMS.register("roof_top_tiles_pile_1_2_oblique", () -> new BuildingComponentItem(() -> BuildingComponents.ROOF_TOP_TILES_PILE_1_2_OBLIQUE));
+    public static final DeferredItem<Item> ROOF_TOP_TILES_PILE_1_4 = ITEMS.register("roof_top_tiles_pile_1_4", () -> new BuildingComponentItem(() -> BuildingComponents.ROOF_TOP_TILES_PILE_1_4));
+    public static final DeferredItem<Item> ROOF_TOP_TILES_PILE_1_4_OBLIQUE = ITEMS.register("roof_top_tiles_pile_1_4_oblique", () -> new BuildingComponentItem(() -> BuildingComponents.ROOF_TOP_TILES_PILE_1_4_OBLIQUE));
+    public static final DeferredItem<Item> ROOF_TOP_TILES_PILE_FLAT = ITEMS.register("roof_top_tiles_pile_flat", () -> new BuildingComponentItem(() -> BuildingComponents.ROOF_TOP_TILES_PILE_FLAT));
+    public static final DeferredItem<Item> ROOF_TOP_TILES_PILE_FLAT_OBLIQUE = ITEMS.register("roof_top_tiles_pile_flat_oblique", () -> new BuildingComponentItem(() -> BuildingComponents.ROOF_TOP_TILES_PILE_FLAT_OBLIQUE));
+    public static final DeferredItem<Item> ROOF_TOP_TILES_PILE_START = ITEMS.register("roof_top_tiles_pile_start", () -> new BuildingComponentItem(() -> BuildingComponents.ROOF_TOP_TILES_PILE_START));
+    public static final DeferredItem<Item> ONI_TILE_1 = ITEMS.register("oni_tile_1", () -> new BuildingComponentItem(() -> BuildingComponents.ONI_TILE_1));
+    public static final DeferredItem<Item> ONI_TILE_1_OBLIQUE = ITEMS.register("oni_tile_1_oblique", () -> new BuildingComponentItem(() -> BuildingComponents.ONI_TILE_1_OBLIQUE));
 
     //灯具
     public static final DeferredItem<Item> LANTERN_LONG_WHITE = ITEMS.register("lantern_long_white", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), new Item.Properties()));

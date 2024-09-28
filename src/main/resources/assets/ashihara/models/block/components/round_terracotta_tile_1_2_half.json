@@ -1,0 +1,24 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"0": "ashihara:block/components/round_terracotta_tile",
+		"particle": "ashihara:block/components/round_terracotta_tile"
+	},
+	"elements": [
+		{
+			"from": [4, -0.025, 3.5279],
+			"to": [12, 7.975, 12.4721],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 4, 8]},
+			"faces": {
+				"north": {"uv": [4, 0, 8, 4], "texture": "#0"},
+				"east": {"uv": [0, 1, 4, 5], "rotation": 270, "texture": "#0"},
+				"south": {"uv": [4, 0, 8, 4], "texture": "#0"},
+				"west": {"uv": [4, 1, 0, 5], "rotation": 90, "texture": "#0"},
+				"up": {"uv": [4, 1, 8, 5], "rotation": 180, "texture": "#0"},
+				"down": {"uv": [4, 1, 8, 5], "texture": "#0"}
+			}
+		}
+	],
+	"display": {}
+}

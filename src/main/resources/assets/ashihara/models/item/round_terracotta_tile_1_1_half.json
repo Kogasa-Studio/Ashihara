@@ -1,0 +1,33 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"0": "ashihara:block/components/round_terracotta_tile",
+		"1": "ashihara:block/components/slope_mark",
+		"particle": "ashihara:block/components/round_terracotta_tile"
+	},
+	"elements": [
+		{
+			"from": [4, 0, 4],
+			"to": [12, 8, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 4, 8]},
+			"faces": {
+				"north": {"uv": [4, 0, 8, 4], "texture": "#0"},
+				"east": {"uv": [0, 1, 4, 5], "rotation": 270, "texture": "#0"},
+				"south": {"uv": [4, 0, 8, 4], "texture": "#0"},
+				"west": {"uv": [4, 1, 0, 5], "rotation": 90, "texture": "#0"},
+				"up": {"uv": [4, 1, 8, 5], "rotation": 180, "texture": "#0"},
+				"down": {"uv": [4, 1, 8, 5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [16, -2, -7.5],
+			"to": [16, 3, -0.5],
+			"rotation": {"angle": 45, "axis": "y", "origin": [10, 0, 0]},
+			"faces": {
+				"east": {"uv": [0, 0, 7, 5], "texture": "#1"},
+				"west": {"uv": [0, 0, 7, 5], "texture": "#1"}
+			}
+		}
+	]
+}

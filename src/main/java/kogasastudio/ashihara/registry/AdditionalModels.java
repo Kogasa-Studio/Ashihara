@@ -105,6 +105,38 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_QUARTER_CORNER = register("block/components/cypress_roof_quarter_corner");
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_TOP = register("block/components/cypress_roof_top");
 
+    public static final BuildingComponentModelResourceLocation FLAT_TERRACOTTA_TILE_ROOF = register("block/components/flat_terracotta_tile_roof");
+    public static final BuildingComponentModelResourceLocation FLAT_TERRACOTTA_TILE_ROOF_HALF = register("block/components/flat_terracotta_tile_roof_half");
+    public static final BuildingComponentModelResourceLocation FLAT_TERRACOTTA_TILE_ROOF_QUARTER = register("block/components/flat_terracotta_tile_roof_quarter");
+    public static final BuildingComponentModelResourceLocation ROUND_TERRACOTTA_TILE_1_1 = register("block/components/round_terracotta_tile_1_1");
+    public static final BuildingComponentModelResourceLocation ROUND_TERRACOTTA_TILE_1_2 = register("block/components/round_terracotta_tile_1_2");
+    public static final BuildingComponentModelResourceLocation ROUND_TERRACOTTA_TILE_1_4 = register("block/components/round_terracotta_tile_1_4");
+    public static final BuildingComponentModelResourceLocation ROUND_TERRACOTTA_TILE_FLAT = register("block/components/round_terracotta_tile_flat");
+    public static final BuildingComponentModelResourceLocation ROUND_TERRACOTTA_TILE_1_1_OBLIQUE = register("block/components/round_terracotta_tile_1_1_oblique");
+    public static final BuildingComponentModelResourceLocation ROUND_TERRACOTTA_TILE_1_2_OBLIQUE = register("block/components/round_terracotta_tile_1_2_oblique");
+    public static final BuildingComponentModelResourceLocation ROUND_TERRACOTTA_TILE_1_4_OBLIQUE = register("block/components/round_terracotta_tile_1_4_oblique");
+    public static final BuildingComponentModelResourceLocation ROUND_TERRACOTTA_TILE_FLAT_OBLIQUE = register("block/components/round_terracotta_tile_flat_oblique");
+    public static final BuildingComponentModelResourceLocation ROUND_TERRACOTTA_TILE_1_1_HALF = register("block/components/round_terracotta_tile_1_1_half");
+    public static final BuildingComponentModelResourceLocation ROUND_TERRACOTTA_TILE_1_2_HALF = register("block/components/round_terracotta_tile_1_2_half");
+    public static final BuildingComponentModelResourceLocation ROUND_TERRACOTTA_TILE_1_4_HALF = register("block/components/round_terracotta_tile_1_4_half");
+    public static final BuildingComponentModelResourceLocation ROUND_TERRACOTTA_TILE_FLAT_HALF = register("block/components/round_terracotta_tile_flat_half");
+    public static final BuildingComponentModelResourceLocation TERRACOTTA_TILE_ROOF_EDGE = register("block/components/terracotta_tile_roof_edge");
+    public static final BuildingComponentModelResourceLocation TERRACOTTA_TILE_ROOF_EDGE_CORNER = register("block/components/terracotta_tile_roof_edge_corner");
+    public static final BuildingComponentModelResourceLocation ROUND_TERRACOTTA_TILE_END = register("block/components/round_terracotta_tile_end");
+    public static final BuildingComponentModelResourceLocation TERRACOTTA_TILE_ROOF_TOP = register("block/components/terracotta_tile_roof_top");
+
+    public static final BuildingComponentModelResourceLocation ROOF_TOP_TILES_PILE_1_1 = register("block/components/roof_top_tiles_pile_1_1");
+    public static final BuildingComponentModelResourceLocation ROOF_TOP_TILES_PILE_1_1_OBLIQUE = register("block/components/roof_top_tiles_pile_1_1_oblique");
+    public static final BuildingComponentModelResourceLocation ROOF_TOP_TILES_PILE_1_2 = register("block/components/roof_top_tiles_pile_1_2");
+    public static final BuildingComponentModelResourceLocation ROOF_TOP_TILES_PILE_1_2_OBLIQUE = register("block/components/roof_top_tiles_pile_1_2_oblique");
+    public static final BuildingComponentModelResourceLocation ROOF_TOP_TILES_PILE_1_4 = register("block/components/roof_top_tiles_pile_1_4");
+    public static final BuildingComponentModelResourceLocation ROOF_TOP_TILES_PILE_1_4_OBLIQUE = register("block/components/roof_top_tiles_pile_1_4_oblique");
+    public static final BuildingComponentModelResourceLocation ROOF_TOP_TILES_PILE_FLAT = register("block/components/roof_top_tiles_pile_flat");
+    public static final BuildingComponentModelResourceLocation ROOF_TOP_TILES_PILE_FLAT_OBLIQUE = register("block/components/roof_top_tiles_pile_flat_oblique");
+    public static final BuildingComponentModelResourceLocation ROOF_TOP_TILES_PILE_START = register("block/components/roof_top_tiles_pile_start");
+    public static final BuildingComponentModelResourceLocation ONI_TILE_1 = register("block/components/oni_tile_1");
+    public static final BuildingComponentModelResourceLocation ONI_TILE_1_OBLIQUE = register("block/components/oni_tile_1_oblique");
+
     @SubscribeEvent
     public static void onRegisterAdditionalModels(ModelEvent.RegisterAdditional event)
     {

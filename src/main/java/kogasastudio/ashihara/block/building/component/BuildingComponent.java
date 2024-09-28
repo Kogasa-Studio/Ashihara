@@ -13,7 +13,7 @@ public abstract class BuildingComponent
     public final String id;
     public final BuildingComponents.Type type;
     public final List<ItemStack> drops;
-    public final SoundType sound;
+    public SoundType sound;
 
     public BuildingComponent(String idIn, BuildingComponents.Type typeIn, List<ItemStack> dropsIn, SoundType soundIn)
     {
@@ -31,4 +31,10 @@ public abstract class BuildingComponent
     public abstract ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context);
 
     public SoundType getSoundType() {return this.sound;}
+
+    public BuildingComponent setSound(SoundType soundIn)
+    {
+        this.sound = soundIn;
+        return this;
+    }
 }
