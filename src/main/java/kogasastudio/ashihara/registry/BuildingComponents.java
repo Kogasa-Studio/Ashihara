@@ -370,6 +370,38 @@ public class BuildingComponents
             SoundType.WOOD
         )
     );
+    public static final AdditionalComponent RED_ROOF_EDGE_PLANKS = (AdditionalComponent) register
+    (
+        new QuarterWall
+        (
+            "red_roof_edge_planks",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_ROOF_EDGE_PLANKS,
+            Shapes.box(0.25, 0, 0.40625, 0.75, 0.5, 0.59375),
+            List.of(ItemRegistryHandler.RED_ROOF_EDGE_PLANKS.toStack()),
+            null,
+            null,
+            null,
+            null,
+            SoundType.WOOD
+        )
+    );
+    public static final AdditionalComponent GOLD_ROOF_EDGE_PLANKS_DECORATION = (AdditionalComponent) register
+    (
+        new QuarterWall
+        (
+            "gold_roof_edge_planks_decoration",
+            Type.BAKED_MODEL,
+            AdditionalModels.GOLD_ROOF_EDGE_PLANKS_DECORATION,
+            Shapes.box(0.25, 0, 0.40625, 0.75, 0.5, 0.59375),
+            List.of(ItemRegistryHandler.GOLD_ROOF_EDGE_PLANKS_DECORATION.toStack()),
+            null,
+            null,
+            null,
+            null,
+            SoundType.WOOD
+        )
+    );
     public static final AdditionalComponent RED_HANGING_FISH_PIG_EYE = (AdditionalComponent) register
     (
         new HangingFish
@@ -1127,6 +1159,21 @@ public class BuildingComponents
             XTP(4),
             List.of(ItemRegistryHandler.ONI_TILE_1_OBLIQUE.toStack())
         ).setSound(SoundType.DEEPSLATE_TILES)
+    );
+    public static final BuildingComponent GOLD_PIN_FIN = register
+    (
+        new RoundTile
+        (
+            "gold_pin_fin",
+            Type.BAKED_MODEL,
+            AdditionalModels.GOLD_PIN_FIN,
+            Shapes.box(0.25, 0, 0, 0.75, 0.5, 0.125),
+            y -> y <= XTP(8) ? 0 : 2,
+            0,
+            0,
+            0,
+            List.of(ItemRegistryHandler.GOLD_PIN_FIN.toStack())
+        ).setSound(SoundType.LANTERN)
     );
 
     static

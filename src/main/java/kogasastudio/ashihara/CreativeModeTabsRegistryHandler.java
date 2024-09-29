@@ -10,6 +10,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
+@SuppressWarnings("unused")
 public class CreativeModeTabsRegistryHandler
 {
     public static final String BUILDING_BLOCKS_TAB_NAME = "group_ash_building_blocks";
@@ -112,6 +113,8 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.RAMMED_SOIL_WALL_QUARTER.get());
                                         output.accept(ItemRegistryHandler.BAMBOO_WALL_BONES_QUARTER.get());
                                         output.accept(ItemRegistryHandler.RED_PLANKS_WALL_QUARTER.get());
+                                        output.accept(ItemRegistryHandler.RED_ROOF_EDGE_PLANKS.get());
+                                        output.accept(ItemRegistryHandler.GOLD_ROOF_EDGE_PLANKS_DECORATION.get());
                                         output.accept(ItemRegistryHandler.RED_HANGING_FISH_PIG_EYE.get());
                                         output.accept(ItemRegistryHandler.GREEN_STRAIGHT_BAR_WINDOW.get());
                                         output.accept(ItemRegistryHandler.GREEN_STRAIGHT_BAR_WINDOW_QUARTER.get());
@@ -169,6 +172,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.ROOF_TOP_TILES_PILE_START.get());
                                         output.accept(ItemRegistryHandler.ONI_TILE_1.get());
                                         output.accept(ItemRegistryHandler.ONI_TILE_1_OBLIQUE.get());
+                                        output.accept(ItemRegistryHandler.GOLD_PIN_FIN.get());
                                         output.accept(ItemRegistryHandler.DIRT_DEPRESSION.get());
                                         output.accept(ItemRegistryHandler.WATER_FIELD.get());
                                     })).build()

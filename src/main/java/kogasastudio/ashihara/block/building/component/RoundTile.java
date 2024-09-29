@@ -46,12 +46,7 @@ public class RoundTile extends AdditionalComponent
         this.xRotation = xRotationIn;
         this.yRotation = yRotationIn;
         this.yOffset = yOffsetIn;
-    }
-
-    @Override
-    public SoundType getSoundType()
-    {
-        return SoundType.DEEPSLATE_TILES;
+        this.setSound(SoundType.DEEPSLATE_TILES);
     }
 
     @Override

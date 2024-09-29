@@ -165,6 +165,8 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> BAMBOO_WALL_BONES_QUARTER = ITEMS.register("bamboo_wall_bones_quarter", () -> new BuildingComponentItem(() -> BuildingComponents.BAMBOO_WALL_BONES_QUARTER));
     public static final DeferredItem<Item> RED_PLANKS_WALL = ITEMS.register("red_planks_wall", () -> new BuildingComponentItem(() -> BuildingComponents.RED_PLANKS_WALL));
     public static final DeferredItem<Item> RED_PLANKS_WALL_QUARTER = ITEMS.register("red_planks_wall_quarter", () -> new BuildingComponentItem(() -> BuildingComponents.RED_PLANKS_WALL_QUARTER));
+    public static final DeferredItem<Item> RED_ROOF_EDGE_PLANKS = ITEMS.register("red_roof_edge_planks", () -> new BuildingComponentItem(() -> BuildingComponents.RED_ROOF_EDGE_PLANKS));
+    public static final DeferredItem<Item> GOLD_ROOF_EDGE_PLANKS_DECORATION = ITEMS.register("gold_roof_edge_planks_decoration", () -> new BuildingComponentItem(() -> BuildingComponents.GOLD_ROOF_EDGE_PLANKS_DECORATION));
     public static final DeferredItem<Item> RED_HANGING_FISH_PIG_EYE = ITEMS.register("red_hanging_fish_pig_eye", () -> new BuildingComponentItem(() -> BuildingComponents.RED_HANGING_FISH_PIG_EYE));
     public static final DeferredItem<Item> GREEN_STRAIGHT_BAR_WINDOW = ITEMS.register("green_straight_bar_window", () -> new BuildingComponentItem(() -> BuildingComponents.GREEN_STRAIGHT_BAR_WINDOW));
     public static final DeferredItem<Item> GREEN_STRAIGHT_BAR_WINDOW_QUARTER = ITEMS.register("green_straight_bar_window_quarter", () -> new BuildingComponentItem(() -> BuildingComponents.GREEN_STRAIGHT_BAR_WINDOW_QUARTER));
@@ -222,6 +224,7 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> ROOF_TOP_TILES_PILE_START = ITEMS.register("roof_top_tiles_pile_start", () -> new BuildingComponentItem(() -> BuildingComponents.ROOF_TOP_TILES_PILE_START));
     public static final DeferredItem<Item> ONI_TILE_1 = ITEMS.register("oni_tile_1", () -> new BuildingComponentItem(() -> BuildingComponents.ONI_TILE_1));
     public static final DeferredItem<Item> ONI_TILE_1_OBLIQUE = ITEMS.register("oni_tile_1_oblique", () -> new BuildingComponentItem(() -> BuildingComponents.ONI_TILE_1_OBLIQUE));
+    public static final DeferredItem<Item> GOLD_PIN_FIN = ITEMS.register("gold_pin_fin", () -> new BuildingComponentItem(() -> BuildingComponents.GOLD_PIN_FIN));
 
     //灯具
     public static final DeferredItem<Item> LANTERN_LONG_WHITE = ITEMS.register("lantern_long_white", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), new Item.Properties()));
