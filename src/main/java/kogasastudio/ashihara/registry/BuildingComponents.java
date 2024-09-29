@@ -370,6 +370,22 @@ public class BuildingComponents
             SoundType.WOOD
         )
     );
+    public static final AdditionalComponent RED_HANGING_FISH_PIG_EYE = (AdditionalComponent) register
+    (
+        new HangingFish
+        (
+            "red_hanging_fish_pig_eye",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_HANGING_FISH_PIG_EYE,
+            Shapes.box(0, 0, 0.40625, 1, 1, 0.59375),
+            List.of(ItemRegistryHandler.RED_HANGING_FISH_PIG_EYE.toStack()),
+            null,
+            null,
+            null,
+            null,
+            SoundType.WOOD
+        )
+    );
     public static final BuildingComponent GREEN_STRAIGHT_BAR_WINDOW = register
     (
         new StraightBarWindow

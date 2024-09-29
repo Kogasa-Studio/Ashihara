@@ -222,6 +222,22 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
                 refresh();
                 return true;
             }
+            else if (def == definition && definition.component() instanceof Decoratable comp)
+            {
+                ComponentStateDefinition decoration = comp.decorate(this, context, def);
+                boolean canAppend = true;
+                for (ComponentStateDefinition d : ADDITIONAL_COMPONENTS)
+                {
+                    if (d.occupation().hashCode() == decoration.occupation().hashCode() && d.equals(decoration)) canAppend = false;
+                }
+                if (canAppend)
+                {
+                    this.ADDITIONAL_COMPONENTS.add(definition);
+                    this.level.playSound(null, this.worldPosition, decoration.component().getSoundType().getPlaceSound(), SoundSource.BLOCKS, 1.0f, 1.0f);
+                    refresh();
+                    return true;
+                }
+            }
         }
         return false;
     }

@@ -112,6 +112,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(ItemRegistryHandler.RAMMED_SOIL_WALL_QUARTER.get());
                                         output.accept(ItemRegistryHandler.BAMBOO_WALL_BONES_QUARTER.get());
                                         output.accept(ItemRegistryHandler.RED_PLANKS_WALL_QUARTER.get());
+                                        output.accept(ItemRegistryHandler.RED_HANGING_FISH_PIG_EYE.get());
                                         output.accept(ItemRegistryHandler.GREEN_STRAIGHT_BAR_WINDOW.get());
                                         output.accept(ItemRegistryHandler.GREEN_STRAIGHT_BAR_WINDOW_QUARTER.get());
                                         output.accept(ItemRegistryHandler.RED_LATTICED_WINDOW.get());
