@@ -399,7 +399,7 @@ public class BuildingComponents
             null,
             null,
             null,
-            SoundType.WOOD
+            SoundType.METAL
         )
     );
     public static final AdditionalComponent RED_HANGING_FISH_PIG_EYE = (AdditionalComponent) register
