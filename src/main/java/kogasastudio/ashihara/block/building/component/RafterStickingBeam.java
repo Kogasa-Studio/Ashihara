@@ -16,7 +16,7 @@ import java.util.List;
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 import static kogasastudio.ashihara.helper.PositionHelper.coordsInRangeFixedY;
 
-public class RafterStickingBeam extends BuildingComponent
+public class RafterStickingBeam extends AdditionalComponent
 {
     private final BuildingComponentModelResourceLocation MODEL;
 
