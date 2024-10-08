@@ -42,18 +42,20 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
 {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+    public final ComponentMaterial material;
     VoxelShape debug = Block.box(5.0D, 0.0D, 5.0D, 11.0D, 2.0D, 11.0D);
 
-    public BaseMultiBuiltBlock()
+    public BaseMultiBuiltBlock(ComponentMaterial materialIn)
     {
         super
         (
             Properties.of()
-            .sound(SoundType.EMPTY)
+            .sound(materialIn.getSound())
             .forceSolidOn()
-            .mapColor(MapColor.WOOD)
-            .strength(0.5f)
+            .mapColor(materialIn.getColor())
+            .strength(materialIn.getStrength())
         );
+        this.material = materialIn;
         this.registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
     }
 
@@ -140,5 +142,65 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState)
     {
         return new MultiBuiltBlockEntity(pPos, pState);
+    }
+
+    public BlockState applyMaterial(@Nullable BlockState origin)
+    {
+        BlockState state = this.defaultBlockState();
+        if (origin == null) return state;
+        state = state.setValue(BaseMultiBuiltBlock.FACING, origin.getValue(BaseMultiBuiltBlock.FACING));
+        state = state.setValue(BaseMultiBuiltBlock.WATERLOGGED, origin.getValue(BaseMultiBuiltBlock.WATERLOGGED));
+        return state;
+    }
+
+
+    public enum ComponentMaterial
+    {
+        //Wall
+        BAMBOO_BONES(1, SoundType.BAMBOO, MapColor.TERRACOTTA_BROWN, 0.3f),
+        RAMMED_SOIL(2, SoundType.DRIPSTONE_BLOCK, MapColor.DIRT, 0.5f),
+        WHITE_SOIL(3, SoundType.DEEPSLATE, MapColor.SNOW, 0.5f),
+        WHITE_WOOD(3, SoundType.WOOD, MapColor.SNOW, 0.5f),
+        //Window
+        GREEN_WOOD(11, SoundType.WOOD, MapColor.WARPED_STEM, 0.5f),
+        //Wood
+        OAK_WOOD(21, SoundType.WOOD, MapColor.WOOD, 0.5f),
+        SPRUCE_WOOD(22, SoundType.WOOD, MapColor.COLOR_BROWN, 0.5f),
+        RED_WOOD(23, SoundType.WOOD, MapColor.COLOR_RED, 0.5f),
+        BLACK_LACQUERED_WOOD(24, SoundType.WOOD, MapColor.COLOR_BLACK, 0.5f),
+        //Deco
+        GOLD_DECO(31, SoundType.LANTERN, MapColor.GOLD, 0.6f),
+        GOLD_STRUCTURAL(31, SoundType.METAL, MapColor.GOLD, 1.0f),
+        STONE(32, SoundType.STONE, MapColor.STONE, 1.0f),
+        //Roof
+        CYPRESS_SKIN(51, SoundType.NETHER_WOOD, MapColor.COLOR_BROWN, 0.5f),
+        TERRACOTTA_TILE(52, SoundType.DEEPSLATE_TILES, MapColor.STONE, 0.8f),
+        ;
+
+        public MapColor getColor() {return color;}
+
+        public int getPriority() {return priority;}
+
+        public SoundType getSound() {return sound;}
+
+        public float getStrength() {return strength;}
+
+        public final SoundType sound;
+        public final MapColor color;
+        public final float strength;
+        public final int priority;
+
+        ComponentMaterial(int priorityIn, SoundType soundIn, MapColor colorIn, float strengthIn)
+        {
+            this.priority = priorityIn;
+            this.sound = soundIn;
+            this.color = colorIn;
+            this.strength = strengthIn;
+        }
+
+        public BaseMultiBuiltBlock createStandardBlock()
+        {
+            return new BaseMultiBuiltBlock(this);
+        }
     }
 }

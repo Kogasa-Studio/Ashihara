@@ -310,7 +310,23 @@ public class BlockRegistryHandler
             return ItemRegistryHandler.RED_THIN_BEAM.get();
         }
     });
-    public static final DeferredBlock<Block> MULTI_BUILT_BLOCK = BLOCKS.register("multi_built_block", BaseMultiBuiltBlock::new);
+    public static final DeferredBlock<BaseMultiBuiltBlock> BAMBOO_BONES_COMPONENT = BLOCKS.register("bamboo_bones_component", BaseMultiBuiltBlock.ComponentMaterial.BAMBOO_BONES::createStandardBlock);
+    public static final DeferredBlock<BaseMultiBuiltBlock> RAMMED_SOIL_COMPONENT = BLOCKS.register("rammed_soil_component", BaseMultiBuiltBlock.ComponentMaterial.RAMMED_SOIL::createStandardBlock);
+    public static final DeferredBlock<BaseMultiBuiltBlock> WHITE_SOIL_COMPONENT = BLOCKS.register("white_soil_component", BaseMultiBuiltBlock.ComponentMaterial.WHITE_SOIL::createStandardBlock);
+    public static final DeferredBlock<BaseMultiBuiltBlock> WHITE_WOOD_COMPONENT = BLOCKS.register("white_wood_component", BaseMultiBuiltBlock.ComponentMaterial.WHITE_WOOD::createStandardBlock);
+
+    public static final DeferredBlock<BaseMultiBuiltBlock> GREEN_WOOD_COMPONENT = BLOCKS.register("green_wood_component", BaseMultiBuiltBlock.ComponentMaterial.GREEN_WOOD::createStandardBlock);
+
+    public static final DeferredBlock<BaseMultiBuiltBlock> MULTI_BUILT_BLOCK = BLOCKS.register("multi_built_block", BaseMultiBuiltBlock.ComponentMaterial.OAK_WOOD::createStandardBlock);
+    public static final DeferredBlock<BaseMultiBuiltBlock> SPRUCE_WOOD_COMPONENT = BLOCKS.register("spruce_wood_component", BaseMultiBuiltBlock.ComponentMaterial.SPRUCE_WOOD::createStandardBlock);
+    public static final DeferredBlock<BaseMultiBuiltBlock> RED_WOOD_COMPONENT = BLOCKS.register("red_wood_component", BaseMultiBuiltBlock.ComponentMaterial.RED_WOOD::createStandardBlock);
+
+    public static final DeferredBlock<BaseMultiBuiltBlock> GOLD_DECO_COMPONENT = BLOCKS.register("gold_deco_component", BaseMultiBuiltBlock.ComponentMaterial.GOLD_DECO::createStandardBlock);
+    public static final DeferredBlock<BaseMultiBuiltBlock> GOLD_STRUCTURAL_COMPONENT = BLOCKS.register("gold_structural_component", BaseMultiBuiltBlock.ComponentMaterial.GOLD_STRUCTURAL::createStandardBlock);
+    public static final DeferredBlock<BaseMultiBuiltBlock> STONE_COMPONENT = BLOCKS.register("stone_component", BaseMultiBuiltBlock.ComponentMaterial.STONE::createStandardBlock);
+
+    public static final DeferredBlock<BaseMultiBuiltBlock> CYPRESS_SKIN_COMPONENT = BLOCKS.register("cypress_skin_component", BaseMultiBuiltBlock.ComponentMaterial.CYPRESS_SKIN::createStandardBlock);
+    public static final DeferredBlock<BaseMultiBuiltBlock> TERRACOTTA_TILE_COMPONENT = BLOCKS.register("terracotta_tile_component", BaseMultiBuiltBlock.ComponentMaterial.TERRACOTTA_TILE::createStandardBlock);
 
     //作物
     public static final DeferredBlock<Block> SOY_BEANS = BLOCKS.register("soy_beans", () -> new AbstractCropAge7Pickable(7, 3)

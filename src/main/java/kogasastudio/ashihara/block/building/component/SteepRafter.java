@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block.building.component;
 
+import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.BuildingComponents;
@@ -13,6 +14,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public class SteepRafter extends AdditionalComponent
 {
@@ -26,10 +28,11 @@ public class SteepRafter extends AdditionalComponent
         BuildingComponents.Type typeIn,
         BuildingComponentModelResourceLocation model,
         VoxelShape shape,
+        Supplier<BaseMultiBuiltBlock> materialIn,
         List<ItemStack> dropsIn
     )
     {
-        super(idIn, typeIn, dropsIn);
+        super(idIn, typeIn, materialIn, dropsIn);
         this.MODEL = model;
         this.SHAPE = shape;
     }
@@ -39,10 +42,11 @@ public class SteepRafter extends AdditionalComponent
         String idIn,
         BuildingComponents.Type typeIn,
         BuildingComponentModelResourceLocation model,
+        Supplier<BaseMultiBuiltBlock> materialIn,
         List<ItemStack> dropsIn
     )
     {
-        this(idIn, typeIn, model, null, dropsIn);
+        this(idIn, typeIn, model, null, materialIn, dropsIn);
         initShape();
     }
 

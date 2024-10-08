@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block.building.component;
 
+import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.BuildingComponents;
@@ -12,6 +13,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 import static kogasastudio.ashihara.helper.PositionHelper.coordsInRangeFixedY;
@@ -28,9 +30,11 @@ public class RafterStickingBeam extends AdditionalComponent
         BuildingComponents.Type typeIn,
         BuildingComponentModelResourceLocation model,
         VoxelShape shape_a,
-        List<ItemStack> dropsIn)
+        Supplier<BaseMultiBuiltBlock> materialIn,
+        List<ItemStack> dropsIn
+    )
     {
-        super(idIn, typeIn, dropsIn);
+        super(idIn, typeIn, materialIn, dropsIn);
         this.MODEL = model;
         this.SHAPE = shape_a;
     }
@@ -40,9 +44,11 @@ public class RafterStickingBeam extends AdditionalComponent
         String idIn,
         BuildingComponents.Type typeIn,
         BuildingComponentModelResourceLocation model,
-        List<ItemStack> dropsIn)
+        Supplier<BaseMultiBuiltBlock> materialIn,
+        List<ItemStack> dropsIn
+    )
     {
-        this(idIn, typeIn, model, Shapes.box(0.1875, 0, 0, 0.8125, 0.5, 1), dropsIn);
+        this(idIn, typeIn, model, Shapes.box(0.1875, 0, 0, 0.8125, 0.5, 1), materialIn, dropsIn);
     }
 
     @Override

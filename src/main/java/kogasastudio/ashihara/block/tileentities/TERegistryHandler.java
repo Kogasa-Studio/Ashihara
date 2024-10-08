@@ -61,7 +61,21 @@ public class TERegistryHandler
         () -> BlockEntityType.Builder.of
         (
             MultiBuiltBlockEntity::new,
-            BlockRegistryHandler.MULTI_BUILT_BLOCK.get()
+            BlockRegistryHandler.BAMBOO_BONES_COMPONENT.get(),
+            BlockRegistryHandler.RAMMED_SOIL_COMPONENT.get(),
+            BlockRegistryHandler.WHITE_SOIL_COMPONENT.get(),
+            BlockRegistryHandler.WHITE_WOOD_COMPONENT.get(),
+
+            BlockRegistryHandler.GREEN_WOOD_COMPONENT.get(),
+            BlockRegistryHandler.MULTI_BUILT_BLOCK.get(),
+            BlockRegistryHandler.SPRUCE_WOOD_COMPONENT.get(),
+            BlockRegistryHandler.RED_WOOD_COMPONENT.get(),
+
+            BlockRegistryHandler.GOLD_DECO_COMPONENT.get(),
+            BlockRegistryHandler.GOLD_STRUCTURAL_COMPONENT.get(),
+
+            BlockRegistryHandler.CYPRESS_SKIN_COMPONENT.get(),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT.get()
         ).build(null)
     );
 

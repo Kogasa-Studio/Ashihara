@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block.building.component;
 
+import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.BuildingComponents;
@@ -17,6 +18,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class StraightBarWindow extends AdditionalComponent implements Connectable
 {
@@ -35,6 +37,7 @@ public class StraightBarWindow extends AdditionalComponent implements Connectabl
     (
         String idIn,
         BuildingComponents.Type typeIn,
+        Supplier<BaseMultiBuiltBlock> materialIn,
         List<ItemStack> dropsIn,
         BuildingComponentModelResourceLocation noneConnected,
         BuildingComponentModelResourceLocation upConnected,
@@ -43,7 +46,7 @@ public class StraightBarWindow extends AdditionalComponent implements Connectabl
         String expectedIdIn
     )
     {
-        super(idIn, typeIn, dropsIn);
+        super(idIn, typeIn, materialIn, dropsIn);
         this.NONE_CONNECTED = noneConnected;
         this.UP_CONNECTED = upConnected;
         this.DOWN_CONNECTED = downConnected;

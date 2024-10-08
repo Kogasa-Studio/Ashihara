@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block.building.component;
 
+import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.BuildingComponents;
@@ -16,6 +17,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 
@@ -36,6 +38,7 @@ public class QuarterStraightBarWindow extends AdditionalComponent implements Con
     (
         String idIn,
         BuildingComponents.Type typeIn,
+        Supplier<BaseMultiBuiltBlock> materialIn,
         List<ItemStack> dropsIn,
         BuildingComponentModelResourceLocation noneConnected,
         BuildingComponentModelResourceLocation upConnected,
@@ -44,7 +47,7 @@ public class QuarterStraightBarWindow extends AdditionalComponent implements Con
         String expectedIdIn
     )
     {
-        super(idIn, typeIn, dropsIn);
+        super(idIn, typeIn, materialIn, dropsIn);
         this.NONE_CONNECTED = noneConnected;
         this.UP_CONNECTED = upConnected;
         this.DOWN_CONNECTED = downConnected;

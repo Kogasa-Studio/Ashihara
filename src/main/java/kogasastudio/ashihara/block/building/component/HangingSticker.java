@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block.building.component;
 
+import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.BuildingComponents;
@@ -13,6 +14,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 import static kogasastudio.ashihara.helper.PositionHelper.coordsInRangeFixedY;
@@ -23,9 +25,17 @@ public class HangingSticker extends AdditionalComponent implements Interactable
     private final BuildingComponentModelResourceLocation model;
     private final BuildingComponentModelResourceLocation endModel;
 
-    public HangingSticker(String idIn, BuildingComponents.Type typeIn, BuildingComponentModelResourceLocation modelIn, BuildingComponentModelResourceLocation endModelIn, List<ItemStack> dropsIn)
+    public HangingSticker
+    (
+        String idIn,
+        BuildingComponents.Type typeIn,
+        BuildingComponentModelResourceLocation modelIn,
+        BuildingComponentModelResourceLocation endModelIn,
+        Supplier<BaseMultiBuiltBlock> materialIn,
+        List<ItemStack> dropsIn
+    )
     {
-        super(idIn, typeIn, dropsIn);
+        super(idIn, typeIn, materialIn, dropsIn);
         this.model = modelIn;
         this.endModel = endModelIn;
         initShape();

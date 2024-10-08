@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block.building.component;
 
+import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.AdditionalModels;
@@ -12,12 +13,13 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public class TouOblique extends Tou
 {
-    public TouOblique(String idIn, BuildingComponents.Type typeIn, BuildingComponentModelResourceLocation modelIn, List<ItemStack> dropsIn)
+    public TouOblique(String idIn, BuildingComponents.Type typeIn, BuildingComponentModelResourceLocation modelIn, Supplier<BaseMultiBuiltBlock> materialIn, List<ItemStack> dropsIn)
     {
-        super(idIn, typeIn, modelIn, dropsIn);
+        super(idIn, typeIn, modelIn, materialIn, dropsIn);
     }
 
     @Override

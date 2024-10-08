@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "ashihara:block/terracotta_tile_component"
+    }
+  }
+}

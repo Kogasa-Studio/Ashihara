@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.block.building.component;
 
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.registry.AdditionalModels;
 import kogasastudio.ashihara.registry.BuildingComponents;
@@ -13,12 +14,13 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public class BaseStone extends AdditionalComponent
 {
-    public BaseStone(String idIn, BuildingComponents.Type typeIn, List<ItemStack> dropsIn)
+    public BaseStone(String idIn, BuildingComponents.Type typeIn, Supplier<BaseMultiBuiltBlock> materialIn, List<ItemStack> dropsIn)
     {
-        super(idIn, typeIn, dropsIn);
+        super(idIn, typeIn, materialIn, dropsIn);
     }
 
     @Override

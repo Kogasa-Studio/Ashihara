@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block.building.component;
 
+import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.BuildingComponents;
@@ -12,15 +13,27 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 
 public class RoundTileHalf extends RoundTile
 {
     public RoundTileHalf
-    (String idIn, BuildingComponents.Type typeIn, BuildingComponentModelResourceLocation model, VoxelShape shape, Function<Double, Integer> floorFuncIn, float xRotationIn, float yRotationIn, float yOffsetIn, List<ItemStack> dropsIn)
+    (
+        String idIn,
+        BuildingComponents.Type typeIn,
+        BuildingComponentModelResourceLocation model,
+        VoxelShape shape,
+        Function<Double, Integer> floorFuncIn,
+        float xRotationIn,
+        float yRotationIn,
+        float yOffsetIn,
+        Supplier<BaseMultiBuiltBlock> materialIn,
+        List<ItemStack> dropsIn
+    )
     {
-        super(idIn, typeIn, model, shape, floorFuncIn, xRotationIn, yRotationIn, yOffsetIn, dropsIn);
+        super(idIn, typeIn, model, shape, floorFuncIn, xRotationIn, yRotationIn, yOffsetIn, materialIn, dropsIn);
     }
 
     @Override

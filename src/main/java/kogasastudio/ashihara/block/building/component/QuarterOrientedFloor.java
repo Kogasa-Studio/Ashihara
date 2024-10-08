@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block.building.component;
 
+import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.BuildingComponents;
@@ -12,6 +13,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 
@@ -27,10 +29,11 @@ public class QuarterOrientedFloor extends AdditionalComponent
         BuildingComponents.Type typeIn,
         BuildingComponentModelResourceLocation model,
         VoxelShape shape,
+        Supplier<BaseMultiBuiltBlock> materialIn,
         List<ItemStack> dropsIn
     )
     {
-        super(idIn, typeIn, dropsIn);
+        super(idIn, typeIn, materialIn, dropsIn);
         this.MODEL = model;
         this.SHAPE = shape;
     }
@@ -40,16 +43,17 @@ public class QuarterOrientedFloor extends AdditionalComponent
         String idIn,
         BuildingComponents.Type typeIn,
         BuildingComponentModelResourceLocation model,
+        Supplier<BaseMultiBuiltBlock> materialIn,
         List<ItemStack> dropsIn
     )
     {
-        this(idIn, typeIn, model, null, dropsIn);
+        this(idIn, typeIn, model, null, materialIn, dropsIn);
         initShape();
     }
 
     private void initShape()
     {
-        this.SHAPE = Shapes.box(0.25, 0, 0.25, 0.75, 0.25625, 0.75);
+        this.SHAPE = Shapes.box(0.25, 0, 0.25, 0.75, 0.25, 0.75);
     }
 
     @Override

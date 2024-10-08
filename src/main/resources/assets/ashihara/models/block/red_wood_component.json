@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "ashihara:block/components/red_beam"
+  }
+}

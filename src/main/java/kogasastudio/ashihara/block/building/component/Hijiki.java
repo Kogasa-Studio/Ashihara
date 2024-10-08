@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block.building.component;
 
+import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.BuildingComponents;
@@ -14,6 +15,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 
@@ -34,9 +36,10 @@ public class Hijiki extends AdditionalComponent implements Connectable
         BuildingComponentModelResourceLocation l,
         BuildingComponentModelResourceLocation r,
         BuildingComponentModelResourceLocation a,
+        Supplier<BaseMultiBuiltBlock> materialIn,
         List<ItemStack> dropsIn)
     {
-        super(idIn, typeIn, dropsIn);
+        super(idIn, typeIn, materialIn, dropsIn);
         this.LEFT_CONNECTED = l;
         this.RIGHT_CONNECTED = r;
         this.BOTH_CONNECTED = a;
@@ -53,9 +56,11 @@ public class Hijiki extends AdditionalComponent implements Connectable
         VoxelShape shape_l,
         VoxelShape shape_r,
         VoxelShape shape_a,
-        List<ItemStack> dropsIn)
+        Supplier<BaseMultiBuiltBlock> materialIn,
+        List<ItemStack> dropsIn
+    )
     {
-        this(idIn, typeIn, l, r, a, dropsIn);
+        this(idIn, typeIn, l, r, a, materialIn, dropsIn);
         this.SHAPE_LEFT_CONNECTED = shape_l;
         this.SHAPE_RIGHT_CONNECTED = shape_r;
         this.SHAPE_BOTH_CONNECTED = shape_a;

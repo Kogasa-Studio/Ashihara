@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.item.block;
 
 import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.building.component.BuildingComponent;
 import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import net.minecraft.world.InteractionResult;
@@ -15,9 +16,9 @@ public class BuildingComponentItem extends BlockItem
 {
     private final Supplier<? extends BuildingComponent> component;
 
-    public BuildingComponentItem(Supplier<? extends BuildingComponent> componentIn)
+    public BuildingComponentItem(Supplier<? extends BuildingComponent> componentIn, Supplier<BaseMultiBuiltBlock> block)
     {
-        super(BlockRegistryHandler.MULTI_BUILT_BLOCK.get(), new Properties());
+        super(block.get(), new Properties());
         this.component = componentIn;
     }
 

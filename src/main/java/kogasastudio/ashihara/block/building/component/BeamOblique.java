@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block.building.component;
 
+import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.BuildingComponents;
@@ -29,10 +30,11 @@ public class BeamOblique extends AdditionalComponent
         String idIn,
         BuildingComponents.Type typeIn,
         BuildingComponentModelResourceLocation modelIn,
+        Supplier<BaseMultiBuiltBlock> materialIn,
         List<ItemStack> dropsIn
     )
     {
-        super(idIn, typeIn, dropsIn);
+        super(idIn, typeIn, materialIn, dropsIn);
         this.MODEL = modelIn;
         initShape();
     }

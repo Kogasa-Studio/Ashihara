@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block.building.component;
 
+import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.BuildingComponents;
@@ -11,6 +12,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 import static kogasastudio.ashihara.helper.PositionHelper.coordsInRangeFixedY;
@@ -20,16 +22,16 @@ public class ShortColumn extends BuildingComponent
     private final BuildingComponentModelResourceLocation MODEL;
     private final VoxelShape SHAPE;
 
-    public ShortColumn(String idIn, BuildingComponents.Type typeIn, BuildingComponentModelResourceLocation modelIn, List<ItemStack> dropsIn)
+    public ShortColumn(String idIn, BuildingComponents.Type typeIn, BuildingComponentModelResourceLocation modelIn, Supplier<BaseMultiBuiltBlock> materialIn, List<ItemStack> dropsIn)
     {
-        super(idIn, typeIn, dropsIn);
+        super(idIn, typeIn, materialIn, dropsIn);
         this.MODEL = modelIn;
         this.SHAPE = Block.box(3d, 0d, 3d, 13d, 8d, 13d);
     }
 
-    public ShortColumn(String idIn, BuildingComponents.Type typeIn, BuildingComponentModelResourceLocation modelIn, VoxelShape shapeIn, List<ItemStack> dropsIn)
+    public ShortColumn(String idIn, BuildingComponents.Type typeIn, BuildingComponentModelResourceLocation modelIn, VoxelShape shapeIn, Supplier<BaseMultiBuiltBlock> materialIn, List<ItemStack> dropsIn)
     {
-        super(idIn, typeIn, dropsIn);
+        super(idIn, typeIn, materialIn, dropsIn);
         this.MODEL = modelIn;
         this.SHAPE = shapeIn;
     }

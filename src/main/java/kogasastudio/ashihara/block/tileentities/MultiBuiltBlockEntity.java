@@ -21,6 +21,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -242,6 +243,21 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
         return false;
     }
 
+    public void checkMaterial()
+    {
+        if (this.level == null) return;
+        BaseMultiBuiltBlock newMaterial = (BaseMultiBuiltBlock) this.getBlockState().getBlock();
+        for (ComponentStateDefinition definition : this.getComponents(OPCODE_READALL))
+        {
+            if (definition.component().getMaterial().get().material.getPriority() > newMaterial.material.getPriority()) newMaterial = definition.component().getMaterial().get();
+        }
+        if (newMaterial != this.getBlockState().getBlock())
+        {
+            this.level.setBlock(this.getBlockPos(), newMaterial.applyMaterial(this.getBlockState()), 3);
+            this.level.setBlockEntity(this);
+        }
+    }
+
     public ComponentStateDefinition getComponentByPosition(Vec3 vec3, int opcode)
     {
         for (ComponentStateDefinition m : this.getComponents(opcode))
@@ -340,6 +356,7 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
         reloadShape();
         reloadOccupation();
         setChanged();
+        checkMaterial();
         if (this.hasLevel()) this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
     }
 

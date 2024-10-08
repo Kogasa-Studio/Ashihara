@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.registry;
 
+import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.block.building.component.*;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.world.level.block.SoundType;
@@ -24,6 +25,7 @@ public class BuildingComponents
             "red_thick_column",
             Type.BAKED_MODEL,
             AdditionalModels.RED_THICK_COLUMN,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_THICK_COLUMN.toStack())
         )
     );
@@ -34,6 +36,7 @@ public class BuildingComponents
             "red_thick_column_short",
             Type.BAKED_MODEL,
             AdditionalModels.RED_THICK_COLUMN_SHORT,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_THICK_COLUMN_SHORT.toStack())
         )
     );
@@ -45,6 +48,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.RED_COLUMN,
             Shapes.box(0.34375, 0, 0.34375, 0.65625, 1, 0.65625),
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_COLUMN.toStack())
         )
     );
@@ -56,6 +60,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.RED_COLUMN_SHORT,
             Shapes.box(0.34375, 0, 0.34375, 0.65625, 0.5, 0.65625),
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_COLUMN_SHORT.toStack())
         )
     );
@@ -66,6 +71,7 @@ public class BuildingComponents
             "red_clamp",
             Type.BAKED_MODEL,
             AdditionalModels.RED_CLAMP,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_CLAMP.toStack())
         )
     );
@@ -76,6 +82,7 @@ public class BuildingComponents
             "red_clamp_joint",
             Type.BAKED_MODEL,
             AdditionalModels.RED_CLAMP_JOINT,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_CLAMP_JOINT.toStack())
         )
     );
@@ -90,6 +97,7 @@ public class BuildingComponents
             RED_BEAM_R,
             RED_BEAM_A,
             () -> RED_CLAMP,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_BEAM.toStack())
         )
     );
@@ -100,6 +108,7 @@ public class BuildingComponents
             "red_beam",
             Type.BAKED_MODEL,
             AdditionalModels.RED_BEAM_CORNER,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_BEAM_CORNER.toStack())
         )
     );
@@ -110,6 +119,7 @@ public class BuildingComponents
             "red_rafter_sticking_beam",
             Type.BAKED_MODEL,
             AdditionalModels.RED_RAFTER_STICKING_BEAM,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_RAFTER_STICKING_BEAM.toStack())
         )
     );
@@ -122,6 +132,7 @@ public class BuildingComponents
             RED_HIJIKI_L,
             RED_HIJIKI_R,
             RED_HIJIKI_A,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_HIJIKI.toStack())
         )
     );
@@ -133,6 +144,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.RED_HIJIKI_SUPPORTER,
             Shapes.box(0.375, -0.03125, -0.25, 0.625, 0.25, 0.5),
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_HIJIKI_SUPPORTER.toStack())
         )
     );
@@ -143,6 +155,7 @@ public class BuildingComponents
             "red_hijiki_connector",
             Type.BAKED_MODEL,
             RED_HIJIKI_A,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_HIJIKI_CONNECTOR.toStack())
         )
     );
@@ -153,6 +166,7 @@ public class BuildingComponents
             "red_hijiki_long",
             Type.BAKED_MODEL,
             AdditionalModels.RED_HIJIKI_LONG,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_HIJIKI_LONG.toStack())
         )
     );
@@ -165,6 +179,7 @@ public class BuildingComponents
             AdditionalModels.RED_HIJIKI_CORNER_NORMAL,
             RED_HIJIKI_CORNER_NORMAL_LONG,
             ItemRegistryHandler.RED_HIJIKI_CORNER_NORMAL::toStack,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_HIJIKI_CORNER_NORMAL.toStack())//
         )
     );
@@ -185,6 +200,7 @@ public class BuildingComponents
             ),
             Shapes.empty(),
             ItemRegistryHandler.RED_HIJIKI_CORNER_LONG::toStack,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_HIJIKI_CORNER_LONG.toStack())//
         )
     );
@@ -195,6 +211,7 @@ public class BuildingComponents
             "red_tou",
             Type.BAKED_MODEL,
             AdditionalModels.RED_TOU,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_TOU.toStack())
         )
     );
@@ -205,6 +222,7 @@ public class BuildingComponents
             "red_tou_oblique",
             Type.BAKED_MODEL,
             AdditionalModels.RED_TOU,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_TOU_OBLIQUE.toStack())//
         )
     );
@@ -215,6 +233,7 @@ public class BuildingComponents
             "red_oni_tou",
             Type.BAKED_MODEL,
             AdditionalModels.RED_ONI_TOU,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_ONI_TOU.toStack())//
         )
     );
@@ -224,6 +243,7 @@ public class BuildingComponents
         (
             "red_big_tou",
             Type.BAKED_MODEL,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_BIG_TOU.toStack())
         )
     );
@@ -235,6 +255,7 @@ public class BuildingComponents
         (
             "base_stone",
             Type.BAKED_MODEL,
+            BlockRegistryHandler.STONE_COMPONENT,
             List.of(ItemRegistryHandler.BASE_STONE.toStack())
         )
     );
@@ -246,6 +267,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.WHITE_SOIL_WALL,
             Shapes.box(0, 0, 0.40625, 1, 1, 0.59375),
+            BlockRegistryHandler.WHITE_SOIL_COMPONENT,
             List.of(ItemRegistryHandler.BAMBOO_WALL_BONES.toStack(), ItemRegistryHandler.RAMMED_SOIL.toStack(4), ItemRegistryHandler.LIME_POWDER.toStack(4)),
             null,
             null,
@@ -262,6 +284,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.WHITE_SOIL_WALL_QUARTER,
             Shapes.box(0.25, 0, 0.40625, 0.75, 0.5, 0.59375),
+            BlockRegistryHandler.WHITE_SOIL_COMPONENT,
             List.of(ItemRegistryHandler.BAMBOO_WALL_BONES_QUARTER.toStack(), ItemRegistryHandler.RAMMED_SOIL.toStack(), ItemRegistryHandler.LIME_POWDER.toStack()),
             null,
             null,
@@ -278,6 +301,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.RAMMED_SOIL_WALL,
             Shapes.box(0, 0, 0.40625, 1, 1, 0.59375),
+            BlockRegistryHandler.RAMMED_SOIL_COMPONENT,
             List.of(ItemRegistryHandler.BAMBOO_WALL_BONES.toStack(), ItemRegistryHandler.RAMMED_SOIL.toStack(4)),
             () -> ItemRegistryHandler.LIME_POWDER.toStack(4),
             () -> WHITE_SOIL_WALL,
@@ -295,6 +319,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.RAMMED_SOIL_WALL_QUARTER,
             Shapes.box(0.25, 0, 0.40625, 0.75, 0.5, 0.59375),
+            BlockRegistryHandler.RAMMED_SOIL_COMPONENT,
             List.of(ItemRegistryHandler.BAMBOO_WALL_BONES_QUARTER.toStack(), ItemRegistryHandler.RAMMED_SOIL.toStack()),
             ItemRegistryHandler.LIME_POWDER::toStack,
             () -> WHITE_SOIL_WALL_QUARTER,
@@ -312,6 +337,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.BAMBOO_WALL_BONES,
             Shapes.box(0, 0, 0.4375, 1, 1, 0.5625),
+            BlockRegistryHandler.BAMBOO_BONES_COMPONENT,
             List.of(ItemRegistryHandler.BAMBOO_WALL_BONES.toStack()),
             () -> ItemRegistryHandler.RAMMED_SOIL.toStack(4),
             () -> RAMMED_SOIL_WALL,
@@ -329,6 +355,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.BAMBOO_WALL_BONES_QUARTER,
             Shapes.box(0.25, 0, 0.4375, 0.75, 0.5, 0.5625),
+            BlockRegistryHandler.BAMBOO_BONES_COMPONENT,
             List.of(ItemRegistryHandler.BAMBOO_WALL_BONES_QUARTER.toStack()),
             ItemRegistryHandler.RAMMED_SOIL::toStack,
             () -> RAMMED_SOIL_WALL_QUARTER,
@@ -346,6 +373,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.RED_PLANKS_WALL,
             Shapes.box(0, 0, 0.40625, 1, 1, 0.59375),
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_PLANKS_WALL.toStack()),
             null,
             null,
@@ -362,6 +390,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.RED_PLANKS_WALL_QUARTER,
             Shapes.box(0.25, 0, 0.40625, 0.75, 0.5, 0.59375),
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_PLANKS_WALL_QUARTER.toStack()),
             null,
             null,
@@ -378,6 +407,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.RED_ROOF_EDGE_PLANKS,
             Shapes.box(0.25, 0, 0.40625, 0.75, 0.5, 0.59375),
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_ROOF_EDGE_PLANKS.toStack()),
             null,
             null,
@@ -394,6 +424,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.GOLD_ROOF_EDGE_PLANKS_DECORATION,
             Shapes.box(0.25, 0, 0.40625, 0.75, 0.5, 0.59375),
+            BlockRegistryHandler.GOLD_STRUCTURAL_COMPONENT,
             List.of(ItemRegistryHandler.GOLD_ROOF_EDGE_PLANKS_DECORATION.toStack()),
             null,
             null,
@@ -410,6 +441,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.RED_HANGING_FISH_PIG_EYE,
             Shapes.box(0, 0, 0.40625, 1, 1, 0.59375),
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_HANGING_FISH_PIG_EYE.toStack()),
             null,
             null,
@@ -424,6 +456,7 @@ public class BuildingComponents
         (
             "green_straight_bar_window",
             Type.BAKED_MODEL,
+            BlockRegistryHandler.GREEN_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.GREEN_STRAIGHT_BAR_WINDOW.toStack()),
             GREEN_STRAIGHT_BAR_WINDOW_ALL,
             GREEN_STRAIGHT_BAR_WINDOW_DOWN,
@@ -438,6 +471,7 @@ public class BuildingComponents
         (
             "green_straight_bar_window_quarter",
             Type.BAKED_MODEL,
+            BlockRegistryHandler.GREEN_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.GREEN_STRAIGHT_BAR_WINDOW_QUARTER.toStack()),
             GREEN_STRAIGHT_BAR_WINDOW_ALL_QUARTER,
             GREEN_STRAIGHT_BAR_WINDOW_DOWN_QUARTER,
@@ -454,6 +488,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.RED_LATTICED_WINDOW,
             Shapes.box(0, 0, 0.4375, 1, 1, 0.5625),
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_LATTICED_WINDOW.toStack()),
             null,
             null,
@@ -470,6 +505,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.RED_LATTICED_WINDOW_QUARTER,
             Shapes.box(0.25, 0, 0.4375, 0.75, 0.5, 0.5625),
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_LATTICED_WINDOW_QUARTER.toStack()),
             null,
             null,
@@ -486,6 +522,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.RED_HANGING_STICKER,
             RED_HANGING_STICKER_END,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_HANGING_STICKER.toStack())
         )
     );
@@ -497,6 +534,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.RED_HANGING_STICKER_CORNER,
             RED_HANGING_STICKER_END_CORNER,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_HANGING_STICKER_CORNER.toStack())
         )
     );
@@ -507,6 +545,7 @@ public class BuildingComponents
             "red_planks_floor",
             Type.BAKED_MODEL,
             AdditionalModels.RED_PLANKS_FLOOR,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_PLANKS_FLOOR.toStack())
         )
     );
@@ -517,6 +556,7 @@ public class BuildingComponents
             "red_planks_floor_quarter",
             Type.BAKED_MODEL,
             AdditionalModels.RED_PLANKS_FLOOR_QUARTER,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_PLANKS_FLOOR_QUARTER.toStack())
         )
     );
@@ -528,6 +568,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.RED_LATTICED_CEILING_WHITE,
             Shapes.box(0, XTP(2), 0, 1, 0.25625, 1),
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_LATTICED_CEILING_WHITE.toStack())
         )
     );
@@ -539,6 +580,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.RED_LATTICED_CEILING_WHITE_QUARTER,
             Shapes.box(0.25, XTP(2), 0.25, 0.75, 0.25625, 0.75),
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_LATTICED_CEILING_WHITE_QUARTER.toStack())
         )
     );
@@ -549,6 +591,7 @@ public class BuildingComponents
             "red_bended_stickers",
             Type.BAKED_MODEL,
             AdditionalModels.RED_BENDED_STICKERS,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_BENDED_STICKERS.toStack())
         )
     );
@@ -560,6 +603,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.RED_FROG_LEGS_LIKED_STICKER,
             Shapes.or(Shapes.box(0.075, 0.1875, 0.375, 0.925, 0.5, 0.625), Shapes.box(-0.25, 0, 0.375, 1.25, 0.1875, 0.625)),
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_FROG_LEGS_LIKED_STICKER.toStack()),
             null,
             null,
@@ -575,6 +619,7 @@ public class BuildingComponents
             "red_steep_rafter",
             Type.BAKED_MODEL,
             AdditionalModels.RED_STEEP_RAFTER,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_STEEP_RAFTER.toStack())
         )
     );
@@ -585,6 +630,7 @@ public class BuildingComponents
             "red_smooth_rafter",
             Type.BAKED_MODEL,
             AdditionalModels.RED_SMOOTH_RAFTER,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_SMOOTH_RAFTER.toStack())
         )
     );
@@ -595,6 +641,7 @@ public class BuildingComponents
             "red_rafter_end",
             Type.BAKED_MODEL,
             AdditionalModels.RED_RAFTER_END,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_RAFTER_END.toStack())
         )
     );
@@ -606,6 +653,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.RED_RAFTER_CONNECTOR,
             Shapes.box(0, 0, 0.375, 1, 0.75, 0.625),
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.RED_SMOOTH_RAFTER.toStack())
         )
     );
@@ -616,6 +664,7 @@ public class BuildingComponents
             "spruce_rafter_planks",
             Type.BAKED_MODEL,
             AdditionalModels.SPRUCE_RAFTER_PLANKS,
+            BlockRegistryHandler.SPRUCE_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.SPRUCE_RAFTER_PLANKS.toStack())
         )
     );
@@ -626,6 +675,7 @@ public class BuildingComponents
             "white_rafter_planks",
             Type.BAKED_MODEL,
             AdditionalModels.WHITE_RAFTER_PLANKS,
+            BlockRegistryHandler.WHITE_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.WHITE_RAFTER_PLANKS.toStack())
         )
     );
@@ -636,6 +686,7 @@ public class BuildingComponents
             "cypress_roof",
             Type.BAKED_MODEL,
             AdditionalModels.CYPRESS_ROOF,
+            BlockRegistryHandler.CYPRESS_SKIN_COMPONENT,
             List.of(ItemRegistryHandler.CYPRESS_ROOF.toStack())
         )
     );
@@ -646,6 +697,7 @@ public class BuildingComponents
             "cypress_roof_corner",
             Type.BAKED_MODEL,
             AdditionalModels.CYPRESS_ROOF_CORNER,
+            BlockRegistryHandler.CYPRESS_SKIN_COMPONENT,
             List.of(ItemRegistryHandler.CYPRESS_ROOF_CORNER.toStack())
         )
     );
@@ -657,6 +709,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.CYPRESS_ROOF_EDGE,
             Shapes.box(0, 0, 0.5, 1, 0.5, 1),
+            BlockRegistryHandler.CYPRESS_SKIN_COMPONENT,
             List.of(ItemRegistryHandler.CYPRESS_ROOF_EDGE.toStack())
         )
     );
@@ -668,6 +721,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.CYPRESS_ROOF_EDGE_CORNER,
             Shapes.box(0.5, 0, 0.5, 1, 0.5, 1),
+            BlockRegistryHandler.CYPRESS_SKIN_COMPONENT,
             List.of(ItemRegistryHandler.CYPRESS_ROOF_EDGE_CORNER.toStack())
         )
     );
@@ -678,6 +732,7 @@ public class BuildingComponents
             "cypress_roof",
             Type.BAKED_MODEL,
             AdditionalModels.CYPRESS_ROOF_HALF,
+            BlockRegistryHandler.CYPRESS_SKIN_COMPONENT,
             List.of(ItemRegistryHandler.CYPRESS_ROOF_HALF.toStack())
         )
     );
@@ -688,6 +743,7 @@ public class BuildingComponents
             "cypress_roof_quarter",
             Type.BAKED_MODEL,
             AdditionalModels.CYPRESS_ROOF_QUARTER,
+            BlockRegistryHandler.CYPRESS_SKIN_COMPONENT,
             List.of(ItemRegistryHandler.CYPRESS_ROOF_QUARTER.toStack())
         )
     );
@@ -698,6 +754,7 @@ public class BuildingComponents
             "cypress_roof_edge_layer_bottom",
             Type.BAKED_MODEL,
             AdditionalModels.CYPRESS_ROOF_EDGE_LAYER_BOTTOM,
+            BlockRegistryHandler.CYPRESS_SKIN_COMPONENT,
             List.of(ItemRegistryHandler.CYPRESS_ROOF_EDGE_LAYER_BOTTOM.toStack())
         )
     );
@@ -708,6 +765,7 @@ public class BuildingComponents
     "cypress_roof_edge_layer_top",
     Type.BAKED_MODEL,
     AdditionalModels.CYPRESS_ROOF_EDGE_LAYER_TOP,
+    BlockRegistryHandler.CYPRESS_SKIN_COMPONENT,
     List.of(ItemRegistryHandler.CYPRESS_ROOF_EDGE_LAYER_TOP.toStack())
     )
     );
@@ -718,6 +776,7 @@ public class BuildingComponents
             "cypress_roof_quarter_corner",
             Type.BAKED_MODEL,
             AdditionalModels.CYPRESS_ROOF_QUARTER_CORNER,
+            BlockRegistryHandler.CYPRESS_SKIN_COMPONENT,
             List.of(ItemRegistryHandler.CYPRESS_ROOF_QUARTER_CORNER.toStack())
         )
     );
@@ -729,6 +788,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.CYPRESS_ROOF_TOP,
             Shapes.or(Shapes.box(0, 0, 0, 1, 0.5, 1), Shapes.box(0, 0.5, 0.25, 1, 1, 0.75)),
+            BlockRegistryHandler.CYPRESS_SKIN_COMPONENT,
             List.of(ItemRegistryHandler.CYPRESS_ROOF_TOP.toStack())
         )
     );
@@ -739,6 +799,7 @@ public class BuildingComponents
             "flat_terracotta_tile_roof",
             Type.BAKED_MODEL,
             AdditionalModels.FLAT_TERRACOTTA_TILE_ROOF,
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.FLAT_TERRACOTTA_TILE_ROOF.toStack())
         ).setSound(SoundType.DEEPSLATE_TILES)
     );
@@ -749,6 +810,7 @@ public class BuildingComponents
             "flat_terracotta_tile_roof_half",
             Type.BAKED_MODEL,
             AdditionalModels.FLAT_TERRACOTTA_TILE_ROOF_HALF,
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.FLAT_TERRACOTTA_TILE_ROOF_HALF.toStack())
         ).setSound(SoundType.DEEPSLATE_TILES)
     );
@@ -759,6 +821,7 @@ public class BuildingComponents
             "flat_terracotta_tile_roof_quarter",
             Type.BAKED_MODEL,
             AdditionalModels.FLAT_TERRACOTTA_TILE_ROOF_QUARTER,
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.FLAT_TERRACOTTA_TILE_ROOF_QUARTER.toStack())
         ).setSound(SoundType.DEEPSLATE_TILES)
     );
@@ -774,6 +837,7 @@ public class BuildingComponents
             45,
             0,
             XTP(8),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_1_1.toStack())
         )
     );
@@ -789,6 +853,7 @@ public class BuildingComponents
             35.2644f,
             -45,
             XTP(8),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_1_1_OBLIQUE.toStack())
         )
     );
@@ -804,6 +869,7 @@ public class BuildingComponents
             45,
             0,
             XTP(-4),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_1_1_HALF.toStack())
         )
     );
@@ -819,6 +885,7 @@ public class BuildingComponents
             26.5651f,
             0,
             XTP(-4),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_1_2.toStack())
         )
     );
@@ -834,6 +901,7 @@ public class BuildingComponents
             19.4712f,
             -45,
             XTP(-4),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_1_2_OBLIQUE.toStack())
         )
     );
@@ -849,6 +917,7 @@ public class BuildingComponents
             26.5651f,
             0,
             XTP(-4),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_1_2_HALF.toStack())
         )
     );
@@ -864,6 +933,7 @@ public class BuildingComponents
             14.0362f,
             0,
             XTP(-6),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_1_4.toStack())
         )
     );
@@ -879,6 +949,7 @@ public class BuildingComponents
             10.025f,
             -45,
             XTP(-6),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_1_4_OBLIQUE.toStack())
         )
     );
@@ -894,6 +965,7 @@ public class BuildingComponents
             14.0362f,
             0,
             XTP(-4),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_1_4_HALF.toStack())
         )
     );
@@ -909,6 +981,7 @@ public class BuildingComponents
             0,
             0,
             XTP(-4),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_FLAT.toStack())
         )
     );
@@ -924,6 +997,7 @@ public class BuildingComponents
             0,
             -45,
             XTP(-4),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_FLAT_OBLIQUE.toStack())
         )
     );
@@ -939,6 +1013,7 @@ public class BuildingComponents
             0,
             0,
             XTP(-4),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_FLAT_HALF.toStack())
         )
     );
@@ -950,6 +1025,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.TERRACOTTA_TILE_ROOF_EDGE,
             Shapes.box(0, 0, 0.4375, 1, 0.5625, 1),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.TERRACOTTA_TILE_ROOF_EDGE.toStack())
         ).setSound(SoundType.DEEPSLATE_TILES)
     );
@@ -961,6 +1037,7 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.TERRACOTTA_TILE_ROOF_EDGE_CORNER,
             Shapes.box(0, 0, 0.1875, 0.8125, 0.5625, 1),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.TERRACOTTA_TILE_ROOF_EDGE_CORNER.toStack())
         ).setSound(SoundType.DEEPSLATE_TILES)
     );
@@ -976,6 +1053,7 @@ public class BuildingComponents
             0,
             0,
             XTP(-4),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROUND_TERRACOTTA_TILE_END.toStack())
         ).setSound(SoundType.DEEPSLATE_TILES)
     );
@@ -992,6 +1070,7 @@ public class BuildingComponents
                 Shapes.box(0, 0.5, 0.25, 1, 1, 0.75),
                 Shapes.box(0.25, 0, 0.0625, 0.75, 0.9375, 0.9375)
             ),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.TERRACOTTA_TILE_ROOF_TOP.toStack())
         ).setSound(SoundType.DEEPSLATE_TILES)
     );
@@ -1007,6 +1086,7 @@ public class BuildingComponents
             45,
             0,
             XTP(0),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROOF_TOP_TILES_PILE_1_1.toStack())
         )
     );
@@ -1022,6 +1102,7 @@ public class BuildingComponents
             35.2644f,
             -45,
             XTP(0),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROOF_TOP_TILES_PILE_1_1_OBLIQUE.toStack())
         )
     );
@@ -1037,6 +1118,7 @@ public class BuildingComponents
             26.5651f,
             0,
             XTP(4),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROOF_TOP_TILES_PILE_1_2.toStack())
         )
     );
@@ -1052,6 +1134,7 @@ public class BuildingComponents
             19.4712f,
             -45,
             XTP(4),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROOF_TOP_TILES_PILE_1_2_OBLIQUE.toStack())
         )
     );
@@ -1067,6 +1150,7 @@ public class BuildingComponents
             14.0362f,
             0,
             XTP(-2),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROOF_TOP_TILES_PILE_1_4.toStack())
         )
     );
@@ -1082,6 +1166,7 @@ public class BuildingComponents
             10.025f,
             -45,
             XTP(-2),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROOF_TOP_TILES_PILE_1_4_OBLIQUE.toStack())
         )
     );
@@ -1097,6 +1182,7 @@ public class BuildingComponents
             0,
             0,
             XTP(4),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROOF_TOP_TILES_PILE_FLAT.toStack())
         )
     );
@@ -1112,6 +1198,7 @@ public class BuildingComponents
             0,
             -45,
             XTP(4),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROOF_TOP_TILES_PILE_FLAT_OBLIQUE.toStack())
         )
     );
@@ -1127,6 +1214,7 @@ public class BuildingComponents
             45,
             0,
             XTP(0),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROOF_TOP_TILES_PILE_START.toStack())
         )
     );
@@ -1142,6 +1230,7 @@ public class BuildingComponents
             0,
             0,
             XTP(4),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ONI_TILE_1.toStack())
         ).setSound(SoundType.DEEPSLATE_TILES)
     );
@@ -1157,6 +1246,7 @@ public class BuildingComponents
             0,
             -45,
             XTP(4),
+            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ONI_TILE_1_OBLIQUE.toStack())
         ).setSound(SoundType.DEEPSLATE_TILES)
     );
@@ -1172,6 +1262,7 @@ public class BuildingComponents
             0,
             0,
             0,
+            BlockRegistryHandler.GOLD_DECO_COMPONENT,
             List.of(ItemRegistryHandler.GOLD_PIN_FIN.toStack())
         ).setSound(SoundType.LANTERN)
     );

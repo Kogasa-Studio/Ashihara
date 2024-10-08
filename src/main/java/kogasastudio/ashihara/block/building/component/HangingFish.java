@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block.building.component;
 
+import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.BuildingComponents;
@@ -38,6 +39,7 @@ public class HangingFish extends AdditionalComponent implements Interactable
         BuildingComponents.Type typeIn,
         BuildingComponentModelResourceLocation modelIn,
         VoxelShape shapeIn,
+        Supplier<BaseMultiBuiltBlock> materialIn,
         List<ItemStack> dropsIn,
         @Nullable Supplier<ItemStack> itemPredicateIn,
         @Nullable Supplier<BuildingComponent> newComponentIn,
@@ -46,7 +48,7 @@ public class HangingFish extends AdditionalComponent implements Interactable
         SoundType soundType
     )
     {
-        super(idIn, typeIn, dropsIn);
+        super(idIn, typeIn, materialIn, dropsIn);
         this.MODEL = modelIn;
         this.SHAPE = shapeIn;
         this.itemPredicate = itemPredicateIn;
@@ -62,6 +64,7 @@ public class HangingFish extends AdditionalComponent implements Interactable
         BuildingComponents.Type typeIn,
         BuildingComponentModelResourceLocation modelIn,
         VoxelShape shapeIn,
+        Supplier<BaseMultiBuiltBlock> materialIn,
         List<ItemStack> dropsIn,
         @Nullable Supplier<ItemStack> itemPredicateIn,
         @Nullable Supplier<BuildingComponent> newComponentIn,
@@ -71,7 +74,7 @@ public class HangingFish extends AdditionalComponent implements Interactable
         SoundType interactSound
     )
     {
-        this(idIn, typeIn, modelIn, shapeIn, dropsIn, itemPredicateIn, newComponentIn, newShapeIn, newModelIn, soundType);
+        this(idIn, typeIn, modelIn, shapeIn, materialIn, dropsIn, itemPredicateIn, newComponentIn, newShapeIn, newModelIn, soundType);
         this.interactSound = interactSound;
     }
 

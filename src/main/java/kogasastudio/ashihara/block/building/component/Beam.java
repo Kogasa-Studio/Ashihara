@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block.building.component;
 
+import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.item.block.BuildingComponentItem;
@@ -44,10 +45,11 @@ public class Beam extends BuildingComponent implements Connectable, Interactable
         BuildingComponentModelResourceLocation r,
         BuildingComponentModelResourceLocation a,
         Supplier<BuildingComponent> clampIn,
+        Supplier<BaseMultiBuiltBlock> materialIn,
         List<ItemStack> dropsIn
     )
     {
-        super(idIn, typeIn, dropsIn);
+        super(idIn, typeIn, materialIn, dropsIn);
         this.NONE_CONNECTED = n;
         this.LEFT_CONNECTED = l;
         this.RIGHT_CONNECTED = r;

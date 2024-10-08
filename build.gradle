@@ -134,6 +134,7 @@ dependencies {
     // Example mod dependency using a file as dependency
     implementation files("libs/worldedit-mod-7.3.6.jar")
     runtimeOnly files("libs/worldeditcui-forge-1.21.1+01-SNAPSHOT-neoforge.jar")
+    runtimeOnly files("libs/journeymap-neoforge-1.21-6.0.0-beta.27.jar")
 
     // Example project dependency using a sister or child project:
     // implementation project(":myproject")

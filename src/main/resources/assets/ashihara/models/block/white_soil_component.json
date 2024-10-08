@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "ashihara:block/components/white_soil"
+  }
+}
