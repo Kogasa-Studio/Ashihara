@@ -73,6 +73,7 @@ public class TERegistryHandler
 
             BlockRegistryHandler.GOLD_DECO_COMPONENT.get(),
             BlockRegistryHandler.GOLD_STRUCTURAL_COMPONENT.get(),
+            BlockRegistryHandler.STONE_COMPONENT.get(),
 
             BlockRegistryHandler.CYPRESS_SKIN_COMPONENT.get(),
             BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT.get()
