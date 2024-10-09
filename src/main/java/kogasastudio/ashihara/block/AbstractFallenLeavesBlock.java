@@ -1,6 +1,5 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -20,22 +19,14 @@ public class AbstractFallenLeavesBlock extends Block
 {
     private final boolean flammable;
 
-    public AbstractFallenLeavesBlock()
+    public AbstractFallenLeavesBlock(Properties properties)
     {
-        this(false);
+        this(false, properties);
     }
 
-    public AbstractFallenLeavesBlock(boolean flammableIn)
+    public AbstractFallenLeavesBlock(boolean flammableIn, Properties properties)
     {
-        super
-                (
-                        Properties.of()
-                                .mapColor(MapColor.PLANT)
-                                .strength(0.1F)
-                                .sound(SoundType.GRASS)
-                                .noOcclusion()
-                                .noCollission()
-                );
+        super(properties);
         this.flammable = flammableIn;
     }
 

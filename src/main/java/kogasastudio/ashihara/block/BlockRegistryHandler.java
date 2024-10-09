@@ -79,9 +79,18 @@ public class BlockRegistryHandler
     public static final DeferredBlock<Block> MEAL_TABLE = BLOCKS.register("meal_table", MealTableBlock::new);
     public static final DeferredBlock<Block> CUTTING_BOARD = BLOCKS.register("cutting_board", CuttingBoardBlock::new);
     public static final DeferredBlock<Block> CHERRY_VINES = BLOCKS.register("cherry_vines", CherryVinesBlock::new);
-    public static final DeferredBlock<Block> FALLEN_SAKURA = BLOCKS.register("fallen_sakura", () -> new AbstractFallenLeavesBlock());
+    public static final DeferredBlock<Block> FALLEN_SAKURA = BLOCKS.register("fallen_sakura", () -> new AbstractFallenLeavesBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.1F).sound(SoundType.CHERRY_SAPLING).noOcclusion().noCollission()));
     //建筑
-    public static final DeferredBlock<Block> CHERRY_BLOSSOM = BLOCKS.register("cherry_blossom", () -> new AbstractFallingLeavesBlock(5, false)
+    public static final DeferredBlock<Block> CHERRY_BLOSSOM = BLOCKS.register("cherry_blossom", () -> new AbstractFallingLeavesBlock
+    (
+        5, false,
+         BlockBehaviour.Properties.of()
+         .mapColor(MapColor.COLOR_PINK)
+         .strength(0.05F)
+         .randomTicks()
+         .sound(SoundType.CHERRY_SAPLING)
+         .noOcclusion()
+    )
     {
         @Override
         protected Block getFallenBlock()
@@ -104,8 +113,16 @@ public class BlockRegistryHandler
             return list;
         }
     });
-    public static final DeferredBlock<Block> FALLEN_MAPLE_LEAVES_RED = BLOCKS.register("fallen_maple_leaves_red", () -> new AbstractFallenLeavesBlock());
-    public static final DeferredBlock<Block> MAPLE_LEAVES_RED = BLOCKS.register("maple_leaves_red", () -> new AbstractFallingLeavesBlock()
+    public static final DeferredBlock<Block> FALLEN_MAPLE_LEAVES_RED = BLOCKS.register("fallen_maple_leaves_red", () -> new AbstractFallenLeavesBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_RED).strength(0.1F).sound(SoundType.GRASS).noOcclusion().noCollission()));
+    public static final DeferredBlock<Block> MAPLE_LEAVES_RED = BLOCKS.register("maple_leaves_red", () -> new AbstractFallingLeavesBlock
+    (
+        BlockBehaviour.Properties.of()
+        .mapColor(MapColor.TERRACOTTA_RED)
+        .strength(0.05F)
+        .randomTicks()
+        .sound(SoundType.GRASS)
+        .noOcclusion()
+    )
     {
         @Override
         protected Block getFallenBlock()

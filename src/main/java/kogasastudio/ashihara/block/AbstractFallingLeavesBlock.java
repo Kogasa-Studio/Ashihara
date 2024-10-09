@@ -11,12 +11,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CherryLeavesBlock;
 import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -27,27 +25,18 @@ import java.util.List;
 
 import static net.minecraft.world.level.block.Blocks.AIR;
 
-public class AbstractFallingLeavesBlock extends LeavesBlock
+public class AbstractFallingLeavesBlock extends CherryLeavesBlock
 {
     private final boolean flammable;
 
-    public AbstractFallingLeavesBlock()
+    public AbstractFallingLeavesBlock(Properties properties)
     {
-        this(0, true);
+        this(0, true, properties);
     }
 
-    public AbstractFallingLeavesBlock(int light, boolean flammableIn)
+    public AbstractFallingLeavesBlock(int light, boolean flammableIn, Properties properties)
     {
-        super
-                (
-                        BlockBehaviour.Properties.of()
-                                .mapColor(MapColor.PLANT)
-                                .strength(0.05F)
-                                .randomTicks()
-                                .sound(SoundType.GRASS)
-                                .noOcclusion()
-                                .lightLevel((state) -> light)
-                );
+        super(properties.lightLevel(p -> light));
         this.registerDefaultState(this.stateDefinition.any().setValue(DISTANCE, 7).setValue(PERSISTENT, Boolean.FALSE));
         this.flammable = flammableIn;
     }
