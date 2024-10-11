@@ -1,6 +1,6 @@
 {
 	"parent": "ashihara:block/components/templates/full_floor_quarter",
 	"textures": {
-		"plank": "ashihara:block/components/red_planks"
+		"plank": "ashihara:block/components/white_soil"
 	}
 }

@@ -657,6 +657,29 @@ public class BuildingComponents
             List.of(ItemRegistryHandler.RED_SMOOTH_RAFTER.toStack())
         )
     );
+    public static final BuildingComponent RED_THIN_RAFTER = register
+    (
+        new QuarterOrientedFloor
+        (
+            "red_thin_rafter",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_THIN_RAFTER,
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
+            List.of(ItemRegistryHandler.RED_THIN_RAFTER.toStack())
+        )
+    );
+    public static final BuildingComponent RED_THIN_RAFTER_CONNECTOR = register
+    (
+        new QuarterOrientedFloor
+        (
+            "red_thin_rafter_connector",
+            Type.BAKED_MODEL,
+            AdditionalModels.RED_THIN_RAFTER_CONNECTOR,
+            Shapes.box(0.25, -0.125, 0.5, 0.75, 0.25, 0.75),
+            BlockRegistryHandler.RED_WOOD_COMPONENT,
+            List.of(ItemRegistryHandler.RED_THIN_RAFTER_CONNECTOR.toStack())
+        )
+    );
     public static final BuildingComponent SPRUCE_RAFTER_PLANKS = register
     (
         new RafterPlanks
@@ -668,6 +691,17 @@ public class BuildingComponents
             List.of(ItemRegistryHandler.SPRUCE_RAFTER_PLANKS.toStack())
         )
     );
+    public static final BuildingComponent SPRUCE_RAFTER_PLANKS_QUARTER = register
+    (
+        new QuarterOrientedFloor
+        (
+            "spruce_rafter_planks_quarter",
+            Type.BAKED_MODEL,
+            AdditionalModels.SPRUCE_RAFTER_PLANKS_QUARTER,
+            BlockRegistryHandler.SPRUCE_WOOD_COMPONENT,
+            List.of(ItemRegistryHandler.SPRUCE_RAFTER_PLANKS_QUARTER.toStack())
+        )
+    );
     public static final BuildingComponent WHITE_RAFTER_PLANKS = register
     (
         new RafterPlanks
@@ -677,6 +711,17 @@ public class BuildingComponents
             AdditionalModels.WHITE_RAFTER_PLANKS,
             BlockRegistryHandler.WHITE_WOOD_COMPONENT,
             List.of(ItemRegistryHandler.WHITE_RAFTER_PLANKS.toStack())
+        )
+    );
+    public static final BuildingComponent WHITE_RAFTER_PLANKS_QUARTER = register
+    (
+        new QuarterOrientedFloor
+        (
+            "white_rafter_planks_quarter",
+            Type.BAKED_MODEL,
+            AdditionalModels.WHITE_RAFTER_PLANKS_QUARTER,
+            BlockRegistryHandler.WHITE_WOOD_COMPONENT,
+            List.of(ItemRegistryHandler.WHITE_RAFTER_PLANKS_QUARTER.toStack())
         )
     );
     public static final BuildingComponent CYPRESS_ROOF = register

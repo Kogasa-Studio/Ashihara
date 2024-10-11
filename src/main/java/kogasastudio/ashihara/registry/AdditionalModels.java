@@ -96,8 +96,13 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation RED_RAFTER_END = register("block/components/red_rafter_end");
     public static final BuildingComponentModelResourceLocation RED_RAFTER_CONNECTOR = register("block/components/red_rafter_connector");
 
+    public static final BuildingComponentModelResourceLocation RED_THIN_RAFTER = register("block/components/red_thin_rafter");
+    public static final BuildingComponentModelResourceLocation RED_THIN_RAFTER_CONNECTOR = register("block/components/red_thin_rafter_connector");
+
     public static final BuildingComponentModelResourceLocation SPRUCE_RAFTER_PLANKS = register("block/components/spruce_rafter_planks");
+    public static final BuildingComponentModelResourceLocation SPRUCE_RAFTER_PLANKS_QUARTER = register("block/components/spruce_rafter_planks_quarter");
     public static final BuildingComponentModelResourceLocation WHITE_RAFTER_PLANKS = register("block/components/white_rafter_planks");
+    public static final BuildingComponentModelResourceLocation WHITE_RAFTER_PLANKS_QUARTER = register("block/components/white_rafter_planks_quarter");
 
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF = register("block/components/cypress_roof");
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_CORNER = register("block/components/cypress_roof_corner");

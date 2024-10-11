@@ -1,0 +1,22 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"0": "ashihara:block/components/red_beam",
+		"particle": "ashihara:block/components/red_beam"
+	},
+	"elements": [
+		{
+			"from": [6, 0, 4],
+			"to": [10, 4.1, 12],
+			"faces": {
+				"north": {"uv": [0, 3, 2, 5], "rotation": 90, "texture": "#0"},
+				"east": {"uv": [6, 4, 10, 12], "rotation": 90, "texture": "#0"},
+				"south": {"uv": [0, 3, 2, 5], "rotation": 90, "texture": "#0"},
+				"west": {"uv": [6, 4, 10, 12], "rotation": 270, "texture": "#0"},
+				"up": {"uv": [6, 4, 10, 12], "texture": "#0"},
+				"down": {"uv": [6, 4, 10, 12], "texture": "#0"}
+			}
+		}
+	]
+}
