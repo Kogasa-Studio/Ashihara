@@ -659,7 +659,7 @@ public class BuildingComponents
     );
     public static final BuildingComponent RED_THIN_RAFTER = register
     (
-        new QuarterOrientedFloor
+        new ThinRafter
         (
             "red_thin_rafter",
             Type.BAKED_MODEL,
