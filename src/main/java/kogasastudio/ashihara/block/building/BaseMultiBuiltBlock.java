@@ -24,6 +24,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -133,7 +135,8 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
     public BlockState getStateForPlacement(BlockPlaceContext pContext)
     {
         BlockState state = super.getStateForPlacement(pContext);
-        state = state.setValue(FACING, pContext.getHorizontalDirection().getOpposite());
+        if (state == null) return null;
+        state = state.setValue(FACING, pContext.getHorizontalDirection().getOpposite()).setValue(WATERLOGGED, pContext.getLevel().getFluidState(pContext.getClickedPos()).getType().equals(Fluids.WATER));
         return state;
     }
 
@@ -142,6 +145,12 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState)
     {
         return new MultiBuiltBlockEntity(pPos, pState);
+    }
+
+    @Override
+    public FluidState getFluidState(BlockState state)
+    {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     public BlockState applyMaterial(@Nullable BlockState origin)
