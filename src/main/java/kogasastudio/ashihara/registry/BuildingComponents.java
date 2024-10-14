@@ -1127,10 +1127,10 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.ROOF_TOP_TILES_PILE_1_1,
             Shapes.box(0.25, 0.125, 0.125, 0.75, 0.875, 0.875),
-            y -> 0,
+            y -> y <= XTP(8) ? 0 : 2,
             45,
             0,
-            XTP(0),
+            XTP(-8),
             BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROOF_TOP_TILES_PILE_1_1.toStack())
         )
@@ -1143,10 +1143,10 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.ROOF_TOP_TILES_PILE_1_1_OBLIQUE,
             Shapes.or(Shapes.box(-0.375, -0.5, -0.375, 0.5, 0, 0.5), Shapes.box(0.1875, 0, 0.1875, 1, 0.5, 1)),
-            y -> 0,
+            y -> y <= XTP(8) ? 0 : 2,
             35.2644f,
             -45,
-            XTP(0),
+            XTP(-8),
             BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROOF_TOP_TILES_PILE_1_1_OBLIQUE.toStack())
         )
@@ -1255,10 +1255,10 @@ public class BuildingComponents
             Type.BAKED_MODEL,
             AdditionalModels.ROOF_TOP_TILES_PILE_START,
             Shapes.box(0.25, 0.125, 0.125, 0.75, 0.875, 0.875),
-            y -> 0,
+            y -> y <= XTP(8) ? 0 : 2,
             45,
             0,
-            XTP(0),
+            XTP(-8),
             BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT,
             List.of(ItemRegistryHandler.ROOF_TOP_TILES_PILE_START.toStack())
         )
