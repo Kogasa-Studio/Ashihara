@@ -5,6 +5,7 @@ import kogasastudio.ashihara.block.building.component.*;
 import kogasastudio.ashihara.helper.MathHelper;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.utils.shape.VoxelShapeSerializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -42,7 +43,6 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
 
     public List<ComponentStateDefinition> COMPONENTS = new ArrayList<>();
     public List<ComponentStateDefinition> ADDITIONAL_COMPONENTS = new ArrayList<>();
-    private VoxelShape shapeCache = Shapes.empty();
     public List<Occupation> occupationCache = new ArrayList<>();
 
     public MultiBuiltBlockEntity(BlockPos pPos, BlockState pBlockState)
@@ -163,7 +163,7 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
             default -> 0;
         };
         shape = ShapeHelper.rotateShape(shape, rotation);
-        this.shapeCache = shape;
+        setShape(shape);
     }
 
     public void reloadOccupation()
@@ -351,18 +351,18 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
         };
     }
 
-    public void refresh()
-    {
-        reloadShape();
+    public void refresh() {
+        refresh(true);
+    }
+
+    public void refresh(boolean reloadShape) {
+        if (reloadShape) {
+            reloadShape();
+        }
         reloadOccupation();
         setChanged();
         checkMaterial();
         if (this.hasLevel()) this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
-    }
-
-    public VoxelShape getShape()
-    {
-        return shapeCache;
     }
 
     @Override
@@ -397,7 +397,9 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
         {
             this.ADDITIONAL_COMPONENTS.add(ComponentStateDefinition.deserializeNBT((CompoundTag) tag));
         }
-        refresh();
+
+        var shapeLoaded = loadShape(pTag, pRegistries);
+        refresh(!shapeLoaded);
     }
 
     @Override
@@ -415,6 +417,7 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
             additionalListTag.add(definition.serializeNBT());
         }
         pTag.put("additional_models", additionalListTag);
+        saveShape(pTag, pRegistries);
         super.saveAdditional(pTag, pRegistries);
     }
 
@@ -435,4 +438,37 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
             default -> List.of();
         };
     }
+
+    // <editor-fold desc="VoxelShape Persistent Storage">
+
+    private VoxelShape shape = Shapes.empty();
+
+    private void setShape(VoxelShape shape) {
+        this.shape = shape;
+    }
+
+    public VoxelShape getShape() {
+        return shape;
+    }
+
+    private boolean saveShape(CompoundTag tag, HolderLookup.Provider registry) {
+        var compound = VoxelShapeSerializer.saveShape(getShape(), registry);
+        if (compound != null) {
+            tag.put("shape", compound);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean loadShape(CompoundTag tag, HolderLookup.Provider registry) {
+        var shape = tag.getCompound("shape");
+        var result = VoxelShapeSerializer.loadShape(shape, registry);
+        if (result != null) {
+            setShape(result);
+            return true;
+        }
+        return false;
+    }
+
+    // </editor-fold>
 }
