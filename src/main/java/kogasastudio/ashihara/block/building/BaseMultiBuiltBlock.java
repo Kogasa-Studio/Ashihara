@@ -124,6 +124,11 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
     }
 
     @Override
+    protected VoxelShape getCollisionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+        return getShape(pState, pLevel, pPos, pContext);
+    }
+
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder)
     {
         pBuilder.add(FACING, WATERLOGGED);
