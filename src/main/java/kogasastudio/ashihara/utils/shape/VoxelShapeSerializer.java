@@ -65,10 +65,16 @@ public class VoxelShapeSerializer {
         if (type == null) {
             return null;
         }
+
         tag.putString("type", type.getName());
         tag.putInt("xSize", shape.xSize);
         tag.putInt("ySize", shape.ySize);
         tag.putInt("zSize", shape.zSize);
+
+        switch (type) {
+            case BIT_SET -> saveBitSetDiscrete(tag, (BitSetDiscreteVoxelShape) shape, registry);
+            case SUB -> saveSubDiscrete(tag, (SubShape) shape, registry);
+        }
         return tag;
     }
 

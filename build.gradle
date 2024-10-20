@@ -136,6 +136,9 @@ dependencies {
     runtimeOnly files("libs/worldeditcui-forge-1.21.1+01-SNAPSHOT-neoforge.jar")
     runtimeOnly files("libs/journeymap-neoforge-1.21-6.0.0-beta.27.jar")
 
+    runtimeOnly "maven.modrinth:spark:1.10.109-neoforge"
+    runtimeOnly "maven.modrinth:worldedit:7.3.7"
+
     // Example project dependency using a sister or child project:
     // implementation project(":myproject")
 

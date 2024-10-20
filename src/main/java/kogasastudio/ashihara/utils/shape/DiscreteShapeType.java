@@ -4,7 +4,7 @@ import net.minecraft.world.phys.shapes.BitSetDiscreteVoxelShape;
 import net.minecraft.world.phys.shapes.SubShape;
 
 public enum DiscreteShapeType {
-    BIT_SET("array", BitSetDiscreteVoxelShape.class),
+    BIT_SET("bit_set", BitSetDiscreteVoxelShape.class),
     SUB("sub", SubShape.class),
     ;
 
