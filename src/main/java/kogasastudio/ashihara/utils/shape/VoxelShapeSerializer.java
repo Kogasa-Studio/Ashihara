@@ -81,6 +81,9 @@ public class VoxelShapeSerializer {
     private static void saveBitSetDiscrete(CompoundTag tag, BitSetDiscreteVoxelShape shape,
                                            HolderLookup.Provider registry) {
         tag.putLongArray("storage", shape.storage.toLongArray());
+        tag.putInt("xMin", shape.xMin);
+        tag.putInt("yMin", shape.yMin);
+        tag.putInt("zMin", shape.zMin);
         tag.putInt("xMax", shape.xMax);
         tag.putInt("yMax", shape.yMax);
         tag.putInt("zMax", shape.zMax);
@@ -230,6 +233,21 @@ public class VoxelShapeSerializer {
         var storageArray = tag.getLongArray("storage");
         var storage = BitSet.valueOf(storageArray);
 
+        if (!tag.contains("xMin")) {
+            return null;
+        }
+        var xMin = tag.getInt("xMin");
+
+        if (!tag.contains("yMin")) {
+            return null;
+        }
+        var yMin = tag.getInt("yMin");
+
+        if (!tag.contains("zMin")) {
+            return null;
+        }
+        var zMin = tag.getInt("zMin");
+
         if (!tag.contains("xMax")) {
             return null;
         }
@@ -247,6 +265,9 @@ public class VoxelShapeSerializer {
 
         var result = new BitSetDiscreteVoxelShape(xSize, ySize, zSize);
         result.storage = storage;
+        result.xMin = xMin;
+        result.yMin = yMin;
+        result.zMin = zMin;
         result.xMax = xMax;
         result.yMax = yMax;
         result.zMax = zMax;
