@@ -351,14 +351,14 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
         };
     }
 
-    public void refresh() {
+    public void refresh()
+    {
         refresh(true);
     }
 
-    public void refresh(boolean reloadShape) {
-        if (reloadShape) {
-            reloadShape();
-        }
+    public void refresh(boolean reloadShape)
+    {
+        if (reloadShape) reloadShape();
         reloadOccupation();
         setChanged();
         checkMaterial();
@@ -443,27 +443,27 @@ public class MultiBuiltBlockEntity extends AshiharaMachineTE implements IMultiBu
 
     private VoxelShape shape = Shapes.empty();
 
-    private void setShape(VoxelShape shape) {
-        this.shape = shape;
-    }
+    private void setShape(VoxelShape shape) {this.shape = shape;}
 
-    public VoxelShape getShape() {
-        return shape;
-    }
+    public VoxelShape getShape() {return shape;}
 
-    private boolean saveShape(CompoundTag tag, HolderLookup.Provider registry) {
+    private boolean saveShape(CompoundTag tag, HolderLookup.Provider registry)
+    {
         var compound = VoxelShapeSerializer.saveShape(getShape(), registry);
-        if (compound != null) {
+        if (compound != null)
+        {
             tag.put("shape", compound);
             return true;
         }
         return false;
     }
 
-    private boolean loadShape(CompoundTag tag, HolderLookup.Provider registry) {
+    private boolean loadShape(CompoundTag tag, HolderLookup.Provider registry)
+    {
         var shape = tag.getCompound("shape");
         var result = VoxelShapeSerializer.loadShape(shape, registry);
-        if (result != null) {
+        if (result != null)
+        {
             setShape(result);
             return true;
         }

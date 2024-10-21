@@ -85,7 +85,11 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
     {
         super.neighborChanged(pState, pLevel, pPos, pNeighborBlock, pNeighborPos, pMovedByPiston);
         BlockEntity be = pLevel.getBlockEntity(pPos);
-        if (be instanceof MultiBuiltBlockEntity mbe) mbe.checkConnection();
+        if (be instanceof MultiBuiltBlockEntity mbe)
+        {
+            mbe.checkConnection();
+            mbe.reloadShape();
+        }
     }
 
     @Override
