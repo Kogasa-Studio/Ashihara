@@ -89,6 +89,7 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
         {
             mbe.checkConnection();
             mbe.reloadShape();
+            mbe.checkMaterial();
         }
     }
 
