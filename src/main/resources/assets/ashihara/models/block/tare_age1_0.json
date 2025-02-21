@@ -1,0 +1,56 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "ashihara:block/crops/tare_age1_2_3",
+		"particle": "ashihara:block/crops/tare_age1_2_3"
+	},
+	"elements": [
+		{
+			"from": [2, -1, 8],
+			"to": [14, 12, 8],
+			"rotation": {"angle": -22.5, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 5.5, 6.5], "texture": "#0"},
+				"south": {"uv": [0, 0, 5.5, 6.5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [8, -1, 2],
+			"to": [8, 12, 14],
+			"rotation": {"angle": -22.5, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"east": {"uv": [0, 0, 5.5, 6.5], "texture": "#0"},
+				"west": {"uv": [0, 0, 5.5, 6.5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [8, 3, 4],
+			"to": [8, 8, 8],
+			"rotation": {"angle": 45, "axis": "y", "origin": [8, 4, 8]},
+			"faces": {
+				"east": {"uv": [11, 0.5, 13, 3], "texture": "#0"},
+				"west": {"uv": [13, 0.5, 11, 3], "texture": "#0"}
+			}
+		},
+		{
+			"from": [4, 1, 8],
+			"to": [8, 6, 8],
+			"rotation": {"angle": 22.5, "axis": "y", "origin": [8, 3, 8]},
+			"faces": {
+				"north": {"uv": [11, 3.5, 13, 6], "texture": "#0"},
+				"south": {"uv": [13, 3.5, 11, 6], "texture": "#0"}
+			}
+		},
+		{
+			"from": [8, 5, 8],
+			"to": [12, 10, 8],
+			"rotation": {"angle": 22.5, "axis": "y", "origin": [8, 3, 8]},
+			"faces": {
+				"north": {"uv": [13, 0.5, 11, 3], "texture": "#0"},
+				"south": {"uv": [11, 0.5, 13, 3], "texture": "#0"}
+			}
+		}
+	]
+}

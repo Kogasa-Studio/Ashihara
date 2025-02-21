@@ -1,0 +1,47 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "ashihara:block/crops/wasabi_ageall",
+		"particle": "ashihara:block/crops/wasabi_ageall"
+	},
+	"elements": [
+		{
+			"from": [8.25, -1, 6],
+			"to": [8.25, 2, 8],
+			"rotation": {"angle": 22.5, "axis": "y", "origin": [8.25, 0, 8]},
+			"faces": {
+				"east": {"uv": [0, 0, 1, 1.5], "texture": "#0"},
+				"west": {"uv": [1, 0, 0, 1.5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [8, -0.75, 7.4],
+			"to": [8, 1.25, 9.4],
+			"rotation": {"angle": -22.5, "axis": "y", "origin": [8.25, 0, 8]},
+			"faces": {
+				"east": {"uv": [2.5, 0.5, 1.5, 1.5], "texture": "#0"},
+				"west": {"uv": [1.5, 0.5, 2.5, 1.5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [6, 1.25, 8],
+			"to": [8, 1.25, 10],
+			"rotation": {"angle": 22.5, "axis": "y", "origin": [8, -1, 8]},
+			"faces": {
+				"up": {"uv": [1.5, 8.5, 2.5, 9.5], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [1.5, 8.5, 2.5, 9.5], "rotation": 270, "texture": "#0"}
+			}
+		},
+		{
+			"from": [5.75, 2.25, 5.5],
+			"to": [7.75, 2.25, 7.5],
+			"rotation": {"angle": -22.5, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"up": {"uv": [1.5, 8.5, 2.5, 9.5], "rotation": 180, "texture": "#0"},
+				"down": {"uv": [1.5, 8.5, 2.5, 9.5], "rotation": 180, "texture": "#0"}
+			}
+		}
+	]
+}

@@ -1,0 +1,55 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"0": "ashihara:block/crops/white_radish_age0_1",
+		"particle": "ashihara:block/crops/white_radish_age0_1"
+	},
+	"elements": [
+		{
+			"from": [8, -1, 8],
+			"to": [8, 4, 11],
+			"rotation": {"angle": 22.5, "axis": "y", "origin": [8, -1, 8]},
+			"faces": {
+				"east": {"uv": [7, 0, 4, 5], "texture": "#0"},
+				"west": {"uv": [4, 0, 7, 5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [6, -1, 8],
+			"to": [8, 1, 8],
+			"rotation": {"angle": 22.5, "axis": "y", "origin": [8, -1, 8]},
+			"faces": {
+				"north": {"uv": [11, 3, 13, 5], "texture": "#0"},
+				"south": {"uv": [11, 3, 13, 5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [8, -1, 4],
+			"to": [8, 4, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, -1, 8]},
+			"faces": {
+				"east": {"uv": [0, 0, 4, 5], "texture": "#0"},
+				"west": {"uv": [4, 0, 0, 5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [5, -1, 8],
+			"to": [8, 3, 8],
+			"rotation": {"angle": -22.5, "axis": "y", "origin": [8, -1, 8]},
+			"faces": {
+				"north": {"uv": [7, 1, 10, 5], "texture": "#0"},
+				"south": {"uv": [10, 1, 7, 5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [8, -1, 8],
+			"to": [10, 2, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, -1, 8]},
+			"faces": {
+				"north": {"uv": [12, 2, 10, 5], "texture": "#0"},
+				"south": {"uv": [10, 2, 12, 5], "texture": "#0"}
+			}
+		}
+	]
+}
