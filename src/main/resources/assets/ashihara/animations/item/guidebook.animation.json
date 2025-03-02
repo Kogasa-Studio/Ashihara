@@ -1,0 +1,22 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"use.open": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 2,
+			"bones": {
+				"rightcover": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.0": {
+							"vector": [-177.5, 0, 0],
+							"easing": "easeOutQuint"
+						}
+					}
+				}
+			}
+		}
+	}
+}

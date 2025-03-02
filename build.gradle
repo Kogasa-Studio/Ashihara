@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.145'
+    id 'net.neoforged.gradle.userdev' version '7.0.181'
 }
 
 tasks.named('wrapper', Wrapper).configure {
@@ -116,8 +116,9 @@ dependencies {
     // And its provides the option to then use net.minecraft as the group, and one of; client, server or joined as the module name, plus the game version as version.
     // For all intends and purposes: You can treat this dependency as if it is a normal library you would use.
     implementation "net.neoforged:neoforge:${neo_version}"
-    implementation "maven.modrinth:sodium:mc1.21-0.6.0-beta.1-neoforge"
-    implementation "maven.modrinth:iris:1.8.0-beta.2+1.21-neoforge"
+    implementation "maven.modrinth:sodium:I9RMZOOH"
+    implementation "maven.modrinth:iris:oXIoDcGE"
+    implementation "maven.modrinth:geckolib:oNBe6h9g"
 
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime

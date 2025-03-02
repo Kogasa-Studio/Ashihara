@@ -226,6 +226,7 @@ public class CreativeModeTabsRegistryHandler
                                     .withTabsAfter(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, MATERIALS_TAB_NAME), ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, BUILDING_BLOCKS_TAB_NAME))
                                     .displayItems(((itemDisplayParameters, output) ->
                                     {
+                                        output.accept(ItemRegistryHandler.GUIDEBOOK.get());
                                         output.accept(ItemRegistryHandler.WILD_RICE.get());
                                         output.accept(ItemRegistryHandler.RICE_SEEDLING.get());
                                         output.accept(ItemRegistryHandler.PADDY.get());

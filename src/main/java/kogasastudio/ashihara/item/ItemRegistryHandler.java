@@ -25,6 +25,7 @@ public class ItemRegistryHandler
 
     //特殊物品
     public static final DeferredItem<Item> ASHIHARA_ICON = ITEMS.register("ashihara_icon", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> GUIDEBOOK = ITEMS.register("guidebook", GuideBook::new);
 
     //以下为物品
     public static final DeferredItem<Item> KOISHI = ITEMS.register("koishi", ItemKoishi::new);
