@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.client.models.geo;
 
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.client.render.geo.PageRendererr;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
@@ -15,15 +16,18 @@ public class GuideBookModel extends GeoModel<GuideBookModel> implements Singleto
     public static final ResourceLocation MODEL = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "geo/item/guidebook.geo.json");
     public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/geo/guidebook.png");
     public static final ResourceLocation ANIMATION = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "animations/item/guidebook.animation.json");
+
+    public static final RawAnimation INTRO = RawAnimation.begin().thenPlay("use.intro");
     public static final RawAnimation OPEN = RawAnimation.begin().thenPlay("use.open");
 
-    public final GeoObjectRenderer<GuideBookModel> RENDERER = new GeoObjectRenderer<>(this);
+    public final PageRendererr RENDERER = new PageRendererr(this);
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar)
     {
+        controllerRegistrar.add(new AnimationController<>(this, "Intro", animationState -> PlayState.STOP).triggerableAnim("intro", INTRO));
         controllerRegistrar.add(new AnimationController<>(this, "Open", animationState -> PlayState.STOP).triggerableAnim("open", OPEN));
     }
 

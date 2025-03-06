@@ -17,6 +17,54 @@
 					}
 				}
 			}
+		},
+		"use.intro": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 3,
+			"override_previous_animation": true,
+			"bones": {
+				"main": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 45, 90]
+						},
+						"1.25": {
+							"vector": [-20.75716, 26.57364, 56.54527],
+							"easing": "easeInExpo"
+						},
+						"3.0": {
+							"vector": [0, 0, 70],
+							"easing": "easeOutExpo"
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.25": {
+							"vector": [0, 5, -3],
+							"easing": "easeInExpo"
+						},
+						"3.0": {
+							"vector": [0, 12, 0],
+							"easing": "easeOutExpo"
+						}
+					},
+					"scale": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.25": {
+							"vector": [0.4, 0.4, 0.4],
+							"easing": "easeInExpo"
+						},
+						"3.0": {
+							"vector": [1, 1, 1],
+							"easing": "easeOutExpo"
+						}
+					}
+				}
+			}
 		}
 	}
 }
