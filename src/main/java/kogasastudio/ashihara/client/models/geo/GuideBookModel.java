@@ -1,14 +1,13 @@
 package kogasastudio.ashihara.client.models.geo;
 
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.client.render.geo.PageRendererr;
+import kogasastudio.ashihara.client.render.geo.PageRenderer;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.renderer.GeoObjectRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class GuideBookModel extends GeoModel<GuideBookModel> implements SingletonGeoAnimatable
@@ -20,7 +19,7 @@ public class GuideBookModel extends GeoModel<GuideBookModel> implements Singleto
     public static final RawAnimation INTRO = RawAnimation.begin().thenPlay("use.intro");
     public static final RawAnimation OPEN = RawAnimation.begin().thenPlay("use.open");
 
-    public final PageRendererr RENDERER = new PageRendererr(this);
+    public final PageRenderer RENDERER = new PageRenderer(this);
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 

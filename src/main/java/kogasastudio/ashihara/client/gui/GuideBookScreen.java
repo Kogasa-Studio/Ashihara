@@ -3,22 +3,15 @@ package kogasastudio.ashihara.client.gui;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import kogasastudio.ashihara.client.models.geo.GuideBookModel;
+import kogasastudio.ashihara.network.GuidebookProgressPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.Blocks;
-import net.neoforged.neoforge.client.model.data.ModelData;
-import org.joml.Quaternionf;
-import software.bernie.geckolib.animation.state.BoneSnapshot;
-import software.bernie.geckolib.cache.AnimatableIdCache;
-import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.util.RenderUtil;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class GuideBookScreen extends Screen
 {
@@ -57,6 +50,11 @@ public class GuideBookScreen extends Screen
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
         book.triggerAnim(player, book.hashCode(), "Open", "open");
+        if (mouseX > 100 && mouseY > 100)
+        {
+            PacketDistributor.sendToServer(new GuidebookProgressPacket(0, 0));
+            this.onClose();
+        }
         return true;
     }
 
@@ -70,6 +68,11 @@ public class GuideBookScreen extends Screen
         pose.scale(64, -64, 64);
         book.RENDERER.render(guiGraphics.pose(), book, guiGraphics.bufferSource(), renderType, guiGraphics.bufferSource().getBuffer(renderType), 15728880, partialTick);
         pose.popPose();
+
+        pose.pushPose();
+        guiGraphics.drawString(Minecraft.getInstance().font, "X: " + mouseX + ", Y: " + mouseY, 0, 0, 0xffffff);
+        pose.popPose();
+
         super.render(guiGraphics, mouseX, mouseY, partialTick);
     }
 

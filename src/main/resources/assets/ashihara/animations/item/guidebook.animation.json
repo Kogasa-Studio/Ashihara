@@ -65,6 +65,57 @@
 					}
 				}
 			}
+		},
+		"use.initial_flip": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 2.5,
+			"bones": {
+				"part_right": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.5": {
+							"vector": [-165, 0, 0],
+							"easing": "step",
+							"easingArgs": [2]
+						}
+					}
+				},
+				"current_page_right": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.5": {
+							"vector": [-160, 0, 0],
+							"easing": "easeOutExpo"
+						}
+					}
+				},
+				"previous_page_left": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.5": {
+							"vector": [-5, 0, 0],
+							"easing": "easeOutExpo"
+						}
+					}
+				},
+				"current_page_left": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.5": {
+							"vector": [-10, 0, 0],
+							"easing": "easeOutExpo"
+						}
+					}
+				}
+			}
 		}
 	}
 }

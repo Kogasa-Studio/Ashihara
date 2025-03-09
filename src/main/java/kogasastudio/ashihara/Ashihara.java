@@ -8,17 +8,26 @@ import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.interaction.recipes.register.RecipeManager;
 import kogasastudio.ashihara.inventory.container.ContainerRegistryHandler;
+import kogasastudio.ashihara.item.GuideBook;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.loading.ReloadableResources;
 import kogasastudio.ashihara.registry.Features;
 import kogasastudio.ashihara.sounds.SoundEvents;
 import kogasastudio.ashihara.registry.WorldGenEventRegistryHandler;
+import kogasastudio.ashihara.utils.json.JsonUtils;
+import kogasastudio.ashihara.utils.json.serializer.GuideBookPageSerializer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import org.slf4j.Logger;
+
+import java.io.IOException;
+import java.nio.file.Path;
 
 @Mod(Ashihara.MODID)
 public class Ashihara
@@ -51,10 +60,20 @@ public class Ashihara
         Features.FEATURES.register(modEventBus);
         WorldGenEventRegistryHandler.PLACED_FEATURE.register(modEventBus);
         WorldGenEventRegistryHandler.CONFIGURED_FEATURE.register(modEventBus);
+        try
+        {
+            JsonUtils.writeToJson(JsonUtils.INSTANCE.pretty, Path.of("test/headpage.json"), GuideBookPageSerializer.serialize(new GuideBook.Page(0, true, new GuideBook.Page.TextField[]{new GuideBook.Page.TextField(0, 0, 5, 10, "小猫崽子")}, new GuideBook.Page.Illustration[]{})).getAsJsonObject());
+        } catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
 
         RecipeManager.register(modEventBus);
 
-        //BuiltInBrModelRenderVisitors.VISITORS.register(modEventBus);
+        if (FMLEnvironment.dist == Dist.CLIENT)
+        {
+            ReloadableResources.register();
+        }
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event)
