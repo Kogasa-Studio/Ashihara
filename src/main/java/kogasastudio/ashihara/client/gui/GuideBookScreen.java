@@ -3,15 +3,29 @@ package kogasastudio.ashihara.client.gui;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import kogasastudio.ashihara.client.models.geo.GuideBookModel;
+import kogasastudio.ashihara.client.models.geo.InternalControlGeoModel;
 import kogasastudio.ashihara.network.GuidebookProgressPacket;
+import kogasastudio.ashihara.registry.DataComponentTypes;
+import kogasastudio.ashihara.utils.OptionalUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.apache.commons.lang3.mutable.MutableFloat;
+import software.bernie.geckolib.animation.Animation;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.EasingType;
+import software.bernie.geckolib.cache.object.GeoBone;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static kogasastudio.ashihara.utils.OptionalUtil.getWithDefault;
 
 public class GuideBookScreen extends Screen
 {
@@ -19,6 +33,11 @@ public class GuideBookScreen extends Screen
     private final Player player;
     private final RenderType renderType = RenderType.ENTITY_CUTOUT.apply(book.getTextureResource(book));
     private int ticks = 0;
+    private int coolDown = 0;
+
+    private int currentPageIndex = 148;
+    private int nextPageIndex = 0;
+    private Map<Integer, MutableFloat> flipQueue = new HashMap<>();
 
     public GuideBookScreen(Component title, Player player)
     {
@@ -36,26 +55,140 @@ public class GuideBookScreen extends Screen
     public void tick()
     {
         ticks += 1;
+        coolDown -= coolDown <= 0 ? 0 : 1;
+        List<Integer> toRemove = new ArrayList<>();
+        for (int i : flipQueue.keySet())
+        {
+            flipQueue.get(i).addAndGet(-1);
+            if (flipQueue.get(i).getValue() <= 0) toRemove.add(i);
+        }
+        toRemove.forEach(i -> flipQueue.remove(i));
         super.tick();
     }
 
     @Override
     protected void init()
     {
-        book.triggerAnim(player, book.hashCode(), "Intro", "intro");
+        book.triggerAnim(player, book.hashCode(), "Intro", GuideBookModel.ANIM_INTRO);
+        //this.currentPageIndex = this.player.getData(DataComponentTypes.GUIDEBOOK_READING_PAGE.get());
+        if (this.currentPageIndex != 0 && this.currentPageIndex <= GuideBookModel.getTotalPages())
+        {
+            String anim = GuideBookModel.getFlipAnim(currentPageIndex - 1, currentPageIndex, 0);
+            book.triggerAnim(player, book.hashCode(), anim, anim);
+        }
+        book.setPageIndex(currentPageIndex);
+        book.triggerInternal(player, book.hashCode(), catchProgress(null).build());
         super.init();
     }
+
+    public int appendBufferedFlip()
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if (!flipQueue.containsKey(i))
+            {
+                flipQueue.put(i, new MutableFloat(30f));
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /*@Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers)
+    {
+        if (keyCode == 87)
+        {
+            book.getAnimatableInstanceCache().getManagerForId(book.hashCode()).getAnimationControllers().get("use.close_from_left").forceAnimationReset();
+            book.triggerAnim(player, book.hashCode(), "use.close_from_left", "use.close_from_left");
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }*/
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
-        book.triggerAnim(player, book.hashCode(), "Open", "open");
-        if (mouseX > 100 && mouseY > 100)
+        if (coolDown > 0) return super.mouseClicked(mouseX, mouseY, button);
+        boolean flip = false;
+        boolean flipToLeft = false;
+        if (mouseX <= this.width / 2f && currentPageIndex <= GuideBookModel.getTotalPages()) flip = true;
+        if (mouseX >= this.width / 2f && currentPageIndex > 0) {flip = true; flipToLeft = true;}
+
+        if (flip)
         {
-            PacketDistributor.sendToServer(new GuidebookProgressPacket(0, 0));
-            this.onClose();
+            String animation = GuideBookModel.getFlipAnim(currentPageIndex, currentPageIndex + (flipToLeft ? -1 : 1), 0);
+            if (animation == null) return super.mouseClicked(mouseX, mouseY, button);
+            if (animation.equals(GuideBookModel.ANIM_FLIP_COMMON_LEFT) || animation.equals(GuideBookModel.ANIM_FLIP_COMMON_RIGHT))
+            {
+                animation = GuideBookModel.getFlipAnim(currentPageIndex, currentPageIndex + (flipToLeft ? -1 : 1), appendBufferedFlip());
+                if (animation == null) return super.mouseClicked(mouseX, mouseY, button);
+            }
+            AnimationController<?> controller = book.getAnimatableInstanceCache().getManagerForId(book.hashCode()).getAnimationControllers().get(animation);
+            controller.forceAnimationReset();
+            controller.getBoneAnimationQueues().clear();
+            book.triggerAnim(player, book.hashCode(), animation, animation);
+            book.triggerInternal(player, book.hashCode(), catchProgress(null).build());
+            currentPageIndex += flipToLeft ? -1 : 1;
+            book.setPageIndex(currentPageIndex);
+            coolDown = 5;
+            return true;
         }
-        return true;
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    private InternalControlGeoModel.InternalAnimationBuilder catchProgress(InternalControlGeoModel.InternalAnimationBuilder builder)
+    {
+        if (builder == null) builder = new InternalControlGeoModel.InternalAnimationBuilder("catchProgress", Animation.LoopType.HOLD_ON_LAST_FRAME);
+        {
+            double progress = (double) book.getPageIndex() / GuideBookModel.getTotalPages();
+            double invertedProgress = 1d - progress;
+            builder = builder
+            .startBone("pos_sim")
+            .lerpX(InternalControlGeoModel.InternalAnimationBuilder.VarType.ROTATION, 10, getWithDefault(0f, book.getBone("pos_sim"), GeoBone::getRotX), Math.toRadians(progress * 160f), EasingType.EASE_IN_OUT_QUAD)
+            .endBone()
+            .startBone("part_left")
+            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.SCALE, 10, getWithDefault(1f, book.getBone("part_left"), GeoBone::getScaleY), invertedProgress * 2f, EasingType.EASE_IN_OUT_QUAD)
+            .endBone()
+            .startBone("part_right")
+            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.SCALE, 10, getWithDefault(1f, book.getBone("part_right"), GeoBone::getScaleY), progress * 2f, EasingType.EASE_IN_OUT_QUAD)
+            .endBone()
+            .startBone("content_left")
+            .lerpX(InternalControlGeoModel.InternalAnimationBuilder.VarType.ROTATION, 10, getWithDefault(0f, book.getBone("content_left"), GeoBone::getRotX), -Math.toRadians(progress * 160f), EasingType.EASE_IN_OUT_QUAD)
+            .endBone()
+            .startBone("content_right")
+            .lerpX(InternalControlGeoModel.InternalAnimationBuilder.VarType.ROTATION, 10, getWithDefault(0f, book.getBone("content_right"), GeoBone::getRotX), -Math.toRadians(progress * 160f), EasingType.EASE_IN_OUT_QUAD)
+            .endBone()
+            .startBone("left")
+            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, getWithDefault(0f, book.getBone("left"), GeoBone::getPosY), invertedProgress * 3f - 1.5f, EasingType.EASE_IN_OUT_QUAD)
+            .endBone()
+            .startBone("right")
+            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, getWithDefault(0f, book.getBone("right"), GeoBone::getPosY), progress * -3f + 1.5f, EasingType.EASE_IN_OUT_QUAD)
+            .endBone()
+            .startBone("rightcover")
+            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, getWithDefault(0f, book.getBone("rightcover"), GeoBone::getPosY), progress * 3f - 1.5f, EasingType.EASE_IN_OUT_QUAD)
+            .endBone()
+            .startBone("leftcover")
+            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, getWithDefault(0f, book.getBone("leftcover"), GeoBone::getPosY), invertedProgress * -3f + 1.5f, EasingType.EASE_IN_OUT_QUAD)
+            .endBone()
+            .startBone("buffer_pages")
+            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, getWithDefault(0f, book.getBone("buffer_pages"), GeoBone::getPosY), progress * -3f + 1.5f, EasingType.EASE_IN_OUT_QUAD)
+            .lerpX(InternalControlGeoModel.InternalAnimationBuilder.VarType.ROTATION, 10, getWithDefault(0f, book.getBone("buffer_pages"), GeoBone::getRotX), -Math.toRadians(progress * 160f), EasingType.EASE_IN_OUT_QUAD)
+            .endBone();
+            /*.startBone("spine")
+            .lerpX(InternalControlGeoModel.InternalAnimationBuilder.VarType.ROTATION, 10, getWithDefault(0f, book.getBone("spine"), GeoBone::getRotX), Math.toRadians(book.getPageIndex() / 150f * 160f), EasingType.EASE_IN_OUT_QUAD)
+            .endBone();
+            /*.startBone("spine_pos")
+            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, getWithDefault(0f, book.getBone("spine_pos"), GeoBone::getPosY), book.getPageIndex() / -150f*3, EasingType.EASE_IN_OUT_QUAD)
+            .endBone();*/
+        }
+        return builder;
+    }
+
+    @Override
+    public void onClose()
+    {
+        PacketDistributor.sendToServer(new GuidebookProgressPacket(0, this.currentPageIndex));
+        super.onClose();
     }
 
     @Override
@@ -70,7 +203,7 @@ public class GuideBookScreen extends Screen
         pose.popPose();
 
         pose.pushPose();
-        guiGraphics.drawString(Minecraft.getInstance().font, "X: " + mouseX + ", Y: " + mouseY, 0, 0, 0xffffff);
+        guiGraphics.drawString(Minecraft.getInstance().font, "X: " + mouseX + ", Y: " + mouseY + ", Current page: " + currentPageIndex, 0, 0, 0xffffff);
         pose.popPose();
 
         super.render(guiGraphics, mouseX, mouseY, partialTick);

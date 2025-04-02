@@ -11,6 +11,7 @@ import kogasastudio.ashihara.inventory.container.ContainerRegistryHandler;
 import kogasastudio.ashihara.item.GuideBook;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.loading.ReloadableResources;
+import kogasastudio.ashihara.registry.DataComponentTypes;
 import kogasastudio.ashihara.registry.Features;
 import kogasastudio.ashihara.sounds.SoundEvents;
 import kogasastudio.ashihara.registry.WorldGenEventRegistryHandler;
@@ -60,6 +61,7 @@ public class Ashihara
         Features.FEATURES.register(modEventBus);
         WorldGenEventRegistryHandler.PLACED_FEATURE.register(modEventBus);
         WorldGenEventRegistryHandler.CONFIGURED_FEATURE.register(modEventBus);
+        DataComponentTypes.ATTACHMENT_TYPES.register(modEventBus);
         try
         {
             JsonUtils.writeToJson(JsonUtils.INSTANCE.pretty, Path.of("test/headpage.json"), GuideBookPageSerializer.serialize(new GuideBook.Page(0, true, new GuideBook.Page.TextField[]{new GuideBook.Page.TextField(0, 0, 5, 10, "小猫崽子")}, new GuideBook.Page.Illustration[]{})).getAsJsonObject());

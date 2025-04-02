@@ -2,11 +2,11 @@ package kogasastudio.ashihara.network;
 
 import io.netty.buffer.ByteBuf;
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.registry.DataComponentTypes;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record GuidebookProgressPacket(int UnlockProgress, int currentPage) implements CustomPacketPayload
@@ -30,7 +30,7 @@ public record GuidebookProgressPacket(int UnlockProgress, int currentPage) imple
     {
         public static void handle(GuidebookProgressPacket packet, final IPayloadContext context)
         {
-            context.enqueueWork(() -> context.player().level().explode(context.player(), context.player().getX(), context.player().getY(), context.player().getZ(), 3, Level.ExplosionInteraction.MOB));
+            context.enqueueWork(() -> context.player().setData(DataComponentTypes.GUIDEBOOK_READING_PAGE, packet.currentPage()));
         }
     }
 }

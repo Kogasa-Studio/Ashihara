@@ -21,10 +21,14 @@ import software.bernie.geckolib.util.RenderUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-public class PageRenderer extends GeoObjectRenderer<GuideBookModel>
+import static kogasastudio.ashihara.utils.OptionalUtil.getWithDefault;
+
+public class GuideBookRenderer extends GeoObjectRenderer<GuideBookModel>
 {
-    public PageRenderer(GeoModel<GuideBookModel> model)
+    public GuideBookRenderer(GeoModel<GuideBookModel> model)
     {
         super(model);
     }
@@ -43,6 +47,7 @@ public class PageRenderer extends GeoObjectRenderer<GuideBookModel>
         RenderUtil.prepMatrixForBone(poseStack, bone);
         buffer = this.checkAndRefreshBuffer(isReRender, buffer, bufferSource, renderType);
         this.renderCubesOfBone(poseStack, bone, buffer, packedLight, packedOverlay, colour);
+
         if (bone.getName().equals("rightcover"))
         {
             poseStack.pushPose();
@@ -50,14 +55,25 @@ public class PageRenderer extends GeoObjectRenderer<GuideBookModel>
             poseStack.translate(75,12.1,-55);
             poseStack.mulPose(Axis.XP.rotationDegrees(90));
             poseStack.mulPose(Axis.ZP.rotationDegrees(90));
-            //Minecraft.getInstance().font.drawInBatch("小猫崽子小猫崽子小猫崽子", 0, 0, 0x943943, true, poseStack.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, packedLight);
             GuideBook.Page page = ReloadableResources.getGuidebookPagesReordered().get(0);
-            renderFormattedText(poseStack, page.getTextFields()[0].text(), 0, 0, 0x943943, true, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight);
+            renderFormattedText(poseStack, page.getTextFields()[0].text(), 0, 0, 0x943943, false, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight);
             poseStack.popPose();
         }
-        //setBoneRotX(bone, "spine", 60);
-        //setBoneRotX(bone, "right", 120);
-        if (!isReRender) {
+
+        GuideBookModel book = (GuideBookModel) this.model;
+
+        //doIfNameMatches(bone, "spine", b -> b.setPivotY(getWithDefault(b.getPivotY(), book.getBone("content_right"), GeoBone::getPosY)));
+        //doIfNameMatches(bone, "part_right", b -> b.setScaleY(book.getPageIndex() / 150f * 2f));
+        //doIfNameMatches(bone, "content_right", b -> b.setPosY(book.getPageIndex() / 150f * -3f + 1.5f));
+        //doIfNameMatches(bone, "part_right", b -> b.setPivotY(book.getPageIndex() / 150f * -3f + 1.5f));
+        //doIfNameMatches(bone, "current_page_right", b -> b.setPosY(book.getPageIndex() / 150f * -3f + 1.5f));
+        //doIfNameMatches(bone, "part_left", b -> b.setScaleY((1 - book.getPageIndex() / 150f) * 2f));
+        //doIfNameMatches(bone, "content_left", b -> b.setPosY((1 - book.getPageIndex() / 150f) * 3f - 1.5f));
+        //doIfNameMatches(bone, "part_left", b -> b.setPivotY((1 - book.getPageIndex() / 150f) * 3f - 1.5f));
+        //doIfNameMatches(bone, "current_page_left", b -> b.setPosY((1 - book.getPageIndex() / 150f) * 3f - 1.5f));
+
+        if (!isReRender)
+        {
             this.applyRenderLayersForBone(poseStack, this.getAnimatable(), bone, renderType, bufferSource, buffer, partialTick, packedLight, packedOverlay);
         }
 
@@ -85,21 +101,11 @@ public class PageRenderer extends GeoObjectRenderer<GuideBookModel>
         }
     }
 
-    protected void setBoneRotIfNameMatches(GeoBone bone, String name, float x, float y, float z)
+    protected void doIfNameMatches(GeoBone bone, String name, Consumer<GeoBone> operation)
     {
         if (bone.getName().equals(name))
         {
-            bone.setRotX((float) Math.toRadians(x));
-            bone.setRotY((float) Math.toRadians(y));
-            bone.setRotZ((float) Math.toRadians(z));
-        }
-    }
-
-    protected void setBoneRotX(GeoBone bone, String name, float x)
-    {
-        if (bone.getName().equals(name))
-        {
-            bone.setRotX((float) Math.toRadians(x));
+            operation.accept(bone);
         }
     }
 }
