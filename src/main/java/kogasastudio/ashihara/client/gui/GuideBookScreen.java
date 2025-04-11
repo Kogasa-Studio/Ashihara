@@ -15,6 +15,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.lang3.mutable.MutableFloat;
+import oshi.util.tuples.Pair;
+import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animation.Animation;
 import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.EasingType;
@@ -35,9 +37,8 @@ public class GuideBookScreen extends Screen
     private int ticks = 0;
     private int coolDown = 0;
 
-    private int currentPageIndex = 148;
-    private int nextPageIndex = 0;
-    private Map<Integer, MutableFloat> flipQueue = new HashMap<>();
+    private int currentPageIndex = 145;
+    private Map<Integer, Pair<MutableFloat, String>> flipQueue = new HashMap<>();
 
     public GuideBookScreen(Component title, Player player)
     {
@@ -59,8 +60,14 @@ public class GuideBookScreen extends Screen
         List<Integer> toRemove = new ArrayList<>();
         for (int i : flipQueue.keySet())
         {
-            flipQueue.get(i).addAndGet(-1);
-            if (flipQueue.get(i).getValue() <= 0) toRemove.add(i);
+            flipQueue.get(i).getA().addAndGet(-1);
+            if (flipQueue.get(i).getA().getValue() <= 0)
+            {
+                toRemove.add(i);
+                String anim = flipQueue.get(i).getB();
+                String controller = anim.contains("buffer") ? anim : GuideBookModel.CONTROLLER_FLIP;
+                if (anim.contains("buffer")) book.stopTriggeredAnim(player, book.hashCode(), controller, anim);
+            }
         }
         toRemove.forEach(i -> flipQueue.remove(i));
         super.tick();
@@ -74,24 +81,35 @@ public class GuideBookScreen extends Screen
         if (this.currentPageIndex != 0 && this.currentPageIndex <= GuideBookModel.getTotalPages())
         {
             String anim = GuideBookModel.getFlipAnim(currentPageIndex - 1, currentPageIndex, 0);
-            book.triggerAnim(player, book.hashCode(), anim, anim);
+            book.triggerAnim(player, book.hashCode(), GuideBookModel.CONTROLLER_FLIP, anim);
         }
         book.setPageIndex(currentPageIndex);
         book.triggerInternal(player, book.hashCode(), catchProgress(null).build());
         super.init();
     }
 
-    public int appendBufferedFlip()
+    public Pair<MutableFloat, String> appendBufferedFlip(boolean flipToLeft)
     {
         for (int i = 0; i < 6; i++)
         {
             if (!flipQueue.containsKey(i))
             {
-                flipQueue.put(i, new MutableFloat(30f));
-                return i;
+                String animation = GuideBookModel.getFlipAnim(currentPageIndex, currentPageIndex + (flipToLeft ? -1 : 1), i);
+                if (animation == null) return null;
+                Pair<MutableFloat, String> p = new Pair<>(new MutableFloat(30f), animation);
+                flipQueue.put(i, p);
+                return new Pair<>(new MutableFloat(i), animation);
             }
         }
-        return -1;
+        return null;
+    }
+
+    public void resetBuffer()
+    {
+        for (int i : flipQueue.keySet())
+        {
+            flipQueue.get(i).getA().setValue(0);
+        }
     }
 
     /*@Override
@@ -111,23 +129,33 @@ public class GuideBookScreen extends Screen
         if (coolDown > 0) return super.mouseClicked(mouseX, mouseY, button);
         boolean flip = false;
         boolean flipToLeft = false;
+        boolean buffered = false;
+        boolean resetBuffer = true;
         if (mouseX <= this.width / 2f && currentPageIndex <= GuideBookModel.getTotalPages()) flip = true;
         if (mouseX >= this.width / 2f && currentPageIndex > 0) {flip = true; flipToLeft = true;}
 
         if (flip)
         {
             String animation = GuideBookModel.getFlipAnim(currentPageIndex, currentPageIndex + (flipToLeft ? -1 : 1), 0);
+
             if (animation == null) return super.mouseClicked(mouseX, mouseY, button);
             if (animation.equals(GuideBookModel.ANIM_FLIP_COMMON_LEFT) || animation.equals(GuideBookModel.ANIM_FLIP_COMMON_RIGHT))
             {
-                animation = GuideBookModel.getFlipAnim(currentPageIndex, currentPageIndex + (flipToLeft ? -1 : 1), appendBufferedFlip());
+                resetBuffer = false;
+                Pair<MutableFloat, String> p = appendBufferedFlip(flipToLeft);
+                int i = p.getA().getValue().intValue();
+                animation = p.getB();
+                buffered = (i > 0);
                 if (animation == null) return super.mouseClicked(mouseX, mouseY, button);
             }
-            AnimationController<?> controller = book.getAnimatableInstanceCache().getManagerForId(book.hashCode()).getAnimationControllers().get(animation);
-            controller.forceAnimationReset();
-            controller.getBoneAnimationQueues().clear();
-            book.triggerAnim(player, book.hashCode(), animation, animation);
+
+            //book.stopTriggeredAnim(player, book.hashCode(), controller, animation);
+            if (resetBuffer) resetBuffer();
+            String controller = buffered ? animation : GuideBookModel.CONTROLLER_FLIP;
+            book.getAnimatableInstanceCache().getManagerForId(book.hashCode()).getAnimationControllers().get(controller).forceAnimationReset();
+
             book.triggerInternal(player, book.hashCode(), catchProgress(null).build());
+            book.triggerAnim(player, book.hashCode(), controller, animation);
             currentPageIndex += flipToLeft ? -1 : 1;
             book.setPageIndex(currentPageIndex);
             coolDown = 5;
@@ -169,10 +197,10 @@ public class GuideBookScreen extends Screen
             .endBone()
             .startBone("leftcover")
             .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, getWithDefault(0f, book.getBone("leftcover"), GeoBone::getPosY), invertedProgress * -3f + 1.5f, EasingType.EASE_IN_OUT_QUAD)
-            .endBone()
+            .endBone();/*
             .startBone("buffer_pages")
             .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, getWithDefault(0f, book.getBone("buffer_pages"), GeoBone::getPosY), progress * -3f + 1.5f, EasingType.EASE_IN_OUT_QUAD)
-            .lerpX(InternalControlGeoModel.InternalAnimationBuilder.VarType.ROTATION, 10, getWithDefault(0f, book.getBone("buffer_pages"), GeoBone::getRotX), -Math.toRadians(progress * 160f), EasingType.EASE_IN_OUT_QUAD)
+            .lerpX(InternalControlGeoModel.InternalAnimationBuilder.VarType.ROTATION, 10, getWithDefault(0f, book.getBone("buffer_pages"), GeoBone::getRotX), Math.toRadians(progress * -160f), EasingType.EASE_IN_OUT_QUAD)
             .endBone();
             /*.startBone("spine")
             .lerpX(InternalControlGeoModel.InternalAnimationBuilder.VarType.ROTATION, 10, getWithDefault(0f, book.getBone("spine"), GeoBone::getRotX), Math.toRadians(book.getPageIndex() / 150f * 160f), EasingType.EASE_IN_OUT_QUAD)
