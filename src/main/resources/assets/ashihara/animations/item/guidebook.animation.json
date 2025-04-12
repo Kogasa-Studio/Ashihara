@@ -850,10 +850,10 @@
 				"buffer_pages": {
 					"rotation": {
 						"0.0": {
-							"vector": [-180, 0, 0]
+							"vector": [0, 0, 0]
 						},
 						"1.5": {
-							"vector": [-180, 0, 0]
+							"vector": [0, 0, 0]
 						}
 					}
 				}
