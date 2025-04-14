@@ -29,6 +29,8 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 @Mod(Ashihara.MODID)
 public class Ashihara
@@ -64,7 +66,11 @@ public class Ashihara
         DataComponentTypes.ATTACHMENT_TYPES.register(modEventBus);
         try
         {
-            JsonUtils.writeToJson(JsonUtils.INSTANCE.pretty, Path.of("test/headpage.json"), GuideBookPageSerializer.serialize(new GuideBook.Page(0, true, new GuideBook.Page.TextField[]{new GuideBook.Page.TextField(0, 0, 5, 10, "小猫崽子")}, new GuideBook.Page.Illustration[]{})).getAsJsonObject());
+            Map<Integer, GuideBook.Page> iMap = new HashMap<>();
+            iMap.put(0, new GuideBook.Page(0, true, new GuideBook.Page.TextField[]{new GuideBook.Page.TextField(0, 0, 5, 10, "小猫崽子")}, new GuideBook.Page.Illustration[]{}));
+            iMap.put(1, new GuideBook.Page(0, true, new GuideBook.Page.TextField[]{new GuideBook.Page.TextField(0, 0, 5, 10, "小猫崽子2")}, new GuideBook.Page.Illustration[]{}));
+            iMap.put(2, new GuideBook.Page(0, true, new GuideBook.Page.TextField[]{new GuideBook.Page.TextField(0, 0, 5, 10, "小猫崽子3")}, new GuideBook.Page.Illustration[]{}));
+            JsonUtils.writeToJson(JsonUtils.INSTANCE.pretty, Path.of("test/zh_cn.json"), GuideBookPageSerializer.serializeAll(iMap).getAsJsonObject());
         } catch (IOException e)
         {
             throw new RuntimeException(e);

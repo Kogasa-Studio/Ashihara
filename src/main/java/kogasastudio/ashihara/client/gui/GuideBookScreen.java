@@ -41,7 +41,14 @@ public class GuideBookScreen extends Screen
     private int coolDown = 0;
 
     private int currentPageIndex = 0;
-    private Map<Integer, Pair<MutableFloat, String>> flipQueue = new HashMap<>();
+    private final Map<Integer, Pair<MutableFloat, String>> flipQueue = new HashMap<>();
+
+    public boolean isInEditMode = false;
+
+    public String previousPageRightBoneName;
+    public String currentPageRightBoneName;
+    public String currentPageLeftBoneName;
+    public String previousPageLeftBoneName;
 
     public GuideBookScreen(Component title, Player player)
     {

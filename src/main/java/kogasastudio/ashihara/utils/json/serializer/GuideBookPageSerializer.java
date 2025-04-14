@@ -5,9 +5,36 @@ import kogasastudio.ashihara.item.GuideBook;
 import net.minecraft.resources.ResourceLocation;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GuideBookPageSerializer implements BaseSerializer<GuideBook.Page>
 {
+    public static Map<Integer, GuideBook.Page> deserializeAll(JsonElement json)
+    {
+        JsonObject jsonObject = json.getAsJsonObject();
+
+        JsonArray entriesRaw = jsonObject.get("entries").getAsJsonArray();
+        Map<Integer, GuideBook.Page> entries = new HashMap<>();
+        for (int i = 0; i < entriesRaw.size(); i++)
+        {
+            JsonElement element = entriesRaw.get(i);
+            GuideBook.Page page = deserialize(element);
+            entries.put(page.getPageNumber(), page);
+        }
+        return entries;
+    }
+
+    public static JsonElement serializeAll(Map<Integer, GuideBook.Page> map)
+    {
+        JsonObject json = new JsonObject();
+        JsonArray array = new JsonArray(map.size());
+        for (GuideBook.Page p : map.values()) {array.add(serialize(p));}
+        json.add("entries", array);
+
+        return json;
+    }
+
     public static GuideBook.Page deserialize(JsonElement json)
     {
         JsonObject jsonObject = json.getAsJsonObject();

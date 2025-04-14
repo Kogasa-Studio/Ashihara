@@ -12,8 +12,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class GuideBook extends Item
 {
+    public static Map<Integer, Page> PAGES = new HashMap<>();
 
     public GuideBook()
     {

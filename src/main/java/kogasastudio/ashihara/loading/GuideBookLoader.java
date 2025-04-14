@@ -8,13 +8,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.BiConsumer;
 
 public class GuideBookLoader
 {
-    public static CompletableFuture<Void> reloadGuideBookPages(Executor backgroundExecutor, ResourceManager resourceManager, BiConsumer<ResourceLocation, GuideBook.Page> elementConsumer)
+    public static CompletableFuture<Void> reloadGuideBookPages(Executor backgroundExecutor, ResourceManager resourceManager, BiConsumer<ResourceLocation, Map<Integer, GuideBook.Page>> elementConsumer)
     {
         Minecraft mc = Minecraft.getInstance();
         String currentLanguage = mc.getLanguageManager().getSelected();
@@ -25,7 +26,7 @@ public class GuideBookLoader
                 backgroundExecutor, resourceManager, "guidebook/" + currentLanguage, (resourceLocation ->
                 {
                     Gson gson = JsonUtils.INSTANCE.normal;
-                    return GuideBookPageSerializer.deserialize(JsonUtils.loadJsonFromFile(gson, resourceLocation, resourceManager));
+                    return GuideBookPageSerializer.deserializeAll(JsonUtils.loadJsonFromFile(gson, resourceLocation, resourceManager));
                 }), elementConsumer
             ),
             ReloadableResources.loadResources
@@ -33,7 +34,7 @@ public class GuideBookLoader
                 backgroundExecutor, resourceManager, "guidebook/zh_cn", (resourceLocation ->
                 {
                     Gson gson = JsonUtils.INSTANCE.normal;
-                    return GuideBookPageSerializer.deserialize(JsonUtils.loadJsonFromFile(gson, resourceLocation, resourceManager));
+                    return GuideBookPageSerializer.deserializeAll(JsonUtils.loadJsonFromFile(gson, resourceLocation, resourceManager));
                 }), elementConsumer
             )
         );

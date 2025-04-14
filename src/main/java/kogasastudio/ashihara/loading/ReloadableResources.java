@@ -36,21 +36,23 @@ public class ReloadableResources
         Map<Integer, GuideBook.Page> pagesReordered = new Object2ObjectOpenHashMap<>();
         CompletableFuture<Void> futures = CompletableFuture.allOf
         (
-            GuideBookLoader.reloadGuideBookPages(backgroundExecutor, resourceManager, (resourceLocation, page) ->
+            GuideBookLoader.reloadGuideBookPages(backgroundExecutor, resourceManager, (resourceLocation, pagesRead) ->
             {
-                if (!pagesReordered.containsKey(page.getPageNumber()))
+                for (GuideBook.Page page : pagesRead.values())
                 {
-                    Minecraft mc = Minecraft.getInstance();
-                    String current = mc.getLanguageManager().getSelected();
-                    if (resourceLocation.toString().contains(current) || (resourceLocation.toString().contains("zh_cn")))
+                    if (!pagesReordered.containsKey(page.getPageNumber()))
                     {
-                        pages.put(resourceLocation, page);
-                        pagesReordered.put(page.getPageNumber(), page);
+                        Minecraft mc = Minecraft.getInstance();
+                        String current = mc.getLanguageManager().getSelected();
+                        if (resourceLocation.toString().contains(current) || (resourceLocation.toString().contains("zh_cn")))
+                        {
+                            pagesReordered.put(page.getPageNumber(), page);
+                        }
                     }
-                }
-                else if (!resourceLocation.toString().contains("zh_cn"))
-                {
-                    Ashihara.LOGGER_MAIN.warn("Loading pages for same page number {}: {} and {}. Remaining the former.", page.getPageNumber(), page, pagesReordered.get(page.getPageNumber()));
+                    else if (!resourceLocation.toString().contains("zh_cn"))
+                    {
+                        Ashihara.LOGGER_MAIN.warn("Loading pages for same page number {}: {} and {}. Remaining the former.", page.getPageNumber(), page, pagesReordered.get(page.getPageNumber()));
+                    }
                 }
             })
         );
