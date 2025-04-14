@@ -40,7 +40,7 @@ public class GuideBookScreen extends Screen
     private int ticks = 0;
     private int coolDown = 0;
 
-    private int currentPageIndex = 144;
+    private int currentPageIndex = 0;
     private Map<Integer, Pair<MutableFloat, String>> flipQueue = new HashMap<>();
 
     public GuideBookScreen(Component title, Player player)

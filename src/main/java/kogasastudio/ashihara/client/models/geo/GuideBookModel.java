@@ -217,8 +217,8 @@ public class GuideBookModel extends InternalControlGeoModel<GuideBookModel> impl
             }
         }
         //if (currentPageIndex < 150 && nextPageIndex < currentPageIndex - 1) return FLIP_RIGHT_MASSIVE;
-        if (currentPageIndex == 3 && nextPageIndex == 2) return ANIM_FLIP_FINAL_RIGHT;
-        if (currentPageIndex == 2 && nextPageIndex == 1) return ANIM_FLIP_FINAL_RIGHT_S;
+        if (currentPageIndex == 3 && nextPageIndex == 2) return ANIM_FLIP_FINAL_RIGHT_S;
+        if (currentPageIndex == 2 && nextPageIndex == 1) return ANIM_FLIP_FINAL_RIGHT;
         if (currentPageIndex == 1 && nextPageIndex == 0) return ANIM_CLOSEUP_FROM_RIGHT;
         return null;
     }

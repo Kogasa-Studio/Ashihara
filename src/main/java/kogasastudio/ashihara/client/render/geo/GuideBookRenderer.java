@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static kogasastudio.ashihara.helper.FontHelper.renderColumnedText;
+import static kogasastudio.ashihara.helper.FontHelper.renderFormattedText;
+
 public class GuideBookRenderer extends GeoObjectRenderer<GuideBookModel>
 {
     public GuideBookRenderer(GeoModel<GuideBookModel> model)
@@ -49,11 +52,11 @@ public class GuideBookRenderer extends GeoObjectRenderer<GuideBookModel>
         {
             poseStack.pushPose();
             poseStack.scale(1f / 64f, 1f / 64f, 1f / 64f);
-            poseStack.translate(75,12.1,-55);
+            poseStack.translate(44,12.1,-13);
             poseStack.mulPose(Axis.XP.rotationDegrees(90));
             poseStack.mulPose(Axis.ZP.rotationDegrees(90));
             GuideBook.Page page = ReloadableResources.getGuidebookPagesReordered().get(0);
-            renderFormattedText(poseStack, page.getTextFields()[0].text(), 0, 0, 0x943943, false, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight);
+            renderColumnedText(poseStack, page.getTextFields()[0].text(), 0, 0, 0x943943, false, 96, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight);
             poseStack.popPose();
         }
 
@@ -76,26 +79,6 @@ public class GuideBookRenderer extends GeoObjectRenderer<GuideBookModel>
 
         this.renderChildBones(poseStack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
         poseStack.popPose();
-    }
-
-    protected void renderFormattedText(PoseStack poseStack, String text, int x, int y, int color, boolean dropShadow, MultiBufferSource bufferSource, Font.DisplayMode mode, int backgroundColor, int packedLight)
-    {
-        Font font = Minecraft.getInstance().font;
-        StringSplitter splitter = font.getSplitter();
-        List<String> list = new ArrayList<>();
-        splitter.splitLines(text, 96, Style.EMPTY, true, ((style, currentPos, contentWidth) ->
-        {
-            String lineText = text.substring(currentPos, contentWidth);
-            lineText = StringUtils.stripEnd(lineText, "\n");
-            list.add(lineText);
-        }));
-        for (int i = 0; i < list.size(); i++)
-        {
-            String line = list.get(i);
-            poseStack.pushPose();
-            font.drawInBatch(line, x, y + i * 9, color, dropShadow, poseStack.last().pose(), bufferSource, mode, backgroundColor, packedLight);
-            poseStack.popPose();
-        }
     }
 
     protected void doIfNameMatches(GeoBone bone, String name, Consumer<GeoBone> operation)
