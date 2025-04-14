@@ -2,8 +2,10 @@ package kogasastudio.ashihara.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import kogasastudio.ashihara.client.gui.widget.TestButton;
 import kogasastudio.ashihara.client.models.geo.GuideBookModel;
 import kogasastudio.ashihara.client.models.geo.InternalControlGeoModel;
+import kogasastudio.ashihara.client.models.geo.TestButtonModel;
 import kogasastudio.ashihara.network.GuidebookProgressPacket;
 import kogasastudio.ashihara.registry.DataComponentTypes;
 import kogasastudio.ashihara.utils.OptionalUtil;
@@ -43,6 +45,8 @@ public class GuideBookScreen extends Screen
     private int currentPageIndex = 0;
     private final Map<Integer, Pair<MutableFloat, String>> flipQueue = new HashMap<>();
 
+    private final TestButton button = new TestButton(0, 0, 64, 64);
+
     public boolean isInEditMode = false;
 
     public String previousPageRightBoneName;
@@ -67,6 +71,7 @@ public class GuideBookScreen extends Screen
     {
         ticks += 1;
         coolDown -= coolDown <= 0 ? 0 : 1;
+        button.updateParent();
         List<Integer> toRemove = new ArrayList<>();
         for (int i : flipQueue.keySet())
         {
@@ -234,14 +239,22 @@ public class GuideBookScreen extends Screen
     {
         PoseStack pose = guiGraphics.pose();
         pose.pushPose();
+        //pose.scale(64, 64, 64);
+        pose.translate(0, -1, -3200);
+        pose.scale(64, 64, 64);
+        button.render(guiGraphics, mouseX, mouseY, partialTick);
+        pose.popPose();
+
+        pose.pushPose();
         pose.translate((float) (this.width / 2d - 72.5), (float) (this.height - 40), 0);
         pose.mulPose(Axis.YP.rotationDegrees(90));
         pose.scale(64, -64, 64);
         book.RENDERER.render(guiGraphics.pose(), book, guiGraphics.bufferSource(), renderType, guiGraphics.bufferSource().getBuffer(renderType), 15728880, partialTick);
         pose.popPose();
 
+
         pose.pushPose();
-        guiGraphics.drawString(Minecraft.getInstance().font, "X: " + mouseX + ", Y: " + mouseY + ", Current page: " + currentPageIndex, 0, 0, 0xffffff);
+        guiGraphics.drawString(Minecraft.getInstance().font, "X: " + mouseX + ", Y: " + mouseY + ", Current page: " + currentPageIndex + ", Mouse on test button: " + button.isMouseOver(mouseX, mouseY), 0, 0, 0xffffff);
         pose.popPose();
 
         super.render(guiGraphics, mouseX, mouseY, partialTick);

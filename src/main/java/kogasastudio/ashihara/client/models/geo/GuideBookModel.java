@@ -50,7 +50,6 @@ public class GuideBookModel extends InternalControlGeoModel<GuideBookModel> impl
     public static final String ANIM_FLIP_BUFFERED_RIGHT_5 = "flip.buffered_right_5";
 
     public static final String CONTROLLER_FLIP = "flip";
-    public static final String CONTROLLER_BUFFERED = "buffered";
 
     public static final RawAnimation INTRO = RawAnimation.begin().thenPlay(ANIM_INTRO);
     public static final RawAnimation OPEN_FROM_LEFT = RawAnimation.begin().thenPlay(ANIM_OPEN_FROM_LEFT);
