@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 public class GuideBookPageSerializer implements BaseSerializer<GuideBook.Page>
 {
@@ -57,7 +58,7 @@ public class GuideBookPageSerializer implements BaseSerializer<GuideBook.Page>
             illustrations[i] = GuideBookIllustrationSerializer.deserialize(element);
         }
 
-        return new GuideBook.Page(jsonObject.get("pageNumber").getAsInt(), jsonObject.get("isTextColumned").getAsBoolean(), textFields, illustrations);
+        return new GuideBook.Page(jsonObject.get("pageNumber").getAsInt(), textFields, illustrations);
     }
 
     @Override
@@ -70,7 +71,6 @@ public class GuideBookPageSerializer implements BaseSerializer<GuideBook.Page>
     {
         JsonObject json = new JsonObject();
         json.addProperty("pageNumber", src.getPageNumber());
-        json.addProperty("isTextColumned", src.isTextColumned());
         JsonArray fieldsRaw = new JsonArray();
         JsonArray illustrationsRaw = new JsonArray();
         for (GuideBook.Page.TextField tf : src.getTextFields()) {fieldsRaw.add(GuideBookTextFieldSerializer.serialize(tf));}
@@ -88,10 +88,25 @@ public class GuideBookPageSerializer implements BaseSerializer<GuideBook.Page>
 
     public static class GuideBookTextFieldSerializer implements BaseSerializer<GuideBook.Page.TextField>
     {
+        static <T> T defaulted(JsonElement element, Function<JsonElement, T> function, T defaultValue)
+        {
+            return element == null ? defaultValue : function.apply(element);
+        }
+
         public static GuideBook.Page.TextField deserialize(JsonElement json)
         {
             JsonObject jsonObject = json.getAsJsonObject();
-            return new GuideBook.Page.TextField(jsonObject.get("x").getAsFloat(), jsonObject.get("y").getAsFloat(), jsonObject.get("width").getAsInt(), jsonObject.get("height").getAsInt(), jsonObject.get("text").getAsString());
+            return new GuideBook.Page.TextField
+            (
+                defaulted(jsonObject.get("x"), JsonElement::getAsFloat, 0f),
+                defaulted(jsonObject.get("y"), JsonElement::getAsFloat, 0f),
+                jsonObject.get("width").getAsInt(),
+                jsonObject.get("height").getAsInt(),
+                defaulted(jsonObject.get("textColor"), JsonElement::getAsInt, 0x000000),
+                defaulted(jsonObject.get("charSize"), JsonElement::getAsFloat, 1f),
+                defaulted(jsonObject.get("isTextColumned"), JsonElement::getAsBoolean, false),
+                jsonObject.get("text").getAsString()
+            );
         }
 
         @Override
@@ -107,6 +122,9 @@ public class GuideBookPageSerializer implements BaseSerializer<GuideBook.Page>
             json.addProperty("y", src.y());
             json.addProperty("width", src.widthInFullWidthChar());
             json.addProperty("height", src.heightInFullWidthChar());
+            json.addProperty("textColor", src.textColor());
+            json.addProperty("charSize", src.charSize());
+            json.addProperty("isTextColumned", src.isTextColumned());
             json.addProperty("text", src.text());
             return json;
         }

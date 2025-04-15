@@ -2,27 +2,29 @@
   "entries": [
     {
       "pageNumber": 0,
-      "isTextColumned": true,
       "textFields": [
         {
-          "x": 0.0,
-          "y": 0.0,
-          "width": 5,
-          "height": 10,
-          "text": "小猫崽子"
+          "x": 32,
+          "y": 72,
+          "width": 4,
+          "height": 100,
+          "textColor": 5129796,
+          "charSize": 3,
+          "isTextColumned": true,
+          "text": "苇原笔记"
         }
       ],
       "illustrations": []
     },
     {
       "pageNumber": 1,
-      "isTextColumned": true,
       "textFields": [
         {
-          "x": 0.0,
-          "y": 0.0,
-          "width": 5,
-          "height": 10,
+          "x": 8,
+          "y": 8,
+          "width": 18,
+          "height": 11,
+          "isTextColumned": true,
           "text": "小猫崽子2"
         }
       ],
@@ -30,14 +32,266 @@
     },
     {
       "pageNumber": 2,
-      "isTextColumned": true,
       "textFields": [
         {
-          "x": 0.0,
-          "y": 0.0,
-          "width": 5,
-          "height": 10,
-          "text": "小猫崽子3"
+          "x": 8,
+          "y": 76,
+          "width": 2,
+          "height": 1,
+          "textColor": 5129796,
+          "charSize": 4,
+          "isTextColumned": true,
+          "text": "引言"
+        },
+        {
+          "x": 8,
+          "y": 8,
+          "width": 18,
+          "height": 8,
+          "textColor": 5129796,
+          "charSize": 2,
+          "isTextColumned": true,
+          "text": "世间瑰奇之物多种多样，使人常有无法览尽万紫千红之悲。现今踏足之土地令我感到惊奇之至，或就包含无从想象之秘密与宝物。\n于是我将作此笔记，以记录众生相貌、生息、风土，以及所发掘之隐秘。\n我实觉兴奋不已，因前程所通绝乃遍放绮彩，有如传说之物语。"
+        }
+      ],
+      "illustrations": []
+    },
+    {
+      "pageNumber": 3,
+      "textFields": [
+        {
+          "x": 8,
+          "y": 8,
+          "width": 18,
+          "height": 11,
+          "textColor": 5129796,
+          "charSize": 2,
+          "isTextColumned": true,
+          "text": "伦道夫卡特曾三次梦见那座精美绝伦的城市，但每次他都只能在城市上方高处的露台上稍作停留，旋即便被某种力量紧紧攫住，从梦境中拖离开去。一连三次，皆是如此。他记得，在夕阳的照耀下，整座城市————那些高墙，那些庙宇，那些柱廊还有那些由带纹理的大理石修筑起来的拱桥——全都闪耀着金碧辉煌而又美妙动人的光辉；银色底座的喷泉在在宽阔广场与芬芳花园里喷吐着泉水，散发出棱彩光芒；优美雅致的树木、繁花锦簇的花坛"
+        }
+      ],
+      "illustrations": []
+    },
+    {
+      "pageNumber": 4,
+      "textFields": [
+        {
+          "x": 8,
+          "y": 8,
+          "width": 18,
+          "height": 11,
+          "textColor": 5129796,
+          "charSize": 2,
+          "isTextColumned": true,
+          "text": "以及象牙色的雕像排列在宽阔的街道两侧；层层叠叠的红色屋顶与老旧的尖型山墙爬在北面的山坡上，为下方草绿色鹅卵石铺筑的小巷提供一份遮蔽。这座城市是诸神的宠爱；是天国喇叭吹奏出的仪仗乐曲，是神界铜钹碰撞发出的洪亮音符。神秘的气息笼罩着这座城市，就仿佛阴云笼罩在一片无人造访、只存在于传说中的山脉上一般；而当卡特屏住呼吸，满怀期待地站在修砌着栏杆的矮墙前时，各种情绪纠缠着一同涌了上来，其中有几乎快要褪去"
+        }
+      ],
+      "illustrations": []
+    },
+    {
+      "pageNumber": 5,
+      "textFields": [
+        {
+          "x": 8,
+          "y": 8,
+          "width": 18,
+          "height": 11,
+          "textColor": 5129796,
+          "charSize": 2,
+          "isTextColumned": true,
+          "text": "的记忆所带来的辛酸与焦虑，也有因失去所爱事物而感到的苦痛，还有那强烈得几乎要将人逼疯的渴望————渴望想要再度出现在那个令人敬畏而又非同寻常的地方。\n他知道这座城市对他来说一定曾有着非凡的意义；但他却不知道自己是在哪个循环，或哪具躯体里时知道这个地方的，也说不出当时自己究竟是醒着还是在梦中。它模糊地唤起了一些片段，一些有关某段遥远的、几乎已被遗忘的幼年岁月的片段————在那个时候白昼中的一切神秘都充"
+        }
+      ],
+      "illustrations": []
+    },
+    {
+      "pageNumber": 6,
+      "textFields": [
+        {
+          "x": 8,
+          "y": 8,
+          "width": 18,
+          "height": 11,
+          "textColor": 5129796,
+          "charSize": 2,
+          "isTextColumned": true,
+          "text": "满了奇妙与愉悦中，而不论黎明还是黄昏都在预兆般地大步向前，走在鲁特琴与歌唱交织的渴望之声中；打开仙境的大门，迈向更多令人惊讶的奇迹。但每次当他站在高处有着奇怪瓮坛与雕栏的大理石露台上，俯瞰着这座肃穆、美妙而又超脱俗世的夕阳之城时，他总能感觉到梦境里那些暴虐专横的诸神所施加的束缚；因为他永远都无法离开那个高台，也不能走下那条宽阔的大理石阶梯————虽然它一直无穷无尽地延伸到下方那些铺展开来、诱人"
+        }
+      ],
+      "illustrations": []
+    },
+    {
+      "pageNumber": 7,
+      "textFields": [
+        {
+          "x": 8,
+          "y": 8,
+          "width": 18,
+          "height": 11,
+          "textColor": 5129796,
+          "charSize": 2,
+          "isTextColumned": true,
+          "text": "心动同时也充满了古老魅力的街道。\n\n当他第三次从这样的梦境里醒来时，他仍旧无法走下那些阶梯，也无法横穿那片被夕阳照耀着的肃穆街道。伦道夫·卡特花了许多时间向那些躲藏起来的梦中诸神祈祷————这些神明总会反复无常地徘徊在无人知晓的卡达斯峰上方的阴云里，而那座山峰则位于杳无人迹的冰冷荒野上。可即便如此，那些神明仍没有作出任何回应，也没有展现出丝毫的怜悯与慈悲。卡特也曾试着在梦境里向他们祷告，甚至通"
+        }
+      ],
+      "illustrations": []
+    },
+    {
+      "pageNumber": 8,
+      "textFields": [
+        {
+          "x": 8,
+          "y": 8,
+          "width": 18,
+          "height": 11,
+          "textColor": 5129796,
+          "charSize": 2,
+          "isTextColumned": true,
+          "text": "过蓄着胡子的那许与卡曼-扎进行了带有牺牲性质的祈求——这两位牧师所掌管的那座矗立着火焰立柱的洞穴神庙就坐落在距离通向清醒世界的大门附近不远的地方——但那些神明仍没有因此展现任何有帮助价值的神迹。不过，他的祈祷似乎传达到了诸神那里，并引起了相反的效果；因为从他第一次祈祷开始，卡特就再也不能俯瞰那座精美绝伦的城市了；就仿佛前三次从高处得到的短暂一瞥仅仅是缘于某种意外或勘漏，违背了某些"
+        }
+      ],
+      "illustrations": []
+    },
+    {
+      "pageNumber": 9,
+      "textFields": [
+        {
+          "x": 8,
+          "y": 8,
+          "width": 18,
+          "height": 11,
+          "textColor": 21442862,
+          "charSize": 1,
+          "isTextColumned": true,
+          "text": "诸神制定的隐秘计划或意愿。"
+        }
+      ],
+      "illustrations": []
+    },
+    {
+      "pageNumber": 10,
+      "textFields": [
+        {
+          "x": 8,
+          "y": 8,
+          "width": 18,
+          "height": 11,
+          "textColor": 8156158,
+          "charSize": 2,
+          "isTextColumned": true,
+          "text": "小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子"
+        }
+      ],
+      "illustrations": []
+    },
+    {
+      "pageNumber": 11,
+      "textFields": [
+        {
+          "x": 8,
+          "y": 8,
+          "width": 18,
+          "height": 11,
+          "textColor": 151135135,
+          "charSize": 2,
+          "isTextColumned": true,
+          "text": "小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子"
+        }
+      ],
+      "illustrations": []
+    },
+    {
+      "pageNumber": 12,
+      "textFields": [
+        {
+          "x": 8,
+          "y": 8,
+          "width": 18,
+          "height": 11,
+          "textColor": 1413567,
+          "charSize": 2,
+          "isTextColumned": true,
+          "text": "小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子"
+        }
+      ],
+      "illustrations": []
+    },
+    {
+      "pageNumber": 13,
+      "textFields": [
+        {
+          "x": 8,
+          "y": 8,
+          "width": 18,
+          "height": 11,
+          "textColor": 8834956,
+          "charSize": 2,
+          "isTextColumned": true,
+          "text": "小猫崽子小猫崽子"
+        }
+      ],
+      "illustrations": []
+    },
+    {
+      "pageNumber": 14,
+      "textFields": [
+        {
+          "x": 8,
+          "y": 8,
+          "width": 18,
+          "height": 11,
+          "textColor": 99995915,
+          "charSize": 2,
+          "isTextColumned": true,
+          "text": "小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子小猫崽子"
+        }
+      ],
+      "illustrations": []
+    },
+    {
+      "pageNumber": 15,
+      "textFields": [
+        {
+          "x": 8,
+          "y": 8,
+          "width": 18,
+          "height": 11,
+          "textColor": 5129796,
+          "charSize": 2,
+          "isTextColumned": true,
+          "text": ""
+        }
+      ],
+      "illustrations": []
+    },
+    {
+      "pageNumber": 16,
+      "textFields": [
+        {
+          "x": 8,
+          "y": 8,
+          "width": 18,
+          "height": 11,
+          "textColor": 5129796,
+          "charSize": 2,
+          "isTextColumned": true,
+          "text": ""
+        }
+      ],
+      "illustrations": []
+    },
+    {
+      "pageNumber": 17,
+      "textFields": [
+        {
+          "x": 8,
+          "y": 8,
+          "width": 18,
+          "height": 11,
+          "textColor": 5129796,
+          "charSize": 2,
+          "isTextColumned": true,
+          "text": ""
         }
       ],
       "illustrations": []

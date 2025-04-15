@@ -3,6 +3,8 @@ package kogasastudio.ashihara.client.models.geo;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.client.gui.GuideBookScreen;
 import kogasastudio.ashihara.client.render.geo.GuideBookRenderer;
+import kogasastudio.ashihara.item.GuideBook;
+import kogasastudio.ashihara.loading.ReloadableResources;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoAnimatable;
@@ -13,6 +15,7 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("removal")
 public class GuideBookModel extends InternalControlGeoModel<GuideBookModel> implements SingletonGeoAnimatable
@@ -91,6 +94,11 @@ public class GuideBookModel extends InternalControlGeoModel<GuideBookModel> impl
     }
 
     public static int totalPages = 150;
+
+    public String previousPageRightBoneName = "";
+    public String currentPageRightBoneName = "";
+    public String currentPageLeftBoneName = "";
+    public String previousPageLeftBoneName = "";
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar)
@@ -221,4 +229,71 @@ public class GuideBookModel extends InternalControlGeoModel<GuideBookModel> impl
         if (currentPageIndex == 1 && nextPageIndex == 0) return ANIM_CLOSEUP_FROM_RIGHT;
         return null;
     }
+
+    public void updateCurrentPage(boolean flipToLeft)
+    {
+        if (pageIndex == 0)
+        {
+            previousPageLeftBoneName = "part_right";
+            currentPageLeftBoneName = "rightcover";
+            currentPageRightBoneName = "";
+            previousPageRightBoneName = "";
+        }
+        else if (pageIndex == 1)
+        {
+            previousPageLeftBoneName = flipToLeft ? "current_page_left" : "current_page_right";
+            currentPageLeftBoneName = "part_right";
+            currentPageRightBoneName = "rightcover";
+            previousPageRightBoneName = "";
+        }
+        else if (pageIndex == 2) //flipToLeft ? "" :
+        {
+            previousPageLeftBoneName = flipToLeft ? "current_page_left" : "previous_page_left";
+            currentPageLeftBoneName = flipToLeft ? "current_page_right" : "current_page_left";
+            currentPageRightBoneName = flipToLeft ? "previous_page_right" : "current_page_right";
+            previousPageRightBoneName = "rightcover";
+        }
+        else if (pageIndex < totalPages - 3)
+        {
+            previousPageLeftBoneName = flipToLeft ? "current_page_left" : "previous_page_left";
+            currentPageLeftBoneName = flipToLeft ? "current_page_right" : "current_page_left";
+            currentPageRightBoneName = flipToLeft ? "previous_page_right" : "current_page_right";
+            previousPageRightBoneName = flipToLeft ? "buffer_page_5" : "previous_page_right";
+        }
+        else if (pageIndex == totalPages - 3)
+        {
+            previousPageLeftBoneName = "leftcover";
+            currentPageLeftBoneName = flipToLeft ? "current_page_left" : "part_left";
+            currentPageRightBoneName = flipToLeft ? "current_page_right" : "current_page_left";
+            previousPageRightBoneName = flipToLeft ? "previous_page_right" : "current_page_right";
+        }
+        else if (pageIndex == totalPages - 2)
+        {
+            previousPageLeftBoneName = "";
+            currentPageLeftBoneName = "leftcover";
+            currentPageRightBoneName = "part_left";
+            previousPageRightBoneName = "current_page_right";
+        }
+        else if (pageIndex == totalPages - 1)
+        {
+            previousPageLeftBoneName = "";
+            currentPageLeftBoneName = "";
+            currentPageRightBoneName = "leftcover";
+            previousPageRightBoneName = "part_left";
+        }
+    }
+
+    public DoubleSidedPage getDoubleSidedPage(String boneName)
+    {
+        Map<Integer, GuideBook.Page> pageMap = ReloadableResources.getGuidebookPagesReordered();
+        int left, right;
+        if (boneName.equals(previousPageLeftBoneName)) {left = pageIndex * 2 + 3; right = pageIndex * 2 + 2;}
+        else if (boneName.equals(currentPageLeftBoneName)) {left = pageIndex * 2 + 1; right = pageIndex * 2;}
+        else if (boneName.equals(currentPageRightBoneName)) {left = pageIndex * 2 - 1; right = pageIndex * 2 - 2;}
+        else if (boneName.equals(previousPageRightBoneName)) {left = pageIndex * 2 - 3; right = pageIndex * 2 - 4;}
+        else return null;
+        return new DoubleSidedPage(pageMap.get(left), pageMap.get(right));
+    }
+
+    public record DoubleSidedPage(GuideBook.Page left, GuideBook.Page right) {}
 }

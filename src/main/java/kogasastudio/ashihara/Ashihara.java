@@ -67,9 +67,9 @@ public class Ashihara
         try
         {
             Map<Integer, GuideBook.Page> iMap = new HashMap<>();
-            iMap.put(0, new GuideBook.Page(0, true, new GuideBook.Page.TextField[]{new GuideBook.Page.TextField(0, 0, 5, 10, "小猫崽子")}, new GuideBook.Page.Illustration[]{}));
-            iMap.put(1, new GuideBook.Page(0, true, new GuideBook.Page.TextField[]{new GuideBook.Page.TextField(0, 0, 5, 10, "小猫崽子2")}, new GuideBook.Page.Illustration[]{}));
-            iMap.put(2, new GuideBook.Page(0, true, new GuideBook.Page.TextField[]{new GuideBook.Page.TextField(0, 0, 5, 10, "小猫崽子3")}, new GuideBook.Page.Illustration[]{}));
+            iMap.put(0, new GuideBook.Page(0, new GuideBook.Page.TextField[]{new GuideBook.Page.TextField(0, 0, 5, 10, 0x000000, 3, true, "小猫崽子")}, new GuideBook.Page.Illustration[]{}));
+            iMap.put(1, new GuideBook.Page(0, new GuideBook.Page.TextField[]{new GuideBook.Page.TextField(0, 0, 5, 10, 0x000000, 3, true, "小猫崽子2")}, new GuideBook.Page.Illustration[]{}));
+            iMap.put(2, new GuideBook.Page(0, new GuideBook.Page.TextField[]{new GuideBook.Page.TextField(0, 0, 5, 10, 0x000000, 3, true, "小猫崽子3")}, new GuideBook.Page.Illustration[]{}));
             JsonUtils.writeToJson(JsonUtils.INSTANCE.pretty, Path.of("test/zh_cn.json"), GuideBookPageSerializer.serializeAll(iMap).getAsJsonObject());
         } catch (IOException e)
         {

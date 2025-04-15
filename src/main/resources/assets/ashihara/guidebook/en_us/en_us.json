@@ -2,42 +2,32 @@
   "entries": [
     {
       "pageNumber": 0,
-      "isTextColumned": true,
       "textFields": [
         {
-          "x": 0.0,
-          "y": 0.0,
-          "width": 5,
-          "height": 10,
-          "text": "little kitten"
+          "x": 32,
+          "y": 72,
+          "width": 4,
+          "height": 100,
+          "textColor": 5129796,
+          "charSize": 3,
+          "isTextColumned": false,
+          "text": "Kitten"
         }
       ],
       "illustrations": []
     },
     {
       "pageNumber": 1,
-      "isTextColumned": true,
       "textFields": [
         {
-          "x": 0.0,
-          "y": 0.0,
-          "width": 5,
-          "height": 10,
-          "text": "little kitten 2"
-        }
-      ],
-      "illustrations": []
-    },
-    {
-      "pageNumber": 2,
-      "isTextColumned": true,
-      "textFields": [
-        {
-          "x": 0.0,
-          "y": 0.0,
-          "width": 5,
-          "height": 10,
-          "text": "little kitten 3"
+          "x": 8,
+          "y": 8,
+          "width": 11,
+          "height": 18,
+          "textColor": 15185213,
+          "charSize": 2,
+          "isTextColumned": false,
+          "text": "Kittens are very small kittens, they have many kittens to live and are furry."
         }
       ],
       "illustrations": []

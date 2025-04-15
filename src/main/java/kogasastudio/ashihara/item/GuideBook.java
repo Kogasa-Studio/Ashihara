@@ -42,11 +42,6 @@ public class GuideBook extends Item
             return pageNumber;
         }
 
-        public boolean isTextColumned()
-        {
-            return isTextColumned;
-        }
-
         public Illustration[] getIllustrations()
         {
             return illustrations;
@@ -58,14 +53,12 @@ public class GuideBook extends Item
         }
 
         final int pageNumber;
-        final boolean isTextColumned;
         TextField[] textFields;
         Illustration[] illustrations;
 
-        public Page(int pageNumberIn, boolean isTextColumned, TextField[] textFieldsIn, Illustration[] illustrationsIn)
+        public Page(int pageNumberIn, TextField[] textFieldsIn, Illustration[] illustrationsIn)
         {
             this.pageNumber = pageNumberIn;
-            this.isTextColumned = isTextColumned;
             this.textFields = textFieldsIn;
             this.illustrations = illustrationsIn;
         }
@@ -74,7 +67,7 @@ public class GuideBook extends Item
          * @param widthInFullWidthChar 若为竖排排版则为高度
          * @param heightInFullWidthChar 若为竖排排版则为宽度
          */
-        public record TextField(float x, float y, int widthInFullWidthChar, int heightInFullWidthChar, String text)
+        public record TextField(float x, float y, int widthInFullWidthChar, int heightInFullWidthChar, int textColor, float charSize, boolean isTextColumned, String text)
         {
         }
 

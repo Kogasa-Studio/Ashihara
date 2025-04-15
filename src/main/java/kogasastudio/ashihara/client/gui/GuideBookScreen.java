@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import kogasastudio.ashihara.client.gui.widget.TestButton;
@@ -17,6 +18,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.lang3.mutable.MutableFloat;
+import org.joml.Vector3f;
 import oshi.util.tuples.Pair;
 import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animation.Animation;
@@ -48,11 +50,6 @@ public class GuideBookScreen extends Screen
     private final TestButton button = new TestButton(0, 0, 64, 64);
 
     public boolean isInEditMode = false;
-
-    public String previousPageRightBoneName;
-    public String currentPageRightBoneName;
-    public String currentPageLeftBoneName;
-    public String previousPageLeftBoneName;
 
     public GuideBookScreen(Component title, Player player)
     {
@@ -99,6 +96,7 @@ public class GuideBookScreen extends Screen
             book.triggerAnim(player, book.hashCode(), GuideBookModel.CONTROLLER_FLIP, anim);
         }
         book.setPageIndex(currentPageIndex);
+        book.updateCurrentPage(false);
         book.triggerInternal(player, book.hashCode(), catchProgress(null).build());
         super.init();
     }
@@ -107,6 +105,16 @@ public class GuideBookScreen extends Screen
     {
         for (int i = 0; i < 6; i++)
         {
+            if (flipQueue.get(i) != null)
+            {
+                String anim = flipQueue.get(i).getB();
+                if ((flipToLeft && anim.contains("left")) || (!flipToLeft && anim.contains("right")))
+                {
+                    String controller = anim.contains("buffer") ? anim : GuideBookModel.CONTROLLER_FLIP;
+                    book.stopTriggeredAnim(player, book.hashCode(), controller, anim);
+                    flipQueue.remove(i);
+                }
+            }
             if (!flipQueue.containsKey(i))
             {
                 String animation = GuideBookModel.getFlipAnim(currentPageIndex, currentPageIndex + (flipToLeft ? -1 : 1), i);
@@ -173,6 +181,7 @@ public class GuideBookScreen extends Screen
             book.triggerAnim(player, book.hashCode(), controller, animation);
             currentPageIndex += flipToLeft ? -1 : 1;
             book.setPageIndex(currentPageIndex);
+            book.updateCurrentPage(flipToLeft);
             coolDown = 5;
             return true;
         }
@@ -237,6 +246,8 @@ public class GuideBookScreen extends Screen
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
     {
+        RenderSystem.setupGui3DDiffuseLighting(new Vector3f(0, 0, 0), new Vector3f(-1, 1, 1));
+
         PoseStack pose = guiGraphics.pose();
         pose.pushPose();
         //pose.scale(64, 64, 64);
@@ -251,7 +262,6 @@ public class GuideBookScreen extends Screen
         pose.scale(64, -64, 64);
         book.RENDERER.render(guiGraphics.pose(), book, guiGraphics.bufferSource(), renderType, guiGraphics.bufferSource().getBuffer(renderType), 15728880, partialTick);
         pose.popPose();
-
 
         pose.pushPose();
         guiGraphics.drawString(Minecraft.getInstance().font, "X: " + mouseX + ", Y: " + mouseY + ", Current page: " + currentPageIndex + ", Mouse on test button: " + button.isMouseOver(mouseX, mouseY), 0, 0, 0xffffff);

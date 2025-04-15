@@ -1,30 +1,25 @@
 package kogasastudio.ashihara.client.render.geo;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import kogasastudio.ashihara.client.models.geo.GuideBookModel;
+import kogasastudio.ashihara.helper.FontHelper;
 import kogasastudio.ashihara.item.GuideBook;
-import kogasastudio.ashihara.loading.ReloadableResources;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.StringSplitter;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.network.chat.Style;
-import org.apache.commons.lang3.StringUtils;
+import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoObjectRenderer;
 import software.bernie.geckolib.util.RenderUtil;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
-import static kogasastudio.ashihara.helper.FontHelper.renderColumnedText;
-import static kogasastudio.ashihara.helper.FontHelper.renderFormattedText;
+import static kogasastudio.ashihara.helper.FontHelper.*;
 
 public class GuideBookRenderer extends GeoObjectRenderer<GuideBookModel>
 {
@@ -48,29 +43,56 @@ public class GuideBookRenderer extends GeoObjectRenderer<GuideBookModel>
         buffer = this.checkAndRefreshBuffer(isReRender, buffer, bufferSource, renderType);
         this.renderCubesOfBone(poseStack, bone, buffer, packedLight, packedOverlay, colour);
 
-        if (bone.getName().equals("rightcover"))
-        {
-            poseStack.pushPose();
-            poseStack.scale(1f / 64f, 1f / 64f, 1f / 64f);
-            poseStack.translate(44,12.1,-13);
-            poseStack.mulPose(Axis.XP.rotationDegrees(90));
-            poseStack.mulPose(Axis.ZP.rotationDegrees(90));
-            GuideBook.Page page = ReloadableResources.getGuidebookPagesReordered().get(0);
-            renderColumnedText(poseStack, page.getTextFields()[0].text(), 0, 0, 0x943943, false, 96, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight);
-            poseStack.popPose();
-        }
-
         GuideBookModel book = (GuideBookModel) this.model;
+        GuideBookModel.DoubleSidedPage doubleSidedPage = book.getDoubleSidedPage(bone.getName());
 
-        //doIfNameMatches(bone, "spine", b -> b.setPivotY(getWithDefault(b.getPivotY(), book.getBone("content_right"), GeoBone::getPosY)));
-        //doIfNameMatches(bone, "part_right", b -> b.setScaleY(book.getPageIndex() / 150f * 2f));
-        //doIfNameMatches(bone, "content_right", b -> b.setPosY(book.getPageIndex() / 150f * -3f + 1.5f));
-        //doIfNameMatches(bone, "part_right", b -> b.setPivotY(book.getPageIndex() / 150f * -3f + 1.5f));
-        //doIfNameMatches(bone, "current_page_right", b -> b.setPosY(book.getPageIndex() / 150f * -3f + 1.5f));
-        //doIfNameMatches(bone, "part_left", b -> b.setScaleY((1 - book.getPageIndex() / 150f) * 2f));
-        //doIfNameMatches(bone, "content_left", b -> b.setPosY((1 - book.getPageIndex() / 150f) * 3f - 1.5f));
-        //doIfNameMatches(bone, "part_left", b -> b.setPivotY((1 - book.getPageIndex() / 150f) * 3f - 1.5f));
-        //doIfNameMatches(bone, "current_page_left", b -> b.setPosY((1 - book.getPageIndex() / 150f) * 3f - 1.5f));
+        VertexConsumer c = bufferSource.getBuffer(RenderType.guiOverlay());
+
+        if (doubleSidedPage != null)
+        {
+            if (doubleSidedPage.right() != null)
+            {
+                poseStack.pushPose();
+                poseStack.scale(1f / 64f, 1f / 64f, 1f / 64f);
+                poseStack.translate(80,0, -60);
+                float yOffset = bone.getName().equals("rightcover") || bone.getName().equals("part_right") ? 12.1f : bone.getName().equals("leftcover") ? 0.1f : 6.1f;
+                for (GuideBook.Page.TextField textField : doubleSidedPage.right().getTextFields())
+                {
+                    poseStack.pushPose();
+                    poseStack.translate(-textField.x(),yOffset, textField.y());
+                    poseStack.mulPose(Axis.XP.rotationDegrees(90));
+                    poseStack.mulPose(Axis.ZP.rotationDegrees(90));
+                    List<String> list = FontHelper.processText(textField.text(), textField.widthInFullWidthChar() * 9);
+                    if (textField.isTextColumned()) list = FontHelper.transformToColumn(list);
+                    poseStack.scale(4f/9f, 4f/9f, 4f/9f);
+                    poseStack.scale(textField.charSize(), textField.charSize(), textField.charSize());
+                    renderFormattedText(poseStack, list, 0, 0, textField.textColor(), false, textField.isTextColumned(), bufferSource, Font.DisplayMode.NORMAL, 0, packedLight);
+                    poseStack.popPose();
+                }
+                poseStack.popPose();
+            }
+            if (doubleSidedPage.left() != null)
+            {
+                poseStack.pushPose();
+                poseStack.scale(1f / 64f, -1f / 64f, 1f / 64f);
+                poseStack.translate(80,0, 27);
+                float yOffset = bone.getName().equals("rightcover") || bone.getName().equals("part_right") ? -11.9f : bone.getName().equals("leftcover") ? -0.1f : -5.9f;
+                for (GuideBook.Page.TextField textField : doubleSidedPage.left().getTextFields())
+                {
+                    poseStack.pushPose();
+                    poseStack.translate(-textField.x(),yOffset, textField.y());
+                    poseStack.mulPose(Axis.XP.rotationDegrees(-90));
+                    poseStack.mulPose(Axis.ZP.rotationDegrees(90));
+                    List<String> list = FontHelper.processText(textField.text(), textField.widthInFullWidthChar() * 9);
+                    if (textField.isTextColumned()) list = FontHelper.transformToColumn(list);
+                    poseStack.scale(4f/9f, 4f/9f, 4f/9f);
+                    poseStack.scale(textField.charSize(), textField.charSize(), textField.charSize());
+                    renderFormattedText(poseStack, list, 0, 0, textField.textColor(), false, textField.isTextColumned(), bufferSource, Font.DisplayMode.NORMAL, 0, packedLight);
+                    poseStack.popPose();
+                }
+                poseStack.popPose();
+            }
+        }
 
         if (!isReRender)
         {
@@ -81,11 +103,38 @@ public class GuideBookRenderer extends GeoObjectRenderer<GuideBookModel>
         poseStack.popPose();
     }
 
-    protected void doIfNameMatches(GeoBone bone, String name, Consumer<GeoBone> operation)
+    public void blit
+    (
+        PoseStack poseStack,
+        ResourceLocation atlasLocation,
+        int x1,
+        int x2,
+        int y1,
+        int y2,
+        int blitOffset,
+        float minU,
+        float maxU,
+        float minV,
+        float maxV
+    )
     {
-        if (bone.getName().equals(name))
-        {
-            operation.accept(bone);
-        }
+        RenderSystem.setShaderTexture(0, atlasLocation);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        Matrix4f matrix4f = poseStack.last().pose();
+        BufferBuilder bufferbuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        bufferbuilder.addVertex(matrix4f, (float)x1, (float)y1, (float)blitOffset).setUv(minU, minV);
+        bufferbuilder.addVertex(matrix4f, (float)x1, (float)y2, (float)blitOffset).setUv(minU, maxV);
+        bufferbuilder.addVertex(matrix4f, (float)x2, (float)y2, (float)blitOffset).setUv(maxU, maxV);
+        bufferbuilder.addVertex(matrix4f, (float)x2, (float)y1, (float)blitOffset).setUv(maxU, minV);
+        BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
+    }
+
+    public void fill(PoseStack poseStack, VertexConsumer consumer, int minX, int minY, int maxX, int maxY, int z, int color)
+    {
+        Matrix4f matrix4f = poseStack.last().pose();
+        consumer.addVertex(matrix4f, (float)minX, (float)minY, (float)z).setColor(color);
+        consumer.addVertex(matrix4f, (float)minX, (float)maxY, (float)z).setColor(color);
+        consumer.addVertex(matrix4f, (float)maxX, (float)maxY, (float)z).setColor(color);
+        consumer.addVertex(matrix4f, (float)maxX, (float)minY, (float)z).setColor(color);
     }
 }
