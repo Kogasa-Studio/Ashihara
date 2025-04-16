@@ -89,7 +89,7 @@ public class GuideBookScreen extends Screen
     protected void init()
     {
         book.triggerAnim(player, book.hashCode(), "Intro", GuideBookModel.ANIM_INTRO);
-        //this.currentPageIndex = this.player.getData(DataComponentTypes.GUIDEBOOK_READING_PAGE.get());
+        this.currentPageIndex = this.player.getData(DataComponentTypes.GUIDEBOOK_READING_PAGE.get());
         if (this.currentPageIndex != 0 && this.currentPageIndex <= GuideBookModel.getTotalPages())
         {
             String anim = GuideBookModel.getFlipAnim(currentPageIndex - 1, currentPageIndex, 0);
@@ -221,17 +221,7 @@ public class GuideBookScreen extends Screen
             .endBone()
             .startBone("leftcover")
             .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, getWithDefault(0f, book.getBone("leftcover"), GeoBone::getPosY), invertedProgress * -3f + 1.5f, EasingType.EASE_IN_OUT_QUAD)
-            .endBone();/*
-            .startBone("buffer_pages")
-            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, getWithDefault(0f, book.getBone("buffer_pages"), GeoBone::getPosY), progress * -3f + 1.5f, EasingType.EASE_IN_OUT_QUAD)
-            .lerpX(InternalControlGeoModel.InternalAnimationBuilder.VarType.ROTATION, 10, getWithDefault(0f, book.getBone("buffer_pages"), GeoBone::getRotX), Math.toRadians(progress * -160f), EasingType.EASE_IN_OUT_QUAD)
             .endBone();
-            /*.startBone("spine")
-            .lerpX(InternalControlGeoModel.InternalAnimationBuilder.VarType.ROTATION, 10, getWithDefault(0f, book.getBone("spine"), GeoBone::getRotX), Math.toRadians(book.getPageIndex() / 150f * 160f), EasingType.EASE_IN_OUT_QUAD)
-            .endBone();
-            /*.startBone("spine_pos")
-            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, getWithDefault(0f, book.getBone("spine_pos"), GeoBone::getPosY), book.getPageIndex() / -150f*3, EasingType.EASE_IN_OUT_QUAD)
-            .endBone();*/
         }
         return builder;
     }
@@ -239,6 +229,7 @@ public class GuideBookScreen extends Screen
     @Override
     public void onClose()
     {
+        player.setData(DataComponentTypes.GUIDEBOOK_READING_PAGE, currentPageIndex);
         PacketDistributor.sendToServer(new GuidebookProgressPacket(0, this.currentPageIndex));
         super.onClose();
     }
@@ -250,7 +241,6 @@ public class GuideBookScreen extends Screen
 
         PoseStack pose = guiGraphics.pose();
         pose.pushPose();
-        //pose.scale(64, 64, 64);
         pose.translate(0, -1, -3200);
         pose.scale(64, 64, 64);
         button.render(guiGraphics, mouseX, mouseY, partialTick);

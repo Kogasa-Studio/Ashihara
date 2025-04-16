@@ -1,8 +1,8 @@
 package kogasastudio.ashihara.item;
 
 import kogasastudio.ashihara.client.gui.GuideBookScreen;
+import kogasastudio.ashihara.registry.DataComponentTypes;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
@@ -11,6 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +19,16 @@ import java.util.Map;
 public class GuideBook extends Item
 {
     public static Map<Integer, Page> PAGES = new HashMap<>();
+
+    static class SetScreen
+    {
+        public void run(Player player)
+        {
+            Minecraft.getInstance().setScreen(new GuideBookScreen(Component.empty(), player));
+        }
+    }
+
+    private static SetScreen setScreen = new SetScreen();
 
     public GuideBook()
     {
@@ -29,8 +40,11 @@ public class GuideBook extends Item
     {
         if (pLevel.isClientSide())
         {
-            Screen screen = new GuideBookScreen(Component.empty(), pPlayer);
-            Minecraft.getInstance().setScreen(screen);
+            if (ServerLifecycleHooks.getCurrentServer() != null && ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(pPlayer.getUUID()) != null)
+            {
+                pPlayer.setData(DataComponentTypes.GUIDEBOOK_READING_PAGE, ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(pPlayer.getUUID()).getData(DataComponentTypes.GUIDEBOOK_READING_PAGE));
+                setScreen.run(pPlayer);
+            }
         }
         return super.use(pLevel, pPlayer, pUsedHand);
     }
