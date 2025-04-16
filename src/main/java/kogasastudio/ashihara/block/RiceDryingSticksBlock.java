@@ -152,7 +152,7 @@ public class RiceDryingSticksBlock extends Block implements SimpleWaterloggedBlo
     {
         if (pState.getValue(DRYING_STATE).equals(RiceDryingState.NONE)) return; //保险措施
         RandomSource random = pLevel.getRandom();
-        if (random.nextInt(10) <= 5)
+        if (random.nextInt(10) <= 5 && (pLevel.canSeeSky(pPos) || pLevel.getBlockState(pPos.above()).getBlock() == BlockRegistryHandler.RICE_DRYING_STICKS.get()) && !pLevel.isRainingAt(pPos))
         {
             pLevel.setBlock(pPos, pState.setValue(DRYING_STATE, pLevel.isRainingAt(pPos) ? RiceDryingState.WET : RiceDryingState.DRY), 3);
         }
@@ -179,11 +179,11 @@ public class RiceDryingSticksBlock extends Block implements SimpleWaterloggedBlo
     }
 
     @Override
-    protected void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston)
+    public void destroy(LevelAccessor level, BlockPos pos, BlockState state)
     {
-        if (!pState.getValue(DRYING_STATE).equals(RiceDryingState.NONE))
-            popResource(pLevel, pPos, new ItemStack(pState.getValue(DRYING_STATE).equals(RiceDryingState.WET) ? ItemRegistryHandler.RICE_CROP.asItem() : ItemRegistryHandler.DRIED_RICE_CROP.asItem()));
-        super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
+        if (!state.getValue(DRYING_STATE).equals(RiceDryingState.NONE))
+            popResource((Level) level, pos, new ItemStack(state.getValue(DRYING_STATE).equals(RiceDryingState.WET) ? ItemRegistryHandler.RICE_CROP.asItem() : ItemRegistryHandler.DRIED_RICE_CROP.asItem()));
+        super.destroy(level, pos, state);
     }
 
     @Override
@@ -200,24 +200,12 @@ public class RiceDryingSticksBlock extends Block implements SimpleWaterloggedBlo
         {
             worldIn.setBlock(pos, initConnection(state, left, right), 3);
         }
-
-        if (state.getValue(HALF) == DoubleBlockHalf.UPPER)
+        BlockPos blockpos = state.getValue(HALF) == DoubleBlockHalf.UPPER ? pos.below() : pos.above();
+        BlockState blockstate = worldIn.getBlockState(blockpos);
+        if (blockstate.getBlock() != state.getBlock() || blockstate.getValue(HALF) == state.getValue(HALF))
         {
-            BlockPos blockpos = pos.below();
-            BlockState blockstate = worldIn.getBlockState(blockpos);
-            if (blockstate.getBlock() != state.getBlock() || blockstate.getValue(HALF) != DoubleBlockHalf.LOWER)
-            {
-                worldIn.setBlock(pos, state.getValue(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState(), 35);
-            }
-        }
-        else if (state.getValue(HALF) == DoubleBlockHalf.LOWER)
-        {
-            BlockPos blockpos = pos.above();
-            BlockState blockstate = worldIn.getBlockState(blockpos);
-            if (blockstate.getBlock() != state.getBlock() || blockstate.getValue(HALF) != DoubleBlockHalf.UPPER)
-            {
-                worldIn.setBlock(pos, state.getValue(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState(), 35);
-            }
+            worldIn.setBlock(pos, state.getValue(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState(), 35);
+            popResource(worldIn, pos, new ItemStack(state.getValue(DRYING_STATE).equals(RiceDryingState.WET) ? ItemRegistryHandler.RICE_CROP.asItem() : ItemRegistryHandler.DRIED_RICE_CROP.asItem()));
         }
     }
 
@@ -294,8 +282,8 @@ public class RiceDryingSticksBlock extends Block implements SimpleWaterloggedBlo
 
     protected BlockState initConnection(BlockState state, BlockState left, BlockState right)
     {
-        if (left.is(this) && !left.getValue(L_R_HALF).equals(DryingSticksHalf.RIGHT)) return state.setValue(L_R_HALF, DryingSticksHalf.RIGHT);
-        else if (right.is(this) && !right.getValue(L_R_HALF).equals(DryingSticksHalf.LEFT)) return state.setValue(L_R_HALF, DryingSticksHalf.LEFT);
+        if (left.is(this) && !left.getValue(L_R_HALF).equals(DryingSticksHalf.RIGHT) && left.getValue(AXIS).equals(state.getValue(AXIS))) return state.setValue(L_R_HALF, DryingSticksHalf.RIGHT);
+        else if (right.is(this) && !right.getValue(L_R_HALF).equals(DryingSticksHalf.LEFT) && right.getValue(AXIS).equals(state.getValue(AXIS))) return state.setValue(L_R_HALF, DryingSticksHalf.LEFT);
         else return state.setValue(L_R_HALF, DryingSticksHalf.SINGLE);
     }
 
