@@ -205,7 +205,7 @@ public class RiceDryingSticksBlock extends Block implements SimpleWaterloggedBlo
         if (blockstate.getBlock() != state.getBlock() || blockstate.getValue(HALF) == state.getValue(HALF))
         {
             worldIn.setBlock(pos, state.getValue(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState(), 35);
-            popResource(worldIn, pos, new ItemStack(state.getValue(DRYING_STATE).equals(RiceDryingState.WET) ? ItemRegistryHandler.RICE_CROP.asItem() : ItemRegistryHandler.DRIED_RICE_CROP.asItem()));
+            if (state.getValue(DRYING_STATE) != RiceDryingState.NONE) popResource(worldIn, pos, new ItemStack(state.getValue(DRYING_STATE).equals(RiceDryingState.WET) ? ItemRegistryHandler.RICE_CROP.asItem() : ItemRegistryHandler.DRIED_RICE_CROP.asItem()));
         }
     }
 
