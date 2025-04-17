@@ -2,10 +2,13 @@ package kogasastudio.ashihara.registry;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.world.tree.BigCherryFoliagePlacer;
+import kogasastudio.ashihara.world.tree.BigCherryTrunkPlacer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -14,23 +17,42 @@ import net.minecraft.world.level.levelgen.feature.configurations.TreeConfigurati
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FancyFoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.trunkplacers.FancyTrunkPlacer;
-import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.*;
 import net.minecraft.world.level.levelgen.placement.*;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.RegisterEvent;
 
 import java.util.List;
 import java.util.OptionalInt;
 import java.util.function.Supplier;
 
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public class WorldGenEventRegistryHandler
 {
     public static final DeferredRegister<ConfiguredFeature<?, ?>> CONFIGURED_FEATURE = DeferredRegister.create(Registries.CONFIGURED_FEATURE.registry(), Ashihara.MODID);
 
     public static final DeferredRegister<PlacedFeature> PLACED_FEATURE = DeferredRegister.create(Registries.PLACED_FEATURE.registry(), Ashihara.MODID);
 
+    public static final DeferredRegister<TrunkPlacerType<?>> TRUNK_PLACER_TYPES = DeferredRegister.create(Registries.TRUNK_PLACER_TYPE.registry(), Ashihara.MODID);
+    public static final DeferredRegister<FoliagePlacerType<?>> FOLIAGE_PLACER_TYPES = DeferredRegister.create(Registries.FOLIAGE_PLACER_TYPE.registry(), Ashihara.MODID);
+
     private static final PlacementModifier TREE_THRESHOLD = SurfaceWaterDepthFilter.forMaxDepth(0);
+
+    public static final Supplier<TrunkPlacerType<?>> BIG_CHERRY_TRUNK_PLACER_TRUNK_PLACER = () -> new TrunkPlacerType<>(BigCherryTrunkPlacer.CODEC);
+
+    public static final Supplier<FoliagePlacerType<?>> BIG_CHERRY_TRUNK_PLACER_FOLIAGE_PLACER = () -> new FoliagePlacerType<>(BigCherryFoliagePlacer.CODEC);
+
+    @SubscribeEvent
+    public static void registerTrunkPlacers(RegisterEvent registerEvent)
+    {
+        registerEvent.register(Registries.TRUNK_PLACER_TYPE, ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "big_cherry_trunk_placer"), BIG_CHERRY_TRUNK_PLACER_TRUNK_PLACER);
+
+        registerEvent.register(Registries.FOLIAGE_PLACER_TYPE, ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "big_cherry_foliage_placer"), BIG_CHERRY_TRUNK_PLACER_FOLIAGE_PLACER);
+    }
 
     public static final Supplier<ConfiguredFeature<?, ?>> FANCY_CHERRY =
             CONFIGURED_FEATURE.register
@@ -38,15 +60,15 @@ public class WorldGenEventRegistryHandler
                             (
                                     Feature.TREE,
                                     new TreeConfiguration.TreeConfigurationBuilder
-                                            (
-                                                    BlockStateProvider.simple(BlockRegistryHandler.CHERRY_LOG.get().defaultBlockState()),
-                                                    new FancyTrunkPlacer(3, 11, 0),
-                                                    BlockStateProvider.simple(BlockRegistryHandler.CHERRY_BLOSSOM.get()),
-                                                    new FancyFoliagePlacer(ConstantInt.of(2), ConstantInt.of(4), 4),
-                                                    new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4))
-                                            )
-                                            .ignoreVines()
-                                            .build()
+                                    (
+                                            BlockStateProvider.simple(BlockRegistryHandler.CHERRY_LOG.get().defaultBlockState()),
+                                            new BigCherryTrunkPlacer(3, 11, 0),
+                                            BlockStateProvider.simple(BlockRegistryHandler.CHERRY_BLOSSOM.get()),
+                                            new BigCherryFoliagePlacer(ConstantInt.of(2), ConstantInt.of(4), 4),
+                                            new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4))
+                                    )
+                                    .ignoreVines()
+                                    .build()
                             )
                     );
 
