@@ -1,18 +1,18 @@
 {
   "variants": {
     "facing=east": {
-      "model": "ashihara:block/mortar/mortar",
+      "model": "ashihara:block/mortar",
       "y": 270
     },
     "facing=north": {
-      "model": "ashihara:block/mortar/mortar",
+      "model": "ashihara:block/mortar",
       "y": 180
     },
     "facing=south": {
-      "model": "ashihara:block/mortar/mortar"
+      "model": "ashihara:block/mortar"
     },
     "facing=west": {
-      "model": "ashihara:block/mortar/mortar",
+      "model": "ashihara:block/mortar",
       "y": 90
     }
   }

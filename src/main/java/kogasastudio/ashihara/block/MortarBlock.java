@@ -1,21 +1,7 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.block.tileentities.MortarTE;
-import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
-import kogasastudio.ashihara.helper.FluidHelper;
-import kogasastudio.ashihara.item.ItemOtsuchi;
-import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -23,41 +9,41 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Arrays;
-
-import static kogasastudio.ashihara.utils.AshiharaTags.CEREALS;
-import static kogasastudio.ashihara.utils.AshiharaTags.CEREAL_PROCESSED;
 
 public class MortarBlock extends Block // implements EntityBlock
 {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
+    public static final VoxelShape SHAPE = Shapes.or
+    (
+        box(2,0,2,14,2,14),
+        box(2,2,2,14,13,4),
+        box(2,2,12,14,13,14),
+        box(12,2,4,14,13,12),
+        box(2,2,4,4,13,12)
+    );
+
     public MortarBlock()
     {
         super
-                (
-                        Properties.of()
-                                .mapColor(MapColor.WOOD)
-                                .strength(3.0F)
-                                // todo tag .harvestTool(ToolType.AXE)
-                                .sound(SoundType.WOOD)
-                                .noOcclusion()
-                );
+        (
+            Properties.of()
+            .mapColor(MapColor.WOOD)
+            .strength(3.0F)
+            // todo tag .harvestTool(ToolType.AXE)
+            .sound(SoundType.WOOD)
+            .noOcclusion()
+        );
     }
 
     @Override
@@ -93,13 +79,7 @@ public class MortarBlock extends Block // implements EntityBlock
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
     {
-        VoxelShape bottom_1 = box(3.0d, 0.0d, 3.0d, 13.0d, 2.0d, 13.0d);
-        VoxelShape bottom_2 = box(2.0d, 2.0d, 2.0d, 14.0d, 4.0d, 14.0d);
-        VoxelShape n = box(1.5d, 4.0d, 1.5d, 14.5d, 16.0d, 3.5d);
-        VoxelShape e = box(12.5d, 4.0d, 3.5d, 14.5d, 16.0d, 12.5d);
-        VoxelShape s = box(1.5d, 4.0d, 12.5d, 14.5d, 16.0d, 14.5d);
-        VoxelShape w = box(1.5d, 4.0d, 3.5d, 3.5d, 16.0d, 12.5d);
-        return Shapes.or(bottom_1, bottom_2, n, e, s, w);
+        return SHAPE;
     }
 
     @Override

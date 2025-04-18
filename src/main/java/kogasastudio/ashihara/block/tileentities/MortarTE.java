@@ -1,57 +1,34 @@
 package kogasastudio.ashihara.block.tileentities;
 
-import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.helper.FluidHelper;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
-import kogasastudio.ashihara.interaction.recipes.register.RecipeTypes;
-import kogasastudio.ashihara.inventory.container.GenericItemStackHandler;
-import kogasastudio.ashihara.inventory.container.MortarContainer;
-import kogasastudio.ashihara.item.ItemOtsuchi;
-import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.Containers;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
-import static kogasastudio.ashihara.utils.AshiharaTags.MASHABLE;
-
-public class MortarTE // extends AshiharaMachineTE implements MenuProvider, IFluidHandler
+public class MortarTE extends AshiharaMachineTE implements IFluidHandler // extends AshiharaMachineTE implements MenuProvider, IFluidHandler
 {
-    /*public MortarInventory contents = new MortarInventory(4);
-    public GenericItemStackHandler fluidIO = new GenericItemStackHandler(2);
-    public LazyOptional<FluidTank> tank = LazyOptional.of(this::createTank);
-    public NonNullList<ItemStack> output = NonNullList.create();
-    public FluidStack fluidCost = FluidStack.EMPTY;
-    public int progress;
-    public int progressTotal;
-    *//**
-     * 0: 脱谷
-     * 1: 打麻糬
-     * 2: 制酱
-     *//*
-    public byte recipeType = -1;
-    public byte pointer = -1;
-    *//**
-     * 0: 手
-     * 1: 杵
-     * 2: 大槌
-     *//*
-    public byte nextStep = -1;
-    public byte[] sequence = new byte[0];
-    public boolean isWorking;
+    public final FluidTank fluidTank = new FluidTank(16000);
+
+    public static final int SLOT_0 = 0;
+    public static final int SLOT_1 = 1;
+    public static final int SLOT_2 = 2;
+    public static final int SLOT_3 = 3;
+
+    public boolean renderFloatingTip = false;
+    public boolean transitingLiquidLevel = false;
+
+    public float productionMultiplier = 1.0f;
+    public MortarRecipe currentRecipe;
+    public Map<Integer, ItemStack> inventory = new HashMap<>();
 
     public MortarTE(BlockPos pos, BlockState state)
     {
@@ -59,301 +36,53 @@ public class MortarTE // extends AshiharaMachineTE implements MenuProvider, IFlu
     }
 
     @Override
-    public FluidTank createTank()
+    public int getTanks()
     {
-        return new FluidTank(4000);
+        return 0;
     }
 
     @Override
-    public LazyOptional<FluidTank> getTank()
+    public FluidStack getFluidInTank(int tank)
     {
-        return this.tank;
+        return fluidTank.getFluidInTank(tank);
+    }
+
+    public static IItemHandler getInv(MortarTE te, Direction side)
+    {
+        if (side.getAxis().equals(Direction.Axis.Y))
+        {
+            return new RangedWrapper(te, 0, 4);
+        }
+        return null;
     }
 
     @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> cap)
+    public int getTankCapacity(int tank)
     {
-        if (!this.isRemoved() && cap.equals(ForgeCapabilities.FLUID_HANDLER))
-        {
-            return this.tank.cast();
-        }
-        return super.getCapability(cap);
+        return fluidTank.getTankCapacity(tank);
     }
 
     @Override
-    public void invalidateCaps()
+    public boolean isFluidValid(int tank, FluidStack stack)
     {
-        super.invalidateCaps();
-        this.tank.invalidate();
+        return fluidTank.isFluidValid(tank, stack);
     }
 
     @Override
-    public void reviveCaps()
+    public int fill(FluidStack resource, FluidAction action)
     {
-        super.reviveCaps();
-        tank = LazyOptional.of(this::createTank);
-    }
-
-    private void process(boolean isSauceProcess)
-    {
-        this.progress += isSauceProcess ? this.nextStep : 1;
-        if (this.progress >= this.progressTotal)
-        {
-            finishReciping(true);
-            setChanged();
-            return;
-        }
-        if (!this.isWorking)
-        {
-            this.isWorking = true;
-        }
-        if (!isSauceProcess)
-        {
-            this.pointer += 1;
-            this.nextStep = this.sequence[this.pointer];
-        }
-        setChanged();
-    }
-
-    private boolean isNextStepNeeded(ItemStack stack)
-    {
-        return switch (this.nextStep)
-        {
-            case 0 -> stack.isEmpty();
-            case 1 -> stack.getItem().equals(ItemRegistryHandler.PESTLE.get());
-            case 2 -> stack.getItem() instanceof ItemOtsuchi;
-            default -> false;
-        };
-    }
-
-    private Optional<MortarRecipe> tryMatchRecipe()
-    {
-        if (level == null) return Optional.empty();
-
-        return level.getRecipeManager().getAllRecipesFor(RecipeTypes.MORTAR.get())
-                .stream().filter(r -> r.matches(contents.getContent())).findFirst();
-    }
-
-    //检查当前状态, 若内容物匹配配方则尝试启用配方
-    public void notifyStateChanged()
-    {
-        Optional<MortarRecipe> recipeIn = tryMatchRecipe();
-        if (recipeIn.isPresent())
-        {
-            boolean flag = true;
-            if (!recipeIn.get().getFluidCost().isEmpty())
-            {
-                flag = FluidHelper.canFluidExtractFromTank(recipeIn.get().getFluidCost(), this.tank);
-            }
-            if (!this.isWorking && flag) applyRecipe(recipeIn.get());
-        } else
-        {
-            finishReciping(false);
-            if (this.level != null)
-                this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition), this.level.getBlockState(this.worldPosition), 3);
-        }
-        if (FluidHelper.notifyFluidTankInteraction(this.fluidIO, 0, 1, this.tank.orElse(new FluidTank(0)), this.level, this.worldPosition))
-        {
-            this.setChanged();
-            if (this.level != null)
-                this.level.sendBlockUpdated(this.worldPosition, this.level.getBlockState(this.worldPosition), this.level.getBlockState(this.worldPosition), 3);
-        }
-    }
-
-    private void applyRecipe(MortarRecipe recipeIn)
-    {
-        this.progress = 0;
-        this.pointer = 0;
-
-        this.recipeType = recipeIn.recipeType;
-        this.progressTotal = recipeIn.sequence.length;
-        this.sequence = recipeIn.sequence;
-        this.fluidCost = recipeIn.getFluidCost();
-        this.nextStep = recipeIn.recipeType == 2 ? -1 : this.sequence[this.pointer];
-        this.output.clear();
-        for (ItemStack stack : recipeIn.getOutput())
-        {
-            this.output.add(stack.copy());
-        }
-        setChanged();
-    }
-
-    private void finishReciping(boolean produce)
-    {
-        this.progress = 0;
-        this.progressTotal = 0;
-        this.sequence = new byte[0];
-        this.recipeType = -1;
-        this.pointer = -1;
-        this.nextStep = -1;
-        if (produce)
-        {
-            this.produce();
-        }
-        this.fluidCost = FluidStack.EMPTY;
-        this.output.clear();
-        this.isWorking = false;
-        setChanged();
-    }
-
-    private void produce()
-    {
-        this.contents.clear();
-        for (int i = 0; i < this.output.size(); i += 1)
-        {
-            ItemStack stack = this.output.get(i);
-            if (!stack.isEmpty()) this.contents.setStackInSlot(i, stack);
-        }
-        if (!this.fluidCost.isEmpty())
-        {
-            this.tank.ifPresent
-                    (
-                            tank ->
-                            {
-                                FluidStack fluidInTank = tank.getFluid();
-                                if (this.fluidCost.isFluidEqual(fluidInTank))
-                                {
-                                    fluidInTank.setAmount(Math.max(0, fluidInTank.getAmount() - this.fluidCost.getAmount()));
-                                    tank.setFluid(fluidInTank);
-                                    setChanged();
-                                }
-                            }
-                    );
-        }
-    }
-
-    //若不在工作状态中空手右击则取出物品，持物品右击则尝试将物品放入舂
-    public boolean notifyInteraction(ItemStack stackIn, Level worldIn, BlockPos posIn, Player player)
-    {
-        if (isNextStepNeeded(stackIn))
-        {
-            player.getCooldowns().addCooldown(stackIn.getItem(), 8);
-            if (!stackIn.isEmpty() && !player.isCreative())
-            {
-                stackIn.hurtAndBreak(1, player, (playerEntity) -> player.broadcastBreakEvent(EquipmentSlot.MAINHAND));
-            }
-            process(this.recipeType == 2);
-            return true;
-        }
-        if (!this.isWorking)
-        {
-            for (int i = 0; i < this.contents.getSlots(); i += 1)
-            {
-                ItemStack stack = this.contents.getStackInSlot(i);
-                if (!stack.isEmpty() && stackIn.isEmpty())
-                {
-                    this.contents.setStackInSlot(i, ItemStack.EMPTY);
-                    notifyStateChanged();
-                    setChanged();
-                    Containers.dropItemStack(worldIn, posIn.getX(), posIn.getY() + 0.5F, posIn.getZ(), stack);
-                    return true;
-                } else if (stack.isEmpty() && stackIn.is(MASHABLE))
-                {
-                    this.contents.insertItem(i, new ItemStack(stackIn.getItem()), false);
-                    if (!player.isCreative()) stackIn.shrink(1);
-                    notifyStateChanged();
-                    setChanged();
-                    return true;
-                }
-            }
-        }
-        return false;
+        return fluidTank.fill(resource, action);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound)
+    public FluidStack drain(FluidStack resource, FluidAction action)
     {
-        super.saveAdditional(compound);
-        compound.putInt("progress", this.progress);
-        compound.putInt("progressTotal", this.progressTotal);
-
-        compound.putByte("recipeType", this.recipeType);
-        compound.putByte("pointer", this.pointer);
-        compound.putByte("nextStep", this.nextStep);
-
-        compound.putByteArray("sequence", this.sequence);
-        compound.putBoolean("isWorking", this.isWorking);
-
-        compound.put("contents", this.contents.serializeNBT());
-        compound.put("fluidCost", this.fluidCost.writeToNBT(new CompoundTag()));
-        compound.put("fluidIO", this.fluidIO.serializeNBT());
-
-        this.tank.ifPresent(fluidTank -> compound.put("tank", fluidTank.writeToNBT(new CompoundTag())));
-
-        ListTag outputIn = new ListTag();
-        for (int i = 0; i < this.output.size(); i++)
-        {
-            if (!this.output.get(i).isEmpty())
-            {
-                CompoundTag itemTag = new CompoundTag();
-                itemTag.putInt("Slot", i);
-                outputIn.add(this.output.get(i).save(itemTag));
-            }
-        }
-        compound.put("output", outputIn);
+        return fluidTank.drain(resource, action);
     }
 
     @Override
-    public void load(CompoundTag nbt)
+    public FluidStack drain(int maxDrain, FluidAction action)
     {
-        this.output = NonNullList.create();
-        this.progress = nbt.getInt("progress");
-        this.progressTotal = nbt.getInt("progressTotal");
-
-        this.recipeType = nbt.getByte("recipeType");
-        this.pointer = nbt.getByte("pointer");
-        this.nextStep = nbt.getByte("nextStep");
-
-        this.sequence = nbt.getByteArray("sequence");
-        this.isWorking = nbt.getBoolean("isWorking");
-
-        this.contents.deserializeNBT(nbt.getCompound("contents"));
-        this.fluidCost = FluidStack.loadFluidStackFromNBT(nbt.getCompound("fluidCost"));
-        this.fluidIO.deserializeNBT(nbt.getCompound("fluidIO"));
-
-        this.tank.ifPresent(fluidTank -> fluidTank.readFromNBT(nbt.getCompound("tank")));
-
-        ListTag outputIn = nbt.getList("output", Tag.TAG_COMPOUND);
-        for (int i = 0; i < outputIn.size(); i++)
-        {
-            CompoundTag itemTags = outputIn.getCompound(i);
-            int slot = itemTags.getInt("Slot");
-
-            if (slot >= 0)
-            {
-                this.output.add(slot, ItemStack.of(itemTags));
-            }
-        }
-        super.load(nbt);
+        return fluidTank.drain(maxDrain, action);
     }
-
-    @Override
-    public Component getDisplayName()
-    {
-        return Component.translatable("gui." + Ashihara.MODID + ".mortar");
-    }
-
-    @Override
-    public AbstractContainerMenu createMenu(int p_createMenu_1_, Inventory p_createMenu_2_, Player p_createMenu_3_)
-    {
-        if (this.level == null)
-        {
-            return null;
-        }
-        return new MortarContainer(p_createMenu_1_, p_createMenu_2_, this);
-    }
-
-    public static class MortarInventory extends GenericItemStackHandler
-    {
-        public MortarInventory(int numSlots)
-        {
-            super(numSlots);
-        }
-
-        @Override
-        protected int getStackLimit(int slot, ItemStack stack)
-        {
-            return 1;
-        }
-    }*/
 }

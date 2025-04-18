@@ -93,6 +93,7 @@ public class ClientEventSubscribeHandler
         setRenderType(BlockRegistryHandler.SWEET_POTATOES.get(), RenderType.cutoutMipped(), event);
         setRenderType(BlockRegistryHandler.CUCUMBERS.get(), RenderType.cutoutMipped(), event);
         setRenderType(BlockRegistryHandler.MEAL_TABLE.get(), RenderType.cutoutMipped(), event);
+        setRenderType(BlockRegistryHandler.MORTAR.get(), RenderType.cutoutMipped(), event);
         setRenderType(BlockRegistryHandler.CHARLOTTE.get(), RenderType.cutoutMipped(), event);
         setRenderType(BlockRegistryHandler.RICE_DRYING_STICKS.get(), RenderType.cutoutMipped(), event);
 

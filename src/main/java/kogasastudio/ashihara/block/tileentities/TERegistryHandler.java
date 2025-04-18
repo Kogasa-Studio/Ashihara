@@ -20,14 +20,14 @@ public class TERegistryHandler
                 BlockRegistryHandler.LANTERN_LONG_WHITE.get()
             ).build(null));
 
-    /*public static final Supplier<BlockEntityType<MortarTE>> MORTAR_TE = TILE_ENTITIES.register("mortar_tileentity",
+    public static final Supplier<BlockEntityType<MortarTE>> MORTAR_TE = TILE_ENTITIES.register("mortar_be",
         () -> BlockEntityType.Builder.of
-                (
-                    MortarTE::new,
-                    BlockRegistryHandler.MORTAR.get()
-                ).build(null));
+            (
+                MortarTE::new,
+                BlockRegistryHandler.MORTAR.get()
+            ).build(null));
 
-    public static final Supplier<BlockEntityType<MillTE>> MILL_TE = TILE_ENTITIES.register("mill_tileentity",
+    /*public static final Supplier<BlockEntityType<MillTE>> MILL_TE = TILE_ENTITIES.register("mill_tileentity",
             () -> BlockEntityType.Builder.of
                 (
                     MillTE::new,
