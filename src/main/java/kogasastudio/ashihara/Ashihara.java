@@ -1,20 +1,16 @@
 package kogasastudio.ashihara;
 
 import com.mojang.logging.LogUtils;
-//import io.github.tt432.eyelib.client.render.visitor.BuiltInBrModelRenderVisitors;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.block.tileentities.TERegistryHandler;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
-import kogasastudio.ashihara.interaction.recipes.register.RecipeManager;
 import kogasastudio.ashihara.inventory.container.ContainerRegistryHandler;
 import kogasastudio.ashihara.item.GuideBook;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.loading.ReloadableResources;
-import kogasastudio.ashihara.registry.DataComponentTypes;
-import kogasastudio.ashihara.registry.Features;
+import kogasastudio.ashihara.registry.*;
 import kogasastudio.ashihara.sounds.SoundEvents;
-import kogasastudio.ashihara.registry.WorldGenEventRegistryHandler;
 import kogasastudio.ashihara.utils.json.JsonUtils;
 import kogasastudio.ashihara.utils.json.serializer.GuideBookPageSerializer;
 import net.minecraft.util.RandomSource;
@@ -56,7 +52,6 @@ public class Ashihara
         ParticleRegistryHandler.PARTICLE_TYPES.register(modEventBus);
         TERegistryHandler.TILE_ENTITIES.register(modEventBus);
         ContainerRegistryHandler.CONTAINER_TYPES.register(modEventBus);
-        // RecipeTypesRegistryHandler.RECIPES.register(bus);
 //        GLMRegistryHandler.MODIFIERS.register(bus);
 
 //        BiomeRegistryHandler.BIOMES.register(bus);
@@ -64,6 +59,8 @@ public class Ashihara
         WorldGenEventRegistryHandler.PLACED_FEATURE.register(modEventBus);
         WorldGenEventRegistryHandler.CONFIGURED_FEATURE.register(modEventBus);
         DataComponentTypes.ATTACHMENT_TYPES.register(modEventBus);
+        RecipeTypes.register(modEventBus);
+        RecipeSerializers.register(modEventBus);
         try
         {
             Map<Integer, GuideBook.Page> iMap = new HashMap<>();
@@ -75,8 +72,6 @@ public class Ashihara
         {
             throw new RuntimeException(e);
         }
-
-        RecipeManager.register(modEventBus);
 
         if (FMLEnvironment.dist == Dist.CLIENT)
         {

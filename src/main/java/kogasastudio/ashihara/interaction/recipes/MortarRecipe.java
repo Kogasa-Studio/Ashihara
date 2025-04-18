@@ -6,16 +6,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import kogasastudio.ashihara.helper.DataHelper;
 import kogasastudio.ashihara.interaction.recipes.base.WrappedRecipe;
-import kogasastudio.ashihara.interaction.recipes.register.RecipeSerializers;
-import kogasastudio.ashihara.interaction.recipes.register.RecipeTypes;
+import kogasastudio.ashihara.registry.RecipeSerializers;
+import kogasastudio.ashihara.registry.RecipeTypes;
 import kogasastudio.ashihara.utils.json.serializer.FluidStackSerializer;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -32,7 +32,6 @@ import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,18 +67,6 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe>
         this.recipeType = recipeTypeIn;
         this.sequence = sequenceIn;
     }
-
-    public static final MapCodec<MortarRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec
-    (
-        mortarRecipeInstance ->
-        {
-            mortarRecipeInstance.group
-            (
-                ResourceLocation.CODEC.fieldOf("id").forGetter(MortarRecipe::getId),
-                NonNullList.codecOf(Ingredient.CODEC).fieldOf("ingredients").forGetter(MortarRecipe::getIngredients)
-            )
-        }
-    );
 
     public boolean testInputFluid(@Nullable FluidTank tank)
     {
@@ -149,6 +136,21 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe>
 
     public static class MortarRecipeSerializer implements RecipeSerializer<MortarRecipe>
     {
+        public static final MapCodec<MortarRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec
+        (
+            mortarRecipeInstance ->
+            {
+                mortarRecipeInstance.group
+                (
+                    ResourceLocation.CODEC.fieldOf("id").forGetter(MortarRecipe::getId),
+                    NonNullList.codecOf(Ingredient.CODEC).fieldOf("ingredients").forGetter(MortarRecipe::getIngredients),
+                    NonNullList.codecOf(ItemStack.CODEC).fieldOf("output").forGetter(MortarRecipe::getOutput),
+                    FluidStack.CODEC.fieldOf("fluid").forGetter(MortarRecipe::getFluidCost),
+                    Codec.INT.fieldOf("progress").forGetter(MortarRecipe::)
+                )
+            }
+        );
+
         @Override
         public MortarRecipe fromJson(ResourceLocation recipeLoc, JsonObject recipeJson, ICondition.IContext context)
         {

@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block.tileentities;
 
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
@@ -39,6 +40,7 @@ public class CatItemHandler implements IItemHandlerModifiable
     @Override
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate)
     {
+        TagKey
         if (inventory.get(slot).isEmpty())
         {
             if (!simulate) inventory.put(slot, stack);

@@ -81,4 +81,8 @@ public class MortarTE extends AshiharaMachineTE implements IFluidHandler // exte
     {
         return fluidTank.drain(maxDrain, action);
     }
+
+    public enum MortarToolType
+    {
+    }
 }

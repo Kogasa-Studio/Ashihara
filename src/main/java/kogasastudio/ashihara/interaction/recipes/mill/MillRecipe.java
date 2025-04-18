@@ -2,8 +2,8 @@ package kogasastudio.ashihara.interaction.recipes.mill;
 
 import kogasastudio.ashihara.block.tileentities.MillTE;
 import kogasastudio.ashihara.interaction.recipes.base.WrappedRecipe;
-import kogasastudio.ashihara.interaction.recipes.register.RecipeSerializers;
-import kogasastudio.ashihara.interaction.recipes.register.RecipeTypes;
+import kogasastudio.ashihara.registry.RecipeSerializers;
+import kogasastudio.ashihara.registry.RecipeTypes;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;

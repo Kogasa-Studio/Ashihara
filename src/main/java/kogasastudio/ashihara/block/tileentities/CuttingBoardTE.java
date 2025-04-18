@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.block.tileentities;
 
 import kogasastudio.ashihara.interaction.recipes.CuttingBoardRecipe;
-import kogasastudio.ashihara.interaction.recipes.register.RecipeTypes;
+import kogasastudio.ashihara.registry.RecipeTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
