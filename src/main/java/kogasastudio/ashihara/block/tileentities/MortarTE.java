@@ -3,16 +3,12 @@ package kogasastudio.ashihara.block.tileentities;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.wrapper.RangedWrapper;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MortarTE extends AshiharaMachineTE implements IFluidHandler // extends AshiharaMachineTE implements MenuProvider, IFluidHandler
 {
@@ -28,7 +24,7 @@ public class MortarTE extends AshiharaMachineTE implements IFluidHandler // exte
 
     public float productionMultiplier = 1.0f;
     public MortarRecipe currentRecipe;
-    public Map<Integer, ItemStack> inventory = new HashMap<>();
+    public CatItemHandler inventory = new CatItemHandler(4);
 
     public MortarTE(BlockPos pos, BlockState state)
     {
@@ -38,7 +34,7 @@ public class MortarTE extends AshiharaMachineTE implements IFluidHandler // exte
     @Override
     public int getTanks()
     {
-        return 0;
+        return 1;
     }
 
     @Override
@@ -51,7 +47,7 @@ public class MortarTE extends AshiharaMachineTE implements IFluidHandler // exte
     {
         if (side.getAxis().equals(Direction.Axis.Y))
         {
-            return new RangedWrapper(te, 0, 4);
+            return new RangedWrapper(te.inventory, 0, 4);
         }
         return null;
     }

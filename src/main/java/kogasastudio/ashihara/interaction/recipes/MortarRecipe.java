@@ -6,29 +6,39 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import kogasastudio.ashihara.helper.DataHelper;
 import kogasastudio.ashihara.interaction.recipes.base.WrappedRecipe;
 import kogasastudio.ashihara.interaction.recipes.register.RecipeSerializers;
 import kogasastudio.ashihara.interaction.recipes.register.RecipeTypes;
 import kogasastudio.ashihara.utils.json.serializer.FluidStackSerializer;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.neoforged.neoforge.common.util.RecipeMatcher;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import org.apache.logging.log4j.LogManager;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MortarRecipe //extends BaseRecipe
+public class MortarRecipe extends WrappedRecipe<MortarRecipe>
 {
-    /*@Expose
+    @Expose
     public final NonNullList<Ingredient> input;
     @Expose
     public final NonNullList<ItemStack> output;
@@ -44,13 +54,12 @@ public class MortarRecipe //extends BaseRecipe
     @Expose
     public byte[] sequence;
 
-    public MortarRecipe(ResourceLocation idIn, String groupId,
+    public MortarRecipe(ResourceLocation idIn,
                         NonNullList<Ingredient> inputIn, NonNullList<ItemStack> outputIn,
                         FluidStack fluidCostIn,
                         int progressIn, byte recipeTypeIn, byte[] sequenceIn)
     {
-        this.id = idIn;
-        this.group = groupId;
+        super(idIn);
 
         this.input = inputIn;
         this.output = outputIn;
@@ -60,17 +69,17 @@ public class MortarRecipe //extends BaseRecipe
         this.sequence = sequenceIn;
     }
 
-    public String getInfo()
-    {
-        return
-                "\n{\ninput: " + this.input.toString()
-                        + "\noutput: " + this.output.toString()
-                        + "\nid: " + this.id.toString()
-                        + "\nprogress: " + this.progress
-                        + "\nrecipeType: " + this.recipeType
-                        + "\nsequence: " + Arrays.toString(this.sequence)
-                        + "\n}";
-    }
+    public static final MapCodec<MortarRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec
+    (
+        mortarRecipeInstance ->
+        {
+            mortarRecipeInstance.group
+            (
+                ResourceLocation.CODEC.fieldOf("id").forGetter(MortarRecipe::getId),
+                NonNullList.codecOf(Ingredient.CODEC).fieldOf("ingredients").forGetter(MortarRecipe::getIngredients)
+            )
+        }
+    );
 
     public boolean testInputFluid(@Nullable FluidTank tank)
     {
@@ -105,7 +114,7 @@ public class MortarRecipe //extends BaseRecipe
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess registryAccess)
+    public @NotNull ItemStack getResultItem(HolderLookup.@NotNull Provider registries)
     {
         return this.output.get(0).copy();
     }
@@ -119,12 +128,6 @@ public class MortarRecipe //extends BaseRecipe
     public NonNullList<ItemStack> getOutput()
     {
         return this.output;
-    }
-
-    @Override
-    public String getGroup()
-    {
-        return this.group;
     }
 
     @Override
@@ -200,5 +203,17 @@ public class MortarRecipe //extends BaseRecipe
             buffer.writeByte(recipe.recipeType);
             buffer.writeByteArray(recipe.sequence);
         }
-    }*/
+
+        @Override
+        public MapCodec<MortarRecipe> codec()
+        {
+
+        }
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, MortarRecipe> streamCodec()
+        {
+            return null;
+        }
+    }
 }
