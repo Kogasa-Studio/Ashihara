@@ -2,7 +2,7 @@ package kogasastudio.ashihara;
 
 import com.mojang.logging.LogUtils;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
-import kogasastudio.ashihara.block.tileentities.TERegistryHandler;
+import kogasastudio.ashihara.registry.TERegistryHandler;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.inventory.container.ContainerRegistryHandler;

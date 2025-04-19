@@ -1,8 +1,7 @@
 package kogasastudio.ashihara.event;
 
 import kogasastudio.ashihara.block.BlockRegistryHandler;
-import kogasastudio.ashihara.block.tileentities.TERegistryHandler;
-import kogasastudio.ashihara.client.models.SujikabutoModel;
+import kogasastudio.ashihara.registry.TERegistryHandler;
 import kogasastudio.ashihara.client.models.baked.PailModel;
 import kogasastudio.ashihara.client.particles.MapleLeafParticle;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
@@ -37,7 +36,6 @@ import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
-import net.neoforged.neoforge.fluids.FluidType;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;

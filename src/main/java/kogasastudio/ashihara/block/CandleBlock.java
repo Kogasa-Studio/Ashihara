@@ -37,7 +37,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
-import static kogasastudio.ashihara.block.tileentities.TERegistryHandler.CANDLE_TE;
+import static kogasastudio.ashihara.registry.TERegistryHandler.CANDLE_TE;
 import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 
 public class CandleBlock extends Block implements EntityBlock

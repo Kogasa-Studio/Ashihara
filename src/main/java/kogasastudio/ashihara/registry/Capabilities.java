@@ -1,7 +1,6 @@
 package kogasastudio.ashihara.registry;
 
 import kogasastudio.ashihara.block.tileentities.MortarTE;
-import kogasastudio.ashihara.block.tileentities.TERegistryHandler;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;

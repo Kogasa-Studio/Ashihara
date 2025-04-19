@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block.tileentities;
 
+import kogasastudio.ashihara.registry.TERegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;

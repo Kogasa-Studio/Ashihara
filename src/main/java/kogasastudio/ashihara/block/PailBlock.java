@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.block.tileentities.PailTE;
-import kogasastudio.ashihara.block.tileentities.TERegistryHandler;
+import kogasastudio.ashihara.registry.TERegistryHandler;
 import kogasastudio.ashihara.helper.FluidHelper;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.item.block.ItemBlockPail;

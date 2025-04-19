@@ -38,15 +38,6 @@ public class CuttingBoardRecipe extends WrappedRecipe<CuttingBoardRecipe> {
         this.tool = CuttingBoardToolType.nameMatches(typeIn);
     }
 
-    public String getInfo() {
-        return
-                "\n{\n    input: " + Arrays.toString(this.ingredient.getItems())
-                        + "\n    output: " + this.result.toString()
-                        + "\n    id: " + this.id.toString()
-                        + "\n    type: " + this.tool.getName()
-                        + "\n}";
-    }
-
     @Override
     public boolean matches(@NotNull NonNullList<ItemStack> inputs, @NotNull Level level) {
         return ingredient.test(inputs.getFirst());

@@ -2,6 +2,7 @@ package kogasastudio.ashihara.block.tileentities;
 
 import kogasastudio.ashihara.interaction.recipes.CuttingBoardRecipe;
 import kogasastudio.ashihara.registry.RecipeTypes;
+import kogasastudio.ashihara.registry.TERegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -107,14 +108,6 @@ public class CuttingBoardTE extends AshiharaMachineTE
             } else
             {
                 Optional<RecipeHolder<CuttingBoardRecipe>> recipe = tryMatchRecipe(new RecipeWrapper(new ItemStackHandler(NonNullList.of(this.content))));
-//                LOGGER_MAIN.info
-//                (
-//                    "\n{\n    inv: " + inv.serializeNBT()
-//                    + ";\n    recipe: " + (recipe.isPresent() ? recipe.get().getInfo() : "not provided")
-//                    + ";\n    tool: " + (recipe.isPresent() ? recipe.get().getTool().getName() : "not provided")
-//                    + ";\n    tool_matches: " + (recipe.isPresent() ? recipe.get().getTool().toolMatches(stack) : "not provided")
-//                    + ";\n}"
-//                );
                 if (recipe.isPresent() && recipe.get().value().getTool().toolMatches(stack))
                 {
                     this.cut(recipe.get().value());

@@ -1,10 +1,10 @@
 package kogasastudio.ashihara.block.tileentities;
 
 import kogasastudio.ashihara.client.render.AshiharaAtlas;
+import kogasastudio.ashihara.registry.TERegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 

@@ -36,7 +36,7 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> PADDY = ITEMS.register("paddy", ItemUnthreshedRice::new);
     public static final DeferredItem<Item> STRAW = ITEMS.register("straw", AshiharaItem::new);
     public static final DeferredItem<Item> RICE = ITEMS.register("rice", AshiharaItem::new);
-    public static final DeferredItem<Item> PESTLE = ITEMS.register("pestle", () -> new Item(new Item.Properties().durability(256)));
+    public static final DeferredItem<Item> PESTLE = ITEMS.register("pestle", () -> new Item(new Item.Properties().durability(512)));
     public static final DeferredItem<Item> SUJIKABUTO = ITEMS.register("sujikabuto", ItemSujikaButo::new);
 
     //食物

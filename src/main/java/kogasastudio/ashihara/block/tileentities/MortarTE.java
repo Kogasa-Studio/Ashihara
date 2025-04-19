@@ -1,14 +1,29 @@
 package kogasastudio.ashihara.block.tileentities;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
+import kogasastudio.ashihara.item.ItemOtsuchi;
+import kogasastudio.ashihara.registry.TERegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.wrapper.RangedWrapper;
+
+import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.function.Predicate;
 
 public class MortarTE extends AshiharaMachineTE implements IFluidHandler // extends AshiharaMachineTE implements MenuProvider, IFluidHandler
 {
@@ -22,8 +37,10 @@ public class MortarTE extends AshiharaMachineTE implements IFluidHandler // exte
     public boolean renderFloatingTip = false;
     public boolean transitingLiquidLevel = false;
 
+    public float progress = 0f;
     public float productionMultiplier = 1.0f;
     public MortarRecipe currentRecipe;
+    private Queue<MortarToolType> queue;
     public CatItemHandler inventory = new CatItemHandler(4);
 
     public MortarTE(BlockPos pos, BlockState state)
@@ -50,6 +67,19 @@ public class MortarTE extends AshiharaMachineTE implements IFluidHandler // exte
             return new RangedWrapper(te.inventory, 0, 4);
         }
         return null;
+    }
+
+    public void acceptRecipe(MortarRecipe recipe)
+    {
+        currentRecipe = recipe;
+        queue = new ConcurrentLinkedDeque<>(currentRecipe.getSequence());
+    }
+
+    public boolean process()
+    {
+        if (currentRecipe == null) return false;
+        boolean flag = false;
+        return flag;
     }
 
     @Override
@@ -84,5 +114,52 @@ public class MortarTE extends AshiharaMachineTE implements IFluidHandler // exte
 
     public enum MortarToolType
     {
+        PESTLE("pestle", i -> i.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "pestle")))),
+        OTSUCHI("otsuchi", i -> i.getItem() instanceof ItemOtsuchi || i.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "otsuchi")))),
+        HAND("hand", ItemStack::isEmpty);
+
+        public final Predicate<ItemStack> itemPredicate;
+        public final String id;
+        public static final Codec<MortarToolType> CODEC = Codec.STRING.xmap(MortarToolType::get, MortarToolType::getId);
+        public static final Codec<Queue<MortarToolType>> QUEUE_CODEC = RecordCodecBuilder.create
+        (
+            instance -> instance.group(Codec.list(CODEC).fieldOf("queue").forGetter(List::copyOf)).apply(instance, ConcurrentLinkedDeque::new)
+        );
+
+        public static final StreamCodec<RegistryFriendlyByteBuf, MortarToolType> STREAM_CODEC = new StreamCodec<>()
+        {
+            @Override
+            public MortarToolType decode(RegistryFriendlyByteBuf buffer)
+            {
+                return get(buffer.readUtf());
+            }
+
+            @Override
+            public void encode(RegistryFriendlyByteBuf buffer, MortarToolType value)
+            {
+                buffer.writeUtf(value.getId());
+            }
+        };
+
+        MortarToolType(String id, Predicate<ItemStack> itemPredicate)
+        {
+            this.id = id;
+            this.itemPredicate = itemPredicate;
+        }
+
+        public boolean is(ItemStack item)
+        {
+            return itemPredicate.test(item);
+        }
+
+        public String getId()
+        {
+            return id;
+        }
+
+        public static MortarToolType get(String id)
+        {
+            return valueOf(id);
+        }
     }
 }

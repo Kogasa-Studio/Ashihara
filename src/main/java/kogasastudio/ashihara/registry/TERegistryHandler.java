@@ -1,7 +1,8 @@
-package kogasastudio.ashihara.block.tileentities;
+package kogasastudio.ashihara.registry;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.block.tileentities.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -13,7 +14,7 @@ public class TERegistryHandler
     public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, Ashihara.MODID);
 
     public static final Supplier<BlockEntityType<MarkableLanternTE>> MARKABLE_LANTERN_TE = TILE_ENTITIES.register("markable_lantern_tileentity",
-        () -> BlockEntityType.Builder.of
+                                                                                                                  () -> BlockEntityType.Builder.of
             (
                 MarkableLanternTE::new,
                 BlockRegistryHandler.LANTERN_LONG_RED.get(),
@@ -21,7 +22,7 @@ public class TERegistryHandler
             ).build(null));
 
     public static final Supplier<BlockEntityType<MortarTE>> MORTAR_TE = TILE_ENTITIES.register("mortar_be",
-        () -> BlockEntityType.Builder.of
+                                                                                               () -> BlockEntityType.Builder.of
             (
                 MortarTE::new,
                 BlockRegistryHandler.MORTAR.get()
@@ -35,21 +36,21 @@ public class TERegistryHandler
                 ).build(null));*/
 
     public static final Supplier<BlockEntityType<PailTE>> PAIL_TE = TILE_ENTITIES.register("pail_tileentity",
-            () -> BlockEntityType.Builder.of
+                                                                                           () -> BlockEntityType.Builder.of
                 (
                     PailTE::new,
                     BlockRegistryHandler.PAIL.get()
                 ).build(null));
 
     public static final Supplier<BlockEntityType<CandleTE>> CANDLE_TE = TILE_ENTITIES.register("candle_tileentity",
-            () -> BlockEntityType.Builder.of
+                                                                                               () -> BlockEntityType.Builder.of
                 (
                     CandleTE::new,
                     BlockRegistryHandler.CANDLE.get()
                 ).build(null));
 
     public static final Supplier<BlockEntityType<CuttingBoardTE>> CUTTING_BOARD_TE = TILE_ENTITIES.register("cutting_board_tileentity",
-            () -> BlockEntityType.Builder.of
+                                                                                                            () -> BlockEntityType.Builder.of
                 (
                     CuttingBoardTE::new,
                     BlockRegistryHandler.CUTTING_BOARD.get()

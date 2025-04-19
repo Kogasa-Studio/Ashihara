@@ -7,6 +7,7 @@ import kogasastudio.ashihara.block.tileentities.IFluidHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -281,5 +282,40 @@ public class RenderHelper
 
             renderLeveledFluidStack(fluid, stackIn, bufferIn, combinedLightIn, combinedOverlayIn, xStart, height, zStart, xEnd, zEnd, worldIn, posIn);
         }
+    }
+
+    public static void blit
+    (
+        PoseStack poseStack,
+        ResourceLocation atlasLocation,
+        float x1,
+        float x2,
+        float y1,
+        float y2,
+        int blitOffset,
+        float minU,
+        float maxU,
+        float minV,
+        float maxV
+    )
+    {
+        RenderSystem.setShaderTexture(0, atlasLocation);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        Matrix4f matrix4f = poseStack.last().pose();
+        BufferBuilder bufferbuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        bufferbuilder.addVertex(matrix4f, x1, y1, (float)blitOffset).setUv(minU, minV);
+        bufferbuilder.addVertex(matrix4f, x1, y2, (float)blitOffset).setUv(minU, maxV);
+        bufferbuilder.addVertex(matrix4f, x2, y2, (float)blitOffset).setUv(maxU, maxV);
+        bufferbuilder.addVertex(matrix4f, x2, y1, (float)blitOffset).setUv(maxU, minV);
+        BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
+    }
+
+    public static void fill(PoseStack poseStack, VertexConsumer consumer, float minX, float minY, float maxX, float maxY, float z, int color)
+    {
+        Matrix4f matrix4f = poseStack.last().pose();
+        consumer.addVertex(matrix4f, minX, minY, z).setColor(color);
+        consumer.addVertex(matrix4f, minX, maxY, z).setColor(color);
+        consumer.addVertex(matrix4f, maxX, maxY, z).setColor(color);
+        consumer.addVertex(matrix4f, maxX, minY, z).setColor(color);
     }
 }

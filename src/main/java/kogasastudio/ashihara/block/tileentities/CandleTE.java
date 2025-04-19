@@ -1,40 +1,16 @@
 package kogasastudio.ashihara.block.tileentities;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
-import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
-import kogasastudio.ashihara.client.models.CandleModel;
-import kogasastudio.ashihara.client.models.baked.BakedModels;
-import kogasastudio.ashihara.client.models.baked.UnbakedModelPart;
-import kogasastudio.ashihara.client.render.AshiharaRenderTypes;
-import kogasastudio.ashihara.client.render.LayerRegistryHandler;
-import kogasastudio.ashihara.client.render.SectionRenderContext;
-import kogasastudio.ashihara.client.render.WithLevelRenderer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import kogasastudio.ashihara.registry.TERegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.fml.ModList;
-import net.neoforged.neoforge.client.event.AddSectionGeometryEvent;
 
 import static kogasastudio.ashihara.helper.MathHelper.simplifyDouble;
 

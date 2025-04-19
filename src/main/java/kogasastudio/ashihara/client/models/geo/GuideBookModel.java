@@ -1,20 +1,15 @@
 package kogasastudio.ashihara.client.models.geo;
 
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.client.gui.GuideBookScreen;
 import kogasastudio.ashihara.client.render.geo.GuideBookRenderer;
 import kogasastudio.ashihara.item.GuideBook;
 import kogasastudio.ashihara.loading.ReloadableResources;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
-import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("removal")
@@ -103,7 +98,6 @@ public class GuideBookModel extends InternalControlGeoModel<GuideBookModel> impl
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar)
     {
-        controllerRegistrar.add(new AnimationController<>(this, "internal", animationState -> PlayState.STOP).triggerableAnim("internal", INTERNAL));
         controllerRegistrar.add(new AnimationController<>(this, "Intro", animationState -> PlayState.STOP).triggerableAnim(ANIM_INTRO, INTRO));
         controllerRegistrar.add(new AnimationController<>(this, CONTROLLER_FLIP, animationState -> PlayState.STOP)
                                 .triggerableAnim(ANIM_OPEN_FROM_LEFT, OPEN_FROM_LEFT)
@@ -139,6 +133,7 @@ public class GuideBookModel extends InternalControlGeoModel<GuideBookModel> impl
         controllerRegistrar.add(new AnimationController<>(this, ANIM_FLIP_BUFFERED_RIGHT_3, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_RIGHT_3, FLIP_BUFFERED_RIGHT_3));
         controllerRegistrar.add(new AnimationController<>(this, ANIM_FLIP_BUFFERED_RIGHT_4, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_RIGHT_4, FLIP_BUFFERED_RIGHT_4));
         controllerRegistrar.add(new AnimationController<>(this, ANIM_FLIP_BUFFERED_RIGHT_5, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_RIGHT_5, FLIP_BUFFERED_RIGHT_5));
+        super.registerControllers(controllerRegistrar);
     }
 
     @Override
