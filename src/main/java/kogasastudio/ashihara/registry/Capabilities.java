@@ -9,7 +9,7 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 public class Capabilities
 {
     @SubscribeEvent
-    public void registerCaps(RegisterCapabilitiesEvent event)
+    public static void registerCaps(RegisterCapabilitiesEvent event)
     {
         event.registerBlockEntity
         (

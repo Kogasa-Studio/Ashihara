@@ -445,27 +445,7 @@ public class BlockRegistryHandler
         }
     });
     public static final DeferredBlock<Block> STRAIGHT_BAR_WINDOW_GREEN = BLOCKS.register("straight_bar_window_green", () -> new StraightBarWindowBlock(BlockBehaviour.Properties.of().mapColor(DyeColor.GREEN).strength(1.5f).sound(SoundType.BAMBOO)));
-    public static final DeferredBlock<Block> CHARLOTTE = BLOCKS.register("charlotte", () -> new Block
-            (
-                    BlockBehaviour.Properties.of()
-                            .noOcclusion()
-                            .strength(1.0F)
-                            .mapColor(DyeColor.PINK)
-                            .sound(SoundType.WOOL)
-            )
-    {
-        public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
-
-        @Override
-        protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {builder.add(FACING);}
-
-        @Override
-        public float getShadeBrightness(BlockState p_60472_, BlockGetter p_60473_, BlockPos p_60474_) {return 1.0F;}
-
-        @Nullable
-        @Override
-        public BlockState getStateForPlacement(BlockPlaceContext context) {return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());}
-    });
+    public static final DeferredBlock<Block> CHARLOTTE = BLOCKS.register("charlotte", CharlotteBlock::new);
 
     public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(BuiltInRegistries.FLUID, Ashihara.MODID);
 

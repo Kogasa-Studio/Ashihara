@@ -56,6 +56,13 @@ public class TERegistryHandler
                     BlockRegistryHandler.CUTTING_BOARD.get()
                 ).build(null));
 
+    public static final Supplier<BlockEntityType<CharlotteTE>> CHARLOTTE_BE = TILE_ENTITIES.register("charlotte_blockentity",
+                                                                                                            () -> BlockEntityType.Builder.of
+                (
+                    CharlotteTE::new,
+                    BlockRegistryHandler.CHARLOTTE.get()
+                ).build(null));
+
     public static final Supplier<BlockEntityType<MultiBuiltBlockEntity>> MULTI_BUILT_BLOCKENTITY = TILE_ENTITIES.register
     (
         "multi_built_blockentity",

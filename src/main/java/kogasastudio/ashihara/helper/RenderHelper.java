@@ -3,6 +3,7 @@ package kogasastudio.ashihara.helper;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Axis;
 import kogasastudio.ashihara.block.tileentities.IFluidHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -287,27 +288,29 @@ public class RenderHelper
     public static void blit
     (
         PoseStack poseStack,
-        ResourceLocation atlasLocation,
+        VertexConsumer consumer,
         float x1,
         float x2,
         float y1,
         float y2,
-        int blitOffset,
+        float z,
         float minU,
         float maxU,
         float minV,
-        float maxV
+        float maxV,
+        boolean doubleSided,
+        int overlay,
+        int light
     )
     {
-        RenderSystem.setShaderTexture(0, atlasLocation);
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        poseStack.pushPose();
+        poseStack.translate(0.5, 0.5, 0.5);
         Matrix4f matrix4f = poseStack.last().pose();
-        BufferBuilder bufferbuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferbuilder.addVertex(matrix4f, x1, y1, (float)blitOffset).setUv(minU, minV);
-        bufferbuilder.addVertex(matrix4f, x1, y2, (float)blitOffset).setUv(minU, maxV);
-        bufferbuilder.addVertex(matrix4f, x2, y2, (float)blitOffset).setUv(maxU, maxV);
-        bufferbuilder.addVertex(matrix4f, x2, y1, (float)blitOffset).setUv(maxU, minV);
-        BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
+        buildMatrix(matrix4f, consumer, x2, y2, z, minU, minV, overlay, light);
+        buildMatrix(matrix4f, consumer, x1, y2, z, maxU, minV, overlay, light);
+        buildMatrix(matrix4f, consumer, x1, y1, z, maxU, maxV, overlay, light);
+        buildMatrix(matrix4f, consumer, x2, y1, z, minU, maxV, overlay, light);
+        poseStack.popPose();
     }
 
     public static void fill(PoseStack poseStack, VertexConsumer consumer, float minX, float minY, float maxX, float maxY, float z, int color)

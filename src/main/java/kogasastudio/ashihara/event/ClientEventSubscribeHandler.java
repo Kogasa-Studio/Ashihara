@@ -120,6 +120,7 @@ public class ClientEventSubscribeHandler
         event.registerBlockEntityRenderer(TERegistryHandler.PAIL_TE.get(), PailTER::new);
         event.registerBlockEntityRenderer(TERegistryHandler.CANDLE_TE.get(), CandleTER::new);
         event.registerBlockEntityRenderer(TERegistryHandler.MULTI_BUILT_BLOCKENTITY.get(), MultiBuiltBlockRenderer::new);
+        event.registerBlockEntityRenderer(TERegistryHandler.CHARLOTTE_BE.get(), CharlotteBER::new);
         //event.registerBlockEntityRenderer(TERegistryHandler.MORTAR_TE.get(), MortarTER::new);
         event.registerBlockEntityRenderer(TERegistryHandler.CUTTING_BOARD_TE.get(), CuttingBoardTER::new);
     }
