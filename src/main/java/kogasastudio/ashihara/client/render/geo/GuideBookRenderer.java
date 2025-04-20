@@ -46,8 +46,6 @@ public class GuideBookRenderer extends GeoObjectRenderer<GuideBookModel>
         GuideBookModel book = (GuideBookModel) this.model;
         GuideBookModel.DoubleSidedPage doubleSidedPage = book.getDoubleSidedPage(bone.getName());
 
-        VertexConsumer c = bufferSource.getBuffer(RenderType.guiOverlay());
-
         if (doubleSidedPage != null)
         {
             if (doubleSidedPage.right() != null)
@@ -101,40 +99,5 @@ public class GuideBookRenderer extends GeoObjectRenderer<GuideBookModel>
 
         this.renderChildBones(poseStack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
         poseStack.popPose();
-    }
-
-    public void blit
-    (
-        PoseStack poseStack,
-        ResourceLocation atlasLocation,
-        int x1,
-        int x2,
-        int y1,
-        int y2,
-        int blitOffset,
-        float minU,
-        float maxU,
-        float minV,
-        float maxV
-    )
-    {
-        RenderSystem.setShaderTexture(0, atlasLocation);
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        Matrix4f matrix4f = poseStack.last().pose();
-        BufferBuilder bufferbuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferbuilder.addVertex(matrix4f, (float)x1, (float)y1, (float)blitOffset).setUv(minU, minV);
-        bufferbuilder.addVertex(matrix4f, (float)x1, (float)y2, (float)blitOffset).setUv(minU, maxV);
-        bufferbuilder.addVertex(matrix4f, (float)x2, (float)y2, (float)blitOffset).setUv(maxU, maxV);
-        bufferbuilder.addVertex(matrix4f, (float)x2, (float)y1, (float)blitOffset).setUv(maxU, minV);
-        BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
-    }
-
-    public void fill(PoseStack poseStack, VertexConsumer consumer, int minX, int minY, int maxX, int maxY, int z, int color)
-    {
-        Matrix4f matrix4f = poseStack.last().pose();
-        consumer.addVertex(matrix4f, (float)minX, (float)minY, (float)z).setColor(color);
-        consumer.addVertex(matrix4f, (float)minX, (float)maxY, (float)z).setColor(color);
-        consumer.addVertex(matrix4f, (float)maxX, (float)maxY, (float)z).setColor(color);
-        consumer.addVertex(matrix4f, (float)maxX, (float)minY, (float)z).setColor(color);
     }
 }

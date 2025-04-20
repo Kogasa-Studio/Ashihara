@@ -298,7 +298,6 @@ public class RenderHelper
         float maxU,
         float minV,
         float maxV,
-        boolean doubleSided,
         int overlay,
         int light
     )
@@ -310,6 +309,37 @@ public class RenderHelper
         buildMatrix(matrix4f, consumer, x1, y2, z, maxU, minV, overlay, light);
         buildMatrix(matrix4f, consumer, x1, y1, z, maxU, maxV, overlay, light);
         buildMatrix(matrix4f, consumer, x2, y1, z, minU, maxV, overlay, light);
+        poseStack.popPose();
+    }
+
+    public static void blitTiles
+    (
+        PoseStack poseStack,
+        VertexConsumer consumer,
+        float x1,
+        float x2,
+        float y1,
+        float y2,
+        float z,
+        float widthIn,
+        float heightIn,
+        int overlay,
+        int light
+    )
+    {
+        float width = widthIn / 16f;
+        float height = heightIn / 16f;
+        poseStack.pushPose();
+        poseStack.translate(x1, y1, z);
+        for (float i = 0; i < Math.abs(y2 - y1); i += height)
+        {
+            float dy = Math.min(height, Math.abs(y2) - i);
+            for (float j = 0; j < Math.abs(x2 - x1); j += width)
+            {
+                float dx = Math.min(width, Math.abs(x2) - j);
+                blit(poseStack, consumer, x1 + j, x1 + j + dx, y1 + i, y1 + i + dy, z, 0, dx / width, 0, dy / height, overlay, light);
+            }
+        }
         poseStack.popPose();
     }
 

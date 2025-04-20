@@ -17,9 +17,16 @@ public class UIPanelModel extends InternalControlGeoModel<UIPanelModel>
     public static final ResourceLocation MODEL = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "geo/panel.geo.json");
     public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/geo/highlight_outline.png");
     public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/gui/nihil.png");
-    public static final int BG_WIDTH = 25;
-    public static final int BG_HEIGHT = 40;
+    public static final int BG_WIDTH = 8;
+    public static final int BG_HEIGHT = 8;
     public float progress = 0.9f;
+    public float scaleX = 1.0f;
+    public float scaleY = 1.0f;
+
+    public SimpleInternalControlGeoModel corner_hemming = new SimpleInternalControlGeoModel("geo/golden_hemming_corner.geo.json", "textures/geo/golden_hemming.png");
+    public SimpleInternalControlGeoModel edge_up = new SimpleInternalControlGeoModel("geo/light_wood_edge.geo.json", "textures/geo/wooden_edge.png");
+    public SimpleInternalControlGeoModel edge_left = new SimpleInternalControlGeoModel("geo/light_wood_edge.geo.json", "textures/geo/wooden_edge.png");
+
     public static final ResourceLocation ANIMATION = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "animations/gui_panel_general.animation.json");
     public final WorldUIPanelRenderer RENDERER = new WorldUIPanelRenderer(this);
 

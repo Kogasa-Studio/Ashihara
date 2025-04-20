@@ -54,15 +54,20 @@ public class CharlotteBlock extends Block implements EntityBlock
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
-        if (stack.is(ItemRegistryHandler.RICE.asItem()))
+        if (stack.is(ItemRegistryHandler.RICE.asItem()) && level.isClientSide())
         {
             CharlotteTE te = (CharlotteTE) level.getBlockEntity(pos);
             if (te != null)
             {
-                if (stack.getCount() > 1) te.switchRender(player);
+                if (stack.getCount() == 1)
                 {
-                    return ItemInteractionResult.SUCCESS;
+                    te.switchRender(player);
                 }
+                if (stack.getCount() > 1)
+                {
+                    te.lerpScale(stack.getCount() * 8, stack.getCount() * 4, player);
+                }
+                return ItemInteractionResult.SUCCESS;
             }
         }
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
