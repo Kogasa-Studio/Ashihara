@@ -61,7 +61,7 @@ public class Ashihara
         DataComponentTypes.ATTACHMENT_TYPES.register(modEventBus);
         RecipeTypes.register(modEventBus);
         RecipeSerializers.register(modEventBus);
-        try
+        /*try
         {
             Map<Integer, GuideBook.Page> iMap = new HashMap<>();
             iMap.put(0, new GuideBook.Page(0, new GuideBook.Page.TextField[]{new GuideBook.Page.TextField(0, 0, 5, 10, 0x000000, 3, true, "小猫崽子")}, new GuideBook.Page.Illustration[]{}));
@@ -71,7 +71,7 @@ public class Ashihara
         } catch (IOException e)
         {
             throw new RuntimeException(e);
-        }
+        }*/
 
         if (FMLEnvironment.dist == Dist.CLIENT)
         {

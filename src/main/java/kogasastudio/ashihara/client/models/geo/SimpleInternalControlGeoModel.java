@@ -5,6 +5,7 @@ import kogasastudio.ashihara.Ashihara;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.renderer.GeoObjectRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
@@ -12,6 +13,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 public class SimpleInternalControlGeoModel extends InternalControlGeoModel<SimpleInternalControlGeoModel>
 {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    public final Player player;
 
     private final ResourceLocation MODEL;
     private final ResourceLocation TEXTURES;
@@ -20,12 +22,13 @@ public class SimpleInternalControlGeoModel extends InternalControlGeoModel<Simpl
 
     public final GeoObjectRenderer<SimpleInternalControlGeoModel> RENDERER = new GeoObjectRenderer<>(this);
 
-    public SimpleInternalControlGeoModel(String modelPrefix, String texturePrefix, String animationsPrefix)
+    public SimpleInternalControlGeoModel(String modelPrefix, String texturePrefix, String animationsPrefix, Player player)
     {
         this.MODEL = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, modelPrefix);
         this.TEXTURES = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, texturePrefix);
         this.ANIMATIONS = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, animationsPrefix);
         this.RENDER_TYPE = RenderType.entityTranslucent(TEXTURES);
+        this.player = player;
     }
 
     public void render(PoseStack stack, MultiBufferSource buffers, int light, int overlay)
@@ -33,9 +36,9 @@ public class SimpleInternalControlGeoModel extends InternalControlGeoModel<Simpl
         this.RENDERER.render(stack, this, buffers, RENDER_TYPE, buffers.getBuffer(RENDER_TYPE), light, overlay);
     }
 
-    public SimpleInternalControlGeoModel(String modelPrefix, String texturePrefix)
+    public SimpleInternalControlGeoModel(String modelPrefix, String texturePrefix, Player player)
     {
-        this(modelPrefix, texturePrefix, "");
+        this(modelPrefix, texturePrefix, "", player);
     }
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache()

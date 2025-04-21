@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.registry;
 
 import kogasastudio.ashihara.network.GuidebookProgressPacket;
+import kogasastudio.ashihara.network.OpenGuidebookPacket;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -19,5 +20,6 @@ public class PacketPayloads
             GuidebookProgressPacket.STREAM_CODEC,
             GuidebookProgressPacket.ServerHandler::handle
         );
+        registrar.playToClient(OpenGuidebookPacket.TYPE, OpenGuidebookPacket.STREAM_CODEC, OpenGuidebookPacket.ClientHandler::handle);
     }
 }
