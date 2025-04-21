@@ -6,6 +6,7 @@ import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -58,8 +59,9 @@ public class ItemKoishi extends Item
                 return InteractionResult.SUCCESS;
             } else if (te != null)
             {
-                CompoundTag nbt = te.getUpdateTag(worldIn.registryAccess());
-                player.sendSystemMessage(Component.translatable((worldIn.isClientSide() ? "client: " : "server: ") + nbt));
+                CompoundTag nbt = te.saveWithFullMetadata(worldIn.registryAccess());
+                player.sendSystemMessage(Component.translatable((worldIn.isClientSide() ? "client: " : "server: ")));
+                player.sendSystemMessage(NbtUtils.toPrettyComponent(nbt));
                 return InteractionResult.SUCCESS;
             } else
             {
