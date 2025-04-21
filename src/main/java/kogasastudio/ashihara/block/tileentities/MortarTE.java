@@ -8,6 +8,8 @@ import kogasastudio.ashihara.item.ItemOtsuchi;
 import kogasastudio.ashihara.registry.TERegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
@@ -27,7 +29,7 @@ import java.util.function.Predicate;
 
 public class MortarTE extends AshiharaMachineTE implements IFluidHandler // extends AshiharaMachineTE implements MenuProvider, IFluidHandler
 {
-    public final FluidTank fluidTank = new FluidTank(16000);
+    public FluidTank fluidTank = new FluidTank(16000);
 
     public static final int SLOT_0 = 0;
     public static final int SLOT_1 = 1;
@@ -110,6 +112,23 @@ public class MortarTE extends AshiharaMachineTE implements IFluidHandler // exte
     public FluidStack drain(int maxDrain, FluidAction action)
     {
         return fluidTank.drain(maxDrain, action);
+    }
+
+    @Override
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries)
+    {
+        this.currentRecipe = (MortarRecipe) this.level.getRecipeManager().byKey(ResourceLocation.parse(tag.getString("currentRecipe"))).orElse(null).value();
+        this.fluidTank = this.fluidTank.readFromNBT(registries, tag);
+        super.loadAdditional(tag, registries);
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries)
+    {
+        tag.putString("currentRecipe", this.currentRecipe.getId().toString());
+        tag.put("contents", this.inventory.)
+        tag.put("fluid", this.fluidTank.writeToNBT(registries, new CompoundTag()));
+        super.saveAdditional(tag, registries);
     }
 
     public enum MortarToolType
