@@ -59,6 +59,7 @@ public class CharlotteTE extends AshiharaMachineTE
 
     public void lerpScale(float xScale, float yScale, Player player)
     {
+        if (model == null) return;
         model.triggerInternal
         (
             player, model.hashCode(),

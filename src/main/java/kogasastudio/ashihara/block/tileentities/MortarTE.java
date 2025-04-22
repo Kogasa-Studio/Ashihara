@@ -3,6 +3,7 @@ package kogasastudio.ashihara.block.tileentities;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
 import kogasastudio.ashihara.item.ItemOtsuchi;
 import kogasastudio.ashihara.registry.TERegistryHandler;
@@ -14,15 +15,20 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.RangedWrapper;
+import software.bernie.geckolib.renderer.GeoObjectRenderer;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.Predicate;
@@ -30,6 +36,11 @@ import java.util.function.Predicate;
 public class MortarTE extends AshiharaMachineTE implements IFluidHandler // extends AshiharaMachineTE implements MenuProvider, IFluidHandler
 {
     public FluidTank fluidTank = new FluidTank(16000);
+
+    public SimpleInternalControlGeoModel item_display_positions;
+    public SimpleInternalControlGeoModel fluid_display_position;
+
+    //public final GeoObjectRenderer<SimpleInternalControlGeoModel> ITEM_RENDERER;
 
     public static final int SLOT_0 = 0;
     public static final int SLOT_1 = 1;
@@ -43,11 +54,17 @@ public class MortarTE extends AshiharaMachineTE implements IFluidHandler // exte
     public float productionMultiplier = 1.0f;
     public MortarRecipe currentRecipe;
     private Queue<MortarToolType> queue;
-    public CatItemHandler inventory = new CatItemHandler(4);
+    public ItemStackHandler inventory = new ItemStackHandler(4);
 
     public MortarTE(BlockPos pos, BlockState state)
     {
         super(TERegistryHandler.MORTAR_TE.get(), pos, state);
+    }
+
+    public void init(Player player)
+    {
+        this.item_display_positions = new SimpleInternalControlGeoModel("geo/assistance/mortar_item_display_loc.geo.json", "", player);
+        this.fluid_display_position = new SimpleInternalControlGeoModel("geo/assistance/light_wood_edge.geo.json", "", player);
     }
 
     @Override
@@ -117,16 +134,21 @@ public class MortarTE extends AshiharaMachineTE implements IFluidHandler // exte
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries)
     {
-        this.currentRecipe = (MortarRecipe) this.level.getRecipeManager().byKey(ResourceLocation.parse(tag.getString("currentRecipe"))).orElse(null).value();
-        this.fluidTank = this.fluidTank.readFromNBT(registries, tag);
+        if (this.level != null)
+        {
+            Optional<RecipeHolder<?>> holderOptional = this.level.getRecipeManager().byKey(ResourceLocation.parse(tag.getString("currentRecipe")));
+            holderOptional.ifPresent(recipeHolder -> this.currentRecipe = (MortarRecipe) recipeHolder.value());
+        }
+        this.inventory.deserializeNBT(registries, tag.getCompound("contents"));
+        this.fluidTank = this.fluidTank.readFromNBT(registries, tag.getCompound("fluid"));
         super.loadAdditional(tag, registries);
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries)
     {
-        tag.putString("currentRecipe", this.currentRecipe.getId().toString());
-        tag.put("contents", this.inventory.)
+        tag.putString("currentRecipe", this.currentRecipe == null ? "" : this.currentRecipe.getId().toString());
+        tag.put("contents", this.inventory.serializeNBT(registries));
         tag.put("fluid", this.fluidTank.writeToNBT(registries, new CompoundTag()));
         super.saveAdditional(tag, registries);
     }

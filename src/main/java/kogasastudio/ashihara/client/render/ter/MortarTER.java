@@ -1,9 +1,108 @@
 package kogasastudio.ashihara.client.render.ter;
 
-import static kogasastudio.ashihara.helper.RenderHelper.buildMatrix;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+import com.mojang.math.Transformation;
+import kogasastudio.ashihara.block.tileentities.MortarTE;
+import kogasastudio.ashihara.client.render.SectionRenderContext;
+import kogasastudio.ashihara.client.render.WithLevelRenderer;
+import kogasastudio.ashihara.helper.MathHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import software.bernie.geckolib.util.RenderUtil;
 
-public class MortarTER //implements BlockEntityRenderer<MortarTE>
+import java.util.HashMap;
+import java.util.Map;
+
+public class MortarTER implements BlockEntityRenderer<MortarTE>, WithLevelRenderer<MortarTE>
 {
+    public Map<Integer, ItemStack> items = new HashMap<>(8);
+
+    public MortarTER(BlockEntityRendererProvider.Context rendererDispatcherIn) {}
+
+    @Override
+    public void render(MortarTE blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay)
+    {
+        poseStack.pushPose();
+        poseStack.translate(0, -0.51, 0);
+        blockEntity.item_display_positions.render(poseStack, buffer, packedLight, packedOverlay);
+        poseStack.popPose();
+    }
+
+    @Override
+    public boolean shouldRender(MortarTE blockEntity, Vec3 cameraPos)
+    {
+        return false;
+    }
+
+    @Override
+    public void renderStatic(SectionRenderContext context, ModelRenderer renderer)
+    {
+        PoseStack poseStack = context.poseStack();
+        MortarTE te = (MortarTE) context.blockEntity();
+        syncItem(te.inventory);
+        ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+        if (te.item_display_positions == null) te.init(Minecraft.getInstance().player);
+        for (int i = 0; i < items.keySet().size(); i++)
+        {
+            ItemStack itemStack = items.get(i);
+            BakedModel model = itemRenderer.getModel(itemStack.copyWithCount(1), te.getLevel(), null, 0);
+            te.item_display_positions.getBakedModel(te.item_display_positions.getModelResource(te.item_display_positions)).getBone("level" + i).ifPresent
+            (
+                bone ->
+                {
+                    poseStack.pushPose();
+                    poseStack.translate(bone.getPivotX() / 16f, bone.getPivotY() / 16f, bone.getPivotZ() / 16f);
+
+                    poseStack.pushPose();
+
+                    poseStack.translate(0.5, 0, 0.5);
+
+                    RenderUtil.rotateMatrixAroundBone(poseStack, bone);
+                    poseStack.mulPose(Axis.XP.rotationDegrees(90));
+                    poseStack.translate(0, -3/16f, 0);
+                    poseStack.scale(6f/16f, 6f/16f, 6f/16f);
+
+                    poseStack.translate(-0.5,-0,-0.5);
+
+                    renderer.renderModel(model, poseStack, RenderType.cutoutMipped(), OverlayTexture.NO_OVERLAY, ModelData.EMPTY);
+                    poseStack.popPose();
+
+                    poseStack.popPose();
+                }
+            );
+        }
+    }
+
+    public void syncItem(ItemStackHandler inventory)
+    {
+        this.items.clear();
+        int k = 0;
+        for (int i = 0; i < inventory.getSlots(); i++)
+        {
+            ItemStack stack = inventory.getStackInSlot(i).copy();
+            if (!stack.isEmpty())
+            {
+                if (stack.getCount() > 32)
+                {
+                    this.items.put(k, stack);
+                    k += 1;
+                }
+                this.items.put(k, stack);
+                k += 1;
+            }
+        }
+    }
     /*private static final String CEREALS = "cereals_level";
     private static final String PROCESSED = "processed_level";
 
@@ -19,10 +118,6 @@ public class MortarTER //implements BlockEntityRenderer<MortarTE>
 
         return builder.build();
     }*//*
-
-    public MortarTER(BlockEntityRendererProvider.Context rendererDispatcherIn)
-    {
-    }
 
     @Override
     public void render(MortarTE tileEntityIn, float partialTicks, PoseStack poseStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)

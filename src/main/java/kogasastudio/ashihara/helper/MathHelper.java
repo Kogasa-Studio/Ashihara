@@ -1,5 +1,9 @@
 package kogasastudio.ashihara.helper;
 
+import org.joml.Quaternionf;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
+
 public class MathHelper
 {
     public static double simplifyDouble(Double d, int bit)
@@ -21,5 +25,15 @@ public class MathHelper
         double nX = (x - pivotX) * Math.cos(rotation) - (z - pivotZ) * Math.sin(rotation) + pivotX;
         double nZ = (z - pivotZ) * Math.cos(rotation) + (x - pivotX) * Math.sin(rotation) + pivotZ;
         return new double[]{nX, nZ};
+    }
+
+    public static Vector3f convertToVector3f(Vector3d vector3d)
+    {
+        return new Vector3f((float) vector3d.x, (float) vector3d.y, (float) vector3d.z);
+    }
+
+    public static Quaternionf convertToQuaternionf(Vector3d eulerAngles)
+    {
+        return new Quaternionf().rotateXYZ((float) eulerAngles.x, (float) eulerAngles.y, (float) eulerAngles.z);
     }
 }

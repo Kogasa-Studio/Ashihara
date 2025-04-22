@@ -1,5 +1,8 @@
 package kogasastudio.ashihara.block;
 
+import kogasastudio.ashihara.block.tileentities.MortarTE;
+import kogasastudio.ashihara.helper.FluidHelper;
+import kogasastudio.ashihara.helper.InventoryHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -9,8 +12,10 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
@@ -19,8 +24,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 
-public class MortarBlock extends Block // implements EntityBlock
+public class MortarBlock extends Block implements EntityBlock
 {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
@@ -85,6 +91,24 @@ public class MortarBlock extends Block // implements EntityBlock
     @Override
     public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
+        MortarTE te = (MortarTE) worldIn.getBlockEntity(pos);
+        if (te != null)
+        {
+            if (FluidHelper.notifyFluidTankInteraction(player, handIn, stack, te.fluidTank, worldIn, pos))
+            {
+                player.getInventory().setChanged();
+                te.setChanged();
+                worldIn.sendBlockUpdated(pos, state, state, UPDATE_ALL);
+                return ItemInteractionResult.SUCCESS;
+            }
+            if (InventoryHelper.interactWithInventory(te.inventory, stack, player, handIn, 64))
+            {
+                player.getInventory().setChanged();
+                te.setChanged();
+                worldIn.sendBlockUpdated(pos, state, state, UPDATE_ALL);
+                return ItemInteractionResult.SUCCESS;
+            }
+        }
         /*MortarTE te = (MortarTE) worldIn.getBlockEntity(pos);
         if (te == null) return InteractionResult.FAIL;
 
@@ -155,6 +179,13 @@ public class MortarBlock extends Block // implements EntityBlock
             return InteractionResult.SUCCESS;
         }*/
         return super.useItemOn(stack, state, worldIn, pos, player, handIn, hit);
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+    {
+        return new MortarTE(pos, state);
     }
 
     /*@Nullable
