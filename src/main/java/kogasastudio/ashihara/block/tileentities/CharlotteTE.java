@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib.animation.Animation;
+import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.EasingType;
 import software.bernie.geckolib.cache.object.GeoBone;
 
@@ -17,7 +18,7 @@ import static kogasastudio.ashihara.utils.OptionalUtil.getWithDefault;
 public class CharlotteTE extends AshiharaMachineTE implements IRenderSwitchable
 {
     public UIPanelModel model;
-    public final GeoRenderSwitch renderSwitch = new GeoRenderSwitch(this::initSwitch, this::hide, this::check);
+    public GeoRenderSwitch renderSwitch = new GeoRenderSwitch(this::initSwitch, this::hide, this::check);
 
     public CharlotteTE(BlockPos pos, BlockState state)
     {
@@ -35,14 +36,14 @@ public class CharlotteTE extends AshiharaMachineTE implements IRenderSwitchable
     private void hide(Player player)
     {
         model.stopTriggeredAnim(player, model.hashCode(), UIPanelModel.INTRO, UIPanelModel.INTRO);
-        model.triggerAnim(player, model.hashCode(), UIPanelModel.INTRO, UIPanelModel.OUTRO);
+        model.triggerAnim(player, model.hashCode(), UIPanelModel.OUTRO, UIPanelModel.OUTRO);
     }
 
     private boolean check()
     {
         if (this.model != null && this.model.getBone("main").isPresent())
         {
-            return this.model.getBone("main").get().getScaleX() > 0.01;
+            return !this.model.getAnimatableInstanceCache().getManagerForId(this.model.hashCode()).getAnimationControllers().get(UIPanelModel.OUTRO).getAnimationState().equals(AnimationController.State.PAUSED);//.getBone("main").get().getScaleX() > 0.01;
         }
         return false;
     }

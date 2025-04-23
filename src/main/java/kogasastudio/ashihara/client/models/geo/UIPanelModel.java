@@ -45,7 +45,8 @@ public class UIPanelModel extends InternalControlGeoModel<UIPanelModel>
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
     {
-        controllers.add(new AnimationController<>(this, INTRO, state -> PlayState.STOP).triggerableAnim(INTRO, ANIM_INTRO).triggerableAnim(OUTRO, ANIM_OUTRO));
+        controllers.add(new AnimationController<>(this, INTRO, state -> PlayState.STOP).triggerableAnim(INTRO, ANIM_INTRO));
+        controllers.add(new AnimationController<>(this, OUTRO, state -> PlayState.STOP).triggerableAnim(OUTRO, ANIM_OUTRO));
         controllers.add(new AnimationController<>(this, FLOAT, state -> PlayState.CONTINUE).triggerableAnim(FLOAT, ANIM_FLOAT));
         super.registerControllers(controllers);
     }

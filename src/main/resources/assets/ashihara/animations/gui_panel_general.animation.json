@@ -4,6 +4,7 @@
 		"intro": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 2,
+			"override_previous_animation": true,
 			"bones": {
 				"main": {
 					"rotation": {
@@ -25,11 +26,11 @@
 							"vector": [-1, 0, 0]
 						},
 						"1.0": {
-							"vector": [-0.5, 8, 0],
+							"vector": [-0.5, 4, 0],
 							"easing": "easeInExpo"
 						},
 						"2.0": {
-							"vector": [0, 16, 0],
+							"vector": [0, 8, 0],
 							"easing": "easeOutBack",
 							"easingArgs": [1]
 						}
@@ -47,6 +48,11 @@
 							"easing": "easeOutBack",
 							"easingArgs": [1]
 						}
+					}
+				},
+				"scale_sim": {
+					"scale": {
+						"vector": [32, 10, 1]
 					}
 				}
 			}
