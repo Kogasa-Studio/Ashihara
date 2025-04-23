@@ -19,7 +19,7 @@ public class Capabilities
         event.registerBlockEntity
         (
             net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.BLOCK,
-            TERegistryHandler.MORTAR_TE.get(), (te, direction) -> te
+            TERegistryHandler.MORTAR_TE.get(), MortarTE::getFluid
         );
     }
 }

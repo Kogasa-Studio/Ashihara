@@ -35,7 +35,7 @@ public class MortarTER implements BlockEntityRenderer<MortarTE>, WithLevelRender
     {
         poseStack.pushPose();
         poseStack.translate(0, -0.51, 0);
-        blockEntity.item_display_positions.render(poseStack, buffer, packedLight, packedOverlay);
+        //blockEntity.item_display_positions.render(poseStack, buffer, packedLight, packedOverlay);
         poseStack.popPose();
     }
 

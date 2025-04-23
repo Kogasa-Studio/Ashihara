@@ -25,7 +25,6 @@ import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.RangedWrapper;
-import software.bernie.geckolib.renderer.GeoObjectRenderer;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +32,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.Predicate;
 
-public class MortarTE extends AshiharaMachineTE implements IFluidHandler // extends AshiharaMachineTE implements MenuProvider, IFluidHandler
+public class MortarTE extends AshiharaMachineTE // extends AshiharaMachineTE implements MenuProvider, IFluidHandler
 {
     public FluidTank fluidTank = new FluidTank(16000);
 
@@ -41,11 +40,6 @@ public class MortarTE extends AshiharaMachineTE implements IFluidHandler // exte
     public SimpleInternalControlGeoModel fluid_display_position;
 
     //public final GeoObjectRenderer<SimpleInternalControlGeoModel> ITEM_RENDERER;
-
-    public static final int SLOT_0 = 0;
-    public static final int SLOT_1 = 1;
-    public static final int SLOT_2 = 2;
-    public static final int SLOT_3 = 3;
 
     public boolean renderFloatingTip = false;
     public boolean transitingLiquidLevel = false;
@@ -67,18 +61,6 @@ public class MortarTE extends AshiharaMachineTE implements IFluidHandler // exte
         this.fluid_display_position = new SimpleInternalControlGeoModel("geo/assistance/light_wood_edge.geo.json", "", player);
     }
 
-    @Override
-    public int getTanks()
-    {
-        return 1;
-    }
-
-    @Override
-    public FluidStack getFluidInTank(int tank)
-    {
-        return fluidTank.getFluidInTank(tank);
-    }
-
     public static IItemHandler getInv(MortarTE te, Direction side)
     {
         if (side.getAxis().equals(Direction.Axis.Y))
@@ -86,6 +68,15 @@ public class MortarTE extends AshiharaMachineTE implements IFluidHandler // exte
             return new RangedWrapper(te.inventory, 0, 4);
         }
         return null;
+    }
+
+    public static IFluidHandler getFluid(MortarTE te, Direction side)
+    {
+        return te.fluidTank;
+    }
+
+    public void updateLiquidLevel()
+    {
     }
 
     public void acceptRecipe(MortarRecipe recipe)
@@ -99,36 +90,6 @@ public class MortarTE extends AshiharaMachineTE implements IFluidHandler // exte
         if (currentRecipe == null) return false;
         boolean flag = false;
         return flag;
-    }
-
-    @Override
-    public int getTankCapacity(int tank)
-    {
-        return fluidTank.getTankCapacity(tank);
-    }
-
-    @Override
-    public boolean isFluidValid(int tank, FluidStack stack)
-    {
-        return fluidTank.isFluidValid(tank, stack);
-    }
-
-    @Override
-    public int fill(FluidStack resource, FluidAction action)
-    {
-        return fluidTank.fill(resource, action);
-    }
-
-    @Override
-    public FluidStack drain(FluidStack resource, FluidAction action)
-    {
-        return fluidTank.drain(resource, action);
-    }
-
-    @Override
-    public FluidStack drain(int maxDrain, FluidAction action)
-    {
-        return fluidTank.drain(maxDrain, action);
     }
 
     @Override

@@ -51,12 +51,7 @@ public class CharlotteBER implements BlockEntityRenderer<CharlotteTE>, WithLevel
     @Override
     public boolean shouldRender(CharlotteTE blockEntity, Vec3 cameraPos)
     {
-        if (blockEntity.model != null && blockEntity.model.getBone("main").isPresent())
-        {
-            if (blockEntity.model.getBone("main").get().getScaleX() > 0.01) return true;
-            else if (blockEntity.forHiding) blockEntity.disableRender();
-        }
-        return blockEntity.doRender();
+        return blockEntity.checkRender();
     }
 
     @Override

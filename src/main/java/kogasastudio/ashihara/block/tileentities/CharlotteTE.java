@@ -14,47 +14,37 @@ import software.bernie.geckolib.cache.object.GeoBone;
 
 import static kogasastudio.ashihara.utils.OptionalUtil.getWithDefault;
 
-public class CharlotteTE extends AshiharaMachineTE
+public class CharlotteTE extends AshiharaMachineTE implements IRenderSwitchable
 {
-    private boolean doRender = false;
-    public boolean forHiding = false;
-
     public UIPanelModel model;
+    public final GeoRenderSwitch renderSwitch = new GeoRenderSwitch(this::initSwitch, this::hide, this::check);
 
     public CharlotteTE(BlockPos pos, BlockState state)
     {
         super(TERegistryHandler.CHARLOTTE_BE.get(), pos, state);
     }
 
-    public void switchRender(Player player)
-    {
-        if (!this.doRender) init(player);
-        else hide(player);
-    }
-
-    public boolean doRender() {return doRender;}
-
-    public void disableRender()
-    {
-        this.doRender = false;
-        this.forHiding = false;
-    }
-
-    public void init(Player player)
+    private void initSwitch(Player player)
     {
         this.model = new UIPanelModel(player);
         model.triggerAnim(player, model.hashCode(), UIPanelModel.INTRO, UIPanelModel.INTRO);
         model.triggerAnim(player, model.hashCode(), UIPanelModel.FLOAT, UIPanelModel.FLOAT);
         lerpScale(8, 8, player);
-        this.doRender = true;
-        this.forHiding = false;
     }
 
-    public void hide(Player player)
+    private void hide(Player player)
     {
         model.stopTriggeredAnim(player, model.hashCode(), UIPanelModel.INTRO, UIPanelModel.INTRO);
         model.triggerAnim(player, model.hashCode(), UIPanelModel.INTRO, UIPanelModel.OUTRO);
-        this.forHiding = true;
+    }
+
+    private boolean check()
+    {
+        if (this.model != null && this.model.getBone("main").isPresent())
+        {
+            return this.model.getBone("main").get().getScaleX() > 0.01;
+        }
+        return false;
     }
 
     public void lerpScale(float xScale, float yScale, Player player)
@@ -85,5 +75,11 @@ public class CharlotteTE extends AshiharaMachineTE
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries)
     {
         super.loadAdditional(tag, registries);
+    }
+
+    @Override
+    public GeoRenderSwitch getSwitch()
+    {
+        return renderSwitch;
     }
 }
