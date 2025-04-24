@@ -2,16 +2,22 @@ package kogasastudio.ashihara.item;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.client.models.geo.PlayerProxyModel;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
+import kogasastudio.ashihara.helper.PlayerAnimationHelper;
 import kogasastudio.ashihara.item.block.*;
 import kogasastudio.ashihara.item.foods.EasyFood;
 import kogasastudio.ashihara.item.foods.ItemDirtBallDon;
 import kogasastudio.ashihara.registry.BuildingComponents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.Tool;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -49,7 +55,19 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> SUSHI_TAMAGO = ITEMS.register("sushi_tamago", () -> new EasyFood(6));
     public static final DeferredItem<Item> ONIGIRI = ITEMS.register("onigiri", () -> new EasyFood(6));
     public static final DeferredItem<Item> TAMAGO = ITEMS.register("tamago", () -> new EasyFood(1));
-    public static final DeferredItem<Item> CUCUMBER = ITEMS.register("cucumber", () -> new ItemNameBlockItem(BlockRegistryHandler.CUCUMBERS.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(2).build())));
+    public static final DeferredItem<Item> CUCUMBER = ITEMS.register("cucumber", () -> new ItemNameBlockItem(BlockRegistryHandler.CUCUMBERS.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(2).build()))
+    {
+        @Override
+        public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand)
+        {
+            if (usedHand.equals(InteractionHand.OFF_HAND) && player.getMainHandItem().is(KOISHI.asItem()))
+            {
+                PlayerAnimationHelper.triggerPlayerAnimation(player, model -> model.triggerAnim(player, model.hashCode(), PlayerProxyModel.TEST, PlayerProxyModel.TEST));
+                return InteractionResultHolder.success(player.getOffhandItem());
+            }
+            return super.use(level, player, usedHand);
+        }
+    });
     public static final DeferredItem<Item> TOMATO = ITEMS.register("tomato", () -> new EasyFood(2));
     public static final DeferredItem<Item> SWEET_POTATO = ITEMS.register("sweet_potato", () -> new ItemNameBlockItem(BlockRegistryHandler.SWEET_POTATOES.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(2).build())));
     public static final DeferredItem<Item> ROASTED_SWEET_POTATO = ITEMS.register("roasted_sweet_potato", () -> new EasyFood(5));

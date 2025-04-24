@@ -5,8 +5,10 @@
   "compatibilityLevel": "JAVA_21",
   "refmap": "ashihara.refmap.json",
   "mixins": [
+    "MixinPlayer"
   ],
   "client": [
+    "MixinLivingEntityRenderer"
   ],
   "injectors": {
     "defaultRequire": 1

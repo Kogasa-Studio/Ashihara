@@ -19,7 +19,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -32,8 +31,9 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.Predicate;
 
-public class MortarTE extends AshiharaMachineTE // extends AshiharaMachineTE implements MenuProvider, IFluidHandler
+public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable // extends AshiharaMachineTE implements MenuProvider, IFluidHandler
 {
+    public final GeoRenderSwitch renderSwitch = new GeoRenderSwitch(this::intro, this::outro, this::check);
     public FluidTank fluidTank = new FluidTank(16000);
 
     public SimpleInternalControlGeoModel item_display_positions;
@@ -59,6 +59,19 @@ public class MortarTE extends AshiharaMachineTE // extends AshiharaMachineTE imp
     {
         this.item_display_positions = new SimpleInternalControlGeoModel("geo/assistance/mortar_item_display_loc.geo.json", "", player);
         this.fluid_display_position = new SimpleInternalControlGeoModel("geo/assistance/light_wood_edge.geo.json", "", player);
+    }
+
+    private void intro(Player player)
+    {
+    }
+
+    private void outro(Player player)
+    {
+    }
+
+    private boolean check()
+    {
+        return true;
     }
 
     public static IItemHandler getInv(MortarTE te, Direction side)
@@ -112,6 +125,12 @@ public class MortarTE extends AshiharaMachineTE // extends AshiharaMachineTE imp
         tag.put("contents", this.inventory.serializeNBT(registries));
         tag.put("fluid", this.fluidTank.writeToNBT(registries, new CompoundTag()));
         super.saveAdditional(tag, registries);
+    }
+
+    @Override
+    public GeoRenderSwitch getSwitch()
+    {
+        return this.renderSwitch;
     }
 
     public enum MortarToolType

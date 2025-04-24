@@ -2,7 +2,10 @@ package kogasastudio.ashihara.event;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.client.render.PlayerAnimationProxy;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.utils.mixin.PlayerProxyProvider;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -18,11 +21,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderPlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 @EventBusSubscriber(modid = Ashihara.MODID)
 public class BasicEventHandler
 {
+    @SubscribeEvent
+    public static void onSyncProxiedPlayerAnimation(RenderPlayerEvent.Pre event)
+    {
+    }
     @SubscribeEvent
     public static void onRightClick(PlayerInteractEvent.RightClickBlock event)
     {
