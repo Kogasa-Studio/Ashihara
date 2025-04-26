@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.renderer.GeoObjectRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
@@ -29,6 +30,7 @@ public class SimpleInternalControlGeoModel extends InternalControlGeoModel<Simpl
         this.ANIMATIONS = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, animationsPrefix);
         this.RENDER_TYPE = RenderType.entityTranslucent(TEXTURES);
         this.player = player;
+        SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
     public void render(PoseStack stack, MultiBufferSource buffers, int light, int overlay)

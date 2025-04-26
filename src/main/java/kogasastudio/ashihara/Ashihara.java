@@ -5,7 +5,6 @@ import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.registry.TERegistryHandler;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
-import kogasastudio.ashihara.inventory.container.ContainerRegistryHandler;
 import kogasastudio.ashihara.item.GuideBook;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.loading.ReloadableResources;
@@ -51,7 +50,6 @@ public class Ashihara
         SoundEvents.SOUNDS.register(modEventBus);
         ParticleRegistryHandler.PARTICLE_TYPES.register(modEventBus);
         TERegistryHandler.TILE_ENTITIES.register(modEventBus);
-        ContainerRegistryHandler.CONTAINER_TYPES.register(modEventBus);
 //        GLMRegistryHandler.MODIFIERS.register(bus);
 
 //        BiomeRegistryHandler.BIOMES.register(bus);

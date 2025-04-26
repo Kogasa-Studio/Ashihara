@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import software.bernie.geckolib.animation.AnimationState;
 
 @Mixin(LivingEntityRenderer.class)
 public class MixinLivingEntityRenderer
@@ -22,11 +23,8 @@ public class MixinLivingEntityRenderer
         if (entity instanceof Player player)
         {
             PlayerAnimationProxy proxy = ((PlayerProxyProvider) player).ashihara_1_21$getAnimationProxy();
+            proxy.model.handleAnimations(proxy.model, proxy.model.hashCode(), new AnimationState<>(proxy.model, 0, 0, partialTicks, false), partialTicks);
             proxy.proxy();
-            poseStack.pushPose();
-            poseStack.translate(0, 3, 0);
-            proxy.model.RENDERER.render(poseStack, proxy.model, buffer, RenderType.solid(), buffer.getBuffer(RenderType.solid()), packedLight, partialTicks);
-            poseStack.popPose();
         }
     }
 }

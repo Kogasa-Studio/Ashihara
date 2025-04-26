@@ -13,7 +13,11 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class AshiharaMachineTE extends BlockEntity {
+import static net.minecraft.world.level.block.Block.UPDATE_ALL;
+
+public abstract class AshiharaMachineTE extends BlockEntity
+{
+    protected boolean needBlockUpdate = false;
 
     public AshiharaMachineTE(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -38,6 +42,22 @@ public abstract class AshiharaMachineTE extends BlockEntity {
         var packet = this.getUpdatePacket();
         serverLevel.getChunkSource().chunkMap.getPlayers(new ChunkPos(this.worldPosition), false)
                 .forEach(k -> k.connection.send(packet));
+    }
+
+    public void setNeedBlockUpdate()
+    {
+        this.needBlockUpdate = true;
+    }
+
+    public boolean needBlockUpdate()
+    {
+        return this.needBlockUpdate;
+    }
+
+    public void updateBlock()
+    {
+        if (this.level != null) this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), UPDATE_ALL);
+        this.needBlockUpdate = false;
     }
 
     @Override

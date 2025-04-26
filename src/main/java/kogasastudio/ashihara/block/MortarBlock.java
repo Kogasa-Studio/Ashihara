@@ -94,18 +94,20 @@ public class MortarBlock extends Block implements EntityBlock
         MortarTE te = (MortarTE) worldIn.getBlockEntity(pos);
         if (te != null)
         {
+            te.pushLastLiquidLevel();
             if (FluidHelper.notifyFluidTankInteraction(player, handIn, stack, te.fluidTank, worldIn, pos))
             {
+                te.switchFluid.switchRender(player);
                 player.getInventory().setChanged();
                 te.setChanged();
-                worldIn.sendBlockUpdated(pos, state, state, UPDATE_ALL);
+                te.updateBlock();
                 return ItemInteractionResult.SUCCESS;
             }
             if (InventoryHelper.interactWithInventory(te.inventory, stack, player, handIn, 64))
             {
                 player.getInventory().setChanged();
                 te.setChanged();
-                worldIn.sendBlockUpdated(pos, state, state, UPDATE_ALL);
+                te.updateBlock();
                 return ItemInteractionResult.SUCCESS;
             }
         }

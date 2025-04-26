@@ -2,12 +2,12 @@ package kogasastudio.ashihara.client.render.ter;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.mojang.math.Transformation;
 import kogasastudio.ashihara.block.tileentities.MortarTE;
 import kogasastudio.ashihara.client.render.SectionRenderContext;
 import kogasastudio.ashihara.client.render.WithLevelRenderer;
-import kogasastudio.ashihara.helper.MathHelper;
+import kogasastudio.ashihara.helper.RenderHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -19,6 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.util.RenderUtil;
 
 import java.util.HashMap;
@@ -33,16 +34,32 @@ public class MortarTER implements BlockEntityRenderer<MortarTE>, WithLevelRender
     @Override
     public void render(MortarTE blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay)
     {
-        poseStack.pushPose();
-        poseStack.translate(0, -0.51, 0);
+        if (blockEntity.fluid_display_position == null) blockEntity.init(Minecraft.getInstance().player);
+        blockEntity.fluid_display_position.handleAnimations(blockEntity.fluid_display_position, blockEntity.fluid_display_position.hashCode(), new AnimationState<>(blockEntity.fluid_display_position, 0, 0, partialTick, false), partialTick);
+        blockEntity.fluid_display_position.getBone("main").ifPresent
+        (
+            b ->
+            {
+                poseStack.pushPose();
+                poseStack.translate(0, b.getPosY() / 16f, 0);
+                RenderHelper.renderLeveledFluidStack
+                (
+                    blockEntity.fluidTank.getFluid(), poseStack, buffer.getBuffer(RenderType.translucent()),
+                    packedLight, OverlayTexture.NO_OVERLAY,
+                    4 / 16f, 0 / 16f, 4 / 16f,
+                    12 / 16f, 12 / 16f, blockEntity.getLevel(), blockEntity.getBlockPos()
+                );
+                poseStack.popPose();
+            }
+        );
         //blockEntity.item_display_positions.render(poseStack, buffer, packedLight, packedOverlay);
-        poseStack.popPose();
     }
 
     @Override
     public boolean shouldRender(MortarTE blockEntity, Vec3 cameraPos)
     {
-        return false;
+        if (blockEntity.needBlockUpdate()) blockEntity.updateBlock();
+        return blockEntity.switchFluid.checkRender() && !blockEntity.fluidTank.isEmpty();
     }
 
     @Override
@@ -81,6 +98,19 @@ public class MortarTER implements BlockEntityRenderer<MortarTE>, WithLevelRender
                     poseStack.popPose();
                 }
             );
+        }
+        if (!te.switchFluid.doRender() && !te.fluidTank.isEmpty())
+        {
+            poseStack.pushPose();
+            resetToBlock000(te, RenderType.translucent(), poseStack);
+            RenderHelper.renderLeveledFluidStack
+            (
+            te.fluidTank.getFluid(), poseStack, context.consumerFunction().apply(RenderType.translucent()),
+            LevelRenderer.getLightColor(te.getLevel(), te.getBlockPos()), OverlayTexture.NO_OVERLAY,
+            4 / 16f, (float) (te.getLiquidLevel() / 16f), 4 / 16f,
+            12 / 16f, 12 / 16f, te.getLevel(), te.getBlockPos()
+            );
+            poseStack.popPose();
         }
     }
 

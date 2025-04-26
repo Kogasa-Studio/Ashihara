@@ -3,18 +3,15 @@ package kogasastudio.ashihara.helper;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Axis;
 import kogasastudio.ashihara.block.tileentities.IFluidHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.Level;
@@ -22,11 +19,12 @@ import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtension
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import org.joml.Matrix4f;
+import software.bernie.geckolib.animatable.GeoAnimatable;
+import software.bernie.geckolib.animation.AnimationController;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.function.Predicate;
 
 import static com.mojang.blaze3d.vertex.DefaultVertexFormat.POSITION_TEX_COLOR;
 
@@ -36,38 +34,6 @@ public class RenderHelper
     public static void buildMatrix(Matrix4f matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int overlay, int light)
     {
         buildMatrix(matrix, builder, x, y, z, u, v, overlay, 0xffffff, 1.0f, light);
-    }
-
-    /**
-     * 将给定列表中的RL统一变换为ashihara:xxx形式
-     * 去掉头和尾巴就可以吃了
-     *
-     * @param textures 需进行操作的列表(textures/xxx/xxx.png 形式)
-     * @return 操作过的列表(ashihara : xxx / xxx形式)
-     */
-    public static ArrayList<ResourceLocation> cookTextureRLs(List<ResourceLocation> textures)
-    {
-        ArrayList<ResourceLocation> cooked = new ArrayList<>();
-        for (ResourceLocation location : textures)
-        {
-            //这里还是用幻数
-            String path = location.getPath().substring(9, location.getPath().length() - 4);
-            cooked.add(ResourceLocation.fromNamespaceAndPath(location.getNamespace(), path));
-        }
-        return cooked;
-    }
-
-    public static Map<String, ResourceLocation> cookTextureRLsToMap(List<ResourceLocation> textures)
-    {
-        Map<String, ResourceLocation> cooked = new HashMap<>();
-        for (ResourceLocation location : textures)
-        {
-            //这里还是用幻数
-            String path = location.getPath().substring(9, location.getPath().length() - 4);
-            String name = path.substring(path.lastIndexOf("/") + 1);
-            cooked.put(name, ResourceLocation.fromNamespaceAndPath(location.getNamespace(), path));
-        }
-        return cooked;
     }
 
     /**
@@ -230,16 +196,14 @@ public class RenderHelper
     }
 
     public static void renderLeveledFluidStack
-            (
-                    FluidStack fluidIn, PoseStack stackIn, MultiBufferSource bufferIn,
-                    int combinedLightIn, int combinedOverlayIn,
-                    float xStart, float heightIn, float zStart,
-                    float xEnd, float zEnd,
-                    Level worldIn, BlockPos posIn
-            )
+    (
+        FluidStack fluidIn, PoseStack stackIn, VertexConsumer builder,
+        int combinedLightIn, int combinedOverlayIn,
+        float xStart, float heightIn, float zStart,
+        float xEnd, float zEnd,
+        Level worldIn, BlockPos posIn
+    )
     {
-        VertexConsumer builder = bufferIn.getBuffer(RenderType.translucent());
-
         TextureAtlasSprite FLUID = (worldIn != null && posIn != null)
                 ? Minecraft.getInstance()
                 .getBlockRenderer()
@@ -252,7 +216,6 @@ public class RenderHelper
         int color = IClientFluidTypeExtensions.of(fluidIn.getFluid()).getTintColor();
 
         stackIn.pushPose();
-        GlStateManager._enableBlend();
 
         stackIn.translate(0.0f, heightIn, 0.0f);
         Matrix4f wtf = stackIn.last().pose();
@@ -262,7 +225,6 @@ public class RenderHelper
         buildMatrix(wtf, builder, xEnd, 0, zEnd, FLUID.getU1(), FLUID.getV1(), combinedOverlayIn, color, 1.0f, combinedLightIn);
         buildMatrix(wtf, builder, xEnd, 0, zStart, FLUID.getU1(), FLUID.getV0(), combinedOverlayIn, color, 1.0f, combinedLightIn);
 
-        GlStateManager._disableBlend();
         stackIn.popPose();
     }
 
@@ -281,7 +243,7 @@ public class RenderHelper
             FluidStack fluid = bucket.getFluid();
             float height = minHeight + ((float) fluid.getAmount() / bucket.getCapacity()) * (maxHeight - minHeight);
 
-            renderLeveledFluidStack(fluid, stackIn, bufferIn, combinedLightIn, combinedOverlayIn, xStart, height, zStart, xEnd, zEnd, worldIn, posIn);
+            renderLeveledFluidStack(fluid, stackIn, bufferIn.getBuffer(RenderType.translucent()), combinedLightIn, combinedOverlayIn, xStart, height, zStart, xEnd, zEnd, worldIn, posIn);
         }
     }
 
@@ -350,5 +312,14 @@ public class RenderHelper
         consumer.addVertex(matrix4f, minX, maxY, z).setColor(color);
         consumer.addVertex(matrix4f, maxX, maxY, z).setColor(color);
         consumer.addVertex(matrix4f, maxX, minY, z).setColor(color);
+    }
+
+    public static boolean checkAnimationController(GeoAnimatable animatable, Predicate<AnimationController<?>> check)
+    {
+        for (AnimationController<?> controller : animatable.getAnimatableInstanceCache().getManagerForId(animatable.hashCode()).getAnimationControllers().values())
+        {
+            if (check.test(controller)) return true;
+        }
+        return false;
     }
 }

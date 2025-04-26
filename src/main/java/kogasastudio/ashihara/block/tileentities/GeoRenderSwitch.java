@@ -7,19 +7,30 @@ import java.util.function.Supplier;
 
 public class GeoRenderSwitch
 {
-    private boolean doRender = false;
-    private boolean needCheck = false;
-    private boolean forHiding = false;
+    protected boolean doRender = false;
+    protected boolean needCheck = false;
+    protected boolean forHiding = false;
 
-    private final Consumer<Player> init;
-    private final Consumer<Player> hide;
-    private final Supplier<Boolean> checker;
+    protected final Consumer<Player> init;
+    protected final Consumer<Player> hide;
+    protected final Supplier<Boolean> checker;
 
+    /**
+     * Construct a render switch with given extra operations and checking conditions.
+     * @param init Extra operation to be executed first when initializing. Could be used to trigger intro animations.
+     * @param hide Extra operation to be executed first when disabling render. Almost same as @init.
+     * @param checker Condition to define if the rendering function this switch is actually controlling should be rendered. If true, then render.
+     */
     public GeoRenderSwitch(Consumer<Player> init, Consumer<Player> hide, Supplier<Boolean> checker)
     {
         this.init = init;
         this.hide = hide;
         this.checker = checker;
+    }
+
+    public boolean doRender()
+    {
+        return this.doRender;
     }
 
     public void switchRender(Player player)
@@ -47,13 +58,14 @@ public class GeoRenderSwitch
         return this.doRender;
     }
 
-    private void disableRender()
+    protected void disableRender()
     {
         this.doRender = false;
         this.forHiding = false;
+        this.needCheck = false;
     }
 
-    private void init(Player player)
+    protected void init(Player player)
     {
         init.accept(player);
         this.doRender = true;
@@ -61,7 +73,7 @@ public class GeoRenderSwitch
         pushRenderCheck();
     }
 
-    private void hide(Player player)
+    protected void hide(Player player)
     {
         hide.accept(player);
         this.forHiding = true;

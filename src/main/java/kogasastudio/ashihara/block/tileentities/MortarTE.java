@@ -3,10 +3,13 @@ package kogasastudio.ashihara.block.tileentities;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.client.models.geo.InternalControlGeoModel;
 import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
+import kogasastudio.ashihara.inventory.BEItemStackHandler;
 import kogasastudio.ashihara.item.ItemOtsuchi;
 import kogasastudio.ashihara.registry.TERegistryHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -22,8 +25,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.RangedWrapper;
+import software.bernie.geckolib.animation.Animation;
+import software.bernie.geckolib.animation.EasingType;
+import software.bernie.geckolib.cache.object.GeoBone;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,9 +36,29 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.Predicate;
 
-public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable // extends AshiharaMachineTE implements MenuProvider, IFluidHandler
+import static net.minecraft.world.level.block.Block.UPDATE_ALL;
+
+public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable
 {
-    public final GeoRenderSwitch renderSwitch = new GeoRenderSwitch(this::intro, this::outro, this::check);
+    public final GeoRenderSwitch switchFluid = new GeoRenderAutoSwitch
+    (
+        p ->
+        {
+            if (this.fluid_display_position == null) this.init(Minecraft.getInstance().player);
+            this.fluid_display_position.triggerInternal
+            (
+                p, this.fluid_display_position.hashCode(),
+                new InternalControlGeoModel.InternalAnimationBuilder("sync_liquid_level", Animation.LoopType.HOLD_ON_LAST_FRAME)
+                .startBone("main")
+                .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, this.lastLiquidLevel, this.getLiquidLevel(), EasingType.EASE_IN_OUT_QUAD)
+                .endBone().build()
+            );
+            this.setNeedBlockUpdate();
+        },
+        p -> this.setNeedBlockUpdate(),
+        this::stillTransiting,
+        () -> !this.stillTransiting()
+    );
     public FluidTank fluidTank = new FluidTank(16000);
 
     public SimpleInternalControlGeoModel item_display_positions;
@@ -41,14 +66,14 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable // 
 
     //public final GeoObjectRenderer<SimpleInternalControlGeoModel> ITEM_RENDERER;
 
-    public boolean renderFloatingTip = false;
     public boolean transitingLiquidLevel = false;
+    private float lastLiquidLevel = 0;
 
     public float progress = 0f;
     public float productionMultiplier = 1.0f;
     public MortarRecipe currentRecipe;
     private Queue<MortarToolType> queue;
-    public ItemStackHandler inventory = new ItemStackHandler(4);
+    public BEItemStackHandler<MortarTE> inventory = new BEItemStackHandler<>(4, this);
 
     public MortarTE(BlockPos pos, BlockState state)
     {
@@ -58,20 +83,26 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable // 
     public void init(Player player)
     {
         this.item_display_positions = new SimpleInternalControlGeoModel("geo/assistance/mortar_item_display_loc.geo.json", "", player);
-        this.fluid_display_position = new SimpleInternalControlGeoModel("geo/assistance/light_wood_edge.geo.json", "", player);
+        this.fluid_display_position = new SimpleInternalControlGeoModel("geo/assistance/mortar_fluid_display_loc.geo.json", "", player);
     }
 
-    private void intro(Player player)
+    public void pushLastLiquidLevel()
     {
+        this.lastLiquidLevel = (float) getLiquidLevel();
     }
 
-    private void outro(Player player)
+    public boolean stillTransiting()
     {
+        Optional<GeoBone> b = this.fluid_display_position.getBakedModel(this.fluid_display_position.getModelResource(this.fluid_display_position)).getBone("main");
+        return b.isPresent() && (Math.abs(b.get().getPosY() - this.getLiquidLevel()) > 0.001);
     }
 
-    private boolean check()
+    /**
+     * Gets the height in pixels where liquid quad should be rendered.
+     */
+    public double getLiquidLevel()
     {
-        return true;
+        return ((double) this.fluidTank.getFluidAmount() / this.fluidTank.getCapacity()) * 6d + 2d;
     }
 
     public static IItemHandler getInv(MortarTE te, Direction side)
@@ -86,10 +117,6 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable // 
     public static IFluidHandler getFluid(MortarTE te, Direction side)
     {
         return te.fluidTank;
-    }
-
-    public void updateLiquidLevel()
-    {
     }
 
     public void acceptRecipe(MortarRecipe recipe)
@@ -112,6 +139,7 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable // 
         {
             Optional<RecipeHolder<?>> holderOptional = this.level.getRecipeManager().byKey(ResourceLocation.parse(tag.getString("currentRecipe")));
             holderOptional.ifPresent(recipeHolder -> this.currentRecipe = (MortarRecipe) recipeHolder.value());
+            this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), UPDATE_ALL);
         }
         this.inventory.deserializeNBT(registries, tag.getCompound("contents"));
         this.fluidTank = this.fluidTank.readFromNBT(registries, tag.getCompound("fluid"));
@@ -130,7 +158,7 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable // 
     @Override
     public GeoRenderSwitch getSwitch()
     {
-        return this.renderSwitch;
+        return this.switchFluid;
     }
 
     public enum MortarToolType

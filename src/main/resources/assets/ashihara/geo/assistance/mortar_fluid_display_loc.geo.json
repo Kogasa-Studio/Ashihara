@@ -13,21 +13,7 @@
 			"bones": [
 				{
 					"name": "main",
-					"pivot": [0, 2, 0],
-					"cubes": [
-						{
-							"origin": [-4, 2, -4],
-							"size": [8, 0, 8],
-							"uv": {
-								"north": {"uv": [0, 0], "uv_size": [8, 0]},
-								"east": {"uv": [0, 0], "uv_size": [8, 0]},
-								"south": {"uv": [0, 0], "uv_size": [8, 0]},
-								"west": {"uv": [0, 0], "uv_size": [8, 0]},
-								"up": {"uv": [8, 8], "uv_size": [-8, -8]},
-								"down": {"uv": [8, 8], "uv_size": [-8, -8]}
-							}
-						}
-					]
+					"pivot": [0, 2, 0]
 				}
 			]
 		}
