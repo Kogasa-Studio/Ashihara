@@ -8,6 +8,8 @@ import kogasastudio.ashihara.helper.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoObjectRenderer;
@@ -16,10 +18,39 @@ import software.bernie.geckolib.util.Color;
 public class PanelRenderer extends GeoObjectRenderer<UIPanelModel>
 {
     private static final Color COLOR = Color.ofARGB(255, 255, 255, 255);
+    private AdditionalRenderer additionalRenderer = null;
 
     public PanelRenderer(GeoModel<UIPanelModel> model)
     {
         super(model);
+    }
+
+    public void setupInformationRenderer(AdditionalRenderer infoRenderer)
+    {
+        this.additionalRenderer = infoRenderer;
+    }
+
+    @Override
+    public void render(PoseStack poseStack, UIPanelModel animatable, @Nullable MultiBufferSource bufferSource, @Nullable RenderType renderType, @Nullable VertexConsumer buffer, int packedLight, float partialTick)
+    {
+        poseStack.pushPose();
+        poseStack.translate(0.5, 0.5, 0.5);
+        poseStack.mulPose(Axis.YP.rotationDegrees(-Minecraft.getInstance().cameraEntity.yRotO));
+        poseStack.translate(-0.5, -0.5, -0.5);
+
+        poseStack.pushPose();
+        poseStack.translate(0.8, -0.51f, 0);
+        super.render(poseStack, animatable, bufferSource, renderType, buffer, packedLight, partialTick);
+        poseStack.popPose();
+
+        poseStack.pushPose();
+        poseStack.translate(0.8, -0.51f, 0);
+        animatable.hemming_corner.render(poseStack, bufferSource, packedLight, OverlayTexture.NO_OVERLAY);
+        if (animatable.showEdgeHemming) animatable.hemming_edge.render(poseStack, bufferSource, packedLight, OverlayTexture.NO_OVERLAY);
+        animatable.edge.render(poseStack, bufferSource, packedLight, OverlayTexture.NO_OVERLAY);
+        poseStack.popPose();
+
+        poseStack.popPose();
     }
 
     @Override
@@ -30,20 +61,6 @@ public class PanelRenderer extends GeoObjectRenderer<UIPanelModel>
             animatable.hemming_corner.syncMain(bone);
             if (animatable.showEdgeHemming) animatable.hemming_edge.syncMain(bone);
             animatable.edge.syncMain(bone);
-
-            poseStack.pushPose();
-            poseStack.translate(0.5, 0.5, 0.5);
-            poseStack.mulPose(Axis.YP.rotationDegrees(-Minecraft.getInstance().cameraEntity.yRotO));
-            poseStack.translate(-0.5, -0.5, -0.5);
-
-            poseStack.pushPose();
-            poseStack.translate(0, 0.8 - 0.16/16f, 0);
-            animatable.hemming_corner.render(poseStack, bufferSource, packedLight, packedOverlay);
-            if (animatable.showEdgeHemming) animatable.hemming_edge.render(poseStack, bufferSource, packedLight, packedOverlay);
-            animatable.edge.render(poseStack, bufferSource, packedLight, packedOverlay);
-            poseStack.popPose();
-
-            poseStack.popPose();
         }
         if (bone.getName().equals("scale_sim"))
         {
@@ -80,6 +97,14 @@ public class PanelRenderer extends GeoObjectRenderer<UIPanelModel>
                 packedOverlay,
                 packedLight
             );
+            if (this.additionalRenderer != null)
+            {
+                poseStack.pushPose();
+                poseStack.translate(xEnd + 0.5, yEnd + 0.5, 0.499);
+                poseStack.mulPose(Axis.ZP.rotationDegrees(180));
+                this.additionalRenderer.render(poseStack, animatable, bufferSource, renderType, buffer, packedLight, partialTick);
+                poseStack.popPose();
+            }
             poseStack.popPose();
             animatable.hemming_corner.syncFrame(xStart*16, xEnd*16, yStart*16, yEnd*16);
             if (animatable.showEdgeHemming) animatable.hemming_edge.syncFrame(xStart*16, xEnd*16, yStart*16, yEnd*16, 0.5f);
@@ -92,5 +117,11 @@ public class PanelRenderer extends GeoObjectRenderer<UIPanelModel>
     public Color getRenderColor(UIPanelModel animatable, float partialTick, int packedLight)
     {
         return COLOR;
+    }
+
+    @FunctionalInterface
+    public interface AdditionalRenderer
+    {
+        void render(PoseStack poseStack, UIPanelModel animatable, @Nullable MultiBufferSource bufferSource, @Nullable RenderType renderType, @Nullable VertexConsumer buffer, int packedLight, float partialTick);
     }
 }

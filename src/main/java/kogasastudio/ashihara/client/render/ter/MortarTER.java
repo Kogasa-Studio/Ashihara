@@ -73,6 +73,7 @@ public class MortarTER implements BlockEntityRenderer<MortarTE>, WithLevelRender
         for (int i = 0; i < items.keySet().size(); i++)
         {
             ItemStack itemStack = items.get(i);
+            if (itemStack == null) continue;
             BakedModel model = itemRenderer.getModel(itemStack.copyWithCount(1), te.getLevel(), null, 0);
             te.item_display_positions.getBakedModel(te.item_display_positions.getModelResource(te.item_display_positions)).getBone("level" + i).ifPresent
             (
