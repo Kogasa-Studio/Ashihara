@@ -3,6 +3,8 @@ package kogasastudio.ashihara.block.tileentities;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.block.tileentities.util.RenderAutoSwitch;
+import kogasastudio.ashihara.block.tileentities.util.RenderSwitch;
 import kogasastudio.ashihara.client.models.geo.InternalControlGeoModel;
 import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
@@ -40,7 +42,7 @@ import static net.minecraft.world.level.block.Block.UPDATE_ALL;
 
 public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable
 {
-    public final GeoRenderSwitch switchFluid = new GeoRenderAutoSwitch
+    public final RenderSwitch switchFluid = new RenderAutoSwitch
     (
         p ->
         {
@@ -156,7 +158,7 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable
     }
 
     @Override
-    public GeoRenderSwitch getSwitch()
+    public RenderSwitch getSwitch()
     {
         return this.switchFluid;
     }

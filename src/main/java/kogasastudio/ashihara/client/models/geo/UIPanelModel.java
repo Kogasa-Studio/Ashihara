@@ -14,13 +14,21 @@ public class UIPanelModel extends InternalControlGeoModel<UIPanelModel>
     public final Player player;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
-    public static final ResourceLocation MODEL = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "geo/panel.geo.json");
-    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/geo/highlight_outline.png");
-    public static final ResourceLocation BACKGROUND = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/gui/nihil.png");
+    public static final ResourceLocation DEFAULT_MODEL = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "geo/panel.geo.json");
+    public static final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/geo/highlight_outline.png");
+    public static final ResourceLocation DEFAULT_BACKGROUND = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/gui/nihil.png");
+
+    public static final String MODEL_GOLDEN_HEMMING_CORNER = "geo/golden_hemming_corner.geo.json";
+    public static final String MODEL_GOLDEN_HEMMING_EDGE = "geo/golden_hemming_edge.geo.json";
+    public static final String MODEL_LIGHT_WOOD_EDGE = "geo/light_wood_edge.geo.json";
+
+    public static final String TEX_GOLDEN_HEMMING = "textures/geo/golden_hemming.png";
+    public static final String TEX_LIGHT_WOOD_EDGE = "textures/geo/wooden_edge.png";
+
     public static final int BG_WIDTH = 8;
     public static final int BG_HEIGHT = 8;
 
-    public HemmingModel hemming;
+    public HemmingCornerModel hemming;
     public EdgeModel edge;
 
     public static final ResourceLocation ANIMATION = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "animations/gui_panel_general.animation.json");
@@ -38,8 +46,12 @@ public class UIPanelModel extends InternalControlGeoModel<UIPanelModel>
     {
         this.player = player;
 
-        hemming = new HemmingModel("geo/golden_hemming_corner.geo.json", "textures/geo/golden_hemming.png", player);
+        hemming = new HemmingCornerModel("geo/golden_hemming_corner.geo.json", "textures/geo/golden_hemming.png", player);
         edge = new EdgeModel("geo/light_wood_edge.geo.json", "textures/geo/wooden_edge.png", player, 2f, 2f);
+    }
+
+    public UIPanelModel(Player player, String hemming_model_corner, String hemming_model_edge, String edge_model, String hemming_tex_corner, String hemming_tex_edge, String edge_tex)
+    {
     }
 
     @Override
@@ -66,13 +78,13 @@ public class UIPanelModel extends InternalControlGeoModel<UIPanelModel>
     @Override
     public ResourceLocation getModelResource(UIPanelModel animatable)
     {
-        return MODEL;
+        return DEFAULT_MODEL;
     }
 
     @Override
     public ResourceLocation getTextureResource(UIPanelModel animatable)
     {
-        return TEXTURE;
+        return DEFAULT_TEXTURE;
     }
 
     @Override
@@ -83,6 +95,6 @@ public class UIPanelModel extends InternalControlGeoModel<UIPanelModel>
 
     public ResourceLocation getBackground()
     {
-        return BACKGROUND;
+        return DEFAULT_BACKGROUND;
     }
 }

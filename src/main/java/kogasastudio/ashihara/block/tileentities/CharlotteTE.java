@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block.tileentities;
 
+import kogasastudio.ashihara.block.tileentities.util.RenderSwitch;
 import kogasastudio.ashihara.client.models.geo.InternalControlGeoModel;
 import kogasastudio.ashihara.client.models.geo.UIPanelModel;
 import kogasastudio.ashihara.registry.TERegistryHandler;
@@ -18,7 +19,7 @@ import static kogasastudio.ashihara.utils.OptionalUtil.getWithDefault;
 public class CharlotteTE extends AshiharaMachineTE implements IRenderSwitchable
 {
     public UIPanelModel model;
-    public GeoRenderSwitch renderSwitch = new GeoRenderSwitch(this::initSwitch, this::hide, this::check);
+    public RenderSwitch renderSwitch = new RenderSwitch(this::initSwitch, this::hide, this::check);
 
     public CharlotteTE(BlockPos pos, BlockState state)
     {
@@ -79,7 +80,7 @@ public class CharlotteTE extends AshiharaMachineTE implements IRenderSwitchable
     }
 
     @Override
-    public GeoRenderSwitch getSwitch()
+    public RenderSwitch getSwitch()
     {
         return renderSwitch;
     }

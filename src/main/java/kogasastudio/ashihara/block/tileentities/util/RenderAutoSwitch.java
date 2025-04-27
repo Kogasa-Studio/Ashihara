@@ -1,4 +1,4 @@
-package kogasastudio.ashihara.block.tileentities;
+package kogasastudio.ashihara.block.tileentities.util;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
@@ -6,7 +6,7 @@ import net.minecraft.world.entity.player.Player;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GeoRenderAutoSwitch extends GeoRenderSwitch
+public class RenderAutoSwitch extends RenderSwitch
 {
     protected final Supplier<Boolean> checkerToHide;
 
@@ -18,7 +18,7 @@ public class GeoRenderAutoSwitch extends GeoRenderSwitch
      * @param checkerToCompleteShutDown Condition to define if the rendering function this switch is actually controlling should be rendered. If true, then render.
      * @param checkerToHide Condition to define if this switch should execute hide function. If true, then hide.
      */
-    public GeoRenderAutoSwitch(Consumer<Player> init, Consumer<Player> hide, Supplier<Boolean> checkerToCompleteShutDown, Supplier<Boolean> checkerToHide)
+    public RenderAutoSwitch(Consumer<Player> init, Consumer<Player> hide, Supplier<Boolean> checkerToCompleteShutDown, Supplier<Boolean> checkerToHide)
     {
         super(init, hide, checkerToCompleteShutDown);
         this.checkerToHide = checkerToHide;

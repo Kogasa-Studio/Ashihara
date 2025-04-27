@@ -25,7 +25,7 @@ public class CharlotteBER implements BlockEntityRenderer<CharlotteTE>, WithLevel
     {
     }
 
-    RenderType renderType = RenderType.entityTranslucent(UIPanelModel.TEXTURE);
+    RenderType renderType = RenderType.entityTranslucent(UIPanelModel.DEFAULT_TEXTURE);
 
     @Override
     public void render(CharlotteTE blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay)

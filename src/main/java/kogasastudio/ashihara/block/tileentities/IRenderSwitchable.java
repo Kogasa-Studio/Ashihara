@@ -1,10 +1,11 @@
 package kogasastudio.ashihara.block.tileentities;
 
+import kogasastudio.ashihara.block.tileentities.util.RenderSwitch;
 import net.minecraft.world.entity.player.Player;
 
 public interface IRenderSwitchable
 {
-    GeoRenderSwitch getSwitch();
+    RenderSwitch getSwitch();
 
     default void switchRender(Player player)
     {

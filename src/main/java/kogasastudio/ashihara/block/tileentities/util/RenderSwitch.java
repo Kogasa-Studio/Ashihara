@@ -1,11 +1,11 @@
-package kogasastudio.ashihara.block.tileentities;
+package kogasastudio.ashihara.block.tileentities.util;
 
 import net.minecraft.world.entity.player.Player;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class GeoRenderSwitch
+public class RenderSwitch
 {
     protected boolean doRender = false;
     protected boolean needCheck = false;
@@ -21,7 +21,7 @@ public class GeoRenderSwitch
      * @param hide Extra operation to be executed first when disabling render. Almost same as @init.
      * @param checker Condition to define if the rendering function this switch is actually controlling should be rendered. If true, then render.
      */
-    public GeoRenderSwitch(Consumer<Player> init, Consumer<Player> hide, Supplier<Boolean> checker)
+    public RenderSwitch(Consumer<Player> init, Consumer<Player> hide, Supplier<Boolean> checker)
     {
         this.init = init;
         this.hide = hide;
