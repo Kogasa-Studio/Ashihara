@@ -9,22 +9,22 @@ import software.bernie.geckolib.animation.AnimationController;
 public class ToolTipController<B extends BlockEntity & IRenderInWorldToolTip>
 {
     protected final B be;
-    protected UIPanelModel model;
-    protected RenderSwitch renderSwitch = new RenderSwitch(this::initSwitch, this::hide, this::check);
+    protected final UIPanelModel model;
+    protected final RenderSwitch renderSwitch = new RenderSwitch(this::initSwitch, this::hide, this::check);
 
     public RenderSwitch getRenderSwitch()
     {
         return renderSwitch;
     }
 
-    public ToolTipController(B be)
+    public ToolTipController(B be, UIPanelModel model)
     {
         this.be = be;
+        this.model = model;
     }
 
     private void initSwitch(Player player)
     {
-        this.model = new UIPanelModel(player);
         model.triggerAnim(player, model.hashCode(), UIPanelModel.INTRO, UIPanelModel.INTRO);
         model.triggerAnim(player, model.hashCode(), UIPanelModel.FLOAT, UIPanelModel.FLOAT);
         reScale(player);

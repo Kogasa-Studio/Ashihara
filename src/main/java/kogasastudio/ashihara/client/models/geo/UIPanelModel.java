@@ -12,6 +12,8 @@ import software.bernie.geckolib.util.RenderUtil;
 public class UIPanelModel extends InternalControlGeoModel<UIPanelModel>
 {
     public final Player player;
+    public boolean showEdgeHemming = false;
+    public boolean trackPlayerView = true;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public static final ResourceLocation DEFAULT_MODEL = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "geo/panel.geo.json");
@@ -28,7 +30,8 @@ public class UIPanelModel extends InternalControlGeoModel<UIPanelModel>
     public static final int BG_WIDTH = 8;
     public static final int BG_HEIGHT = 8;
 
-    public HemmingCornerModel hemming;
+    public HemmingCornerModel hemming_corner;
+    public HemmingEdgeModel hemming_edge;
     public EdgeModel edge;
 
     public static final ResourceLocation ANIMATION = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "animations/gui_panel_general.animation.json");
@@ -46,12 +49,30 @@ public class UIPanelModel extends InternalControlGeoModel<UIPanelModel>
     {
         this.player = player;
 
-        hemming = new HemmingCornerModel("geo/golden_hemming_corner.geo.json", "textures/geo/golden_hemming.png", player);
-        edge = new EdgeModel("geo/light_wood_edge.geo.json", "textures/geo/wooden_edge.png", player, 2f, 2f);
+        hemming_corner = new HemmingCornerModel(MODEL_GOLDEN_HEMMING_CORNER, TEX_GOLDEN_HEMMING, player);
+        hemming_edge = new HemmingEdgeModel(MODEL_GOLDEN_HEMMING_EDGE, TEX_GOLDEN_HEMMING, player);
+        edge = new EdgeModel(MODEL_LIGHT_WOOD_EDGE, TEX_LIGHT_WOOD_EDGE, player, 2f, 2f);
     }
 
     public UIPanelModel(Player player, String hemming_model_corner, String hemming_model_edge, String edge_model, String hemming_tex_corner, String hemming_tex_edge, String edge_tex)
     {
+        this.player = player;
+
+        hemming_corner = new HemmingCornerModel(hemming_model_corner, hemming_tex_corner, player);
+        hemming_edge = new HemmingEdgeModel(hemming_model_edge, hemming_tex_edge, player);
+        edge = new EdgeModel(edge_model, edge_tex, player, 2f, 2f);
+    }
+
+    public UIPanelModel showHemmingEdge(boolean b)
+    {
+        this.showEdgeHemming = b;
+        return this;
+    }
+
+    public UIPanelModel trackPlayerView(boolean b)
+    {
+        this.trackPlayerView = b;
+        return this;
     }
 
     @Override

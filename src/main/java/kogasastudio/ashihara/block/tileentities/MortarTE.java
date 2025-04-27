@@ -5,8 +5,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.tileentities.util.RenderAutoSwitch;
 import kogasastudio.ashihara.block.tileentities.util.RenderSwitch;
+import kogasastudio.ashihara.block.tileentities.util.ToolTipController;
 import kogasastudio.ashihara.client.models.geo.InternalControlGeoModel;
 import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
+import kogasastudio.ashihara.client.models.geo.UIPanelModel;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
 import kogasastudio.ashihara.inventory.BEItemStackHandler;
 import kogasastudio.ashihara.item.ItemOtsuchi;
@@ -40,7 +42,7 @@ import java.util.function.Predicate;
 
 import static net.minecraft.world.level.block.Block.UPDATE_ALL;
 
-public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable
+public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable, IRenderInWorldToolTip
 {
     public final RenderSwitch switchFluid = new RenderAutoSwitch
     (
@@ -65,8 +67,8 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable
 
     public SimpleInternalControlGeoModel item_display_positions;
     public SimpleInternalControlGeoModel fluid_display_position;
-
-    //public final GeoObjectRenderer<SimpleInternalControlGeoModel> ITEM_RENDERER;
+    public UIPanelModel ui_panel_model;
+    public ToolTipController<MortarTE> toolTipController;
 
     public boolean transitingLiquidLevel = false;
     private float lastLiquidLevel = 0;
@@ -86,6 +88,8 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable
     {
         this.item_display_positions = new SimpleInternalControlGeoModel("geo/assistance/mortar_item_display_loc.geo.json", "", player);
         this.fluid_display_position = new SimpleInternalControlGeoModel("geo/assistance/mortar_fluid_display_loc.geo.json", "", player);
+        this.ui_panel_model = new UIPanelModel(player).showHemmingEdge(true);
+        this.toolTipController = new ToolTipController<>(this, this.ui_panel_model);
     }
 
     public void pushLastLiquidLevel()
@@ -161,6 +165,17 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable
     public RenderSwitch getSwitch()
     {
         return this.switchFluid;
+    }
+
+    @Override
+    public ToolTipController<?> getToolTipController()
+    {
+        return null;
+    }
+
+    @Override
+    public void reScale(Player player)
+    {
     }
 
     public enum MortarToolType

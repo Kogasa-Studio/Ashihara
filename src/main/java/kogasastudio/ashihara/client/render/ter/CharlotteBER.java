@@ -31,20 +31,8 @@ public class CharlotteBER implements BlockEntityRenderer<CharlotteTE>, WithLevel
     public void render(CharlotteTE blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay)
     {
         poseStack.pushPose();
-        poseStack.translate(0.5, 0.5, 0.5);
-        poseStack.mulPose(Axis.YP.rotationDegrees(-Minecraft.getInstance().cameraEntity.yRotO));
-        poseStack.translate(-0.5, -0.5, -0.5);
-
-        poseStack.pushPose();
         poseStack.translate(0, 0.8 - 0.16/16f, 0);
         blockEntity.model.RENDERER.render(poseStack, blockEntity.model, buffer, renderType, buffer.getBuffer(renderType), packedLight, packedOverlay);
-        poseStack.popPose();
-        poseStack.pushPose();
-        poseStack.translate(0, 0.8 - 0.16/16f, 0);
-        blockEntity.model.hemming.render(poseStack, buffer, packedLight, packedOverlay);
-        blockEntity.model.edge.render(poseStack, buffer, packedLight, packedOverlay);
-        poseStack.popPose();
-
         poseStack.popPose();
     }
 

@@ -2,8 +2,10 @@ package kogasastudio.ashihara.client.render.geo.worldui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import kogasastudio.ashihara.client.models.geo.UIPanelModel;
 import kogasastudio.ashihara.helper.RenderHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import software.bernie.geckolib.cache.object.GeoBone;
@@ -25,8 +27,23 @@ public class PanelRenderer extends GeoObjectRenderer<UIPanelModel>
     {
         if (bone.getName().equals("main"))
         {
-            animatable.hemming.syncMain(bone);
+            animatable.hemming_corner.syncMain(bone);
+            if (animatable.showEdgeHemming) animatable.hemming_edge.syncMain(bone);
             animatable.edge.syncMain(bone);
+
+            poseStack.pushPose();
+            poseStack.translate(0.5, 0.5, 0.5);
+            poseStack.mulPose(Axis.YP.rotationDegrees(-Minecraft.getInstance().cameraEntity.yRotO));
+            poseStack.translate(-0.5, -0.5, -0.5);
+
+            poseStack.pushPose();
+            poseStack.translate(0, 0.8 - 0.16/16f, 0);
+            animatable.hemming_corner.render(poseStack, bufferSource, packedLight, packedOverlay);
+            if (animatable.showEdgeHemming) animatable.hemming_edge.render(poseStack, bufferSource, packedLight, packedOverlay);
+            animatable.edge.render(poseStack, bufferSource, packedLight, packedOverlay);
+            poseStack.popPose();
+
+            poseStack.popPose();
         }
         if (bone.getName().equals("scale_sim"))
         {
@@ -64,7 +81,8 @@ public class PanelRenderer extends GeoObjectRenderer<UIPanelModel>
                 packedLight
             );
             poseStack.popPose();
-            animatable.hemming.syncFrame(xStart*16, xEnd*16, yStart*16, yEnd*16);
+            animatable.hemming_corner.syncFrame(xStart*16, xEnd*16, yStart*16, yEnd*16);
+            if (animatable.showEdgeHemming) animatable.hemming_edge.syncFrame(xStart*16, xEnd*16, yStart*16, yEnd*16, 0.5f);
             animatable.edge.syncFrame(xStart * 16, xEnd * 16, yStart * 16, yEnd * 16, bone.getScaleX(), bone.getScaleY());
         }
         super.renderRecursively(poseStack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);

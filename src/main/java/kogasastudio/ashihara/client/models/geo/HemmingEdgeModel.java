@@ -5,17 +5,20 @@ import software.bernie.geckolib.cache.object.GeoBone;
 
 public class HemmingEdgeModel extends SimpleInternalControlGeoModel
 {
-    public HemmingEdgeModel(String modelPrefix, String texturePrefix, String animationsPrefix, Player player)
+    public HemmingEdgeModel(String modelPrefix, String texturePrefix, Player player)
     {
-        super(modelPrefix, texturePrefix, animationsPrefix, player);
+        super(modelPrefix, texturePrefix, player);
     }
 
-    public void syncFrame(float xStart, float xEnd, float yStart, float yEnd, int divides)
+    /**
+     * @param divides Relative location in range [0, 1], should be defaulted to be 0.5 to map the center location.
+     */
+    public void syncFrame(float xStart, float xEnd, float yStart, float yEnd, float divides)
     {
-        this.getBone("up").ifPresent(b -> {b.setPosX(-(xEnd - xStart) / divides);b.setPosY(yEnd);});
-        this.getBone("right").ifPresent(b -> {b.setPosX(-xStart);b.setPosY(yEnd);});
-        this.getBone("down").ifPresent(b -> {b.setPosX(-xStart);b.setPosY(yStart);});
-        this.getBone("left").ifPresent(b -> {b.setPosX(-xEnd);b.setPosY(yStart);});
+        this.getBone("up").ifPresent(b -> {b.setPosX(-(xEnd - xStart) * divides);b.setPosY(yEnd);});
+        this.getBone("right").ifPresent(b -> {b.setPosX(-xStart);b.setPosY(yEnd * divides);});
+        this.getBone("down").ifPresent(b -> {b.setPosX(-xStart * divides);b.setPosY(yStart);});
+        this.getBone("left").ifPresent(b -> {b.setPosX(-xEnd);b.setPosY(yStart * divides);});
     }
 
     public void syncMain(GeoBone from)
