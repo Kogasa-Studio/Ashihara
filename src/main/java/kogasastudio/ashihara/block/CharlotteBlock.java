@@ -59,6 +59,7 @@ public class CharlotteBlock extends Block implements EntityBlock
             CharlotteTE te = (CharlotteTE) level.getBlockEntity(pos);
             if (te != null)
             {
+                if (te.toolTipController == null) te.init(player);
                 if (stack.getCount() == 1)
                 {
                     te.switchRender(player);

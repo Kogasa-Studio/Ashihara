@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.block.tileentities;
 
-import kogasastudio.ashihara.block.tileentities.util.RenderSwitch;
+import kogasastudio.ashihara.block.tileentities.util.ToolTipController;
 import kogasastudio.ashihara.client.models.geo.InternalControlGeoModel;
 import kogasastudio.ashihara.client.models.geo.UIPanelModel;
 import kogasastudio.ashihara.registry.TERegistryHandler;
@@ -10,43 +10,26 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib.animation.Animation;
-import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.EasingType;
 import software.bernie.geckolib.cache.object.GeoBone;
 
 import static kogasastudio.ashihara.utils.OptionalUtil.getWithDefault;
 
-public class CharlotteTE extends AshiharaMachineTE implements IRenderSwitchable
+public class CharlotteTE extends AshiharaMachineTE implements IRenderInWorldToolTip
 {
     public UIPanelModel model;
-    public RenderSwitch renderSwitch = new RenderSwitch(this::initSwitch, this::hide, this::check);
+    public ToolTipController toolTipController;
 
     public CharlotteTE(BlockPos pos, BlockState state)
     {
         super(TERegistryHandler.CHARLOTTE_BE.get(), pos, state);
     }
 
-    private void initSwitch(Player player)
+    public void init(Player player)
     {
         this.model = new UIPanelModel(player);
-        model.triggerAnim(player, model.hashCode(), UIPanelModel.INTRO, UIPanelModel.INTRO);
-        model.triggerAnim(player, model.hashCode(), UIPanelModel.FLOAT, UIPanelModel.FLOAT);
+        this.toolTipController = new ToolTipController<>(this, this.model);
         lerpScale(8, 8, player);
-    }
-
-    private void hide(Player player)
-    {
-        model.stopTriggeredAnim(player, model.hashCode(), UIPanelModel.INTRO, UIPanelModel.INTRO);
-        model.triggerAnim(player, model.hashCode(), UIPanelModel.OUTRO, UIPanelModel.OUTRO);
-    }
-
-    private boolean check()
-    {
-        if (this.model != null && this.model.getBone("main").isPresent())
-        {
-            return !this.model.getAnimatableInstanceCache().getManagerForId(this.model.hashCode()).getAnimationControllers().get(UIPanelModel.OUTRO).getAnimationState().equals(AnimationController.State.PAUSED);//.getBone("main").get().getScaleX() > 0.01;
-        }
-        return false;
     }
 
     public void lerpScale(float xScale, float yScale, Player player)
@@ -80,8 +63,14 @@ public class CharlotteTE extends AshiharaMachineTE implements IRenderSwitchable
     }
 
     @Override
-    public RenderSwitch getSwitch()
+    public ToolTipController<?> getToolTipController()
     {
-        return renderSwitch;
+        return this.toolTipController;
+    }
+
+    @Override
+    public void reScale(Player player)
+    {
+
     }
 }

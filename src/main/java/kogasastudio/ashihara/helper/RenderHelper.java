@@ -5,26 +5,20 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import kogasastudio.ashihara.block.tileentities.IFluidHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animation.AnimationController;
 
@@ -308,30 +302,6 @@ public class RenderHelper
                 blit(poseStack, consumer, x1 + j, x1 + j + dx, y1 + i, y1 + i + dy, z, 0, dx / width, 0, dy / height, overlay, light);
             }
         }
-        poseStack.popPose();
-    }
-
-    public static void renderPixelSizedComponent(Font font, Component text, int color, boolean dropShadow, PoseStack poseStack, MultiBufferSource bufferSource, Font.DisplayMode displayMode, int bgColor, int light, float sizeInPixel)
-    {
-        float multiplier = (8f / 9f) * (1f / 16f) * sizeInPixel;
-        poseStack.pushPose();
-        poseStack.scale(multiplier, multiplier, multiplier);
-        poseStack.translate(1f, 1f, 0f);
-        font.drawInBatch(text, 0f, 0f, color, dropShadow, poseStack.last().pose(), bufferSource, displayMode, bgColor, light);
-        poseStack.scale(1 / multiplier, 1 / multiplier, 1 / multiplier);
-        poseStack.popPose();
-    }
-
-    public static void renderInWorldToolTipItem(ItemStack stack, PoseStack poseStack, MultiBufferSource bufferSource, int light)
-    {
-        BakedModel model = Minecraft.getInstance().getItemRenderer().getModel(stack, null, null, 42);
-        poseStack.pushPose();
-        poseStack.mulPose(new Quaternionf().rotateXYZ(0f, (float) Math.toRadians(180), (float) Math.toRadians(180)));
-        Minecraft.getInstance().getItemRenderer().render(stack, ItemDisplayContext.GUI, false, poseStack, bufferSource, light, OverlayTexture.NO_OVERLAY, model);
-        poseStack.popPose();
-        poseStack.pushPose();
-        poseStack.translate(0.25, 0, -0.25);
-        renderPixelSizedComponent(Minecraft.getInstance().font, Component.literal(String.valueOf(stack.getCount())), 0xffffff, false, poseStack, bufferSource, Font.DisplayMode.NORMAL, 0, light, 1f);
         poseStack.popPose();
     }
 
