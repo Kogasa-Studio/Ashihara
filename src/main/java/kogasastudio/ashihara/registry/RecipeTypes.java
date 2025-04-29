@@ -21,7 +21,7 @@ public class RecipeTypes
     public static final Supplier<RecipeType<MortarRecipe>> MORTAR = register("mortar");
     public static final Supplier<RecipeType<MillRecipe>> MILL = register("mill");
 
-    private static <TYPE extends WrappedRecipe<?>> Supplier<RecipeType<TYPE>> register(String name)
+    private static <TYPE extends WrappedRecipe<?, ?>> Supplier<RecipeType<TYPE>> register(String name)
     {
         return TYPES.register(name, () -> new RecipeType<>()
         {

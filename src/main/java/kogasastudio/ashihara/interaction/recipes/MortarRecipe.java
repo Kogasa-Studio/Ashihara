@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import kogasastudio.ashihara.block.tileentities.MortarTE;
 import kogasastudio.ashihara.helper.DataHelper;
 import kogasastudio.ashihara.interaction.recipes.base.WrappedRecipe;
+import kogasastudio.ashihara.inventory.BEItemStackHandler;
 import kogasastudio.ashihara.registry.RecipeSerializers;
 import kogasastudio.ashihara.registry.RecipeTypes;
 import net.minecraft.core.HolderLookup;
@@ -31,7 +32,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
-public class MortarRecipe extends WrappedRecipe<MortarRecipe>
+public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarTE>
 {
     public final NonNullList<Ingredient> input;
     public final NonNullList<ItemStack> output;
@@ -55,8 +56,8 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe>
 
     public boolean testInputFluid(@Nullable FluidTank tank)
     {
-        return tank == null ? fluidCost == null :
-                tank.drain(fluidCost.copy(), IFluidHandler.FluidAction.SIMULATE).getAmount() >= fluidCost.getAmount();
+        if (tank == null && fluidCost != null) return false;
+        return fluidCost == null || tank.drain(fluidCost.copy(), IFluidHandler.FluidAction.SIMULATE).getAmount() >= fluidCost.getAmount();
     }
 
     @Override
@@ -71,6 +72,17 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe>
         inputs = NonNullList.copyOf(inputs.stream().filter(i -> !i.isEmpty()).collect(Collectors.toList()));
 
         return RecipeMatcher.findMatches(inputs, this.input) != null;
+    }
+
+    @Override
+    public boolean testBE(MortarTE be)
+    {
+        BEItemStackHandler<?> inv = be.inventory;
+        int multiplier = inv.testIngredients(this.getIngredients(), be.getMaxParallel());
+        if (multiplier == 0) return false;
+        if (!testInputFluid(be.fluidTank)) return false;
+        be.setMultiplier(multiplier);
+        return true;
     }
 
     @Override
@@ -127,16 +139,16 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe>
     {
         public static final MapCodec<MortarRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec
         (
-            mortarRecipeInstance ->
-            mortarRecipeInstance.group
-            (
-                ResourceLocation.CODEC.fieldOf("id").forGetter(MortarRecipe::getId),
-                NonNullList.codecOf(Ingredient.CODEC).fieldOf("ingredients").forGetter(MortarRecipe::getIngredients),
-                NonNullList.codecOf(ItemStack.CODEC).fieldOf("output").forGetter(MortarRecipe::getOutput),
-                FluidStack.CODEC.fieldOf("fluid").forGetter(MortarRecipe::getFluidCost),
-                Codec.INT.fieldOf("progress").forGetter(MortarRecipe::getProgress),
-                MortarTE.MortarToolType.QUEUE_CODEC.fieldOf("sequence").forGetter(MortarRecipe::getSequence)
-            ).apply(mortarRecipeInstance, MortarRecipe::new)
+        mortarRecipeInstance ->
+        mortarRecipeInstance.group
+        (
+        ResourceLocation.CODEC.fieldOf("id").forGetter(MortarRecipe::getId),
+        NonNullList.codecOf(Ingredient.CODEC).fieldOf("ingredients").forGetter(MortarRecipe::getIngredients),
+        NonNullList.codecOf(ItemStack.CODEC).fieldOf("output").forGetter(MortarRecipe::getOutput),
+        FluidStack.CODEC.fieldOf("fluid").forGetter(MortarRecipe::getFluidCost),
+        Codec.INT.fieldOf("progress").forGetter(MortarRecipe::getProgress),
+        MortarTE.MortarToolType.QUEUE_CODEC.fieldOf("sequence").forGetter(MortarRecipe::getSequence)
+        ).apply(mortarRecipeInstance, MortarRecipe::new)
         );
         public static final StreamCodec<RegistryFriendlyByteBuf, MortarRecipe> STREAM_CODEC = StreamCodec.of(MortarRecipeSerializer::toNetwork, MortarRecipeSerializer::fromNetwork);
 

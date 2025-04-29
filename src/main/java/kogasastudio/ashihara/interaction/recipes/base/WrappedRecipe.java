@@ -6,13 +6,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author DustW
  **/
-public abstract class WrappedRecipe<T extends WrappedRecipe<?>> implements Recipe<RecipeWrapper> {
+public abstract class WrappedRecipe<T extends WrappedRecipe<?, ?>, B extends BlockEntity> implements Recipe<RecipeWrapper> {
     protected final ResourceLocation id;
 
     public WrappedRecipe(ResourceLocation id) {
@@ -31,6 +32,8 @@ public abstract class WrappedRecipe<T extends WrappedRecipe<?>> implements Recip
         }
         return matches(inputs, level);
     }
+
+    public abstract boolean testBE(B be);
 
     @Override
     public @NotNull ItemStack assemble(@NotNull RecipeWrapper wrapper, @NotNull HolderLookup.Provider registries) {
@@ -63,6 +66,6 @@ public abstract class WrappedRecipe<T extends WrappedRecipe<?>> implements Recip
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof WrappedRecipe<?> recipe && id.equals(recipe.id);
+        return obj instanceof WrappedRecipe<?, ?> recipe && id.equals(recipe.id);
     }
 }

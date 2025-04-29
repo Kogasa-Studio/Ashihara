@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import kogasastudio.ashihara.block.tileentities.CuttingBoardTE;
 import kogasastudio.ashihara.helper.DataHelper;
 import kogasastudio.ashihara.interaction.recipes.base.WrappedRecipe;
 import kogasastudio.ashihara.registry.RecipeSerializers;
@@ -23,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
-public class CuttingBoardRecipe extends WrappedRecipe<CuttingBoardRecipe> {
+public class CuttingBoardRecipe extends WrappedRecipe<CuttingBoardRecipe, CuttingBoardTE> {
     @Expose
     private final Ingredient ingredient;
     @Expose
@@ -41,6 +42,12 @@ public class CuttingBoardRecipe extends WrappedRecipe<CuttingBoardRecipe> {
     @Override
     public boolean matches(@NotNull NonNullList<ItemStack> inputs, @NotNull Level level) {
         return ingredient.test(inputs.getFirst());
+    }
+
+    @Override
+    public boolean testBE(CuttingBoardTE be)
+    {
+        return false;
     }
 
     @Override

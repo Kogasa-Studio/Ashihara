@@ -12,12 +12,16 @@ import kogasastudio.ashihara.client.models.geo.UIPanelModel;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
 import kogasastudio.ashihara.inventory.BEItemStackHandler;
 import kogasastudio.ashihara.item.ItemOtsuchi;
+import kogasastudio.ashihara.registry.RecipeTypes;
 import kogasastudio.ashihara.registry.TERegistryHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
@@ -25,6 +29,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
@@ -70,10 +75,9 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable, IR
     public UIPanelModel ui_panel_model;
     public ToolTipController<MortarTE> toolTipController;
 
-    public boolean transitingLiquidLevel = false;
     private float lastLiquidLevel = 0;
 
-    public float progress = 0f;
+    public int progress = 0;
     public float productionMultiplier = 1.0f;
     public MortarRecipe currentRecipe;
     private Queue<MortarToolType> queue;
@@ -111,6 +115,16 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable, IR
         return ((double) this.fluidTank.getFluidAmount() / this.fluidTank.getCapacity()) * 6d + 2d;
     }
 
+    public int getMaxParallel()
+    {
+        return 16;
+    }
+
+    public void setMultiplier(int multiplier)
+    {
+        this.productionMultiplier = multiplier;
+    }
+
     public static IItemHandler getInv(MortarTE te, Direction side)
     {
         if (side.getAxis().equals(Direction.Axis.Y))
@@ -125,13 +139,32 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable, IR
         return te.fluidTank;
     }
 
+    public void refreshRecipe()
+    {
+        if (this.level == null) return;
+        RecipeManager recipeManager =  this.level.getRecipeManager();
+        List<RecipeHolder<MortarRecipe>> recipes = recipeManager.getAllRecipesFor(RecipeTypes.MORTAR.get());
+        Optional<RecipeHolder<MortarRecipe>> recipeOptional = recipes.stream().filter(h -> h.value().testBE(this)).findFirst();
+        if (recipeOptional.isPresent())
+        {
+            MortarRecipe recipe = recipeOptional.get().value();
+            if (recipe == currentRecipe) return;
+            acceptRecipe(recipe);
+        }
+    }
+
     public void acceptRecipe(MortarRecipe recipe)
     {
         currentRecipe = recipe;
-        queue = new ConcurrentLinkedDeque<>(currentRecipe.getSequence());
+        this.progress = 0;
+        if (recipe != null) queue = new ConcurrentLinkedDeque<>(currentRecipe.getSequence());
     }
 
-    public boolean process()
+    public void finishRecipe(MortarRecipe recipe)
+    {
+    }
+
+    public boolean process(ItemStack stack)
     {
         if (currentRecipe == null) return false;
         boolean flag = false;
@@ -149,6 +182,14 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable, IR
         }
         this.inventory.deserializeNBT(registries, tag.getCompound("contents"));
         this.fluidTank = this.fluidTank.readFromNBT(registries, tag.getCompound("fluid"));
+        this.queue = new ConcurrentLinkedDeque<>();
+        ListTag listTag = tag.getList("queue", Tag.TAG_STRING);
+        for (int i = 0; i < listTag.size(); i++)
+        {
+            MortarToolType mortarToolType = MortarToolType.valueOf(listTag.getString(i));
+            this.queue.add(mortarToolType);
+        }
+        refreshRecipe();
         super.loadAdditional(tag, registries);
     }
 
@@ -158,6 +199,12 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable, IR
         tag.putString("currentRecipe", this.currentRecipe == null ? "" : this.currentRecipe.getId().toString());
         tag.put("contents", this.inventory.serializeNBT(registries));
         tag.put("fluid", this.fluidTank.writeToNBT(registries, new CompoundTag()));
+        ListTag listTag = new ListTag();
+        for (MortarToolType type : this.queue)
+        {
+            listTag.add(StringTag.valueOf(type.id));
+        }
+        tag.put("queue", listTag);
         super.saveAdditional(tag, registries);
     }
 

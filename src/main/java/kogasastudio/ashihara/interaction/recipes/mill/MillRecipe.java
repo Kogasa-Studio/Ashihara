@@ -13,7 +13,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
 import org.jetbrains.annotations.NotNull;
 
-public class MillRecipe extends WrappedRecipe<MillRecipe> {
+public class MillRecipe extends WrappedRecipe<MillRecipe, MillTE> {
 
     @NotNull
     private final Ingredient millstone;
@@ -80,6 +80,12 @@ public class MillRecipe extends WrappedRecipe<MillRecipe> {
 
     public @NotNull FluidIngredient getOutputFluid() {
         return outputFluid;
+    }
+
+    @Override
+    public boolean testBE(MillTE be)
+    {
+        return false;
     }
 
     @Override
