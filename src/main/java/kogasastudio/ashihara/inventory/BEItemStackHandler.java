@@ -2,12 +2,11 @@ package kogasastudio.ashihara.inventory;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static net.minecraft.world.level.block.Block.UPDATE_ALL;
 
@@ -41,20 +40,20 @@ public class BEItemStackHandler<B extends BlockEntity> extends ItemStackHandler
         if (be.getLevel() != null) be.getLevel().sendBlockUpdated(be.getBlockPos(), be.getBlockState(), be.getBlockState(), UPDATE_ALL);
     }
 
-    public int testIngredient(Ingredient ingredient)
+    public int testIngredient(SizedIngredient ingredient)
     {
         int count = 0;
         for (ItemStack stack : this.stacks)
         {
-            if (ingredient.test(stack)) count = stack.getCount();
+            if (ingredient.test(stack)) count = stack.getCount() / ingredient.count();
         }
         return count;
     }
 
-    public int testIngredients(List<Ingredient> ingredients, int maxValue)
+    public int testIngredients(List<SizedIngredient> ingredients, int maxValue)
     {
         int multiplier = maxValue;
-        for (Ingredient ingredient : ingredients)
+        for (SizedIngredient ingredient : ingredients)
         {
             multiplier = Math.min(multiplier, testIngredient(ingredient));
         }

@@ -1,0 +1,32 @@
+{
+  "fluid": {
+    "id": "minecraft:water",
+    "amount": 1000
+  },
+  "progress": 7,
+  "sequence": {
+    "queue": [
+      "pestle",
+      "hand",
+      "otsuchi"
+    ]
+  },
+  "id": "ashihara:chick",
+  "ingredients": [
+    {
+      "tag": "minecraft:wolf_food",
+      "count": 4
+    }
+  ],
+  "output": [
+    {
+      "id": "ashihara:rice",
+      "count": 1
+    },
+    {
+      "id": "ashihara:rice",
+      "count": 7
+    }
+  ],
+  "type": "ashihara:mortar"
+}

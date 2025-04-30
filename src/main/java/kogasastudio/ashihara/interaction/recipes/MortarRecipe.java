@@ -20,6 +20,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.common.util.RecipeMatcher;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -34,14 +35,14 @@ import java.util.stream.Collectors;
 
 public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarTE>
 {
-    public final NonNullList<Ingredient> input;
+    public final NonNullList<SizedIngredient> input;
     public final NonNullList<ItemStack> output;
     public final FluidStack fluidCost;
     public int progress;
     public Queue<MortarTE.MortarToolType> sequence;
 
     public MortarRecipe(ResourceLocation idIn,
-                        NonNullList<Ingredient> inputIn, NonNullList<ItemStack> outputIn,
+                        NonNullList<SizedIngredient> inputIn, NonNullList<ItemStack> outputIn,
                         FluidStack fluidCostIn,
                         int progressIn, Queue<MortarTE.MortarToolType> sequenceIn)
     {
@@ -71,14 +72,14 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarTE>
 
         inputs = NonNullList.copyOf(inputs.stream().filter(i -> !i.isEmpty()).collect(Collectors.toList()));
 
-        return RecipeMatcher.findMatches(inputs, this.input) != null;
+        return true; //RecipeMatcher.findMatches(inputs, this.input.) != null;
     }
 
     @Override
     public boolean testBE(MortarTE be)
     {
         BEItemStackHandler<?> inv = be.inventory;
-        int multiplier = inv.testIngredients(this.getIngredients(), be.getMaxParallel());
+        int multiplier = inv.testIngredients(this.getSizedIngredients(), be.getMaxParallel());
         if (multiplier == 0) return false;
         if (!testInputFluid(be.fluidTank)) return false;
         be.setMultiplier(multiplier);
@@ -109,8 +110,7 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarTE>
         return this.id;
     }
 
-    @Override
-    public NonNullList<Ingredient> getIngredients()
+    public NonNullList<SizedIngredient> getSizedIngredients()
     {
         return this.input;
     }
@@ -143,7 +143,7 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarTE>
         mortarRecipeInstance.group
         (
         ResourceLocation.CODEC.fieldOf("id").forGetter(MortarRecipe::getId),
-        NonNullList.codecOf(Ingredient.CODEC).fieldOf("ingredients").forGetter(MortarRecipe::getIngredients),
+        NonNullList.codecOf(SizedIngredient.FLAT_CODEC).fieldOf("ingredients").forGetter(MortarRecipe::getSizedIngredients),
         NonNullList.codecOf(ItemStack.CODEC).fieldOf("output").forGetter(MortarRecipe::getOutput),
         FluidStack.CODEC.fieldOf("fluid").forGetter(MortarRecipe::getFluidCost),
         Codec.INT.fieldOf("progress").forGetter(MortarRecipe::getProgress),
@@ -155,7 +155,7 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarTE>
         public static MortarRecipe fromNetwork(RegistryFriendlyByteBuf buffer)
         {
             ResourceLocation id = ResourceLocation.STREAM_CODEC.decode(buffer);
-            NonNullList<Ingredient> iListN = NonNullList.copyOf(Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buffer));
+            NonNullList<SizedIngredient> iListN = NonNullList.copyOf(SizedIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buffer));
             NonNullList<ItemStack> oListN = DataHelper.copyAndCast(ItemStack.LIST_STREAM_CODEC.decode(buffer));
             FluidStack fCostN = FluidStack.STREAM_CODEC.decode(buffer);
             int progressN = buffer.readInt();
@@ -167,7 +167,7 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarTE>
         public static RegistryFriendlyByteBuf toNetwork(RegistryFriendlyByteBuf buffer, MortarRecipe recipe)
         {
             ResourceLocation.STREAM_CODEC.encode(buffer, recipe.getId());
-            Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buffer, recipe.getIngredients());
+            SizedIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buffer, recipe.getSizedIngredients());
             ItemStack.LIST_STREAM_CODEC.encode(buffer, recipe.getOutput());
             FluidStack.STREAM_CODEC.encode(buffer, recipe.getFluidCost());
             buffer.writeInt(recipe.progress);

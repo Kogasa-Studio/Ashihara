@@ -101,6 +101,7 @@ public class MortarBlock extends Block implements EntityBlock
                 player.getInventory().setChanged();
                 te.setChanged();
                 te.updateBlock();
+                te.refreshRecipe();
                 return ItemInteractionResult.SUCCESS;
             }
             if (InventoryHelper.interactWithInventory(te.inventory, stack, player, handIn, 64))
@@ -108,6 +109,7 @@ public class MortarBlock extends Block implements EntityBlock
                 player.getInventory().setChanged();
                 te.setChanged();
                 te.updateBlock();
+                te.refreshRecipe();
                 return ItemInteractionResult.SUCCESS;
             }
         }

@@ -39,6 +39,7 @@ import software.bernie.geckolib.animation.Animation;
 import software.bernie.geckolib.animation.EasingType;
 import software.bernie.geckolib.cache.object.GeoBone;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
@@ -80,7 +81,7 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable, IR
     public int progress = 0;
     public float productionMultiplier = 1.0f;
     public MortarRecipe currentRecipe;
-    private Queue<MortarToolType> queue;
+    private Queue<MortarToolType> queue = new ConcurrentLinkedDeque<>();
     public BEItemStackHandler<MortarTE> inventory = new BEItemStackHandler<>(4, this);
 
     public MortarTE(BlockPos pos, BlockState state)
@@ -158,6 +159,7 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable, IR
         currentRecipe = recipe;
         this.progress = 0;
         if (recipe != null) queue = new ConcurrentLinkedDeque<>(currentRecipe.getSequence());
+        setChanged();
     }
 
     public void finishRecipe(MortarRecipe recipe)
@@ -186,7 +188,7 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable, IR
         ListTag listTag = tag.getList("queue", Tag.TAG_STRING);
         for (int i = 0; i < listTag.size(); i++)
         {
-            MortarToolType mortarToolType = MortarToolType.valueOf(listTag.getString(i));
+            MortarToolType mortarToolType = MortarToolType.get(listTag.getString(i));
             this.queue.add(mortarToolType);
         }
         refreshRecipe();
@@ -272,6 +274,8 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable, IR
 
         public static MortarToolType get(String id)
         {
+            Optional<MortarToolType> type = Arrays.stream(MortarToolType.values()).filter(t -> t.id.equals(id)).findFirst();
+            if (type.isPresent()) return type.get();
             return valueOf(id);
         }
     }
