@@ -13,7 +13,7 @@ import org.joml.Quaternionf;
 
 public class InWorldTipRenderHelper
 {
-    public static void renderComponent(Font font, Component text, int color, boolean dropShadow, PoseStack poseStack, MultiBufferSource bufferSource, Font.DisplayMode displayMode, int bgColor, int light, float sizeInPixel)
+    public static float renderComponent(Font font, Component text, int color, boolean dropShadow, PoseStack poseStack, MultiBufferSource bufferSource, Font.DisplayMode displayMode, int bgColor, int light, float sizeInPixel)
     {
         float multiplier = (8f / 9f) * (1f / 16f) * (sizeInPixel * 2);
         poseStack.pushPose();
@@ -22,6 +22,7 @@ public class InWorldTipRenderHelper
         font.drawInBatch(text, 0f, 0f, color, dropShadow, poseStack.last().pose(), bufferSource, displayMode, bgColor, light);
         poseStack.scale(1 / multiplier, 1 / multiplier, 1 / multiplier);
         poseStack.popPose();
+        return font.width(text) * multiplier;
     }
 
     public static void renderItemStack(ItemStack stack, PoseStack poseStack, MultiBufferSource bufferSource, int light, float sizeInPixel)

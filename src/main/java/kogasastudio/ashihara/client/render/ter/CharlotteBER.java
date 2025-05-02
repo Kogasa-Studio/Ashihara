@@ -7,6 +7,7 @@ import kogasastudio.ashihara.client.models.geo.UIPanelModel;
 import kogasastudio.ashihara.client.render.SectionRenderContext;
 import kogasastudio.ashihara.client.render.WithLevelRenderer;
 import kogasastudio.ashihara.helper.InWorldTipRenderHelper;
+import kogasastudio.ashihara.helper.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -48,12 +49,16 @@ public class CharlotteBER implements BlockEntityRenderer<CharlotteTE>, WithLevel
     @Override
     public void renderInfo(CharlotteTE be, PoseStack poseStack, UIPanelModel animatable, MultiBufferSource bufferSource, RenderType renderType, VertexConsumer buffer, int packedLight, float partialTick)
     {
+        float maxX = 2;
+        float maxY = 2;
         poseStack.pushPose();
         poseStack.scale(1 / 16f, 1 / 16f, 1 / 16f);
         poseStack.translate(1f, 1f, 0);
-        InWorldTipRenderHelper.renderComponent(Minecraft.getInstance().font, Component.literal(be.getBlockPos().toString()), 0x1fcb58, false, poseStack, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight, 2);
-        InWorldTipRenderHelper.renderComponent(Minecraft.getInstance().font, Component.literal("猫咪崽子，小猫崽子，Chicken, Kitten"), 0xffffff, false, poseStack, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight, 2);
+        maxX += 1; maxY += 1;
+        maxX += InWorldTipRenderHelper.renderComponent(Minecraft.getInstance().font, Component.literal(be.getBlockPos().toString()), 0x1fcb58, false, poseStack, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight, 2);
+        maxX += InWorldTipRenderHelper.renderComponent(Minecraft.getInstance().font, Component.literal("猫咪崽子，小猫崽子，Chicken, Kitten"), 0xffffff, false, poseStack, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight, 2);
         poseStack.translate(1f, 3f, 0);
+        maxY += 1; maxY += 3;
         for (int i = 0; i < 5; i++)
         {
             poseStack.pushPose();
@@ -62,12 +67,19 @@ public class CharlotteBER implements BlockEntityRenderer<CharlotteTE>, WithLevel
                 ItemStack stack = new ItemStack(Blocks.CAMPFIRE, i * j + 1);
                 InWorldTipRenderHelper.renderItemStack(stack, poseStack, bufferSource, packedLight, 2);
                 poseStack.translate(2f, 0, 0);
+                maxX += 2;
             }
             poseStack.popPose();
             poseStack.translate(0, 2f, 0);
+            maxY += 2;
         }
         poseStack.translate(-1f, -1f, 0);
-        InWorldTipRenderHelper.renderComponent(Minecraft.getInstance().font, Component.translatable("chat.cannotSend"), 0xffffff, false, poseStack, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight, 2);
+        maxX -= 1; maxY -= 1;
+        maxX += InWorldTipRenderHelper.renderComponent(Minecraft.getInstance().font, Component.translatable("chat.cannotSend"), 0xffffff, false, poseStack, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight, 2);
+        if ((maxX != animatable.getScaleX() || maxY != animatable.getScaleY()) && !RenderHelper.animControllerPlaying(animatable, c -> c.getName().equals("internal")))
+        {
+            be.reScale(maxX, maxY, Minecraft.getInstance().player);
+        }
         poseStack.popPose();
     }
 }

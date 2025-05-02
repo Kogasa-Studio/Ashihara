@@ -322,4 +322,13 @@ public class RenderHelper
         }
         return false;
     }
+
+    public static boolean animControllerPlaying(GeoAnimatable animatable, Predicate<AnimationController<?>> check)
+    {
+        for (AnimationController<?> controller : animatable.getAnimatableInstanceCache().getManagerForId(animatable.hashCode()).getAnimationControllers().values())
+        {
+            if (check.test(controller) && (controller.getAnimationState().equals(AnimationController.State.RUNNING) || controller.getAnimationState().equals(AnimationController.State.TRANSITIONING))) return true;
+        }
+        return false;
+    }
 }

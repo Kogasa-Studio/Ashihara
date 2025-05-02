@@ -250,6 +250,9 @@
 
   "gui.ashihara.mill": "Mill",
   "gui.ashihara.mortar": "Mortar",
+  "gui.ashihara.toast.iwt.staring_at": "This block supports in world tooltip.",
+  "gui.ashihara.toast.iwt.info.pre": "Press ",
+  "gui.ashihara.toast.iwt.info.post": " to check out information.",
 
   "item.ashihara.dirt_ball_don.projectile": "§d§l§oA strong and weird felling grows inside your heart while you are looking at it",
   "item.ashihara.dirt_ball_don.projectile_1": "§9§l§oI don't know why something like this exists",
@@ -257,5 +260,8 @@
   "tooltip.ashihara.pail_display": "§e§lPail: §n",
   "tooltip.ashihara.pail_empty_message": "    §7The pail is empty now",
   "tooltip.ashihara.pail_fluid_existence": "    §7Fluid: ",
-  "tooltip.ashihara.fluid_existence": "Fluid: "
+  "tooltip.ashihara.fluid_existence": "Fluid: ",
+
+  "key.category.in_world_tooltip": "Ashihara: In world ToolTip",
+  "key.show_in_world_tooltip": "Show in world ToolTip"
 }

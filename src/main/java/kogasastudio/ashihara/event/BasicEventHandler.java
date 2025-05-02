@@ -2,11 +2,13 @@ package kogasastudio.ashihara.event;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
-import kogasastudio.ashihara.client.render.PlayerAnimationProxy;
+import kogasastudio.ashihara.block.tileentities.IRenderInWorldToolTip;
+import kogasastudio.ashihara.client.gui.InWorldToolTipTipToast;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
-import kogasastudio.ashihara.utils.mixin.PlayerProxyProvider;
-import net.minecraft.client.renderer.RenderType;
+import kogasastudio.ashihara.registry.KeyMappings;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
@@ -17,20 +19,52 @@ import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.RenderPlayerEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 @EventBusSubscriber(modid = Ashihara.MODID)
 public class BasicEventHandler
 {
+    private static int toastTipTicks = 0;
+    private static boolean showedToast = false;
     @SubscribeEvent
-    public static void onSyncProxiedPlayerAnimation(RenderPlayerEvent.Pre event)
+    public static void onClientTick(ClientTickEvent.Post event)
     {
+        if (Minecraft.getInstance().hitResult == null || Minecraft.getInstance().level == null) return;
+        BlockEntity be = Minecraft.getInstance().level.getBlockEntity(((BlockHitResult) Minecraft.getInstance().hitResult).getBlockPos());
+        if (be instanceof IRenderInWorldToolTip iBe)
+        {
+            if (!showedToast)
+            {
+                toastTipTicks++;
+                if (toastTipTicks >= 200)
+                {
+                    Minecraft.getInstance().getToasts().addToast(new InWorldToolTipTipToast());
+                    showedToast = true;
+                }
+            }
+
+            if (KeyMappings.SHOW_IN_WORLD_TOOLTIP.consumeClick() && Minecraft.getInstance().player != null)
+            {
+                iBe.switchRender(Minecraft.getInstance().player);
+            }
+        }
+        else toastTipTicks = 0;
     }
+
+    @SubscribeEvent
+    public static void onLogOut(PlayerEvent.PlayerLoggedOutEvent event)
+    {
+        showedToast = false;
+    }
+
     @SubscribeEvent
     public static void onRightClick(PlayerInteractEvent.RightClickBlock event)
     {
@@ -79,6 +113,4 @@ public class BasicEventHandler
             }
         }
     }
-
-    // todo 这个事件下个版本就寄了，你想一下别的办法吧
 }

@@ -89,6 +89,7 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable, IR
         super(TERegistryHandler.MORTAR_TE.get(), pos, state);
     }
 
+    @Override
     public void init(Player player)
     {
         this.item_display_positions = new SimpleInternalControlGeoModel("geo/assistance/mortar_item_display_loc.geo.json", "", player);
@@ -219,12 +220,7 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable, IR
     @Override
     public ToolTipController<?> getToolTipController()
     {
-        return null;
-    }
-
-    @Override
-    public void reScale(Player player)
-    {
+        return this.toolTipController;
     }
 
     public enum MortarToolType

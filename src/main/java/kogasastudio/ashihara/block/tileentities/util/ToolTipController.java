@@ -1,11 +1,17 @@
 package kogasastudio.ashihara.block.tileentities.util;
 
 import kogasastudio.ashihara.block.tileentities.IRenderInWorldToolTip;
+import kogasastudio.ashihara.client.models.geo.InternalControlGeoModel;
 import kogasastudio.ashihara.client.models.geo.UIPanelModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import software.bernie.geckolib.animation.Animation;
 import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.EasingType;
+import software.bernie.geckolib.cache.object.GeoBone;
+
+import static kogasastudio.ashihara.utils.OptionalUtil.getWithDefault;
 
 public class ToolTipController<B extends BlockEntity & IRenderInWorldToolTip>
 {
@@ -27,9 +33,9 @@ public class ToolTipController<B extends BlockEntity & IRenderInWorldToolTip>
 
     private void initSwitch(Player player)
     {
+        model.stopTriggeredAnim(player, model.hashCode(), UIPanelModel.OUTRO, UIPanelModel.OUTRO);
         model.triggerAnim(player, model.hashCode(), UIPanelModel.INTRO, UIPanelModel.INTRO);
         model.triggerAnim(player, model.hashCode(), UIPanelModel.FLOAT, UIPanelModel.FLOAT);
-        reScale(player);
     }
 
     private void hide(Player player)
@@ -47,8 +53,26 @@ public class ToolTipController<B extends BlockEntity & IRenderInWorldToolTip>
         return false;
     }
 
-    public void reScale(Player player)
+    public void reScale(float scaleX, float scaleY, Player player)
     {
-        this.be.reScale(player);
+        model.triggerInternal
+        (
+            player, model.hashCode(),
+            new InternalControlGeoModel.InternalAnimationBuilder("scale", Animation.LoopType.HOLD_ON_LAST_FRAME)
+            .startBone("scale_sim")
+            .lerpSingle
+            (
+                InternalControlGeoModel.InternalAnimationBuilder.VarType.SCALE,
+                40,
+                getWithDefault(1f, model.getBone("scale_sim"), GeoBone::getScaleX),
+                scaleX,
+                getWithDefault(1f, model.getBone("scale_sim"), GeoBone::getScaleY),
+                scaleY,
+                1, 1,
+                EasingType.EASE_IN_OUT_QUAD
+            )
+            .endBone()
+            .build()
+        );
     }
 }

@@ -89,7 +89,7 @@ public class CharlotteBlock extends Block implements EntityBlock
                 }
                 if (stack.getCount() > 1)
                 {
-                    te.lerpScale(stack.getCount() * 8, stack.getCount() * 4, player);
+                    te.reScale(stack.getCount() * 8, stack.getCount() * 4, player);
                 }
                 return ItemInteractionResult.SUCCESS;
             }

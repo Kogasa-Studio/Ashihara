@@ -247,10 +247,15 @@
   "itemGroup.group_ash_building_blocks": "苇原-建筑方块",
   "gui.ashihara.mill": "石磨",
   "gui.ashihara.mortar": "舂",
+  "gui.ashihara.toast.iwt.staring_at": "此方块支持世界内ToolTip。",
+  "gui.ashihara.toast.iwt.info.pre": "按 ",
+  "gui.ashihara.toast.iwt.info.post": " 键检查信息。",
   "item.ashihara.dirt_ball_don.projectile": "§d§l§o这东西散发着一种不可思议的气场",
   "item.ashihara.dirt_ball_don.projectile_1": "§9§l§o§m别把这事告诉4z（",
   "tooltip.ashihara.pail_display": "§e§l提桶: §n",
   "tooltip.ashihara.pail_empty_message": "    §7桶现在是空的",
   "tooltip.ashihara.pail_fluid_existence": "    §7流体: ",
-  "tooltip.ashihara.fluid_existence": "流体: "
+  "tooltip.ashihara.fluid_existence": "流体: ",
+  "key.category.in_world_tooltip": "苇原：世界内ToolTip",
+  "key.show_in_world_tooltip": "显示世界内ToolTip"
 }

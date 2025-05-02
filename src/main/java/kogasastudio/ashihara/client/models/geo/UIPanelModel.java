@@ -6,8 +6,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import software.bernie.geckolib.util.RenderUtil;
+
+import java.util.Optional;
 
 public class UIPanelModel extends InternalControlGeoModel<UIPanelModel>
 {
@@ -73,6 +76,18 @@ public class UIPanelModel extends InternalControlGeoModel<UIPanelModel>
     {
         this.trackPlayerView = b;
         return this;
+    }
+
+    public float getScaleX()
+    {
+        Optional<GeoBone> boneOptional = this.getBone("scale_sim");
+        return boneOptional.map(GeoBone::getScaleX).orElse(0f);
+    }
+
+    public float getScaleY()
+    {
+        Optional<GeoBone> boneOptional = this.getBone("scale_sim");
+        return boneOptional.map(GeoBone::getScaleY).orElse(0f);
     }
 
     @Override
