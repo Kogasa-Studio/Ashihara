@@ -71,14 +71,14 @@ public class PlayerAnimationProxy
 
     private void syncBones(GeoBone bone, ModelPart part)
     {
-        part.x += bone.getPosX();
-        part.y += bone.getPosY();
-        part.z += bone.getPosZ();
-        part.xRot += bone.getRotX();
-        part.yRot += bone.getRotY();
-        part.zRot += bone.getRotZ();
-        part.xScale *= bone.getScaleX();
-        part.yScale *= bone.getScaleY();
-        part.zScale *= bone.getScaleZ();
+        part.x = bone.getPosX();
+        part.y = bone.getPosY();
+        part.z = bone.getPosZ();
+        part.xRot = bone.getRotX();
+        part.yRot = bone.getRotY();
+        part.zRot = bone.getRotZ();
+        part.xScale = bone.getScaleX();
+        part.yScale = bone.getScaleY();
+        part.zScale = bone.getScaleZ();
     }
 }

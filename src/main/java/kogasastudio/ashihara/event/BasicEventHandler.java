@@ -44,7 +44,7 @@ public class BasicEventHandler
             if (!showedToast)
             {
                 toastTipTicks++;
-                if (toastTipTicks >= 200)
+                if (toastTipTicks >= 100)
                 {
                     Minecraft.getInstance().getToasts().addToast(new InWorldToolTipTipToast());
                     showedToast = true;
@@ -54,6 +54,7 @@ public class BasicEventHandler
             if (KeyMappings.SHOW_IN_WORLD_TOOLTIP.consumeClick() && Minecraft.getInstance().player != null)
             {
                 iBe.switchRender(Minecraft.getInstance().player);
+                showedToast = true;
             }
         }
         else toastTipTicks = 0;

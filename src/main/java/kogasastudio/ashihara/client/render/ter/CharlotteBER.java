@@ -8,6 +8,7 @@ import kogasastudio.ashihara.client.render.SectionRenderContext;
 import kogasastudio.ashihara.client.render.WithLevelRenderer;
 import kogasastudio.ashihara.helper.InWorldTipRenderHelper;
 import kogasastudio.ashihara.helper.RenderHelper;
+import kogasastudio.ashihara.utils.InWorldTooltipInfoWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -16,12 +17,17 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.List;
 
 public class CharlotteBER implements BlockEntityRenderer<CharlotteTE>, WithLevelRenderer<CharlotteTE>, InWorldToolTipBER<CharlotteTE>
 {
     public CharlotteBER(BlockEntityRendererProvider.Context dispatcherIn) {}
+
+    private final InWorldTooltipInfoWrapper info = new InWorldTooltipInfoWrapper();
 
     @Override
     public void renderStatic(SectionRenderContext context, ModelRenderer renderer)
@@ -49,37 +55,17 @@ public class CharlotteBER implements BlockEntityRenderer<CharlotteTE>, WithLevel
     @Override
     public void renderInfo(CharlotteTE be, PoseStack poseStack, UIPanelModel animatable, MultiBufferSource bufferSource, RenderType renderType, VertexConsumer buffer, int packedLight, float partialTick)
     {
-        float maxX = 2;
-        float maxY = 2;
-        poseStack.pushPose();
-        poseStack.scale(1 / 16f, 1 / 16f, 1 / 16f);
-        poseStack.translate(1f, 1f, 0);
-        maxX += 1; maxY += 1;
-        maxX += InWorldTipRenderHelper.renderComponent(Minecraft.getInstance().font, Component.literal(be.getBlockPos().toString()), 0x1fcb58, false, poseStack, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight, 2);
-        maxX += InWorldTipRenderHelper.renderComponent(Minecraft.getInstance().font, Component.literal("猫咪崽子，小猫崽子，Chicken, Kitten"), 0xffffff, false, poseStack, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight, 2);
-        poseStack.translate(1f, 3f, 0);
-        maxY += 1; maxY += 3;
-        for (int i = 0; i < 5; i++)
+        info.init(poseStack);
+        info.translate(1f, 1f);
+        info.checkAndOffsetY(InWorldTipRenderHelper.renderComponent(Minecraft.getInstance().font, Component.literal(be.getBlockPos().toString()), 0x1fcb58, false, poseStack, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight, 2, 20 * 9));
+        info.checkAndOffsetY(InWorldTipRenderHelper.renderComponent(Minecraft.getInstance().font, Component.literal("猫咪崽子，小猫崽子，Chicken, Kitten"), 0xffffff, false, poseStack, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight, 2, 20 * 9));
+        info.translate(0, 1f);
+        info.checkAndOffsetY(InWorldTipRenderHelper.renderItemStacks(poseStack, bufferSource, packedLight, 2f, 2, List.of(new ItemStack(Blocks.ACACIA_PLANKS, 22), new ItemStack(Blocks.AMETHYST_BLOCK, 7), new ItemStack(Items.GHAST_TEAR))));
+        info.checkAndOffsetY(InWorldTipRenderHelper.renderComponent(Minecraft.getInstance().font, Component.translatable("chat.cannotSend"), 0xffffff, false, poseStack, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight, 2, 20 * 9));
+        if ((info.getMaxX() != animatable.getScaleX() || info.getMaxY() != animatable.getScaleY()) && !RenderHelper.animControllerPlaying(animatable, c -> c.getName().equals("internal")))
         {
-            poseStack.pushPose();
-            for (int j = 0; j < 5; j++)
-            {
-                ItemStack stack = new ItemStack(Blocks.CAMPFIRE, i * j + 1);
-                InWorldTipRenderHelper.renderItemStack(stack, poseStack, bufferSource, packedLight, 2);
-                poseStack.translate(2f, 0, 0);
-                maxX += 2;
-            }
-            poseStack.popPose();
-            poseStack.translate(0, 2f, 0);
-            maxY += 2;
+            be.reScale(info.getMaxX() + 2, info.getMaxY(), Minecraft.getInstance().player);
         }
-        poseStack.translate(-1f, -1f, 0);
-        maxX -= 1; maxY -= 1;
-        maxX += InWorldTipRenderHelper.renderComponent(Minecraft.getInstance().font, Component.translatable("chat.cannotSend"), 0xffffff, false, poseStack, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight, 2);
-        if ((maxX != animatable.getScaleX() || maxY != animatable.getScaleY()) && !RenderHelper.animControllerPlaying(animatable, c -> c.getName().equals("internal")))
-        {
-            be.reScale(maxX, maxY, Minecraft.getInstance().player);
-        }
-        poseStack.popPose();
+        info.cast();
     }
 }

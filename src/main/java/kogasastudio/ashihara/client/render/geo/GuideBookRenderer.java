@@ -1,16 +1,13 @@
 package kogasastudio.ashihara.client.render.geo;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import kogasastudio.ashihara.client.models.geo.GuideBookModel;
 import kogasastudio.ashihara.helper.FontHelper;
 import kogasastudio.ashihara.item.GuideBook;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.model.GeoModel;

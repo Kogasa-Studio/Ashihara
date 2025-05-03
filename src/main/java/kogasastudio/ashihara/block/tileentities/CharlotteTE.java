@@ -24,7 +24,6 @@ public class CharlotteTE extends AshiharaMachineTE implements IRenderInWorldTool
     {
         this.model = new UIPanelModel(player);
         this.toolTipController = new ToolTipController<>(this, this.model);
-        reScale(8, 8, player);
     }
 
     @Override
