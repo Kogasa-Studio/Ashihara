@@ -1,12 +1,18 @@
 package kogasastudio.ashihara.client.render.ter;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.tileentities.MortarTE;
+import kogasastudio.ashihara.client.models.geo.UIPanelModel;
 import kogasastudio.ashihara.client.render.SectionRenderContext;
 import kogasastudio.ashihara.client.render.WithLevelRenderer;
+import kogasastudio.ashihara.helper.InWorldTipRenderHelper;
 import kogasastudio.ashihara.helper.RenderHelper;
+import kogasastudio.ashihara.utils.InWorldTooltipInfoWrapper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -15,7 +21,12 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.items.ItemStackHandler;
@@ -23,43 +34,58 @@ import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.util.RenderUtil;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class MortarTER implements BlockEntityRenderer<MortarTE>, WithLevelRenderer<MortarTE>
+public class MortarTER implements BlockEntityRenderer<MortarTE>, WithLevelRenderer<MortarTE>, InWorldToolTipBER<MortarTE>
 {
     public Map<Integer, ItemStack> items = new HashMap<>(8);
+    private final InWorldTooltipInfoWrapper info = new InWorldTooltipInfoWrapper();
 
     public MortarTER(BlockEntityRendererProvider.Context rendererDispatcherIn) {}
+
+    RenderType renderType = RenderType.entityTranslucent(UIPanelModel.DEFAULT_TEXTURE);
 
     @Override
     public void render(MortarTE blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay)
     {
-        if (blockEntity.fluid_display_position == null) blockEntity.init(Minecraft.getInstance().player);
-        blockEntity.fluid_display_position.handleAnimations(blockEntity.fluid_display_position, blockEntity.fluid_display_position.hashCode(), new AnimationState<>(blockEntity.fluid_display_position, 0, 0, partialTick, false), partialTick);
-        blockEntity.fluid_display_position.getBone("main").ifPresent
-        (
+        if (blockEntity.switchFluid.checkRender() && !blockEntity.fluidTank.isEmpty())
+        {
+            if (blockEntity.fluid_display_position == null) blockEntity.init(Minecraft.getInstance().player);
+            blockEntity.fluid_display_position.handleAnimations(blockEntity.fluid_display_position, blockEntity.fluid_display_position.hashCode(), new AnimationState<>(blockEntity.fluid_display_position, 0, 0, partialTick, false), partialTick);
+            blockEntity.fluid_display_position.getBone("main").ifPresent
+            (
             b ->
             {
                 poseStack.pushPose();
                 poseStack.translate(0, b.getPosY() / 16f, 0);
                 RenderHelper.renderLeveledFluidStack
                 (
-                    blockEntity.fluidTank.getFluid(), poseStack, buffer.getBuffer(RenderType.translucent()),
-                    packedLight, OverlayTexture.NO_OVERLAY,
-                    4 / 16f, 0 / 16f, 4 / 16f,
-                    12 / 16f, 12 / 16f, blockEntity.getLevel(), blockEntity.getBlockPos()
+                blockEntity.fluidTank.getFluid(), poseStack, buffer.getBuffer(RenderType.translucent()),
+                packedLight, OverlayTexture.NO_OVERLAY,
+                4 / 16f, 0 / 16f, 4 / 16f,
+                12 / 16f, 12 / 16f, blockEntity.getLevel(), blockEntity.getBlockPos()
                 );
                 poseStack.popPose();
             }
-        );
+            );
+        }
         //blockEntity.item_display_positions.render(poseStack, buffer, packedLight, packedOverlay);
+        if (blockEntity.checkRender())
+        {
+            poseStack.pushPose();
+            poseStack.translate(0, 0.8 - 0.16 / 16f, 0);
+            blockEntity.ui_panel_model.RENDERER.setupInformationRenderer(this.getInfoRenderer(blockEntity));
+            blockEntity.ui_panel_model.RENDERER.render(poseStack, blockEntity.ui_panel_model, buffer, renderType, buffer.getBuffer(renderType), packedLight, partialTick);
+            poseStack.popPose();
+        }
     }
 
     @Override
     public boolean shouldRender(MortarTE blockEntity, Vec3 cameraPos)
     {
         if (blockEntity.needBlockUpdate()) blockEntity.updateBlock();
-        return blockEntity.switchFluid.checkRender() && !blockEntity.fluidTank.isEmpty();
+        return blockEntity.checkRender() || (blockEntity.switchFluid.checkRender() && !blockEntity.fluidTank.isEmpty());
     }
 
     @Override
@@ -134,75 +160,74 @@ public class MortarTER implements BlockEntityRenderer<MortarTE>, WithLevelRender
             }
         }
     }
-    /*private static final String CEREALS = "cereals_level";
-    private static final String PROCESSED = "processed_level";
 
-    *//*public static Map<String, ResourceLocation> assistanceMap()
-    {
-        ImmutableMap.Builder<String, ResourceLocation> builder = new ImmutableMap.Builder<>();
-
-        for (ResourceLocation resourceLocation : AshiharaAtlas.ALL_ASSISTANCE)
-        {
-            String path = resourceLocation.getPath();
-            builder.put(path.substring(path.lastIndexOf("/") + 1), resourceLocation);
-        }
-
-        return builder.build();
-    }*//*
+    public static final ResourceLocation PROGRESS = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/geo/mortar_progress_bar.png");
+    public static final ResourceLocation PROGRESS_OUTLINE = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/geo/mortar_progress_bar_outline.png");
 
     @Override
-    public void render(MortarTE tileEntityIn, float partialTicks, PoseStack poseStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
+    public void renderInfo(MortarTE be, PoseStack poseStack, UIPanelModel animatable, MultiBufferSource bufferSource, RenderType renderType, VertexConsumer buffer, int packedLight, float partialTick)
     {
-        RenderHelper.renderLeveledFluidStack
-                (
-                        tileEntityIn, poseStackIn, bufferIn,
-                        combinedLightIn, combinedOverlayIn,
-                        XTP(3.5f), XTP(4.0f), XTP(3.5f),
-                        XTP(12.5f), XTP(12.0f), XTP(12.5f),
-                        tileEntityIn.getLevel(), tileEntityIn.getBlockPos()
-                );
+        info.init(poseStack);
+        info.translate(1f, 1f);
+        info.checkAndOffsetY(InWorldTipRenderHelper.renderComponent(Minecraft.getInstance().font, Component.translatable("block.ashihara.mortar"), 0xffffff, false, poseStack, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight, 2, 20 * 9));
+        info.translate(0, 1f);
 
-        NonNullList<ItemStack> list = NonNullList.create();
-        for (int i = 0; i < tileEntityIn.contents.getSlots(); i += 1)
+        MutableComponent contents = Component.translatable("tooltip.ashihara.contents");
+        if (be.inventory.isEmpty()) contents.append(Component.translatable("tooltip.ashihara.none"));
+        info.checkAndOffsetY(InWorldTipRenderHelper.renderComponent(Minecraft.getInstance().font, contents, 0x23f17d, false, poseStack, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight, 2, 20 * 9));
+        if (!be.inventory.isEmpty())
         {
-            list.add(i, tileEntityIn.contents.getStackInSlot(i));
+            info.checkAndOffsetY(InWorldTipRenderHelper.renderItemStacks(poseStack, bufferSource, packedLight, 2f, 4, be.inventory.getAllContents()));
+            //info.translate(0, 2f);
         }
 
-        float renderHeight = XTP(4.0f);
-        for (ItemStack stack : list)
+        MutableComponent fluid =  Component.translatable("tooltip.ashihara.fluid_existence");
+        if (be.fluidTank.isEmpty()) fluid.append(Component.translatable("tooltip.ashihara.none"));
+        else fluid.append(be.fluidTank.getFluid().getHoverName()).append(" ").append(String.valueOf(be.fluidTank.getFluid().getAmount())).append(" mB");
+        info.checkAndOffsetY(InWorldTipRenderHelper.renderComponent(Minecraft.getInstance().font, fluid, 0x237df1, false, poseStack, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight, 2, 20 * 9));
+        if (!be.fluidTank.isEmpty())
         {
-            if (!stack.isEmpty())
+            info.checkAndOffsetY(InWorldTipRenderHelper.renderFluid(poseStack, bufferSource, be.fluidTank.getFluid(), 16f, 16f, OverlayTexture.NO_OVERLAY, packedLight, 2));
+        }
+
+        if (be.currentRecipe != null)
+        {
+            MutableComponent recipe = Component.translatable("tooltip.ashihara.current_recipe");
+            info.checkAndOffsetY(InWorldTipRenderHelper.renderComponent(Minecraft.getInstance().font, recipe, 0xffffff, false, poseStack, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight, 2, 20 * 9));
+
+            info.pushPose();
+            InWorldTipRenderHelper.XY ingredients = InWorldTipRenderHelper.renderIngredients(poseStack, bufferSource, packedLight, 2f, 4, be.currentRecipe.getSizedIngredients());
+            poseStack.translate(ingredients.getX(), 0, 0);
+
+            InWorldTipRenderHelper.XY progress = InWorldTipRenderHelper.blit(poseStack, bufferSource.getBuffer(RenderType.entityCutout(PROGRESS_OUTLINE)), 32, 16, 0, 0, 1, 0, 1, OverlayTexture.NO_OVERLAY, packedLight, 2);
+            InWorldTipRenderHelper.blit(poseStack, bufferSource.getBuffer(RenderType.entityCutout(PROGRESS)), 32, 16, 0, 0, be.getProgress(), 0, 1, OverlayTexture.NO_OVERLAY, packedLight, 2);
+            poseStack.translate(progress.getX(), 0, 0);
+
+            InWorldTipRenderHelper.XY output = InWorldTipRenderHelper.renderItemStacks(poseStack, bufferSource, packedLight, 2f, 4, be.currentRecipe.getOutput());
+            poseStack.translate(output.getX(), 0, 0);
+            info.popPose();
+
+            float maxX = ingredients.getX() + progress.getX() + output.getX();
+            float maxY = Math.max(Math.max(ingredients.getY(), progress.getY()), output.getY());
+            info.check(maxX, 0);
+            info.translate(0, maxY);
+
+            MutableComponent current_parrel = Component.translatable("tooltip.ashihara.current_parallel").append(String.valueOf(be.productionMultiplier));
+            info.checkAndOffsetY(InWorldTipRenderHelper.renderComponent(Minecraft.getInstance().font, current_parrel, 0xffffff, false, poseStack, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight, 2, 20 * 9));
+
+            if (be.currentRecipe.getFluidCost() != null && !be.currentRecipe.getFluidCost().isEmpty())
             {
-                renderHeight += XTP(2.0f);
-                //以Quad方式渲染谷物或产物
-                if (stack.is(AshiharaTags.CEREALS) || stack.is(AshiharaTags.CEREAL_PROCESSED))
-                {
-                    String key = stack.is(AshiharaTags.CEREAL_PROCESSED) ? PROCESSED : CEREALS;
+                MutableComponent fluid_action = be.currentRecipe.fluidOpcode == 0 ? Component.translatable("tooltip.ashihara.fluid_consume_exception") : Component.translatable("tooltip.ashihara.fluid_output_exception");
+                fluid_action.append(be.currentRecipe.getFluidCost().getHoverName()).append(" ").append(String.valueOf(be.currentRecipe.getFluidCost().getAmount())).append(" mB");
+                info.checkAndOffsetY(InWorldTipRenderHelper.renderComponent(Minecraft.getInstance().font, fluid_action, 0x237df1, false, poseStack, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight, 2, 20 * 9));
 
-                    RenderType ASSISTANCE = RenderType.entityCutout(AshiharaAtlas.ALL_ASSISTANCE.get(key));
-                    VertexConsumer builder = bufferIn.getBuffer(ASSISTANCE);;
-
-                    //主渲染
-                    poseStackIn.pushPose();
-                    poseStackIn.translate(0.0f, renderHeight, 0.0f);
-                    Matrix4f wtf = poseStackIn.last().pose();
-                    buildMatrix(wtf, builder, XTP(3.5f), 0.0f, XTP(3.5f), 0, 0, combinedOverlayIn, combinedLightIn);
-                    buildMatrix(wtf, builder, XTP(3.5f), 0.0f, XTP(12.5f), 0, 1, combinedOverlayIn, combinedLightIn);
-                    buildMatrix(wtf, builder, XTP(12.5f), 0.0f, XTP(12.5f), 1, 1, combinedOverlayIn, combinedLightIn);
-                    buildMatrix(wtf, builder, XTP(12.5f), 0.0f, XTP(3.5f), 1, 0, combinedOverlayIn, combinedLightIn);
-                } else
-                {
-                    poseStackIn.pushPose();
-                    poseStackIn.translate(XTP(8.0f), renderHeight, XTP(8.0f));
-                    poseStackIn.scale(0.6f, 0.6f, 0.6f);
-                    poseStackIn.mulPose(Axis.XP.rotationDegrees(90.0f));
-                    poseStackIn.mulPose(Axis.YP.rotationDegrees(tileEntityIn.getBlockState().getValue(FACING).toYRot()));
-
-                    ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
-                    renderer.renderStatic(stack, ItemDisplayContext.FIXED, combinedLightIn, combinedOverlayIn, poseStackIn, bufferIn, tileEntityIn.getLevel(), 0);
-                }
-                poseStackIn.popPose();
+                info.checkAndOffsetY(InWorldTipRenderHelper.renderFluid(poseStack, bufferSource, be.currentRecipe.getFluidCost(), 16f, 16f, OverlayTexture.NO_OVERLAY, packedLight, 2));
             }
         }
-    }*/
+        if ((info.getMaxX() != animatable.getScaleX() || info.getMaxY() != animatable.getScaleY()) && !RenderHelper.animControllerPlaying(animatable, c -> c.getName().equals("internal")))
+        {
+            be.reScale(info.getMaxX() + 2, info.getMaxY(), Minecraft.getInstance().player);
+        }
+        info.cast();
+    }
 }

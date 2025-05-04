@@ -16,9 +16,9 @@ public class HemmingEdgeModel extends SimpleInternalControlGeoModel
     public void syncFrame(float xStart, float xEnd, float yStart, float yEnd, float divides)
     {
         this.getBone("up").ifPresent(b -> {b.setPosX(-(xEnd - xStart) * divides);b.setPosY(yEnd);});
-        this.getBone("right").ifPresent(b -> {b.setPosX(-xStart);b.setPosY(yEnd * divides);});
-        this.getBone("down").ifPresent(b -> {b.setPosX(-xStart * divides);b.setPosY(yStart);});
-        this.getBone("left").ifPresent(b -> {b.setPosX(-xEnd);b.setPosY(yStart * divides);});
+        this.getBone("right").ifPresent(b -> {b.setPosX(-xStart);b.setPosY((yEnd - yStart) * divides);});
+        this.getBone("down").ifPresent(b -> {b.setPosX(-(xEnd - xStart) * divides);b.setPosY(yStart);});
+        this.getBone("left").ifPresent(b -> {b.setPosX(xStart - xEnd);b.setPosY((yEnd - yStart) * divides);});
     }
 
     public void syncMain(GeoBone from)

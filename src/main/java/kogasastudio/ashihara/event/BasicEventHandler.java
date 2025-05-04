@@ -37,7 +37,7 @@ public class BasicEventHandler
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event)
     {
-        if (Minecraft.getInstance().hitResult == null || Minecraft.getInstance().level == null) return;
+        if (Minecraft.getInstance().hitResult == null || !(Minecraft.getInstance().hitResult instanceof BlockHitResult) || Minecraft.getInstance().level == null) return;
         BlockEntity be = Minecraft.getInstance().level.getBlockEntity(((BlockHitResult) Minecraft.getInstance().hitResult).getBlockPos());
         if (be instanceof IRenderInWorldToolTip iBe)
         {

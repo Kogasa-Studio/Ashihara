@@ -183,7 +183,7 @@ public class MillTE extends AshiharaMachineTE implements IItemHandler, IFluidHan
     private boolean canProduce(MillRecipe r)
     {
         var result = r.matches(input.getContent().stream().filter(i -> !i.isEmpty()).collect(Collectors.toList())) &&
-                r.testInputFluid(tankIn) &&
+                r.testFluidOption(tankIn) &&
                 tankOut.fill(r.getOutputFluid(), SIMULATE) == r.getOutputFluid().getAmount();
 
         if (result)

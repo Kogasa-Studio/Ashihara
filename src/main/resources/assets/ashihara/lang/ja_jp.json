@@ -255,7 +255,14 @@
   "tooltip.ashihara.pail_display": "§e§l樽: §n",
   "tooltip.ashihara.pail_empty_message": "    §7樽はまだ空です",
   "tooltip.ashihara.pail_fluid_existence": "    §7液体: ",
+  "tooltip.ashihara.mortar.next_tool": "次の工具: ",
+  "tooltip.ashihara.none": "無",
+  "tooltip.ashihara.contents": "内容: ",
   "tooltip.ashihara.fluid_existence": "液体: ",
+  "tooltip.ashihara.current_recipe": "今の製作中: ",
+  "tooltip.ashihara.current_parallel": "今の並行数: ",
+  "tooltip.ashihara.fluid_output_exception": "予期液体産出: ",
+  "tooltip.ashihara.fluid_consume_exception": "予期液体消耗: ",
   "key.category.in_world_tooltip": "葦原：世界内ToolTip",
   "key.show_in_world_tooltip": "世界内ToolTipを示す"
 }

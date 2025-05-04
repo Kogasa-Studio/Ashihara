@@ -125,7 +125,7 @@ public class RenderHelper
      * @param x      x（绝对）
      * @param y      y（绝对）
      */
-    public static void renderFluidStackInGUI(Matrix4f matrix, FluidStack fluid, int width, int height, float x, float y)
+    public static void renderFluidStackInGUI(Matrix4f matrix, FluidStack fluid, float width, float height, float x, float y)
     {
         //正常渲染透明度
         RenderSystem.enableBlend();
@@ -147,10 +147,10 @@ public class RenderHelper
          * 每16像素为1层，通过将给定渲染长宽不加类型转换除16来获取层数
          * 通过取余获取数值大小在16以下的额外数值
          */
-        int wFloors = width / 16;
-        int extraWidth = wFloors == 0 ? width : width % 16;
-        int hFloors = height / 16;
-        int extraHeight = hFloors == 0 ? height : height % 16;
+        int wFloors = (int) (width / 16);
+        float extraWidth = wFloors == 0 ? width : width - wFloors * 16;
+        int hFloors = (int) (height / 16);
+        float extraHeight = hFloors == 0 ? height : height - hFloors * 16;
 
         float u0 = FLUID.getU0();
         float v0 = FLUID.getV0();
@@ -172,9 +172,9 @@ public class RenderHelper
             if (i == 0 && extraHeight == 0) break;
             float yStart = y - ((hFloors - i) * 16);
             //获取本层/额外层的高度，若高度层渲染完毕则设为额外层高度
-            float yOffset = i == 0 ? (float) extraHeight : 16;
+            float yOffset = i == 0 ? extraHeight : 16;
             //获取v1
-            float v1 = i == 0 ? FLUID.getV0() + ((FLUID.getV1() - v0) * ((float) extraHeight / 16f)) : FLUID.getV1();
+            float v1 = i == 0 ? FLUID.getV0() + ((FLUID.getV1() - v0) * (extraHeight / 16f)) : FLUID.getV1();
 
             //x层以此类推
             for (int j = wFloors; j >= 0; j--)
@@ -245,6 +245,54 @@ public class RenderHelper
 
             renderLeveledFluidStack(fluid, stackIn, bufferIn.getBuffer(RenderType.translucent()), combinedLightIn, combinedOverlayIn, xStart, height, zStart, xEnd, zEnd, worldIn, posIn);
         }
+    }
+
+    public static void blitFluid
+    (
+        PoseStack poseStack,
+        MultiBufferSource bufferSource,
+        FluidStack fluidStack,
+        float x1,
+        float x2,
+        float y1,
+        float y2,
+        float z,
+        int overlay,
+        int light
+    )
+    {
+        TextureAtlasSprite FLUID = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(fluidStack.getFluid()).getStillTexture());
+        int color = IClientFluidTypeExtensions.of(fluidStack.getFluid()).getTintColor();
+        blit(poseStack, bufferSource.getBuffer(RenderType.translucent()), x1, x2, y1, y2, z, FLUID.getU0(), FLUID.getU1(), FLUID.getV0(), FLUID.getV1(), overlay, color, 1f, light);
+    }
+
+    public static void blit
+    (
+        PoseStack poseStack,
+        VertexConsumer consumer,
+        float x1,
+        float x2,
+        float y1,
+        float y2,
+        float z,
+        float minU,
+        float maxU,
+        float minV,
+        float maxV,
+        int overlay,
+        int color,
+        float alpha,
+        int light
+    )
+    {
+        poseStack.pushPose();
+        poseStack.translate(0.5, 0.5, 0.5);
+        Matrix4f matrix4f = poseStack.last().pose();
+        buildMatrix(matrix4f, consumer, x2, y2, z, minU, minV, overlay, color, alpha, light);
+        buildMatrix(matrix4f, consumer, x1, y2, z, maxU, minV, overlay, color, alpha, light);
+        buildMatrix(matrix4f, consumer, x1, y1, z, maxU, maxV, overlay, color, alpha, light);
+        buildMatrix(matrix4f, consumer, x2, y1, z, minU, maxV, overlay, color, alpha, light);
+        poseStack.popPose();
     }
 
     public static void blit

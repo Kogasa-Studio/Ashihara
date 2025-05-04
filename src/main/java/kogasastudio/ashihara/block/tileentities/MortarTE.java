@@ -127,6 +127,12 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable, IR
         this.productionMultiplier = multiplier;
     }
 
+    public float getProgress()
+    {
+        if (currentRecipe == null) return 0;
+        return 1 - ((float) this.queue.size() / currentRecipe.getSequence().size());
+    }
+
     public static IItemHandler getInv(MortarTE te, Direction side)
     {
         if (side.getAxis().equals(Direction.Axis.Y))
@@ -152,7 +158,9 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable, IR
             MortarRecipe recipe = recipeOptional.get().value();
             if (recipe == currentRecipe) return;
             acceptRecipe(recipe);
+            return;
         }
+        acceptRecipe(null);
     }
 
     public void acceptRecipe(MortarRecipe recipe)
@@ -271,8 +279,7 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable, IR
         public static MortarToolType get(String id)
         {
             Optional<MortarToolType> type = Arrays.stream(MortarToolType.values()).filter(t -> t.id.equals(id)).findFirst();
-            if (type.isPresent()) return type.get();
-            return valueOf(id);
+            return type.orElseGet(() -> valueOf(id));
         }
     }
 }

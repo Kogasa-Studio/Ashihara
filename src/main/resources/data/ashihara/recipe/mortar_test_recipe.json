@@ -3,7 +3,7 @@
     "id": "minecraft:water",
     "amount": 1000
   },
-  "progress": 7,
+  "fluid_action": "consume",
   "sequence": {
     "queue": [
       "pestle",
@@ -16,6 +16,10 @@
     {
       "tag": "minecraft:wolf_food",
       "count": 4
+    },
+    {
+      "item": "ashihara:koishi",
+      "count": 1
     }
   ],
   "output": [

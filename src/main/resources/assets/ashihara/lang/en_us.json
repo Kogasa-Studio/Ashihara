@@ -260,7 +260,14 @@
   "tooltip.ashihara.pail_display": "§e§lPail: §n",
   "tooltip.ashihara.pail_empty_message": "    §7The pail is empty now",
   "tooltip.ashihara.pail_fluid_existence": "    §7Fluid: ",
+  "tooltip.ashihara.mortar.next_tool": "Next tool: ",
+  "tooltip.ashihara.none": "None",
+  "tooltip.ashihara.contents": "Contents: ",
   "tooltip.ashihara.fluid_existence": "Fluid: ",
+  "tooltip.ashihara.current_recipe": "Current recipe: ",
+  "tooltip.ashihara.current_parallel": "Current parallel: ",
+  "tooltip.ashihara.fluid_output_exception": "Excepted fluid output: ",
+  "tooltip.ashihara.fluid_consume_exception": "Excepted fluid consume: ",
 
   "key.category.in_world_tooltip": "Ashihara: In world ToolTip",
   "key.show_in_world_tooltip": "Show in world ToolTip"

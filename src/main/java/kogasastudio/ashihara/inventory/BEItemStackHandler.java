@@ -40,6 +40,16 @@ public class BEItemStackHandler<B extends BlockEntity> extends ItemStackHandler
         if (be.getLevel() != null) be.getLevel().sendBlockUpdated(be.getBlockPos(), be.getBlockState(), be.getBlockState(), UPDATE_ALL);
     }
 
+    public boolean isEmpty()
+    {
+        return this.stacks.stream().allMatch(ItemStack::isEmpty);
+    }
+
+    public List<ItemStack> getAllContents()
+    {
+        return List.copyOf(this.stacks);
+    }
+
     public int testIngredient(SizedIngredient ingredient)
     {
         int count = 0;

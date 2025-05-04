@@ -3,6 +3,7 @@ package kogasastudio.ashihara.interaction.recipes;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.tileentities.MortarTE;
 import kogasastudio.ashihara.helper.DataHelper;
 import kogasastudio.ashihara.interaction.recipes.base.WrappedRecipe;
@@ -16,63 +17,51 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
-import net.neoforged.neoforge.common.util.RecipeMatcher;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import org.apache.logging.log4j.LogManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.stream.Collectors;
 
 public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarTE>
 {
     public final NonNullList<SizedIngredient> input;
     public final NonNullList<ItemStack> output;
     public final FluidStack fluidCost;
-    public int progress;
+    //0: consume; other: produce
+    public int fluidOpcode;
     public Queue<MortarTE.MortarToolType> sequence;
 
     public MortarRecipe(ResourceLocation idIn,
                         NonNullList<SizedIngredient> inputIn, NonNullList<ItemStack> outputIn,
                         FluidStack fluidCostIn,
-                        int progressIn, Queue<MortarTE.MortarToolType> sequenceIn)
+                        int fluidOpcodeIn, Queue<MortarTE.MortarToolType> sequenceIn)
     {
         super(idIn);
 
         this.input = inputIn;
         this.output = outputIn;
         this.fluidCost = fluidCostIn;
-        this.progress = progressIn;
+        this.fluidOpcode = fluidOpcodeIn;
         this.sequence = sequenceIn;
     }
 
-    public boolean testInputFluid(@Nullable FluidTank tank)
+    public boolean testFluidOption(@Nullable FluidTank tank)
     {
-        if (tank == null && fluidCost != null) return false;
-        return fluidCost == null || tank.drain(fluidCost.copy(), IFluidHandler.FluidAction.SIMULATE).getAmount() >= fluidCost.getAmount();
-    }
-
-    @Override
-    public boolean matches(@NotNull NonNullList<ItemStack> inputs, @NotNull Level level)
-    {
-        if (this.input == null)
+        if (fluidCost == null || fluidCost.isEmpty()) return true;
+        if (tank == null) return false;
+        if (fluidOpcode == 0) return tank.drain(fluidCost.copy(), IFluidHandler.FluidAction.SIMULATE).getAmount() >= fluidCost.getAmount();
+        else
         {
-            LogManager.getLogger().error("MortarRecipe.matches: input is null. id: " + getId());
-            return false;
+            if (fluidOpcode != 1) Ashihara.LOGGER_MAIN.warn("MortarRecipe fluid action defined incorrectly. Please define field 'fluid_action' to 'consume' or 'produce'. Related recipe: {}.", getId());
+            return tank.fill(fluidCost.copy(), IFluidHandler.FluidAction.SIMULATE) >= fluidCost.getAmount();
         }
-
-        inputs = NonNullList.copyOf(inputs.stream().filter(i -> !i.isEmpty()).collect(Collectors.toList()));
-
-        return true; //RecipeMatcher.findMatches(inputs, this.input.) != null;
     }
 
     @Override
@@ -81,7 +70,7 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarTE>
         BEItemStackHandler<?> inv = be.inventory;
         int multiplier = inv.testIngredients(this.getSizedIngredients(), be.getMaxParallel());
         if (multiplier == 0) return false;
-        if (!testInputFluid(be.fluidTank)) return false;
+        if (!testFluidOption(be.fluidTank)) return false;
         be.setMultiplier(multiplier);
         return true;
     }
@@ -125,7 +114,7 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarTE>
         return fluidCost == null ? FluidStack.EMPTY : fluidCost;
     }
 
-    public int getProgress() {return progress;}
+    public int getFluidOpcode() {return fluidOpcode;}
 
     public Queue<MortarTE.MortarToolType> getSequence() {return sequence;}
 
@@ -139,16 +128,16 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarTE>
     {
         public static final MapCodec<MortarRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec
         (
-        mortarRecipeInstance ->
-        mortarRecipeInstance.group
-        (
-        ResourceLocation.CODEC.fieldOf("id").forGetter(MortarRecipe::getId),
-        NonNullList.codecOf(SizedIngredient.FLAT_CODEC).fieldOf("ingredients").forGetter(MortarRecipe::getSizedIngredients),
-        NonNullList.codecOf(ItemStack.CODEC).fieldOf("output").forGetter(MortarRecipe::getOutput),
-        FluidStack.CODEC.fieldOf("fluid").forGetter(MortarRecipe::getFluidCost),
-        Codec.INT.fieldOf("progress").forGetter(MortarRecipe::getProgress),
-        MortarTE.MortarToolType.QUEUE_CODEC.fieldOf("sequence").forGetter(MortarRecipe::getSequence)
-        ).apply(mortarRecipeInstance, MortarRecipe::new)
+            mortarRecipeInstance ->
+            mortarRecipeInstance.group
+            (
+                ResourceLocation.CODEC.fieldOf("id").forGetter(MortarRecipe::getId),
+                NonNullList.codecOf(SizedIngredient.FLAT_CODEC).fieldOf("ingredients").forGetter(MortarRecipe::getSizedIngredients),
+                NonNullList.codecOf(ItemStack.CODEC).fieldOf("output").forGetter(MortarRecipe::getOutput),
+                FluidStack.CODEC.fieldOf("fluid").forGetter(MortarRecipe::getFluidCost),
+                Codec.STRING.xmap(s -> s.equals("consume") ? 0 : s.equals("produce") ? 1 : -1, i -> i == 0 ? "consume" : "produce").fieldOf("fluid_action").forGetter(MortarRecipe::getFluidOpcode),
+                MortarTE.MortarToolType.QUEUE_CODEC.fieldOf("sequence").forGetter(MortarRecipe::getSequence)
+            ).apply(mortarRecipeInstance, MortarRecipe::new)
         );
         public static final StreamCodec<RegistryFriendlyByteBuf, MortarRecipe> STREAM_CODEC = StreamCodec.of(MortarRecipeSerializer::toNetwork, MortarRecipeSerializer::fromNetwork);
 
@@ -158,10 +147,10 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarTE>
             NonNullList<SizedIngredient> iListN = NonNullList.copyOf(SizedIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buffer));
             NonNullList<ItemStack> oListN = DataHelper.copyAndCast(ItemStack.LIST_STREAM_CODEC.decode(buffer));
             FluidStack fCostN = FluidStack.STREAM_CODEC.decode(buffer);
-            int progressN = buffer.readInt();
+            int fluidOpcodeN = buffer.readInt();
             Queue<MortarTE.MortarToolType> sequenceN = new ConcurrentLinkedQueue<>(DataHelper.copyAndCast(MortarTE.MortarToolType.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buffer)));
 
-            return new MortarRecipe(id, iListN, oListN, fCostN, progressN, sequenceN);
+            return new MortarRecipe(id, iListN, oListN, fCostN, fluidOpcodeN, sequenceN);
         }
 
         public static RegistryFriendlyByteBuf toNetwork(RegistryFriendlyByteBuf buffer, MortarRecipe recipe)
@@ -170,7 +159,7 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarTE>
             SizedIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buffer, recipe.getSizedIngredients());
             ItemStack.LIST_STREAM_CODEC.encode(buffer, recipe.getOutput());
             FluidStack.STREAM_CODEC.encode(buffer, recipe.getFluidCost());
-            buffer.writeInt(recipe.progress);
+            buffer.writeInt(recipe.fluidOpcode);
             MortarTE.MortarToolType.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buffer, NonNullList.copyOf(recipe.getSequence()));
             return buffer;
         }

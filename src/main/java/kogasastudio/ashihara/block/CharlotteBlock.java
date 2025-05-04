@@ -100,10 +100,10 @@ public class CharlotteBlock extends Block implements EntityBlock
             MortarRecipe recipe = new MortarRecipe
             (
                 ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "chick"),
-                NonNullList.of(SizedIngredient.of(ItemStack.EMPTY.getItem(), 1), SizedIngredient.of(ItemTags.WOLF_FOOD, 4)),
+                NonNullList.of(SizedIngredient.of(ItemStack.EMPTY.getItem(), 1), SizedIngredient.of(ItemTags.WOLF_FOOD, 4), SizedIngredient.of(ItemRegistryHandler.KOISHI, 1)),
                 NonNullList.of(ItemStack.EMPTY, ItemRegistryHandler.RICE.toStack(), ItemRegistryHandler.RICE.toStack(7)),
                 new FluidStack(Fluids.WATER.getSource(), 1000),
-                7,
+                0,
                 new ConcurrentLinkedQueue<>(List.of(MortarTE.MortarToolType.PESTLE, MortarTE.MortarToolType.HAND, MortarTE.MortarToolType.OTSUCHI))
             );
             JsonElement element = MortarRecipe.CODEC.encodeStart(dynamicOps, recipe).getOrThrow(msg -> new RuntimeException("Failed to encode %s: %s".formatted("test/test_recipe.json", msg)));

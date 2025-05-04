@@ -255,7 +255,14 @@
   "tooltip.ashihara.pail_display": "§e§l提桶: §n",
   "tooltip.ashihara.pail_empty_message": "    §7桶现在是空的",
   "tooltip.ashihara.pail_fluid_existence": "    §7流体: ",
+  "tooltip.ashihara.mortar.next_tool": "下一个工具: ",
+  "tooltip.ashihara.none": "无",
+  "tooltip.ashihara.contents": "内容: ",
   "tooltip.ashihara.fluid_existence": "流体: ",
+  "tooltip.ashihara.current_recipe": "当前配方: ",
+  "tooltip.ashihara.current_parallel": "当前并行数: ",
+  "tooltip.ashihara.fluid_output_exception": "预期流体产出: ",
+  "tooltip.ashihara.fluid_consume_exception": "预期流体消耗: ",
   "key.category.in_world_tooltip": "苇原：世界内ToolTip",
   "key.show_in_world_tooltip": "显示世界内ToolTip"
 }
