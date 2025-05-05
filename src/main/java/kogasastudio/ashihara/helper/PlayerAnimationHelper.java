@@ -1,15 +1,31 @@
 package kogasastudio.ashihara.helper;
 
+import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.client.models.geo.PlayerProxyModel;
+import kogasastudio.ashihara.network.AnimatePlayerPacket;
+import kogasastudio.ashihara.registry.PlayerAnimations;
 import kogasastudio.ashihara.utils.mixin.PlayerProxyProvider;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.network.PacketDistributor;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class PlayerAnimationHelper
 {
-    public static void triggerPlayerAnimation(Player player, Consumer<PlayerProxyModel> consumer)
+    public static void triggerPlayerAnimation(Player player, String id)
     {
+        BiConsumer<Player, PlayerProxyModel> consumer = PlayerAnimations.get(id);
+        if (consumer == null)
+        {
+            Ashihara.LOGGER_MAIN.error("Could not find any player animation with id: {}", id);
+            return;
+        }
         ((PlayerProxyProvider) player).ashihara_1_21$getAnimationProxy().startProxy(consumer);
+    }
+
+    public static void pushPlayerAnimation(Player player, String id)
+    {
+        PacketDistributor.sendToAllPlayers(new AnimatePlayerPacket(id, player.getUUID()));
     }
 }

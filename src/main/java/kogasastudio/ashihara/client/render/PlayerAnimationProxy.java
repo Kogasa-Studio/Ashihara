@@ -10,12 +10,14 @@ import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class PlayerAnimationProxy
 {
     public final Player player;
     public final PlayerProxyModel model;
+    private PlayerModel<?> playerModel;
     private boolean activated = false;
 
     public PlayerAnimationProxy(Player player)
@@ -28,10 +30,10 @@ public class PlayerAnimationProxy
      * Actually triggers player animation.
      * @param modelConsumer play your animation via lambda here.
      */
-    public void startProxy(Consumer<PlayerProxyModel> modelConsumer)
+    public void startProxy(BiConsumer<Player, PlayerProxyModel> modelConsumer)
     {
         this.activated = true;
-        modelConsumer.accept(this.model);
+        modelConsumer.accept(this.player, this.model);
     }
 
     public void endProxy()
@@ -71,14 +73,14 @@ public class PlayerAnimationProxy
 
     private void syncBones(GeoBone bone, ModelPart part)
     {
-        part.x = bone.getPosX();
-        part.y = bone.getPosY();
-        part.z = bone.getPosZ();
-        part.xRot = bone.getRotX();
-        part.yRot = bone.getRotY();
-        part.zRot = bone.getRotZ();
-        part.xScale = bone.getScaleX();
-        part.yScale = bone.getScaleY();
-        part.zScale = bone.getScaleZ();
+        part.x += bone.getPosX();
+        part.y -= bone.getPosY();
+        part.z += bone.getPosZ();
+        part.xRot += (bone.getRotX());
+        part.yRot += (bone.getRotY());
+        part.zRot += (bone.getRotZ());
+        part.xScale *= bone.getScaleX();
+        part.yScale *= bone.getScaleY();
+        part.zScale *= bone.getScaleZ();
     }
 }

@@ -9,6 +9,7 @@ import kogasastudio.ashihara.item.block.*;
 import kogasastudio.ashihara.item.foods.EasyFood;
 import kogasastudio.ashihara.item.foods.ItemDirtBallDon;
 import kogasastudio.ashihara.registry.BuildingComponents;
+import kogasastudio.ashihara.registry.PlayerAnimations;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -62,7 +63,7 @@ public class ItemRegistryHandler
         {
             if (usedHand.equals(InteractionHand.OFF_HAND) && player.getMainHandItem().is(KOISHI.asItem()))
             {
-                PlayerAnimationHelper.triggerPlayerAnimation(player, model -> model.triggerAnim(player, model.hashCode(), PlayerProxyModel.TEST, PlayerProxyModel.TEST));
+                PlayerAnimationHelper.pushPlayerAnimation(player, PlayerAnimations.TEST_TEKOKI_ANIM);
                 return InteractionResultHolder.success(player.getOffhandItem());
             }
             return super.use(level, player, usedHand);
