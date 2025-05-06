@@ -14,7 +14,6 @@ import kogasastudio.ashihara.inventory.BEItemStackHandler;
 import kogasastudio.ashihara.item.ItemOtsuchi;
 import kogasastudio.ashihara.registry.RecipeTypes;
 import kogasastudio.ashihara.registry.TERegistryHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -54,7 +53,7 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable, IR
     (
         p ->
         {
-            if (this.fluid_display_position == null) this.init(Minecraft.getInstance().player);
+            if (this.fluid_display_position == null) this.init(p);
             this.fluid_display_position.triggerInternal
             (
                 p, this.fluid_display_position.hashCode(),

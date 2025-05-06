@@ -5,6 +5,9 @@ import kogasastudio.ashihara.client.models.geo.PlayerProxyModel;
 import kogasastudio.ashihara.network.AnimatePlayerPacket;
 import kogasastudio.ashihara.registry.PlayerAnimations;
 import kogasastudio.ashihara.utils.mixin.PlayerProxyProvider;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.player.RemotePlayer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -15,6 +18,7 @@ public class PlayerAnimationHelper
 {
     public static void triggerPlayerAnimation(Player player, String id)
     {
+        if (!(player instanceof LocalPlayer) && !(player instanceof RemotePlayer)) return;
         BiConsumer<Player, PlayerProxyModel> consumer = PlayerAnimations.get(id);
         if (consumer == null)
         {
@@ -26,6 +30,7 @@ public class PlayerAnimationHelper
 
     public static void pushPlayerAnimation(Player player, String id)
     {
+        if (!(player instanceof ServerPlayer)) return;
         PacketDistributor.sendToAllPlayers(new AnimatePlayerPacket(id, player.getUUID()));
     }
 }

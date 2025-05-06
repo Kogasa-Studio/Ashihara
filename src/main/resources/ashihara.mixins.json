@@ -8,7 +8,9 @@
     "MixinPlayer"
   ],
   "client": [
-    "MixinLivingEntityRenderer"
+    "MixinLivingEntityRenderer",
+    "MixinLocalPlayer",
+    "MixinRemotePlayer"
   ],
   "injectors": {
     "defaultRequire": 1

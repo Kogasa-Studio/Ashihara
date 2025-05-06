@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
@@ -65,21 +66,17 @@ public class MortarBlock extends Block implements EntityBlock
     }
 
     @Override
-    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState state1, boolean b)
+    public void destroy(LevelAccessor level, BlockPos pos, BlockState state)
     {
-        /*BlockEntity te = worldIn.getBlockEntity(pos);
-        if (te instanceof MortarTE)
+        BlockEntity be = level.getBlockEntity(pos);
+        if (be instanceof MortarTE mortarTE && !mortarTE.inventory.isEmpty())
         {
-            NonNullList<ItemStack> stacks = NonNullList.create();
-            for (int i = 0; i < ((MortarTE) te).contents.getSlots(); i += 1)
+            for (ItemStack stack : mortarTE.inventory.getAllContents())
             {
-                ItemStack stackI = ((MortarTE) te).contents.getStackInSlot(i);
-                if (!stackI.isEmpty()) stacks.add(stackI);
+                popResource((Level) level, pos, stack);
             }
-            Containers.dropContents(worldIn, pos, stacks);
-            worldIn.updateNeighbourForOutputSignal(pos, this);
-        }*/
-        super.onRemove(state, worldIn, pos, state1, b);
+        }
+        super.destroy(level, pos, state);
     }
 
     @Override
@@ -113,75 +110,6 @@ public class MortarBlock extends Block implements EntityBlock
                 return ItemInteractionResult.SUCCESS;
             }
         }
-        /*MortarTE te = (MortarTE) worldIn.getBlockEntity(pos);
-        if (te == null) return InteractionResult.FAIL;
-
-        FluidTank tank = te.getTank().orElse(new FluidTank(0));
-        if (!stack.isEmpty() && FluidHelper.notifyFluidTankInteraction(player, handIn, stack, tank, worldIn, pos))
-        {
-            player.getInventory().setChanged();
-            te.notifyStateChanged();
-            worldIn.sendBlockUpdated(pos, state, state, 3);
-            return InteractionResult.SUCCESS;
-        } else if (handIn.equals(InteractionHand.MAIN_HAND))
-        {
-            if (stack.getItem().equals(ItemRegistryHandler.KOISHI.get()))
-            {
-                player.sendSystemMessage
-                        (
-                                Component.translatable
-                                        (
-                                                "\n{\n    te_contents: " + te.contents.toString()
-                                                        + ";\n    te_contained_output: " + te.output.toString()
-                                                        + ";\n    te_progress: " + te.progress
-                                                        + ";\n    te_progress_total: " + te.progressTotal
-                                                        + ";\n    te_pointer: " + te.pointer
-                                                        + ";\n    te_recipeType: " + te.recipeType
-                                                        + ";\n    te_sequence: " + Arrays.toString(te.sequence)
-                                                        + ";\n    te_next_step: " + te.nextStep
-                                                        + ";\n    te_working_statement_code: " + te.isWorking
-                                        )
-                        );
-            }
-            if (!player.isShiftKeyDown() && te.notifyInteraction(stack, worldIn, pos, player))
-            {
-                boolean isPowder = stack.is(CEREALS) || stack.is(CEREAL_PROCESSED);
-                boolean isTool = stack.getItem().equals(ItemRegistryHandler.PESTLE.get()) || stack.getItem() instanceof ItemOtsuchi;
-                if (!te.isWorking && !isTool)
-                {
-                    if (isPowder)
-                    {
-                        worldIn.playSound(player, pos, SoundEvents.SAND_PLACE, SoundSource.BLOCKS, 1.0f, 1.0f);
-                    }
-                } else if (isTool)
-                {
-                    worldIn.playSound(player, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
-                    if (te.recipeType == 0)
-                    {
-                        RandomSource rand = worldIn.getRandom();
-                        for (int i = 0; i < 12; i += 1)
-                        {
-                            worldIn.addParticle
-                                    (
-                                            new GenericParticleData(new Vec3(0, 0, 0), 0, ParticleRegistryHandler.RICE.get()),
-                                            (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D,
-                                            (double) pos.getZ() + 0.5D, rand.nextFloat() / 2.0F,
-                                            5.0E-5D,
-                                            rand.nextFloat() / 2.0F
-                                    );
-                        }
-                    }
-                } else
-                {
-                    worldIn.playSound(player, pos, SoundEvents.ARMOR_EQUIP_GENERIC, SoundSource.BLOCKS, 1.0f, 1.0f);
-                }
-                worldIn.sendBlockUpdated(pos, state, state, 3);
-            } else if (!worldIn.isClientSide())
-            {
-                NetworkHooks.openScreen((ServerPlayer) player, te, (FriendlyByteBuf packerBuffer) -> packerBuffer.writeBlockPos(te.getBlockPos()));
-            }
-            return InteractionResult.SUCCESS;
-        }*/
         return super.useItemOn(stack, state, worldIn, pos, player, handIn, hit);
     }
 
@@ -191,11 +119,4 @@ public class MortarBlock extends Block implements EntityBlock
     {
         return new MortarTE(pos, state);
     }
-
-    /*@Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState)
-    {
-        return new MortarTE(pPos, pState);
-    }*/
 }
