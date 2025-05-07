@@ -4,16 +4,25 @@ import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import kogasastudio.ashihara.client.models.geo.GuideBookModel;
 import kogasastudio.ashihara.helper.FontHelper;
+import kogasastudio.ashihara.helper.RenderHelper;
 import kogasastudio.ashihara.item.GuideBook;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import org.joml.Matrix4f;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.level.block.Blocks;
+import org.joml.*;
 import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.cache.object.GeoCube;
+import software.bernie.geckolib.cache.object.GeoQuad;
+import software.bernie.geckolib.cache.object.GeoVertex;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoObjectRenderer;
 import software.bernie.geckolib.util.RenderUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static kogasastudio.ashihara.helper.FontHelper.*;
@@ -38,6 +47,19 @@ public class GuideBookRenderer extends GeoObjectRenderer<GuideBookModel>
         poseStack.pushPose();
         RenderUtil.prepMatrixForBone(poseStack, bone);
         buffer = this.checkAndRefreshBuffer(isReRender, buffer, bufferSource, renderType);
+
+        if (bone.getName().equals("rightcover"))
+        {
+            poseStack.pushPose();
+            Matrix4f pose = poseStack.last().copy().pose();
+            pose.translate(20/16f, 3.05f/16f, 10/16f);
+            animatable.projectionMatrix = pose;
+            Vector2f v = animatable.getRightCoverProjectedPos(animatable.mouseX, animatable.mouseY);
+            poseStack.translate(20/16f, 3.05f/16f, -15/16f);
+            poseStack.translate(v.x, 0, v.y);
+            Minecraft.getInstance().getItemRenderer().render(Blocks.GRASS_BLOCK.asItem().getDefaultInstance(), ItemDisplayContext.GUI, false, poseStack, bufferSource, packedLight, packedOverlay, Minecraft.getInstance().getItemRenderer().getModel(Blocks.GRASS_BLOCK.asItem().getDefaultInstance(), null, null, 42));
+            poseStack.popPose();
+        }
         this.renderCubesOfBone(poseStack, bone, buffer, packedLight, packedOverlay, colour);
 
         GuideBookModel book = (GuideBookModel) this.model;

@@ -356,10 +356,10 @@ public class RenderHelper
     public static void fill(PoseStack poseStack, VertexConsumer consumer, float minX, float minY, float maxX, float maxY, float z, int color)
     {
         Matrix4f matrix4f = poseStack.last().pose();
-        consumer.addVertex(matrix4f, minX, minY, z).setColor(color);
-        consumer.addVertex(matrix4f, minX, maxY, z).setColor(color);
-        consumer.addVertex(matrix4f, maxX, maxY, z).setColor(color);
-        consumer.addVertex(matrix4f, maxX, minY, z).setColor(color);
+        consumer.addVertex(matrix4f, minX, minY, z).setColor(color).setUv(0, 0).setUv1(0, 0).setUv2(0, 0).setNormal(0, 0, 1);
+        consumer.addVertex(matrix4f, minX, maxY, z).setColor(color).setUv(0, 0).setUv1(0, 0).setUv2(0, 0).setNormal(0, 0, 1);
+        consumer.addVertex(matrix4f, maxX, maxY, z).setColor(color).setUv(0, 0).setUv1(0, 0).setUv2(0, 0).setNormal(0, 0, 1);
+        consumer.addVertex(matrix4f, maxX, minY, z).setColor(color).setUv(0, 0).setUv1(0, 0).setUv2(0, 0).setNormal(0, 0, 1);
     }
 
     public static boolean checkAnimationController(GeoAnimatable animatable, Predicate<AnimationController<?>> check)

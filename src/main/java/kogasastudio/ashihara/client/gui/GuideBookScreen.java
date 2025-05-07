@@ -7,6 +7,7 @@ import kogasastudio.ashihara.client.gui.widget.TestButton;
 import kogasastudio.ashihara.client.models.geo.GuideBookModel;
 import kogasastudio.ashihara.client.models.geo.InternalControlGeoModel;
 import kogasastudio.ashihara.client.models.geo.TestButtonModel;
+import kogasastudio.ashihara.helper.RenderHelper;
 import kogasastudio.ashihara.network.GuidebookProgressPacket;
 import kogasastudio.ashihara.registry.DataComponentTypes;
 import kogasastudio.ashihara.utils.OptionalUtil;
@@ -19,6 +20,7 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import oshi.util.tuples.Pair;
 import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animation.Animation;
@@ -251,10 +253,44 @@ public class GuideBookScreen extends Screen
         pose.mulPose(Axis.YP.rotationDegrees(90));
         pose.scale(64, -64, 64);
         book.RENDERER.render(guiGraphics.pose(), book, guiGraphics.bufferSource(), renderType, guiGraphics.bufferSource().getBuffer(renderType), 15728880, partialTick);
+        book.mouseX = mouseX;
+        book.mouseY = mouseY;
         pose.popPose();
 
         pose.pushPose();
-        guiGraphics.drawString(Minecraft.getInstance().font, "X: " + mouseX + ", Y: " + mouseY + ", Current page: " + currentPageIndex + ", Mouse on test button: " + button.isMouseOver(mouseX, mouseY), 0, 0, 0xffffff);
+        guiGraphics.drawString(Minecraft.getInstance().font, "X: " + mouseX + ", Y: " + mouseY + ", Current page: " + currentPageIndex + ", Test: " + book.getRightCoverProjectedPos(mouseX, mouseY).toString(), 0, 0, 0xffffff);
+        pose.popPose();
+
+        pose.pushPose();
+        Vector4f ul = book.projectionMatrix.transform(new Vector4f(0f, 0f, -25f/16f, 1.0f));
+        Vector4f ur = book.projectionMatrix.transform(new Vector4f(0f, 0f, 0f, 1.0f));
+        Vector4f dr = book.projectionMatrix.transform(new Vector4f(-40f/16f, 0f, 0f, 1.0f));
+        Vector4f dl = book.projectionMatrix.transform(new Vector4f(-40f/16f, 0f, -25f/16f, 1.0f));
+
+        pose.pushPose();
+        pose.translate(ul.x, ul.y, ul.z);
+        guiGraphics.drawString(Minecraft.getInstance().font, "猫", 0, 0, 0xacf133);
+        RenderHelper.fill(pose, guiGraphics.bufferSource().getBuffer(RenderType.solid()), -0.5f, -0.5f, 0.5f, 0.5f, 0, 0xc1002f);
+        pose.popPose();
+
+        pose.pushPose();
+        pose.translate(ur.x, ur.y, ur.z);
+        guiGraphics.drawString(Minecraft.getInstance().font, "猫", 0, 0, 0xacf133);
+        RenderHelper.fill(pose, guiGraphics.bufferSource().getBuffer(RenderType.solid()), -0.5f, -0.5f, 0.5f, 0.5f, 0, 0xc1002f);
+        pose.popPose();
+
+        pose.pushPose();
+        pose.translate(dr.x, dr.y, dr.z);
+        guiGraphics.drawString(Minecraft.getInstance().font, "猫", 0, 0, 0xacf133);
+        RenderHelper.fill(pose, guiGraphics.bufferSource().getBuffer(RenderType.solid()), -0.5f, -0.5f, 0.5f, 0.5f, 0, 0xc1002f);
+        pose.popPose();
+
+        pose.pushPose();
+        pose.translate(dl.x, dl.y, dl.z);
+        guiGraphics.drawString(Minecraft.getInstance().font, "猫", 0, 0, 0xacf133);
+        RenderHelper.fill(pose, guiGraphics.bufferSource().getBuffer(RenderType.solid()), -0.5f, -0.5f, 0.5f, 0.5f, 0, 0xc1002f);
+        pose.popPose();
+
         pose.popPose();
 
         super.render(guiGraphics, mouseX, mouseY, partialTick);

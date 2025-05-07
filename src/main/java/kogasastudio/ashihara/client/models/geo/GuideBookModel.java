@@ -2,9 +2,11 @@ package kogasastudio.ashihara.client.models.geo;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.client.render.geo.GuideBookRenderer;
+import kogasastudio.ashihara.helper.PositionHelper;
 import kogasastudio.ashihara.item.GuideBook;
 import kogasastudio.ashihara.loading.ReloadableResources;
 import net.minecraft.resources.ResourceLocation;
+import org.joml.*;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
@@ -94,6 +96,22 @@ public class GuideBookModel extends InternalControlGeoModel<GuideBookModel> impl
     public String currentPageRightBoneName = "";
     public String currentPageLeftBoneName = "";
     public String previousPageLeftBoneName = "";
+
+    public Matrix4f projectionMatrix = new Matrix4f();
+    public float mouseX = 0;
+    public float mouseY = 0;
+
+    public Vector2f getRightCoverProjectedPos(float x, float y)
+    {
+        Vector4f ul = projectionMatrix.transform(new Vector4f(0f, 0f, -25f/16f, 1.0f));
+        Vector4f ur = projectionMatrix.transform(new Vector4f(0f, 0f, 0f, 1.0f));
+        Vector4f dr = projectionMatrix.transform(new Vector4f(-40f/16f, 0f, 0f, 1.0f));
+        Vector4f dl = projectionMatrix.transform(new Vector4f(-40f/16f, 0f, -25f/16f, 1.0f));
+
+        float[] v = PositionHelper.solvePosition(x, y, 25f/16f, 40f/16f, new Vector2f(ul.x(), ul.y()), new Vector2f(dl.x(), dl.y()), new Vector2f(dr.x(), dr.y()), new Vector2f(ur.x(), ur.y()));
+
+        return new Vector2f(-v[1], v[0]);
+    }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar)
