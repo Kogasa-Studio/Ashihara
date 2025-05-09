@@ -379,4 +379,19 @@ public class RenderHelper
         }
         return false;
     }
+    private static final MultiBufferSource.BufferSource BUFFER_SOURCE = MultiBufferSource.immediate(new ByteBufferBuilder(1000));
+
+    public static void renderIndicator(PoseStack.Pose pose, float length)
+    {
+        var buffer = BUFFER_SOURCE.getBuffer(RenderType.lines());
+        buffer.addVertex(pose, 0, 0, 0f).setNormal(pose, -1, 0, 0).setColor(0xffff0053);
+        buffer.addVertex(pose, length, 0, 0f).setNormal(pose, 1, 0, 0).setColor(0xffffe953);
+
+        buffer.addVertex(pose, 0, 0, 0f).setNormal(pose, 0, -1, 0).setColor(0xff5fd67f);
+        buffer.addVertex(pose, 0, length, 0f).setNormal(pose, 0, 1, 0).setColor(0xff5fd6ff);
+
+        buffer.addVertex(pose, 0, 0, 0f).setNormal(pose, 0, 0, -1).setColor(0xff5f00ff);
+        buffer.addVertex(pose, 0, 0, length).setNormal(pose, 0, 0, 1).setColor(0xff5fffff);
+        BUFFER_SOURCE.endLastBatch();
+    }
 }

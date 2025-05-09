@@ -126,7 +126,7 @@ public class PositionHelper
         a[row][4] = 0f;
         a[row][5] = 0f;
         a[row][6] = -u * x;
-        a[row][7] = -v * y;
+        a[row][7] = -u * y;
         b[row] = u;
 
         a[row + 1][0] = 0f;
@@ -164,6 +164,7 @@ public class PositionHelper
             if (Math.abs(pivot) <= 1e-6f)
             {
                 //throw new IllegalArgumentException("Matrix is singular, check if points are collinear");
+                return b;
             }
 
             for (int j = i; j <= n; j++)
