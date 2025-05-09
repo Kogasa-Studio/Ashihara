@@ -32,10 +32,10 @@ public class EntityEventHandler
     @SubscribeEvent
     public static void onAttackEntity(AttackEntityEvent event)
     {
-        if (event.getEntity().getWeaponItem().getItem() instanceof IHasPreSwing preSwingItem && !event.getEntity().hasData(DataComponentTypes.PRE_SWING_REMAINING))
+        if (event.getEntity().getWeaponItem().getItem() instanceof IHasPreSwing preSwingItem)
         {
-            preSwingItem.prepareAttack(event.getEntity().getWeaponItem(), event.getEntity(), event.getTarget());
-            event.setCanceled(true);
+            if (!event.getEntity().hasData(DataComponentTypes.PRE_SWING_REMAINING)) preSwingItem.prepareAttack(event.getEntity().getWeaponItem(), event.getEntity(), event.getTarget());
+            if (event.getEntity().getData(DataComponentTypes.PRE_SWING_REMAINING).getTicksRemain() > 0) event.setCanceled(true);
         }
     }
 
