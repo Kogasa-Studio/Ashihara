@@ -99,6 +99,7 @@ public class ItemOtsuchi extends TieredItem implements IHasPreSwing, IBoundedAtt
         List<LivingEntity> entities = player.level().getEntities(EntityTypeTest.forClass(LivingEntity.class), aabb, EntitySelector.LIVING_ENTITY_STILL_ALIVE);
         entities.forEach(player::attack);
         ((PlayerHandleAttackTickResetProvider) player).ashihara1_21$resetAttackStrengthForBoundedWeapon();
+        player.swing(InteractionHand.MAIN_HAND);
         stack.hurtAndBreak(1, player, stack.getEquipmentSlot());
     }
 

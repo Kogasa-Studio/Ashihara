@@ -10,6 +10,7 @@
   "client": [
     "MixinLivingEntityRenderer",
     "MixinLocalPlayer",
+    "MixinMinecraft",
     "MixinRemotePlayer"
   ],
   "injectors": {
