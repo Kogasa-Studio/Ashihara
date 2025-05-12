@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import kogasastudio.ashihara.block.tileentities.IFluidHandler;
+import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -384,14 +385,16 @@ public class RenderHelper
     public static void renderIndicator(PoseStack.Pose pose, float length)
     {
         var buffer = BUFFER_SOURCE.getBuffer(RenderType.lines());
-        buffer.addVertex(pose, 0, 0, 0f).setNormal(pose, -1, 0, 0).setColor(0xffff0053);
+        buffer.addVertex(pose, -length, 0, 0f).setNormal(pose, -1, 0, 0).setColor(0xffff0053);
         buffer.addVertex(pose, length, 0, 0f).setNormal(pose, 1, 0, 0).setColor(0xffffe953);
 
-        buffer.addVertex(pose, 0, 0, 0f).setNormal(pose, 0, -1, 0).setColor(0xff5fd67f);
+        buffer.addVertex(pose, 0, -length, 0f).setNormal(pose, 0, -1, 0).setColor(0xff5fd67f);
         buffer.addVertex(pose, 0, length, 0f).setNormal(pose, 0, 1, 0).setColor(0xff5fd6ff);
 
-        buffer.addVertex(pose, 0, 0, 0f).setNormal(pose, 0, 0, -1).setColor(0xff5f00ff);
+        buffer.addVertex(pose, 0, 0, -length).setNormal(pose, 0, 0, -1).setColor(0xff5f00ff);
         buffer.addVertex(pose, 0, 0, length).setNormal(pose, 0, 0, 1).setColor(0xff5fffff);
         BUFFER_SOURCE.endLastBatch();
     }
+
+    public static final SimpleInternalControlGeoModel INDICATOR = new SimpleInternalControlGeoModel("geo/assistance/indicator.geo.json", "textures/geo/indicator.png", Minecraft.getInstance().player);
 }

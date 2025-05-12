@@ -48,6 +48,7 @@ public class GuideBookRenderer extends GeoObjectRenderer<GuideBookModel>
         RenderUtil.prepMatrixForBone(poseStack, bone);
         buffer = this.checkAndRefreshBuffer(isReRender, buffer, bufferSource, renderType);
 
+        this.renderCubesOfBone(poseStack, bone, buffer, packedLight, packedOverlay, colour);
         if (bone.getName().equals("rightcover"))
         {
             poseStack.pushPose();
@@ -55,13 +56,16 @@ public class GuideBookRenderer extends GeoObjectRenderer<GuideBookModel>
             pose.translate(20/16f, 3.05f/16f, 10/16f);
             animatable.projectionMatrix = pose;
             Vector2f v = animatable.getRightCoverProjectedPos(animatable.mouseX, animatable.mouseY);
-            poseStack.translate(20/16f, 3.05f/16f, -15/16f);
+            poseStack.translate(20/16f, 3.05f/16f - 1.02f, -15/16f);
             poseStack.translate(v.x, 0f, v.y);
-            RenderHelper.renderIndicator(poseStack.last(), 2.5f);
+            //RenderHelper.renderIndicator(poseStack.last(), 2.5f);
+            poseStack.pushPose();
+            poseStack.scale(2, 2, 2);
+            RenderHelper.INDICATOR.render(poseStack, bufferSource, packedLight, packedOverlay);
+            poseStack.popPose();
             //Minecraft.getInstance().getItemRenderer().render(Blocks.GRASS_BLOCK.asItem().getDefaultInstance(), ItemDisplayContext.GUI, false, poseStack, bufferSource, packedLight, packedOverlay, Minecraft.getInstance().getItemRenderer().getModel(Blocks.GRASS_BLOCK.asItem().getDefaultInstance(), null, null, 42));
             poseStack.popPose();
         }
-        this.renderCubesOfBone(poseStack, bone, buffer, packedLight, packedOverlay, colour);
 
         GuideBookModel book = (GuideBookModel) this.model;
         GuideBookModel.DoubleSidedPage doubleSidedPage = book.getDoubleSidedPage(bone.getName());

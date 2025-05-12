@@ -19,6 +19,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.lang3.mutable.MutableFloat;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import oshi.util.tuples.Pair;
@@ -258,7 +259,8 @@ public class GuideBookScreen extends Screen
         pose.popPose();
 
         pose.pushPose();
-        guiGraphics.drawString(Minecraft.getInstance().font, "X: " + mouseX + ", Y: " + mouseY + ", Current page: " + currentPageIndex + ", Test: " + book.getRightCoverProjectedPos(mouseX, mouseY).toString(), 0, 0, 0xffffff);
+        Vector2f mI = book.getRightCoverProjectedPos(mouseX, mouseY);
+        guiGraphics.drawString(Minecraft.getInstance().font, "X: " + mouseX + ", Y: " + mouseY + ", Current page: " + currentPageIndex + ", In model pos: X: " + mI.x * 16 + ", Y: " + mI.y * 16, 0, 0, 0xffffff);
         pose.popPose();
 
         pose.pushPose();
