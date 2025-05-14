@@ -9,6 +9,7 @@ public class PrePostSwingHandler
 {
     private ItemStack item;
     private InteractionHand hand;
+    private boolean use;
     private float ticksRemain;
 
     public static final PrePostSwingHandler EMPTY = new PrePostSwingHandler(ItemStack.EMPTY, InteractionHand.MAIN_HAND, 0f);
@@ -18,14 +19,22 @@ public class PrePostSwingHandler
         (
             ItemStack.CODEC.fieldOf("item").forGetter(PrePostSwingHandler::getItem),
             Codec.STRING.fieldOf("hand").xmap(InteractionHand::valueOf, InteractionHand::name).forGetter(PrePostSwingHandler::getHand),
+            Codec.BOOL.fieldOf("use").forGetter(PrePostSwingHandler::isUse),
             Codec.FLOAT.fieldOf("duration").forGetter(PrePostSwingHandler::getTicksRemain)
         ).apply(instance, PrePostSwingHandler::new)
     );
 
+
     public PrePostSwingHandler(ItemStack item, InteractionHand hand, float duration)
+    {
+        this(item, hand, false, duration);
+    }
+
+    public PrePostSwingHandler(ItemStack item, InteractionHand hand, boolean use, float duration)
     {
         this.item = item;
         this.hand = hand;
+        this.use = use;
         this.ticksRemain = duration;
     }
 
@@ -43,6 +52,10 @@ public class PrePostSwingHandler
     {
         return hand;
     }
+
+    public boolean isUse() {return use;}
+
+    public void setUse(boolean use) {this.use = use;}
 
     public float getTicksRemain()
     {

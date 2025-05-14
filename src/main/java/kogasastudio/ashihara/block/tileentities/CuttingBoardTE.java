@@ -1,29 +1,25 @@
 package kogasastudio.ashihara.block.tileentities;
 
+import kogasastudio.ashihara.helper.ParticleHelper;
 import kogasastudio.ashihara.interaction.recipes.CuttingBoardRecipe;
 import kogasastudio.ashihara.registry.RecipeTypes;
 import kogasastudio.ashihara.registry.TERegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ItemParticleOption;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
@@ -61,23 +57,7 @@ public class CuttingBoardTE extends AshiharaMachineTE
         this.level.playSound(null, this.worldPosition, event, SoundSource.BLOCKS, 1.0f, 1.0f);
         if (this.level.isClientSide())
         {
-            RandomSource random = this.level.getRandom();
-            ParticleOptions data = this.content.getItem() instanceof BlockItem
-                    ? new BlockParticleOption(ParticleTypes.BLOCK, ((BlockItem) this.content.getItem()).getBlock().defaultBlockState())
-                    : new ItemParticleOption(ParticleTypes.ITEM, this.content);
-            for (int i = 0; i < 10; i += 1)
-            {
-                this.level.addParticle
-                (
-                    data,
-                    (double) this.worldPosition.getX() + 0.5D,
-                    (double) this.worldPosition.getY() + 0.7D,
-                    (double) this.worldPosition.getZ() + 0.5D,
-                    ((double) random.nextFloat() - 0.5D) * 0.2D,
-                    ((double) random.nextFloat() - 0.5D) * 0.2D,
-                    ((double) random.nextFloat() - 0.5D) * 0.2D
-                );
-            }
+            ParticleHelper.spawnItemStackDestruction(this.level, this.content, new Vec3(this.worldPosition.getX() + 0.5d, this.worldPosition.getY() + 0.7d, this.worldPosition.getZ() + 0.5d), 10);
         }
         for (int i = 0; i < this.content.getCount(); i += 1)
         {

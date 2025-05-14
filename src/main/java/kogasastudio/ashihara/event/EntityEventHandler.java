@@ -26,7 +26,13 @@ public class EntityEventHandler
         if (event.getEntity().getWeaponItem().getItem() instanceof IHasPreSwing preSwingItem)
         {
             if (!event.getEntity().hasData(DataComponentTypes.PRE_SWING_REMAINING)) preSwingItem.prepareAttack(event.getEntity().getWeaponItem(), event.getEntity(), event.getTarget());
-            if (event.getEntity().getData(DataComponentTypes.PRE_SWING_REMAINING).getTicksRemain() > 0) event.setCanceled(true);
+            PrePostSwingHandler handler = event.getEntity().getData(DataComponentTypes.PRE_SWING_REMAINING);
+            if (handler.isUse())
+            {
+                handler.setUse(false);
+                event.getEntity().setData(DataComponentTypes.PRE_SWING_REMAINING, handler);
+            }
+            if (handler.getTicksRemain() > 0) event.setCanceled(true);
         }
     }
 
@@ -71,7 +77,11 @@ public class EntityEventHandler
                 handler.tick();
                 if (handler.getTicksRemain() <= 0)
                 {
-                    item.actuallyAttack(stack, player);
+                    if (handler.isUse())
+                    {
+                        item.actuallyUse(stack, player);
+                    }
+                    else item.actuallyAttack(stack, player);
                     player.removeData(DataComponentTypes.PRE_SWING_REMAINING);
                 }
             }

@@ -25,8 +25,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.items.ItemStackHandler;
@@ -34,7 +32,6 @@ import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.util.RenderUtil;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MortarTER implements BlockEntityRenderer<MortarTE>, WithLevelRenderer<MortarTE>, InWorldToolTipBER<MortarTE>
@@ -214,6 +211,12 @@ public class MortarTER implements BlockEntityRenderer<MortarTE>, WithLevelRender
 
             MutableComponent current_parrel = Component.translatable("tooltip.ashihara.current_parallel").append(String.valueOf(be.productionMultiplier));
             info.checkAndOffsetY(InWorldTipRenderHelper.renderComponent(Minecraft.getInstance().font, current_parrel, 0xffffff, false, poseStack, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight, 2, 20 * 9));
+
+            if (!be.getQueue().isEmpty())
+            {
+                MutableComponent next_tool = Component.translatable("tooltip.ashihara.mortar.next_tool").append(be.getQueue().peek().getName());
+                info.checkAndOffsetY(InWorldTipRenderHelper.renderComponent(Minecraft.getInstance().font, next_tool, 0xffffff, false, poseStack, bufferSource, Font.DisplayMode.NORMAL, 0, packedLight, 2, 20 * 9));
+            }
 
             if (be.currentRecipe.getFluidCost() != null && !be.currentRecipe.getFluidCost().isEmpty())
             {

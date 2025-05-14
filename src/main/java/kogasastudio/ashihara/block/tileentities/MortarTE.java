@@ -9,9 +9,11 @@ import kogasastudio.ashihara.block.tileentities.util.ToolTipController;
 import kogasastudio.ashihara.client.models.geo.InternalControlGeoModel;
 import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
 import kogasastudio.ashihara.client.models.geo.UIPanelModel;
+import kogasastudio.ashihara.helper.ParticleHelper;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
 import kogasastudio.ashihara.inventory.BEItemStackHandler;
 import kogasastudio.ashihara.item.ItemOtsuchi;
+import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.registry.RecipeTypes;
 import kogasastudio.ashihara.registry.TERegistryHandler;
 import net.minecraft.core.BlockPos;
@@ -22,14 +24,19 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -126,6 +133,11 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable, IR
         this.productionMultiplier = multiplier;
     }
 
+    public Queue<MortarToolType> getQueue()
+    {
+        return queue;
+    }
+
     public float getProgress()
     {
         if (currentRecipe == null) return 0;
@@ -166,18 +178,31 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable, IR
     {
         currentRecipe = recipe;
         this.progress = 0;
-        if (recipe != null) queue = new ConcurrentLinkedDeque<>(currentRecipe.getSequence());
+        if (recipe != null && this.queue.isEmpty()) queue = new ConcurrentLinkedDeque<>(currentRecipe.getSequence()).reversed();
+        else this.queue = new ConcurrentLinkedDeque<>();
         setChanged();
     }
 
     public void finishRecipe(MortarRecipe recipe)
     {
+        acceptRecipe(null);
     }
 
     public boolean process(ItemStack stack)
     {
-        if (currentRecipe == null) return false;
+        if (currentRecipe == null || this.queue.isEmpty() || this.level == null) return false;
         boolean flag = false;
+        MortarToolType toolType = this.queue.peek();
+        if (toolType.is(stack))
+        {
+            for (ItemStack i : currentRecipe.getOutput())
+            {
+                ParticleHelper.spawnItemStackDestruction(this.level, i, new Vec3(this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 1, this.worldPosition.getZ() + 0.5), 5);
+            }
+            level.playSound(null, this.worldPosition, toolType.getSound(), SoundSource.BLOCKS, 1f, 1f);
+            this.queue.poll();
+            flag = true;
+        }
         return flag;
     }
 
@@ -232,12 +257,14 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable, IR
 
     public enum MortarToolType
     {
-        PESTLE("pestle", i -> i.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "pestle")))),
-        OTSUCHI("otsuchi", i -> i.getItem() instanceof ItemOtsuchi || i.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "otsuchi")))),
-        HAND("hand", ItemStack::isEmpty);
+        PESTLE("pestle", i -> i.is(ItemRegistryHandler.PESTLE) || i.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "pestle"))), Component.translatable("tooltip.ashihara.mortar.pestle"), SoundEvents.PLAYER_ATTACK_WEAK),
+        OTSUCHI("otsuchi", i -> i.getItem() instanceof ItemOtsuchi || i.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "otsuchi"))), Component.translatable("tooltip.ashihara.mortar.otsuchi"), SoundEvents.PLAYER_ATTACK_STRONG),
+        HAND("hand", ItemStack::isEmpty, Component.translatable("tooltip.ashihara.mortar.hand"), SoundEvents.ARMOR_EQUIP_ELYTRA.value());
 
         public final Predicate<ItemStack> itemPredicate;
         public final String id;
+        public final SoundEvent soundEvent;
+        public final Component name;
         public static final Codec<MortarToolType> CODEC = Codec.STRING.xmap(MortarToolType::get, MortarToolType::getId);
         public static final Codec<Queue<MortarToolType>> QUEUE_CODEC = RecordCodecBuilder.create
         (
@@ -259,10 +286,12 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable, IR
             }
         };
 
-        MortarToolType(String id, Predicate<ItemStack> itemPredicate)
+        MortarToolType(String id, Predicate<ItemStack> itemPredicate, Component name, SoundEvent soundEvent)
         {
             this.id = id;
             this.itemPredicate = itemPredicate;
+            this.soundEvent = soundEvent;
+            this.name = name;
         }
 
         public boolean is(ItemStack item)
@@ -274,6 +303,10 @@ public class MortarTE extends AshiharaMachineTE implements IRenderSwitchable, IR
         {
             return id;
         }
+
+        public SoundEvent getSound() {return soundEvent;}
+
+        public Component getName() {return name;}
 
         public static MortarToolType get(String id)
         {
