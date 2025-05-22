@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.block.tileentities.MortarTE;
+import kogasastudio.ashihara.block.blockentity.MortarBE;
 import kogasastudio.ashihara.helper.DataHelper;
 import kogasastudio.ashihara.interaction.recipes.base.WrappedRecipe;
 import kogasastudio.ashihara.inventory.BEItemStackHandler;
@@ -29,19 +29,19 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarTE>
+public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarBE>
 {
     public final NonNullList<SizedIngredient> input;
     public final NonNullList<ItemStack> output;
     public final FluidStack fluidCost;
     //0: consume; other: produce
     public int fluidOpcode;
-    public Queue<MortarTE.MortarToolType> sequence;
+    public Queue<MortarBE.MortarToolType> sequence;
 
     public MortarRecipe(ResourceLocation idIn,
                         NonNullList<SizedIngredient> inputIn, NonNullList<ItemStack> outputIn,
                         FluidStack fluidCostIn,
-                        int fluidOpcodeIn, Queue<MortarTE.MortarToolType> sequenceIn)
+                        int fluidOpcodeIn, Queue<MortarBE.MortarToolType> sequenceIn)
     {
         super(idIn);
 
@@ -65,7 +65,7 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarTE>
     }
 
     @Override
-    public boolean testBE(MortarTE be)
+    public boolean testBE(MortarBE be)
     {
         BEItemStackHandler<?> inv = be.inventory;
         int multiplier = inv.testIngredients(this.getSizedIngredients(), be.getMaxParallel());
@@ -116,7 +116,7 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarTE>
 
     public int getFluidOpcode() {return fluidOpcode;}
 
-    public Queue<MortarTE.MortarToolType> getSequence() {return sequence;}
+    public Queue<MortarBE.MortarToolType> getSequence() {return sequence;}
 
     @Override
     public RecipeSerializer<?> getSerializer()
@@ -131,12 +131,12 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarTE>
             mortarRecipeInstance ->
             mortarRecipeInstance.group
             (
-                ResourceLocation.CODEC.fieldOf("id").forGetter(MortarRecipe::getId),
-                NonNullList.codecOf(SizedIngredient.FLAT_CODEC).fieldOf("ingredients").forGetter(MortarRecipe::getSizedIngredients),
-                NonNullList.codecOf(ItemStack.CODEC).fieldOf("output").forGetter(MortarRecipe::getOutput),
-                FluidStack.CODEC.fieldOf("fluid").forGetter(MortarRecipe::getFluidCost),
-                Codec.STRING.xmap(s -> s.equals("consume") ? 0 : s.equals("produce") ? 1 : -1, i -> i == 0 ? "consume" : "produce").fieldOf("fluid_action").forGetter(MortarRecipe::getFluidOpcode),
-                MortarTE.MortarToolType.QUEUE_CODEC.fieldOf("sequence").forGetter(MortarRecipe::getSequence)
+            ResourceLocation.CODEC.fieldOf("id").forGetter(MortarRecipe::getId),
+            NonNullList.codecOf(SizedIngredient.FLAT_CODEC).fieldOf("ingredients").forGetter(MortarRecipe::getSizedIngredients),
+            NonNullList.codecOf(ItemStack.CODEC).fieldOf("output").forGetter(MortarRecipe::getOutput),
+            FluidStack.CODEC.fieldOf("fluid").forGetter(MortarRecipe::getFluidCost),
+            Codec.STRING.xmap(s -> s.equals("consume") ? 0 : s.equals("produce") ? 1 : -1, i -> i == 0 ? "consume" : "produce").fieldOf("fluid_action").forGetter(MortarRecipe::getFluidOpcode),
+            MortarBE.MortarToolType.QUEUE_CODEC.fieldOf("sequence").forGetter(MortarRecipe::getSequence)
             ).apply(mortarRecipeInstance, MortarRecipe::new)
         );
         public static final StreamCodec<RegistryFriendlyByteBuf, MortarRecipe> STREAM_CODEC = StreamCodec.of(MortarRecipeSerializer::toNetwork, MortarRecipeSerializer::fromNetwork);
@@ -148,7 +148,7 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarTE>
             NonNullList<ItemStack> oListN = DataHelper.copyAndCast(ItemStack.LIST_STREAM_CODEC.decode(buffer));
             FluidStack fCostN = FluidStack.STREAM_CODEC.decode(buffer);
             int fluidOpcodeN = buffer.readInt();
-            Queue<MortarTE.MortarToolType> sequenceN = new ConcurrentLinkedQueue<>(DataHelper.copyAndCast(MortarTE.MortarToolType.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buffer)));
+            Queue<MortarBE.MortarToolType> sequenceN = new ConcurrentLinkedQueue<>(DataHelper.copyAndCast(MortarBE.MortarToolType.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buffer)));
 
             return new MortarRecipe(id, iListN, oListN, fCostN, fluidOpcodeN, sequenceN);
         }
@@ -160,7 +160,7 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarTE>
             ItemStack.LIST_STREAM_CODEC.encode(buffer, recipe.getOutput());
             FluidStack.STREAM_CODEC.encode(buffer, recipe.getFluidCost());
             buffer.writeInt(recipe.fluidOpcode);
-            MortarTE.MortarToolType.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buffer, NonNullList.copyOf(recipe.getSequence()));
+            MortarBE.MortarToolType.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buffer, NonNullList.copyOf(recipe.getSequence()));
             return buffer;
         }
 

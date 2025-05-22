@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.block.tileentities.MortarTE;
+import kogasastudio.ashihara.block.blockentity.MortarBE;
 import kogasastudio.ashihara.client.models.geo.UIPanelModel;
 import kogasastudio.ashihara.client.render.SectionRenderContext;
 import kogasastudio.ashihara.client.render.WithLevelRenderer;
@@ -34,7 +34,7 @@ import software.bernie.geckolib.util.RenderUtil;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MortarTER implements BlockEntityRenderer<MortarTE>, WithLevelRenderer<MortarTE>, InWorldToolTipBER<MortarTE>
+public class MortarTER implements BlockEntityRenderer<MortarBE>, WithLevelRenderer<MortarBE>, InWorldToolTipBER<MortarBE>
 {
     public Map<Integer, ItemStack> items = new HashMap<>(8);
     private final InWorldTooltipInfoWrapper info = new InWorldTooltipInfoWrapper();
@@ -44,7 +44,7 @@ public class MortarTER implements BlockEntityRenderer<MortarTE>, WithLevelRender
     RenderType renderType = RenderType.entityTranslucent(UIPanelModel.DEFAULT_TEXTURE);
 
     @Override
-    public void render(MortarTE blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay)
+    public void render(MortarBE blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay)
     {
         if (blockEntity.switchFluid.checkRender() && !blockEntity.fluidTank.isEmpty())
         {
@@ -79,7 +79,7 @@ public class MortarTER implements BlockEntityRenderer<MortarTE>, WithLevelRender
     }
 
     @Override
-    public boolean shouldRender(MortarTE blockEntity, Vec3 cameraPos)
+    public boolean shouldRender(MortarBE blockEntity, Vec3 cameraPos)
     {
         if (blockEntity.needBlockUpdate()) blockEntity.updateBlock();
         return blockEntity.checkRender() || (blockEntity.switchFluid.checkRender() && !blockEntity.fluidTank.isEmpty());
@@ -89,7 +89,7 @@ public class MortarTER implements BlockEntityRenderer<MortarTE>, WithLevelRender
     public void renderStatic(SectionRenderContext context, ModelRenderer renderer)
     {
         PoseStack poseStack = context.poseStack();
-        MortarTE te = (MortarTE) context.blockEntity();
+        MortarBE te = (MortarBE) context.blockEntity();
         syncItem(te.inventory);
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
         if (te.item_display_positions == null) te.init(Minecraft.getInstance().player);
@@ -162,7 +162,7 @@ public class MortarTER implements BlockEntityRenderer<MortarTE>, WithLevelRender
     public static final ResourceLocation PROGRESS_OUTLINE = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/geo/mortar_progress_bar_outline.png");
 
     @Override
-    public void renderInfo(MortarTE be, PoseStack poseStack, UIPanelModel animatable, MultiBufferSource bufferSource, RenderType renderType, VertexConsumer buffer, int packedLight, float partialTick)
+    public void renderInfo(MortarBE be, PoseStack poseStack, UIPanelModel animatable, MultiBufferSource bufferSource, RenderType renderType, VertexConsumer buffer, int packedLight, float partialTick)
     {
         info.init(poseStack);
         info.translate(1f, 1f);

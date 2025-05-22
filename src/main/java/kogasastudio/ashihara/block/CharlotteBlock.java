@@ -4,9 +4,8 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.block.tileentities.CharlotteTE;
-import kogasastudio.ashihara.block.tileentities.MortarTE;
-import kogasastudio.ashihara.client.models.geo.UIPanelModel;
+import kogasastudio.ashihara.block.blockentity.CharlotteBE;
+import kogasastudio.ashihara.block.blockentity.MortarBE;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.utils.json.JsonUtils;
@@ -22,7 +21,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -45,7 +43,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class CharlotteBlock extends Block implements EntityBlock
@@ -79,7 +76,7 @@ public class CharlotteBlock extends Block implements EntityBlock
     {
         if (stack.is(ItemRegistryHandler.RICE.asItem()) && level.isClientSide())
         {
-            CharlotteTE te = (CharlotteTE) level.getBlockEntity(pos);
+            CharlotteBE te = (CharlotteBE) level.getBlockEntity(pos);
             if (te != null)
             {
                 if (te.toolTipController == null) te.init(player);
@@ -104,7 +101,7 @@ public class CharlotteBlock extends Block implements EntityBlock
                 NonNullList.of(ItemStack.EMPTY, ItemRegistryHandler.RICE.toStack(), ItemRegistryHandler.RICE.toStack(7)),
                 new FluidStack(Fluids.WATER.getSource(), 1000),
                 0,
-                new ConcurrentLinkedQueue<>(List.of(MortarTE.MortarToolType.PESTLE, MortarTE.MortarToolType.HAND, MortarTE.MortarToolType.OTSUCHI))
+                new ConcurrentLinkedQueue<>(List.of(MortarBE.MortarToolType.PESTLE, MortarBE.MortarToolType.HAND, MortarBE.MortarToolType.OTSUCHI))
             );
             JsonElement element = MortarRecipe.CODEC.encodeStart(dynamicOps, recipe).getOrThrow(msg -> new RuntimeException("Failed to encode %s: %s".formatted("test/test_recipe.json", msg)));
             try
@@ -122,6 +119,6 @@ public class CharlotteBlock extends Block implements EntityBlock
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return new CharlotteTE(pos, state);
+        return new CharlotteBE(pos, state);
     }
 }

@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import kogasastudio.ashihara.block.tileentities.CuttingBoardTE;
+import kogasastudio.ashihara.block.blockentity.CuttingBoardBE;
 import kogasastudio.ashihara.helper.DataHelper;
 import kogasastudio.ashihara.interaction.recipes.base.WrappedRecipe;
 import kogasastudio.ashihara.registry.RecipeSerializers;
@@ -22,9 +22,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-
-public class CuttingBoardRecipe extends WrappedRecipe<CuttingBoardRecipe, CuttingBoardTE> {
+public class CuttingBoardRecipe extends WrappedRecipe<CuttingBoardRecipe, CuttingBoardBE> {
     @Expose
     private final Ingredient ingredient;
     @Expose
@@ -45,7 +43,7 @@ public class CuttingBoardRecipe extends WrappedRecipe<CuttingBoardRecipe, Cuttin
     }
 
     @Override
-    public boolean testBE(CuttingBoardTE be)
+    public boolean testBE(CuttingBoardBE be)
     {
         return false;
     }

@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.block.building.component;
 
-import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
+import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 
 public interface Connectable
 {

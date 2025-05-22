@@ -2,7 +2,7 @@ package kogasastudio.ashihara.block.building.component;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
-import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
+import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.registry.AdditionalModels;
 import kogasastudio.ashihara.registry.BuildingComponents;
 import kogasastudio.ashihara.utils.BuildingComponentModelResourceLocation;

@@ -2,16 +2,13 @@ package kogasastudio.ashihara;
 
 import com.mojang.logging.LogUtils;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
-import kogasastudio.ashihara.registry.TERegistryHandler;
+import kogasastudio.ashihara.registry.BlockEntities;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
-import kogasastudio.ashihara.item.GuideBook;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.loading.ReloadableResources;
 import kogasastudio.ashihara.registry.*;
 import kogasastudio.ashihara.sounds.SoundEvents;
-import kogasastudio.ashihara.utils.json.JsonUtils;
-import kogasastudio.ashihara.utils.json.serializer.GuideBookPageSerializer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.api.distmarker.Dist;
@@ -21,11 +18,6 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import org.slf4j.Logger;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 
 @Mod(Ashihara.MODID)
 public class Ashihara
@@ -49,7 +41,7 @@ public class Ashihara
         CreativeModeTabsRegistryHandler.TABS.register(modEventBus);
         SoundEvents.SOUNDS.register(modEventBus);
         ParticleRegistryHandler.PARTICLE_TYPES.register(modEventBus);
-        TERegistryHandler.TILE_ENTITIES.register(modEventBus);
+        BlockEntities.BLOCK_ENTITIES.register(modEventBus);
 //        GLMRegistryHandler.MODIFIERS.register(bus);
 
 //        BiomeRegistryHandler.BIOMES.register(bus);

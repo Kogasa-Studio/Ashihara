@@ -2,7 +2,7 @@ package kogasastudio.ashihara.client.render.ter;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import kogasastudio.ashihara.block.tileentities.IRenderInWorldToolTip;
+import kogasastudio.ashihara.block.blockentity.IRenderInWorldToolTip;
 import kogasastudio.ashihara.client.models.geo.UIPanelModel;
 import kogasastudio.ashihara.client.render.geo.worldui.PanelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;

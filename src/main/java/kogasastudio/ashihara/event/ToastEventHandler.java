@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.event;
 
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.block.tileentities.IRenderInWorldToolTip;
+import kogasastudio.ashihara.block.blockentity.IRenderInWorldToolTip;
 import kogasastudio.ashihara.client.gui.InWorldToolTipTipToast;
 import kogasastudio.ashihara.registry.KeyMappings;
 import net.minecraft.client.Minecraft;

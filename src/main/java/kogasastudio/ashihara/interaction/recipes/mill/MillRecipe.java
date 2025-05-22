@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.interaction.recipes.mill;
 
-import kogasastudio.ashihara.block.tileentities.MillTE;
+import kogasastudio.ashihara.block.blockentity.MillBE;
 import kogasastudio.ashihara.interaction.recipes.base.WrappedRecipe;
 import kogasastudio.ashihara.registry.RecipeSerializers;
 import kogasastudio.ashihara.registry.RecipeTypes;
@@ -13,7 +13,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
 import org.jetbrains.annotations.NotNull;
 
-public class MillRecipe extends WrappedRecipe<MillRecipe, MillTE> {
+public class MillRecipe extends WrappedRecipe<MillRecipe, MillBE> {
 
     @NotNull
     private final Ingredient millstone;
@@ -83,7 +83,7 @@ public class MillRecipe extends WrappedRecipe<MillRecipe, MillTE> {
     }
 
     @Override
-    public boolean testBE(MillTE be)
+    public boolean testBE(MillBE be)
     {
         return false;
     }
@@ -112,7 +112,7 @@ public class MillRecipe extends WrappedRecipe<MillRecipe, MillTE> {
     }
 
     // Todo: accepts inventory
-    public boolean test(MillTE blockEntity) {
+    public boolean test(MillBE blockEntity) {
         return false;
     }
 }

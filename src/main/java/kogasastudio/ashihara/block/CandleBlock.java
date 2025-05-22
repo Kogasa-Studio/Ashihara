@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.block.tileentities.CandleTE;
+import kogasastudio.ashihara.block.blockentity.CandleBE;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,7 +37,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
-import static kogasastudio.ashihara.registry.TERegistryHandler.CANDLE_TE;
+import static kogasastudio.ashihara.registry.BlockEntities.CANDLE_BE;
 import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 
 public class CandleBlock extends Block implements EntityBlock
@@ -59,17 +59,17 @@ public class CandleBlock extends Block implements EntityBlock
         this.registerDefaultState(this.getStateDefinition().any().setValue(LIT, false).setValue(MULTIPLE, false));
     }
 
-    private CandleTE checkCandle(BlockGetter worldIn, BlockPos pos)
+    private CandleBE checkCandle(BlockGetter worldIn, BlockPos pos)
     {
         BlockEntity te = worldIn.getBlockEntity(pos);
-        if (te != null && te.getType().equals(CANDLE_TE.get())) return (CandleTE) te;
+        if (te != null && te.getType().equals(CANDLE_BE.get())) return (CandleBE) te;
         else return null;
     }
 
     @Override
     public void playerDestroy(Level worldIn, Player player, BlockPos pos, BlockState state, BlockEntity te, ItemStack stack)
     {
-        if (state.getValue(MULTIPLE) && te instanceof CandleTE candle)
+        if (state.getValue(MULTIPLE) && te instanceof CandleBE candle)
         {
             int amount = candle.pickCandle(true, worldIn, pos);
             if (amount == 0) return;
@@ -91,7 +91,7 @@ public class CandleBlock extends Block implements EntityBlock
     @Override
     protected InteractionResult useWithoutItem(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, BlockHitResult pHitResult)
     {
-        CandleTE te = checkCandle(pLevel, pPos);
+        CandleBE te = checkCandle(pLevel, pPos);
         RandomSource random = pLevel.getRandom();
         if (pPlayer.isShiftKeyDown() && te != null)
         {
@@ -127,7 +127,7 @@ public class CandleBlock extends Block implements EntityBlock
     {
         if (stateIn.getValue(LIT))
         {
-            CandleTE te = checkCandle(worldIn, pos);
+            CandleBE te = checkCandle(worldIn, pos);
             if (stateIn.getValue(MULTIPLE) && te != null)
             {
                 for (double[] d : te.getPosList())
@@ -165,7 +165,7 @@ public class CandleBlock extends Block implements EntityBlock
     {
         if (state.getValue(MULTIPLE))
         {
-            CandleTE te = checkCandle(worldIn, pos);
+            CandleBE te = checkCandle(worldIn, pos);
             if (te != null)
             {
                 VoxelShape shape = Shapes.empty();
@@ -183,6 +183,6 @@ public class CandleBlock extends Block implements EntityBlock
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState)
     {
-        return new CandleTE(pPos, pState);
+        return new CandleBE(pPos, pState);
     }
 }

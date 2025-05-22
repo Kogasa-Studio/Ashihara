@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.block.tileentities.CuttingBoardTE;
-import kogasastudio.ashihara.registry.TERegistryHandler;
+import kogasastudio.ashihara.block.blockentity.CuttingBoardBE;
+import kogasastudio.ashihara.registry.BlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
@@ -45,9 +45,9 @@ public class CuttingBoardBlock extends Block implements EntityBlock
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState state1, boolean b)
     {
         BlockEntity te = worldIn.getBlockEntity(pos);
-        if (te instanceof CuttingBoardTE)
+        if (te instanceof CuttingBoardBE)
         {
-            Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), ((CuttingBoardTE) te).getContent());
+            Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), ((CuttingBoardBE) te).getContent());
             worldIn.updateNeighbourForOutputSignal(pos, this);
         }
         super.onRemove(state, worldIn, pos, state1, b);
@@ -69,8 +69,8 @@ public class CuttingBoardBlock extends Block implements EntityBlock
     public ItemInteractionResult useItemOn(ItemStack pStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         BlockEntity teIn = worldIn.getBlockEntity(pos);
-        if (teIn == null || !teIn.getType().equals(TERegistryHandler.CUTTING_BOARD_TE.get())) return ItemInteractionResult.FAIL;
-        CuttingBoardTE te = (CuttingBoardTE) teIn;
+        if (teIn == null || !teIn.getType().equals(BlockEntities.CUTTING_BOARD_BE.get())) return ItemInteractionResult.FAIL;
+        CuttingBoardBE te = (CuttingBoardBE) teIn;
         if (te.handleInteraction(player, handIn, worldIn, pos))
         {
             worldIn.sendBlockUpdated(pos, state, state, UPDATE_ALL);
@@ -92,6 +92,6 @@ public class CuttingBoardBlock extends Block implements EntityBlock
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState)
     {
-        return new CuttingBoardTE(pPos, pState);
+        return new CuttingBoardBE(pPos, pState);
     }
 }

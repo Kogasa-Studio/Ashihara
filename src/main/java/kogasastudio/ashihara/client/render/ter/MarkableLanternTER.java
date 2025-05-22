@@ -3,7 +3,7 @@ package kogasastudio.ashihara.client.render.ter;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import kogasastudio.ashihara.block.tileentities.MarkableLanternTE;
+import kogasastudio.ashihara.block.blockentity.MarkableLanternBE;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -14,7 +14,7 @@ import static kogasastudio.ashihara.block.MarkableHangingLanternBlock.FACING;
 import static kogasastudio.ashihara.helper.BlockActionHelper.getRotationByFacing;
 import static kogasastudio.ashihara.helper.RenderHelper.buildMatrix;
 
-public class MarkableLanternTER implements BlockEntityRenderer<MarkableLanternTE>
+public class MarkableLanternTER implements BlockEntityRenderer<MarkableLanternBE>
 {
 
 
@@ -23,7 +23,7 @@ public class MarkableLanternTER implements BlockEntityRenderer<MarkableLanternTE
     }
 
     @Override
-    public void render(MarkableLanternTE tileEntityIn, float partialTicks, PoseStack poseStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
+    public void render(MarkableLanternBE tileEntityIn, float partialTicks, PoseStack poseStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
     {
         RenderType icon = RenderType.entityTranslucent(tileEntityIn.getIcon());
         //获取IVertexBuilder

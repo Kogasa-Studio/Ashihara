@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.registry;
 
-import kogasastudio.ashihara.block.tileentities.MortarTE;
+import kogasastudio.ashihara.block.blockentity.MortarBE;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
@@ -13,13 +13,13 @@ public class Capabilities
     {
         event.registerBlockEntity
         (
-            net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK,
-            TERegistryHandler.MORTAR_TE.get(), MortarTE::getInv
+        net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK,
+        BlockEntities.MORTAR_BE.get(), MortarBE::getInv
         );
         event.registerBlockEntity
         (
-            net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.BLOCK,
-            TERegistryHandler.MORTAR_TE.get(), MortarTE::getFluid
+        net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.BLOCK,
+        BlockEntities.MORTAR_BE.get(), MortarBE::getFluid
         );
     }
 }

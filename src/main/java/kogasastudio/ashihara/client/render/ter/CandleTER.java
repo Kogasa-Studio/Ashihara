@@ -1,9 +1,8 @@
 package kogasastudio.ashihara.client.render.ter;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
-import kogasastudio.ashihara.block.tileentities.CandleTE;
+import kogasastudio.ashihara.block.blockentity.CandleBE;
 import kogasastudio.ashihara.client.render.SectionRenderContext;
 import kogasastudio.ashihara.client.render.WithLevelRenderer;
 import net.minecraft.client.Minecraft;
@@ -13,12 +12,10 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.client.model.data.ModelData;
 
-public class CandleTER implements BlockEntityRenderer<CandleTE>, WithLevelRenderer<CandleTE>
+public class CandleTER implements BlockEntityRenderer<CandleBE>, WithLevelRenderer<CandleBE>
 {
     //public static final CandleModel candleSingle = new CandleModel(Minecraft.getInstance().getEntityModels().bakeLayer(LayerRegistryHandler.CANDLE));
     public CandleTER(BlockEntityRendererProvider.Context dispatcherIn)
@@ -26,7 +23,7 @@ public class CandleTER implements BlockEntityRenderer<CandleTE>, WithLevelRender
     }
 
     @Override
-    public void render(CandleTE tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
+    public void render(CandleBE tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
     {
     }
 
@@ -34,7 +31,7 @@ public class CandleTER implements BlockEntityRenderer<CandleTE>, WithLevelRender
     public void renderStatic(SectionRenderContext context, ModelRenderer renderer)
     {
         BlockEntity be = context.blockEntity();
-        if (!(be instanceof CandleTE tileEntityIn)) return;
+        if (!(be instanceof CandleBE tileEntityIn)) return;
         PoseStack matrixStackIn = context.poseStack();
 
         //int combinedLightIn = getPackedLight(be);

@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.block.building;
 
 import kogasastudio.ashihara.block.building.component.ComponentStateDefinition;
-import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
+import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.item.block.BuildingComponentItem;
 import net.minecraft.core.BlockPos;

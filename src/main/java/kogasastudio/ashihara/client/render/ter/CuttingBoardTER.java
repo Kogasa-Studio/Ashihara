@@ -2,8 +2,7 @@ package kogasastudio.ashihara.client.render.ter;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import kogasastudio.ashihara.block.tileentities.CuttingBoardTE;
-import kogasastudio.ashihara.client.render.AshiharaRenderTypes;
+import kogasastudio.ashihara.block.blockentity.CuttingBoardBE;
 import kogasastudio.ashihara.client.render.SectionRenderContext;
 import kogasastudio.ashihara.client.render.WithLevelRenderer;
 import net.minecraft.client.Minecraft;
@@ -24,14 +23,14 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import static kogasastudio.ashihara.block.CuttingBoardBlock.FACING;
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 
-public class CuttingBoardTER implements BlockEntityRenderer<CuttingBoardTE>, WithLevelRenderer<CuttingBoardTE>
+public class CuttingBoardTER implements BlockEntityRenderer<CuttingBoardBE>, WithLevelRenderer<CuttingBoardBE>
 {
     public CuttingBoardTER(BlockEntityRendererProvider.Context rendererDispatcherIn)
     {
     }
 
     @Override
-    public void render(CuttingBoardTE tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
+    public void render(CuttingBoardBE tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
     {
     }
 
@@ -39,7 +38,7 @@ public class CuttingBoardTER implements BlockEntityRenderer<CuttingBoardTE>, Wit
     public void renderStatic(SectionRenderContext context, ModelRenderer modelRenderer)
     {
         BlockEntity blockEntity = context.blockEntity();
-        if (!(blockEntity instanceof CuttingBoardTE be) || be.getContent().isEmpty()) return;
+        if (!(blockEntity instanceof CuttingBoardBE be) || be.getContent().isEmpty()) return;
         ItemStack stack = be.getContent();
         PoseStack matrixStackIn = context.poseStack();
         Level level = be.getLevel();

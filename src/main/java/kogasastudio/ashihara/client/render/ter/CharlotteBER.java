@@ -2,7 +2,7 @@ package kogasastudio.ashihara.client.render.ter;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import kogasastudio.ashihara.block.tileentities.CharlotteTE;
+import kogasastudio.ashihara.block.blockentity.CharlotteBE;
 import kogasastudio.ashihara.client.models.geo.UIPanelModel;
 import kogasastudio.ashihara.client.render.SectionRenderContext;
 import kogasastudio.ashihara.client.render.WithLevelRenderer;
@@ -23,7 +23,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
-public class CharlotteBER implements BlockEntityRenderer<CharlotteTE>, WithLevelRenderer<CharlotteTE>, InWorldToolTipBER<CharlotteTE>
+public class CharlotteBER implements BlockEntityRenderer<CharlotteBE>, WithLevelRenderer<CharlotteBE>, InWorldToolTipBER<CharlotteBE>
 {
     public CharlotteBER(BlockEntityRendererProvider.Context dispatcherIn) {}
 
@@ -37,7 +37,7 @@ public class CharlotteBER implements BlockEntityRenderer<CharlotteTE>, WithLevel
     RenderType renderType = RenderType.entityTranslucent(UIPanelModel.DEFAULT_TEXTURE);
 
     @Override
-    public void render(CharlotteTE blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay)
+    public void render(CharlotteBE blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay)
     {
         poseStack.pushPose();
         poseStack.translate(0, 0.8 - 0.16 / 16f, 0);
@@ -47,13 +47,13 @@ public class CharlotteBER implements BlockEntityRenderer<CharlotteTE>, WithLevel
     }
 
     @Override
-    public boolean shouldRender(CharlotteTE blockEntity, Vec3 cameraPos)
+    public boolean shouldRender(CharlotteBE blockEntity, Vec3 cameraPos)
     {
         return blockEntity.checkRender();
     }
 
     @Override
-    public void renderInfo(CharlotteTE be, PoseStack poseStack, UIPanelModel animatable, MultiBufferSource bufferSource, RenderType renderType, VertexConsumer buffer, int packedLight, float partialTick)
+    public void renderInfo(CharlotteBE be, PoseStack poseStack, UIPanelModel animatable, MultiBufferSource bufferSource, RenderType renderType, VertexConsumer buffer, int packedLight, float partialTick)
     {
         info.init(poseStack);
         info.translate(1f, 1f);

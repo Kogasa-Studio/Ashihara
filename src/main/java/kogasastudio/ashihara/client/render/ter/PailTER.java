@@ -1,20 +1,20 @@
 package kogasastudio.ashihara.client.render.ter;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import kogasastudio.ashihara.block.tileentities.PailTE;
+import kogasastudio.ashihara.block.blockentity.PailBE;
 import kogasastudio.ashihara.helper.RenderHelper;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 
-public class PailTER implements BlockEntityRenderer<PailTE>
+public class PailTER implements BlockEntityRenderer<PailBE>
 {
     public PailTER(BlockEntityRendererProvider.Context rendererDispatcherIn)
     {
     }
 
     @Override
-    public void render(PailTE tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
+    public void render(PailBE tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
     {
         RenderHelper.renderLeveledFluidStack
                 (

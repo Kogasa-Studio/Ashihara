@@ -1,10 +1,10 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.block.tileentities.PailTE;
-import kogasastudio.ashihara.registry.TERegistryHandler;
+import kogasastudio.ashihara.block.blockentity.PailBE;
+import kogasastudio.ashihara.registry.BlockEntities;
 import kogasastudio.ashihara.helper.FluidHelper;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
-import kogasastudio.ashihara.item.block.ItemBlockPail;
+import kogasastudio.ashihara.item.block.PailBlockItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -57,12 +57,12 @@ public class PailBlock extends Block implements EntityBlock
 
     private ItemStack getIdentifiedItem(Level worldIn, BlockPos pos)
     {
-        PailTE te = (PailTE) worldIn.getBlockEntity(pos);
+        PailBE te = (PailBE) worldIn.getBlockEntity(pos);
         ItemStack stack = new ItemStack(PAIL.get());
         if (te != null && !worldIn.isClientSide() && !te.getTank().isEmpty())
         {
             CompoundTag nbt = te.getPersistentData();
-            ItemBlockPail.setBlockEntityData(stack, TERegistryHandler.PAIL_TE.get(), nbt);
+            PailBlockItem.setBlockEntityData(stack, BlockEntities.PAIL_BE.get(), nbt);
         }
         return stack;
     }
@@ -88,9 +88,9 @@ public class PailBlock extends Block implements EntityBlock
             return ambientLight;
         }
         BlockEntity tileEntity = level.getBlockEntity(pos);
-        if (tileEntity != null && tileEntity.getType().equals(TERegistryHandler.PAIL_TE.get()))
+        if (tileEntity != null && tileEntity.getType().equals(BlockEntities.PAIL_BE.get()))
         {
-            PailTE te = (PailTE) tileEntity;
+            PailBE te = (PailBE) tileEntity;
             FluidStack fluid = te.getTank().getFluid();
             if (!fluid.isEmpty())
             {
@@ -132,7 +132,7 @@ public class PailBlock extends Block implements EntityBlock
     @Override
     public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
-        PailTE te = (PailTE) worldIn.getBlockEntity(pos);
+        PailBE te = (PailBE) worldIn.getBlockEntity(pos);
         if (te == null) return ItemInteractionResult.FAIL;
         FluidTank bucket = te.getTank();
 
@@ -211,6 +211,6 @@ public class PailBlock extends Block implements EntityBlock
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState)
     {
-        return new PailTE(pPos, pState);
+        return new PailBE(pPos, pState);
     }
 }

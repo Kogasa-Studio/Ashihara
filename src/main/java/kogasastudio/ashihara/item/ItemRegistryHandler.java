@@ -2,12 +2,11 @@ package kogasastudio.ashihara.item;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.BlockRegistryHandler;
-import kogasastudio.ashihara.client.models.geo.PlayerProxyModel;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.helper.PlayerAnimationHelper;
 import kogasastudio.ashihara.item.block.*;
-import kogasastudio.ashihara.item.foods.EasyFood;
-import kogasastudio.ashihara.item.foods.ItemDirtBallDon;
+import kogasastudio.ashihara.item.food.EasyFood;
+import kogasastudio.ashihara.item.food.DirtBallDon;
 import kogasastudio.ashihara.registry.BuildingComponents;
 import kogasastudio.ashihara.registry.PlayerAnimations;
 import net.minecraft.world.InteractionHand;
@@ -35,21 +34,21 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> GUIDEBOOK = ITEMS.register("guidebook", GuideBook::new);
 
     //以下为物品
-    public static final DeferredItem<Item> KOISHI = ITEMS.register("koishi", ItemKoishi::new);
-    public static final DeferredItem<Item> MINATO_AQUA = ITEMS.register("aqua", ItemMinatoAqua::new);
-    public static final DeferredItem<Item> RICE_SEEDLING = ITEMS.register("rice_seedling", ItemRiceSeedling::new);
+    public static final DeferredItem<Item> KOISHI = ITEMS.register("koishi", Koishi::new);
+    public static final DeferredItem<Item> MINATO_AQUA = ITEMS.register("aqua", MinatoAqua::new);
+    public static final DeferredItem<Item> RICE_SEEDLING = ITEMS.register("rice_seedling", RiceSeedling::new);
     public static final DeferredItem<Item> RICE_CROP = ITEMS.register("rice_crop_item", AshiharaItem::new);
     public static final DeferredItem<Item> DRIED_RICE_CROP = ITEMS.register("dried_rice_crop", AshiharaItem::new);
-    public static final DeferredItem<Item> PADDY = ITEMS.register("paddy", ItemUnthreshedRice::new);
+    public static final DeferredItem<Item> PADDY = ITEMS.register("paddy", Paddy::new);
     public static final DeferredItem<Item> STRAW = ITEMS.register("straw", AshiharaItem::new);
     public static final DeferredItem<Item> RICE = ITEMS.register("rice", AshiharaItem::new);
     public static final DeferredItem<Item> PESTLE = ITEMS.register("pestle", () -> new Item(new Item.Properties().durability(512)));
-    public static final DeferredItem<Item> SUJIKABUTO = ITEMS.register("sujikabuto", ItemSujikaButo::new);
+    public static final DeferredItem<Item> SUJIKABUTO = ITEMS.register("sujikabuto", SujikaButo::new);
 
     //食物
     public static final DeferredItem<Item> SAKURAMOCHI = ITEMS.register("sakuramochi", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(1).effect(() -> new MobEffectInstance(MobEffects.HEAL, 1, 2), 1.0F).build())));
     public static final DeferredItem<Item> COOKED_RICE = ITEMS.register("cooked_rice", () -> new EasyFood(5));
-    public static final DeferredItem<Item> DIRT_BALL_DON = ITEMS.register("dirt_ball_don", ItemDirtBallDon::new);
+    public static final DeferredItem<Item> DIRT_BALL_DON = ITEMS.register("dirt_ball_don", DirtBallDon::new);
     public static final DeferredItem<Item> SUSHI_BASIC = ITEMS.register("sushi_basic", () -> new EasyFood(5));
     public static final DeferredItem<Item> SUSHI_RAW_FISH = ITEMS.register("sushi_raw_fish", () -> new EasyFood(6));
     public static final DeferredItem<Item> SUSHI_SAKURA = ITEMS.register("sushi_sakura", () -> new EasyFood(7));
@@ -85,9 +84,9 @@ public class ItemRegistryHandler
     //工具
     public static final DeferredItem<Item> TACHI = ITEMS.register("tachi", () -> new SwordItem(Tiers.DIAMOND, new Item.Properties(), new Tool(List.of(Tool.Rule.overrideSpeed(List.of(Blocks.COBWEB), 15f)), 4f, 15)));
 
-    public static final DeferredItem<Item> WOOD_OTSUCHI = ITEMS.register("wood_otsuchi", () -> new ItemOtsuchi(Tiers.WOOD, 16, -3.4d));
-    public static final DeferredItem<Item> IRON_OTSUCHI = ITEMS.register("iron_otsuchi", () -> new ItemOtsuchi(Tiers.IRON, 16, -3.5d));
-    public static final DeferredItem<Item> DIAMOND_OTSUCHI = ITEMS.register("diamond_otsuchi", () -> new ItemOtsuchi(Tiers.DIAMOND, 16, -3.55d));
+    public static final DeferredItem<Item> WOOD_OTSUCHI = ITEMS.register("wood_otsuchi", () -> new Otsuchi(Tiers.WOOD, 16, -3.4d));
+    public static final DeferredItem<Item> IRON_OTSUCHI = ITEMS.register("iron_otsuchi", () -> new Otsuchi(Tiers.IRON, 16, -3.5d));
+    public static final DeferredItem<Item> DIAMOND_OTSUCHI = ITEMS.register("diamond_otsuchi", () -> new Otsuchi(Tiers.DIAMOND, 16, -3.55d));
     public static final DeferredItem<Item> WOODEN_HAMMER = ITEMS.register("wooden_hammer", AshiharaItem::new);
     public static final DeferredItem<Item> CHISEL = ITEMS.register("chisel", AshiharaItem::new);
 
@@ -133,7 +132,7 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> REED = ITEMS.register("reed", () -> new BlockItem(BlockRegistryHandler.REED.get(), new Item.Properties()));
     public static final DeferredItem<Item> SHORTER_REED = ITEMS.register("shorter_reed", () -> new BlockItem(BlockRegistryHandler.SHORTER_REED.get(), new Item.Properties()));
     public static final DeferredItem<Item> HYDRANGEA_BUSH = ITEMS.register("hydrangea_bush", () -> new BlockItem(BlockRegistryHandler.HYDRANGEA_BUSH.get(), new Item.Properties()));
-    public static final DeferredItem<Item> PAIL = ITEMS.register("pail", ItemBlockPail::new);
+    public static final DeferredItem<Item> PAIL = ITEMS.register("pail", PailBlockItem::new);
     public static final DeferredItem<Item> MEAL_TABLE = ITEMS.register("meal_table", () -> new BlockItem(BlockRegistryHandler.MEAL_TABLE.get(), new Item.Properties()));
     public static final DeferredItem<Item> CUTTING_BOARD = ITEMS.register("cutting_board", () -> new BlockItem(BlockRegistryHandler.CUTTING_BOARD.get(), new Item.Properties()));
     public static final DeferredItem<Item> CHARLOTTE = ITEMS.register("charlotte", () -> new BlockItem(BlockRegistryHandler.CHARLOTTE.get(), new Item.Properties()));
@@ -149,7 +148,7 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> RED_ADVANCED_FENCE = ITEMS.register("advanced_red_fence", () -> new BlockItem(BlockRegistryHandler.RED_ADVANCED_FENCE.get(), new Item.Properties()));
     public static final DeferredItem<Item> SPRUCE_ADVANCED_FENCE = ITEMS.register("advanced_spruce_fence", () -> new BlockItem(BlockRegistryHandler.SPRUCE_ADVANCED_FENCE.get(), new Item.Properties()));
     public static final DeferredItem<Item> RED_THICK_COLUMN = ITEMS.register("red_thick_column", () -> new BlockItem(BlockRegistryHandler.RED_THICK_COLUMN.get(), new Item.Properties()));
-    public static final DeferredItem<Item> RED_THIN_BEAM = ITEMS.register("red_thin_beam", ItemBlockBeam::new);
+    public static final DeferredItem<Item> RED_THIN_BEAM = ITEMS.register("red_thin_beam", BeamBlockItem::new);
     public static final DeferredItem<Item> RED_KUMINONO = ITEMS.register("red_kumimono", () -> new BlockItem(BlockRegistryHandler.RED_KUMIMONO.get(), new Item.Properties()));
     public static final DeferredItem<Item> RED_KAWAKI = ITEMS.register("red_kawaki", () -> new BlockItem(BlockRegistryHandler.RED_KAWAKI.get(), new Item.Properties()));
     public static final DeferredItem<Item> THIN_WHITE_SOIL_WALL = ITEMS.register("thin_white_soil_wall", () -> new BlockItem(BlockRegistryHandler.THIN_WHITE_SOIL_WALL.get(), new Item.Properties()));
@@ -255,12 +254,12 @@ public class ItemRegistryHandler
     public static final DeferredItem<Item> LANTERN_LONG_RED = ITEMS.register("lantern_long_red", () -> new BlockItem(BlockRegistryHandler.LANTERN_LONG_RED.get(), new Item.Properties()));
     public static final DeferredItem<Item> HOUSE_LIKE_HANGING_LANTERN = ITEMS.register("house_like_hanging_lantern", () -> new BlockItem(BlockRegistryHandler.HOUSE_LIKE_HANGING_LANTERN.get(), new Item.Properties()));
     public static final DeferredItem<Item> HEXAGONAL_HANGING_LANTERN = ITEMS.register("hexagonal_hanging_lantern", () -> new BlockItem(BlockRegistryHandler.HEXAGONAL_HANGING_LANTERN.get(), new Item.Properties()));
-    public static final DeferredItem<Item> JINJA_LANTERN = ITEMS.register("jinja_lantern", () -> new ItemBlockDouble(BlockRegistryHandler.JINJA_LANTERN.get(), new Item.Properties()));
-    public static final DeferredItem<Item> STONE_LANTERN = ITEMS.register("stone_lantern", () -> new ItemBlockDouble(BlockRegistryHandler.STONE_LANTERN.get(), new Item.Properties()));
-    public static final DeferredItem<Item> BONBURI_LAMP = ITEMS.register("bonburi_lamp", () -> new ItemBlockDouble(BlockRegistryHandler.BONBURI_LAMP.get(), new Item.Properties()));
-    public static final DeferredItem<Item> CANDLESTICK = ITEMS.register("candlestick", () -> new ItemBlockDouble(BlockRegistryHandler.CANDLESTICK.get(), new Item.Properties()));
-    public static final DeferredItem<Item> OIL_PLATE_STICK = ITEMS.register("oil_plate_stick", () -> new ItemBlockDouble(BlockRegistryHandler.OIL_PLATE_STICK.get(), new Item.Properties()));
-    public static final DeferredItem<Item> CANDLE = ITEMS.register("candle", ItemBlockCandle::new);
+    public static final DeferredItem<Item> JINJA_LANTERN = ITEMS.register("jinja_lantern", () -> new DoubleBlockItem(BlockRegistryHandler.JINJA_LANTERN.get(), new Item.Properties()));
+    public static final DeferredItem<Item> STONE_LANTERN = ITEMS.register("stone_lantern", () -> new DoubleBlockItem(BlockRegistryHandler.STONE_LANTERN.get(), new Item.Properties()));
+    public static final DeferredItem<Item> BONBURI_LAMP = ITEMS.register("bonburi_lamp", () -> new DoubleBlockItem(BlockRegistryHandler.BONBURI_LAMP.get(), new Item.Properties()));
+    public static final DeferredItem<Item> CANDLESTICK = ITEMS.register("candlestick", () -> new DoubleBlockItem(BlockRegistryHandler.CANDLESTICK.get(), new Item.Properties()));
+    public static final DeferredItem<Item> OIL_PLATE_STICK = ITEMS.register("oil_plate_stick", () -> new DoubleBlockItem(BlockRegistryHandler.OIL_PLATE_STICK.get(), new Item.Properties()));
+    public static final DeferredItem<Item> CANDLE = ITEMS.register("candle", CandleBlockItem::new);
 
     //木制品
     public static final DeferredItem<Item> CHERRY_LOG = ITEMS.register("cherry_log", () -> new BlockItem(BlockRegistryHandler.CHERRY_LOG.get(), new Item.Properties()));

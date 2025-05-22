@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.event;
 
 import kogasastudio.ashihara.block.BlockRegistryHandler;
-import kogasastudio.ashihara.registry.TERegistryHandler;
+import kogasastudio.ashihara.registry.BlockEntities;
 import kogasastudio.ashihara.client.models.baked.PailModel;
 import kogasastudio.ashihara.client.particles.MapleLeafParticle;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
@@ -115,14 +115,14 @@ public class ClientEventSubscribeHandler
     @SubscribeEvent
     public static void onTERBind(EntityRenderersEvent.RegisterRenderers event)
     {
-        event.registerBlockEntityRenderer(TERegistryHandler.MARKABLE_LANTERN_TE.get(), MarkableLanternTER::new);
-        //event.registerBlockEntityRenderer(TERegistryHandler.MILL_TE.get(), MillTER::new);
-        event.registerBlockEntityRenderer(TERegistryHandler.PAIL_TE.get(), PailTER::new);
-        event.registerBlockEntityRenderer(TERegistryHandler.CANDLE_TE.get(), CandleTER::new);
-        event.registerBlockEntityRenderer(TERegistryHandler.MULTI_BUILT_BLOCKENTITY.get(), MultiBuiltBlockRenderer::new);
-        event.registerBlockEntityRenderer(TERegistryHandler.CHARLOTTE_BE.get(), CharlotteBER::new);
-        event.registerBlockEntityRenderer(TERegistryHandler.MORTAR_TE.get(), MortarTER::new);
-        event.registerBlockEntityRenderer(TERegistryHandler.CUTTING_BOARD_TE.get(), CuttingBoardTER::new);
+        event.registerBlockEntityRenderer(BlockEntities.MARKABLE_LANTERN_BE.get(), MarkableLanternTER::new);
+        //event.registerBlockEntityRenderer(BlockEntities.MILL_TE.get(), MillTER::new);
+        event.registerBlockEntityRenderer(BlockEntities.PAIL_BE.get(), PailTER::new);
+        event.registerBlockEntityRenderer(BlockEntities.CANDLE_BE.get(), CandleTER::new);
+        event.registerBlockEntityRenderer(BlockEntities.MULTI_BUILT_BLOCKENTITY.get(), MultiBuiltBlockRenderer::new);
+        event.registerBlockEntityRenderer(BlockEntities.CHARLOTTE_BE.get(), CharlotteBER::new);
+        event.registerBlockEntityRenderer(BlockEntities.MORTAR_BE.get(), MortarTER::new);
+        event.registerBlockEntityRenderer(BlockEntities.CUTTING_BOARD_BE.get(), CuttingBoardTER::new);
     }
 
     @SubscribeEvent

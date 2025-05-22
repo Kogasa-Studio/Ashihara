@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.block.tileentities.MarkableLanternTE;
+import kogasastudio.ashihara.block.blockentity.MarkableLanternBE;
 import kogasastudio.ashihara.item.ItemRegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -69,7 +69,7 @@ public class MarkableHangingLanternBlock extends LanternBlock.HangingLanternBloc
     {
         if (player.getItemInHand(handIn).getItem() == ItemRegistryHandler.KOISHI.get())
         {
-            MarkableLanternTE te = (MarkableLanternTE) worldIn.getBlockEntity(pos);
+            MarkableLanternBE te = (MarkableLanternBE) worldIn.getBlockEntity(pos);
             if (te != null)
             {
                 te.nextIcon();
@@ -83,6 +83,6 @@ public class MarkableHangingLanternBlock extends LanternBlock.HangingLanternBloc
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState)
     {
-        return new MarkableLanternTE(pPos, pState);
+        return new MarkableLanternBE(pPos, pState);
     }
 }

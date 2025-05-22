@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.block.building.component;
 
 import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
-import kogasastudio.ashihara.block.tileentities.MultiBuiltBlockEntity;
+import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.BuildingComponents;
 import kogasastudio.ashihara.utils.BuildingComponentModelResourceLocation;
@@ -15,7 +15,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static kogasastudio.ashihara.block.building.BaseMultiBuiltBlock.FACING;
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 
 public class OrientedFloor extends AdditionalComponent

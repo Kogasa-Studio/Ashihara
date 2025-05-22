@@ -2,7 +2,7 @@ package kogasastudio.ashihara.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import kogasastudio.ashihara.item.IBoundedAttack;
+import kogasastudio.ashihara.item.IBoundedInteract;
 import kogasastudio.ashihara.utils.mixin.PlayerHandleAttackTickResetProvider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,6 +28,6 @@ public abstract class MixinPlayer extends LivingEntity implements PlayerHandleAt
     @WrapOperation(method = "resetAttackStrengthTicker", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/player/Player;attackStrengthTicker:I"))
     private void cancelAttackStrengthResetForBoundedWeapon(Player instance, int value, Operation<Void> original)
     {
-        if (!(instance.getWeaponItem().getItem() instanceof IBoundedAttack)) original.call(instance, value);
+        if (!(instance.getWeaponItem().getItem() instanceof IBoundedInteract)) original.call(instance, value);
     }
 }

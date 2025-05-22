@@ -3,7 +3,7 @@ package kogasastudio.ashihara.helper;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import kogasastudio.ashihara.block.tileentities.IFluidHandler;
+import kogasastudio.ashihara.block.blockentity.IFluidHandler;
 import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

@@ -42,19 +42,19 @@ public class MillBlock extends Block // implements EntityBlock
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState state1, boolean b)
     {
         /*BlockEntity te = worldIn.getBlockEntity(pos);
-        if (te instanceof MillTE)
+        if (te instanceof MillBE)
         {
             NonNullList<ItemStack> stacks = NonNullList.create();
-            for (int i = 0; i < ((MillTE) te).getInput().getSlots(); i += 1)
+            for (int i = 0; i < ((MillBE) te).getInput().getSlots(); i += 1)
             {
-                ItemStack stack1 = ((MillTE) te).getInput().getStackInSlot(i);
+                ItemStack stack1 = ((MillBE) te).getInput().getStackInSlot(i);
                 if (!stack1.isEmpty())
                 {
                     stacks.add(stack1);
                 }
             }
             Containers.dropContents(worldIn, pos, stacks);
-            Containers.dropContents(worldIn, pos, ((MillTE) te).getOutput().getContent());
+            Containers.dropContents(worldIn, pos, ((MillBE) te).getOutput().getContent());
             worldIn.updateNeighbourForOutputSignal(pos, this);
         }*/
         super.onRemove(state, worldIn, pos, state1, b);
@@ -77,7 +77,7 @@ public class MillBlock extends Block // implements EntityBlock
     @Override
     public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
-        /*MillTE te = (MillTE) worldIn.getBlockEntity(pos);
+        /*MillBE te = (MillBE) worldIn.getBlockEntity(pos);
 
         if (te != null)
         {
@@ -106,7 +106,7 @@ public class MillBlock extends Block // implements EntityBlock
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return new MillTE(pos, state);
+        return new MillBE(pos, state);
     }
 
     // todo 需要 tick 的 BlockEntity 都需要在 EntityBlock 里注册 Ticker
@@ -114,6 +114,6 @@ public class MillBlock extends Block // implements EntityBlock
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_153212_, BlockState p_153213_, BlockEntityType<T> p_153214_)
     {
-        return TickableTileEntity.orEmpty(p_153214_, TERegistryHandler.MILL_TE.get());
+        return TickableTileEntity.orEmpty(p_153214_, BlockEntities.MILL_TE.get());
     }*/
 }

@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.block.tileentities.MortarTE;
+import kogasastudio.ashihara.block.blockentity.MortarBE;
 import kogasastudio.ashihara.helper.FluidHelper;
 import kogasastudio.ashihara.helper.InventoryHelper;
 import net.minecraft.core.BlockPos;
@@ -69,7 +69,7 @@ public class MortarBlock extends Block implements EntityBlock
     public void destroy(LevelAccessor level, BlockPos pos, BlockState state)
     {
         BlockEntity be = level.getBlockEntity(pos);
-        if (be instanceof MortarTE mortarTE && !mortarTE.inventory.isEmpty())
+        if (be instanceof MortarBE mortarTE && !mortarTE.inventory.isEmpty())
         {
             for (ItemStack stack : mortarTE.inventory.getAllContents())
             {
@@ -88,7 +88,7 @@ public class MortarBlock extends Block implements EntityBlock
     @Override
     public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
-        MortarTE te = (MortarTE) worldIn.getBlockEntity(pos);
+        MortarBE te = (MortarBE) worldIn.getBlockEntity(pos);
         if (te != null)
         {
             te.pushLastLiquidLevel();
@@ -124,6 +124,6 @@ public class MortarBlock extends Block implements EntityBlock
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return new MortarTE(pos, state);
+        return new MortarBE(pos, state);
     }
 }
