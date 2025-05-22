@@ -38,7 +38,9 @@ public class Items
     public static final DeferredItem<Item> DRIED_RICE_CROP = ITEMS.register("dried_rice_crop", AshiharaItem::new);
     public static final DeferredItem<Item> PADDY = ITEMS.register("paddy", Paddy::new);
     public static final DeferredItem<Item> STRAW = ITEMS.register("straw", AshiharaItem::new);
+    public static final DeferredItem<Item> PADDY_PILE = ITEMS.register("paddy_pile", AshiharaItem::new);
     public static final DeferredItem<Item> RICE = ITEMS.register("rice", AshiharaItem::new);
+    public static final DeferredItem<Item> BROWN_RICE = ITEMS.register("brown_rice", AshiharaItem::new);
     public static final DeferredItem<Item> PESTLE = ITEMS.register("pestle", () -> new Item(new Item.Properties().durability(512)));
     public static final DeferredItem<Item> SUJIKABUTO = ITEMS.register("sujikabuto", SujikaButo::new);
 

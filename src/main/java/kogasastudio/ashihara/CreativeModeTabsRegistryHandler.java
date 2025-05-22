@@ -233,6 +233,8 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.RICE_CROP.get());
                                         output.accept(Items.DRIED_RICE_CROP.get());
                                         output.accept(Items.STRAW.get());
+                                        output.accept(Items.PADDY_PILE.get());
+                                        output.accept(Items.BROWN_RICE.get());
                                         output.accept(Items.RICE.get());
                                         output.accept(Items.COOKED_RICE.get());
                                         output.accept(Items.ONIGIRI.get());
