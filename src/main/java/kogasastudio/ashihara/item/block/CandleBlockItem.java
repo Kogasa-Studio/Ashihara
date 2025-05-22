@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-import static kogasastudio.ashihara.block.BlockRegistryHandler.CANDLE;
+import static kogasastudio.ashihara.registry.Blocks.CANDLE;
 import static kogasastudio.ashihara.registry.BlockEntities.CANDLE_BE;
 import static net.minecraft.world.level.block.Blocks.AIR;
 

@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.block.blockentity.CandleBE;
-import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.registry.Items;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -74,7 +74,7 @@ public class CandleBlock extends Block implements EntityBlock
             int amount = candle.pickCandle(true, worldIn, pos);
             if (amount == 0) return;
 
-            ItemStack candleItem = new ItemStack(ItemRegistryHandler.CANDLE.get(), amount);
+            ItemStack candleItem = new ItemStack(Items.CANDLE.get(), amount);
             ItemEntity entity = new ItemEntity(worldIn, (double) pos.getX() + 0.5d, (double) pos.getY() + 0.5d, pos.getZ() + 0.5d, candleItem);
             entity.setDefaultPickUpDelay();
             worldIn.addFreshEntity(entity);
@@ -97,7 +97,7 @@ public class CandleBlock extends Block implements EntityBlock
         {
             int amount = te.pickCandle(false, pLevel, pPos);
             if (amount == 0) return InteractionResult.PASS;
-            pPlayer.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ItemRegistryHandler.CANDLE.get(), amount));
+            pPlayer.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.CANDLE.get(), amount));
         }
         else if (pState.getValue(LIT))
         {

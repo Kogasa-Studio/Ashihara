@@ -4,7 +4,7 @@ import kogasastudio.ashihara.block.building.*;
 import kogasastudio.ashihara.block.building.component.*;
 import kogasastudio.ashihara.helper.MathHelper;
 import kogasastudio.ashihara.helper.ShapeHelper;
-import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.registry.Items;
 import kogasastudio.ashihara.registry.BlockEntities;
 import kogasastudio.ashihara.utils.shape.VoxelShapeSerializer;
 import net.minecraft.core.BlockPos;
@@ -90,7 +90,7 @@ public class MultiBuiltBlockEntity extends AshiharaMachineBE implements IMultiBu
         ItemStack stack = context.getItemInHand();
         Vec3 vec = context.getClickLocation();
         Vec3 inBlockVec = transformVec3(inBlockVec(vec));
-        int opcode = stack.is(ItemRegistryHandler.WOODEN_HAMMER) ? OPCODE_COMPONENT : stack.is(ItemRegistryHandler.CHISEL) ? OPCODE_ADDITIONAL : -1;
+        int opcode = stack.is(Items.WOODEN_HAMMER) ? OPCODE_COMPONENT : stack.is(Items.CHISEL) ? OPCODE_ADDITIONAL : -1;
         if (opcode == OPCODE_COMPONENT || opcode == OPCODE_ADDITIONAL)
         {
             ComponentStateDefinition definition = getComponentByPosition(inBlockVec, opcode);

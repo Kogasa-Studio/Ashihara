@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.block.woodcraft;
 
-import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.registry.Blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -14,8 +14,8 @@ public class SimpleStairsBlock extends StairBlock
     {
         super
         (
-            BlockRegistryHandler.CHERRY_PLANKS.get().defaultBlockState(),
-            BlockBehaviour.Properties.ofFullCopy(BlockRegistryHandler.CHERRY_PLANKS.get())
+        Blocks.CHERRY_PLANKS.get().defaultBlockState(),
+        BlockBehaviour.Properties.ofFullCopy(Blocks.CHERRY_PLANKS.get())
         );
     }
 

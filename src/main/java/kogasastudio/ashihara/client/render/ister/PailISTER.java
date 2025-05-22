@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.block.blockentity.PailBE;
 import kogasastudio.ashihara.client.models.PailItemModel;
 import kogasastudio.ashihara.client.render.LayerRegistryHandler;
@@ -48,7 +48,7 @@ public class PailISTER extends BlockEntityWithoutLevelRenderer
     {
         ResourceLocation PAIL = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/block/pail_multiple.png");
 
-        PailBE te = new PailBE(BlockPos.ZERO, BlockRegistryHandler.PAIL.get().defaultBlockState());
+        PailBE te = new PailBE(BlockPos.ZERO, Blocks.PAIL.get().defaultBlockState());
         CustomData customData = stack.getComponents().getOrDefault(DataComponents.BLOCK_ENTITY_DATA, CustomData.EMPTY);
         if (!customData.isEmpty() && Minecraft.getInstance().level != null) customData.loadInto(te, Minecraft.getInstance().level.registryAccess());
 

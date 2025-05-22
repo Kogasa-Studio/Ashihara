@@ -1,26 +1,21 @@
 package kogasastudio.ashihara.fluid;
 
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.block.BlockRegistryHandler;
-import kogasastudio.ashihara.item.ItemRegistryHandler;
-import net.minecraft.client.Minecraft;
+import kogasastudio.ashihara.registry.Blocks;
+import kogasastudio.ashihara.registry.Items;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.FastColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.common.SoundActions;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
-import javax.annotation.Nullable;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 
@@ -48,8 +43,8 @@ public class FluidRegistryHandler
     public static final Supplier<FlowingFluid> OIL = FLUIDS.register("oil", () -> new BaseFlowingFluid.Source(FluidRegistryHandler.OIL_PROP));
     public static final Supplier<FlowingFluid> OIL_FLOWING = FLUIDS.register("oil_flowing", () -> new BaseFlowingFluid.Flowing(FluidRegistryHandler.OIL_PROP));
 
-    public static BaseFlowingFluid.Properties SOY_MILK_PROP = getBasicFluidProp(AshiharaFluidTypes.TYPE_SOY_MILK, SOY_MILK, SOY_MILK_FLOWING, BlockRegistryHandler.SOY_MILK_BLOCK, ItemRegistryHandler.SOY_MILK_BUCKET);
-    public static BaseFlowingFluid.Properties OIL_PROP = getBasicFluidProp(AshiharaFluidTypes.TYPE_OIL, OIL, OIL_FLOWING, BlockRegistryHandler.OIL_BLOCK, ItemRegistryHandler.OIL_BUCKET);
+    public static BaseFlowingFluid.Properties SOY_MILK_PROP = getBasicFluidProp(AshiharaFluidTypes.TYPE_SOY_MILK, SOY_MILK, SOY_MILK_FLOWING, Blocks.SOY_MILK_BLOCK, Items.SOY_MILK_BUCKET);
+    public static BaseFlowingFluid.Properties OIL_PROP = getBasicFluidProp(AshiharaFluidTypes.TYPE_OIL, OIL, OIL_FLOWING, Blocks.OIL_BLOCK, Items.OIL_BUCKET);
     //oil 168 244 233 132
 
     public static class AshiharaFluidTypes

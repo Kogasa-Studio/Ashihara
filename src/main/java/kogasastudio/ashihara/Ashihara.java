@@ -1,11 +1,11 @@
 package kogasastudio.ashihara;
 
 import com.mojang.logging.LogUtils;
-import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.registry.BlockEntities;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
-import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.registry.Items;
 import kogasastudio.ashihara.loading.ReloadableResources;
 import kogasastudio.ashihara.registry.*;
 import kogasastudio.ashihara.sounds.SoundEvents;
@@ -34,8 +34,8 @@ public class Ashihara
     {
         modEventBus.addListener(this::addCreative);
 
-        ItemRegistryHandler.ITEMS.register(modEventBus);
-        BlockRegistryHandler.BLOCKS.register(modEventBus);
+        Items.ITEMS.register(modEventBus);
+        Blocks.BLOCKS.register(modEventBus);
         FluidRegistryHandler.FLUIDS.register(modEventBus);
         FluidRegistryHandler.AshiharaFluidTypes.TYPES.register(modEventBus);
         CreativeModeTabsRegistryHandler.TABS.register(modEventBus);
@@ -73,11 +73,11 @@ public class Ashihara
     {
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS)
         {
-            event.accept(ItemRegistryHandler.KOISHI);
-            event.accept(ItemRegistryHandler.MINATO_AQUA);
+            event.accept(Items.KOISHI);
+            event.accept(Items.MINATO_AQUA);
         } else if (event.getTabKey().equals(CreativeModeTabs.FUNCTIONAL_BLOCKS))
         {
-            event.accept(ItemRegistryHandler.CHARLOTTE);
+            event.accept(Items.CHARLOTTE);
         }
     }
 }

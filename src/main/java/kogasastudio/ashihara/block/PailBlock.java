@@ -3,7 +3,7 @@ package kogasastudio.ashihara.block;
 import kogasastudio.ashihara.block.blockentity.PailBE;
 import kogasastudio.ashihara.registry.BlockEntities;
 import kogasastudio.ashihara.helper.FluidHelper;
-import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.registry.Items;
 import kogasastudio.ashihara.item.block.PailBlockItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,8 +34,8 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.Nullable;
 
-import static kogasastudio.ashihara.item.ItemRegistryHandler.MINATO_AQUA;
-import static kogasastudio.ashihara.item.ItemRegistryHandler.PAIL;
+import static kogasastudio.ashihara.registry.Items.MINATO_AQUA;
+import static kogasastudio.ashihara.registry.Items.PAIL;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_AXIS;
 
 public class PailBlock extends Block implements EntityBlock
@@ -143,7 +143,7 @@ public class PailBlock extends Block implements EntityBlock
             return ItemInteractionResult.SUCCESS;
         }
 
-        if (stack.getItem().equals(ItemRegistryHandler.KOISHI.get()))
+        if (stack.getItem().equals(Items.KOISHI.get()))
         {
             if (!worldIn.isClientSide())
             {

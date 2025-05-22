@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.item;
 
-import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.block.blockentity.IFluidHandler;
 import kogasastudio.ashihara.block.trees.TreeGrowers;
 import net.minecraft.core.BlockPos;
@@ -54,7 +54,7 @@ public class MinatoAqua extends Item
         if (!item.isEmpty() && Objects.requireNonNull(playerIn).mayUseItemAt(pos.relative(direction), direction, item) && !world.isClientSide())
         {
             ServerLevel worldIn = (ServerLevel) world;
-            tree.growTree(worldIn, worldIn.getChunkSource().getGenerator(), pos, BlockRegistryHandler.CHERRY_LOG.get().defaultBlockState(), rand);
+            tree.growTree(worldIn, worldIn.getChunkSource().getGenerator(), pos, Blocks.CHERRY_LOG.get().defaultBlockState(), rand);
             return InteractionResult.SUCCESS;
         } else return InteractionResult.PASS;
     }

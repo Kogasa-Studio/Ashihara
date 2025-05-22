@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block;
 
+import kogasastudio.ashihara.registry.Blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -14,7 +15,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -65,7 +65,7 @@ public class StoneLanternBlock extends DoubleLanternBlock
             BlockState blockstate = worldIn.getBlockState(blockpos);
             if (blockstate.getBlock() != state.getBlock() || blockstate.getValue(HALF) != DoubleBlockHalf.LOWER)
             {
-                worldIn.setBlock(pos, state.getValue(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState(), 35);
+                worldIn.setBlock(pos, state.getValue(WATERLOGGED) ? net.minecraft.world.level.block.Blocks.WATER.defaultBlockState() : net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 35);
             } else if (state.getValue(LIT) && state.getValue(WATERLOGGED) && !state.getValue(SEALED))
             {
                 worldIn.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -77,7 +77,7 @@ public class StoneLanternBlock extends DoubleLanternBlock
             BlockState blockstate = worldIn.getBlockState(blockpos);
             if (blockstate.getBlock() != state.getBlock() || blockstate.getValue(HALF) != DoubleBlockHalf.UPPER)
             {
-                worldIn.setBlock(pos, state.getValue(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState(), 35);
+                worldIn.setBlock(pos, state.getValue(WATERLOGGED) ? net.minecraft.world.level.block.Blocks.WATER.defaultBlockState() : net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 35);
             }
         }
     }
@@ -159,7 +159,7 @@ public class StoneLanternBlock extends DoubleLanternBlock
     public void handleRain(Level worldIn, BlockPos pos)
     {
         BlockState state = worldIn.getBlockState(pos);
-        if (!state.is(BlockRegistryHandler.STONE_LANTERN.get()))
+        if (!state.is(Blocks.STONE_LANTERN.get()))
         {
             return;
         }

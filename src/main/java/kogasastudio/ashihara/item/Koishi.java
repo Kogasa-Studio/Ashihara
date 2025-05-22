@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.item;
 
-import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.block.PaddyFieldBlock;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import net.minecraft.core.BlockPos;
@@ -17,7 +17,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -43,16 +42,16 @@ public class Koishi extends Item
         if (!item.isEmpty() && Objects.requireNonNull(player).mayUseItemAt(pos.relative(facing), facing, item))
         {
             BlockState blockState = worldIn.getBlockState(pos); //测试功能：右击草方块变钻石
-            if (blockState.getBlock() == Blocks.GRASS_BLOCK)
+            if (blockState.getBlock() == net.minecraft.world.level.block.Blocks.GRASS_BLOCK)
             {
                 worldIn.playSound(player, pos, SoundEvents.BAMBOO_HIT, SoundSource.BLOCKS, 1.0F, 1.0F);
-                worldIn.setBlockAndUpdate(pos, Blocks.DIAMOND_BLOCK.defaultBlockState());
+                worldIn.setBlockAndUpdate(pos, net.minecraft.world.level.block.Blocks.DIAMOND_BLOCK.defaultBlockState());
                 if (!player.getAbilities().instabuild)
                 {
                     item.shrink(1);
                 }
                 return InteractionResult.SUCCESS;
-            } else if (blockState.getBlock() == BlockRegistryHandler.WATER_FIELD.get())
+            } else if (blockState.getBlock() == Blocks.WATER_FIELD.get())
             {
                 worldIn.playSound(player, pos, SoundEvents.BAMBOO_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
                 worldIn.setBlockAndUpdate(pos, blockState.setValue(PaddyFieldBlock.LEVEL, 6));

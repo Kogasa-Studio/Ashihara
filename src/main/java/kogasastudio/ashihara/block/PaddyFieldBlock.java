@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.registry.Blocks;
+import kogasastudio.ashihara.registry.Items;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -8,7 +9,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -55,7 +55,7 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
 
     private boolean matchesWaterField(BlockState state)
     {
-        return state.is(BlockRegistryHandler.WATER_FIELD.get());
+        return state.is(Blocks.WATER_FIELD.get());
     }
 
     private boolean hasExit(Level worldIn, BlockPos pos)
@@ -75,7 +75,7 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
                 FluidState fluidF = worldIn.getFluidState(pos1);
                 if
                 (
-                        (state.is(Blocks.AIR)
+                        (state.is(net.minecraft.world.level.block.Blocks.AIR)
                                 || (fluid.getType() == Fluids.FLOWING_WATER
                                 && fluidF.getType() == Fluids.FLOWING_WATER
                                 && fluidF.getValue(BlockStateProperties.LEVEL_FLOWING) < fluid.getValue(BlockStateProperties.LEVEL_FLOWING)))
@@ -110,7 +110,7 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) //设置掉落物品为2土球
     {
         List<ItemStack> list = new LinkedList<>();
-        list.add(new ItemStack(ItemRegistryHandler.DIRT_BALL.get(), 2));
+        list.add(new ItemStack(Items.DIRT_BALL.get(), 2));
         return list;
     }
 
@@ -170,7 +170,7 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
     public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) //那一大堆判定
     {
         BlockState fromState = worldIn.getBlockState(fromPos);
-        if (!fromState.is(BlockRegistryHandler.RICE_CROP.get()))
+        if (!fromState.is(Blocks.RICE_CROP.get()))
         {
             boolean watered = fourWaysFluidsIncludesWater(worldIn, pos);
             if (worldIn.getFluidState(pos.above()).getType().equals(Fluids.WATER))
@@ -239,12 +239,12 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
             }
             if (levelT > 5)
             {
-                List<BlockPos> list = getMarkedBlockPosAround(worldIn, pos, Blocks.AIR);
+                List<BlockPos> list = getMarkedBlockPosAround(worldIn, pos, net.minecraft.world.level.block.Blocks.AIR);
                 if (!list.isEmpty())
                 {
                     for (BlockPos pos1 : list)
                     {
-                        if (worldIn.getBlockState(pos1).is(Blocks.AIR) && worldIn.getFluidState(pos1).isEmpty())
+                        if (worldIn.getBlockState(pos1).is(net.minecraft.world.level.block.Blocks.AIR) && worldIn.getFluidState(pos1).isEmpty())
                         {
                             worldIn.setBlockAndUpdate(pos1, Fluids.FLOWING_WATER.getFlowing(state.getValue(LEVEL) - 1, false).createLegacyBlock());
                         }
@@ -406,7 +406,7 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
     @Override
     public ItemStack pickupBlock(@Nullable Player pPlayer, LevelAccessor pLevel, BlockPos pPos, BlockState pState)
     {
-        return pState.getValue(LEVEL) == 8 ? Items.WATER_BUCKET.getDefaultInstance() : ItemStack.EMPTY;
+        return pState.getValue(LEVEL) == 8 ? net.minecraft.world.item.Items.WATER_BUCKET.getDefaultInstance() : ItemStack.EMPTY;
     }
 
     @Override

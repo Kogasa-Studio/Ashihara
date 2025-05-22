@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.utils;
 
 import cpw.mods.util.Lazy;
-import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.registry.Items;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -12,10 +12,10 @@ import java.util.function.Supplier;
 public enum AshiharaItemTiers implements Tier
 {
     STEEL(4, 1200, 7.0F, 5.0F, 10, 1.5f,
-            () -> Ingredient.of(ItemRegistryHandler.RICE.get())),
+            () -> Ingredient.of(Items.RICE.get())),
 
     TAMA(2, 105, 4.0F, 1.0F, 20, 10.0f,
-            () -> Ingredient.of(ItemRegistryHandler.RICE.get()));
+            () -> Ingredient.of(Items.RICE.get()));
 
     private final int harvestLevel;
     private final int maxUses;

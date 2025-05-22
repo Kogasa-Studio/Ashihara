@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.item.block;
 
-import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.block.building.AbstractWallBlock;
 import kogasastudio.ashihara.block.building.AbstractBeamBlock;
 import net.minecraft.core.BlockPos;
@@ -17,7 +17,7 @@ public class BeamBlockItem extends BlockItem
 {
     public BeamBlockItem()
     {
-        super(BlockRegistryHandler.RED_THIN_BEAM.get(), new Properties());
+        super(Blocks.RED_THIN_BEAM.get(), new Properties());
     }
 
     @Override

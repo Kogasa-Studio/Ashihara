@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
+import kogasastudio.ashihara.registry.Blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -15,7 +16,6 @@ import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -61,7 +61,7 @@ public class TatamiBlock extends Block
     //随后由multipart模型对其进行模型更新
     private BlockState updateState(BlockState state, Level worldIn, BlockPos pos)
     {
-        if (state.is(BlockRegistryHandler.TATAMI.get()) && !state.getValue(LOCKED))
+        if (state.is(Blocks.TATAMI.get()) && !state.getValue(LOCKED))
         {
             BlockState n = worldIn.getBlockState(pos.north());
             BlockState s = worldIn.getBlockState(pos.south());
@@ -79,7 +79,7 @@ public class TatamiBlock extends Block
     //检查传入的方块是否是榻榻米且轴与判断源榻榻米方块相同
     private boolean check(BlockState state, BlockState newState)
     {
-        return state.is(BlockRegistryHandler.TATAMI.get()) && state.getValue(AXIS) == newState.getValue(AXIS);
+        return state.is(Blocks.TATAMI.get()) && state.getValue(AXIS) == newState.getValue(AXIS);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class TatamiBlock extends Block
     public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
     {
         BlockState fromState = worldIn.getBlockState(fromPos);
-        if (fromState.is(BlockRegistryHandler.TATAMI.get()) || fromState.is(Blocks.AIR))
+        if (fromState.is(Blocks.TATAMI.get()) || fromState.is(net.minecraft.world.level.block.Blocks.AIR))
         {
             worldIn.setBlockAndUpdate(pos, updateState(state, worldIn, pos));
         }

@@ -1,7 +1,8 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.helper.ShapeHelper;
-import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.registry.Blocks;
+import kogasastudio.ashihara.registry.Items;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -19,7 +20,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -152,7 +152,7 @@ public class RiceDryingSticksBlock extends Block implements SimpleWaterloggedBlo
     {
         if (pState.getValue(DRYING_STATE).equals(RiceDryingState.NONE)) return; //保险措施
         RandomSource random = pLevel.getRandom();
-        if (random.nextInt(10) <= 5 && (pLevel.canSeeSky(pPos) || pLevel.getBlockState(pPos.above()).getBlock() == BlockRegistryHandler.RICE_DRYING_STICKS.get()) && !pLevel.isRainingAt(pPos))
+        if (random.nextInt(10) <= 5 && (pLevel.canSeeSky(pPos) || pLevel.getBlockState(pPos.above()).getBlock() == Blocks.RICE_DRYING_STICKS.get()) && !pLevel.isRainingAt(pPos))
         {
             pLevel.setBlock(pPos, pState.setValue(DRYING_STATE, pLevel.isRainingAt(pPos) ? RiceDryingState.WET : RiceDryingState.DRY), 3);
         }
@@ -161,7 +161,7 @@ public class RiceDryingSticksBlock extends Block implements SimpleWaterloggedBlo
     @Override
     protected ItemInteractionResult useItemOn(ItemStack pStack, BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHitResult)
     {
-        if (pState.getValue(DRYING_STATE).equals(RiceDryingState.NONE) && pStack.is(ItemRegistryHandler.RICE_CROP))
+        if (pState.getValue(DRYING_STATE).equals(RiceDryingState.NONE) && pStack.is(Items.RICE_CROP))
         {
             pLevel.setBlock(pPos, pState.setValue(DRYING_STATE, RiceDryingState.WET), 3);
             pLevel.playSound(pPlayer, pPos, SoundEvents.CHERRY_LEAVES_PLACE, SoundSource.BLOCKS);
@@ -170,7 +170,7 @@ public class RiceDryingSticksBlock extends Block implements SimpleWaterloggedBlo
         }
         else if (!pState.getValue(DRYING_STATE).equals(RiceDryingState.NONE))
         {
-            popResource(pLevel, pPos, new ItemStack(pState.getValue(DRYING_STATE).equals(RiceDryingState.WET) ? ItemRegistryHandler.RICE_CROP.asItem() : ItemRegistryHandler.DRIED_RICE_CROP.asItem()));
+            popResource(pLevel, pPos, new ItemStack(pState.getValue(DRYING_STATE).equals(RiceDryingState.WET) ? Items.RICE_CROP.asItem() : Items.DRIED_RICE_CROP.asItem()));
             pLevel.setBlock(pPos, pState.setValue(DRYING_STATE, RiceDryingState.NONE), 3);
             pLevel.playSound(pPlayer, pPos, SoundEvents.CHERRY_LEAVES_BREAK, SoundSource.BLOCKS);
             return ItemInteractionResult.SUCCESS;
@@ -182,7 +182,7 @@ public class RiceDryingSticksBlock extends Block implements SimpleWaterloggedBlo
     public void destroy(LevelAccessor level, BlockPos pos, BlockState state)
     {
         if (!state.getValue(DRYING_STATE).equals(RiceDryingState.NONE))
-            popResource((Level) level, pos, new ItemStack(state.getValue(DRYING_STATE).equals(RiceDryingState.WET) ? ItemRegistryHandler.RICE_CROP.asItem() : ItemRegistryHandler.DRIED_RICE_CROP.asItem()));
+            popResource((Level) level, pos, new ItemStack(state.getValue(DRYING_STATE).equals(RiceDryingState.WET) ? Items.RICE_CROP.asItem() : Items.DRIED_RICE_CROP.asItem()));
         super.destroy(level, pos, state);
     }
 
@@ -204,8 +204,8 @@ public class RiceDryingSticksBlock extends Block implements SimpleWaterloggedBlo
         BlockState blockstate = worldIn.getBlockState(blockpos);
         if (blockstate.getBlock() != state.getBlock() || blockstate.getValue(HALF) == state.getValue(HALF))
         {
-            worldIn.setBlock(pos, state.getValue(WATERLOGGED) ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState(), 35);
-            if (state.getValue(DRYING_STATE) != RiceDryingState.NONE) popResource(worldIn, pos, new ItemStack(state.getValue(DRYING_STATE).equals(RiceDryingState.WET) ? ItemRegistryHandler.RICE_CROP.asItem() : ItemRegistryHandler.DRIED_RICE_CROP.asItem()));
+            worldIn.setBlock(pos, state.getValue(WATERLOGGED) ? net.minecraft.world.level.block.Blocks.WATER.defaultBlockState() : net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 35);
+            if (state.getValue(DRYING_STATE) != RiceDryingState.NONE) popResource(worldIn, pos, new ItemStack(state.getValue(DRYING_STATE).equals(RiceDryingState.WET) ? Items.RICE_CROP.asItem() : Items.DRIED_RICE_CROP.asItem()));
         }
     }
 

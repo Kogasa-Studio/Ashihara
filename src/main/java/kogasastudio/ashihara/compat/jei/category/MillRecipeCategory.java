@@ -12,7 +12,7 @@ public class MillRecipeCategory //extends BaseRecipeCategory<MillRecipe>
     public MillRecipeCategory(IGuiHelper helper)
     {
         super(JeiPlugin.MILL,
-                helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ItemRegistryHandler.MILL.get())),
+                helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(Items.MILL.get())),
                 helper.createDrawable(BACKGROUND, 0, 0, 176, 113));
     }
 

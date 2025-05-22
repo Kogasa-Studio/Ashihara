@@ -1,13 +1,12 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.registry.Items;
 import kogasastudio.ashihara.sounds.SoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -64,14 +63,14 @@ public class TetsusenchiBlock extends Block
     public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         ItemStack item = player.getItemInHand(handIn);
-        if (item.getItem() == ItemRegistryHandler.DRIED_RICE_CROP.get())
+        if (item.getItem() == Items.DRIED_RICE_CROP.get())
         {
             if (!player.getCooldowns().isOnCooldown(item.getItem()))
             {
                 RandomSource rand = worldIn.getRandom();
                 worldIn.playSound(player, pos, SoundEvents.UNTHRESH.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
-                Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemRegistryHandler.STRAW.get()));
-                Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemRegistryHandler.PADDY.get(), rand.nextInt(2) + 1));
+                Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(Items.STRAW.get()));
+                Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(Items.PADDY.get(), rand.nextInt(2) + 1));
                 player.getCooldowns().addCooldown(item.getItem(), 8);
                 item.shrink(1);
                 return ItemInteractionResult.SUCCESS;

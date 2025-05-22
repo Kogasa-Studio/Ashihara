@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.client.render.ter;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.block.blockentity.CandleBE;
 import kogasastudio.ashihara.client.render.SectionRenderContext;
 import kogasastudio.ashihara.client.render.WithLevelRenderer;
@@ -36,7 +36,7 @@ public class CandleTER implements BlockEntityRenderer<CandleBE>, WithLevelRender
 
         //int combinedLightIn = getPackedLight(be);
 
-        BakedModel model = Minecraft.getInstance().getModelManager().getBlockModelShaper().getBlockModel(BlockRegistryHandler.CANDLE.get().defaultBlockState());
+        BakedModel model = Minecraft.getInstance().getModelManager().getBlockModelShaper().getBlockModel(Blocks.CANDLE.get().defaultBlockState());
         for (double[] d : tileEntityIn.getPosList())
         {
             double x = d[0];

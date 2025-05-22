@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.block.blockentity.MarkableLanternBE;
-import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.registry.Items;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -67,7 +67,7 @@ public class MarkableHangingLanternBlock extends LanternBlock.HangingLanternBloc
     @Override
     public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
-        if (player.getItemInHand(handIn).getItem() == ItemRegistryHandler.KOISHI.get())
+        if (player.getItemInHand(handIn).getItem() == Items.KOISHI.get())
         {
             MarkableLanternBE te = (MarkableLanternBE) worldIn.getBlockEntity(pos);
             if (te != null)

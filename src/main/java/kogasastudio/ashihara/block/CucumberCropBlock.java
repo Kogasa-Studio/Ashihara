@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block;
 
+import kogasastudio.ashihara.registry.Blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -25,7 +26,7 @@ public class CucumberCropBlock extends AbstractCropAge7
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter worldIn, BlockPos pos)
     {
-        return super.mayPlaceOn(state, worldIn, pos) || (state.is(BlockRegistryHandler.CUCUMBERS.get()) && state.getValue(AGE) > 5);
+        return super.mayPlaceOn(state, worldIn, pos) || (state.is(Blocks.CUCUMBERS.get()) && state.getValue(AGE) > 5);
     }
 
     @Override
@@ -49,11 +50,11 @@ public class CucumberCropBlock extends AbstractCropAge7
         if (downState.is(FARMLAND))
         {
             return age < 6
-                    || (age < 7 && worldIn.getBlockState(pos.above()).is(BlockRegistryHandler.CUCUMBERS.get())
+                    || (age < 7 && worldIn.getBlockState(pos.above()).is(Blocks.CUCUMBERS.get())
                     && worldIn.getBlockState(pos.above()).getValue(AGE) > 3);
         }
         //case up
-        if (downState.is(BlockRegistryHandler.CUCUMBERS.get()))
+        if (downState.is(Blocks.CUCUMBERS.get()))
         {
             return age < 5;
         }
@@ -65,7 +66,7 @@ public class CucumberCropBlock extends AbstractCropAge7
     {
         BlockState downState = worldIn.getBlockState(pos.below());
         int age = this.getAge(state);
-        boolean isUpper = downState.is(BlockRegistryHandler.CUCUMBERS.get());
+        boolean isUpper = downState.is(Blocks.CUCUMBERS.get());
 
         if (isUpper && this.getAge(state) >= 5)
         {
@@ -90,7 +91,7 @@ public class CucumberCropBlock extends AbstractCropAge7
             return; // Forge: prevent loading unloaded chunks when checking neighbor's light
 
         BlockState downState = worldIn.getBlockState(pos.below());
-        boolean isUpper = downState.is(BlockRegistryHandler.CUCUMBERS.get());
+        boolean isUpper = downState.is(Blocks.CUCUMBERS.get());
 
         if ((isUpper && state.getValue(AGE) > 4) || (!isUpper && state.getValue(AGE) > 6 && !worldIn.getBlockState(pos.above()).isAir()))
             return;
@@ -166,7 +167,7 @@ public class CucumberCropBlock extends AbstractCropAge7
     public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         BlockState downState = worldIn.getBlockState(pos.below());
-        boolean isUpper = downState.is(BlockRegistryHandler.CUCUMBERS.get());
+        boolean isUpper = downState.is(Blocks.CUCUMBERS.get());
 
         int age = state.getValue(AGE);
         int ageAvailable = isUpper ? 5 : 7;

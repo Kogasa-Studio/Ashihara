@@ -13,7 +13,7 @@ import kogasastudio.ashihara.helper.ParticleHelper;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
 import kogasastudio.ashihara.inventory.BEItemStackHandler;
 import kogasastudio.ashihara.item.Otsuchi;
-import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.registry.Items;
 import kogasastudio.ashihara.registry.RecipeTypes;
 import kogasastudio.ashihara.registry.BlockEntities;
 import net.minecraft.core.BlockPos;
@@ -257,7 +257,7 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
 
     public enum MortarToolType
     {
-        PESTLE("pestle", i -> i.is(ItemRegistryHandler.PESTLE) || i.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "pestle"))), Component.translatable("tooltip.ashihara.mortar.pestle"), SoundEvents.PLAYER_ATTACK_WEAK),
+        PESTLE("pestle", i -> i.is(Items.PESTLE) || i.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "pestle"))), Component.translatable("tooltip.ashihara.mortar.pestle"), SoundEvents.PLAYER_ATTACK_WEAK),
         OTSUCHI("otsuchi", i -> i.getItem() instanceof Otsuchi || i.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "otsuchi"))), Component.translatable("tooltip.ashihara.mortar.otsuchi"), SoundEvents.PLAYER_ATTACK_STRONG),
         HAND("hand", ItemStack::isEmpty, Component.translatable("tooltip.ashihara.mortar.hand"), SoundEvents.ARMOR_EQUIP_ELYTRA.value());
 

@@ -12,7 +12,7 @@ public class MortarRecipeCategory //extends BaseRecipeCategory<MortarRecipe>
     public MortarRecipeCategory(IGuiHelper helper)
     {
         super(JeiPlugin.MORTAR,
-                helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ItemRegistryHandler.MORTAR.get())),
+                helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(Items.MORTAR.get())),
                 helper.createDrawable(BACKGROUND, 0, 0, 176, 113));
     }
 

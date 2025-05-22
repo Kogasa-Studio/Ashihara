@@ -1,9 +1,8 @@
 package kogasastudio.ashihara.utils;
 
-import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.registry.Blocks;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 
 public enum WallTypes implements StringRepresentable
 {
@@ -12,7 +11,7 @@ public enum WallTypes implements StringRepresentable
                 @Override
                 public Block getBlock()
                 {
-                    return BlockRegistryHandler.THIN_WHITE_SOIL_WALL.get();
+                    return Blocks.THIN_WHITE_SOIL_WALL.get();
                 }
             },
     PLANK("plank"),
@@ -28,5 +27,5 @@ public enum WallTypes implements StringRepresentable
         return this.name;
     }
 
-    public Block getBlock() {return Blocks.AIR;}
+    public Block getBlock() {return net.minecraft.world.level.block.Blocks.AIR;}
 }

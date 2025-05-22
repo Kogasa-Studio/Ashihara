@@ -5,8 +5,8 @@ import kogasastudio.ashihara.compat.jei.category.CuttingBoardRecipeCategory;
 import kogasastudio.ashihara.interaction.recipes.CuttingBoardRecipe;
 import kogasastudio.ashihara.interaction.recipes.mill.MillRecipe;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
+import kogasastudio.ashihara.registry.Items;
 import kogasastudio.ashihara.registry.RecipeTypes;
-import kogasastudio.ashihara.item.ItemRegistryHandler;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.*;
@@ -59,9 +59,9 @@ public class JeiPlugin implements IModPlugin
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration)
     {
-        registration.addRecipeCatalyst(new ItemStack(ItemRegistryHandler.CUTTING_BOARD.get()), CUTTING_BOARD);
-        registration.addRecipeCatalyst(new ItemStack(ItemRegistryHandler.MILL.get()), MILL);
-        registration.addRecipeCatalyst(new ItemStack(ItemRegistryHandler.MORTAR.get()), MORTAR);
+        registration.addRecipeCatalyst(new ItemStack(Items.CUTTING_BOARD.get()), CUTTING_BOARD);
+        registration.addRecipeCatalyst(new ItemStack(Items.MILL.get()), MILL);
+        registration.addRecipeCatalyst(new ItemStack(Items.MORTAR.get()), MORTAR);
     }
 
     @Override

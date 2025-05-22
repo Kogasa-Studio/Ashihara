@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.registry.Blocks;
+import kogasastudio.ashihara.registry.Items;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -52,20 +53,20 @@ public class RiceCropBlock extends CropBlock
     @Override
     public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos)
     {
-        return worldIn.getBlockState(pos.below()).is(BlockRegistryHandler.WATER_FIELD.get());
+        return worldIn.getBlockState(pos.below()).is(Blocks.WATER_FIELD.get());
     }
 
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter worldIn, BlockPos pos)
     {
-        return state.is(BlockRegistryHandler.WATER_FIELD.get());
+        return state.is(Blocks.WATER_FIELD.get());
     }
 
     @Override
     public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state)
     {
         boolean flag = false;
-        if (worldIn.getBlockState(pos.below()).is(BlockRegistryHandler.WATER_FIELD.get()))
+        if (worldIn.getBlockState(pos.below()).is(Blocks.WATER_FIELD.get()))
         {
             flag = !this.isMaxAge(state) && worldIn.getBlockState(pos.below()).getValue(LEVEL) > 5;
         }
@@ -75,7 +76,7 @@ public class RiceCropBlock extends CropBlock
     @Override
     protected ItemLike getBaseSeedId()
     {
-        return ItemRegistryHandler.RICE_SEEDLING.get();
+        return Items.RICE_SEEDLING.get();
     }
 
     @Override

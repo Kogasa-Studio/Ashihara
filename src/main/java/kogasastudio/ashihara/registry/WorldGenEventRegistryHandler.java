@@ -1,7 +1,6 @@
 package kogasastudio.ashihara.registry;
 
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.world.tree.BigCherryFoliagePlacer;
 import kogasastudio.ashihara.world.tree.BigCherryTrunkPlacer;
 import net.minecraft.core.BlockPos;
@@ -16,7 +15,6 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
-import net.minecraft.world.level.levelgen.feature.foliageplacers.FancyFoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.*;
@@ -61,9 +59,9 @@ public class WorldGenEventRegistryHandler
                                     Feature.TREE,
                                     new TreeConfiguration.TreeConfigurationBuilder
                                     (
-                                            BlockStateProvider.simple(BlockRegistryHandler.CHERRY_LOG.get().defaultBlockState()),
+                                            BlockStateProvider.simple(Blocks.CHERRY_LOG.get().defaultBlockState()),
                                             new BigCherryTrunkPlacer(3, 11, 0),
-                                            BlockStateProvider.simple(BlockRegistryHandler.CHERRY_BLOSSOM.get()),
+                                            BlockStateProvider.simple(Blocks.CHERRY_BLOSSOM.get()),
                                             new BigCherryFoliagePlacer(ConstantInt.of(2), ConstantInt.of(4), 4),
                                             new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4))
                                     )
@@ -80,9 +78,9 @@ public class WorldGenEventRegistryHandler
                                             Feature.TREE,
                                             new TreeConfiguration.TreeConfigurationBuilder
                                                     (
-                                                            BlockStateProvider.simple(BlockRegistryHandler.MAPLE_LOG.get().defaultBlockState()),
+                                                            BlockStateProvider.simple(Blocks.MAPLE_LOG.get().defaultBlockState()),
                                                             new StraightTrunkPlacer(5, 2, 0),
-                                                            BlockStateProvider.simple(BlockRegistryHandler.MAPLE_LEAVES_RED.get().defaultBlockState()),
+                                                            BlockStateProvider.simple(Blocks.MAPLE_LEAVES_RED.get().defaultBlockState()),
                                                             new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
                                                             new TwoLayersFeatureSize(0, 0, 0, OptionalInt.of(4))
                                                     )
@@ -101,8 +99,8 @@ public class WorldGenEventRegistryHandler
                                 InSquarePlacement.spread(),
                                 TREE_THRESHOLD,
                                 PlacementUtils.HEIGHTMAP_OCEAN_FLOOR,
-                                PlacementUtils.filteredByBlockSurvival(BlockRegistryHandler.CHERRY_SAPLING.get()),
-                                BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(BlockRegistryHandler.CHERRY_SAPLING.get().defaultBlockState(), BlockPos.ZERO)),
+                                PlacementUtils.filteredByBlockSurvival(Blocks.CHERRY_SAPLING.get()),
+                                BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(Blocks.CHERRY_SAPLING.get().defaultBlockState(), BlockPos.ZERO)),
                                 BiomeFilter.biome()
                         );
     }
@@ -146,8 +144,8 @@ public class WorldGenEventRegistryHandler
     //                                 (
     //                                         new BaseTreeFeatureConfig.Builder
     //                                                 (
-    //                                                         new SimpleBlockStateProvider(BlockRegistryHandler.MAPLE_LOG.get().defaultBlockState()),
-    //                                                         new SimpleBlockStateProvider(BlockRegistryHandler.MAPLE_LEAVES_RED.get().defaultBlockState()),
+    //                                                         new SimpleBlockStateProvider(Blocks.MAPLE_LOG.get().defaultBlockState()),
+    //                                                         new SimpleBlockStateProvider(Blocks.MAPLE_LEAVES_RED.get().defaultBlockState()),
     //                                                         new BlobFoliagePlacer(FeatureSpread.fixed(2), FeatureSpread.fixed(0), 3),
     //                                                         new StraightTrunkPlacer(5, 2, 0),
     //                                                         new TwoLayerFeature(0, 0, 0, OptionalInt.of(4))

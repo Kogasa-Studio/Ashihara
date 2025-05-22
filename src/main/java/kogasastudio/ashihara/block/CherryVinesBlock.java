@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block;
 
+import kogasastudio.ashihara.registry.Blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -9,7 +10,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -43,13 +43,13 @@ public class CherryVinesBlock extends Block
     @Override
     public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos)
     {
-        return !stateIn.canSurvive(worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+        return !stateIn.canSurvive(worldIn, currentPos) ? net.minecraft.world.level.block.Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
     @Override
     public boolean canSurvive(BlockState state, LevelReader reader, BlockPos pos)
     {
-        return reader.getBlockState(pos.above()).is(BlockRegistryHandler.CHERRY_BLOSSOM.get()) || reader.getBlockState(pos.above()).is(this.asBlock());
+        return reader.getBlockState(pos.above()).is(Blocks.CHERRY_BLOSSOM.get()) || reader.getBlockState(pos.above()).is(this.asBlock());
     }
 
     @Override

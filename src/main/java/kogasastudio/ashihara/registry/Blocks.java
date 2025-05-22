@@ -1,12 +1,14 @@
-package kogasastudio.ashihara.block;
+package kogasastudio.ashihara.registry;
 
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.block.*;
+import kogasastudio.ashihara.block.CandleBlock;
+import kogasastudio.ashihara.block.LanternBlock;
 import kogasastudio.ashihara.block.building.*;
 import kogasastudio.ashihara.block.trees.TreeGrowers;
 import kogasastudio.ashihara.block.woodcraft.*;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
-import kogasastudio.ashihara.item.ItemRegistryHandler;
 import kogasastudio.ashihara.utils.AshiharaWoodTypes;
 import kogasastudio.ashihara.utils.WallTypes;
 import net.minecraft.core.BlockPos;
@@ -44,7 +46,7 @@ import java.util.List;
 import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 
 @SuppressWarnings("all")
-public class BlockRegistryHandler
+public class Blocks
 {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Ashihara.MODID);
 
@@ -54,9 +56,9 @@ public class BlockRegistryHandler
     public static final DeferredBlock<Block> TETSUSENCHI = BLOCKS.register("tetsusenchi", TetsusenchiBlock::new);
     public static final DeferredBlock<Block> RICE_DRYING_STICKS = BLOCKS.register("rice_drying_sticks", RiceDryingSticksBlock::new);
     public static final DeferredBlock<Block> CHERRY_SAPLING = BLOCKS.register("cherry_sapling", () -> new SaplingBlock(TreeGrowers.CHERRY_BLOSSOM, BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
-    public static final DeferredBlock<Block> POTTED_CHERRY_SAPLING = BLOCKS.register("potted_cherry_sapling", () -> new FlowerPotBlock(BlockRegistryHandler.CHERRY_SAPLING.get(), BlockBehaviour.Properties.of().instabreak().noOcclusion()));
+    public static final DeferredBlock<Block> POTTED_CHERRY_SAPLING = BLOCKS.register("potted_cherry_sapling", () -> new FlowerPotBlock(Blocks.CHERRY_SAPLING.get(), BlockBehaviour.Properties.of().instabreak().noOcclusion()));
     public static final DeferredBlock<Block> RED_MAPLE_SAPLING = BLOCKS.register("red_maple_sapling", () -> new SaplingBlock(TreeGrowers.RED_MAPLE, BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
-    public static final DeferredBlock<Block> POTTED_RED_MAPLE_SAPLING = BLOCKS.register("potted_red_maple_sapling", () -> new FlowerPotBlock(BlockRegistryHandler.RED_MAPLE_SAPLING.get(), BlockBehaviour.Properties.of().instabreak().noOcclusion()));
+    public static final DeferredBlock<Block> POTTED_RED_MAPLE_SAPLING = BLOCKS.register("potted_red_maple_sapling", () -> new FlowerPotBlock(Blocks.RED_MAPLE_SAPLING.get(), BlockBehaviour.Properties.of().instabreak().noOcclusion()));
     public static final DeferredBlock<Block> MORTAR = BLOCKS.register("mortar", MortarBlock::new);
     public static final DeferredBlock<Block> IMMATURE_RICE = BLOCKS.register("immature_rice", ImmatureRiceCropBlock::new);
     public static final DeferredBlock<Block> CHRYSANTHEMUM = BLOCKS.register("chrysanthemum", ChrysanthemumBushBlock::new);
@@ -106,8 +108,8 @@ public class BlockRegistryHandler
         protected List<ItemStack> getBonusResource()
         {
             ArrayList<ItemStack> list = new ArrayList<>();
-            list.add(new ItemStack(ItemRegistryHandler.SAKURA.get(), Ashihara.RANDOM.nextInt(1,2)));
-            list.add(new ItemStack(ItemRegistryHandler.SAKURA_PETAL.get(), Ashihara.RANDOM.nextInt(1,3)));
+            list.add(new ItemStack(Items.SAKURA.get(), Ashihara.RANDOM.nextInt(1, 2)));
+            list.add(new ItemStack(Items.SAKURA_PETAL.get(), Ashihara.RANDOM.nextInt(1, 3)));
             return list;
         }
     });
@@ -259,7 +261,7 @@ public class BlockRegistryHandler
     });
     public static final DeferredBlock<Block> LANTERN_LONG_WHITE = BLOCKS.register("lantern_long_white", MarkableHangingLanternBlock::new);
     public static final DeferredBlock<Block> LANTERN_LONG_RED = BLOCKS.register("lantern_long_red", MarkableHangingLanternBlock::new);
-    public static final DeferredBlock<Block> HOUSE_LIKE_HANGING_LANTERN = BLOCKS.register("house_like_hanging_lantern", () -> new LanternBlock.HangingLanternBlock
+    public static final DeferredBlock<Block> HOUSE_LIKE_HANGING_LANTERN = BLOCKS.register("house_like_hanging_lantern", () -> new kogasastudio.ashihara.block.LanternBlock.HangingLanternBlock
             (
                     BlockBehaviour.Properties.of()
                     .mapColor(MapColor.METAL)
@@ -322,7 +324,7 @@ public class BlockRegistryHandler
         @Override
         public Item getBeam()
         {
-            return ItemRegistryHandler.RED_THIN_BEAM.get();
+            return Items.RED_THIN_BEAM.get();
         }
     });
     public static final DeferredBlock<BaseMultiBuiltBlock> BAMBOO_BONES_COMPONENT = BLOCKS.register("bamboo_bones_component", BaseMultiBuiltBlock.ComponentMaterial.BAMBOO_BONES::createStandardBlock);
@@ -349,7 +351,7 @@ public class BlockRegistryHandler
         @Override
         protected ItemLike getBaseSeedId()
         {
-            return ItemRegistryHandler.SOY_BEAN.get();
+            return Items.SOY_BEAN.get();
         }
     });
     public static final DeferredBlock<Block> SWEET_POTATOES = BLOCKS.register("sweet_potatoes", () -> new AbstractCropAge7()
@@ -357,7 +359,7 @@ public class BlockRegistryHandler
         @Override
         protected ItemLike getBaseSeedId()
         {
-            return ItemRegistryHandler.SWEET_POTATO.get();
+            return Items.SWEET_POTATO.get();
         }
     });
     public static final DeferredBlock<Block> CUCUMBERS = BLOCKS.register("cucumbers", () -> new CucumberCropBlock()
@@ -365,7 +367,7 @@ public class BlockRegistryHandler
         @Override
         protected ItemLike getBaseSeedId()
         {
-            return ItemRegistryHandler.CUCUMBER.get();
+            return Items.CUCUMBER.get();
         }
     });
     public static final DeferredBlock<Block> STRIPPED_CHERRY_LOG = BLOCKS.register("stripped_cherry_log", SimpleLogBlock::new);

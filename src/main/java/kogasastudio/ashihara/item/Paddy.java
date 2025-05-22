@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.item;
 
-import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.registry.Blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
@@ -9,7 +9,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Objects;
@@ -32,9 +31,9 @@ public class Paddy extends Item
         if (!item.isEmpty() && Objects.requireNonNull(player).mayUseItemAt(pos.relative(facing), facing, item))
         {
             BlockState state = worldIn.getBlockState(pos.above());
-            if (state.getBlock() == Blocks.FARMLAND && worldIn.getBlockState(pos.above(2)).getBlock() == Blocks.AIR)
+            if (state.getBlock() == net.minecraft.world.level.block.Blocks.FARMLAND && worldIn.getBlockState(pos.above(2)).getBlock() == net.minecraft.world.level.block.Blocks.AIR)
             {
-                worldIn.setBlockAndUpdate(pos.above(2), BlockRegistryHandler.IMMATURE_RICE.get().defaultBlockState());
+                worldIn.setBlockAndUpdate(pos.above(2), Blocks.IMMATURE_RICE.get().defaultBlockState());
                 if (!player.isCreative())
                 {
                     item.shrink(1);

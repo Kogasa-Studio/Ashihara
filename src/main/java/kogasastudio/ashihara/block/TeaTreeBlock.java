@@ -36,7 +36,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.CommonHooks;
 
-import static kogasastudio.ashihara.item.ItemRegistryHandler.*;
+import static kogasastudio.ashihara.registry.Items.*;
 import static net.minecraft.world.item.Items.BONE_MEAL;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_AXIS;
 

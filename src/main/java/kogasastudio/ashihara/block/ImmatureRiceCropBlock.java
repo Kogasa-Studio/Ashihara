@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.registry.Items;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.CropBlock;
@@ -32,7 +32,7 @@ public class ImmatureRiceCropBlock extends CropBlock
     @Override
     protected ItemLike getBaseSeedId()
     {
-        return ItemRegistryHandler.PADDY.get();
+        return Items.PADDY.get();
     }
 
     @Override
@@ -47,11 +47,11 @@ public class ImmatureRiceCropBlock extends CropBlock
         List<ItemStack> list = new LinkedList<>();
         if (this.getAge(state) == 2)
         {
-            list.add(new ItemStack(ItemRegistryHandler.RICE_SEEDLING.get()));
+            list.add(new ItemStack(Items.RICE_SEEDLING.get()));
             return list;
         } else if (this.getAge(state) <= 1)
         {
-            list.add(new ItemStack(ItemRegistryHandler.PADDY.get()));
+            list.add(new ItemStack(Items.PADDY.get()));
             return list;
         } else
         {

@@ -3,7 +3,7 @@ package kogasastudio.ashihara.compat.jei.category;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.compat.jei.JeiPlugin;
 import kogasastudio.ashihara.interaction.recipes.CuttingBoardRecipe;
-import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.registry.Items;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -33,7 +33,7 @@ public class CuttingBoardRecipeCategory extends BaseRecipeCategory<CuttingBoardR
     public CuttingBoardRecipeCategory(IGuiHelper helper)
     {
         super(JeiPlugin.CUTTING_BOARD,
-                helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ItemRegistryHandler.CUTTING_BOARD.get())),
+                helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(Items.CUTTING_BOARD.get())),
                 helper.createDrawable(BACKGROUND, 0, 0, 176, 166 - 90));
     }
 

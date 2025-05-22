@@ -7,7 +7,7 @@ import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.blockentity.CharlotteBE;
 import kogasastudio.ashihara.block.blockentity.MortarBE;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
-import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.registry.Items;
 import kogasastudio.ashihara.utils.json.JsonUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -74,7 +74,7 @@ public class CharlotteBlock extends Block implements EntityBlock
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
-        if (stack.is(ItemRegistryHandler.RICE.asItem()) && level.isClientSide())
+        if (stack.is(Items.RICE.asItem()) && level.isClientSide())
         {
             CharlotteBE te = (CharlotteBE) level.getBlockEntity(pos);
             if (te != null)
@@ -91,14 +91,14 @@ public class CharlotteBlock extends Block implements EntityBlock
                 return ItemInteractionResult.SUCCESS;
             }
         }
-        if (stack.is(ItemRegistryHandler.CHISEL.asItem()) && level.isClientSide())
+        if (stack.is(Items.CHISEL.asItem()) && level.isClientSide())
         {
             final DynamicOps<JsonElement> dynamicOps = new ConditionalOps<>(RegistryOps.create(JsonOps.INSTANCE, level.registryAccess()), ICondition.IContext.EMPTY);
             MortarRecipe recipe = new MortarRecipe
             (
                 ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "chick"),
-                NonNullList.of(SizedIngredient.of(ItemStack.EMPTY.getItem(), 1), SizedIngredient.of(ItemTags.WOLF_FOOD, 4), SizedIngredient.of(ItemRegistryHandler.KOISHI, 1)),
-                NonNullList.of(ItemStack.EMPTY, ItemRegistryHandler.RICE.toStack(), ItemRegistryHandler.RICE.toStack(7)),
+                NonNullList.of(SizedIngredient.of(ItemStack.EMPTY.getItem(), 1), SizedIngredient.of(ItemTags.WOLF_FOOD, 4), SizedIngredient.of(Items.KOISHI, 1)),
+                NonNullList.of(ItemStack.EMPTY, Items.RICE.toStack(), Items.RICE.toStack(7)),
                 new FluidStack(Fluids.WATER.getSource(), 1000),
                 0,
                 new ConcurrentLinkedQueue<>(List.of(MortarBE.MortarToolType.PESTLE, MortarBE.MortarToolType.HAND, MortarBE.MortarToolType.OTSUCHI))

@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.block.building.ColumnBlock;
+import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.utils.AshiharaWoodTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,7 +19,6 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -88,7 +88,7 @@ public class AdvancedFenceBlock extends Block implements IVariable<AshiharaWoodT
 
     protected Block getExpansion()
     {
-        return Blocks.AIR;
+        return net.minecraft.world.level.block.Blocks.AIR;
     }
 
     public BlockState updateState(Level worldIn, BlockPos pos)
@@ -123,7 +123,7 @@ public class AdvancedFenceBlock extends Block implements IVariable<AshiharaWoodT
                         || ((nS && wS && !sS && !eS) || (nS && eS && !sS && !wS) || (sS && wS && !nS && !eS) || (sS && eS && !nS && !wS))
                         || (worldIn.getBlockState(pos.above()).isFaceSturdy(worldIn, pos.above(), Direction.DOWN))
                         || (up.getBlock() instanceof AdvancedFenceBlock)
-                        || (up.is(BlockRegistryHandler.GOLD_FENCE_DECORATION.get()) && up.getValue(ORB))
+                        || (up.is(Blocks.GOLD_FENCE_DECORATION.get()) && up.getValue(ORB))
         )
         {
             init = init.setValue(COLUMN, ColumnType.CORE);
@@ -169,7 +169,7 @@ public class AdvancedFenceBlock extends Block implements IVariable<AshiharaWoodT
         {
             if (hit.getDirection().equals(Direction.UP) && worldIn.getBlockState(pos.above()).isAir())
             {
-                BlockState deco = BlockRegistryHandler.GOLD_FENCE_DECORATION.get().defaultBlockState();
+                BlockState deco = Blocks.GOLD_FENCE_DECORATION.get().defaultBlockState();
 
                 if (state.getValue(COLUMN).equals(ColumnType.CORE)) deco = deco.setValue(ORB, true);
                 else if (state.getValue(NORTH) && state.getValue(SOUTH) && state.getValue(EAST) && state.getValue(WEST)) deco = deco.setValue(AXIS, Direction.Axis.Y);
@@ -199,7 +199,7 @@ public class AdvancedFenceBlock extends Block implements IVariable<AshiharaWoodT
                         && state.getValue(COLUMN).equals(ColumnType.CORE)
                         && !((worldIn.getBlockState(pos.above()).isFaceSturdy(worldIn, pos.above(), Direction.DOWN))
                         || (worldIn.getBlockState(pos.above()).getBlock() instanceof AdvancedFenceBlock)
-                        || (worldIn.getBlockState(pos.above()).is(BlockRegistryHandler.GOLD_FENCE_DECORATION.get()) && worldIn.getBlockState(pos.above()).getValue(ORB)))
+                        || (worldIn.getBlockState(pos.above()).is(Blocks.GOLD_FENCE_DECORATION.get()) && worldIn.getBlockState(pos.above()).getValue(ORB)))
         )
         {
             worldIn.setBlockAndUpdate(pos, this.updateState(worldIn, pos));

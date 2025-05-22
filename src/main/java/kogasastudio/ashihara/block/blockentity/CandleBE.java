@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.block.blockentity;
 
-import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.registry.BlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -17,7 +17,7 @@ import static kogasastudio.ashihara.helper.MathHelper.simplifyDouble;
 public class CandleBE extends AshiharaMachineBE
 {
     private final NonNullList<double[]> posList = NonNullList.create();
-    private final BlockState state = BlockRegistryHandler.CANDLE.get().defaultBlockState();
+    private final BlockState state = Blocks.CANDLE.get().defaultBlockState();
 
     public CandleBE(BlockPos pos, BlockState state)
     {

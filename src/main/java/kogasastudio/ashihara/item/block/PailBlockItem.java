@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.item.block;
 
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.registry.Blocks;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -19,7 +19,7 @@ public class PailBlockItem extends BlockItem
 {
     public PailBlockItem()
     {
-        super(BlockRegistryHandler.PAIL.get(), new Properties());
+        super(Blocks.PAIL.get(), new Properties());
     }
 
     @Override

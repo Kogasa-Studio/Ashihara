@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.item;
 
-import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.registry.Blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
@@ -9,7 +9,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Objects;
@@ -32,9 +31,9 @@ public class RiceSeedling extends Item
         if (!item.isEmpty() && Objects.requireNonNull(player).mayUseItemAt(pos.relative(facing), facing, item))
         {
             BlockState state = worldIn.getBlockState(pos.above());
-            if (state.is(BlockRegistryHandler.WATER_FIELD.get()) && worldIn.getBlockState(pos.above(2)).getBlock() == Blocks.AIR)
+            if (state.is(Blocks.WATER_FIELD.get()) && worldIn.getBlockState(pos.above(2)).getBlock() == net.minecraft.world.level.block.Blocks.AIR)
             {
-                worldIn.setBlockAndUpdate(pos.above(2), BlockRegistryHandler.RICE_CROP.get().defaultBlockState());
+                worldIn.setBlockAndUpdate(pos.above(2), Blocks.RICE_CROP.get().defaultBlockState());
                 if (!player.getAbilities().instabuild)
                 {
                     item.shrink(1);

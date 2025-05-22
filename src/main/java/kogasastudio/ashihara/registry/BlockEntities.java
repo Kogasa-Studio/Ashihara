@@ -1,7 +1,6 @@
 package kogasastudio.ashihara.registry;
 
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.block.BlockRegistryHandler;
 import kogasastudio.ashihara.block.blockentity.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -17,50 +16,50 @@ public class BlockEntities
                                                                                                                    () -> BlockEntityType.Builder.of
             (
             MarkableLanternBE::new,
-            BlockRegistryHandler.LANTERN_LONG_RED.get(),
-            BlockRegistryHandler.LANTERN_LONG_WHITE.get()
+            Blocks.LANTERN_LONG_RED.get(),
+            Blocks.LANTERN_LONG_WHITE.get()
             ).build(null));
 
     public static final Supplier<BlockEntityType<MortarBE>> MORTAR_BE = BLOCK_ENTITIES.register("mortar_be",
                                                                                                 () -> BlockEntityType.Builder.of
             (
             MortarBE::new,
-            BlockRegistryHandler.MORTAR.get()
+            Blocks.MORTAR.get()
             ).build(null));
 
     /*public static final Supplier<BlockEntityType<MillBE>> MILL_TE = TILE_ENTITIES.register("mill_blockentity",
             () -> BlockEntityType.Builder.of
                 (
                     MillBE::new,
-                    BlockRegistryHandler.MILL.get()
+                    Blocks.MILL.get()
                 ).build(null));*/
 
     public static final Supplier<BlockEntityType<PailBE>> PAIL_BE = BLOCK_ENTITIES.register("pail_blockentity",
                                                                                             () -> BlockEntityType.Builder.of
                 (
                 PailBE::new,
-                BlockRegistryHandler.PAIL.get()
+                Blocks.PAIL.get()
                 ).build(null));
 
     public static final Supplier<BlockEntityType<CandleBE>> CANDLE_BE = BLOCK_ENTITIES.register("candle_blockentity",
                                                                                                 () -> BlockEntityType.Builder.of
                 (
                 CandleBE::new,
-                BlockRegistryHandler.CANDLE.get()
+                Blocks.CANDLE.get()
                 ).build(null));
 
     public static final Supplier<BlockEntityType<CuttingBoardBE>> CUTTING_BOARD_BE = BLOCK_ENTITIES.register("cutting_board_blockentity",
                                                                                                              () -> BlockEntityType.Builder.of
                 (
                 CuttingBoardBE::new,
-                BlockRegistryHandler.CUTTING_BOARD.get()
+                Blocks.CUTTING_BOARD.get()
                 ).build(null));
 
     public static final Supplier<BlockEntityType<CharlotteBE>> CHARLOTTE_BE = BLOCK_ENTITIES.register("charlotte_blockentity",
                                                                                                       () -> BlockEntityType.Builder.of
                 (
                 CharlotteBE::new,
-                BlockRegistryHandler.CHARLOTTE.get()
+                Blocks.CHARLOTTE.get()
                 ).build(null));
 
     public static final Supplier<BlockEntityType<MultiBuiltBlockEntity>> MULTI_BUILT_BLOCKENTITY = BLOCK_ENTITIES.register
@@ -68,23 +67,23 @@ public class BlockEntities
         "multi_built_blockentity",
         () -> BlockEntityType.Builder.of
         (
-            MultiBuiltBlockEntity::new,
-            BlockRegistryHandler.BAMBOO_BONES_COMPONENT.get(),
-            BlockRegistryHandler.RAMMED_SOIL_COMPONENT.get(),
-            BlockRegistryHandler.WHITE_SOIL_COMPONENT.get(),
-            BlockRegistryHandler.WHITE_WOOD_COMPONENT.get(),
+        MultiBuiltBlockEntity::new,
+        Blocks.BAMBOO_BONES_COMPONENT.get(),
+        Blocks.RAMMED_SOIL_COMPONENT.get(),
+        Blocks.WHITE_SOIL_COMPONENT.get(),
+        Blocks.WHITE_WOOD_COMPONENT.get(),
 
-            BlockRegistryHandler.GREEN_WOOD_COMPONENT.get(),
-            BlockRegistryHandler.MULTI_BUILT_BLOCK.get(),
-            BlockRegistryHandler.SPRUCE_WOOD_COMPONENT.get(),
-            BlockRegistryHandler.RED_WOOD_COMPONENT.get(),
+        Blocks.GREEN_WOOD_COMPONENT.get(),
+        Blocks.MULTI_BUILT_BLOCK.get(),
+        Blocks.SPRUCE_WOOD_COMPONENT.get(),
+        Blocks.RED_WOOD_COMPONENT.get(),
 
-            BlockRegistryHandler.GOLD_DECO_COMPONENT.get(),
-            BlockRegistryHandler.GOLD_STRUCTURAL_COMPONENT.get(),
-            BlockRegistryHandler.STONE_COMPONENT.get(),
+        Blocks.GOLD_DECO_COMPONENT.get(),
+        Blocks.GOLD_STRUCTURAL_COMPONENT.get(),
+        Blocks.STONE_COMPONENT.get(),
 
-            BlockRegistryHandler.CYPRESS_SKIN_COMPONENT.get(),
-            BlockRegistryHandler.TERRACOTTA_TILE_COMPONENT.get()
+        Blocks.CYPRESS_SKIN_COMPONENT.get(),
+        Blocks.TERRACOTTA_TILE_COMPONENT.get()
         ).build(null)
     );
 
@@ -92,6 +91,6 @@ public class BlockEntities
             () -> BlockEntityType.Builder.of
                 (
                     MealTableTE::new,
-                    BlockRegistryHandler.MEAL_TABLE.get()
+                    Blocks.MEAL_TABLE.get()
                 ).build(null));*/
 }

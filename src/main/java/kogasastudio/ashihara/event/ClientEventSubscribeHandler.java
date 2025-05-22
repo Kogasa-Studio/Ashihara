@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.event;
 
-import kogasastudio.ashihara.block.BlockRegistryHandler;
+import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.registry.BlockEntities;
 import kogasastudio.ashihara.client.models.baked.PailModel;
 import kogasastudio.ashihara.client.particles.MapleLeafParticle;
@@ -10,7 +10,7 @@ import kogasastudio.ashihara.client.particles.SakuraParticle;
 import kogasastudio.ashihara.client.render.ister.PailISTER;
 import kogasastudio.ashihara.client.render.ter.*;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
-import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.registry.Items;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.particle.ParticleEngine;
@@ -58,42 +58,42 @@ public class ClientEventSubscribeHandler
     @SubscribeEvent
     public static void onRenderTypeSetup(FMLClientSetupEvent event)
     {
-        setRenderType(BlockRegistryHandler.RICE_CROP.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.IMMATURE_RICE.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.CHERRY_BLOSSOM.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.MAPLE_LEAVES_RED.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.CHERRY_SAPLING.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.RED_MAPLE_SAPLING.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.JINJA_LANTERN.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.STONE_LANTERN.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.BONBURI_LAMP.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.CANDLESTICK.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.OIL_PLATE_STICK.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.CHERRY_VINES.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.FALLEN_SAKURA.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.FALLEN_MAPLE_LEAVES_RED.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.POTTED_CHERRY_SAPLING.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.POTTED_RED_MAPLE_SAPLING.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.LANTERN_LONG_WHITE.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.LANTERN_LONG_RED.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.HOUSE_LIKE_HANGING_LANTERN.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.HEXAGONAL_HANGING_LANTERN.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.CHRYSANTHEMUM.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.WILD_RICE.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.REED.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.SHORTER_REED.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.HYDRANGEA_BUSH.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.TEA_TREE.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.GOLD_FENCE_DECORATION.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.RED_FENCE_EXPANSION.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.SPRUCE_FENCE_EXPANSION.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.SOY_BEANS.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.SWEET_POTATOES.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.CUCUMBERS.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.MEAL_TABLE.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.MORTAR.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.CHARLOTTE.get(), RenderType.cutoutMipped(), event);
-        setRenderType(BlockRegistryHandler.RICE_DRYING_STICKS.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.RICE_CROP.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.IMMATURE_RICE.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.CHERRY_BLOSSOM.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.MAPLE_LEAVES_RED.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.CHERRY_SAPLING.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.RED_MAPLE_SAPLING.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.JINJA_LANTERN.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.STONE_LANTERN.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.BONBURI_LAMP.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.CANDLESTICK.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.OIL_PLATE_STICK.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.CHERRY_VINES.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.FALLEN_SAKURA.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.FALLEN_MAPLE_LEAVES_RED.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.POTTED_CHERRY_SAPLING.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.POTTED_RED_MAPLE_SAPLING.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.LANTERN_LONG_WHITE.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.LANTERN_LONG_RED.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.HOUSE_LIKE_HANGING_LANTERN.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.HEXAGONAL_HANGING_LANTERN.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.CHRYSANTHEMUM.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.WILD_RICE.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.REED.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.SHORTER_REED.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.HYDRANGEA_BUSH.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.TEA_TREE.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.GOLD_FENCE_DECORATION.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.RED_FENCE_EXPANSION.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.SPRUCE_FENCE_EXPANSION.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.SOY_BEANS.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.SWEET_POTATOES.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.CUCUMBERS.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.MEAL_TABLE.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.MORTAR.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.CHARLOTTE.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.RICE_DRYING_STICKS.get(), RenderType.cutoutMipped(), event);
 
         setRenderType(FluidRegistryHandler.SOY_MILK.get(), RenderType.translucent(), event);
         setRenderType(FluidRegistryHandler.SOY_MILK_FLOWING.get(), RenderType.translucent(), event);
@@ -129,7 +129,7 @@ public class ClientEventSubscribeHandler
     public static void onModelBaked(ModelEvent.ModifyBakingResult event)
     {
         Map<ModelResourceLocation, BakedModel> modelRegistry = event.getModels();
-        ModelResourceLocation location = new ModelResourceLocation(ItemRegistryHandler.PAIL.getId(), "inventory");
+        ModelResourceLocation location = new ModelResourceLocation(Items.PAIL.getId(), "inventory");
         BakedModel existingModel = modelRegistry.get(location);
         if (existingModel == null)
         {
@@ -161,14 +161,14 @@ public class ClientEventSubscribeHandler
     {
         event.registerItem
         (
-            new IClientItemExtensions()
+        new IClientItemExtensions()
             {
                 @Override
                 public @NotNull BlockEntityWithoutLevelRenderer getCustomRenderer()
                 {
                     return new PailISTER(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
                 }
-            }, ItemRegistryHandler.PAIL.get()
+            }, Items.PAIL.get()
         );
 
         event.registerItem(new IClientItemExtensions() {
@@ -181,7 +181,7 @@ public class ClientEventSubscribeHandler
 //                return new SujikabutoModel(0.8F);
                 return IClientItemExtensions.super.getHumanoidArmorModel(livingEntity, itemStack, equipmentSlot, original);
             }
-        }, ItemRegistryHandler.SUJIKABUTO.get());
+        }, Items.SUJIKABUTO.get());
 
         event.registerFluidType(createClientFluidTypeExtension(FastColor.ARGB32.color(255, 255, 253, 225)), FluidRegistryHandler.AshiharaFluidTypes.TYPE_SOY_MILK.get());
         event.registerFluidType(createClientFluidTypeExtension(FastColor.ARGB32.color(255, 246, 223, 12)), FluidRegistryHandler.AshiharaFluidTypes.TYPE_OIL.get());

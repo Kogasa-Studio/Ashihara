@@ -2,7 +2,7 @@ package kogasastudio.ashihara.client.models.geo;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.item.Otsuchi;
-import kogasastudio.ashihara.item.ItemRegistryHandler;
+import kogasastudio.ashihara.registry.Items;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
@@ -45,7 +45,7 @@ public class PlayerProxyModel extends GeoModel<PlayerProxyModel> implements Sing
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
     {
-        controllers.add(new ProxiedPlayerAnimationController(this, TEST, h -> PlayState.STOP, p -> p.getOffhandItem().is(ItemRegistryHandler.CUCUMBER.get())).triggerableAnim(TEST, ANIM_TEST));
+        controllers.add(new ProxiedPlayerAnimationController(this, TEST, h -> PlayState.STOP, p -> p.getOffhandItem().is(Items.CUCUMBER.get())).triggerableAnim(TEST, ANIM_TEST));
         controllers.add(new ProxiedPlayerAnimationController(this, OTSUCHI_HOLD, h -> PlayState.STOP, p -> p.getMainHandItem().getItem() instanceof Otsuchi).triggerableAnim(OTSUCHI_HOLD, ANIM_OTSUCHI_HOLD));
         controllers.add(new ProxiedPlayerAnimationController(this, OTSUCHI_SMASH, h -> PlayState.STOP, p -> p.getMainHandItem().getItem() instanceof Otsuchi).triggerableAnim(OTSUCHI_SMASH, ANIM_OTSUCHI_SMASH));
     }
