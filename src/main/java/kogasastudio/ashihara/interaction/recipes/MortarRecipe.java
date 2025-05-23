@@ -31,8 +31,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarBE>
 {
-    public final NonNullList<SizedIngredient> input;
-    public final NonNullList<ItemStack> output;
+    private final NonNullList<SizedIngredient> input;
+    private final NonNullList<ItemStack> output;
     public final FluidStack fluidCost;
     //0: consume; other: produce
     public int fluidOpcode;
@@ -52,15 +52,16 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarBE>
         this.sequence = sequenceIn;
     }
 
-    public boolean testFluidOption(@Nullable FluidTank tank)
+    public int testFluidOption(@Nullable FluidTank tank, int multiplier, IFluidHandler.FluidAction action)
     {
-        if (fluidCost == null || fluidCost.isEmpty()) return true;
-        if (tank == null) return false;
-        if (fluidOpcode == 0) return tank.drain(fluidCost.copy(), IFluidHandler.FluidAction.SIMULATE).getAmount() >= fluidCost.getAmount();
+        if (fluidCost == null || fluidCost.isEmpty() || multiplier == 0) return multiplier;
+        if (tank == null) return 0;
+        FluidStack fluid = fluidCost.copyWithAmount(fluidCost.getAmount() * multiplier);
+        if (fluidOpcode == 0) return tank.drain(fluid, action).getAmount() / fluid.getAmount();
         else
         {
             if (fluidOpcode != 1) Ashihara.LOGGER_MAIN.warn("MortarRecipe fluid action defined incorrectly. Please define field 'fluid_action' to 'consume' or 'produce'. Related recipe: {}.", getId());
-            return tank.fill(fluidCost.copy(), IFluidHandler.FluidAction.SIMULATE) >= fluidCost.getAmount();
+            return tank.fill(fluid, action) / fluid.getAmount();
         }
     }
 
@@ -68,9 +69,9 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarBE>
     public boolean testBE(MortarBE be)
     {
         BEItemStackHandler<?> inv = be.inventory;
-        int multiplier = inv.testIngredients(this.getSizedIngredients(), be.getMaxParallel());
-        if (multiplier == 0) return false;
-        if (!testFluidOption(be.fluidTank)) return false;
+        int multiplier = inv.testIngredients(this.getSizedIngredients(), be.getMaxParallel(), true);
+        multiplier = testFluidOption(be.fluidTank, multiplier, IFluidHandler.FluidAction.SIMULATE);
+        if (multiplier < 1) return false;
         be.setMultiplier(multiplier);
         return true;
     }
@@ -101,12 +102,17 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarBE>
 
     public NonNullList<SizedIngredient> getSizedIngredients()
     {
-        return this.input;
+        return NonNullList.copyOf(this.input);
     }
 
     public NonNullList<ItemStack> getOutput()
     {
-        return this.output;
+        NonNullList<ItemStack> output = NonNullList.create();
+        for (ItemStack stack : this.output)
+        {
+            output.add(stack.copy());
+        }
+        return output;
     }
 
     public FluidStack getFluidCost()
@@ -131,12 +137,12 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarBE>
             mortarRecipeInstance ->
             mortarRecipeInstance.group
             (
-            ResourceLocation.CODEC.fieldOf("id").forGetter(MortarRecipe::getId),
-            NonNullList.codecOf(SizedIngredient.FLAT_CODEC).fieldOf("ingredients").forGetter(MortarRecipe::getSizedIngredients),
-            NonNullList.codecOf(ItemStack.CODEC).fieldOf("output").forGetter(MortarRecipe::getOutput),
-            FluidStack.CODEC.fieldOf("fluid").forGetter(MortarRecipe::getFluidCost),
-            Codec.STRING.xmap(s -> s.equals("consume") ? 0 : s.equals("produce") ? 1 : -1, i -> i == 0 ? "consume" : "produce").fieldOf("fluid_action").forGetter(MortarRecipe::getFluidOpcode),
-            MortarBE.MortarToolType.QUEUE_CODEC.fieldOf("sequence").forGetter(MortarRecipe::getSequence)
+                ResourceLocation.CODEC.fieldOf("id").forGetter(MortarRecipe::getId),
+                NonNullList.codecOf(SizedIngredient.FLAT_CODEC).fieldOf("ingredients").forGetter(MortarRecipe::getSizedIngredients),
+                NonNullList.codecOf(ItemStack.CODEC).fieldOf("output").forGetter(MortarRecipe::getOutput),
+                FluidStack.CODEC.optionalFieldOf("fluid", FluidStack.EMPTY).forGetter(MortarRecipe::getFluidCost),
+                Codec.STRING.xmap(s -> s.equals("consume") ? 0 : s.equals("produce") ? 1 : -1, i -> i == 0 ? "consume" : "produce").optionalFieldOf("fluid_action", 0).forGetter(MortarRecipe::getFluidOpcode),
+                MortarBE.MortarToolType.QUEUE_CODEC.fieldOf("sequence").forGetter(MortarRecipe::getSequence)
             ).apply(mortarRecipeInstance, MortarRecipe::new)
         );
         public static final StreamCodec<RegistryFriendlyByteBuf, MortarRecipe> STREAM_CODEC = StreamCodec.of(MortarRecipeSerializer::toNetwork, MortarRecipeSerializer::fromNetwork);
@@ -146,7 +152,12 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarBE>
             ResourceLocation id = ResourceLocation.STREAM_CODEC.decode(buffer);
             NonNullList<SizedIngredient> iListN = NonNullList.copyOf(SizedIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buffer));
             NonNullList<ItemStack> oListN = DataHelper.copyAndCast(ItemStack.LIST_STREAM_CODEC.decode(buffer));
-            FluidStack fCostN = FluidStack.STREAM_CODEC.decode(buffer);
+            FluidStack fCostN;
+            if (buffer.readBoolean())
+            {
+                fCostN = FluidStack.STREAM_CODEC.decode(buffer);
+            }
+            else fCostN = FluidStack.EMPTY;
             int fluidOpcodeN = buffer.readInt();
             Queue<MortarBE.MortarToolType> sequenceN = new ConcurrentLinkedQueue<>(DataHelper.copyAndCast(MortarBE.MortarToolType.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buffer)));
 
@@ -158,7 +169,12 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarBE>
             ResourceLocation.STREAM_CODEC.encode(buffer, recipe.getId());
             SizedIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buffer, recipe.getSizedIngredients());
             ItemStack.LIST_STREAM_CODEC.encode(buffer, recipe.getOutput());
-            FluidStack.STREAM_CODEC.encode(buffer, recipe.getFluidCost());
+            if (!recipe.getFluidCost().isEmpty())
+            {
+                buffer.writeBoolean(true);
+                FluidStack.STREAM_CODEC.encode(buffer, recipe.getFluidCost());
+            }
+            else buffer.writeBoolean(false);
             buffer.writeInt(recipe.fluidOpcode);
             MortarBE.MortarToolType.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buffer, NonNullList.copyOf(recipe.getSequence()));
             return buffer;

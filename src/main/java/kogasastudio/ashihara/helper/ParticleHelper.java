@@ -35,7 +35,7 @@ public class ParticleHelper
         }
     }
 
-    public static void spawnItemStackDestruction(Level level, ItemStack stack, Vec3 pos, int amount)
+    public static void spawnItemStackDestruction(Level level, ItemStack stack, Vec3 pos, int amount, double xMul, double yMul, double zMul)
     {
         RandomSource random = level.getRandom();
         ParticleOptions data = stack.getItem() instanceof BlockItem
@@ -49,11 +49,21 @@ public class ParticleHelper
                 pos.x(),
                 pos.y(),
                 pos.z(),
-                ((double) random.nextFloat() - 0.5D) * 0.2D,
-                ((double) random.nextFloat() - 0.5D) * 0.2D,
-                ((double) random.nextFloat() - 0.5D) * 0.2D
+                ((double) random.nextFloat() - 0.5D) * 0.2D * xMul,
+                ((double) random.nextFloat()) * 0.2D * yMul,
+                ((double) random.nextFloat() - 0.5D) * 0.2D * zMul
             );
         }
+    }
+
+    public static void spawnItemStackDestruction(Level level, ItemStack stack, Vec3 pos, int amount, double yMul)
+    {
+        spawnItemStackDestruction(level, stack, pos, amount, 1, yMul, 1);
+    }
+
+    public static void spawnItemStackDestruction(Level level, ItemStack stack, Vec3 pos, int amount)
+    {
+        spawnItemStackDestruction(level, stack, pos, amount, 1);
     }
 
     public static void drawAABB(AABB aabb, Level level)

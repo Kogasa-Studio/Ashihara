@@ -1,0 +1,26 @@
+{
+  "sequence": {
+    "queue": [
+      "pestle",
+      "pestle",
+      "pestle",
+      "pestle",
+      "pestle",
+      "pestle"
+    ]
+  },
+  "id": "ashihara:mortar_rice",
+  "ingredients": [
+    {
+      "item": "ashihara:brown_rice",
+      "count": 1
+    }
+  ],
+  "output": [
+    {
+      "id": "ashihara:rice",
+      "count": 1
+    }
+  ],
+  "type": "ashihara:mortar"
+}

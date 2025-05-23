@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "ashihara:paddy"
+    },
+    {
+      "item": "ashihara:paddy"
+    },
+    {
+      "item": "ashihara:paddy"
+    }
+  ],
+  "result": {
+    "id": "ashihara:paddy_pile",
+    "count": 1
+  }
+}

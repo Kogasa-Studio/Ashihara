@@ -89,6 +89,11 @@ public class MortarBlock extends Block implements EntityBlock
     public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         MortarBE te = (MortarBE) worldIn.getBlockEntity(pos);
+        boolean flag = false;
+        for (MortarBE.MortarToolType type : MortarBE.MortarToolType.values())
+        {
+            flag = (flag || type.is(stack)) && !stack.isEmpty();
+        }
         if (te != null)
         {
             te.pushLastLiquidLevel();
@@ -108,7 +113,7 @@ public class MortarBlock extends Block implements EntityBlock
                 te.refreshRecipe();
                 return ItemInteractionResult.SUCCESS;
             }
-            if (InventoryHelper.interactWithInventory(te.inventory, stack, player, handIn, 64))
+            if (!flag && InventoryHelper.interactWithInventory(te.inventory, stack, player, handIn, 64))
             {
                 player.getInventory().setChanged();
                 te.setChanged();

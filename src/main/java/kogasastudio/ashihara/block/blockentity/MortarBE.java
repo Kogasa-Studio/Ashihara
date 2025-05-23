@@ -53,6 +53,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.Predicate;
 
 import static net.minecraft.world.level.block.Block.UPDATE_ALL;
+import static net.minecraft.world.level.block.Block.popResource;
 
 public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IRenderInWorldToolTip
 {
@@ -87,6 +88,7 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
     public int progress = 0;
     public float productionMultiplier = 1.0f;
     public MortarRecipe currentRecipe;
+    public ResourceLocation lastRecipe;
     private Queue<MortarToolType> queue = new ConcurrentLinkedDeque<>();
     public BEItemStackHandler<MortarBE> inventory = new BEItemStackHandler<>(4, this);
 
@@ -146,11 +148,7 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
 
     public static IItemHandler getInv(MortarBE te, Direction side)
     {
-        if (side.getAxis().equals(Direction.Axis.Y))
-        {
-            return new RangedWrapper(te.inventory, 0, 4);
-        }
-        return null;
+        return new RangedWrapper(te.inventory, 0, 4);
     }
 
     public static IFluidHandler getFluid(MortarBE te, Direction side)
@@ -161,9 +159,19 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
     public void refreshRecipe()
     {
         if (this.level == null) return;
+        if (this.queue.isEmpty()) acceptRecipe(null);
         RecipeManager recipeManager =  this.level.getRecipeManager();
         List<RecipeHolder<MortarRecipe>> recipes = recipeManager.getAllRecipesFor(RecipeTypes.MORTAR.get());
-        Optional<RecipeHolder<MortarRecipe>> recipeOptional = recipes.stream().filter(h -> h.value().testBE(this)).findFirst();
+
+        Optional<RecipeHolder<MortarRecipe>> recipeOptional = Optional.empty();
+        boolean flag = true;
+        if (this.lastRecipe != null)
+        {
+            recipeOptional = recipes.stream().filter(h -> h.value().getId().equals(this.lastRecipe) && h.value().testBE(this)).findFirst();
+            if (recipeOptional.isPresent()) flag = false;
+        }
+        if (flag) recipeOptional = recipes.stream().filter(h -> h.value().testBE(this)).findFirst();
+
         if (recipeOptional.isPresent())
         {
             MortarRecipe recipe = recipeOptional.get().value();
@@ -176,6 +184,7 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
 
     public void acceptRecipe(MortarRecipe recipe)
     {
+        if (currentRecipe != null) lastRecipe = currentRecipe.getId();
         currentRecipe = recipe;
         this.progress = 0;
         if (recipe != null && this.queue.isEmpty()) queue = new ConcurrentLinkedDeque<>(currentRecipe.getSequence()).reversed();
@@ -185,11 +194,28 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
 
     public void finishRecipe(MortarRecipe recipe)
     {
+        if (recipe != null)
+        {
+            int multiplier = this.inventory.testIngredients(recipe.getSizedIngredients(), this.getMaxParallel(), false);
+            for (int i = 0; i < multiplier; i++)
+            {
+                List<ItemStack> remains = this.inventory.insert(recipe.getOutput(), false);
+                if (this.level != null)
+                {
+                    for (ItemStack stack : remains)
+                    {
+                        if (!stack.isEmpty()) popResource(this.level, this.worldPosition, stack);
+                    }
+                }
+            }
+            recipe.testFluidOption(this.fluidTank, multiplier, IFluidHandler.FluidAction.EXECUTE);
+        }
         acceptRecipe(null);
     }
 
     public boolean process(ItemStack stack)
     {
+        refreshRecipe();
         if (currentRecipe == null || this.queue.isEmpty() || this.level == null) return false;
         boolean flag = false;
         MortarToolType toolType = this.queue.peek();
@@ -197,11 +223,13 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
         {
             for (ItemStack i : currentRecipe.getOutput())
             {
-                ParticleHelper.spawnItemStackDestruction(this.level, i, new Vec3(this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 1, this.worldPosition.getZ() + 0.5), 5);
+                ParticleHelper.spawnItemStackDestruction(this.level, i, new Vec3(this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 0.3, this.worldPosition.getZ() + 0.5), 25, 1.5, 2, 1.5);
             }
             level.playSound(null, this.worldPosition, toolType.getSound(), SoundSource.BLOCKS, 1f, 1f);
             this.queue.poll();
+            if (this.queue.isEmpty()) finishRecipe(currentRecipe);
             flag = true;
+            setChanged();
         }
         return flag;
     }
@@ -215,6 +243,7 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
             holderOptional.ifPresent(recipeHolder -> this.currentRecipe = (MortarRecipe) recipeHolder.value());
             this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), UPDATE_ALL);
         }
+        this.lastRecipe = ResourceLocation.parse(tag.getString("lastRecipe"));
         this.inventory.deserializeNBT(registries, tag.getCompound("contents"));
         this.fluidTank = this.fluidTank.readFromNBT(registries, tag.getCompound("fluid"));
         this.queue = new ConcurrentLinkedDeque<>();
@@ -232,6 +261,7 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries)
     {
         tag.putString("currentRecipe", this.currentRecipe == null ? "" : this.currentRecipe.getId().toString());
+        tag.putString("lastRecipe", this.lastRecipe == null ? "" : this.lastRecipe.toString());
         tag.put("contents", this.inventory.serializeNBT(registries));
         tag.put("fluid", this.fluidTank.writeToNBT(registries, new CompoundTag()));
         ListTag listTag = new ListTag();
