@@ -1,0 +1,43 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north",
+        "fore_hind": "hind"
+      },
+      "apply": {
+        "model": "ashihara:block/dirt_cookstove"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "fore_hind": "hind"
+      },
+      "apply": {
+        "model": "ashihara:block/dirt_cookstove",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "fore_hind": "hind"
+      },
+      "apply": {
+        "model": "ashihara:block/dirt_cookstove",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "fore_hind": "hind"
+      },
+      "apply": {
+        "model": "ashihara:block/dirt_cookstove",
+        "y": 270
+      }
+    }
+  ]
+}

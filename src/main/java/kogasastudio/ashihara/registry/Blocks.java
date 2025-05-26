@@ -73,6 +73,7 @@ public class Blocks
     public static final DeferredBlock<Block> REED = BLOCKS.register("reed", ReedBlock::new);
     public static final DeferredBlock<Block> SHORTER_REED = BLOCKS.register("shorter_reed", ShorterReedBlock::new);
     public static final DeferredBlock<Block> MILL = BLOCKS.register("mill", MillBlock::new);
+    public static final DeferredBlock<Block> DIRT_COOKSTOVE = BLOCKS.register("dirt_cookstove", DirtCookStoveBlock::new);
     public static final DeferredBlock<Block> HYDRANGEA_BUSH = BLOCKS.register("hydrangea_bush", () -> new HydrangeaBushBlock(false));
     public static final DeferredBlock<Block> PAIL = BLOCKS.register("pail", PailBlock::new);
     public static final DeferredBlock<Block> TEA_TREE = BLOCKS.register("tea_tree", TeaTreeBlock::new);

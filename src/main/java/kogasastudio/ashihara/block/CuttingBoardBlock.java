@@ -30,6 +30,9 @@ public class CuttingBoardBlock extends Block implements EntityBlock
 {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
+    public static final VoxelShape X = box(2.0d, 0.0d, 1.0d, 14.0d, 1.0d, 15.0d);
+    public static final VoxelShape Z = box(1.0d, 0.0d, 2.0d, 15.0d, 1.0d, 14.0d);
+
     public CuttingBoardBlock()
     {
         super
@@ -82,10 +85,7 @@ public class CuttingBoardBlock extends Block implements EntityBlock
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
     {
-        VoxelShape x = box(2.0d, 0.0d, 1.0d, 14.0d, 1.0d, 15.0d);
-        VoxelShape z = box(1.0d, 0.0d, 2.0d, 15.0d, 1.0d, 14.0d);
-
-        return state.getValue(FACING).getAxis().equals(Direction.Axis.X) ? x : z;
+        return state.getValue(FACING).getAxis().equals(Direction.Axis.X) ? X : Z;
     }
 
     @Nullable

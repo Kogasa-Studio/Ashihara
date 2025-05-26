@@ -126,6 +126,7 @@ public class Items
     public static final DeferredItem<Item> RICE_DRYING_STICKS = ITEMS.register("rice_drying_sticks", () -> new BlockItem(Blocks.RICE_DRYING_STICKS.get(), new Item.Properties()));
     public static final DeferredItem<Item> MORTAR = ITEMS.register("mortar", () -> new BlockItem(Blocks.MORTAR.get(), new Item.Properties()));
     public static final DeferredItem<Item> MILL = ITEMS.register("mill", () -> new BlockItem(Blocks.MILL.get(), new Item.Properties()));
+    public static final DeferredItem<Item> DIRT_COOKSTOVE = ITEMS.register("dirt_cookstove", () -> new BlockItem(Blocks.DIRT_COOKSTOVE.get(), new Item.Properties()));
     public static final DeferredItem<Item> CHRYSANTHEMUM = ITEMS.register("chrysanthemum", () -> new BlockItem(Blocks.CHRYSANTHEMUM.get(), new Item.Properties()));
     public static final DeferredItem<Item> WILD_RICE = ITEMS.register("wild_rice", () -> new BlockItem(Blocks.WILD_RICE.get(), new Item.Properties()));
     public static final DeferredItem<Item> REED = ITEMS.register("reed", () -> new BlockItem(Blocks.REED.get(), new Item.Properties()));

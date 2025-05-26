@@ -23,15 +23,15 @@ public class DirtDepressionBlock extends Block implements SimpleWaterloggedBlock
     public DirtDepressionBlock()
     {
         super
-                (
-                        Properties.of()
-                                .mapColor(MapColor.DIRT)
-                                .strength(0.5F)
-                                // todo tag .harvestTool(ToolType.SHOVEL)
-                                // todo tag .harvestLevel(2)
-                                .sound(SoundType.GRAVEL)
-                                .noOcclusion()
-                );
+        (
+            Properties.of()
+            .mapColor(MapColor.DIRT)
+            .strength(0.5F)
+            // todo tag .harvestTool(ToolType.SHOVEL)
+            // todo tag .harvestLevel(2)
+            .sound(SoundType.GRAVEL)
+            .noOcclusion()
+        );
         this.registerDefaultState(this.getStateDefinition().any().setValue(WATERLOGGED, false));
     }
 

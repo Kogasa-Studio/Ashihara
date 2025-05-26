@@ -95,6 +95,7 @@ public class ClientEventSubscribeHandler
         setRenderType(Blocks.CHARLOTTE.get(), RenderType.cutoutMipped(), event);
         setRenderType(Blocks.RICE_DRYING_STICKS.get(), RenderType.cutoutMipped(), event);
         setRenderType(Blocks.TETSUSENCHI.get(), RenderType.cutoutMipped(), event);
+        setRenderType(Blocks.DIRT_COOKSTOVE.get(), RenderType.cutoutMipped(), event);
 
         setRenderType(FluidRegistryHandler.SOY_MILK.get(), RenderType.translucent(), event);
         setRenderType(FluidRegistryHandler.SOY_MILK_FLOWING.get(), RenderType.translucent(), event);
