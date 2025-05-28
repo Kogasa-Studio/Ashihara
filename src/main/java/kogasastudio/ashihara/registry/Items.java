@@ -42,6 +42,7 @@ public class Items
     public static final DeferredItem<Item> RICE = ITEMS.register("rice", AshiharaItem::new);
     public static final DeferredItem<Item> BROWN_RICE = ITEMS.register("brown_rice", AshiharaItem::new);
     public static final DeferredItem<Item> PESTLE = ITEMS.register("pestle", () -> new Item(new Item.Properties().durability(512)));
+    public static final DeferredItem<Item> POT_LID = ITEMS.register("pot_lid", AshiharaItem::new);
     public static final DeferredItem<Item> SUJIKABUTO = ITEMS.register("sujikabuto", SujikaButo::new);
 
     //食物
@@ -125,6 +126,7 @@ public class Items
     public static final DeferredItem<Item> TETSUSENCHI = ITEMS.register("tetsusenchi", () -> new BlockItem(Blocks.TETSUSENCHI.get(), new Item.Properties()));
     public static final DeferredItem<Item> RICE_DRYING_STICKS = ITEMS.register("rice_drying_sticks", () -> new BlockItem(Blocks.RICE_DRYING_STICKS.get(), new Item.Properties()));
     public static final DeferredItem<Item> MORTAR = ITEMS.register("mortar", () -> new BlockItem(Blocks.MORTAR.get(), new Item.Properties()));
+    public static final DeferredItem<Item> POT = ITEMS.register("pot", () -> new BlockItem(Blocks.POT.get(), new Item.Properties()));
     public static final DeferredItem<Item> MILL = ITEMS.register("mill", () -> new BlockItem(Blocks.MILL.get(), new Item.Properties()));
     public static final DeferredItem<Item> DIRT_COOKSTOVE = ITEMS.register("dirt_cookstove", () -> new BlockItem(Blocks.DIRT_COOKSTOVE.get(), new Item.Properties()));
     public static final DeferredItem<Item> CHRYSANTHEMUM = ITEMS.register("chrysanthemum", () -> new BlockItem(Blocks.CHRYSANTHEMUM.get(), new Item.Properties()));

@@ -161,6 +161,7 @@
   "item.ashihara.gold_pin_fin": "Gold Pin Fin",
   "item.ashihara.gold_roof_edge_planks_decoration": "Gold Roof Edge Planks Decoration",
   "item.ashihara.red_roof_edge_planks": "Red Roof Edge Planks",
+  "item.ashihara.pot_lid": "Pot Lid",
   "block.ashihara.water_field": "Water Field",
   "block.ashihara.dirt_depression": "Dirt Depression",
   "block.ashihara.immature_rice": "Immature Rice",
@@ -241,6 +242,7 @@
   "block.ashihara.wild_rice": "Wild Rice",
   "block.ashihara.rice_drying_sticks": "Rice Drying Sticks",
   "block.ashihara.multi_built_block": "Building Component",
+  "block.ashihara.pot": "Pot",
 
   "fluid.ashihara.soy_milk": "Soy Milk",
   "fluid.ashihara.soy_milk_flowing": "Flowing Soy Milk",

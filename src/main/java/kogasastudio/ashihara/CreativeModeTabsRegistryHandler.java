@@ -268,6 +268,8 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.TEA_SEED.get());
                                         output.accept(Items.PESTLE.get());
                                         output.accept(Items.DIRT_COOKSTOVE.get());
+                                        output.accept(Items.POT.get());
+                                        output.accept(Items.POT_LID.get());
                                         output.accept(Items.MILL.get());
                                         output.accept(Items.MORTAR.get());
                                         output.accept(Items.TETSUSENCHI.get());

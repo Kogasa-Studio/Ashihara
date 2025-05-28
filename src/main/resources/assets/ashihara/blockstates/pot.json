@@ -1,0 +1,38 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "on_stove": "false"
+      },
+      "apply": {
+        "model": "ashihara:block/pot"
+      }
+    },
+    {
+      "when": {
+        "on_stove": "false",
+        "has_lid": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/pot_lid"
+      }
+    },
+    {
+      "when": {
+        "on_stove": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/pot_on_stove"
+      }
+    },
+    {
+      "when": {
+        "on_stove": "true",
+        "has_lid": "true"
+      },
+      "apply": {
+        "model": "ashihara:block/pot_lid_on_stove"
+      }
+    }
+  ]
+}

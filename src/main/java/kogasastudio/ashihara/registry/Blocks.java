@@ -60,6 +60,7 @@ public class Blocks
     public static final DeferredBlock<Block> RED_MAPLE_SAPLING = BLOCKS.register("red_maple_sapling", () -> new SaplingBlock(TreeGrowers.RED_MAPLE, BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
     public static final DeferredBlock<Block> POTTED_RED_MAPLE_SAPLING = BLOCKS.register("potted_red_maple_sapling", () -> new FlowerPotBlock(Blocks.RED_MAPLE_SAPLING.get(), BlockBehaviour.Properties.of().instabreak().noOcclusion()));
     public static final DeferredBlock<Block> MORTAR = BLOCKS.register("mortar", MortarBlock::new);
+    public static final DeferredBlock<Block> POT = BLOCKS.register("pot", PotBlock::new);
     public static final DeferredBlock<Block> IMMATURE_RICE = BLOCKS.register("immature_rice", ImmatureRiceCropBlock::new);
     public static final DeferredBlock<Block> CHRYSANTHEMUM = BLOCKS.register("chrysanthemum", ChrysanthemumBushBlock::new);
     public static final DeferredBlock<Block> WILD_RICE = BLOCKS.register("wild_rice", () -> new ChrysanthemumBushBlock()
