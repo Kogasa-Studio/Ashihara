@@ -1,6 +1,5 @@
 package kogasastudio.ashihara.client.gui;
 
-import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import kogasastudio.ashihara.client.gui3d.Screen3D;
@@ -23,20 +22,13 @@ public class PotScreen extends Screen3D
         PoseStack pose = guiGraphics.pose();
         VertexConsumer bufferBuilder = guiGraphics.bufferSource().getBuffer(RenderType.lines());
         pose.pushPose();
-        guiGraphics.drawString(Minecraft.getInstance().font, "MouseX: "+mouseX()+"; MouseY: "+mouseY(), 0, 0, 0xffffff);
-        pose.pushPose();
-        bufferBuilder.addVertex(pose.last().pose(), 0, (float) mouseY(), 0).setColor(0xcff3fc);
-        bufferBuilder.addVertex(pose.last().pose(), 0, (float) mouseY(), 0).setColor(0xcff3fc);
-        bufferBuilder.addVertex(pose.last().pose(), this.width, (float) mouseY(), 0).setColor(0xcff3fc);
-        bufferBuilder.addVertex(pose.last().pose(), this.width, (float) mouseY(), 0).setColor(0xcff3fc);
-        pose.popPose();
+        bufferBuilder.addVertex(pose.last(), 0, (float) mouseY(), 0).setNormal(pose.last(), 1, 0, 0).setColor(0xffffffff);
+        bufferBuilder.addVertex(pose.last(), this.width, (float) mouseY(), 0).setNormal(pose.last(), 1, 0, 0).setColor(0xffffffff);
 
-        pose.pushPose();
-        bufferBuilder.addVertex(pose.last().pose(), (float) mouseX(), 0, 0).setColor(0xcff3fc);
-        bufferBuilder.addVertex(pose.last().pose(), (float) mouseX(), 0, 0).setColor(0xcff3fc);
-        bufferBuilder.addVertex(pose.last().pose(), (float) mouseX(), this.height, 0).setColor(0xcff3fc);
-        bufferBuilder.addVertex(pose.last().pose(), (float) mouseX(), this.height, 0).setColor(0xcff3fc);
-        pose.popPose();
+        bufferBuilder.addVertex(pose.last(), (float) mouseX(), 0, 0).setNormal(pose.last(), 0, 1, 0).setColor(0xffffffff);
+        bufferBuilder.addVertex(pose.last(), (float) mouseX(), this.height, 0).setNormal(pose.last(), 0, 1, 0).setColor(0xffffffff);
+
+        guiGraphics.drawString(Minecraft.getInstance().font, "MouseX: "+mouseX()+"; MouseY: "+mouseY(), 0, 0, 0xffffff);
         pose.popPose();
     }
 
