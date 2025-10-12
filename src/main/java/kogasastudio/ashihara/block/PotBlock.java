@@ -1,8 +1,10 @@
 package kogasastudio.ashihara.block;
 
+import kogasastudio.ashihara.client.gui.PotScreen;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.registry.Items;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -90,6 +92,11 @@ public class PotBlock extends Block
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
+        if (stack.isEmpty() && player.isShiftKeyDown())
+        {
+            if (level.isClientSide()) Minecraft.getInstance().setScreen(new PotScreen());
+            return ItemInteractionResult.SUCCESS;
+        }
         if (stack.isEmpty() && state.getValue(HAS_LID))
         {
             player.setItemInHand(hand, Items.POT_LID.toStack());

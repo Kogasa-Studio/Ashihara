@@ -5,6 +5,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Screen3D extends Screen
@@ -14,7 +15,7 @@ public abstract class Screen3D extends Screen
         super(title);
     }
 
-    protected List<AbstractComponent> components;
+    protected List<AbstractComponent> components = new ArrayList<>();
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)

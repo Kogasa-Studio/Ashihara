@@ -4,6 +4,7 @@ import kogasastudio.ashihara.client.models.geo.InternalControlGeoModel;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractComponent
@@ -14,7 +15,7 @@ public abstract class AbstractComponent
     }
 
     protected final Screen parent;
-    protected List<AbstractComponent> children;
+    protected List<AbstractComponent> children = new ArrayList<>();
     protected InternalControlGeoModel<?> model;
 
     public Screen getParent()
