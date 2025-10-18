@@ -25,7 +25,7 @@ public class ChrysanthemumBushBlock extends BushBlock implements IShearable
                         .noCollission()
                         .instabreak()
                         .sound(SoundType.GRASS)
-                        .offsetType(OffsetType.XZ)
+                        .offsetType(OffsetType.XYZ)
                 );
     }
 

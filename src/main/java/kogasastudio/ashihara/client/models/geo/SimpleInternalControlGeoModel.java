@@ -2,6 +2,7 @@ package kogasastudio.ashihara.client.models.geo;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.utils.mixin.GeoRendererPoseSyncProvider;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
@@ -36,6 +37,11 @@ public class SimpleInternalControlGeoModel extends InternalControlGeoModel<Simpl
     public void render(PoseStack stack, MultiBufferSource buffers, int light, int overlay)
     {
         this.RENDERER.render(stack, this, buffers, RENDER_TYPE, buffers.getBuffer(RENDER_TYPE), light, overlay);
+    }
+
+    public GeoRendererPoseSyncProvider getRendererPoseSync()
+    {
+        return (GeoRendererPoseSyncProvider) this.RENDERER;
     }
 
     public SimpleInternalControlGeoModel(String modelPrefix, String texturePrefix, Player player)

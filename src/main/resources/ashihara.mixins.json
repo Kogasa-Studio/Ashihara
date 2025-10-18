@@ -5,7 +5,9 @@
   "compatibilityLevel": "JAVA_21",
   "refmap": "ashihara.refmap.json",
   "mixins": [
-    "MixinPlayer"
+    "MixinPlayer",
+    "geckolib.MixinGeoObjectRenderer",
+    "geckolib.MixinGeoRenderer"
   ],
   "client": [
     "MixinLivingEntityRenderer",

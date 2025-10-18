@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.client.models.geo;
 
+import kogasastudio.ashihara.utils.mixin.GeoRendererPoseSyncProvider;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
