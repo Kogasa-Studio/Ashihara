@@ -1,7 +1,18 @@
 {
   "variants": {
-    "": {
-      "model": "ashihara:block/chrysanthemum"
-    }
+    "": [
+      {
+        "model": "ashihara:block/flos_eterna_0",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/flos_eterna_1",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/flos_eterna_2",
+        "weight": 1
+      }
+    ]
   }
 }
