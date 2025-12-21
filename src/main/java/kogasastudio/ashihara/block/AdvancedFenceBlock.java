@@ -19,11 +19,15 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -34,12 +38,13 @@ import static kogasastudio.ashihara.block.FenceDecorationBlock.AXIS;
 import static kogasastudio.ashihara.block.FenceDecorationBlock.ORB;
 import static kogasastudio.ashihara.block.FenceExpansionBlock.FACING;
 
-public class AdvancedFenceBlock extends Block implements IVariable<AshiharaWoodTypes>
+public class AdvancedFenceBlock extends Block implements SimpleWaterloggedBlock, IVariable<AshiharaWoodTypes>
 {
     public static final BooleanProperty NORTH = BooleanProperty.create("north");
     public static final BooleanProperty SOUTH = BooleanProperty.create("south");
     public static final BooleanProperty WEST = BooleanProperty.create("west");
     public static final BooleanProperty EAST = BooleanProperty.create("east");
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final EnumProperty<ColumnType> COLUMN = EnumProperty.create("column", ColumnType.class);
     public static AshiharaWoodTypes type;
 
@@ -53,8 +58,14 @@ public class AdvancedFenceBlock extends Block implements IVariable<AshiharaWoodT
                                 // todo tag .harvestTool(ToolType.AXE)
                                 .sound(SoundType.WOOD)
                 );
-        this.registerDefaultState(this.getStateDefinition().any().setValue(COLUMN, ColumnType.CORE));
+        this.registerDefaultState(this.defaultBlockState().setValue(COLUMN, ColumnType.CORE));
         type = typeIn;
+    }
+
+    @Override
+    public FluidState getFluidState(BlockState state)
+    {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
@@ -66,7 +77,7 @@ public class AdvancedFenceBlock extends Block implements IVariable<AshiharaWoodT
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(NORTH).add(SOUTH).add(WEST).add(EAST).add(COLUMN);
+        builder.add(NORTH, SOUTH, WEST, EAST, COLUMN, WATERLOGGED);
     }
 
     private boolean canConnect(Level world, BlockPos pos, Direction direction)

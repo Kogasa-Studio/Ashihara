@@ -17,5 +17,7 @@ public class ObbInterSector
         Vector4f dirWorld = new Vector4f(ray.direction(), 0.0f);  // Homogeneous coordinates (w==0)
         Vector4f dirLocal = new Vector4f(dirWorld).mul(invPose);  // local direction
         Vector3f rayDirLocal = new Vector3f(dirLocal.x, dirLocal.y, dirLocal.z).normalize();
+
+        return 0f;
     }
 }
