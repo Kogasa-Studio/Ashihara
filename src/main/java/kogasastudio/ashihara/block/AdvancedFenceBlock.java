@@ -58,7 +58,7 @@ public class AdvancedFenceBlock extends Block implements SimpleWaterloggedBlock,
                                 // todo tag .harvestTool(ToolType.AXE)
                                 .sound(SoundType.WOOD)
                 );
-        this.registerDefaultState(this.defaultBlockState().setValue(COLUMN, ColumnType.CORE));
+        this.registerDefaultState(this.defaultBlockState().setValue(COLUMN, ColumnType.CORE).setValue(WATERLOGGED, false));
         type = typeIn;
     }
 

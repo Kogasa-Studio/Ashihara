@@ -57,13 +57,13 @@ public class MarkableLanternTER implements BlockEntityRenderer<MarkableLanternBE
         buildMatrix(wth, builder, -0.25f, 0.25f, -0.2505f, 1,0, combinedOverlayIn, combinedLightIn);
         buildMatrix(wth, builder, -0.25f, -0.25f, -0.2505f, 1,1, combinedOverlayIn, combinedLightIn);
         buildMatrix(wth, builder, 0.25f, -0.25f, -0.2505f,0,1, combinedOverlayIn, combinedLightIn);
-        poseStackIn.popPose();*/
+        poseStackIn.popPose();
         poseStackIn.pushPose();
         poseStackIn.translate(0.5D, 0.5D, 0.5D);
         poseStackIn.scale(0.2F, 0.2F, 0.2F);
         renderRays(poseStackIn, bufferIn.getBuffer(RenderType.dragonRays()));
         renderRays(poseStackIn, bufferIn.getBuffer(RenderType.dragonRaysDepth()));
-        poseStackIn.popPose();
+        poseStackIn.popPose();*/
     }
 
     private static void renderRays(PoseStack poseStack, VertexConsumer buffer)

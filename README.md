@@ -30,3 +30,4 @@
 不管怎么说，先用起来就是。
 
 MC百科介绍链接：https://www.mcmod.cn/class/4444.html
+Regula Numeri Versionis: Magnum_Propositum.Stadium.Versio_Ludicra.Versio_in_Progressu

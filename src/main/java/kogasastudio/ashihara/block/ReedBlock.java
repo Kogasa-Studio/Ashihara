@@ -12,11 +12,12 @@ public class ReedBlock extends DoublePlantBlock implements IShearable
         super
                 (
                         Properties.of()
-                                .mapColor(MapColor.PLANT)
-                                .noCollission()
-                                .instabreak()
-                                .sound(SoundType.GRASS)
-                                .noOcclusion()
+                        .mapColor(MapColor.PLANT)
+                        .offsetType(OffsetType.XZ)
+                        .noCollission()
+                        .instabreak()
+                        .sound(SoundType.GRASS)
+                        .noOcclusion()
                 );
     }
 }

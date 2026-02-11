@@ -1,10 +1,28 @@
 {
-  "variants": {
-    "half=lower": {
-      "model": "ashihara:block/reed_bottom"
-    },
-    "half=upper": {
-      "model": "ashihara:block/reed_top"
+  "multipart": [
+    {
+      "when": {
+        "half": "lower"
+      },
+      "apply":
+      [
+        {
+          "model": "ashihara:block/reed_0",
+          "weight": 1
+        },
+        {
+          "model": "ashihara:block/reed_1",
+          "weight": 1
+        },
+        {
+          "model": "ashihara:block/reed_2",
+          "weight": 1
+        },
+        {
+          "model": "ashihara:block/reed_3",
+          "weight": 1
+        }
+      ]
     }
-  }
+  ]
 }

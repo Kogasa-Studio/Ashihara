@@ -1,0 +1,33 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+    "ambientocclusion": false,
+	"texture_size": [64, 64],
+	"textures": {
+        "0": "ashihara:block/reed",
+        "particle": "minecraft:block/azalea_leaves"
+	},
+	"elements": [
+		{
+			"from": [-5, 0, 8],
+			"to": [21, 32, 8],
+			"rotation": {"angle": -45, "axis": "y", "origin": [8, 0, 8]},
+            "shade": false,
+			"faces": {
+				"north": {"uv": [0.5, 8, 7, 16], "texture": "#0"},
+				"south": {"uv": [0.5, 8, 7, 16], "texture": "#0"}
+			}
+		},
+		{
+			"from": [-5, 0, 8],
+			"to": [21, 32, 8],
+			"rotation": {"angle": 45, "axis": "y", "origin": [8, 0, 8]},
+            "shade": false,
+			"faces": {
+				"north": {"uv": [0.5, 8, 7, 16], "texture": "#0"},
+				"south": {"uv": [0.5, 8, 7, 16], "texture": "#0"}
+			}
+		}
+	]
+}
