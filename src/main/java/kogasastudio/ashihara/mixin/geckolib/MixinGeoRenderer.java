@@ -24,7 +24,10 @@ public interface MixinGeoRenderer<T extends GeoAnimatable> extends GeoRendererPo
         {
             for (BoneTracer tracer : ashihara_1_21$getTracers())
             {
-                if (tracer.testBone(bone)) tracer.syncMatrix(poseStack.last().copy().pose());
+                if (tracer.testBone(bone))
+                {
+                    tracer.syncFromBone(bone, poseStack.last().copy().pose());
+                }
             }
         }
     }

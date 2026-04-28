@@ -1,0 +1,11 @@
+# ============================================================
+# src-refrences/ — 仅供本地开发阅读，不得随仓库分发
+# Minecraft 源码受 MICROSOFT 最终用户许可协议约束
+# NeoForge 源码受 LGPL-2.1 约束（headers retained in files）
+# GeckoLib 源码受 MIT 约束（headers retained in files）
+# 任何情况下均不得将这些文件提交或推送到公开仓库
+# ============================================================
+*
+!.gitignore
+!README.md
+

@@ -10,11 +10,16 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -394,6 +399,13 @@ public class RenderHelper
         buffer.addVertex(pose, 0, 0, -length).setNormal(pose, 0, 0, -1).setColor(0xff5f00ff);
         buffer.addVertex(pose, 0, 0, length).setNormal(pose, 0, 0, 1).setColor(0xff5fffff);
         BUFFER_SOURCE.endLastBatch();
+    }
+
+    public static void renderItem(PoseStack poseStack, MultiBufferSource bufferSource, ItemStack itemStack)
+    {
+        ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+        BakedModel itemModel = itemRenderer.getModel(itemStack, null, null, 0);
+        Minecraft.getInstance().getItemRenderer().render(itemStack, ItemDisplayContext.FIXED, false, poseStack, bufferSource, 15728880, OverlayTexture.NO_OVERLAY, itemModel);
     }
 
     public static final SimpleInternalControlGeoModel INDICATOR = new SimpleInternalControlGeoModel("geo/assistance/indicator.geo.json", "textures/geo/indicator.png", Minecraft.getInstance().player);

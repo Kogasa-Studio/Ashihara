@@ -3,6 +3,7 @@ package kogasastudio.ashihara;
 import com.mojang.logging.LogUtils;
 import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.registry.BlockEntities;
+import kogasastudio.ashihara.registry.MenuTypes;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.registry.Items;
@@ -42,6 +43,7 @@ public class Ashihara
         SoundEvents.SOUNDS.register(modEventBus);
         ParticleRegistryHandler.PARTICLE_TYPES.register(modEventBus);
         BlockEntities.BLOCK_ENTITIES.register(modEventBus);
+        MenuTypes.MENU_TYPES.register(modEventBus);
 //        GLMRegistryHandler.MODIFIERS.register(bus);
 
 //        BiomeRegistryHandler.BIOMES.register(bus);

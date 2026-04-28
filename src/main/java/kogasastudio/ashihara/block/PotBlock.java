@@ -1,10 +1,9 @@
 package kogasastudio.ashihara.block;
 
-import kogasastudio.ashihara.client.gui.PotScreen;
+import kogasastudio.ashihara.block.blockentity.PotBlockEntity;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.registry.Items;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -15,7 +14,11 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -26,7 +29,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
-public class PotBlock extends Block
+public class PotBlock extends Block implements EntityBlock
 {
     public static final VoxelShape NORMAL = Shapes.or
     (
@@ -92,9 +95,13 @@ public class PotBlock extends Block
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
-        if (stack.isEmpty() && player.isShiftKeyDown())
+        if (stack.isEmpty() && !player.isShiftKeyDown())
         {
-            if (level.isClientSide()) Minecraft.getInstance().setScreen(new PotScreen());
+            // 服务端发起 openMenu，客户端通过 RegisterMenuScreensEvent 绑定收到 OpenScreen 包后自动打开 PotScreen
+            if (!level.isClientSide() && level.getBlockEntity(pos) instanceof PotBlockEntity be)
+            {
+                player.openMenu(be, buf -> buf.writeBlockPos(pos));
+            }
             return ItemInteractionResult.SUCCESS;
         }
         if (stack.isEmpty() && state.getValue(HAS_LID))
@@ -117,5 +124,39 @@ public class PotBlock extends Block
     {
         builder.add(HAS_LID);
         builder.add(ON_STOVE);
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+    {
+        return new PotBlockEntity(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
+    {
+        if (level.isClientSide()) return null;
+        return (lvl, pos, st, be) ->
+        {
+            if (be instanceof PotBlockEntity potBE)
+            {
+                PotBlockEntity.serverTick(lvl, pos, st, potBE);
+            }
+        };
+    }
+
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston)
+    {
+        if (!state.is(newState.getBlock()))
+        {
+            if (level.getBlockEntity(pos) instanceof PotBlockEntity potBE)
+            {
+                potBE.dropContents(level, pos);
+            }
+        }
+        super.onRemove(state, level, pos, newState, movedByPiston);
     }
 }

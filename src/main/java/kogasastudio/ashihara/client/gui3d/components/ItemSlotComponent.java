@@ -1,0 +1,157 @@
+package kogasastudio.ashihara.client.gui3d.components;
+
+import kogasastudio.ashihara.client.gui3d.ContainerScreen3D;
+import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
+import kogasastudio.ashihara.client.gui3d.util.OBB;
+import kogasastudio.ashihara.client.models.geo.SelectionFrameModel;
+import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
+import kogasastudio.ashihara.helper.RenderHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * 物品槽位组件。
+ *
+ * <p>每个实例绑定：
+ * <ul>
+ *   <li>一个来自父级 Model 的骨骼（{@code boneName}），用于定位渲染位置和碰撞盒</li>
+ *   <li>一个 {@link Slot}（来自 Menu），用于读取物品和发送交互</li>
+ * </ul>
+ *
+ * <p>交互逻辑：
+ * <ul>
+ *   <li>左键（无 Shift）→ {@link ClickType#PICKUP}，button=0（拾取/放置/交换）</li>
+ *   <li>右键           → {@link ClickType#PICKUP}，button=1（分半放置）</li>
+ *   <li>Shift+左键     → {@link ClickType#QUICK_MOVE}，button=0（快速转移）</li>
+ * </ul>
+ */
+public class ItemSlotComponent extends ModelComponent implements ISelectable
+{
+    /** 渲染 3D 物品时的缩放系数（在骨骼局部空间中）。可在实例上直接赋值覆盖。 */
+    public float itemRenderScale = 8.0f;
+
+    protected final String boneName;
+    protected final Slot menuSlot;
+    protected final SelectionFrameComponent selectionFrame;
+
+    /**
+     * @param model     父级 ModelComponent 持有的 GeoModel 实例（共享引用，用于骨骼追踪）
+     * @param boneName  要绑定的骨骼名称，例如 {@code "item_slot_0"}
+     * @param menuSlot  对应 Menu 中的 {@link Slot}，用于读写物品和提供 slotId
+     */
+    public ItemSlotComponent(SimpleInternalControlGeoModel model, String boneName, Slot menuSlot)
+    {
+        super(model);
+        this.boneName = boneName;
+        this.menuSlot = menuSlot;
+        this.interactionPriority = 50;
+
+        // 预先绑定骨骼，使 ModelComponent.init() 能在首次渲染前注册到 rendererPoseSync
+        this.bindBone(boneName);
+
+        SelectionFrameModel frameModel = new SelectionFrameModel(
+                "geo/assistance/cubic_selection_frame.geo.json",
+                "textures/geo/highlight_outline.png",
+                Minecraft.getInstance().player
+        );
+        this.selectionFrame = new SelectionFrameComponent(frameModel);
+    }
+
+    // ── 生命周期 ─────────────────────────────────────────────────────────────
+
+    @Override
+    public void init()
+    {
+        super.init();
+        this.addChild(selectionFrame);
+    }
+
+    // ── 碰撞盒 ───────────────────────────────────────────────────────────────
+
+    @Override
+    public List<OBB> getCollisionBoxes()
+    {
+        BoneTracer tracer = this.boneTracers.get(this.boneName);
+        if (tracer == null) return Collections.emptyList();
+        List<OBB> boxes = tracer.collisionBoxes();
+        return boxes.isEmpty() ? Collections.emptyList() : boxes;
+    }
+
+    // ── 渲染 ─────────────────────────────────────────────────────────────────
+
+    @Override
+    protected void renderSelf(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+    {
+        super.renderSelf(guiGraphics, mouseX, mouseY, partialTick);
+
+        ItemStack stack = this.menuSlot.getItem();
+        if (stack.isEmpty()) return;
+
+        BoneTracer tracer = this.boneTracers.get(this.boneName);
+        if (tracer == null || tracer.collisionBoxes().isEmpty()) return;
+
+        OBB obb = tracer.collisionBoxes().get(0);
+
+        var poseStack = guiGraphics.pose();
+        poseStack.pushPose();
+        poseStack.mulPose(obb.pose());
+        poseStack.scale(this.itemRenderScale, this.itemRenderScale, this.itemRenderScale);
+        poseStack.translate(-0.5, -0.5, -0.5);
+
+        RenderHelper.renderItem(poseStack, guiGraphics.bufferSource(), stack);
+
+        poseStack.popPose();
+    }
+
+    // ── 交互 ─────────────────────────────────────────────────────────────────
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button)
+    {
+        super.mouseClicked(mouseX, mouseY, button);
+        if (!(this.screen instanceof ContainerScreen3D<?> cs)) return false;
+
+        ClickType clickType = (button == 0 && Screen.hasShiftDown())
+                ? ClickType.QUICK_MOVE
+                : ClickType.PICKUP;
+
+        cs.sendSlotClick(this.menuSlot.index, button, clickType);
+        return true;
+    }
+
+    // ── 悬停钩子 ─────────────────────────────────────────────────────────────
+
+    @Override
+    protected void onHoverEnter()
+    {
+        List<OBB> boxes = this.getCollisionBoxes();
+        if (!boxes.isEmpty()) this.selectionFrame.onHoverEnter(boxes);
+    }
+
+    @Override
+    protected void onHoverExit()
+    {
+        this.selectionFrame.onHoverExit();
+    }
+
+    // ── ISelectable ───────────────────────────────────────────────────────────
+
+    @Override
+    public SelectionFrameComponent getSelectionFrame()
+    {
+        return this.selectionFrame;
+    }
+
+    // ── 访问器 ────────────────────────────────────────────────────────────────
+
+    public Slot     getMenuSlot()  { return this.menuSlot; }
+    public int      getSlotIndex() { return this.menuSlot.index; }
+    public ItemStack getStack()    { return this.menuSlot.getItem(); }
+}

@@ -1,6 +1,8 @@
 package kogasastudio.ashihara.client.models.geo;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import kogasastudio.ashihara.utils.mixin.GeoRendererPoseSyncProvider;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
@@ -14,6 +16,7 @@ import software.bernie.geckolib.animation.keyframe.event.data.SoundKeyframeData;
 import software.bernie.geckolib.loading.math.MathValue;
 import software.bernie.geckolib.loading.math.value.Constant;
 import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.renderer.GeoObjectRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +25,13 @@ public abstract class InternalControlGeoModel<T extends SingletonGeoAnimatable> 
 {
     public Animation triggeredInternal;
     public static final RawAnimation INTERNAL = RawAnimation.begin().thenPlay("internal");
+
+    public final GeoObjectRenderer<T> RENDERER = new GeoObjectRenderer<>(this);
+
+    public GeoRendererPoseSyncProvider getRendererPoseSync()
+    {
+        return (GeoRendererPoseSyncProvider) this.RENDERER;
+    }
 
     @Override
     public @Nullable Animation getAnimation(T animatable, String name)
@@ -43,7 +53,7 @@ public abstract class InternalControlGeoModel<T extends SingletonGeoAnimatable> 
         controllers.add(new AnimationController<>(this, "internal", animationState -> PlayState.STOP).triggerableAnim("internal", INTERNAL));
     }
 
-    public Animation lerpTo()
+    public Animation lerpTest()
     {
         return new InternalAnimationBuilder("in", Animation.LoopType.HOLD_ON_LAST_FRAME)
         .startBone("cat")

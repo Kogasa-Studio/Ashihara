@@ -89,16 +89,16 @@ public class MortarTER implements BlockEntityRenderer<MortarBE>, WithLevelRender
     public void renderStatic(SectionRenderContext context, ModelRenderer renderer)
     {
         PoseStack poseStack = context.poseStack();
-        MortarBE te = (MortarBE) context.blockEntity();
-        syncItem(te.inventory);
+        MortarBE blockEntity = (MortarBE) context.blockEntity();
+        syncItem(blockEntity.inventory);
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-        if (te.item_display_positions == null) te.init(Minecraft.getInstance().player);
+        if (blockEntity.item_display_positions == null) blockEntity.init(Minecraft.getInstance().player);
         for (int i = 0; i < items.keySet().size(); i++)
         {
             ItemStack itemStack = items.get(i);
             if (itemStack == null) continue;
-            BakedModel model = itemRenderer.getModel(itemStack.copyWithCount(1), te.getLevel(), null, 0);
-            te.item_display_positions.getBakedModel(te.item_display_positions.getModelResource(te.item_display_positions)).getBone("level" + i).ifPresent
+            BakedModel model = itemRenderer.getModel(itemStack.copyWithCount(1), blockEntity.getLevel(), null, 0);
+            blockEntity.item_display_positions.getBakedModel(blockEntity.item_display_positions.getModelResource(blockEntity.item_display_positions)).getBone("level" + i).ifPresent
             (
                 bone ->
                 {
@@ -123,16 +123,16 @@ public class MortarTER implements BlockEntityRenderer<MortarBE>, WithLevelRender
                 }
             );
         }
-        if (!te.switchFluid.doRender() && !te.fluidTank.isEmpty())
+        if (!blockEntity.switchFluid.doRender() && !blockEntity.fluidTank.isEmpty())
         {
             poseStack.pushPose();
-            resetToBlock000(te, RenderType.translucent(), poseStack);
+            resetToBlock000(blockEntity, RenderType.translucent(), poseStack);
             RenderHelper.renderLeveledFluidStack
             (
-            te.fluidTank.getFluid(), poseStack, context.consumerFunction().apply(RenderType.translucent()),
-            LevelRenderer.getLightColor(te.getLevel(), te.getBlockPos()), OverlayTexture.NO_OVERLAY,
-            4 / 16f, (float) (te.getLiquidLevel() / 16f), 4 / 16f,
-            12 / 16f, 12 / 16f, te.getLevel(), te.getBlockPos()
+            blockEntity.fluidTank.getFluid(), poseStack, context.consumerFunction().apply(RenderType.translucent()),
+            LevelRenderer.getLightColor(blockEntity.getLevel(), blockEntity.getBlockPos()), OverlayTexture.NO_OVERLAY,
+            4 / 16f, (float) (blockEntity.getLiquidLevel() / 16f), 4 / 16f,
+            12 / 16f, 12 / 16f, blockEntity.getLevel(), blockEntity.getBlockPos()
             );
             poseStack.popPose();
         }

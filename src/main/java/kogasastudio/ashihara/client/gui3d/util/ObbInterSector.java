@@ -16,8 +16,69 @@ public class ObbInterSector
 
         Vector4f dirWorld = new Vector4f(ray.direction(), 0.0f);  // Homogeneous coordinates (w==0)
         Vector4f dirLocal = new Vector4f(dirWorld).mul(invPose);  // local direction
-        Vector3f rayDirLocal = new Vector3f(dirLocal.x, dirLocal.y, dirLocal.z).normalize();
+        Vector3f rayDirLocal = new Vector3f(dirLocal.x, dirLocal.y, dirLocal.z).normalize();// 4. 局部空间中，OBB是轴对齐的AABB（范围：minXYZ ~ maxXYZ）
+        Vector3f aabbMin = obb.minXYZ();
+        Vector3f aabbMax = obb.maxXYZ();
 
-        return 0f;
+        // 5. 对局部AABB应用Slabs算法计算相交
+        float tMin = -Float.MAX_VALUE;
+        float tMax = Float.MAX_VALUE;
+
+        // 检查X轴
+        if (Math.abs(rayDirLocal.x) < 1e-6f) {  // 射线平行于X轴
+            if (rayOriginLocal.x < aabbMin.x || rayOriginLocal.x > aabbMax.x) {
+                return -1;  // 原点不在X范围内，无交集
+            }
+        } else {
+            float t1 = (aabbMin.x - rayOriginLocal.x) / rayDirLocal.x;
+            float t2 = (aabbMax.x - rayOriginLocal.x) / rayDirLocal.x;
+            if (t1 > t2) {  // 确保t1是较小值
+                float temp = t1;
+                t1 = t2;
+                t2 = temp;
+            }
+            tMin = Math.max(tMin, t1);  // 进入AABB的最大t
+            tMax = Math.min(tMax, t2);  // 离开AABB的最小t
+        }
+
+        // 检查Y轴（同X轴逻辑）
+        if (Math.abs(rayDirLocal.y) < 1e-6f) {
+            if (rayOriginLocal.y < aabbMin.y || rayOriginLocal.y > aabbMax.y) {
+                return -1;
+            }
+        } else {
+            float t1 = (aabbMin.y - rayOriginLocal.y) / rayDirLocal.y;
+            float t2 = (aabbMax.y - rayOriginLocal.y) / rayDirLocal.y;
+            if (t1 > t2) {
+                float temp = t1;
+                t1 = t2;
+                t2 = temp;
+            }
+            tMin = Math.max(tMin, t1);
+            tMax = Math.min(tMax, t2);
+        }
+
+        // 检查Z轴（同X轴逻辑）
+        if (Math.abs(rayDirLocal.z) < 1e-6f) {
+            if (rayOriginLocal.z < aabbMin.z || rayOriginLocal.z > aabbMax.z) {
+                return -1;
+            }
+        } else {
+            float t1 = (aabbMin.z - rayOriginLocal.z) / rayDirLocal.z;
+            float t2 = (aabbMax.z - rayOriginLocal.z) / rayDirLocal.z;
+            if (t1 > t2) {
+                float temp = t1;
+                t1 = t2;
+                t2 = temp;
+            }
+            tMin = Math.max(tMin, t1);
+            tMax = Math.min(tMax, t2);
+        }
+
+        // 6. 判断有效交集（t>0表示在射线前方）
+        if (tMin < tMax && tMax > 0) {
+            return Math.max(tMin, 0f);  // 取t≥0（射线起点在OBB内部时t为负）
+        }
+        return -1;
     }
 }

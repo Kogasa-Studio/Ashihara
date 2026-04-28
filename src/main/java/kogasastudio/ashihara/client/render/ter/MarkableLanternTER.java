@@ -118,4 +118,10 @@ public class MarkableLanternTER implements BlockEntityRenderer<MarkableLanternBE
     {
         return true;
     }
+
+    @Override
+    public int getViewDistance()
+    {
+        return BlockEntityRenderer.super.getViewDistance();
+    }
 }

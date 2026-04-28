@@ -3,6 +3,8 @@ package kogasastudio.ashihara.event;
 import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.registry.BlockEntities;
 import kogasastudio.ashihara.client.models.baked.PailModel;
+import kogasastudio.ashihara.client.gui.PotScreen;
+import kogasastudio.ashihara.registry.MenuTypes;
 import kogasastudio.ashihara.client.particles.MapleLeafParticle;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.client.particles.RiceParticle;
@@ -11,8 +13,7 @@ import kogasastudio.ashihara.client.render.ister.PailISTER;
 import kogasastudio.ashihara.client.render.ter.*;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.registry.Items;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.Minecraft;import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -32,6 +33,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
@@ -148,13 +150,10 @@ public class ClientEventSubscribeHandler
 
     //绑定GUI
     @SubscribeEvent
-    public static void onScreenBind(FMLClientSetupEvent event)
+    public static void onRegisterMenuScreens(RegisterMenuScreensEvent event)
     {
-        event.enqueueWork(() ->
-        {
-            //MenuScreens.register(ContainerRegistryHandler.MILL_CONTAINER.get(), MillScreen::new);
-            //MenuScreens.register(ContainerRegistryHandler.MORTAR_CONTAINER.get(), MortarScreen::new);
-        });
+        // 土锅 3D 容器屏幕
+        event.register(MenuTypes.POT_MENU.get(), PotScreen::new);
     }
 
     // Register client extensions, changed due to the deprecation of initializeClient in NeoForge 1.21.

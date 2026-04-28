@@ -27,6 +27,9 @@ public class BlockEntities
             Blocks.MORTAR.get()
             ).build(null));
 
+    public static final Supplier<BlockEntityType<PotBlockEntity>> POT_BE = BLOCK_ENTITIES.register("pot_be",
+            () -> BlockEntityType.Builder.of(PotBlockEntity::new, Blocks.POT.get()).build(null));
+
     /*public static final Supplier<BlockEntityType<MillBE>> MILL_TE = TILE_ENTITIES.register("mill_blockentity",
             () -> BlockEntityType.Builder.of
                 (

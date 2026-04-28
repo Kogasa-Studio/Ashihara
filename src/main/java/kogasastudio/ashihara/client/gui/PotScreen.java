@@ -1,73 +1,69 @@
 package kogasastudio.ashihara.client.gui;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
-import kogasastudio.ashihara.client.gui3d.Screen3D;
-import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
-import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
-import kogasastudio.ashihara.helper.RenderHelper;
-import net.minecraft.client.Minecraft;
+import kogasastudio.ashihara.client.gui3d.ContainerScreen3D;
+import kogasastudio.ashihara.client.gui3d.components.ItemSlotComponent;
+import kogasastudio.ashihara.client.gui3d.components.PotLidComponent;
+import kogasastudio.ashihara.client.gui3d.components.PotModelComponent;
+import kogasastudio.ashihara.inventory.container.PotMenu;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
-import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.util.RenderUtil;
+import net.minecraft.world.entity.player.Inventory;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class PotScreen extends Screen3D
+/**
+ * 土锅 3D 容器屏幕。
+ *
+ * <p>职责：
+ * <ul>
+ *   <li>组装 {@link PotModelComponent}、{@link PotLidComponent}、4 个 {@link ItemSlotComponent}</li>
+ *   <li>物品交互、carried-item 渲染、C↔S 同步全部由父类 {@link ContainerScreen3D} 处理</li>
+ * </ul>
+ */
+public class PotScreen extends ContainerScreen3D<PotMenu>
 {
-    public PotScreen()
+    protected PotModelComponent potModelComponent;
+
+    /** 由 MenuScreens 工厂调用（MenuType 绑定时传入 Inventory 和 title，此处忽略两者）。 */
+    public PotScreen(PotMenu menu, Inventory playerInventory, Component title)
     {
-        super(Component.empty());
+        super(menu, Component.empty());
     }
 
-    private final SimpleInternalControlGeoModel test_block = new SimpleInternalControlGeoModel("geo/block/pot.geo.json", "textures/block/pot.png", Minecraft.getInstance().player);
-
-    public final BoneTracer test_tracer = new BoneTracer(b -> b.getName().equals("movable"));
-
     @Override
-    protected void init()
+    public void init()
     {
+        this.clearComponents();
+
+        // 主模型（土锅 + 锅盖）
+        this.potModelComponent = new PotModelComponent(
+                this.width / 2.0f,
+                this.height / 2.0f + 26.0f,
+                64.0f
+        );
+        PotLidComponent lidComponent = new PotLidComponent(this.potModelComponent);
+        this.potModelComponent.addChild(lidComponent);
+
+        // 4 个食材槽位，绑定到 PotMenu 的 Slot 0-3 及对应骨骼 item_slot_0..3
+        for (int i = 0; i < PotMenu.INGREDIENT_SLOTS; i++)
+        {
+            ItemSlotComponent slot = new ItemSlotComponent(
+                    this.potModelComponent.getModel(),
+                    "item_slot_" + i,
+                    this.menu.getSlot(i)
+            );
+            this.potModelComponent.addChild(slot);
+        }
+
+        this.addComponent(this.potModelComponent);
+
         super.init();
-        test_block.getRendererPoseSync().ashihara_1_21$addTracer(this.test_tracer);
     }
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
     {
+        // 背景
+        guiGraphics.fill(0, 0, this.width, this.height, 0xCC050505);
+        // 组件 + carried-item（由父类处理）
         super.render(guiGraphics, mouseX, mouseY, partialTick);
-        PoseStack pose = guiGraphics.pose();
-        VertexConsumer bufferBuilder = guiGraphics.bufferSource().getBuffer(RenderType.lines());
-        pose.pushPose();
-        bufferBuilder.addVertex(pose.last(), 0, (float) mouseY(), 0).setNormal(pose.last(), 1, 0, 0).setColor(0xffffffff);
-        bufferBuilder.addVertex(pose.last(), this.width, (float) mouseY(), 0).setNormal(pose.last(), 1, 0, 0).setColor(0xffffffff);
-
-        bufferBuilder.addVertex(pose.last(), (float) mouseX(), 0, 0).setNormal(pose.last(), 0, 1, 0).setColor(0xffffffff);
-        bufferBuilder.addVertex(pose.last(), (float) mouseX(), this.height, 0).setNormal(pose.last(), 0, 1, 0).setColor(0xffffffff);
-
-        guiGraphics.drawString(Minecraft.getInstance().font, "MouseX: "+mouseX()+"; MouseY: "+mouseY(), 0, 0, 0xffffff);
-        pose.popPose();
-
-        pose.pushPose();
-        pose.translate(this.width / 2f, this.height / 2f, 19);
-        pose.scale(64f, 64f, 64f);
-        pose.mulPose(Axis.XP.rotationDegrees(45));
-        pose.mulPose(Axis.YP.rotation((float) (RenderUtil.getCurrentTick() % (Math.PI * 22)) / 11));
-        test_block.render(pose, guiGraphics.bufferSource(), 15728880, 0);
-        pose.popPose();
-
-        pose.pushPose();
-        pose.mulPose(test_tracer.matrix());
-        RenderHelper.INDICATOR.render(pose, guiGraphics.bufferSource(), 15728880, 0);
-        pose.popPose();
-    }
-
-    @Override
-    public boolean isPauseScreen()
-    {
-        return false;
     }
 }
