@@ -1,17 +1,19 @@
 package kogasastudio.ashihara.utils;
 
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
-public record BuildingComponentModelResourceLocation(ResourceLocation id, String variant)
+public class BuildingComponentModelResourceLocation
 {
-    public ModelResourceLocation toModelResourceLocation()
+    public final Identifier id;
+    public final String variant;
+
+    public BuildingComponentModelResourceLocation(Identifier id, String variant)
     {
-        return new ModelResourceLocation(this.id(), this.variant());
+        this.id = id;
+        this.variant = variant;
     }
 
-    public static BuildingComponentModelResourceLocation fromModelResourceLocation(ModelResourceLocation modelResourceLocation)
-    {
-        return new BuildingComponentModelResourceLocation(modelResourceLocation.id(), modelResourceLocation.variant());
-    }
+    public Identifier id() {return id;}
+
+    public String variant() {return variant;}
 }

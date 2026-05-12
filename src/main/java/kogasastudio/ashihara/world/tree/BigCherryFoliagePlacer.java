@@ -4,18 +4,13 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import kogasastudio.ashihara.registry.WorldGenEventRegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.LevelSimulatedReader;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
-import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
-
-import java.util.function.BiConsumer;
 
 public class BigCherryFoliagePlacer extends BlobFoliagePlacer
 {
@@ -35,13 +30,13 @@ public class BigCherryFoliagePlacer extends BlobFoliagePlacer
     }
 
     @Override
-    protected void createFoliage(LevelSimulatedReader levelSimulatedReader, FoliageSetter biConsumer, RandomSource random, TreeConfiguration treeConfiguration, int maxFreeTreeHeight, FoliagePlacer.FoliageAttachment foliageAttachment, int foliageHeight, int radius, int offset) {
+    protected void createFoliage(WorldGenLevel level, FoliageSetter foliageSetter, RandomSource random, TreeConfiguration config, int treeHeight, FoliageAttachment foliageAttachment, int foliageHeight, int leafRadius, int offset) {
 
         BlockPos blockPos = foliageAttachment.pos();
-        placeLeaves(levelSimulatedReader, biConsumer, random, treeConfiguration, blockPos, radius, offset);
+        placeLeaves(level, foliageSetter, random, config, blockPos, leafRadius, offset);
     }
 
-    private void placeLeaves(LevelSimulatedReader levelSimulatedReader, FoliageSetter biConsumer, RandomSource random, TreeConfiguration treeConfiguration, BlockPos pos, int radius, int offset) {
+    private void placeLeaves(WorldGenLevel levelSimulatedReader, FoliageSetter biConsumer, RandomSource random, TreeConfiguration treeConfiguration, BlockPos pos, int radius, int offset) {
         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
 
         for (int x = -radius; x <= radius; ++x) {

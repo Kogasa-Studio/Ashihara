@@ -30,7 +30,7 @@ public class AbstractCropAge7 extends CropBlock
         (
             Properties.of()
             .mapColor(MapColor.PLANT)
-            .noCollission()
+            .noCollision()
             .noOcclusion()
             .randomTicks()
             .instabreak()
@@ -39,7 +39,7 @@ public class AbstractCropAge7 extends CropBlock
         );
     }
 
-    protected AbstractCropAge7(Properties properties)
+    public AbstractCropAge7(Properties properties)
     {
         super(properties);
     }

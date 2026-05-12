@@ -12,15 +12,20 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class MealTableBlock extends Block
 {
+    public MealTableBlock(Properties properties)
+    {
+        super(properties);
+    }
+
     public MealTableBlock()
     {
-        super
-                (
-                        Properties.of()
-                                .mapColor(MapColor.WOOD)
-                                .sound(SoundType.BAMBOO)
-                                .strength(0.5f)
-                );
+        this
+        (
+            Properties.of()
+            .mapColor(MapColor.WOOD)
+            .sound(SoundType.BAMBOO)
+            .strength(0.5f)
+        );
     }
 
     @Override

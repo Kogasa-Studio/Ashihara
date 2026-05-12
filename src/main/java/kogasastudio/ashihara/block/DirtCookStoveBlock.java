@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -23,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class DirtCookStoveBlock extends Block implements SimpleWaterloggedBlock
 {
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final EnumProperty<ForeHind> FORE_HIND = EnumProperty.create("fore_hind", ForeHind.class);
@@ -50,9 +51,15 @@ public class DirtCookStoveBlock extends Block implements SimpleWaterloggedBlock
     public static final VoxelShape S_FORE = ShapeHelper.rotateShape(N_FORE, 180);
     public static final VoxelShape W_FORE = ShapeHelper.rotateShape(N_FORE, 270);
 
+    public DirtCookStoveBlock(Properties properties)
+    {
+        super(properties);
+        this.registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(LIT, false).setValue(WATERLOGGED, false).setValue(FORE_HIND, ForeHind.HIND));
+    }
+
     public DirtCookStoveBlock()
     {
-        super
+        this
         (
             Properties.of()
             .noOcclusion()
@@ -60,7 +67,6 @@ public class DirtCookStoveBlock extends Block implements SimpleWaterloggedBlock
             .strength(0.5F)
             .sound(SoundType.DRIPSTONE_BLOCK)
         );
-        this.registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(LIT, false).setValue(WATERLOGGED, false).setValue(FORE_HIND, ForeHind.HIND));
     }
 
     @Override
@@ -126,15 +132,16 @@ public class DirtCookStoveBlock extends Block implements SimpleWaterloggedBlock
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @org.jspecify.annotations.Nullable Orientation orientation, boolean movedByPiston)
     {
         Direction direction = state.getValue(FORE_HIND).equals(ForeHind.FORE) ? state.getValue(FACING).getOpposite() : state.getValue(FACING);
         BlockPos toCheck = pos.relative(direction);
-        BlockState blockstate = worldIn.getBlockState(toCheck);
+        BlockState blockstate = level.getBlockState(toCheck);
         if (blockstate.getBlock() != state.getBlock() || blockstate.getValue(FORE_HIND) == state.getValue(FORE_HIND))
         {
-            worldIn.destroyBlock(pos, false);
+            level.destroyBlock(pos, false);
         }
+        super.neighborChanged(state, level, pos, block, orientation, movedByPiston);
     }
 
     public enum ForeHind implements StringRepresentable

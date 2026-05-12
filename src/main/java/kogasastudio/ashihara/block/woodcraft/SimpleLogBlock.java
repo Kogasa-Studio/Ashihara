@@ -10,16 +10,20 @@ import net.minecraft.world.level.material.MapColor;
 
 public class SimpleLogBlock extends RotatedPillarBlock
 {
+    public SimpleLogBlock(Properties properties)
+    {
+        super(properties);
+    }
+
     public SimpleLogBlock()
     {
-        super
-                (
-                        Properties.of()
-                                .mapColor((state) ->
-                                state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? MapColor.WOOD : MapColor.STONE)
-                                .strength(2.0F)
-                                .sound(SoundType.WOOD)
-                );
+        this
+        (
+            Properties.of()
+            .mapColor((state) -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? MapColor.WOOD : MapColor.STONE)
+            .strength(2.0F)
+            .sound(SoundType.WOOD)
+        );
     }
 
     @Override

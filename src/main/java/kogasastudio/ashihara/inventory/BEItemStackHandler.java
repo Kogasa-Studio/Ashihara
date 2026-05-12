@@ -4,7 +4,9 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +14,13 @@ import java.util.function.Predicate;
 
 import static net.minecraft.world.level.block.Block.UPDATE_ALL;
 
-public class BEItemStackHandler<B extends BlockEntity> extends ItemStackHandler
+public class BEItemStackHandler<B extends BlockEntity> extends ItemStacksResourceHandler
 {
     public final B be;
 
     public BEItemStackHandler(B be)
     {
-        super();
+        super(1);
         this.be = be;
     }
 
@@ -35,12 +37,18 @@ public class BEItemStackHandler<B extends BlockEntity> extends ItemStackHandler
     }
 
     @Override
-    protected void onContentsChanged(int slot)
+    protected void onContentsChanged(int index, ItemStack previousContents)
     {
-        super.onContentsChanged(slot);
         be.setChanged();
         if (be.getLevel() != null) be.getLevel().sendBlockUpdated(be.getBlockPos(), be.getBlockState(), be.getBlockState(), UPDATE_ALL);
     }
+
+    public ItemStack getStackInSlot(int i)
+    {
+        return getResource(i).toStack(getAmountAsInt(i));
+    }
+
+    // ── Convenience methods ───────────────────────────────────────────────────
 
     public boolean isEmpty()
     {
@@ -52,39 +60,61 @@ public class BEItemStackHandler<B extends BlockEntity> extends ItemStackHandler
         return List.copyOf(this.stacks);
     }
 
+    /**
+     * Consumes up to {@code count} items matching {@code predicate} from internal slots.
+     * Uses {@link #set} so that {@link #onContentsChanged} is properly triggered.
+     */
     public void consumeItemStack(Predicate<ItemStack> predicate, int count)
     {
-        int shrinked = count;
-        for (ItemStack stack : this.stacks)
+        int remaining = count;
+        for (int i = 0; i < this.stacks.size() && remaining > 0; i++)
         {
-            if (predicate.test(stack))
+            ItemStack stack = this.stacks.get(i);
+            if (!stack.isEmpty() && predicate.test(stack))
             {
-                int i = Math.min(stack.getCount(), shrinked);
-                stack.shrink(i);
-                shrinked -= i;
+                int toConsume = Math.min(stack.getCount(), remaining);
+                int newCount  = stack.getCount() - toConsume;
+                set(i, newCount > 0 ? ItemResource.of(stack) : ItemResource.EMPTY, newCount);
+                remaining -= toConsume;
             }
-            if (shrinked <= 0) return;
         }
     }
 
+    /**
+     * Tries to insert {@code stack} into the first available slot.
+     *
+     * @param stack    the stack to insert
+     * @param simulate if {@code true} the operation is rolled back
+     * @return the remainder that could not be inserted (may be empty)
+     */
     public ItemStack insert(ItemStack stack, boolean simulate)
     {
-        for (int i = 0; i < this.getSlots(); i++)
+        if (stack.isEmpty()) return ItemStack.EMPTY;
+        ItemResource resource = ItemResource.of(stack);
+        int amount = stack.getCount();
+        try (Transaction tx = Transaction.openRoot())
         {
-            stack = this.insertItem(i, stack, simulate);
-            if (stack.isEmpty()) return stack;
+            int inserted = this.insert(resource, amount, tx);
+            if (!simulate && inserted > 0) tx.commit();
+            return inserted >= amount ? ItemStack.EMPTY : stack.copyWithCount(amount - inserted);
         }
-        return stack;
     }
 
+    /**
+     * Tries to insert each stack in the list, returning leftover stacks.
+     *
+     * @param stacks   the stacks to insert
+     * @param simulate if {@code true} every insertion is rolled back
+     * @return list of remainders (empty stacks mean fully inserted)
+     */
     public List<ItemStack> insert(List<ItemStack> stacks, boolean simulate)
     {
-        List<ItemStack> newStacks = new ArrayList<>();
+        List<ItemStack> remainders = new ArrayList<>();
         for (ItemStack stack : stacks)
         {
-            newStacks.add(this.insert(stack, simulate));
+            remainders.add(this.insert(stack, simulate));
         }
-        return newStacks;
+        return remainders;
     }
 
     public int testIngredient(SizedIngredient ingredient)

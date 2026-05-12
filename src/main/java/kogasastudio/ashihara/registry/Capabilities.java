@@ -6,28 +6,27 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber
 public class Capabilities
 {
     @SubscribeEvent
     public static void registerCaps(RegisterCapabilitiesEvent event)
     {
-        event.registerBlockEntity
-        (
-        net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK,
-        BlockEntities.MORTAR_BE.get(), MortarBE::getInv
+        event.registerBlockEntity(
+            net.neoforged.neoforge.capabilities.Capabilities.Item.BLOCK,
+            BlockEntities.MORTAR_BE.get(), MortarBE::getInv
         );
         event.registerBlockEntity(
-        net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.BLOCK,
-        BlockEntities.MORTAR_BE.get(), MortarBE::getFluid
+            net.neoforged.neoforge.capabilities.Capabilities.Fluid.BLOCK,
+            BlockEntities.MORTAR_BE.get(), MortarBE::getFluid
         );
         event.registerBlockEntity(
-        net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK,
-        BlockEntities.POT_BE.get(), PotBlockEntity::getItemHandler
+            net.neoforged.neoforge.capabilities.Capabilities.Item.BLOCK,
+            BlockEntities.POT_BE.get(), PotBlockEntity::getItemHandler
         );
         event.registerBlockEntity(
-        net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.BLOCK,
-        BlockEntities.POT_BE.get(), PotBlockEntity::getFluidHandler
+            net.neoforged.neoforge.capabilities.Capabilities.Fluid.BLOCK,
+            BlockEntities.POT_BE.get(), PotBlockEntity::getFluidHandler
         );
     }
 }

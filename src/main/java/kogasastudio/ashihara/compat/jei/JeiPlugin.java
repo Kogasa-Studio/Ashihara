@@ -3,22 +3,13 @@ package kogasastudio.ashihara.compat.jei;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.compat.jei.category.CuttingBoardRecipeCategory;
 import kogasastudio.ashihara.interaction.recipes.CuttingBoardRecipe;
-import kogasastudio.ashihara.interaction.recipes.mill.MillRecipe;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
 import kogasastudio.ashihara.registry.Items;
-import kogasastudio.ashihara.registry.RecipeTypes;
 import mezz.jei.api.IModPlugin;
-import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.registration.*;
-import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author DustW
@@ -26,19 +17,11 @@ import java.util.List;
 @mezz.jei.api.JeiPlugin
 public class JeiPlugin implements IModPlugin
 {
-    public static final RecipeType<CuttingBoardRecipe> CUTTING_BOARD = new RecipeType<>(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "cutting_board"), CuttingBoardRecipe.class);
+    public static final IRecipeType<CuttingBoardRecipe> CUTTING_BOARD = IRecipeType.create(Identifier.fromNamespaceAndPath(Ashihara.MODID, "cutting_board"), CuttingBoardRecipe.class);
 
-    public static final RecipeType<MillRecipe> MILL = new RecipeType<>(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "mill"), MillRecipe.class);
+    //public static final IRecipeType<MillRecipe> MILL = IRecipeType.create(Identifier.fromNamespaceAndPath(Ashihara.MODID, "mill"), MillRecipe.class);
 
-    public static final RecipeType<MortarRecipe> MORTAR = new RecipeType<>(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "mortar"), MortarRecipe.class);
-
-    protected <C extends RecipeWrapper, T extends Recipe<C>> List<T> getRecipe(net.minecraft.world.item.crafting.RecipeType<T> recipeType)
-    {
-        List<RecipeHolder<T>> list = Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(recipeType);
-        List<T> recipes = new ArrayList<>();
-        list.forEach(tRecipeHolder -> recipes.add(tRecipeHolder.value()));
-        return recipes;
-    }
+    public static final IRecipeType<MortarRecipe> MORTAR = IRecipeType.create(Identifier.fromNamespaceAndPath(Ashihara.MODID, "mortar"), MortarRecipe.class);
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registry)
@@ -51,7 +34,7 @@ public class JeiPlugin implements IModPlugin
     @Override
     public void registerRecipes(IRecipeRegistration registration)
     {
-        registration.addRecipes(CUTTING_BOARD, getRecipe(RecipeTypes.CUTTING_BOARD.get()));
+        //registration.addRecipes(CUTTING_BOARD, RecipeHelper.getRecipes(null, RecipeTypes.CUTTING_BOARD.get()));
         //registration.addRecipes(MILL, getRecipe(RecipeTypes.MILL.get()));
         //registration.addRecipes(MORTAR, getRecipe(RecipeTypes.MORTAR.get()));
     }
@@ -59,9 +42,9 @@ public class JeiPlugin implements IModPlugin
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration)
     {
-        registration.addRecipeCatalyst(new ItemStack(Items.CUTTING_BOARD.get()), CUTTING_BOARD);
-        registration.addRecipeCatalyst(new ItemStack(Items.MILL.get()), MILL);
-        registration.addRecipeCatalyst(new ItemStack(Items.MORTAR.get()), MORTAR);
+        registration.addCraftingStation(CUTTING_BOARD, Items.CUTTING_BOARD.get());
+        //registration.addCraftingStation(MILL, new ItemStack(Items.MILL.get()));
+        registration.addCraftingStation(MORTAR, new ItemStack(Items.MORTAR.get()));
     }
 
     @Override
@@ -81,10 +64,10 @@ public class JeiPlugin implements IModPlugin
         //        36, 6, 0, 36);
     }
 
-    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "jei_plugin");
+    public static final Identifier UID = Identifier.fromNamespaceAndPath(Ashihara.MODID, "jei_plugin");
 
     @Override
-    public ResourceLocation getPluginUid()
+    public Identifier getPluginUid()
     {
         return UID;
     }

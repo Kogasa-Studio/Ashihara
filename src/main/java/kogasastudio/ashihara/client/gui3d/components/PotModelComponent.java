@@ -1,12 +1,11 @@
 package kogasastudio.ashihara.client.gui3d.components;
 
+import com.geckolib.animation.object.EasingType;
+import com.geckolib.animation.object.LoopType;
 import kogasastudio.ashihara.client.models.geo.InternalControlGeoModel;
 import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
 import net.minecraft.client.Minecraft;
 import org.joml.Matrix4f;
-import software.bernie.geckolib.animation.Animation;
-import software.bernie.geckolib.animation.EasingType;
-import software.bernie.geckolib.cache.object.GeoBone;
 
 public class PotModelComponent extends ModelComponent
 {
@@ -39,14 +38,14 @@ public class PotModelComponent extends ModelComponent
         this.lidRemoved = !this.lidRemoved;
         float targetYOffset = this.lidRemoved ? 4.0f : 0.0f;
         float targetRotation = this.lidRemoved ? (float) Math.toRadians(-20.0f) : 0.0f;
-        float currentYOffset = this.model.getBone("lid").map(GeoBone::getPosY).orElse(0.0f);
-        float currentRotation = this.model.getBone("lid").map(GeoBone::getRotZ).orElse(0.0f);
+        float currentYOffset = 0;//this.model.getBone("lid").map(GeoBone::getPosY).orElse(0.0f);
+        float currentRotation = 0;//this.model.getBone("lid").map(GeoBone::getRotZ).orElse(0.0f);
 
         this.model.triggerInternal
         (
             Minecraft.getInstance().player,
             this.model.hashCode(),
-            new InternalControlGeoModel.InternalAnimationBuilder("pot_lid_toggle", Animation.LoopType.HOLD_ON_LAST_FRAME)
+            new InternalControlGeoModel.InternalAnimationBuilder("pot_lid_toggle", LoopType.HOLD_ON_LAST_FRAME)
                 .startBone("lid")
                 .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 8, currentYOffset, targetYOffset, EasingType.EASE_OUT_CUBIC)
                 .lerpZ(InternalControlGeoModel.InternalAnimationBuilder.VarType.ROTATION, 8, currentRotation, targetRotation, EasingType.EASE_OUT_CUBIC)

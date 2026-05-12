@@ -1,13 +1,11 @@
 package kogasastudio.ashihara.block.blockentity;
 
 import kogasastudio.ashihara.helper.ParticleHelper;
+import kogasastudio.ashihara.helper.RecipeHelper;
 import kogasastudio.ashihara.interaction.recipes.CuttingBoardRecipe;
 import kogasastudio.ashihara.registry.BlockEntities;
 import kogasastudio.ashihara.registry.RecipeTypes;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -16,12 +14,11 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.items.ItemStackHandler;
-import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
 import java.util.Optional;
 
@@ -30,12 +27,10 @@ import java.util.Optional;
 public class CuttingBoardBE extends AshiharaMachineBE
 {
     private ItemStack content = ItemStack.EMPTY;
-    private final RecipeManager.CachedCheck<RecipeWrapper, CuttingBoardRecipe> quickCheck;
 
     public CuttingBoardBE(BlockPos pos, BlockState state)
     {
         super(BlockEntities.CUTTING_BOARD_BE.get(), pos, state);
-        this.quickCheck = RecipeManager.createCheck(RecipeTypes.CUTTING_BOARD.get());
     }
 
     public ItemStack getContent()
@@ -43,11 +38,12 @@ public class CuttingBoardBE extends AshiharaMachineBE
         return this.content.copy();
     }
 
-    public Optional<RecipeHolder<CuttingBoardRecipe>> tryMatchRecipe(RecipeWrapper wrapper)
+    public Optional<RecipeHolder<CuttingBoardRecipe>> tryMatchRecipe(ItemStack content)
     {
-        if (this.level == null) return Optional.empty();
-
-        return this.quickCheck.getRecipeFor(wrapper, this.level);
+        return RecipeHelper.getRecipesByType(this.level, RecipeTypes.CUTTING_BOARD.get())
+                .stream()
+                .filter(h -> h.value().getInput().test(content))
+                .findFirst();
     }
 
     public void cut(CuttingBoardRecipe recipe)
@@ -87,7 +83,7 @@ public class CuttingBoardBE extends AshiharaMachineBE
                 return true;
             } else
             {
-                Optional<RecipeHolder<CuttingBoardRecipe>> recipe = tryMatchRecipe(new RecipeWrapper(new ItemStackHandler(NonNullList.of(this.content))));
+                Optional<RecipeHolder<CuttingBoardRecipe>> recipe = tryMatchRecipe(this.content);
                 if (recipe.isPresent() && recipe.get().value().getTool().toolMatches(stack))
                 {
                     this.cut(recipe.get().value());
@@ -107,16 +103,16 @@ public class CuttingBoardBE extends AshiharaMachineBE
     }
 
     @Override
-    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries)
+    public void loadAdditional(ValueInput input)
     {
-        super.loadAdditional(nbt, registries);
-        this.content = ItemStack.parse(registries, nbt.getCompound("Content")).orElse(ItemStack.EMPTY);
+        super.loadAdditional(input);
+        this.content = input.read("Content", ItemStack.CODEC).orElse(ItemStack.EMPTY);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound, HolderLookup.Provider registries)
+    protected void saveAdditional(ValueOutput output)
     {
-        super.saveAdditional(compound, registries);
-        if (!this.content.isEmpty()) compound.put("Content", this.content.save(registries));
+        super.saveAdditional(output);
+        if (!this.content.isEmpty()) output.store("Content", ItemStack.CODEC, this.content);
     }
 }

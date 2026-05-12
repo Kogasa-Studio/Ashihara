@@ -7,7 +7,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -21,10 +20,12 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jspecify.annotations.Nullable;
 
 import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 import static net.minecraft.world.item.Items.GLASS_PANE;
@@ -34,18 +35,22 @@ public class StoneLanternBlock extends DoubleLanternBlock
     public static final BooleanProperty SEALED = BooleanProperty.create("sealed");
     public static final BooleanProperty MOSSY = BooleanProperty.create("mossy");
 
+    public StoneLanternBlock(Properties properties)
+    {
+        super(properties, 0.5d, 0.125d, 0.5d);
+        this.registerDefaultState(this.defaultBlockState().setValue(SEALED, false).setValue(MOSSY, false));
+    }
+
     public StoneLanternBlock()
     {
-        super
-                (
-                        Properties.of()
-                                .mapColor(MapColor.STONE)
-                                .strength(4.0F)
-                                .sound(SoundType.STONE)
-                                .lightLevel(getLightValueLit(15)),
-                        0.5d, 0.125d, 0.5d
-                );
-        this.registerDefaultState(this.defaultBlockState().setValue(SEALED, false).setValue(MOSSY, false));
+        this
+        (
+            Properties.of()
+            .mapColor(MapColor.STONE)
+            .strength(4.0F)
+            .sound(SoundType.STONE)
+            .lightLevel(getLightValueLit(15))
+        );
     }
 
     @Override
@@ -56,28 +61,28 @@ public class StoneLanternBlock extends DoubleLanternBlock
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean movedByPiston)
     {
         DoubleBlockHalf doubleblockhalf = state.getValue(HALF);
         if (doubleblockhalf == DoubleBlockHalf.UPPER)
         {
             BlockPos blockpos = pos.below();
-            BlockState blockstate = worldIn.getBlockState(blockpos);
+            BlockState blockstate = level.getBlockState(blockpos);
             if (blockstate.getBlock() != state.getBlock() || blockstate.getValue(HALF) != DoubleBlockHalf.LOWER)
             {
-                worldIn.setBlock(pos, state.getValue(WATERLOGGED) ? net.minecraft.world.level.block.Blocks.WATER.defaultBlockState() : net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 35);
+                level.setBlock(pos, state.getValue(WATERLOGGED) ? net.minecraft.world.level.block.Blocks.WATER.defaultBlockState() : net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 35);
             } else if (state.getValue(LIT) && state.getValue(WATERLOGGED) && !state.getValue(SEALED))
             {
-                worldIn.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, 1.0F);
-                worldIn.setBlockAndUpdate(pos, state.setValue(LIT, false));
+                level.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, 1.0F);
+                level.setBlockAndUpdate(pos, state.setValue(LIT, false));
             }
         } else if (doubleblockhalf == DoubleBlockHalf.LOWER)
         {
             BlockPos blockpos = pos.above();
-            BlockState blockstate = worldIn.getBlockState(blockpos);
+            BlockState blockstate = level.getBlockState(blockpos);
             if (blockstate.getBlock() != state.getBlock() || blockstate.getValue(HALF) != DoubleBlockHalf.UPPER)
             {
-                worldIn.setBlock(pos, state.getValue(WATERLOGGED) ? net.minecraft.world.level.block.Blocks.WATER.defaultBlockState() : net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 35);
+                level.setBlock(pos, state.getValue(WATERLOGGED) ? net.minecraft.world.level.block.Blocks.WATER.defaultBlockState() : net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 35);
             }
         }
     }
@@ -104,15 +109,15 @@ public class StoneLanternBlock extends DoubleLanternBlock
     }
 
     @Override
-    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public InteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
-        if (state.getValue(HALF).equals(DoubleBlockHalf.LOWER)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        if (state.getValue(HALF).equals(DoubleBlockHalf.LOWER)) return InteractionResult.PASS;
         RandomSource random = worldIn.getRandom();
         if (stack.getItem().equals(Items.FLINT_AND_STEEL) && !state.getValue(LIT) && (!state.getValue(WATERLOGGED) || state.getValue(SEALED)))
         {
             worldIn.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, random.nextFloat() * 0.4F + 0.8F);
             worldIn.setBlockAndUpdate(pos, state.setValue(LIT, true));
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         else if (stack.getItem().equals(GLASS_PANE) && !state.getValue(SEALED))
         {
@@ -122,10 +127,10 @@ public class StoneLanternBlock extends DoubleLanternBlock
             {
                 stack.shrink(1);
             }
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         } else
         {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.PASS;
         }
     }
 

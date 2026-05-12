@@ -6,7 +6,7 @@ import kogasastudio.ashihara.block.blockentity.IRenderInWorldToolTip;
 import kogasastudio.ashihara.client.models.geo.UIPanelModel;
 import kogasastudio.ashihara.client.render.geo.worldui.PanelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 public interface InWorldToolTipBER<B extends BlockEntity & IRenderInWorldToolTip>

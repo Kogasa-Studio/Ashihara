@@ -5,7 +5,7 @@ import kogasastudio.ashihara.item.GuideBook;
 import kogasastudio.ashihara.utils.json.JsonUtils;
 import kogasastudio.ashihara.utils.json.serializer.GuideBookPageSerializer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 
 import java.util.Map;
@@ -15,7 +15,7 @@ import java.util.function.BiConsumer;
 
 public class GuideBookLoader
 {
-    public static CompletableFuture<Void> reloadGuideBookPages(Executor backgroundExecutor, ResourceManager resourceManager, BiConsumer<ResourceLocation, Map<Integer, GuideBook.Page>> elementConsumer)
+    public static CompletableFuture<Void> reloadGuideBookPages(Executor backgroundExecutor, ResourceManager resourceManager, BiConsumer<Identifier, Map<Integer, GuideBook.Page>> elementConsumer)
     {
         Minecraft mc = Minecraft.getInstance();
         String currentLanguage = mc.getLanguageManager().getSelected();

@@ -10,9 +10,9 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -24,18 +24,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Otsuchi extends TieredItem implements IHeavyUse, IHasHoldAnim
+public class Otsuchi extends Item implements IHeavyUse, IHasHoldAnim
 {
     private final ItemAttributeModifiers attributeModifiers;
 
-    public Otsuchi(Tier tier, int dmgIn, double spdIn)
+    public Otsuchi(ToolMaterial tier, int dmgIn, double spdIn, Properties properties)
     {
-        super(tier, new Properties());
-        float attackDamage = (float) dmgIn + (float) Math.pow(tier.getAttackDamageBonus(), 2);
+        super(properties);
+        float attackDamage = (float) dmgIn + (float) Math.pow(tier.attackDamageBonus(), 2);
         List<ItemAttributeModifiers.Entry> entries = new ArrayList<>();
         entries.add(new ItemAttributeModifiers.Entry(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_ID, attackDamage, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.HAND));
         //entries.add(new ItemAttributeModifiers.Entry(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_ID, spdIn, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.HAND));
-        this.attributeModifiers = new ItemAttributeModifiers(entries, true);
+        this.attributeModifiers = new ItemAttributeModifiers(entries);
+    }
+
+    public Otsuchi(ToolMaterial tier, int dmgIn, double spdIn)
+    {
+        this(tier, dmgIn, spdIn, new Properties());
     }
 
     @Override

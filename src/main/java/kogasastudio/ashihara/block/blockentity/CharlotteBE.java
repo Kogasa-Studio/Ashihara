@@ -4,10 +4,9 @@ import kogasastudio.ashihara.block.blockentity.util.ToolTipController;
 import kogasastudio.ashihara.client.models.geo.UIPanelModel;
 import kogasastudio.ashihara.registry.BlockEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
 
 public class CharlotteBE extends AshiharaMachineBE implements IRenderInWorldToolTip
 {
@@ -27,9 +26,9 @@ public class CharlotteBE extends AshiharaMachineBE implements IRenderInWorldTool
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries)
+    protected void loadAdditional(ValueInput input)
     {
-        super.loadAdditional(tag, registries);
+        super.loadAdditional(input);
     }
 
     @Override

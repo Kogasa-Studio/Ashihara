@@ -10,15 +10,20 @@ import net.minecraft.world.level.material.MapColor;
 
 public class SimpleSlabBlock extends SlabBlock
 {
+    public SimpleSlabBlock(Properties properties)
+    {
+        super(properties);
+    }
+
     public SimpleSlabBlock()
     {
-        super
-                (
-                        Properties.of()
-                                .mapColor(MapColor.WOOD)
-                                .strength(2.0F, 3.0F)
-                                .sound(SoundType.WOOD)
-                );
+        this
+        (
+            Properties.of()
+            .mapColor(MapColor.WOOD)
+            .strength(2.0F, 3.0F)
+            .sound(SoundType.WOOD)
+        );
     }
 
     @Override

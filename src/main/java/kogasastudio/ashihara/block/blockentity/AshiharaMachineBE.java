@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block.blockentity;
 
+import kogasastudio.ashihara.Ashihara;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -7,10 +8,12 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.TagValueOutput;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minecraft.world.level.block.Block.UPDATE_ALL;
@@ -24,9 +27,15 @@ public abstract class AshiharaMachineBE extends BlockEntity
     }
 
     @Override
-    public @NotNull CompoundTag getUpdateTag(@NotNull HolderLookup.Provider registries) {
+    public @NotNull CompoundTag getUpdateTag(@NotNull HolderLookup.Provider registries)
+    {
         var result = new CompoundTag();
-        this.saveAdditional(result, registries);
+        try(ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(Ashihara.LOGGER_MAIN))
+        {
+            TagValueOutput output = TagValueOutput.createWithContext(reporter, registries);
+            this.saveAdditional(output);
+            result = output.buildResult();
+        }
         return result;
     }
 
@@ -40,7 +49,7 @@ public abstract class AshiharaMachineBE extends BlockEntity
             return;
         }
         var packet = this.getUpdatePacket();
-        serverLevel.getChunkSource().chunkMap.getPlayers(new ChunkPos(this.worldPosition), false)
+        serverLevel.getChunkSource().chunkMap.getPlayers(ChunkPos.containing(this.worldPosition), false)
                 .forEach(k -> k.connection.send(packet));
     }
 

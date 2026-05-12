@@ -11,7 +11,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -31,11 +31,13 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jspecify.annotations.Nullable;
 
 public class RiceDryingSticksBlock extends Block implements SimpleWaterloggedBlock
 {
@@ -46,17 +48,9 @@ public class RiceDryingSticksBlock extends Block implements SimpleWaterloggedBlo
     public static final EnumProperty<RiceDryingState> DRYING_STATE = EnumProperty.create("drying_state", RiceDryingState.class);
     public static final EnumProperty<DryingSticksHalf> L_R_HALF = EnumProperty.create("l_r_type", DryingSticksHalf.class);
 
-    public RiceDryingSticksBlock()
+    public RiceDryingSticksBlock(Properties properties)
     {
-        super
-        (
-            Properties.of()
-            .mapColor(MapColor.WOOD)
-            .strength(2)
-            .sound(SoundType.WOOD)
-            .noOcclusion()
-            .lightLevel(i -> 1)
-        );
+        super(properties);
         this.registerDefaultState
         (
             this.defaultBlockState()
@@ -67,6 +61,19 @@ public class RiceDryingSticksBlock extends Block implements SimpleWaterloggedBlo
             .setValue(WATERLOGGED, false)
         );
         initShapes();
+    }
+
+    public RiceDryingSticksBlock()
+    {
+        this
+        (
+            Properties.of()
+            .mapColor(MapColor.WOOD)
+            .strength(2)
+            .sound(SoundType.WOOD)
+            .noOcclusion()
+            .lightLevel(i -> 1)
+        );
     }
 
     VoxelShape single_X = Shapes.empty();
@@ -159,21 +166,21 @@ public class RiceDryingSticksBlock extends Block implements SimpleWaterloggedBlo
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack pStack, BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHitResult)
+    protected InteractionResult useItemOn(ItemStack pStack, BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHitResult)
     {
         if (pState.getValue(DRYING_STATE).equals(RiceDryingState.NONE) && pStack.is(Items.RICE_CROP))
         {
             pLevel.setBlock(pPos, pState.setValue(DRYING_STATE, RiceDryingState.WET), 3);
             pLevel.playSound(pPlayer, pPos, SoundEvents.CHERRY_LEAVES_PLACE, SoundSource.BLOCKS);
             if (!pPlayer.isCreative()) pStack.shrink(1);
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         else if (!pState.getValue(DRYING_STATE).equals(RiceDryingState.NONE))
         {
             popResource(pLevel, pPos, new ItemStack(pState.getValue(DRYING_STATE).equals(RiceDryingState.WET) ? Items.RICE_CROP.asItem() : Items.DRIED_RICE_CROP.asItem()));
             pLevel.setBlock(pPos, pState.setValue(DRYING_STATE, RiceDryingState.NONE), 3);
             pLevel.playSound(pPlayer, pPos, SoundEvents.CHERRY_LEAVES_BREAK, SoundSource.BLOCKS);
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return super.useItemOn(pStack, pState, pLevel, pPos, pPlayer, pHand, pHitResult);
     }
@@ -187,25 +194,25 @@ public class RiceDryingSticksBlock extends Block implements SimpleWaterloggedBlo
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean movedByPiston)
     {
         Direction.Axis axis = state.getValue(AXIS);
-        BlockState left = worldIn.getBlockState(pos.relative(axis, -1));
-        BlockState right = worldIn.getBlockState(pos.relative(axis, 1));
+        BlockState left = level.getBlockState(pos.relative(axis, -1));
+        BlockState right = level.getBlockState(pos.relative(axis, 1));
         if
         (
             !(right.is(this) && state.getValue(L_R_HALF).equals(DryingSticksHalf.LEFT) && right.getValue(L_R_HALF).equals(DryingSticksHalf.RIGHT))
             || (left.is(this) && state.getValue(L_R_HALF).equals(DryingSticksHalf.RIGHT) && left.getValue(L_R_HALF).equals(DryingSticksHalf.LEFT))
         )
         {
-            worldIn.setBlock(pos, initConnection(state, left, right), 3);
+            level.setBlock(pos, initConnection(state, left, right), 3);
         }
         BlockPos blockpos = state.getValue(HALF) == DoubleBlockHalf.UPPER ? pos.below() : pos.above();
-        BlockState blockstate = worldIn.getBlockState(blockpos);
+        BlockState blockstate = level.getBlockState(blockpos);
         if (blockstate.getBlock() != state.getBlock() || blockstate.getValue(HALF) == state.getValue(HALF))
         {
-            worldIn.setBlock(pos, state.getValue(WATERLOGGED) ? net.minecraft.world.level.block.Blocks.WATER.defaultBlockState() : net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 35);
-            if (state.getValue(DRYING_STATE) != RiceDryingState.NONE) popResource(worldIn, pos, new ItemStack(state.getValue(DRYING_STATE).equals(RiceDryingState.WET) ? Items.RICE_CROP.asItem() : Items.DRIED_RICE_CROP.asItem()));
+            level.setBlock(pos, state.getValue(WATERLOGGED) ? net.minecraft.world.level.block.Blocks.WATER.defaultBlockState() : net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 35);
+            if (state.getValue(DRYING_STATE) != RiceDryingState.NONE) popResource(level, pos, new ItemStack(state.getValue(DRYING_STATE).equals(RiceDryingState.WET) ? Items.RICE_CROP.asItem() : Items.DRIED_RICE_CROP.asItem()));
         }
     }
 
@@ -235,7 +242,7 @@ public class RiceDryingSticksBlock extends Block implements SimpleWaterloggedBlo
     }
 
     @Override
-    protected VoxelShape getOcclusionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos)
+    protected VoxelShape getOcclusionShape(BlockState state)
     {
         return Shapes.empty();
     }

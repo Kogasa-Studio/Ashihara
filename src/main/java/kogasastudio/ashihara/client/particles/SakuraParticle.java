@@ -2,19 +2,22 @@ package kogasastudio.ashihara.client.particles;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.util.RandomSource;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.jspecify.annotations.Nullable;
 
-public class SakuraParticle extends TextureSheetParticle
+public class SakuraParticle extends FallingLeavesParticle
 {
     private float offsetSpeed;
     private float timePointer;
     private float rotSpeed;
     private final float spinAcceleration;
-    protected SakuraParticle(ClientLevel world, double x, double y, double z)
+    protected SakuraParticle(ClientLevel world, double x, double y, double z, TextureAtlasSprite sprite, float fallAcceleration, float sideAcceleration, boolean swirl, boolean flowAway, float scale, float startVelocity)
     {
-        super(world, x, y, z, 0.0D, 0.0D, 0.0D);
+        super(world, x, y, z, sprite, fallAcceleration, sideAcceleration, swirl, flowAway, scale, startVelocity);
         this.xd = 0;
         this.yd = 0;
         this.zd = 0;
@@ -26,12 +29,6 @@ public class SakuraParticle extends TextureSheetParticle
         this.quadSize = f;
         this.setSize(f, f);
         this.lifetime = 200;
-    }
-
-    @Override
-    public ParticleRenderType getRenderType()
-    {
-        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
     @Override
@@ -68,7 +65,7 @@ public class SakuraParticle extends TextureSheetParticle
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    
     public static class SakuraParticleProvider implements ParticleProvider<SimpleParticleType>
     {
         private final SpriteSet spriteSet;
@@ -79,10 +76,9 @@ public class SakuraParticle extends TextureSheetParticle
         }
 
         @Override
-        public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
+        public Particle createParticle(SimpleParticleType options, ClientLevel level, double x, double y, double z, double xAux, double yAux, double zAux, RandomSource random)
         {
-            SakuraParticle sakuraParticle = new SakuraParticle(worldIn, x, y, z);
-            sakuraParticle.pickSprite(this.spriteSet);
+            SakuraParticle sakuraParticle = new SakuraParticle(level, x, y, z, spriteSet.get(random), 0.25F, 2.0F, true, true, 1.0F, 0.0F);
             return sakuraParticle;
         }
     }

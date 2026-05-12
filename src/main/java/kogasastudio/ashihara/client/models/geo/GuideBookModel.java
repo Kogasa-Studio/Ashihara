@@ -1,25 +1,30 @@
 package kogasastudio.ashihara.client.models.geo;
 
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.object.PlayState;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.client.render.geo.GuideBookRenderer;
 import kogasastudio.ashihara.helper.PositionHelper;
 import kogasastudio.ashihara.item.GuideBook;
 import kogasastudio.ashihara.loading.ReloadableResources;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import com.geckolib.renderer.base.GeoRenderState;
 import org.joml.*;
-import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.*;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.SingletonGeoAnimatable;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animation.*;
+import com.geckolib.util.GeckoLibUtil;
+import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Map;
 
-@SuppressWarnings("removal")
+@NullMarked
 public class GuideBookModel extends InternalControlGeoModel<GuideBookModel> implements SingletonGeoAnimatable
 {
-    public static final ResourceLocation MODEL = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "geo/item/guidebook.geo.json");
-    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/geo/guidebook.png");
-    public static final ResourceLocation ANIMATION = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "animations/item/guidebook.animation.json");
+    public static final Identifier MODEL = Identifier.fromNamespaceAndPath(Ashihara.MODID, "geo/item/guidebook.geo.json");
+    public static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Ashihara.MODID, "textures/geo/guidebook.png");
+    public static final Identifier ANIMATION = Identifier.fromNamespaceAndPath(Ashihara.MODID, "animations/item/guidebook.animation.json");
 
     public static final String ANIM_INTRO = "use.intro";
     public static final String ANIM_OPEN_FROM_LEFT = "use.open_from_left";
@@ -116,8 +121,8 @@ public class GuideBookModel extends InternalControlGeoModel<GuideBookModel> impl
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar)
     {
-        controllerRegistrar.add(new AnimationController<>(this, "Intro", animationState -> PlayState.STOP).triggerableAnim(ANIM_INTRO, INTRO));
-        controllerRegistrar.add(new AnimationController<>(this, CONTROLLER_FLIP, animationState -> PlayState.STOP)
+        controllerRegistrar.add(new AnimationController<>("Intro", animationState -> PlayState.STOP).triggerableAnim(ANIM_INTRO, INTRO));
+        controllerRegistrar.add(new AnimationController<>(CONTROLLER_FLIP, animationState -> PlayState.STOP)
                                 .triggerableAnim(ANIM_OPEN_FROM_LEFT, OPEN_FROM_LEFT)
                                 .triggerableAnim(ANIM_OPEN_FROM_RIGHT, OPEN_FROM_RIGHT)
                                 .triggerableAnim(ANIM_FLIP_INITIAL_LEFT, FLIP_INITIAL_LEFT)
@@ -139,18 +144,18 @@ public class GuideBookModel extends InternalControlGeoModel<GuideBookModel> impl
                                 .triggerableAnim(ANIM_FLIP_FINAL_RIGHT_S, FLIP_FINAL_RIGHT_S)
                                 .triggerableAnim(ANIM_FLIP_FINAL_RIGHT, FLIP_FINAL_RIGHT)
                                 .triggerableAnim(ANIM_CLOSEUP_FROM_RIGHT, CLOSEUP_FROM_RIGHT));
-        controllerRegistrar.add(new AnimationController<>(this, ANIM_FLIP_BUFFERED_LEFT_0, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_LEFT_0, FLIP_BUFFERED_LEFT_0));
-        controllerRegistrar.add(new AnimationController<>(this, ANIM_FLIP_BUFFERED_LEFT_1, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_LEFT_1, FLIP_BUFFERED_LEFT_1));
-        controllerRegistrar.add(new AnimationController<>(this, ANIM_FLIP_BUFFERED_LEFT_2, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_LEFT_2, FLIP_BUFFERED_LEFT_2));
-        controllerRegistrar.add(new AnimationController<>(this, ANIM_FLIP_BUFFERED_LEFT_3, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_LEFT_3, FLIP_BUFFERED_LEFT_3));
-        controllerRegistrar.add(new AnimationController<>(this, ANIM_FLIP_BUFFERED_LEFT_4, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_LEFT_4, FLIP_BUFFERED_LEFT_4));
-        controllerRegistrar.add(new AnimationController<>(this, ANIM_FLIP_BUFFERED_LEFT_5, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_LEFT_5, FLIP_BUFFERED_LEFT_5));
-        controllerRegistrar.add(new AnimationController<>(this, ANIM_FLIP_BUFFERED_RIGHT_0, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_RIGHT_0, FLIP_BUFFERED_RIGHT_0));
-        controllerRegistrar.add(new AnimationController<>(this, ANIM_FLIP_BUFFERED_RIGHT_1, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_RIGHT_1, FLIP_BUFFERED_RIGHT_1));
-        controllerRegistrar.add(new AnimationController<>(this, ANIM_FLIP_BUFFERED_RIGHT_2, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_RIGHT_2, FLIP_BUFFERED_RIGHT_2));
-        controllerRegistrar.add(new AnimationController<>(this, ANIM_FLIP_BUFFERED_RIGHT_3, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_RIGHT_3, FLIP_BUFFERED_RIGHT_3));
-        controllerRegistrar.add(new AnimationController<>(this, ANIM_FLIP_BUFFERED_RIGHT_4, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_RIGHT_4, FLIP_BUFFERED_RIGHT_4));
-        controllerRegistrar.add(new AnimationController<>(this, ANIM_FLIP_BUFFERED_RIGHT_5, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_RIGHT_5, FLIP_BUFFERED_RIGHT_5));
+        controllerRegistrar.add(new AnimationController<>(ANIM_FLIP_BUFFERED_LEFT_0, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_LEFT_0, FLIP_BUFFERED_LEFT_0));
+        controllerRegistrar.add(new AnimationController<>(ANIM_FLIP_BUFFERED_LEFT_1, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_LEFT_1, FLIP_BUFFERED_LEFT_1));
+        controllerRegistrar.add(new AnimationController<>(ANIM_FLIP_BUFFERED_LEFT_2, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_LEFT_2, FLIP_BUFFERED_LEFT_2));
+        controllerRegistrar.add(new AnimationController<>(ANIM_FLIP_BUFFERED_LEFT_3, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_LEFT_3, FLIP_BUFFERED_LEFT_3));
+        controllerRegistrar.add(new AnimationController<>(ANIM_FLIP_BUFFERED_LEFT_4, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_LEFT_4, FLIP_BUFFERED_LEFT_4));
+        controllerRegistrar.add(new AnimationController<>(ANIM_FLIP_BUFFERED_LEFT_5, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_LEFT_5, FLIP_BUFFERED_LEFT_5));
+        controllerRegistrar.add(new AnimationController<>(ANIM_FLIP_BUFFERED_RIGHT_0, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_RIGHT_0, FLIP_BUFFERED_RIGHT_0));
+        controllerRegistrar.add(new AnimationController<>(ANIM_FLIP_BUFFERED_RIGHT_1, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_RIGHT_1, FLIP_BUFFERED_RIGHT_1));
+        controllerRegistrar.add(new AnimationController<>(ANIM_FLIP_BUFFERED_RIGHT_2, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_RIGHT_2, FLIP_BUFFERED_RIGHT_2));
+        controllerRegistrar.add(new AnimationController<>(ANIM_FLIP_BUFFERED_RIGHT_3, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_RIGHT_3, FLIP_BUFFERED_RIGHT_3));
+        controllerRegistrar.add(new AnimationController<>(ANIM_FLIP_BUFFERED_RIGHT_4, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_RIGHT_4, FLIP_BUFFERED_RIGHT_4));
+        controllerRegistrar.add(new AnimationController<>(ANIM_FLIP_BUFFERED_RIGHT_5, animationState -> PlayState.STOP).triggerableAnim(ANIM_FLIP_BUFFERED_RIGHT_5, FLIP_BUFFERED_RIGHT_5));
         super.registerControllers(controllerRegistrar);
     }
 
@@ -161,25 +166,19 @@ public class GuideBookModel extends InternalControlGeoModel<GuideBookModel> impl
     }
 
     @Override
-    public double getTick(Object o)
-    {
-        return 0;
-    }
-
-    @Override
-    public ResourceLocation getModelResource(GuideBookModel guideBookModel)
+    public Identifier getModelResource(GeoRenderState renderState)
     {
         return MODEL;
     }
 
     @Override
-    public ResourceLocation getTextureResource(GuideBookModel guideBookModel)
+    public Identifier getTextureResource(GeoRenderState renderState)
     {
         return TEXTURE;
     }
 
     @Override
-    public ResourceLocation getAnimationResource(GuideBookModel guideBookModel)
+    public Identifier getAnimationResource(GuideBookModel guideBookModel)
     {
         return ANIMATION;
     }
@@ -198,7 +197,7 @@ public class GuideBookModel extends InternalControlGeoModel<GuideBookModel> impl
      * PageIndex和PageNumber是不同的，前者表示纸张的序数，后者表示页码。后者的总长度是前者的两倍。
      * @param currentPageIndex 当前页面左侧显示的纸张序数
      */
-    public static String getFlipAnim(int currentPageIndex, int nextPageIndex, int buffer)
+    public static @Nullable String getFlipAnim(int currentPageIndex, int nextPageIndex, int buffer)
     {
         if (currentPageIndex == 0 && nextPageIndex == 1) return ANIM_OPEN_FROM_LEFT;
         if (currentPageIndex == 1 && nextPageIndex == 2) return ANIM_FLIP_INITIAL_LEFT;
@@ -296,7 +295,7 @@ public class GuideBookModel extends InternalControlGeoModel<GuideBookModel> impl
         }
     }
 
-    public DoubleSidedPage getDoubleSidedPage(String boneName)
+    public @Nullable DoubleSidedPage getDoubleSidedPage(String boneName)
     {
         Map<Integer, GuideBook.Page> pageMap = ReloadableResources.getGuidebookPagesReordered();
         int left, right;

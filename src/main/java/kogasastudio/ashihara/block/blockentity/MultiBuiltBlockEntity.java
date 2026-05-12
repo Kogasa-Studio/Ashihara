@@ -6,16 +6,13 @@ import kogasastudio.ashihara.helper.MathHelper;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.Items;
 import kogasastudio.ashihara.registry.BlockEntities;
+import kogasastudio.ashihara.utils.OptionalUtil;
 import kogasastudio.ashihara.utils.shape.VoxelShapeSerializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -24,6 +21,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -113,7 +112,7 @@ public class MultiBuiltBlockEntity extends AshiharaMachineBE implements IMultiBu
             if (this.level.isClientSide() && !drops.getFirst().isEmpty())
             {
                 RandomSource random = this.level.getRandom();
-                ParticleOptions data = new ItemParticleOption(ParticleTypes.ITEM, drops.getFirst());
+                ParticleOptions data = new ItemParticleOption(ParticleTypes.ITEM, drops.getFirst().getItem());
                 for (int i = 0; i < 20; i += 1)
                 {
                     this.level.addParticle
@@ -382,43 +381,41 @@ public class MultiBuiltBlockEntity extends AshiharaMachineBE implements IMultiBu
     }
 
     @Override
-    protected void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries)
+    protected void loadAdditional(ValueInput input)
     {
-        super.loadAdditional(pTag, pRegistries);
+        super.loadAdditional(input);
         this.COMPONENTS.clear();
         this.ADDITIONAL_COMPONENTS.clear();
-        ListTag models = pTag.getList("models", 10);
-        for (Tag tag : models)
+        for (ValueInput child : input.childrenListOrEmpty("models"))
         {
-            this.COMPONENTS.add(ComponentStateDefinition.deserializeNBT((CompoundTag) tag));
+            this.COMPONENTS.add(ComponentStateDefinition.deserializeNBT(child));
         }
-        ListTag additional_models = pTag.getList("additional_models", 10);
-        for (Tag tag : additional_models)
+        for (ValueInput child : input.childrenListOrEmpty("additional_models"))
         {
-            this.ADDITIONAL_COMPONENTS.add(ComponentStateDefinition.deserializeNBT((CompoundTag) tag));
+            this.ADDITIONAL_COMPONENTS.add(ComponentStateDefinition.deserializeNBT(child));
         }
 
-        var shapeLoaded = loadShape(pTag, pRegistries);
+        boolean shapeLoaded = loadShape(input);
         refresh(!shapeLoaded);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries)
+    protected void saveAdditional(ValueOutput output)
     {
-        ListTag listTag = new ListTag();
+        var listTag = output.childrenList("models");
         for (ComponentStateDefinition definition : this.COMPONENTS)
         {
-            listTag.add(definition.serializeNBT());
+            ValueOutput o = listTag.addChild();
+            definition.serialize(o);
         }
-        pTag.put("models", listTag);
-        ListTag additionalListTag = new ListTag();
+        var additionalListTag = output.childrenList("additional_models");
         for (ComponentStateDefinition definition : this.ADDITIONAL_COMPONENTS)
         {
-            additionalListTag.add(definition.serializeNBT());
+            ValueOutput o = additionalListTag.addChild();
+            definition.serialize(o);
         }
-        pTag.put("additional_models", additionalListTag);
-        saveShape(pTag, pRegistries);
-        super.saveAdditional(pTag, pRegistries);
+        saveShape(output);
+        super.saveAdditional(output);
     }
 
     @Override
@@ -447,21 +444,14 @@ public class MultiBuiltBlockEntity extends AshiharaMachineBE implements IMultiBu
 
     public VoxelShape getShape() {return shape;}
 
-    private boolean saveShape(CompoundTag tag, HolderLookup.Provider registry)
+    private void saveShape(ValueOutput output)
     {
-        var compound = VoxelShapeSerializer.saveShape(getShape(), registry);
-        if (compound != null)
-        {
-            tag.put("shape", compound);
-            return true;
-        }
-        return false;
+        VoxelShapeSerializer.saveShape(getShape(), output.child("shape"));
     }
 
-    private boolean loadShape(CompoundTag tag, HolderLookup.Provider registry)
+    private boolean loadShape(ValueInput input)
     {
-        var shape = tag.getCompound("shape");
-        var result = VoxelShapeSerializer.loadShape(shape, registry);
+        VoxelShape result = VoxelShapeSerializer.loadShape(input.childOrEmpty("shape"));
         if (result != null)
         {
             setShape(result);

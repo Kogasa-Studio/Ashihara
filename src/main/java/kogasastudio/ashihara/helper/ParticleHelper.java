@@ -28,9 +28,9 @@ public class ParticleHelper
                 x,
                 y,
                 z,
-                ((double) level.random.nextFloat() - 0.5D) * 0.2D,
-                ((double) level.random.nextFloat() - 0.5D) * 0.2D,
-                ((double) level.random.nextFloat() - 0.5D) * 0.2D
+                ((double) level.getRandom().nextFloat() - 0.5D) * 0.2D,
+                ((double) level.getRandom().nextFloat() - 0.5D) * 0.2D,
+                ((double) level.getRandom().nextFloat() - 0.5D) * 0.2D
             );
         }
     }
@@ -40,7 +40,7 @@ public class ParticleHelper
         RandomSource random = level.getRandom();
         ParticleOptions data = stack.getItem() instanceof BlockItem
         ? new BlockParticleOption(ParticleTypes.BLOCK, ((BlockItem) stack.getItem()).getBlock().defaultBlockState())
-        : new ItemParticleOption(ParticleTypes.ITEM, stack);
+        : new ItemParticleOption(ParticleTypes.ITEM, stack.getItem());
         for (int i = 0; i < amount; i += 1)
         {
             level.addParticle
@@ -71,26 +71,26 @@ public class ParticleHelper
         for (double i = aabb.minX; i < aabb.maxX; i += 0.02)
         {
             double offset = Ashihara.RANDOM.nextIntBetweenInclusive(-90, 90) / 1000d;
-            level.addParticle(new DustParticleOptions(new Vector3f(0.3f, 0.5f, 0.8f), 1f), i + offset, aabb.minY + offset, aabb.minZ + offset, 0.0D, 0.0D, 0.0D);
-            level.addParticle(new DustParticleOptions(new Vector3f(0.3f, 0.5f, 0.8f), 1f), i + offset, aabb.maxY + offset, aabb.minZ + offset, 0.0D, 0.0D, 0.0D);
-            level.addParticle(new DustParticleOptions(new Vector3f(0.3f, 0.5f, 0.8f), 1f), i + offset, aabb.minY + offset, aabb.maxZ + offset, 0.0D, 0.0D, 0.0D);
-            level.addParticle(new DustParticleOptions(new Vector3f(0.3f, 0.5f, 0.8f), 1f), i + offset, aabb.maxY + offset, aabb.maxZ + offset, 0.0D, 0.0D, 0.0D);
+            level.addParticle(new DustParticleOptions(0x196884, 1f), i + offset, aabb.minY + offset, aabb.minZ + offset, 0.0D, 0.0D, 0.0D);
+            level.addParticle(new DustParticleOptions(0x196884, 1f), i + offset, aabb.maxY + offset, aabb.minZ + offset, 0.0D, 0.0D, 0.0D);
+            level.addParticle(new DustParticleOptions(0x196884, 1f), i + offset, aabb.minY + offset, aabb.maxZ + offset, 0.0D, 0.0D, 0.0D);
+            level.addParticle(new DustParticleOptions(0x196884, 1f), i + offset, aabb.maxY + offset, aabb.maxZ + offset, 0.0D, 0.0D, 0.0D);
         }
         for (double i = aabb.minY; i < aabb.maxY; i += 0.02)
         {
             double offset = Ashihara.RANDOM.nextIntBetweenInclusive(-90, 90) / 1000d;
-            level.addParticle(new DustParticleOptions(new Vector3f(0.3f, 0.5f, 0.8f), 1f), aabb.minX + offset, i + offset, aabb.minZ + offset, 0.0D, 0.0D, 0.0D);
-            level.addParticle(new DustParticleOptions(new Vector3f(0.3f, 0.5f, 0.8f), 1f), aabb.maxX + offset, i + offset, aabb.minZ + offset, 0.0D, 0.0D, 0.0D);
-            level.addParticle(new DustParticleOptions(new Vector3f(0.3f, 0.5f, 0.8f), 1f), aabb.minX + offset, i + offset, aabb.maxZ + offset, 0.0D, 0.0D, 0.0D);
-            level.addParticle(new DustParticleOptions(new Vector3f(0.3f, 0.5f, 0.8f), 1f), aabb.maxX + offset, i + offset, aabb.maxZ + offset, 0.0D, 0.0D, 0.0D);
+            level.addParticle(new DustParticleOptions(0x196884, 1f), aabb.minX + offset, i + offset, aabb.minZ + offset, 0.0D, 0.0D, 0.0D);
+            level.addParticle(new DustParticleOptions(0x196884, 1f), aabb.maxX + offset, i + offset, aabb.minZ + offset, 0.0D, 0.0D, 0.0D);
+            level.addParticle(new DustParticleOptions(0x196884, 1f), aabb.minX + offset, i + offset, aabb.maxZ + offset, 0.0D, 0.0D, 0.0D);
+            level.addParticle(new DustParticleOptions(0x196884, 1f), aabb.maxX + offset, i + offset, aabb.maxZ + offset, 0.0D, 0.0D, 0.0D);
         }
         for (double i = aabb.minZ; i < aabb.maxZ; i += 0.02)
         {
             double offset = Ashihara.RANDOM.nextIntBetweenInclusive(-90, 90) / 1000d;
-            level.addParticle(new DustParticleOptions(new Vector3f(0.3f, 0.5f, 0.8f), 1f), aabb.minX + offset, aabb.minY + offset, i + offset, 0.0D, 0.0D, 0.0D);
-            level.addParticle(new DustParticleOptions(new Vector3f(0.3f, 0.5f, 0.8f), 1f), aabb.maxX + offset, aabb.minY + offset, i + offset, 0.0D, 0.0D, 0.0D);
-            level.addParticle(new DustParticleOptions(new Vector3f(0.3f, 0.5f, 0.8f), 1f), aabb.minX + offset, aabb.maxY + offset, i + offset, 0.0D, 0.0D, 0.0D);
-            level.addParticle(new DustParticleOptions(new Vector3f(0.3f, 0.5f, 0.8f), 1f), aabb.maxX + offset, aabb.maxY + offset, i + offset, 0.0D, 0.0D, 0.0D);
+            level.addParticle(new DustParticleOptions(0x196884, 1f), aabb.minX + offset, aabb.minY + offset, i + offset, 0.0D, 0.0D, 0.0D);
+            level.addParticle(new DustParticleOptions(0x196884, 1f), aabb.maxX + offset, aabb.minY + offset, i + offset, 0.0D, 0.0D, 0.0D);
+            level.addParticle(new DustParticleOptions(0x196884, 1f), aabb.minX + offset, aabb.maxY + offset, i + offset, 0.0D, 0.0D, 0.0D);
+            level.addParticle(new DustParticleOptions(0x196884, 1f), aabb.maxX + offset, aabb.maxY + offset, i + offset, 0.0D, 0.0D, 0.0D);
         }
     }
 }

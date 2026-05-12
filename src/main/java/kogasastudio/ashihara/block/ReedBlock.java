@@ -7,17 +7,22 @@ import net.neoforged.neoforge.common.IShearable;
 
 public class ReedBlock extends DoublePlantBlock implements IShearable
 {
+    public ReedBlock(Properties properties)
+    {
+        super(properties);
+    }
+
     public ReedBlock()
     {
-        super
-                (
-                        Properties.of()
-                        .mapColor(MapColor.PLANT)
-                        .offsetType(OffsetType.XZ)
-                        .noCollission()
-                        .instabreak()
-                        .sound(SoundType.GRASS)
-                        .noOcclusion()
-                );
+        this
+        (
+            Properties.of()
+            .mapColor(MapColor.PLANT)
+            .offsetType(OffsetType.XZ)
+            .noCollision()
+            .instabreak()
+            .sound(SoundType.GRASS)
+            .noOcclusion()
+        );
     }
 }

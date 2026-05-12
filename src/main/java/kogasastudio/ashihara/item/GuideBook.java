@@ -2,13 +2,12 @@ package kogasastudio.ashihara.item;
 
 import kogasastudio.ashihara.network.OpenGuidebookPacket;
 import kogasastudio.ashihara.registry.DataComponentTypes;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
@@ -20,13 +19,18 @@ public class GuideBook extends Item
 {
     public static Map<Integer, Page> PAGES = new HashMap<>();
 
+    public GuideBook(Properties properties)
+    {
+        super(properties);
+    }
+
     public GuideBook()
     {
-        super(new Properties());
+        this(new Properties());
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand)
+    public InteractionResult use(Level pLevel, Player pPlayer, InteractionHand pUsedHand)
     {
         if (!pPlayer.isLocalPlayer())
         {
@@ -78,7 +82,7 @@ public class GuideBook extends Item
         {
         }
 
-        public record Illustration(float x, float y, float width, float height, ResourceLocation pic)
+        public record Illustration(float x, float y, float width, float height, Identifier pic)
         {
         }
     }

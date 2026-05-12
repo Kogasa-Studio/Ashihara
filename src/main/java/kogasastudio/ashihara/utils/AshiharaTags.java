@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.utils;
 
 import kogasastudio.ashihara.Ashihara;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -23,21 +23,21 @@ public class AshiharaTags
 
     private static TagKey<Item> tag(String name)
     {
-        return ItemTags.create(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, name));
+        return ItemTags.create(Identifier.fromNamespaceAndPath(Ashihara.MODID, name));
     }
 
     private static TagKey<Item> tagForge(String name)
     {
-        return ItemTags.create(ResourceLocation.fromNamespaceAndPath("forge", name));
+        return ItemTags.create(Identifier.fromNamespaceAndPath("forge", name));
     }
 
     private static TagKey<Block> tagBlock(String name)
     {
-        return BlockTags.create(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, name));
+        return BlockTags.create(Identifier.fromNamespaceAndPath(Ashihara.MODID, name));
     }
 
     private static TagKey<Block> tagForgeBlock(String name)
     {
-        return BlockTags.create(ResourceLocation.fromNamespaceAndPath("forge", name));
+        return BlockTags.create(Identifier.fromNamespaceAndPath("forge", name));
     }
 }

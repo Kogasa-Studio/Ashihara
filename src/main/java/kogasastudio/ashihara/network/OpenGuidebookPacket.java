@@ -6,12 +6,12 @@ import kogasastudio.ashihara.utils.ClientUtil;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record OpenGuidebookPacket(String id) implements CustomPacketPayload
 {
-    public static final Type<OpenGuidebookPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "open_guidebook_packet"));
+    public static final Type<OpenGuidebookPacket> TYPE = new Type<>(Identifier.fromNamespaceAndPath(Ashihara.MODID, "open_guidebook_packet"));
 
     @Override
     public Type<? extends CustomPacketPayload> type()

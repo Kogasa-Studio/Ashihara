@@ -1,6 +1,5 @@
 package kogasastudio.ashihara.client.gui3d.components;
 
-import net.minecraft.client.gui.GuiGraphics;
 
 public class Panel extends AbstractComponent
 {
@@ -34,8 +33,7 @@ public class Panel extends AbstractComponent
 		return this;
 	}
 
-	@Override
-	protected void renderSelf(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+	protected void renderSelf(int mouseX, int mouseY, float partialTick)
 	{
 		if (!this.drawBackground)
 		{
@@ -47,10 +45,10 @@ public class Panel extends AbstractComponent
 		int right = Math.round(this.getGlobalX() + this.width);
 		int bottom = Math.round(this.getGlobalY() + this.height);
 
-		guiGraphics.fill(left, top, right, bottom, this.backgroundColor);
+		/*guiGraphics.fill(left, top, right, bottom, this.backgroundColor);
 		guiGraphics.fill(left, top, right, top + 1, this.borderColor);
 		guiGraphics.fill(left, bottom - 1, right, bottom, this.borderColor);
 		guiGraphics.fill(left, top, left + 1, bottom, this.borderColor);
-		guiGraphics.fill(right - 1, top, right, bottom, this.borderColor);
+		guiGraphics.fill(right - 1, top, right, bottom, this.borderColor);*/
 	}
 }

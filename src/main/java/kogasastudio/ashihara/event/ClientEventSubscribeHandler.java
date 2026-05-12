@@ -1,126 +1,78 @@
 package kogasastudio.ashihara.event;
 
-import kogasastudio.ashihara.registry.Blocks;
+import kogasastudio.ashihara.client.render.state.Screen3DPiPRenderState;
 import kogasastudio.ashihara.registry.BlockEntities;
-import kogasastudio.ashihara.client.models.baked.PailModel;
 import kogasastudio.ashihara.client.gui.PotScreen;
 import kogasastudio.ashihara.registry.MenuTypes;
 import kogasastudio.ashihara.client.particles.MapleLeafParticle;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.client.particles.RiceParticle;
 import kogasastudio.ashihara.client.particles.SakuraParticle;
-import kogasastudio.ashihara.client.render.ister.PailISTER;
 import kogasastudio.ashihara.client.render.ter.*;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.registry.Items;
-import net.minecraft.client.Minecraft;import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.particle.ParticleEngine;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FastColor;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.Model;
+import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.material.Fluid;
+import kogasastudio.ashihara.registry.AdditionalModels;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import kogasastudio.ashihara.client.render.geo.pip.Screen3DPiPRenderer;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.client.event.RegisterPictureInPictureRenderersEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import net.neoforged.neoforge.client.model.standalone.SimpleUnbakedStandaloneModel;
+import net.neoforged.neoforge.client.model.standalone.StandaloneModelKey;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
-import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.Map;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(value = Dist.CLIENT)
 public class ClientEventSubscribeHandler
 {
-    private static void setRenderType(Block block, RenderType type, FMLClientSetupEvent event)
+    // --- 独立模型 key 缓存（仅客户端） ---
+    private static Map<Identifier, StandaloneModelKey<BlockStateModel>> keyCache;
+
+    public static StandaloneModelKey<BlockStateModel> getOrCreateKey(Identifier id)
     {
-        event.enqueueWork(() -> ItemBlockRenderTypes.setRenderLayer(block, type));
+        if (keyCache == null) keyCache = new HashMap<>();
+        return keyCache.computeIfAbsent(id, k -> new StandaloneModelKey<>(k::toDebugFileName));
     }
 
-    private static void setRenderType(Fluid fluid, RenderType type, FMLClientSetupEvent event)
-    {
-        event.enqueueWork(() -> ItemBlockRenderTypes.setRenderLayer(fluid, type));
-    }
-
-    //设置渲染方式
+    // 注册独立模型
     @SubscribeEvent
-    public static void onRenderTypeSetup(FMLClientSetupEvent event)
+    public static void onRegisterAdditionalModels(ModelEvent.RegisterStandalone event)
     {
-        setRenderType(Blocks.RICE_CROP.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.IMMATURE_RICE.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.CHERRY_BLOSSOM.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.MAPLE_LEAVES_RED.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.CHERRY_SAPLING.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.RED_MAPLE_SAPLING.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.JINJA_LANTERN.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.STONE_LANTERN.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.BONBURI_LAMP.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.CANDLESTICK.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.OIL_PLATE_STICK.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.CHERRY_VINES.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.FALLEN_SAKURA.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.FALLEN_MAPLE_LEAVES_RED.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.POTTED_CHERRY_SAPLING.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.POTTED_RED_MAPLE_SAPLING.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.LANTERN_LONG_WHITE.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.LANTERN_LONG_RED.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.HOUSE_LIKE_HANGING_LANTERN.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.HEXAGONAL_HANGING_LANTERN.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.CHRYSANTHEMUM.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.WILD_RICE.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.REED.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.SHORTER_REED.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.HYDRANGEA_BUSH.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.TEA_TREE.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.GOLD_FENCE_DECORATION.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.RED_FENCE_EXPANSION.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.SPRUCE_FENCE_EXPANSION.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.SOY_BEANS.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.SWEET_POTATOES.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.CUCUMBERS.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.MEAL_TABLE.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.MORTAR.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.CHARLOTTE.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.RICE_DRYING_STICKS.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.TETSUSENCHI.get(), RenderType.cutoutMipped(), event);
-        setRenderType(Blocks.DIRT_COOKSTOVE.get(), RenderType.cutoutMipped(), event);
-
-        setRenderType(FluidRegistryHandler.SOY_MILK.get(), RenderType.translucent(), event);
-        setRenderType(FluidRegistryHandler.SOY_MILK_FLOWING.get(), RenderType.translucent(), event);
-        setRenderType(FluidRegistryHandler.OIL.get(), RenderType.translucent(), event);
-        setRenderType(FluidRegistryHandler.OIL_FLOWING.get(), RenderType.translucent(), event);
+        AdditionalModels.getModels().forEach(location ->
+            event.register(getOrCreateKey(location.id()), SimpleUnbakedStandaloneModel.blockStateModel(location.id()))
+        );
     }
 
-    //注册粒子
+    // 注册粒子
     @SubscribeEvent
     public static void onParticleFactoryRegister(RegisterParticleProvidersEvent event)
     {
-        ParticleEngine manager = Minecraft.getInstance().particleEngine;
-        manager.register(ParticleRegistryHandler.RICE.get(), RiceParticle.RiceParticleProvider::new);
-        manager.register(ParticleRegistryHandler.SAKURA.get(), SakuraParticle.SakuraParticleProvider::new);
-        manager.register(ParticleRegistryHandler.MAPLE_LEAF.get(), MapleLeafParticle.MapleLeafParticleProvider::new);
+        event.registerSpriteSet(ParticleRegistryHandler.RICE.get(), RiceParticle.RiceParticleProvider::new);
+        event.registerSpriteSet(ParticleRegistryHandler.SAKURA.get(), SakuraParticle.SakuraParticleProvider::new);
+        event.registerSpriteSet(ParticleRegistryHandler.MAPLE_LEAF.get(), MapleLeafParticle.MapleLeafParticleProvider::new);
     }
 
-    //绑定TER
+    // 绑定TER
     @SubscribeEvent
     public static void onTERBind(EntityRenderersEvent.RegisterRenderers event)
     {
         event.registerBlockEntityRenderer(BlockEntities.MARKABLE_LANTERN_BE.get(), MarkableLanternTER::new);
-        //event.registerBlockEntityRenderer(BlockEntities.MILL_TE.get(), MillTER::new);
         event.registerBlockEntityRenderer(BlockEntities.PAIL_BE.get(), PailTER::new);
         event.registerBlockEntityRenderer(BlockEntities.CANDLE_BE.get(), CandleTER::new);
         event.registerBlockEntityRenderer(BlockEntities.MULTI_BUILT_BLOCKENTITY.get(), MultiBuiltBlockRenderer::new);
@@ -129,97 +81,56 @@ public class ClientEventSubscribeHandler
         event.registerBlockEntityRenderer(BlockEntities.CUTTING_BOARD_BE.get(), CuttingBoardTER::new);
     }
 
-    @SubscribeEvent
-    public static void onModelBaked(ModelEvent.ModifyBakingResult event)
-    {
-        Map<ModelResourceLocation, BakedModel> modelRegistry = event.getModels();
-        ModelResourceLocation location = new ModelResourceLocation(Items.PAIL.getId(), "inventory");
-        BakedModel existingModel = modelRegistry.get(location);
-        if (existingModel == null)
-        {
-            throw new RuntimeException("Did not find Obsidian Hidden in registry");
-        } else if (existingModel instanceof PailModel)
-        {
-            throw new RuntimeException("Tried to replace Obsidian Hidden twice");
-        } else
-        {
-            PailModel model = new PailModel(existingModel);
-            modelRegistry.put(location, model);
-        }
-    }
+    // TODO(migration): PailModel 注册需迁移到 ModelEvent.RegisterAdditional 或 UnbakedModelLoader
+    // @SubscribeEvent
+    // public static void onModelBaked(ModelEvent.ModifyBakingResult event) { ... }
 
-    //绑定GUI
+    // 绑定GUI
     @SubscribeEvent
     public static void onRegisterMenuScreens(RegisterMenuScreensEvent event)
     {
-        // 土锅 3D 容器屏幕
         event.register(MenuTypes.POT_MENU.get(), PotScreen::new);
     }
 
-    // Register client extensions, changed due to the deprecation of initializeClient in NeoForge 1.21.
+    // 注册客户端扩展（流体、装备模型等）
     @SubscribeEvent
     public static void onRegisterClientExtensions(RegisterClientExtensionsEvent event)
     {
-        event.registerItem
-        (
-        new IClientItemExtensions()
-            {
-                @Override
-                public @NotNull BlockEntityWithoutLevelRenderer getCustomRenderer()
-                {
-                    return new PailISTER(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
-                }
-            }, Items.PAIL.get()
-        );
-
-        event.registerItem(new IClientItemExtensions() {
+        // 盔甲模型扩展（Sujikabuto，待实装 SujikabotoModel）
+        event.registerItem(new IClientItemExtensions()
+        {
             @Override
-            public @NotNull HumanoidModel<?> getHumanoidArmorModel(@NotNull LivingEntity livingEntity,
-                                                                   @NotNull ItemStack itemStack,
-                                                                   @NotNull EquipmentSlot equipmentSlot,
-                                                                   @NotNull HumanoidModel<?> original) {
-                // Todo: SujikabotoModel here.
-//                return new SujikabutoModel(0.8F);
-                return IClientItemExtensions.super.getHumanoidArmorModel(livingEntity, itemStack, equipmentSlot, original);
+            public Model getHumanoidArmorModel(ItemStack itemStack, EquipmentClientInfo.LayerType layerType, Model original)
+            {
+                // TODO: return new SujikabutoModel(0.8F) when SujikabutoModel is implemented
+                return original;
             }
         }, Items.SUJIKABUTO.get());
 
-        event.registerFluidType(createClientFluidTypeExtension(FastColor.ARGB32.color(255, 255, 253, 225)), FluidRegistryHandler.AshiharaFluidTypes.TYPE_SOY_MILK.get());
-        event.registerFluidType(createClientFluidTypeExtension(FastColor.ARGB32.color(255, 246, 223, 12)), FluidRegistryHandler.AshiharaFluidTypes.TYPE_OIL.get());
+        // 流体摄像头叠加纹理（still/flowing/tint 由 FluidType.Properties 设置）
+        event.registerFluidType(new IClientFluidTypeExtensions()
+        {
+            @Override
+            public @Nullable Identifier getRenderOverlayTexture(@NotNull Minecraft mc)
+            {
+                return Identifier.withDefaultNamespace("textures/misc/underwater.png");
+            }
+        }, FluidRegistryHandler.AshiharaFluidTypes.TYPE_SOY_MILK.get());
+
+        event.registerFluidType(new IClientFluidTypeExtensions()
+        {
+            @Override
+            public @Nullable Identifier getRenderOverlayTexture(@NotNull Minecraft mc)
+            {
+                return Identifier.withDefaultNamespace("textures/misc/underwater.png");
+            }
+        }, FluidRegistryHandler.AshiharaFluidTypes.TYPE_OIL.get());
     }
 
-    private static IClientFluidTypeExtensions createClientFluidTypeExtension(int color)
+    /** 注册 GuideBook 的 PiP 渲染器工厂（Mod 事件总线，仅客户端）。 */
+    @SubscribeEvent
+    public static void onRegisterPiPRenderers(RegisterPictureInPictureRenderersEvent event)
     {
-        return createClientFluidTypeExtension(FluidRegistryHandler.WATER_STILL, FluidRegistryHandler.WATER_FLOW, FluidRegistryHandler.WATER_OVERLAY, FluidRegistryHandler.UNDERWATER_LOCATION, color);
-    }
-
-    private static IClientFluidTypeExtensions createClientFluidTypeExtension(@Nullable ResourceLocation still, @Nullable ResourceLocation flowing, @Nullable ResourceLocation overlay, @Nullable ResourceLocation renderOverlay, int color)
-    {
-        return new IClientFluidTypeExtensions() {
-            @Override
-            public int getTintColor() {
-                return color;
-            }
-
-            @Override
-            public @NotNull ResourceLocation getStillTexture() {
-                return still == null ? IClientFluidTypeExtensions.super.getStillTexture() : still;
-            }
-
-            @Override
-            public @NotNull ResourceLocation getFlowingTexture() {
-                return flowing == null ? IClientFluidTypeExtensions.super.getFlowingTexture() : flowing;
-            }
-
-            @Override
-            public @Nullable ResourceLocation getOverlayTexture() {
-                return overlay == null ? IClientFluidTypeExtensions.super.getOverlayTexture() : overlay;
-            }
-
-            @Override
-            public @Nullable ResourceLocation getRenderOverlayTexture(@NotNull Minecraft mc) {
-                return renderOverlay == null ? IClientFluidTypeExtensions.super.getRenderOverlayTexture(mc) : renderOverlay;
-            }
-        };
+        event.register(Screen3DPiPRenderState.class, Screen3DPiPRenderer::new);
     }
 }

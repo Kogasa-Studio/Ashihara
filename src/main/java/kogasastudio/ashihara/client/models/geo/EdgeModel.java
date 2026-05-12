@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.client.models.geo;
 
+import com.geckolib.cache.model.GeoBone;
 import net.minecraft.world.entity.player.Player;
-import software.bernie.geckolib.cache.object.GeoBone;
 
 public class EdgeModel extends SimpleInternalControlGeoModel
 {
@@ -17,15 +17,15 @@ public class EdgeModel extends SimpleInternalControlGeoModel
 
     public void syncFrame(float xStart, float xEnd, float yStart, float yEnd, float xScale, float yScale)
     {
-        this.getBone("up").ifPresent(b -> {b.setPosX(-xEnd);b.setPosY(yEnd);b.setScaleX(xScale / baseScaleX + baseScaleX);});
-        this.getBone("right").ifPresent(b -> {b.setPosX(-xStart);b.setPosY(yEnd);b.setScaleX(yScale / baseScaleY);});
-        this.getBone("down").ifPresent(b -> {b.setPosX(-xEnd);b.setPosY(yStart);b.setScaleX(xScale / baseScaleX + baseScaleX);});
-        this.getBone("left").ifPresent(b -> {b.setPosX(-xEnd);b.setPosY(yEnd);b.setScaleX(yScale / baseScaleY);});
+        //this.getBone("up").ifPresent(b -> {b.setPosX(-xEnd);b.setPosY(yEnd);b.setScaleX(xScale / baseScaleX + baseScaleX);});
+        //this.getBone("right").ifPresent(b -> {b.setPosX(-xStart);b.setPosY(yEnd);b.setScaleX(yScale / baseScaleY);});
+        //this.getBone("down").ifPresent(b -> {b.setPosX(-xEnd);b.setPosY(yStart);b.setScaleX(xScale / baseScaleX + baseScaleX);});
+        //this.getBone("left").ifPresent(b -> {b.setPosX(-xEnd);b.setPosY(yEnd);b.setScaleX(yScale / baseScaleY);});
     }
 
     public void syncMain(GeoBone from)
     {
-        this.getBone("main").ifPresent
+        /*this.getBone("main").ifPresent
         (
             b ->
             {
@@ -39,6 +39,6 @@ public class EdgeModel extends SimpleInternalControlGeoModel
                 b.setScaleY(from.getScaleY());
                 b.setScaleZ(from.getScaleZ());
             }
-        );
+        );*/
     }
 }

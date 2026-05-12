@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.client.models.geo;
 
+import com.geckolib.cache.model.GeoBone;
 import net.minecraft.world.entity.player.Player;
-import software.bernie.geckolib.cache.object.GeoBone;
 
 public class HemmingCornerModel extends SimpleInternalControlGeoModel
 {
@@ -12,15 +12,15 @@ public class HemmingCornerModel extends SimpleInternalControlGeoModel
 
     public void syncFrame(float xStart, float xEnd, float yStart, float yEnd)
     {
-        this.getBone("up_left").ifPresent(b -> {b.setPosX(-xEnd);b.setPosY(yEnd);});
-        this.getBone("up_right").ifPresent(b -> {b.setPosX(-xStart);b.setPosY(yEnd);});
-        this.getBone("down_right").ifPresent(b -> {b.setPosX(-xStart);b.setPosY(yStart);});
-        this.getBone("down_left").ifPresent(b -> {b.setPosX(-xEnd);b.setPosY(yStart);});
+        //this.getBone("up_left").ifPresent(b -> {b.setPosX(-xEnd);b.setPosY(yEnd);});
+        //this.getBone("up_right").ifPresent(b -> {b.setPosX(-xStart);b.setPosY(yEnd);});
+        //this.getBone("down_right").ifPresent(b -> {b.setPosX(-xStart);b.setPosY(yStart);});
+        //this.getBone("down_left").ifPresent(b -> {b.setPosX(-xEnd);b.setPosY(yStart);});
     }
 
     public void syncMain(GeoBone from)
     {
-        this.getBone("main").ifPresent
+        /*this.getBone("main").ifPresent
         (
             b ->
             {
@@ -34,6 +34,6 @@ public class HemmingCornerModel extends SimpleInternalControlGeoModel
                 b.setScaleY(from.getScaleY());
                 b.setScaleZ(from.getScaleZ());
             }
-        );
+        );*/
     }
 }

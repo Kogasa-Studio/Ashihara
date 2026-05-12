@@ -8,19 +8,20 @@ import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.client.render.SectionRenderContext;
 import kogasastudio.ashihara.client.render.WithLevelRenderer;
 import kogasastudio.ashihara.registry.BuildingComponents;
+import kogasastudio.ashihara.event.ClientEventSubscribeHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.MultiPartBakedModel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.model.data.ModelData;
 
-public class MultiBuiltBlockRenderer implements BlockEntityRenderer<MultiBuiltBlockEntity>, WithLevelRenderer<MultiBuiltBlockEntity>
+public class MultiBuiltBlockRenderer implements BlockEntityRenderer<MultiBuiltBlockEntity, BlockEntityRenderState>, WithLevelRenderer<MultiBuiltBlockEntity>
 {
     public MultiBuiltBlockRenderer(BlockEntityRendererProvider.Context dispatcherIn)
     {
@@ -37,28 +38,38 @@ public class MultiBuiltBlockRenderer implements BlockEntityRenderer<MultiBuiltBl
         {
             if (model.component().type.equals(BuildingComponents.Type.BAKED_MODEL))
             {
-                matrixStackIn.pushPose();
+                resetToBlock000(be, matrixStackIn);
+
+                // 1) 先把方块内部坐标系转到 FACING（绕方块中心）
                 translateCoordinateSystem(tileEntityIn, matrixStackIn);
 
+                // 2) 再放到组件在方块内的位置（这个位移不能被组件自旋带走）
                 Vec3 pos = model.inBlockPos();
                 matrixStackIn.translate(pos.x, pos.y, pos.z);
 
+                // 3) 最后做组件自身旋转（绕组件局部中心）
                 matrixStackIn.translate(0.5, 0, 0.5);
                 matrixStackIn.mulPose(Axis.YP.rotationDegrees(model.rotationY()));
                 matrixStackIn.mulPose(Axis.XP.rotationDegrees(model.rotationX()));
                 matrixStackIn.mulPose(Axis.ZP.rotationDegrees(model.rotationZ()));
                 matrixStackIn.translate(-0.5, 0, -0.5);
 
-                BakedModel bakedModel = Minecraft.getInstance().getModelManager().getModel(model.model().toModelResourceLocation());
-                if (!(bakedModel instanceof MultiPartBakedModel)) modelRenderer.renderModel(bakedModel, matrixStackIn, RenderType.cutoutMipped(), OverlayTexture.NO_OVERLAY, ModelData.EMPTY);
+                BlockStateModel bakedModel = Minecraft.getInstance().getModelManager().getStandaloneModel(ClientEventSubscribeHandler.getOrCreateKey(model.model().id()));
+                modelRenderer.renderBlockStateModel(bakedModel, matrixStackIn, OverlayTexture.NO_OVERLAY, ModelData.EMPTY);
                     //if (!(bakedModel instanceof MultiPartBakedModel)) BakedModels.render(bakedModel, consumer, context.lighter(), matrixStackIn, tileEntityIn.getLevel(), tileEntityIn.getBlockState(), tileEntityIn.getBlockPos(), RenderType.cutoutMipped());
-                matrixStackIn.popPose();
+
             }
         }
     }
 
     @Override
-    public void render(MultiBuiltBlockEntity tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
+    public BlockEntityRenderState createRenderState()
+    {
+        return null;
+    }
+
+    @Override
+    public void submit(BlockEntityRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera)
     {
     }
 

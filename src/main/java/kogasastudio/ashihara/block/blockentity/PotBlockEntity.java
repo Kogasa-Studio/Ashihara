@@ -1,12 +1,11 @@
 package kogasastudio.ashihara.block.blockentity;
 
+import kogasastudio.ashihara.inventory.BEFluidStackHandler;
 import kogasastudio.ashihara.inventory.BEItemStackHandler;
 import kogasastudio.ashihara.inventory.container.PotMenu;
 import kogasastudio.ashihara.registry.BlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -16,9 +15,11 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 
 /**
  * Block entity for the clay pot cooking block.
@@ -41,11 +42,9 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
     public final BEItemStackHandler<PotBlockEntity> inventory =
             new BEItemStackHandler<>(INVENTORY_SIZE, this);
 
-    /**
-     * Liquid storage (water, dashi, etc.).
-     * Not {@code final} because {@link FluidTank#readFromNBT} returns a new instance.
-     */
-    public FluidTank fluidTank = new FluidTank(FLUID_CAPACITY);
+    /** Liquid storage (water, dashi, etc.). */
+    public final BEFluidStackHandler<PotBlockEntity> fluidTank =
+            new BEFluidStackHandler<>(FLUID_CAPACITY, this);
 
     // ── Cooking state ─────────────────────────────────────────────────────────
     private boolean isCooking  = false;
@@ -59,8 +58,8 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
     }
 
     // ── Capability providers ──────────────────────────────────────────────────
-    public static IItemHandler  getItemHandler (PotBlockEntity be, Direction side) { return be.inventory; }
-    public static IFluidHandler getFluidHandler(PotBlockEntity be, Direction side) { return be.fluidTank; }
+    public static ResourceHandler<ItemResource>  getItemHandler (PotBlockEntity be, Direction side) { return be.inventory; }
+    public static ResourceHandler<FluidResource> getFluidHandler(PotBlockEntity be, Direction side) { return be.fluidTank; }
 
     // ── MenuProvider ─────────────────────────────────────────────────────────
 
@@ -133,32 +132,32 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
 
     // ── NBT ───────────────────────────────────────────────────────────────────
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries)
+    protected void saveAdditional(ValueOutput output)
     {
-        super.saveAdditional(tag, registries);
-        tag.put("inventory",   this.inventory.serializeNBT(registries));
-        tag.put("fluid",       this.fluidTank.writeToNBT(registries, new CompoundTag()));
-        tag.putInt    ("cookTime",    this.cookTime);
-        tag.putInt    ("maxCookTime", this.maxCookTime);
-        tag.putBoolean("isCooking",   this.isCooking);
+        super.saveAdditional(output);
+        output.putChild("inventory",   this.inventory);
+        output.putChild("fluid",       this.fluidTank);
+        output.putInt    ("cookTime",    this.cookTime);
+        output.putInt    ("maxCookTime", this.maxCookTime);
+        output.putBoolean("isCooking",   this.isCooking);
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries)
+    protected void loadAdditional(ValueInput input)
     {
-        super.loadAdditional(tag, registries);
-        if (tag.contains("inventory")) this.inventory.deserializeNBT(registries, tag.getCompound("inventory"));
-        if (tag.contains("fluid"))     this.fluidTank = this.fluidTank.readFromNBT(registries, tag.getCompound("fluid"));
-        this.cookTime    = tag.getInt    ("cookTime");
-        this.maxCookTime = tag.getInt    ("maxCookTime");
-        this.isCooking   = tag.getBoolean("isCooking");
+        super.loadAdditional(input);
+        input.readChild("inventory", this.inventory);
+        input.readChild("fluid",     this.fluidTank);
+        this.cookTime    = input.getIntOr    ("cookTime",    0);
+        this.maxCookTime = input.getIntOr    ("maxCookTime", 0);
+        this.isCooking   = input.getBooleanOr("isCooking",   false);
     }
 
     // ── Utilities ─────────────────────────────────────────────────────────────
     /** Drop all ingredient items into the world (called from PotBlock#onRemove). */
     public void dropContents(Level level, BlockPos pos)
     {
-        for (int i = 0; i < this.inventory.getSlots(); i++)
+        for (int i = 0; i < this.inventory.size(); i++)
         {
             ItemStack stack = this.inventory.getStackInSlot(i);
             if (!stack.isEmpty())

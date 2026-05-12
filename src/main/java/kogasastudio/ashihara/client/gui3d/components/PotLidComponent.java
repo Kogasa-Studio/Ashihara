@@ -4,7 +4,7 @@ import kogasastudio.ashihara.client.gui3d.Screen3D;
 import kogasastudio.ashihara.client.gui3d.util.OBB;
 import kogasastudio.ashihara.client.models.geo.SelectionFrameModel;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.input.MouseButtonEvent;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -84,8 +84,8 @@ public class PotLidComponent extends AbstractComponent implements ISelectable
 
     // ---- 渲染 ----
 
-    @Override
-    protected void renderSelf(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+    //@Override
+    protected void renderSelf(int mouseX, int mouseY, float partialTick)
     {
         /*// 锅盖打开后强制隐藏选框
         if (this.modelComponent.isLidRemoved()
@@ -107,18 +107,18 @@ public class PotLidComponent extends AbstractComponent implements ISelectable
         int bottom = Math.round(bounds[3]);
         int color  = 0xFFFFD36B;
 
-        guiGraphics.fill(left, top, right, top + 1, color);
+        /*guiGraphics.fill(left, top, right, top + 1, color);
         guiGraphics.fill(left, bottom - 1, right, bottom, color);
         guiGraphics.fill(left, top, left + 1, bottom, color);
-        guiGraphics.fill(right - 1, top, right, bottom, color);
+        guiGraphics.fill(right - 1, top, right, bottom, color);*/
     }
 
     // ---- 交互 ----
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button)
+    public boolean mouseClicked(MouseButtonEvent event)
     {
-        if (button != 0) return false;
+        if (event.button() != 0) return false;
 
         boolean lidRemoved = this.modelComponent.toggleLid();
         if (this.toggleCallback != null) this.toggleCallback.accept(lidRemoved);

@@ -16,17 +16,22 @@ import java.util.List;
 
 public class ImmatureRiceCropBlock extends CropBlock
 {
+    public ImmatureRiceCropBlock(BlockBehaviour.Properties properties)
+    {
+        super(properties);
+    }
+
     public ImmatureRiceCropBlock()
     {
-        super
-                (
-                        BlockBehaviour.Properties.of()
-                                .mapColor(MapColor.PLANT)
-                                .noCollission()
-                                .randomTicks()
-                                .instabreak()
-                                .sound(SoundType.CROP)
-                );
+        this
+        (
+            BlockBehaviour.Properties.of()
+            .mapColor(MapColor.PLANT)
+            .noCollision()
+            .randomTicks()
+            .instabreak()
+            .sound(SoundType.CROP)
+        );
     }
 
     @Override

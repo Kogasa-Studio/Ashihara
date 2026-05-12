@@ -10,10 +10,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -26,6 +27,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -41,17 +43,13 @@ public abstract class AbstractBeamBlock extends Block implements IVariable<Ashih
     public static final EnumProperty<WallFillType> WALL_FILL_TYPE = EnumProperty.create("fill", WallFillType.class);
     public static final EnumProperty<Combination> COMBINATION = EnumProperty.create("combination", Combination.class);
     public static final Map<String, Combination> COMBINATIONS = new HashMap<>();
+    public static final VoxelShape X = Block.box(0,0,6,16,16,10);
+    public static final VoxelShape Z = Block.box(6,0,0,10,16,16);
 
-    public AbstractBeamBlock()
+
+    public AbstractBeamBlock(Properties properties)
     {
-        super
-                (
-                        Properties.of()
-                                .mapColor(MapColor.WOOD)
-                                .strength(0.3F)
-                                .sound(SoundType.WOOD)
-                                .noOcclusion()
-                );
+        super(properties);
         this.registerDefaultState
                 (
                         defaultBlockState()
@@ -66,6 +64,18 @@ public abstract class AbstractBeamBlock extends Block implements IVariable<Ashih
         {
             COMBINATIONS.put(combination.getSerializedName(), combination);
         }
+    }
+
+    public AbstractBeamBlock()
+    {
+        this
+        (
+            Properties.of()
+            .mapColor(MapColor.WOOD)
+            .strength(0.3F)
+            .sound(SoundType.WOOD)
+            .noOcclusion()
+        );
     }
 
     @Nullable
@@ -98,13 +108,13 @@ public abstract class AbstractBeamBlock extends Block implements IVariable<Ashih
 
     //高级障子壁构筑主要逻辑
     @Override
-    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
+    public InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
         ItemStack item = player.getItemInHand(hand);
         boolean isBeam = item.getItem().equals(this.getBeam());
         boolean isAxe = item.getItem() instanceof AxeItem;
         boolean isWall = item.getItem() instanceof BlockItem && ((BlockItem) item.getItem()).getBlock() instanceof AbstractWallBlock;
-        boolean isPickaxe = item.getItem() instanceof PickaxeItem;
+        boolean isPickaxe = item.tags().anyMatch(t -> t.equals(ItemTags.PICKAXES));
         if ((isBeam && !hitResult.getDirection().getAxis().equals(state.getValue(AXIS))) || isAxe)
         {
             boolean changed = false;
@@ -146,7 +156,7 @@ public abstract class AbstractBeamBlock extends Block implements IVariable<Ashih
                     level.setBlockAndUpdate(pos, state);
                     level.playSound(player, pos, event, SoundSource.BLOCKS, 1.0f, 1.0f);
                     if (isAxe) ParticleHelper.spawnBlockDestruction(level, hitResult.getLocation().x(), hitResult.getLocation().y(), hitResult.getLocation().z(), state, 10);
-                    return ItemInteractionResult.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
                 else if (replaced.equals("oooo") && !state.getValue(WALL_FILL_TYPE).equals(WallFillType.NONE) && state.getValue(WALL_TYPE).getBlock() instanceof AbstractWallBlock wall)
                 {
@@ -156,7 +166,7 @@ public abstract class AbstractBeamBlock extends Block implements IVariable<Ashih
                     level.playSound(player, pos, SoundEvents.WOOD_BREAK, SoundSource.BLOCKS, 1.0f, 1.0f);
                     ParticleHelper.spawnBlockDestruction(level, hitResult.getLocation().x(), hitResult.getLocation().y(), hitResult.getLocation().z(), state, 10);
                     if (!player.isCreative()) Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, this.getBeam().getDefaultInstance());
-                    return ItemInteractionResult.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
             }
         }
@@ -214,10 +224,10 @@ public abstract class AbstractBeamBlock extends Block implements IVariable<Ashih
                     ParticleHelper.spawnBlockDestruction(level, pos.getX(), pos.getY(), pos.getZ(), state.getValue(WALL_TYPE).getBlock().defaultBlockState(), 10);
                     if (!player.isCreative()) Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, state.getValue(WALL_TYPE).getBlock().asItem().getDefaultInstance());
                 }
-                return ItemInteractionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return InteractionResult.PASS;
     }
 
     public BlockState updateState(Level level, BlockPos pos, BlockState state)
@@ -235,11 +245,11 @@ public abstract class AbstractBeamBlock extends Block implements IVariable<Ashih
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos neighborPos, boolean flag)
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @org.jspecify.annotations.Nullable Orientation orientation, boolean movedByPiston)
     {
         BlockState updated = this.updateState(level, pos, state);
         if (!updated.equals(state)) level.setBlockAndUpdate(pos, updated);
-        super.neighborChanged(state, level, pos, block, neighborPos, flag);
+        super.neighborChanged(state, level, pos, block, orientation, movedByPiston);
     }
 
     /*@Override
@@ -344,9 +354,6 @@ public abstract class AbstractBeamBlock extends Block implements IVariable<Ashih
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context)
     {
-        VoxelShape X = Block.box(0,0,6,16,16,10);
-        VoxelShape Z = Block.box(6,0,0,10,16,16);
-
         return state.getValue(AXIS).equals(Direction.Axis.X) ? X : Z;
     }
 

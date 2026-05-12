@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.client.models.geo;
 
+import com.geckolib.cache.model.GeoBone;
 import net.minecraft.world.entity.player.Player;
-import software.bernie.geckolib.cache.object.GeoBone;
 
 public class HemmingEdgeModel extends SimpleInternalControlGeoModel
 {
@@ -15,15 +15,15 @@ public class HemmingEdgeModel extends SimpleInternalControlGeoModel
      */
     public void syncFrame(float xStart, float xEnd, float yStart, float yEnd, float divides)
     {
-        this.getBone("up").ifPresent(b -> {b.setPosX(-(xEnd - xStart) * divides);b.setPosY(yEnd);});
-        this.getBone("right").ifPresent(b -> {b.setPosX(-xStart);b.setPosY((yEnd - yStart) * divides);});
-        this.getBone("down").ifPresent(b -> {b.setPosX(-(xEnd - xStart) * divides);b.setPosY(yStart);});
-        this.getBone("left").ifPresent(b -> {b.setPosX(xStart - xEnd);b.setPosY((yEnd - yStart) * divides);});
+        //this.getBone("up").ifPresent(b -> {b.setPosX(-(xEnd - xStart) * divides);b.setPosY(yEnd);});
+        //this.getBone("right").ifPresent(b -> {b.setPosX(-xStart);b.setPosY((yEnd - yStart) * divides);});
+        //this.getBone("down").ifPresent(b -> {b.setPosX(-(xEnd - xStart) * divides);b.setPosY(yStart);});
+        //this.getBone("left").ifPresent(b -> {b.setPosX(xStart - xEnd);b.setPosY((yEnd - yStart) * divides);});
     }
 
     public void syncMain(GeoBone from)
     {
-        this.getBone("main").ifPresent
+        /*this.getBone("main").ifPresent
         (
             b ->
             {
@@ -37,6 +37,6 @@ public class HemmingEdgeModel extends SimpleInternalControlGeoModel
                 b.setScaleY(from.getScaleY());
                 b.setScaleZ(from.getScaleZ());
             }
-        );
+        );*/
     }
 }

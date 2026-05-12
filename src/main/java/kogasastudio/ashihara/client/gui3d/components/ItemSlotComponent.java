@@ -1,16 +1,18 @@
 package kogasastudio.ashihara.client.gui3d.components;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import kogasastudio.ashihara.client.gui3d.ContainerScreen3D;
 import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
 import kogasastudio.ashihara.client.gui3d.util.OBB;
 import kogasastudio.ashihara.client.models.geo.SelectionFrameModel;
 import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
+import kogasastudio.ashihara.client.render.state.GUI3DComponentRenderState;
 import kogasastudio.ashihara.helper.RenderHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Collections;
@@ -27,9 +29,9 @@ import java.util.List;
  *
  * <p>交互逻辑：
  * <ul>
- *   <li>左键（无 Shift）→ {@link ClickType#PICKUP}，button=0（拾取/放置/交换）</li>
- *   <li>右键           → {@link ClickType#PICKUP}，button=1（分半放置）</li>
- *   <li>Shift+左键     → {@link ClickType#QUICK_MOVE}，button=0（快速转移）</li>
+ *   <li>左键（无 Shift）→ {@link net.minecraft.world.inventory.ClickAction#PRIMARY}，button=0（拾取/放置/交换）</li>
+ *   <li>右键           → {@link net.minecraft.world.inventory.ClickAction#SECONDARY}，button=1（分半放置）</li>
+ *   <li>Shift+左键     → {@link net.minecraft.world.inventory.ClickAction#PRIMARY}，button=0（快速转移）</li>
  * </ul>
  */
 public class ItemSlotComponent extends ModelComponent implements ISelectable
@@ -86,10 +88,9 @@ public class ItemSlotComponent extends ModelComponent implements ISelectable
 
     // ── 渲染 ─────────────────────────────────────────────────────────────────
 
-    @Override
-    protected void renderSelf(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+    protected void renderSelf(PoseStack poseStack, int mouseX, int mouseY, float partialTick)
     {
-        super.renderSelf(guiGraphics, mouseX, mouseY, partialTick);
+        //super.renderSelf(poseStack, mouseX, mouseY, partialTick);
 
         ItemStack stack = this.menuSlot.getItem();
         if (stack.isEmpty()) return;
@@ -99,30 +100,70 @@ public class ItemSlotComponent extends ModelComponent implements ISelectable
 
         OBB obb = tracer.collisionBoxes().get(0);
 
-        var poseStack = guiGraphics.pose();
         poseStack.pushPose();
         poseStack.mulPose(obb.pose());
         poseStack.scale(this.itemRenderScale, this.itemRenderScale, this.itemRenderScale);
         poseStack.translate(-0.5, -0.5, -0.5);
 
-        RenderHelper.renderItem(poseStack, guiGraphics.bufferSource(), stack);
+        //RenderHelper.renderItem(poseStack, guiGraphics.bufferSource(), stack);
 
         poseStack.popPose();
+    }
+
+    @Override
+    protected void collectSelfRenderStates(List<GUI3DComponentRenderState> output, int mouseX, int mouseY, float partialTick)
+    {
+        ItemStack stack = this.menuSlot.getItem();
+        if (stack.isEmpty())
+        {
+            return;
+        }
+
+        BoneTracer tracer = this.boneTracers.get(this.boneName);
+        if (tracer == null || tracer.collisionBoxes().isEmpty())
+        {
+            return;
+        }
+
+        OBB obb = tracer.collisionBoxes().get(0);
+        output.add(new GUI3DComponentRenderState((poseStack, submitNodeCollector) ->
+        {
+            poseStack.pushPose();
+            poseStack.mulPose(obb.pose());
+            poseStack.scale(this.itemRenderScale, this.itemRenderScale, this.itemRenderScale);
+            poseStack.translate(-0.5f, -0.5f, -0.5f);
+
+            RenderHelper.renderItem
+            (
+                poseStack,
+                submitNodeCollector,
+                stack,
+                ItemDisplayContext.FIXED,
+                Minecraft.getInstance().level,
+                Minecraft.getInstance().player,
+                this.menuSlot.index,
+                0xF000F0,
+                0,
+                0
+            );
+
+            poseStack.popPose();
+        }));
     }
 
     // ── 交互 ─────────────────────────────────────────────────────────────────
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button)
+    public boolean mouseClicked(MouseButtonEvent event)
     {
-        super.mouseClicked(mouseX, mouseY, button);
+        super.mouseClicked(event);
         if (!(this.screen instanceof ContainerScreen3D<?> cs)) return false;
 
-        ClickType clickType = (button == 0 && Screen.hasShiftDown())
-                ? ClickType.QUICK_MOVE
-                : ClickType.PICKUP;
+        ClickAction clickType = (event.button() == 0 && event.hasShiftDown())
+                ? ClickAction.PRIMARY
+                : ClickAction.SECONDARY;
 
-        cs.sendSlotClick(this.menuSlot.index, button, clickType);
+        cs.sendSlotClick(this.menuSlot.index, event.button(), clickType);
         return true;
     }
 

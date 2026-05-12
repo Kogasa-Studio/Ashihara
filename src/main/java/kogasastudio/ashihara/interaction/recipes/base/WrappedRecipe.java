@@ -1,62 +1,57 @@
 package kogasastudio.ashihara.interaction.recipes.base;
 
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.item.crafting.RecipeBookCategory;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author DustW
  **/
-public abstract class WrappedRecipe<T extends WrappedRecipe<?, ?>, B extends BlockEntity> implements Recipe<RecipeWrapper> {
-    protected final ResourceLocation id;
+public abstract class WrappedRecipe<T extends WrappedRecipe<?, ?>, B extends BlockEntity> implements Recipe<BERecipeInput> {
+    protected final Identifier id;
 
-    public WrappedRecipe(ResourceLocation id) {
+    public WrappedRecipe(Identifier id) {
         this.id = id;
-    }
-
-    public boolean matches(@NotNull NonNullList<ItemStack> inputs, @NotNull Level level) {
-        return false;
-    }
-
-    @Override
-    public boolean matches(@NotNull RecipeWrapper wrapper, @NotNull Level level) {
-        var inputs = NonNullList.<ItemStack>create();
-        for (var i = 0; i < wrapper.size(); i++) {
-            inputs.add(wrapper.getItem(i));
-        }
-        return matches(inputs, level);
     }
 
     public abstract boolean testBE(B be);
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull RecipeWrapper wrapper, @NotNull HolderLookup.Provider registries) {
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public @NotNull ItemStack getResultItem(@NotNull HolderLookup.Provider registries) {
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
+    public boolean matches(@NotNull BERecipeInput input, @NotNull net.minecraft.world.level.Level level) {
         return false;
     }
 
-    public ResourceLocation getId() {
-        return id;
+    @Override
+    public @NotNull ItemStack assemble(@NotNull BERecipeInput input) {
+        return ItemStack.EMPTY;
     }
 
     @Override
-    public @NotNull String getGroup() {
-        return Recipe.super.getGroup();
+    public boolean showNotification() {
+        return false;
+    }
+
+    @Override
+    public @NotNull String group() {
+        return "";
+    }
+
+    @Override
+    public PlacementInfo placementInfo() {
+        return PlacementInfo.NOT_PLACEABLE;
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return null;
+    }
+
+    public Identifier getId() {
+        return id;
     }
 
     @Override

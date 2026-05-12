@@ -1,14 +1,9 @@
 package kogasastudio.ashihara.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
@@ -40,13 +35,13 @@ public class FluidStackRenderer
 
     public void render(PoseStack poseStack, FluidStack fluidStack)
     {
-        RenderSystem.enableBlend();
+        //RenderSystem.enableBlend();
 
         drawFluid(poseStack, width, height, fluidStack);
 
-        RenderSystem.setShaderColor(1, 1, 1, 1);
+        //RenderSystem.setShaderColor(1, 1, 1, 1);
 
-        RenderSystem.disableBlend();
+        //RenderSystem.disableBlend();
     }
 
     public void render(PoseStack stack, int xPosition, int yPosition, @Nullable FluidStack ingredient)
@@ -72,7 +67,7 @@ public class FluidStackRenderer
 
         TextureAtlasSprite fluidStillSprite = getStillFluidSprite(fluidStack);
 
-        int fluidColor = IClientFluidTypeExtensions.of(fluidStack.getFluid()).getTintColor(fluidStack);
+        int fluidColor = 0xffffff; //IClientFluidTypeExtensions.of(fluidStack.getFluid()).getTintColor(fluidStack);
 
         int amount = fluidStack.getAmount();
         int scaledAmount = (amount * height) / capacityMb;
@@ -90,7 +85,7 @@ public class FluidStackRenderer
 
     private static void drawTiledSprite(PoseStack poseStack, final int tiledWidth, final int tiledHeight, int color, int scaledAmount, TextureAtlasSprite sprite)
     {
-        RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
+        //RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
         Matrix4f matrix = poseStack.last().pose();
         setGLColorFromInt(color);
 
@@ -124,8 +119,8 @@ public class FluidStackRenderer
     {
         Minecraft minecraft = Minecraft.getInstance();
         Fluid fluid = fluidStack.getFluid();
-        ResourceLocation fluidStill = IClientFluidTypeExtensions.of(fluid).getStillTexture(fluidStack);
-        return minecraft.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
+        //ResourceLocation fluidStill = IClientFluidTypeExtensions.of(fluid).getStillTexture(fluidStack);
+        return null; //minecraft.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
     }
 
     private static void setGLColorFromInt(int color)
@@ -135,7 +130,7 @@ public class FluidStackRenderer
         float blue = (color & 0xFF) / 255.0F;
         float alpha = ((color >> 24) & 0xFF) / 255F;
 
-        RenderSystem.setShaderColor(red, green, blue, alpha);
+        //RenderSystem.setShaderColor(red, green, blue, alpha);
     }
 
     private static void drawTextureWithMasking(Matrix4f matrix, float xCoord, float yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, float zLevel)
@@ -147,7 +142,7 @@ public class FluidStackRenderer
         uMax = uMax - (maskRight / 16F * (uMax - uMin));
         vMax = vMax - (maskTop / 16F * (vMax - vMin));
 
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        //RenderSystem.setShader(GameRenderer::getPositionTexShader);
 
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder bufferBuilder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);

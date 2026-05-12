@@ -1,15 +1,15 @@
 package kogasastudio.ashihara.block.blockentity;
 
+import kogasastudio.ashihara.inventory.BEFluidStackHandler;
 import kogasastudio.ashihara.registry.BlockEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 public class PailBE extends AshiharaMachineBE implements IFluidHandler
 {
-    FluidTank bucket = this.createTank();
+    public final BEFluidStackHandler<PailBE> bucket = new BEFluidStackHandler<>(16000, this);
 
     public PailBE(BlockPos pos, BlockState state)
     {
@@ -17,28 +17,22 @@ public class PailBE extends AshiharaMachineBE implements IFluidHandler
     }
 
     @Override
-    public FluidTank createTank()
-    {
-        return new FluidTank(16000);
-    }
-
-    @Override
-    public FluidTank getTank()
+    public BEFluidStackHandler<PailBE> getTank()
     {
         return this.bucket;
     }
 
     @Override
-    protected void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries)
+    protected void loadAdditional(ValueInput input)
     {
-        super.loadAdditional(pTag, pRegistries);
-        this.bucket = bucket.readFromNBT(pRegistries, pTag);
+        super.loadAdditional(input);
+        input.readChild("bucket", this.bucket);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound, HolderLookup.Provider provider)
+    protected void saveAdditional(ValueOutput output)
     {
-        super.saveAdditional(compound, provider);
-        bucket.writeToNBT(provider, compound);
+        super.saveAdditional(output);
+        output.putChild("bucket", this.bucket);
     }
 }

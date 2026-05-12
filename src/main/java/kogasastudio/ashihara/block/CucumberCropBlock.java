@@ -5,15 +5,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.common.CommonHooks;
@@ -23,6 +25,16 @@ import static net.minecraft.world.level.block.Blocks.FARMLAND;
 
 public class CucumberCropBlock extends AbstractCropAge7
 {
+    public CucumberCropBlock()
+    {
+        super();
+    }
+
+    public CucumberCropBlock(BlockBehaviour.Properties properties)
+    {
+        super(properties);
+    }
+
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter worldIn, BlockPos pos)
     {
@@ -117,54 +129,54 @@ public class CucumberCropBlock extends AbstractCropAge7
         }
     }
 
-    private float getGrowSpeed(BlockState blockState, BlockGetter level, BlockPos pos) {
-        Block block = blockState.getBlock();
-        float f = 1.0F;
-        BlockPos blockpos = pos.below();
+    private float getGrowSpeed(BlockState cropBlockState, BlockGetter level, BlockPos pos) {
+        Block type = cropBlockState.getBlock();
+        float speed = 1.0F;
+        BlockPos below = pos.below();
 
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                float f1 = 0.0F;
-                BlockState blockstate = level.getBlockState(blockpos.offset(i, 0, j));
-                net.neoforged.neoforge.common.util.TriState soilDecision = blockstate.canSustainPlant(level, blockpos.offset(i, 0, j), net.minecraft.core.Direction.UP, blockState);
-                if (soilDecision.isDefault() ? blockstate.getBlock() instanceof net.minecraft.world.level.block.FarmBlock : soilDecision.isTrue()) {
-                    f1 = 1.0F;
-                    if (blockstate.isFertile(level, pos.offset(i, 0, j)) || blockstate.is(this)) {
-                        f1 = 3.0F;
+        for (int xx = -1; xx <= 1; xx++) {
+            for (int zz = -1; zz <= 1; zz++) {
+                float blockSpeed = 0.0F;
+                BlockState blockState = level.getBlockState(below.offset(xx, 0, zz));
+                var soilDecision = blockState.canSustainPlant(level, below.offset(xx, 0, zz), net.minecraft.core.Direction.UP, blockState);
+                if (soilDecision.isDefault() ? blockState.is(BlockTags.GROWS_CROPS) : soilDecision.isTrue()) {
+                    blockSpeed = 1.0F;
+                    if (blockState.isFertile(level, pos.offset(xx, 0, zz))) {
+                        blockSpeed = 3.0F;
                     }
                 }
 
-                if (i != 0 || j != 0) {
-                    f1 /= 4.0F;
+                if (xx != 0 || zz != 0) {
+                    blockSpeed /= 4.0F;
                 }
 
-                f += f1;
+                speed += blockSpeed;
             }
         }
 
-        BlockPos blockpos1 = pos.north();
-        BlockPos blockpos2 = pos.south();
-        BlockPos blockpos3 = pos.west();
-        BlockPos blockpos4 = pos.east();
-        boolean flag = level.getBlockState(blockpos3).is(block) || level.getBlockState(blockpos4).is(block);
-        boolean flag1 = level.getBlockState(blockpos1).is(block) || level.getBlockState(blockpos2).is(block);
-        if (flag && flag1) {
-            f /= 2.0F;
+        BlockPos north = pos.north();
+        BlockPos south = pos.south();
+        BlockPos west = pos.west();
+        BlockPos east = pos.east();
+        boolean horizontal = level.getBlockState(west).is(type) || level.getBlockState(east).is(type);
+        boolean vertical = level.getBlockState(north).is(type) || level.getBlockState(south).is(type);
+        if (horizontal && vertical) {
+            speed /= 2.0F;
         } else {
-            boolean flag2 = level.getBlockState(blockpos3.north()).is(block)
-            || level.getBlockState(blockpos4.north()).is(block)
-            || level.getBlockState(blockpos4.south()).is(block)
-            || level.getBlockState(blockpos3.south()).is(block);
-            if (flag2) {
-                f /= 2.0F;
+            boolean diagonal = level.getBlockState(west.north()).is(type)
+            || level.getBlockState(east.north()).is(type)
+            || level.getBlockState(east.south()).is(type)
+            || level.getBlockState(west.south()).is(type);
+            if (diagonal) {
+                speed /= 2.0F;
             }
         }
 
-        return f;
+        return speed;
     }
 
     @Override
-    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public InteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         BlockState downState = worldIn.getBlockState(pos.below());
         boolean isUpper = downState.is(Blocks.CUCUMBERS.get());
@@ -172,7 +184,7 @@ public class CucumberCropBlock extends AbstractCropAge7
         int age = state.getValue(AGE);
         int ageAvailable = isUpper ? 5 : 7;
         int ageTurnIn = isUpper ? 4 : 6;
-        if (age < ageAvailable && stack.getItem().equals(BONE_MEAL)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        if (age < ageAvailable && stack.getItem().equals(BONE_MEAL)) return InteractionResult.PASS;
         if (age == ageAvailable)
         {
             if (!worldIn.isClientSide())
@@ -182,9 +194,9 @@ public class CucumberCropBlock extends AbstractCropAge7
                     popResource(worldIn, pos, stack1);
                 }
             }
-            worldIn.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + worldIn.random.nextFloat() * 0.4F);
+            worldIn.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + worldIn.getRandom().nextFloat() * 0.4F);
             worldIn.setBlockAndUpdate(pos, this.getStateForAge(ageTurnIn));
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return super.useItemOn(stack, state, worldIn, pos, player, handIn, hit);
     }

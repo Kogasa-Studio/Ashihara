@@ -8,7 +8,7 @@ import kogasastudio.ashihara.utils.CuttingBoardToolType;
 import kogasastudio.ashihara.utils.json.serializer.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
@@ -62,7 +62,7 @@ public enum JsonUtils
         pretty = builder.create();
     }
 
-    public static JsonObject loadJsonFromFile(Gson gson, ResourceLocation location, ResourceManager manager)
+    public static JsonObject loadJsonFromFile(Gson gson, Identifier location, ResourceManager manager)
     {
         return GsonHelper.fromJson(gson, getFileContents(location, manager), JsonObject.class);
     }
@@ -74,7 +74,7 @@ public enum JsonUtils
      * @param manager The Minecraft {@code ResourceManager} responsible for maintaining in-memory resource access
      */
 
-    public static String getFileContents(ResourceLocation location, ResourceManager manager)
+    public static String getFileContents(Identifier location, ResourceManager manager)
     {
         try (InputStream inputStream = manager.getResourceOrThrow(location).open())
         {

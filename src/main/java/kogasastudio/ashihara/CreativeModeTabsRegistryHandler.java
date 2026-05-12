@@ -3,7 +3,7 @@ package kogasastudio.ashihara;
 import kogasastudio.ashihara.registry.Items;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -223,7 +223,7 @@ public class CreativeModeTabsRegistryHandler
                             () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.group_ashihara"))
                                     .icon(() -> Items.ASHIHARA_ICON.get().getDefaultInstance())
                                     .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
-                                    .withTabsAfter(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, MATERIALS_TAB_NAME), ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, BUILDING_BLOCKS_TAB_NAME))
+                                    .withTabsAfter(Identifier.fromNamespaceAndPath(Ashihara.MODID, MATERIALS_TAB_NAME), Identifier.fromNamespaceAndPath(Ashihara.MODID, BUILDING_BLOCKS_TAB_NAME))
                                     .displayItems(((itemDisplayParameters, output) ->
                                     {
                                         output.accept(Items.GUIDEBOOK.get());

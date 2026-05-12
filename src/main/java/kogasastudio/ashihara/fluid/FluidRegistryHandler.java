@@ -4,7 +4,7 @@ import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.registry.Items;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.LiquidBlock;
@@ -21,13 +21,13 @@ import java.util.function.Supplier;
 
 public class FluidRegistryHandler
 {
-    public static final ResourceLocation UNDERWATER_LOCATION = ResourceLocation.withDefaultNamespace("textures/misc/underwater.png"),
-            WATER_STILL = ResourceLocation.withDefaultNamespace("block/water_still"),
-            WATER_FLOW = ResourceLocation.withDefaultNamespace("block/water_flow"),
-            WATER_OVERLAY = ResourceLocation.withDefaultNamespace("block/water_overlay");
+    public static final Identifier UNDERWATER_LOCATION = Identifier.withDefaultNamespace("textures/misc/underwater.png"),
+            WATER_STILL = Identifier.withDefaultNamespace("block/water_still"),
+            WATER_FLOW = Identifier.withDefaultNamespace("block/water_flow"),
+            WATER_OVERLAY = Identifier.withDefaultNamespace("block/water_overlay");
 
-    public static final ResourceLocation MILK_STILL = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/fluid/milky_liquid_still.png");
-    public static final ResourceLocation MILK_FLOW = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/fluid/milky_liquid_flow.png");
+    public static final Identifier MILK_STILL = Identifier.fromNamespaceAndPath(Ashihara.MODID, "textures/fluid/milky_liquid_still.png");
+    public static final Identifier MILK_FLOW = Identifier.fromNamespaceAndPath(Ashihara.MODID, "textures/fluid/milky_liquid_flow.png");
 
     private static BaseFlowingFluid.Properties getBasicFluidProp(Supplier<FluidType> type, Supplier<FlowingFluid> source, Supplier<FlowingFluid> flowing, Supplier<? extends LiquidBlock> block, Supplier<? extends Item> bucket)
     {

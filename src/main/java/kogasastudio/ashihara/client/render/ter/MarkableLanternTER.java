@@ -4,24 +4,31 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import com.mojang.math.Transformation;
 import kogasastudio.ashihara.block.blockentity.MarkableLanternBE;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.util.FastColor;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
 import org.joml.Matrix4f;
+import org.joml.Matrix4fc;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import software.bernie.geckolib.util.RenderUtil;
+import com.geckolib.util.RenderUtil;
+import org.lwjgl.glfw.GLFW;
 
 import static kogasastudio.ashihara.block.MarkableHangingLanternBlock.FACING;
 import static kogasastudio.ashihara.helper.BlockActionHelper.getRotationByFacing;
 import static kogasastudio.ashihara.helper.RenderHelper.buildMatrix;
 
-public class MarkableLanternTER implements BlockEntityRenderer<MarkableLanternBE>
+public class MarkableLanternTER implements BlockEntityRenderer<MarkableLanternBE, BlockEntityRenderState>
 {
     private static RandomSource RANDOM = RandomSource.create(432L);
 
@@ -29,10 +36,10 @@ public class MarkableLanternTER implements BlockEntityRenderer<MarkableLanternBE
     {
     }
 
-    @Override
+    /*@Override
     public void render(MarkableLanternBE tileEntityIn, float partialTicks, PoseStack poseStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
     {
-        /*RenderType icon = RenderType.entityTranslucent(tileEntityIn.getIcon());
+        RenderType icon = RenderType.entityTranslucent(tileEntityIn.getIcon());
         //获取IVertexBuilder
         VertexConsumer builder = bufferIn.getBuffer(icon);
         //通过小纹理的源文件获取该小纹理在Atlas上的位置
@@ -63,15 +70,15 @@ public class MarkableLanternTER implements BlockEntityRenderer<MarkableLanternBE
         poseStackIn.scale(0.2F, 0.2F, 0.2F);
         renderRays(poseStackIn, bufferIn.getBuffer(RenderType.dragonRays()));
         renderRays(poseStackIn, bufferIn.getBuffer(RenderType.dragonRaysDepth()));
-        poseStackIn.popPose();*/
-    }
+        poseStackIn.popPose();
+    }*/
 
-    private static void renderRays(PoseStack poseStack, VertexConsumer buffer)
+    private static void renderRays(PoseStack.Pose pose, VertexConsumer buffer)
     {
-        float timeConstant = (float) (RenderUtil.getCurrentTick()) / 200f; //Controls how fast the rays move.
-        poseStack.pushPose();
+        Level level = Minecraft.getInstance().level;
+        float timeConstant = level == null ? 0 : (float) (level.getGameTime()) / 200f; //Controls how fast the rays move.
         float rotationControl = Math.min(timeConstant > 0.8F ? (timeConstant - 0.8F) / 0.2F : 0.0F, 1.0F);
-        int startColor = FastColor.ARGB32.colorFromFloat(1.0F - 0f, 1.0F, 1.0F, 1.0F);
+        int startColor = 0xffffff;
         int endColor = 0x3c9077;
         RandomSource randomsource = RandomSource.create(432L); //Very important, cannot replace with a static field. it's related to the continuity of the rays movement.
         Vector3f vector3f = new Vector3f();
@@ -81,7 +88,8 @@ public class MarkableLanternTER implements BlockEntityRenderer<MarkableLanternBE
         Quaternionf quaternionf = new Quaternionf();
         int raysCount = 20;
 
-        for (int l = 0; l < raysCount; l++) {
+        for (int l = 0; l < raysCount; l++)
+        {
             quaternionf.rotationXYZ(
             randomsource.nextFloat() * (float) (Math.PI * 2),
             randomsource.nextFloat() * (float) (Math.PI * 2),
@@ -92,31 +100,40 @@ public class MarkableLanternTER implements BlockEntityRenderer<MarkableLanternBE
             randomsource.nextFloat() * (float) (Math.PI * 2),
             randomsource.nextFloat() * (float) (Math.PI * 2) + timeConstant * (float) (Math.PI / 2)
                       );
-            poseStack.mulPose(quaternionf);
+            pose.mulPose(new Transformation(null, quaternionf, null, null));
             float f1 = randomsource.nextFloat() * 20.0F + 5.0F + rotationControl * 10.0F;
             float f2 = randomsource.nextFloat() * 2.0F + 1.0F + rotationControl * 2.0F;
             vector3f1.set(-(Math.sqrt(3f) / 2f) * f2, f1, -0.5F * f2);
             vector3f2.set((Math.sqrt(3f) / 2f) * f2, f1, -0.5F * f2);
             vector3f3.set(0.0F, f1, f2);
-            PoseStack.Pose posestack$pose = poseStack.last();
-            buffer.addVertex(posestack$pose, vector3f).setColor(startColor);
-            buffer.addVertex(posestack$pose, vector3f1).setColor(endColor);
-            buffer.addVertex(posestack$pose, vector3f2).setColor(endColor);
-            buffer.addVertex(posestack$pose, vector3f).setColor(startColor);
-            buffer.addVertex(posestack$pose, vector3f2).setColor(endColor);
-            buffer.addVertex(posestack$pose, vector3f3).setColor(endColor);
-            buffer.addVertex(posestack$pose, vector3f).setColor(startColor);
-            buffer.addVertex(posestack$pose, vector3f3).setColor(endColor);
-            buffer.addVertex(posestack$pose, vector3f1).setColor(endColor);
+            buffer.addVertex(pose, vector3f).setColor(startColor);
+            buffer.addVertex(pose, vector3f1).setColor(endColor);
+            buffer.addVertex(pose, vector3f2).setColor(endColor);
+            buffer.addVertex(pose, vector3f).setColor(startColor);
+            buffer.addVertex(pose, vector3f2).setColor(endColor);
+            buffer.addVertex(pose, vector3f3).setColor(endColor);
+            buffer.addVertex(pose, vector3f).setColor(startColor);
+            buffer.addVertex(pose, vector3f3).setColor(endColor);
+            buffer.addVertex(pose, vector3f1).setColor(endColor);
         }
-
-        poseStack.popPose();
     }
 
     @Override
-    public boolean shouldRenderOffScreen(MarkableLanternBE blockEntity)
+    public boolean shouldRenderOffScreen()
     {
         return true;
+    }
+
+    @Override
+    public BlockEntityRenderState createRenderState()
+    {
+        return new BlockEntityRenderState();
+    }
+
+    @Override
+    public void submit(BlockEntityRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera)
+    {
+        submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.dragonRays(), MarkableLanternTER::renderRays);
     }
 
     @Override

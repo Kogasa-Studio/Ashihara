@@ -2,7 +2,7 @@ package kogasastudio.ashihara.utils.json.serializer;
 
 import com.google.gson.*;
 import kogasastudio.ashihara.item.GuideBook;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -141,7 +141,7 @@ public class GuideBookPageSerializer implements BaseSerializer<GuideBook.Page>
         public static GuideBook.Page.Illustration deserialize(JsonElement json)
         {
             JsonObject jsonObject = json.getAsJsonObject();
-            return new GuideBook.Page.Illustration(jsonObject.get("x").getAsFloat(), jsonObject.get("y").getAsFloat(), jsonObject.get("width").getAsInt(), jsonObject.get("height").getAsInt(), ResourceLocation.parse(jsonObject.get("pic").getAsString()));
+            return new GuideBook.Page.Illustration(jsonObject.get("x").getAsFloat(), jsonObject.get("y").getAsFloat(), jsonObject.get("width").getAsInt(), jsonObject.get("height").getAsInt(), Identifier.parse(jsonObject.get("pic").getAsString()));
         }
 
         @Override

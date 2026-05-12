@@ -4,8 +4,9 @@ import kogasastudio.ashihara.block.blockentity.MortarBE;
 import kogasastudio.ashihara.helper.FluidHelper;
 import kogasastudio.ashihara.helper.InventoryHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -19,7 +20,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -29,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class MortarBlock extends Block implements EntityBlock
 {
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 
     public static final VoxelShape SHAPE = Shapes.or
     (
@@ -40,9 +41,14 @@ public class MortarBlock extends Block implements EntityBlock
         box(2,2,4,4,13,12)
     );
 
+    public MortarBlock(Properties properties)
+    {
+        super(properties);
+    }
+
     public MortarBlock()
     {
-        super
+        this
         (
             Properties.of()
             .mapColor(MapColor.WOOD)
@@ -86,7 +92,7 @@ public class MortarBlock extends Block implements EntityBlock
     }
 
     @Override
-    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public InteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         MortarBE te = (MortarBE) worldIn.getBlockEntity(pos);
         boolean flag = false;
@@ -97,21 +103,21 @@ public class MortarBlock extends Block implements EntityBlock
         if (te != null)
         {
             te.pushLastLiquidLevel();
-            if (FluidHelper.notifyFluidTankInteraction(player, handIn, stack, te.fluidTank, worldIn, pos))
+            if (FluidHelper.notifyFluidTankInteraction(player, handIn, te.fluidTank, pos))
             {
                 te.switchFluid.switchRender(player);
                 player.getInventory().setChanged();
                 te.setChanged();
                 te.updateBlock();
                 te.refreshRecipe();
-                return ItemInteractionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
             if (te.process(stack))
             {
                 te.setChanged();
                 te.updateBlock();
                 te.refreshRecipe();
-                return ItemInteractionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
             if (!flag && InventoryHelper.interactWithInventory(te.inventory, stack, player, handIn, 64))
             {
@@ -119,7 +125,7 @@ public class MortarBlock extends Block implements EntityBlock
                 te.setChanged();
                 te.updateBlock();
                 te.refreshRecipe();
-                return ItemInteractionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
         return super.useItemOn(stack, state, worldIn, pos, player, handIn, hit);

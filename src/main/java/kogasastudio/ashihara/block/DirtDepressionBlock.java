@@ -20,19 +20,22 @@ public class DirtDepressionBlock extends Block implements SimpleWaterloggedBlock
 {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
+    public DirtDepressionBlock(Properties properties)
+    {
+        super(properties);
+        this.registerDefaultState(this.getStateDefinition().any().setValue(WATERLOGGED, false));
+    }
+
     public DirtDepressionBlock()
     {
-        super
+        this
         (
             Properties.of()
             .mapColor(MapColor.DIRT)
             .strength(0.5F)
-            // todo tag .harvestTool(ToolType.SHOVEL)
-            // todo tag .harvestLevel(2)
             .sound(SoundType.GRAVEL)
             .noOcclusion()
         );
-        this.registerDefaultState(this.getStateDefinition().any().setValue(WATERLOGGED, false));
     }
 
     @Override

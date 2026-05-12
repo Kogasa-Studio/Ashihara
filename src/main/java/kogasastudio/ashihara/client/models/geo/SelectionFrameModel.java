@@ -1,13 +1,10 @@
 package kogasastudio.ashihara.client.models.geo;
 
+import com.geckolib.animation.object.EasingType;
+import com.geckolib.animation.object.LoopType;
 import net.minecraft.world.entity.player.Player;
 import org.joml.Vector3f;
-import software.bernie.geckolib.animation.Animation;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.EasingType;
-import software.bernie.geckolib.cache.object.GeoBone;
-
-import static kogasastudio.ashihara.utils.OptionalUtil.getWithDefault;
+import com.geckolib.animation.AnimationController;
 
 public class SelectionFrameModel extends SimpleInternalControlGeoModel
 {
@@ -26,9 +23,9 @@ public class SelectionFrameModel extends SimpleInternalControlGeoModel
         float xs = max.x - min.x;
         float ys = max.y - min.y;
         float zs = max.z - min.z;
-        for (String b : X_BONES) getBone(b).ifPresent(bone -> { bone.setScaleX(xs); bone.setScaleY(0); bone.setScaleZ(0); });
+        /*for (String b : X_BONES) getBone(b).ifPresent(bone -> { bone.setScaleX(xs); bone.setScaleY(0); bone.setScaleZ(0); });
         for (String b : Y_BONES) getBone(b).ifPresent(bone -> { bone.setScaleX(0); bone.setScaleY(ys); bone.setScaleZ(0); });
-        for (String b : Z_BONES) getBone(b).ifPresent(bone -> { bone.setScaleX(0); bone.setScaleY(0); bone.setScaleZ(zs); });
+        for (String b : Z_BONES) getBone(b).ifPresent(bone -> { bone.setScaleX(0); bone.setScaleY(0); bone.setScaleZ(zs); });*/
     }
 
     /**
@@ -45,7 +42,7 @@ public class SelectionFrameModel extends SimpleInternalControlGeoModel
         float xs = max.x - x, ys = max.y - y, zs = max.z - z;
 
         // x-parallel bones：沿X轴延伸，PosX置于X中点，YZ锚定角点
-        getBone("x_pp").ifPresent(b -> { b.setPosX(x + xs/2); b.setPosY(y + ys); b.setPosZ(z + zs); });
+        /*getBone("x_pp").ifPresent(b -> { b.setPosX(x + xs/2); b.setPosY(y + ys); b.setPosZ(z + zs); });
         getBone("x_pn").ifPresent(b -> { b.setPosX(x + xs/2); b.setPosY(y + ys); b.setPosZ(z);      });
         getBone("x_np").ifPresent(b -> { b.setPosX(x + xs/2); b.setPosY(y);      b.setPosZ(z + zs); });
         getBone("x_nn").ifPresent(b -> { b.setPosX(x + xs/2); b.setPosY(y);      b.setPosZ(z);      });
@@ -60,7 +57,7 @@ public class SelectionFrameModel extends SimpleInternalControlGeoModel
         getBone("z_pp").ifPresent(b -> { b.setPosX(x + xs); b.setPosY(y + ys); b.setPosZ(z + zs/2); });
         getBone("z_pn").ifPresent(b -> { b.setPosX(x + xs); b.setPosY(y);      b.setPosZ(z + zs/2); });
         getBone("z_np").ifPresent(b -> { b.setPosX(x);      b.setPosY(y + ys); b.setPosZ(z + zs/2); });
-        getBone("z_nn").ifPresent(b -> { b.setPosX(x);      b.setPosY(y);      b.setPosZ(z + zs/2); });
+        getBone("z_nn").ifPresent(b -> { b.setPosX(x);      b.setPosY(y);      b.setPosZ(z + zs/2); });*/
     }
 
     /**
@@ -69,9 +66,9 @@ public class SelectionFrameModel extends SimpleInternalControlGeoModel
      */
     public float[] readCurrentEdgeScales()
     {
-        float xs = getBone("x_nn").map(b -> b.getScaleY()).orElse(0f);
-        float ys = getBone("y_nn").map(b -> b.getScaleZ()).orElse(0f);
-        float zs = getBone("z_nn").map(b -> b.getScaleX()).orElse(0f);
+        float xs = 0;//getBone("x_nn").map(b -> b.getScaleY()).orElse(0f);
+        float ys = 0;//getBone("y_nn").map(b -> b.getScaleZ()).orElse(0f);
+        float zs = 0;//getBone("z_nn").map(b -> b.getScaleX()).orElse(0f);
         return new float[]{ xs, ys, zs };
     }
 
@@ -93,7 +90,7 @@ public class SelectionFrameModel extends SimpleInternalControlGeoModel
         var SCALE = InternalControlGeoModel.InternalAnimationBuilder.VarType.SCALE;
         var POS   = InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION;
 
-        var builder = new InternalControlGeoModel.InternalAnimationBuilder("frame_anim", Animation.LoopType.HOLD_ON_LAST_FRAME);
+        var builder = new InternalControlGeoModel.InternalAnimationBuilder("frame_anim", LoopType.HOLD_ON_LAST_FRAME);
 
         // x-parallel bones：PosX锁定X中点，YZ锁定角点
         builder.startBone("x_pp").lerpSingle(POS, duration, x+xs/2, x+xs/2, y+ys, y+ys, z+zs, z+zs, EasingType.STEP).lerpSingle(SCALE, duration, xs_fixed, xs_fixed, yFrom, yTo, zFrom, zTo, easing).endBone();

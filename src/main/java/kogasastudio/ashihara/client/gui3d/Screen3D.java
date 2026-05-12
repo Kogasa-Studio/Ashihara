@@ -2,9 +2,13 @@ package kogasastudio.ashihara.client.gui3d;
 
 import kogasastudio.ashihara.client.gui3d.components.AbstractComponent;
 import kogasastudio.ashihara.client.gui3d.util.Ray;
+import kogasastudio.ashihara.client.render.state.GUI3DComponentRenderState;
+import kogasastudio.ashihara.client.render.state.Screen3DPiPRenderState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 import org.joml.Vector2f;
@@ -49,28 +53,41 @@ public abstract class Screen3D extends Screen
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a)
     {
         this.updateHoverState(mouseX, mouseY);
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
-        this.components.forEach(component -> component.render(guiGraphics, mouseX, mouseY, partialTick));
+        super.extractRenderState(graphics, mouseX, mouseY, a);
 
+        List<GUI3DComponentRenderState> renderStates = new ArrayList<>();
+        this.components.forEach(component -> component.collectRenderStates(renderStates, mouseX, mouseY, a));
+
+        graphics.submitPictureInPictureRenderState
+        (
+            new Screen3DPiPRenderState
+            (
+                0, 0, this.width, this.height, 1.0f,
+                graphics.peekScissorStack(),
+                renderStates,
+                0xF000F0,
+                a
+            )
+        );
         if (this.debugOverlayEnabled)
         {
-            Gui3dDebugOverlay.render(guiGraphics, this, this.components, mouseX, mouseY);
+            //Gui3dDebugOverlay.render(graphics, this, this.components, mouseX, mouseY);
         }
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers)
+    public boolean keyPressed(KeyEvent event)
     {
-        if (keyCode == GLFW.GLFW_KEY_F9)
+        if (event.key() == GLFW.GLFW_KEY_F9)
         {
             this.debugOverlayEnabled = !this.debugOverlayEnabled;
             return true;
         }
 
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return super.keyPressed(event);
     }
 
     public void addComponent(AbstractComponent component)
@@ -119,10 +136,12 @@ public abstract class Screen3D extends Screen
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button)
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClicked)
     {
+        double mouseX = event.x(), mouseY = event.y();
+        int button = event.button();
         AbstractComponent target = this.findTopComponent(mouseX, mouseY);
-        if (target != null && target.mouseClicked(mouseX, mouseY, button))
+        if (target != null && target.mouseClicked(event))
         {
             if (button == 0)
             {
@@ -130,38 +149,39 @@ public abstract class Screen3D extends Screen
             }
             return true;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(event, doubleClicked);
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button)
+    public boolean mouseReleased(MouseButtonEvent event)
     {
+        double mouseX = event.x(), mouseY = event.y();
         if (this.draggingComponent != null)
         {
             AbstractComponent target = this.draggingComponent;
             this.draggingComponent = null;
-            if (target.mouseReleased(mouseX, mouseY, button))
+            if (target.mouseReleased(event))
             {
                 return true;
             }
         }
 
         AbstractComponent hovered = this.findTopComponent(mouseX, mouseY);
-        if (hovered != null && hovered.mouseReleased(mouseX, mouseY, button))
+        if (hovered != null && hovered.mouseReleased(event))
         {
             return true;
         }
-        return super.mouseReleased(mouseX, mouseY, button);
+        return super.mouseReleased(event);
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY)
+    public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY)
     {
-        if (this.draggingComponent != null && this.draggingComponent.mouseDragged(mouseX, mouseY, button, dragX, dragY))
+        if (this.draggingComponent != null && this.draggingComponent.mouseDragged(event, dragX, dragY))
         {
             return true;
         }
-        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+        return super.mouseDragged(event, dragX, dragY);
     }
 
     @Override

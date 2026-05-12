@@ -24,9 +24,14 @@ import java.util.Objects;
 
 public class Koishi extends Item
 {
+    public Koishi(Properties properties)
+    {
+        super(properties);
+    }
+
     public Koishi()
     {
-        super(new Properties());
+        this(new Properties());
     }
 
     @Override

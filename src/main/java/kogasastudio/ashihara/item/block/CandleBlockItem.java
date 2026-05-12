@@ -19,9 +19,14 @@ import static net.minecraft.world.level.block.Blocks.AIR;
 
 public class CandleBlockItem extends BlockItem
 {
+    public CandleBlockItem(Properties properties)
+    {
+        super(CANDLE.get(), properties.useBlockDescriptionPrefix());
+    }
+
     public CandleBlockItem()
     {
-        super(CANDLE.get(), new Properties());
+        this(new Properties());
     }
 
     @Override

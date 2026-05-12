@@ -1,12 +1,12 @@
 package kogasastudio.ashihara.block.building.component;
 
 import kogasastudio.ashihara.helper.ShapeHelper;
+import kogasastudio.ashihara.registry.AdditionalModels;
 import kogasastudio.ashihara.registry.BuildingComponents;
 import kogasastudio.ashihara.utils.BuildingComponentModelResourceLocation;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -15,52 +15,46 @@ import java.util.List;
 
 public record ComponentStateDefinition(BuildingComponent component, Vec3 inBlockPos, float rotationX, float rotationY, float rotationZ, VoxelShape shape, BuildingComponentModelResourceLocation model, List<Occupation> occupation)
 {
-    public CompoundTag serializeNBT()
+    public ValueOutput serialize(ValueOutput output)
     {
-        CompoundTag tag = new CompoundTag();
-        tag.putString("component", component().id);
-        CompoundTag posTag = new CompoundTag();
+        output.putString("component", component().id);
+        ValueOutput posTag = output.child("inBlockPos");
         posTag.putDouble("x", inBlockPos().x());
         posTag.putDouble("y", inBlockPos().y());
         posTag.putDouble("z", inBlockPos().z());
-        tag.put("inBlockPos", posTag);
-        tag.putFloat("rotationX", rotationX());
-        tag.putFloat("rotationY", rotationY());
-        tag.putFloat("rotationZ", rotationZ());
-        ShapeHelper.saveNBT(tag, shape());
-        ListTag occupationTag = new ListTag();
+        output.putFloat("rotationX", rotationX());
+        output.putFloat("rotationY", rotationY());
+        output.putFloat("rotationZ", rotationZ());
+        ShapeHelper.saveNBT(output, shape());
+        ValueOutput.ValueOutputList occupationTag = output.childrenList("occupation");
         for (Occupation occupation : occupation())
         {
-            CompoundTag occTag = new CompoundTag();
+            ValueOutput occTag = occupationTag.addChild();
             occTag.putString("value", occupation.getId());
-            occupationTag.add(occTag);
         }
-        CompoundTag modelTag = new CompoundTag();
+        ValueOutput modelTag = output.child("model");
         modelTag.putString("id", model().id().toString());
         modelTag.putString("variant", model().variant());
-        tag.put("model", modelTag);
-        tag.put("occupation", occupationTag);
-        return tag;
+        return output;
     }
 
-    public static ComponentStateDefinition deserializeNBT(CompoundTag model)
+    public static ComponentStateDefinition deserializeNBT(ValueInput input)
     {
-        BuildingComponent component = BuildingComponents.COMPONENTS.getOrDefault(model.getString("component"), null);
-        if (component == null) throw new RuntimeException("Error loading component: Component \"" + model.getString("component") + "\" does not exist!");
-        CompoundTag posTag = model.getCompound("inBlockPos");
-        Vec3 inBlockPos = new Vec3(posTag.getDouble("x"), posTag.getDouble("y"), posTag.getDouble("z"));
-        float rotationX = model.getFloat("rotationX");
-        float rotationY = model.getFloat("rotationY");
-        float rotationZ = model.getFloat("rotationZ");
-        VoxelShape shape = ShapeHelper.readNBT(model);
-        CompoundTag modelTag = model.getCompound("model");
-        BuildingComponentModelResourceLocation modelRL = new BuildingComponentModelResourceLocation(ResourceLocation.parse(modelTag.getString("id")), modelTag.getString("variant"));
+        BuildingComponent component = BuildingComponents.COMPONENTS.getOrDefault(input.getStringOr("component", ""), null);
+        if (component == null) throw new RuntimeException("Error loading component: Component \"" + input.getString("component") + "\" does not exist!");
+        ValueInput posTag = input.childOrEmpty("inBlockPos");
+        Vec3 inBlockPos = new Vec3(posTag.getDoubleOr("x", 0), posTag.getDoubleOr("y", 0), posTag.getDoubleOr("z", 0));
+        float rotationX = input.getFloatOr("rotationX", 0);
+        float rotationY = input.getFloatOr("rotationY", 0);
+        float rotationZ = input.getFloatOr("rotationZ", 0);
+        VoxelShape shape = ShapeHelper.readNBT(input);
+        ValueInput modelTag = input.childOrEmpty("model");
+        BuildingComponentModelResourceLocation modelRL = AdditionalModels.get(Identifier.parse(modelTag.getStringOr("id", "")));
         List<Occupation> occupations = new ArrayList<>();
-        ListTag occupation = model.getList("occupation", 10);
-        for (Tag occupationTag : occupation)
+        ValueInput.ValueInputList occupation = input.childrenListOrEmpty("occupation");
+        for (ValueInput occupationTag : occupation)
         {
-            CompoundTag occTag = (CompoundTag) occupationTag;
-            occupations.add(Occupation.OCCUPATION_MAP.get(occTag.getString("value")));
+            occupations.add(Occupation.OCCUPATION_MAP.get(occupationTag.getStringOr("value", "")));
         }
         return new ComponentStateDefinition(component, inBlockPos, rotationX, rotationY, rotationZ, shape, modelRL, occupations);
     }

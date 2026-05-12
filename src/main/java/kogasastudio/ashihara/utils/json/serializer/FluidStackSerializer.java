@@ -2,20 +2,19 @@ package kogasastudio.ashihara.utils.json.serializer;
 
 import com.google.gson.*;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.lang.reflect.Type;
 
-/**
- * @author DustW
- **/
 public class FluidStackSerializer implements BaseSerializer<FluidStack>
 {
     public static FluidStack deserialize(JsonElement json)
     {
         var obj = json.getAsJsonObject();
-        var fluid = BuiltInRegistries.FLUID.get(ResourceLocation.parse(obj.get("fluid").getAsString()));
+        var fluid = BuiltInRegistries.FLUID.get(Identifier.parse(obj.get("fluid").getAsString())).orElse(null);
 
         if (fluid == null)
         {

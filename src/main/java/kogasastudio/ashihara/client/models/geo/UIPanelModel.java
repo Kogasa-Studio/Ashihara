@@ -1,17 +1,23 @@
 package kogasastudio.ashihara.client.models.geo;
 
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.state.BoneSnapshot;
+import com.geckolib.renderer.base.GeoRenderState;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.client.render.geo.worldui.PanelRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.*;
-import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.util.GeckoLibUtil;
-import software.bernie.geckolib.util.RenderUtil;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animation.*;
+import com.geckolib.cache.model.GeoBone;
+import com.geckolib.util.GeckoLibUtil;
+import com.geckolib.util.RenderUtil;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Optional;
 
+@NullMarked
 public class UIPanelModel extends InternalControlGeoModel<UIPanelModel>
 {
     public final Player player;
@@ -19,9 +25,9 @@ public class UIPanelModel extends InternalControlGeoModel<UIPanelModel>
     public boolean trackPlayerView = true;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
-    public static final ResourceLocation DEFAULT_MODEL = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "geo/panel.geo.json");
-    public static final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/geo/highlight_outline.png");
-    public static final ResourceLocation DEFAULT_BACKGROUND = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/gui/nihil.png");
+    public static final Identifier DEFAULT_MODEL = Identifier.fromNamespaceAndPath(Ashihara.MODID, "geo/panel.geo.json");
+    public static final Identifier DEFAULT_TEXTURE = Identifier.fromNamespaceAndPath(Ashihara.MODID, "textures/geo/highlight_outline.png");
+    public static final Identifier DEFAULT_BACKGROUND = Identifier.fromNamespaceAndPath(Ashihara.MODID, "textures/gui/nihil.png");
 
     public static final String MODEL_GOLDEN_HEMMING_CORNER = "geo/golden_hemming_corner.geo.json";
     public static final String MODEL_GOLDEN_HEMMING_EDGE = "geo/golden_hemming_edge.geo.json";
@@ -37,7 +43,7 @@ public class UIPanelModel extends InternalControlGeoModel<UIPanelModel>
     public HemmingEdgeModel hemming_edge;
     public EdgeModel edge;
 
-    public static final ResourceLocation ANIMATION = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "animations/gui_panel_general.animation.json");
+    public static final Identifier ANIMATION = Identifier.fromNamespaceAndPath(Ashihara.MODID, "animations/gui_panel_general.animation.json");
     public final PanelRenderer RENDERER = new PanelRenderer(this);
 
     public static final String INTRO = "intro";
@@ -78,24 +84,34 @@ public class UIPanelModel extends InternalControlGeoModel<UIPanelModel>
         return this;
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     public float getScaleX()
     {
-        Optional<GeoBone> boneOptional = this.getBone("scale_sim");
-        return boneOptional.map(GeoBone::getScaleX).orElse(0f);
+        Optional<GeoBone> boneOptional = this.getBakedModel(DEFAULT_MODEL).getBone("scale_sim");
+
+        return boneOptional
+                .map(bone -> bone.frameSnapshot)
+                .map(BoneSnapshot::getScaleX)
+                .orElse(0f);
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     public float getScaleY()
     {
-        Optional<GeoBone> boneOptional = this.getBone("scale_sim");
-        return boneOptional.map(GeoBone::getScaleY).orElse(0f);
+        Optional<GeoBone> boneOptional = this.getBakedModel(DEFAULT_MODEL).getBone("scale_sim");
+
+        return boneOptional
+                .map(bone -> bone.frameSnapshot)
+                .map(BoneSnapshot::getScaleY)
+                .orElse(0f);
     }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
     {
-        controllers.add(new AnimationController<>(this, INTRO, state -> PlayState.STOP).triggerableAnim(INTRO, ANIM_INTRO));
-        controllers.add(new AnimationController<>(this, OUTRO, state -> PlayState.STOP).triggerableAnim(OUTRO, ANIM_OUTRO));
-        controllers.add(new AnimationController<>(this, FLOAT, state -> PlayState.CONTINUE).triggerableAnim(FLOAT, ANIM_FLOAT));
+        controllers.add(new AnimationController<>(INTRO, state -> PlayState.STOP).triggerableAnim(INTRO, ANIM_INTRO));
+        controllers.add(new AnimationController<>(OUTRO, state -> PlayState.STOP).triggerableAnim(OUTRO, ANIM_OUTRO));
+        controllers.add(new AnimationController<>(FLOAT, state -> PlayState.CONTINUE).triggerableAnim(FLOAT, ANIM_FLOAT));
         super.registerControllers(controllers);
     }
 
@@ -106,30 +122,24 @@ public class UIPanelModel extends InternalControlGeoModel<UIPanelModel>
     }
 
     @Override
-    public double getTick(Object object)
-    {
-        return RenderUtil.getCurrentTick();
-    }
-
-    @Override
-    public ResourceLocation getModelResource(UIPanelModel animatable)
+    public Identifier getModelResource(GeoRenderState renderState)
     {
         return DEFAULT_MODEL;
     }
 
     @Override
-    public ResourceLocation getTextureResource(UIPanelModel animatable)
+    public Identifier getTextureResource(GeoRenderState renderState)
     {
         return DEFAULT_TEXTURE;
     }
 
     @Override
-    public ResourceLocation getAnimationResource(UIPanelModel animatable)
+    public Identifier getAnimationResource(UIPanelModel animatable)
     {
         return ANIMATION;
     }
 
-    public ResourceLocation getBackground()
+    public Identifier getBackground()
     {
         return DEFAULT_BACKGROUND;
     }

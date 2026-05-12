@@ -2,12 +2,11 @@ package kogasastudio.ashihara.helper;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -125,36 +124,33 @@ public class ShapeHelper
         return operated[0];
     }
 
-    public static VoxelShape readNBT(CompoundTag tag)
+    public static VoxelShape readNBT(ValueInput input)
     {
         VoxelShape shape = Shapes.empty();
-        ListTag shapeTag = tag.getList("shape", 10);
-        for (Tag t : shapeTag)
+        ValueInput.ValueInputList shapeTag = input.childrenListOrEmpty("shape");
+        for (ValueInput t : shapeTag)
         {
-            CompoundTag c = (CompoundTag) t;
-            shape = Shapes.or(shape, Shapes.box(c.getDouble("x0"), c.getDouble("y0"), c.getDouble("z0"), c.getDouble("x1"), c.getDouble("y1"), c.getDouble("z1")));
+            shape = Shapes.or(shape, Shapes.box(t.getDoubleOr("x0", 0), t.getDoubleOr("y0", 0), t.getDoubleOr("z0", 0), t.getDoubleOr("x1", 0), t.getDoubleOr("y1", 0), t.getDoubleOr("z1", 0)));
         }
         return shape;
     }
 
-    public static CompoundTag saveNBT(CompoundTag tag, VoxelShape shape)
+    public static ValueOutput saveNBT(ValueOutput tag, VoxelShape shape)
     {
-        ListTag shapeTag = new ListTag();
+        ValueOutput.ValueOutputList shapeTag = tag.childrenList("shape");
         shape.forAllBoxes
         (
             (pMinX, pMinY, pMinZ, pMaxX, pMaxY, pMaxZ) ->
             {
-                CompoundTag c = new CompoundTag();
+                ValueOutput c = shapeTag.addChild();
                 c.putDouble("x0", pMinX);
                 c.putDouble("y0", pMinY);
                 c.putDouble("z0", pMinZ);
                 c.putDouble("x1", pMaxX);
                 c.putDouble("y1", pMaxY);
                 c.putDouble("z1", pMaxZ);
-                shapeTag.add(c);
             }
         );
-        tag.put("shape", shapeTag);
         return tag;
     }
 }

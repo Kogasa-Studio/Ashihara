@@ -9,7 +9,7 @@ import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 
 public class MillStoneModel extends Model
 {
@@ -18,7 +18,7 @@ public class MillStoneModel extends Model
 
     public MillStoneModel(ModelPart root)
     {
-        super(RenderType::entitySolid);
+        super(root, f -> RenderTypes.solidMovingBlock());
         this.stone = root.getChild("stone");
         this.handle = root.getChild("handle");
     }
@@ -43,10 +43,9 @@ public class MillStoneModel extends Model
         return LayerDefinition.create(meshdefinition, 32, 32);
     }
 
-    @Override
-    public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, int color)
+    public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float color)
     {
-        stone.render(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, color);
-        handle.render(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, color);
+        stone.render(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, (int) color);
+        handle.render(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, (int) color);
     }
 }

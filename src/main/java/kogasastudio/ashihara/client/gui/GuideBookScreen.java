@@ -1,58 +1,51 @@
 package kogasastudio.ashihara.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
-import kogasastudio.ashihara.client.gui.widget.TestButton;
+import com.geckolib.animation.object.EasingType;
+import com.geckolib.animation.object.LoopType;
+import kogasastudio.ashihara.client.gui3d.Screen3D;
+import kogasastudio.ashihara.client.gui3d.util.OBB;
+import kogasastudio.ashihara.client.gui3d.util.ObbInterSector;
+import kogasastudio.ashihara.client.gui3d.util.Ray;
 import kogasastudio.ashihara.client.models.geo.GuideBookModel;
 import kogasastudio.ashihara.client.models.geo.InternalControlGeoModel;
-import kogasastudio.ashihara.client.models.geo.TestButtonModel;
-import kogasastudio.ashihara.helper.RenderHelper;
+import kogasastudio.ashihara.client.render.state.GUI3DComponentRenderState;
+import kogasastudio.ashihara.client.render.state.Screen3DPiPRenderState;
 import kogasastudio.ashihara.network.GuidebookProgressPacket;
 import kogasastudio.ashihara.registry.DataComponentTypes;
-import kogasastudio.ashihara.utils.OptionalUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.apache.commons.lang3.mutable.MutableFloat;
-import org.joml.Vector2f;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
 import oshi.util.tuples.Pair;
-import software.bernie.geckolib.animatable.GeoAnimatable;
-import software.bernie.geckolib.animation.Animation;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.EasingType;
-import software.bernie.geckolib.cache.object.GeoBone;
+import org.jspecify.annotations.Nullable;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static kogasastudio.ashihara.utils.OptionalUtil.getWithDefault;
-
 /*
  * Thanks to @TT432 for helping to debug animation.
  */
-public class GuideBookScreen extends Screen
+public class GuideBookScreen extends Screen3D
 {
     private final GuideBookModel book = new GuideBookModel();
     private final Player player;
-    private final RenderType renderType = RenderType.ENTITY_CUTOUT.apply(book.getTextureResource(book));
-    private int ticks = 0;
     private int coolDown = 0;
 
     private int currentPageIndex = 0;
     private final Map<Integer, Pair<MutableFloat, String>> flipQueue = new HashMap<>();
 
-    private final TestButton button = new TestButton(0, 0, 64, 64);
-
-    public boolean isInEditMode = false;
+    // 3D UI minimum migration: page hit areas in the same GUI-space used by PiP rendering.
+    @Nullable
+    private OBB leftPageObb;
+    @Nullable
+    private OBB rightPageObb;
 
     public GuideBookScreen(Component title, Player player)
     {
@@ -69,14 +62,12 @@ public class GuideBookScreen extends Screen
     @Override
     public void tick()
     {
-        ticks += 1;
         coolDown -= coolDown <= 0 ? 0 : 1;
-        button.updateParent();
         List<Integer> toRemove = new ArrayList<>();
         for (int i : flipQueue.keySet())
         {
             flipQueue.get(i).getA().addAndGet(-1);
-            if (flipQueue.get(i).getA().getValue() <= 0)
+            if (flipQueue.get(i).getA().floatValue() <= 0)
             {
                 toRemove.add(i);
                 String anim = flipQueue.get(i).getB();
@@ -84,27 +75,76 @@ public class GuideBookScreen extends Screen
                 if (anim.contains("buffer")) book.stopTriggeredAnim(player, book.hashCode(), controller, anim);
             }
         }
-        toRemove.forEach(i -> flipQueue.remove(i));
+        toRemove.forEach(flipQueue::remove);
         super.tick();
     }
 
     @Override
-    protected void init()
+    public void init()
     {
         book.triggerAnim(player, book.hashCode(), "Intro", GuideBookModel.ANIM_INTRO);
         this.currentPageIndex = this.player.getData(DataComponentTypes.GUIDEBOOK_READING_PAGE.get());
         if (this.currentPageIndex != 0 && this.currentPageIndex <= GuideBookModel.getTotalPages())
         {
             String anim = GuideBookModel.getFlipAnim(currentPageIndex - 1, currentPageIndex, 0);
-            book.triggerAnim(player, book.hashCode(), GuideBookModel.CONTROLLER_FLIP, anim);
+            if (anim != null)
+            {
+                book.triggerAnim(player, book.hashCode(), GuideBookModel.CONTROLLER_FLIP, anim);
+            }
         }
         book.setPageIndex(currentPageIndex);
         book.updateCurrentPage(false);
         book.triggerInternal(player, book.hashCode(), catchProgress(null).build());
+        rebuildPageObbs();
         super.init();
     }
 
-    public Pair<MutableFloat, String> appendBufferedFlip(boolean flipToLeft)
+    @Override
+    public void resize(int width, int height)
+    {
+        super.resize(width, height);
+        rebuildPageObbs();
+    }
+
+    private void rebuildPageObbs()
+    {
+        // Keep this geometry strictly aligned with extractRenderState PiP bounds.
+        final int bookWidth = Math.max(32, Math.min(this.width - 48, 220));
+        final int bookHeight = Math.max(32, Math.min(this.height - 84, 148));
+        final int bookLeft = this.width / 2 - bookWidth / 2;
+        final int bookTop = this.height / 2 - bookHeight / 2 + 4;
+
+        final int spineLeft = this.width / 2 - 5;
+        final int pageInset = 8;
+        final int pageGap = 3;
+        final int obbDepth = 50;
+
+        final int leftStart = bookLeft + pageInset;
+        final int leftEnd = Math.max(leftStart + 1, spineLeft - pageGap);
+        final int leftWidth = leftEnd - leftStart;
+
+        final int rightStart = spineLeft + 10 + pageGap;
+        final int rightEnd = Math.max(rightStart + 1, bookLeft + bookWidth - pageInset);
+        final int rightWidth = rightEnd - rightStart;
+
+        this.leftPageObb = new OBB
+        (
+                new Vector3f(leftWidth * 0.5f, bookHeight * 0.5f, obbDepth * 0.5f),
+                new Vector3f(0, 0, 0),
+                new Vector3f(leftWidth, bookHeight, obbDepth),
+                new Matrix4f().translation(leftStart, bookTop, 0)
+        );
+
+        this.rightPageObb = new OBB
+        (
+                new Vector3f(rightWidth * 0.5f, bookHeight * 0.5f, obbDepth * 0.5f),
+                new Vector3f(0, 0, 0),
+                new Vector3f(rightWidth, bookHeight, obbDepth),
+                new Matrix4f().translation(rightStart, bookTop, 0)
+        );
+    }
+
+    public @Nullable Pair<MutableFloat, String> appendBufferedFlip(boolean flipToLeft)
     {
         for (int i = 0; i < 6; i++)
         {
@@ -150,35 +190,49 @@ public class GuideBookScreen extends Screen
     }*/
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button)
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick)
     {
-        if (coolDown > 0) return super.mouseClicked(mouseX, mouseY, button);
+        if (coolDown > 0) return super.mouseClicked(event, doubleClick);
+
         boolean flip = false;
         boolean flipToLeft = false;
         boolean buffered = false;
         boolean resetBuffer = true;
-        if (mouseX <= this.width / 2f && currentPageIndex <= GuideBookModel.getTotalPages()) flip = true;
-        if (mouseX >= this.width / 2f && currentPageIndex > 0) {flip = true; flipToLeft = true;}
+
+        // 3D UI picking: same ray convention as Screen3D (origin z=-2000, dir +Z).
+        final Ray mouseRay = new Ray(new Vector3f((float)event.x(), (float)event.y(), -2000f), new Vector3f(0f, 0f, 1f));
+        final float tLeft = this.leftPageObb != null ? ObbInterSector.rayOBBIntersect(mouseRay, this.leftPageObb) : -1f;
+        final float tRight = this.rightPageObb != null ? ObbInterSector.rayOBBIntersect(mouseRay, this.rightPageObb) : -1f;
+
+        // Left page -> next page (flipToLeft=false); Right page -> previous page (flipToLeft=true).
+        if (tLeft >= 0f && (tRight < 0f || tLeft <= tRight) && currentPageIndex < GuideBookModel.getTotalPages())
+        {
+            flip = true;
+        }
+        else if (tRight >= 0f && currentPageIndex > 0)
+        {
+            flip = true;
+            flipToLeft = true;
+        }
 
         if (flip)
         {
             String animation = GuideBookModel.getFlipAnim(currentPageIndex, currentPageIndex + (flipToLeft ? -1 : 1), 0);
 
-            if (animation == null) return super.mouseClicked(mouseX, mouseY, button);
+            if (animation == null) return super.mouseClicked(event, doubleClick);
             if (animation.equals(GuideBookModel.ANIM_FLIP_COMMON_LEFT) || animation.equals(GuideBookModel.ANIM_FLIP_COMMON_RIGHT))
             {
                 resetBuffer = false;
                 Pair<MutableFloat, String> p = appendBufferedFlip(flipToLeft);
-                int i = p.getA().getValue().intValue();
+                if (p == null) return super.mouseClicked(event, doubleClick);
+                int i = p.getA().intValue();
                 animation = p.getB();
                 buffered = (i > 0);
-                if (animation == null) return super.mouseClicked(mouseX, mouseY, button);
+                if (animation == null) return super.mouseClicked(event, doubleClick);
             }
 
-            //book.stopTriggeredAnim(player, book.hashCode(), controller, animation);
             if (resetBuffer) resetBuffer();
             String controller = buffered ? animation : GuideBookModel.CONTROLLER_FLIP;
-            book.getAnimatableInstanceCache().getManagerForId(book.hashCode()).getAnimationControllers().get(controller).forceAnimationReset();
 
             book.triggerInternal(player, book.hashCode(), catchProgress(null).build());
             book.triggerAnim(player, book.hashCode(), controller, animation);
@@ -188,44 +242,50 @@ public class GuideBookScreen extends Screen
             coolDown = 5;
             return true;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(event, doubleClick);
     }
 
     private InternalControlGeoModel.InternalAnimationBuilder catchProgress(InternalControlGeoModel.InternalAnimationBuilder builder)
     {
-        if (builder == null) builder = new InternalControlGeoModel.InternalAnimationBuilder("catchProgress", Animation.LoopType.HOLD_ON_LAST_FRAME);
+        if (builder == null)
+        {
+            builder = new InternalControlGeoModel.InternalAnimationBuilder("catchProgress", LoopType.HOLD_ON_LAST_FRAME);
+        }
+
         {
             double progress = (double) book.getPageIndex() / GuideBookModel.getTotalPages();
             double invertedProgress = 1d - progress;
+
             builder = builder
             .startBone("pos_sim")
-            .lerpX(InternalControlGeoModel.InternalAnimationBuilder.VarType.ROTATION, 10, getWithDefault(0f, book.getBone("pos_sim"), GeoBone::getRotX), Math.toRadians(progress * 160f), EasingType.EASE_IN_OUT_QUAD)
+            .lerpX(InternalControlGeoModel.InternalAnimationBuilder.VarType.ROTATION, 10, 0f, Math.toRadians(progress * 160f), EasingType.EASE_IN_OUT_QUAD)
             .endBone()
             .startBone("part_left")
-            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.SCALE, 10, getWithDefault(1f, book.getBone("part_left"), GeoBone::getScaleY), invertedProgress * 2f, EasingType.EASE_IN_OUT_QUAD)
+            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.SCALE, 10, 1f, invertedProgress * 2f, EasingType.EASE_IN_OUT_QUAD)
             .endBone()
             .startBone("part_right")
-            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.SCALE, 10, getWithDefault(1f, book.getBone("part_right"), GeoBone::getScaleY), progress * 2f, EasingType.EASE_IN_OUT_QUAD)
+            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.SCALE, 10, 1f, progress * 2f, EasingType.EASE_IN_OUT_QUAD)
             .endBone()
             .startBone("content_left")
-            .lerpX(InternalControlGeoModel.InternalAnimationBuilder.VarType.ROTATION, 10, getWithDefault(0f, book.getBone("content_left"), GeoBone::getRotX), -Math.toRadians(progress * 160f), EasingType.EASE_IN_OUT_QUAD)
+            .lerpX(InternalControlGeoModel.InternalAnimationBuilder.VarType.ROTATION, 10, 0f, -Math.toRadians(progress * 160f), EasingType.EASE_IN_OUT_QUAD)
             .endBone()
             .startBone("content_right")
-            .lerpX(InternalControlGeoModel.InternalAnimationBuilder.VarType.ROTATION, 10, getWithDefault(0f, book.getBone("content_right"), GeoBone::getRotX), -Math.toRadians(progress * 160f), EasingType.EASE_IN_OUT_QUAD)
+            .lerpX(InternalControlGeoModel.InternalAnimationBuilder.VarType.ROTATION, 10, 0f, -Math.toRadians(progress * 160f), EasingType.EASE_IN_OUT_QUAD)
             .endBone()
             .startBone("left")
-            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, getWithDefault(0f, book.getBone("left"), GeoBone::getPosY), invertedProgress * 3f - 1.5f, EasingType.EASE_IN_OUT_QUAD)
+            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, 0f, invertedProgress * 3f - 1.5f, EasingType.EASE_IN_OUT_QUAD)
             .endBone()
             .startBone("right")
-            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, getWithDefault(0f, book.getBone("right"), GeoBone::getPosY), progress * -3f + 1.5f, EasingType.EASE_IN_OUT_QUAD)
+            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, 0f, progress * -3f + 1.5f, EasingType.EASE_IN_OUT_QUAD)
             .endBone()
             .startBone("rightcover")
-            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, getWithDefault(0f, book.getBone("rightcover"), GeoBone::getPosY), progress * 3f - 1.5f, EasingType.EASE_IN_OUT_QUAD)
+            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, 0f, progress * 3f - 1.5f, EasingType.EASE_IN_OUT_QUAD)
             .endBone()
             .startBone("leftcover")
-            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, getWithDefault(0f, book.getBone("leftcover"), GeoBone::getPosY), invertedProgress * -3f + 1.5f, EasingType.EASE_IN_OUT_QUAD)
+            .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, 0f, invertedProgress * -3f + 1.5f, EasingType.EASE_IN_OUT_QUAD)
             .endBone();
         }
+
         return builder;
     }
 
@@ -233,74 +293,55 @@ public class GuideBookScreen extends Screen
     public void onClose()
     {
         player.setData(DataComponentTypes.GUIDEBOOK_READING_PAGE, currentPageIndex);
-        PacketDistributor.sendToServer(new GuidebookProgressPacket(0, this.currentPageIndex));
+        ClientPacketDistributor.sendToServer(new GuidebookProgressPacket(0, this.currentPageIndex));
         super.onClose();
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
     {
-        RenderSystem.setupGui3DDiffuseLighting(new Vector3f(0, 0, 0), new Vector3f(-1, 1, 1));
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
 
-        PoseStack pose = guiGraphics.pose();
-        pose.pushPose();
-        pose.translate(0, -1, -3200);
-        pose.scale(64, 64, 64);
-        button.render(guiGraphics, mouseX, mouseY, partialTick);
-        pose.popPose();
+        // Stage2 minimal: submit PiP state to render the 3D book model in GUI.
+        final int bookWidth = Math.max(32, Math.min(this.width - 48, 220));
+        final int bookHeight = Math.max(32, Math.min(this.height - 84, 148));
+        final int bookLeft = this.width / 2 - bookWidth / 2;
+        final int bookTop = this.height / 2 - bookHeight / 2 + 4;
 
-        pose.pushPose();
-        pose.translate((float) (this.width / 2d - 72.5), (float) (this.height - 40), 0);
-        pose.mulPose(Axis.YP.rotationDegrees(90));
-        pose.scale(64, -64, 64);
-        book.RENDERER.render(guiGraphics.pose(), book, guiGraphics.bufferSource(), renderType, guiGraphics.bufferSource().getBuffer(renderType), 15728880, partialTick);
-        book.mouseX = mouseX;
-        book.mouseY = mouseY;
-        pose.popPose();
+        graphics.submitPictureInPictureRenderState(
+            new Screen3DPiPRenderState
+            (
+                bookLeft,
+                bookTop,
+                bookLeft + bookWidth,
+                bookTop + bookHeight,
+                1.0f,
+                graphics.peekScissorStack(),
+                List.of(GUI3DComponentRenderState.of(this.book, this.book.RENDERER, null, new CameraRenderState(), 0xF000F0, partialTick)),
+                0xF000F0,
+                partialTick
+            )
+        );
 
-        pose.pushPose();
-        Vector2f mI = book.getRightCoverProjectedPos(mouseX, mouseY);
-        guiGraphics.drawString(Minecraft.getInstance().font, "X: " + mouseX + ", Y: " + mouseY + ", Current page: " + currentPageIndex + ", In model pos: X: " + mI.x * 16 + ", Y: " + mI.y * 16, 0, 0, 0xffffff);
-        pose.popPose();
+        final int leftColor = this.currentPageIndex < GuideBookModel.getTotalPages() ? 0x66306090 : 0x33202020;
+        final int rightColor = this.currentPageIndex > 0 ? 0x66906030 : 0x33202020;
 
-        pose.pushPose();
-        Vector4f ul = book.projectionMatrix.transform(new Vector4f(0f, 0f, -25f/16f, 1.0f));
-        Vector4f ur = book.projectionMatrix.transform(new Vector4f(0f, 0f, 0f, 1.0f));
-        Vector4f dr = book.projectionMatrix.transform(new Vector4f(-40f/16f, 0f, 0f, 1.0f));
-        Vector4f dl = book.projectionMatrix.transform(new Vector4f(-40f/16f, 0f, -25f/16f, 1.0f));
+        graphics.fill(0, 0, this.width / 2, this.height, leftColor);
+        graphics.fill(this.width / 2, 0, this.width, this.height, rightColor);
 
-        pose.pushPose();
-        pose.translate(ul.x, ul.y, ul.z);
-        guiGraphics.drawString(Minecraft.getInstance().font, "猫", 0, 0, 0xacf133);
-        RenderHelper.fill(pose, guiGraphics.bufferSource().getBuffer(RenderType.solid()), -0.5f, -0.5f, 0.5f, 0.5f, 0, 0xc1002f);
-        pose.popPose();
+        graphics.text(this.font, "GuideBook PiP 3D + fallback overlay", 6, 6, 0xFFFFFF, true);
+        graphics.text(this.font, "pageIndex=" + this.currentPageIndex + "/" + GuideBookModel.getTotalPages(), 6, 18, 0xE0E0E0, false);
+        graphics.text(this.font, "Left half: next page", 6, this.height - 24, 0xC8D8FF, false);
+        graphics.text(this.font, "Right half: previous page", this.width / 2 + 6, this.height - 24, 0xFFD8C8, false);
 
-        pose.pushPose();
-        pose.translate(ur.x, ur.y, ur.z);
-        guiGraphics.drawString(Minecraft.getInstance().font, "猫", 0, 0, 0xacf133);
-        RenderHelper.fill(pose, guiGraphics.bufferSource().getBuffer(RenderType.solid()), -0.5f, -0.5f, 0.5f, 0.5f, 0, 0xc1002f);
-        pose.popPose();
+        if (!this.flipQueue.isEmpty())
+        {
+            graphics.text(this.font, "buffered flips=" + this.flipQueue.size(), 6, 30, 0xFFD54F, false);
+        }
 
-        pose.pushPose();
-        pose.translate(dr.x, dr.y, dr.z);
-        guiGraphics.drawString(Minecraft.getInstance().font, "猫", 0, 0, 0xacf133);
-        RenderHelper.fill(pose, guiGraphics.bufferSource().getBuffer(RenderType.solid()), -0.5f, -0.5f, 0.5f, 0.5f, 0, 0xc1002f);
-        pose.popPose();
-
-        pose.pushPose();
-        pose.translate(dl.x, dl.y, dl.z);
-        guiGraphics.drawString(Minecraft.getInstance().font, "猫", 0, 0, 0xacf133);
-        RenderHelper.fill(pose, guiGraphics.bufferSource().getBuffer(RenderType.solid()), -0.5f, -0.5f, 0.5f, 0.5f, 0, 0xc1002f);
-        pose.popPose();
-
-        pose.popPose();
-
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
-    }
-
-    @Override
-    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
-    {
-        //this.renderBlurredBackground(partialTick);
+        if (this.coolDown > 0)
+        {
+            graphics.text(this.font, "cooldown=" + this.coolDown, 6, 42, 0xFF8A80, false);
+        }
     }
 }

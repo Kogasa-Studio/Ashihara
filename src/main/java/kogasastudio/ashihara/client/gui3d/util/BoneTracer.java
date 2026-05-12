@@ -1,8 +1,9 @@
 package kogasastudio.ashihara.client.gui3d.util;
 
 import org.joml.Matrix4f;
-import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.cache.object.GeoCube;
+import com.geckolib.cache.model.GeoBone;
+import com.geckolib.cache.model.cuboid.CuboidGeoBone;
+import com.geckolib.cache.model.cuboid.GeoCube;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,9 +30,12 @@ public class BoneTracer
         this.matrix = new Matrix4f(matrix);
         this.collisionBoxes.clear();
 
-        for (GeoCube cube : bone.getCubes())
+        if (bone instanceof CuboidGeoBone cuboidBone)
         {
-            this.collisionBoxes.add(GeoCubeObbExtractor.extract(this.matrix, cube));
+            for (GeoCube cube : cuboidBone.cubes)
+            {
+                this.collisionBoxes.add(GeoCubeObbExtractor.extract(this.matrix, cube));
+            }
         }
     }
 

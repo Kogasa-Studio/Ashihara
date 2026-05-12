@@ -18,17 +18,21 @@ import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 
 public class JinjaLanternBlock extends DoubleLanternBlock.AxisAlignedVariant
 {
+    public JinjaLanternBlock(Properties properties)
+    {
+        super(properties, 0, 0, 0);
+    }
+
     public JinjaLanternBlock()
     {
-        super
-                (
-                        Properties.of()
-                                .mapColor(MapColor.WOOD)
-                                .strength(0.5F)
-                                .sound(SoundType.WOOD)
-                                .lightLevel(getLightValueLit(15)),
-                        0, 0, 0
-                );
+        this
+        (
+            Properties.of()
+            .mapColor(MapColor.WOOD)
+            .strength(0.5F)
+            .sound(SoundType.WOOD)
+            .lightLevel(getLightValueLit(15))
+        );
     }
 
     VoxelShape UPPER_X = Block.box(1.8D, 0.0D, 3.2D, 14.2D, 13.1D, 12.9D);

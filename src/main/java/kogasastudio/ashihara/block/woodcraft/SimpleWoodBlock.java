@@ -10,15 +10,20 @@ import net.minecraft.world.level.material.MapColor;
 
 public class SimpleWoodBlock extends RotatedPillarBlock
 {
+    public SimpleWoodBlock(Properties properties)
+    {
+        super(properties);
+    }
+
     public SimpleWoodBlock()
     {
-        super
-                (
-                        Properties.of()
-                                .mapColor(MapColor.WOOD)
-                                .strength(0.2F, 0.3F)
-                                .sound(SoundType.WOOD)
-                );
+        this
+        (
+            Properties.of()
+            .mapColor(MapColor.WOOD)
+            .strength(0.2F, 0.3F)
+            .sound(SoundType.WOOD)
+        );
     }
 
     @Override

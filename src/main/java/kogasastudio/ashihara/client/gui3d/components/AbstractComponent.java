@@ -4,7 +4,8 @@ import kogasastudio.ashihara.client.gui3d.Screen3D;
 import kogasastudio.ashihara.client.gui3d.util.OBB;
 import kogasastudio.ashihara.client.gui3d.util.ObbInterSector;
 import kogasastudio.ashihara.client.gui3d.util.Ray;
-import net.minecraft.client.gui.GuiGraphics;
+import kogasastudio.ashihara.client.render.state.GUI3DComponentRenderState;
+import net.minecraft.client.input.MouseButtonEvent;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -115,35 +116,54 @@ public class AbstractComponent
         }
     }
 
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+    public void render(GUI3DComponentRenderState renderState, int mouseX, int mouseY, float partialTick)
     {
         if (!this.visible)
         {
             return;
         }
 
-        this.renderSelf(guiGraphics, mouseX, mouseY, partialTick);
-        this.children.forEach(child -> child.render(guiGraphics, mouseX, mouseY, partialTick));
+        this.renderSelf(renderState, mouseX, mouseY, partialTick);
+        this.children.forEach(child -> child.render(renderState, mouseX, mouseY, partialTick));
     }
 
-    protected void renderSelf(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+    /**
+     * Collect PiP render-state nodes from this component tree.
+     */
+    public void collectRenderStates(List<GUI3DComponentRenderState> output, int mouseX, int mouseY, float partialTick)
+    {
+        if (!this.visible)
+        {
+            return;
+        }
+
+        this.collectSelfRenderStates(output, mouseX, mouseY, partialTick);
+        this.children.forEach(child -> child.collectRenderStates(output, mouseX, mouseY, partialTick));
+    }
+
+    /** Hook for subclasses to append their own render-state submissions. */
+    protected void collectSelfRenderStates(List<GUI3DComponentRenderState> output, int mouseX, int mouseY, float partialTick)
     {
     }
 
-    public boolean mouseClicked(double mouseX, double mouseY, int button)
+    protected void renderSelf(GUI3DComponentRenderState renderState, int mouseX, int mouseY, float partialTick)
     {
-        this.dragging = button == 0;
+    }
+
+    public boolean mouseClicked(MouseButtonEvent event)
+    {
+        this.dragging = event.button() == 0;
         return false;
     }
 
-    public boolean mouseReleased(double mouseX, double mouseY, int button)
+    public boolean mouseReleased(MouseButtonEvent event)
     {
         boolean wasDragging = this.dragging;
         this.dragging = false;
         return wasDragging;
     }
 
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY)
+    public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY)
     {
         return this.dragging;
     }

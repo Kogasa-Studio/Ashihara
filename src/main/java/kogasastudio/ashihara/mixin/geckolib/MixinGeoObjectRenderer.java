@@ -4,12 +4,12 @@ import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
 import kogasastudio.ashihara.utils.mixin.GeoRendererPoseSyncProvider;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
-import software.bernie.geckolib.renderer.GeoObjectRenderer;
+import com.geckolib.renderer.GeoObjectRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Mixin(GeoObjectRenderer.class)
+//@Mixin(GeoObjectRenderer.class)
 public class MixinGeoObjectRenderer implements GeoRendererPoseSyncProvider
 {
     @Unique

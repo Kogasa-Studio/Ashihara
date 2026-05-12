@@ -1,18 +1,18 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-    {
-      "item": "ashihara:mochi"
-    },
-    {
-      "item": "ashihara:bamboo_stick"
-    },
-    {
-      "item": "ashihara:sakura"
-    },
-    {
-      "item": "ashihara:macha_powder"
-    }
+    [
+      "ashihara:mochi"
+    ],
+    [
+      "ashihara:bamboo_stick"
+    ],
+    [
+      "ashihara:sakura"
+    ],
+    [
+      "ashihara:macha_powder"
+    ]
   ],
   "result": {
     "id": "ashihara:dango_hanamie",

@@ -2,13 +2,13 @@ package kogasastudio.ashihara.client.gui3d;
 
 import kogasastudio.ashihara.network.ContainerSlotClickPacket;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
 /**
  * 基于 Screen3D 的容器屏幕基类，持有 {@link AbstractContainerMenu} 并提供：
@@ -48,9 +48,9 @@ public abstract class ContainerScreen3D<T extends AbstractContainerMenu>
      * @param button      0=左键, 1=右键
      * @param clickType   原版 ClickType 枚举
      */
-    public void sendSlotClick(int slotId, int button, ClickType clickType)
+    public void sendSlotClick(int slotId, int button, ClickAction clickType)
     {
-        PacketDistributor.sendToServer(new ContainerSlotClickPacket(
+        ClientPacketDistributor.sendToServer(new ContainerSlotClickPacket(
                 this.menu.containerId, slotId, button, clickType.ordinal()));
     }
 
@@ -58,14 +58,14 @@ public abstract class ContainerScreen3D<T extends AbstractContainerMenu>
      * 渲染跟随鼠标的拾取物品（2D 平面，与原版槽位 UI 一致）。
      */
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a)
     {
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        super.extractRenderState(graphics, mouseX, mouseY, a);
         ItemStack carried = this.menu.getCarried();
         if (!carried.isEmpty())
         {
-            guiGraphics.renderItem(carried, mouseX - 8, mouseY - 8);
-            guiGraphics.renderItemDecorations(Minecraft.getInstance().font, carried, mouseX - 8, mouseY - 8);
+            graphics.item(carried, mouseX - 8, mouseY - 8);
+            graphics.itemDecorations(Minecraft.getInstance().font, carried, mouseX - 8, mouseY - 8);
         }
     }
 

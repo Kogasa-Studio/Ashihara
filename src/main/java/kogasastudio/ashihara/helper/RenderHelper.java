@@ -1,32 +1,35 @@
 package kogasastudio.ashihara.helper;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import kogasastudio.ashihara.block.blockentity.IFluidHandler;
 import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
+import kogasastudio.ashihara.inventory.BEFluidStackHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.block.FluidModel;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.FastColor;
-import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.util.ARGB;
+import net.minecraft.world.entity.ItemOwner;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.client.fluid.FluidTintSource;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import org.joml.Matrix4f;
-import software.bernie.geckolib.animatable.GeoAnimatable;
-import software.bernie.geckolib.animation.AnimationController;
+import com.geckolib.animatable.GeoAnimatable;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.object.PlayState;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,10 +77,10 @@ public class RenderHelper
      */
     public static void buildMatrix(Matrix4f matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int RGBA)
     {
-        int red = FastColor.ARGB32.red(RGBA);
-        int green = FastColor.ARGB32.green(RGBA);
-        int blue = FastColor.ARGB32.blue(RGBA);
-        int alpha = FastColor.ARGB32.alpha(RGBA);
+        int red = ARGB.red(RGBA);
+        int green = ARGB.green(RGBA);
+        int blue = ARGB.blue(RGBA);
+        int alpha = ARGB.alpha(RGBA);
 
         builder.addVertex(matrix, x, y, z)
                 .setColor(red, green, blue, alpha)
@@ -97,15 +100,15 @@ public class RenderHelper
      * @param height 区域高度
      * @param list   渲染文本列表
      */
-    public static void drawTooltip(Screen gui, GuiGraphics guiGraphics, int mouseX, int mouseY, int x, int y, int weight, int height, List<Component> list)
+    public static void drawTooltip(Screen gui, GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, int x, int y, int weight, int height, List<ClientTooltipComponent> list)
     {
         if ((x <= mouseX && mouseX <= x + weight) && (y <= mouseY && mouseY <= y + height))
         {
-            guiGraphics.renderComponentTooltip(gui.getMinecraft().font, list, mouseX, mouseY);
+            guiGraphics.tooltip(gui.getMinecraft().font, list, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
         }
     }
 
-    public static void drawFluidToolTip(Screen gui, GuiGraphics guiGraphics, int mouseX, int mouseY, int x, int y, int weight, int height, FluidStack stack, int Capacity)
+    public static void drawFluidToolTip(Screen gui, GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, int x, int y, int weight, int height, FluidStack stack, int Capacity)
     {
         if (!stack.isEmpty())
         {
@@ -117,7 +120,7 @@ public class RenderHelper
                                     + ": " + stack.getAmount()
                                     + (Capacity > 0 ? (" mB / " + Capacity + " mB") : " mB")
                     ));
-            drawTooltip(gui, guiGraphics, mouseX, mouseY, x, y, weight, height, list);
+            drawTooltip(gui, guiGraphics, mouseX, mouseY, x, y, weight, height, list.stream().map(c -> ClientTooltipComponent.create(c.getVisualOrderText())).toList());
         }
     }
 
@@ -133,20 +136,13 @@ public class RenderHelper
      */
     public static void renderFluidStackInGUI(Matrix4f matrix, FluidStack fluid, float width, float height, float x, float y)
     {
-        //正常渲染透明度
-        RenderSystem.enableBlend();
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        if (fluid.isEmpty())
+        {
+            return;
+        }
 
-        //获取sprite
-        TextureAtlasSprite FLUID =
-                Minecraft.getInstance()
-                        .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                        .apply(IClientFluidTypeExtensions.of(fluid.getFluid()).getStillTexture());
-
-        //绑atlas
-        RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
-
-        int color = IClientFluidTypeExtensions.of(fluid.getFluid()).getTintColor();
+        TextureAtlasSprite FLUID = getFluidStillSprite(fluid);
+        int color = getFluidTintColor(fluid);
 
         /*
          * 获取横向和纵向层数
@@ -187,18 +183,17 @@ public class RenderHelper
             {
                 if (j == 0 && extraWidth == 0) break;
                 float xStart = x + (wFloors - j) * 16;
-                float xOffset = j == 0 ? (float) extraWidth : 16;
-                float u1 = j == 0 ? FLUID.getU0() + ((FLUID.getU1() - u0) * ((float) extraWidth / 16f)) : FLUID.getU1();
+                float xOffset = j == 0 ? extraWidth : 16;
+                float u1 = j == 0 ? FLUID.getU0() + ((FLUID.getU1() - u0) * (extraWidth / 16f)) : FLUID.getU1();
 
                 //渲染主代码
                 buildMatrix(matrix, builder, xStart, yStart - yOffset, 0.0f, u0, v0, color);
                 buildMatrix(matrix, builder, xStart, yStart, 0.0f, u0, v1, color);
                 buildMatrix(matrix, builder, xStart + xOffset, yStart, 0.0f, u1, v1, color);
                 buildMatrix(matrix, builder, xStart + xOffset, yStart - yOffset, 0.0f, u1, v0, color);
-                tessellator.clear();
             }
         }
-        RenderSystem.disableBlend();
+        tessellator.clear();
     }
 
     public static void renderLeveledFluidStack
@@ -210,16 +205,8 @@ public class RenderHelper
         Level worldIn, BlockPos posIn
     )
     {
-        TextureAtlasSprite FLUID = (worldIn != null && posIn != null)
-                ? Minecraft.getInstance()
-                .getBlockRenderer()
-                .getBlockModelShaper()
-                .getTexture(fluidIn.getFluid().defaultFluidState().createLegacyBlock(), worldIn, posIn)
-                : Minecraft.getInstance()
-                .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                .apply(IClientFluidTypeExtensions.of(fluidIn.getFluid()).getStillTexture());
-
-        int color = IClientFluidTypeExtensions.of(fluidIn.getFluid()).getTintColor();
+        TextureAtlasSprite FLUID = getFluidStillSprite(fluidIn);
+        int color = getFluidTintColor(fluidIn);
 
         stackIn.pushPose();
 
@@ -243,13 +230,14 @@ public class RenderHelper
                     Level worldIn, BlockPos posIn
             )
     {
-        FluidTank bucket = teIn.getTank();
+        BEFluidStackHandler<?> bucket = teIn.getTank();
         if (!bucket.isEmpty())
         {
-            FluidStack fluid = bucket.getFluid();
-            float height = minHeight + ((float) fluid.getAmount() / bucket.getCapacity()) * (maxHeight - minHeight);
+            FluidStack fluid = bucket.getFluidStack();
+            float height = minHeight + ((float) bucket.getFluidAmount() / bucket.getCapacity()) * (maxHeight - minHeight);
 
-            renderLeveledFluidStack(fluid, stackIn, bufferIn.getBuffer(RenderType.translucent()), combinedLightIn, combinedOverlayIn, xStart, height, zStart, xEnd, zEnd, worldIn, posIn);
+            TextureAtlasSprite sprite = getFluidStillSprite(fluid);
+            renderLeveledFluidStack(fluid, stackIn, bufferIn.getBuffer(RenderTypes.itemTranslucent(sprite.atlasLocation())), combinedLightIn, combinedOverlayIn, xStart, height, zStart, xEnd, zEnd, worldIn, posIn);
         }
     }
 
@@ -267,9 +255,34 @@ public class RenderHelper
         int light
     )
     {
-        TextureAtlasSprite FLUID = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(fluidStack.getFluid()).getStillTexture());
-        int color = IClientFluidTypeExtensions.of(fluidStack.getFluid()).getTintColor();
-        blit(poseStack, bufferSource.getBuffer(RenderType.translucent()), x1, x2, y1, y2, z, FLUID.getU0(), FLUID.getU1(), FLUID.getV0(), FLUID.getV1(), overlay, color, 1f, light);
+        TextureAtlasSprite FLUID = getFluidStillSprite(fluidStack);
+        int color = getFluidTintColor(fluidStack);
+        blit(poseStack, bufferSource.getBuffer(RenderTypes.itemTranslucent(FLUID.atlasLocation())), x1, x2, y1, y2, z, FLUID.getU0(), FLUID.getU1(), FLUID.getV0(), FLUID.getV1(), overlay, color, 1f, light);
+    }
+
+    public static FluidModel getFluidModel(FluidStack fluidStack)
+    {
+        return Minecraft.getInstance().getModelManager().getFluidStateModelSet().get(fluidStack.getFluid().defaultFluidState());
+    }
+
+    public static TextureAtlasSprite getFluidStillSprite(FluidStack fluidStack)
+    {
+        if (fluidStack.isEmpty())
+        {
+            return Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(net.minecraft.data.AtlasIds.BLOCKS).getSprite(MissingTextureAtlasSprite.getLocation());
+        }
+        return getFluidModel(fluidStack).stillMaterial().sprite();
+    }
+
+    public static int getFluidTintColor(FluidStack fluidStack)
+    {
+        if (fluidStack.isEmpty())
+        {
+            return 0xFFFFFFFF;
+        }
+
+        FluidTintSource tintSource = getFluidModel(fluidStack).fluidTintSource();
+        return tintSource == null ? 0xFFFFFFFF : tintSource.colorAsStack(fluidStack);
     }
 
     public static void blit
@@ -381,7 +394,15 @@ public class RenderHelper
     {
         for (AnimationController<?> controller : animatable.getAnimatableInstanceCache().getManagerForId(animatable.hashCode()).getAnimationControllers().values())
         {
-            if (check.test(controller) && (controller.getAnimationState().equals(AnimationController.State.RUNNING) || controller.getAnimationState().equals(AnimationController.State.TRANSITIONING))) return true;
+            if (!check.test(controller))
+            {
+                continue;
+            }
+
+            if (controller.getPlayState() != PlayState.STOP || controller.isAnimatingBones() || controller.isTransitioning())
+            {
+                return true;
+            }
         }
         return false;
     }
@@ -389,7 +410,7 @@ public class RenderHelper
 
     public static void renderIndicator(PoseStack.Pose pose, float length)
     {
-        var buffer = BUFFER_SOURCE.getBuffer(RenderType.lines());
+        var buffer = BUFFER_SOURCE.getBuffer(RenderTypes.lines());
         buffer.addVertex(pose, -length, 0, 0f).setNormal(pose, -1, 0, 0).setColor(0xffff0053);
         buffer.addVertex(pose, length, 0, 0f).setNormal(pose, 1, 0, 0).setColor(0xffffe953);
 
@@ -401,11 +422,40 @@ public class RenderHelper
         BUFFER_SOURCE.endLastBatch();
     }
 
-    public static void renderItem(PoseStack poseStack, MultiBufferSource bufferSource, ItemStack itemStack)
+    public static void renderItem
+    (
+        PoseStack poseStack,
+        SubmitNodeCollector submitNodeCollector,
+        ItemStack itemStack,
+        ItemDisplayContext displayContext,
+        @Nullable Level level,
+        @Nullable ItemOwner owner,
+        int seed,
+        int packedLight,
+        int packedOverlay,
+        int outlineColor
+    )
     {
-        ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-        BakedModel itemModel = itemRenderer.getModel(itemStack, null, null, 0);
-        Minecraft.getInstance().getItemRenderer().render(itemStack, ItemDisplayContext.FIXED, false, poseStack, bufferSource, 15728880, OverlayTexture.NO_OVERLAY, itemModel);
+        if (itemStack.isEmpty())
+        {
+            return;
+        }
+
+        ItemStackRenderState renderState = new ItemStackRenderState();
+        Minecraft.getInstance().getItemModelResolver().updateForTopItem
+        (
+            renderState,
+            itemStack,
+            displayContext,
+            level,
+            owner,
+            seed
+        );
+
+        if (!renderState.isEmpty())
+        {
+            renderState.submit(poseStack, submitNodeCollector, packedLight, packedOverlay, outlineColor);
+        }
     }
 
     public static final SimpleInternalControlGeoModel INDICATOR = new SimpleInternalControlGeoModel("geo/assistance/indicator.geo.json", "textures/geo/indicator.png", Minecraft.getInstance().player);

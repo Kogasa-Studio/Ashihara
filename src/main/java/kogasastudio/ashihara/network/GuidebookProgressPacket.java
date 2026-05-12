@@ -7,12 +7,12 @@ import kogasastudio.ashihara.registry.DataComponentTypes;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record GuidebookProgressPacket(int UnlockProgress, int currentPage) implements CustomPacketPayload
 {
-    public static final Type<GuidebookProgressPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "guidebook_progress_packet"));
+    public static final Type<GuidebookProgressPacket> TYPE = new Type<>(Identifier.fromNamespaceAndPath(Ashihara.MODID, "guidebook_progress_packet"));
 
     public static final StreamCodec<ByteBuf, GuidebookProgressPacket> STREAM_CODEC = StreamCodec.composite
     (
@@ -27,7 +27,7 @@ public record GuidebookProgressPacket(int UnlockProgress, int currentPage) imple
         return TYPE;
     }
 
-    public static class ServerHandler
+    public static class Handler
     {
         public static void handle(GuidebookProgressPacket packet, final IPayloadContext context)
         {

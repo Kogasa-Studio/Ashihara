@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -11,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CherryLeavesBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -25,7 +25,7 @@ import java.util.List;
 
 import static net.minecraft.world.level.block.Blocks.AIR;
 
-public class AbstractFallingLeavesBlock extends CherryLeavesBlock
+public class AbstractFallingLeavesBlock extends LeavesBlock
 {
     private final boolean flammable;
 
@@ -36,7 +36,7 @@ public class AbstractFallingLeavesBlock extends CherryLeavesBlock
 
     public AbstractFallingLeavesBlock(int light, boolean flammableIn, Properties properties)
     {
-        super(properties.lightLevel(p -> light));
+        super(0, properties.lightLevel(p -> light));
         this.registerDefaultState(this.stateDefinition.any().setValue(DISTANCE, 7).setValue(PERSISTENT, Boolean.FALSE));
         this.flammable = flammableIn;
     }
@@ -50,6 +50,7 @@ public class AbstractFallingLeavesBlock extends CherryLeavesBlock
     {
         return null;
     }
+
     protected List<ItemStack> getBonusResource()
     {
         return new ArrayList<>();
@@ -63,6 +64,12 @@ public class AbstractFallingLeavesBlock extends CherryLeavesBlock
             this.getBonusResource().forEach(itemStack -> popResource((Level) pLevel, pPos, itemStack));
         }
         super.playerDestroy(pLevel, player, pPos, pState, te, item);
+    }
+
+    @Override
+    public MapCodec<? extends LeavesBlock> codec()
+    {
+        return null;
     }
 
     @Override
@@ -100,13 +107,7 @@ public class AbstractFallingLeavesBlock extends CherryLeavesBlock
     }
 
     @Override
-    public int getLightBlock(BlockState state, BlockGetter worldIn, BlockPos pos)
-    {
-        return 0;
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
+    
     public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand)
     {
         BlockPos blockpos = pos.below();
@@ -128,6 +129,11 @@ public class AbstractFallingLeavesBlock extends CherryLeavesBlock
                 }
             }
         }
+    }
+
+    @Override
+    protected void spawnFallingLeavesParticle(Level level, BlockPos pos, RandomSource random)
+    {
     }
 
     @Override

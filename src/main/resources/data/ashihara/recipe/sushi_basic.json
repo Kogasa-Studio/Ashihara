@@ -1,18 +1,18 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-    {
-      "item": "ashihara:cooked_rice"
-    },
-    {
-      "item": "minecraft:dried_kelp"
-    },
-    {
-      "item": "minecraft:carrot"
-    },
-    {
-      "tag": "neoforge:cooked_fishes"
-    }
+    [
+      "ashihara:cooked_rice"
+    ],
+    [
+      "minecraft:dried_kelp"
+    ],
+    [
+      "minecraft:carrot"
+    ],
+    [
+      "neoforge:cooked_fishes"
+    ]
   ],
   "result": {
     "id": "ashihara:sushi_basic",

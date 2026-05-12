@@ -7,12 +7,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -26,7 +27,6 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -40,17 +40,21 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
     public static final BooleanProperty HAS_WATER = BooleanProperty.create("haswaterinside");
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 4, 8);
 
+    public PaddyFieldBlock(Properties properties)
+    {
+        super(properties);
+        this.registerDefaultState(this.stateDefinition.any().setValue(HAS_WATER, false));
+    }
+
     public PaddyFieldBlock()
     {
-        super
-                (Properties.of()
-                         .mapColor(MapColor.DIRT)
-                        .strength(0.5F)
-                        // todo tag .harvestTool(ToolType.SHOVEL)
-                        // todo tag .harvestLevel(2)
-                        .sound(SoundType.GRAVEL)
-                );
-        this.registerDefaultState(this.stateDefinition.any().setValue(HAS_WATER, false));
+        this
+        (
+            Properties.of()
+            .mapColor(MapColor.DIRT)
+            .strength(0.5F)
+            .sound(SoundType.GRAVEL)
+        );
     }
 
     private boolean matchesWaterField(BlockState state)
@@ -158,18 +162,12 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
      *          否：自身水位设为来者水位
      *      否：不做更改
      * 否：不做更改
-     *
-     * @param state    2
-     * @param worldIn  2
-     * @param pos      2
-     * @param blockIn  2
-     * @param fromPos  2
-     * @param isMoving 2
      */
     @Override
-    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) //那一大堆判定
+    public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor)
     {
-        BlockState fromState = worldIn.getBlockState(fromPos);
+        Level worldIn = (Level) level;
+        BlockState fromState = worldIn.getBlockState(neighbor);
         if (!fromState.is(Blocks.RICE_CROP.get()))
         {
             boolean watered = fourWaysFluidsIncludesWater(worldIn, pos);
@@ -204,7 +202,7 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
                     {
                         if (watered)
                         {
-                            worldIn.setBlockAndUpdate(fromPos, fromState.setValue(HAS_WATER, true));
+                            worldIn.setBlockAndUpdate(neighbor, fromState.setValue(HAS_WATER, true));
                         } else
                         {
                             worldIn.setBlockAndUpdate(pos, state.setValue(HAS_WATER, false));
@@ -223,7 +221,7 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
                     {
                         if (watered)
                         {
-                            worldIn.setBlockAndUpdate(fromPos, fromState.setValue(LEVEL, levelT));
+                            worldIn.setBlockAndUpdate(neighbor, fromState.setValue(LEVEL, levelT));
                         } else
                         {
                             worldIn.setBlockAndUpdate(pos, state.setValue(LEVEL, levelF));
@@ -382,9 +380,9 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
     }
 
     @Override
-    public boolean canPlaceLiquid(@Nullable Player pPlayer, BlockGetter pLevel, BlockPos pPos, BlockState pState, Fluid pFluid)
+    public boolean canPlaceLiquid(@org.jspecify.annotations.Nullable LivingEntity user, BlockGetter level, BlockPos pos, BlockState state, Fluid type)
     {
-        return pState.getValue(LEVEL) < 8 && (pFluid == Fluids.FLOWING_WATER || pFluid == Fluids.WATER);
+        return state.getValue(LEVEL) < 8 && (type == Fluids.FLOWING_WATER || type == Fluids.WATER);
     }
 
     @Override
@@ -404,9 +402,9 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
     }
 
     @Override
-    public ItemStack pickupBlock(@Nullable Player pPlayer, LevelAccessor pLevel, BlockPos pPos, BlockState pState)
+    public ItemStack pickupBlock(@org.jspecify.annotations.Nullable LivingEntity user, LevelAccessor level, BlockPos pos, BlockState state)
     {
-        return pState.getValue(LEVEL) == 8 ? net.minecraft.world.item.Items.WATER_BUCKET.getDefaultInstance() : ItemStack.EMPTY;
+        return state.getValue(LEVEL) == 8 ? net.minecraft.world.item.Items.WATER_BUCKET.getDefaultInstance() : ItemStack.EMPTY;
     }
 
     @Override

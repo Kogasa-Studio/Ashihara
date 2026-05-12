@@ -11,7 +11,6 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.neoforged.neoforge.items.SlotItemHandler;
 
 import java.util.Objects;
 
@@ -57,10 +56,7 @@ public class PotMenu extends AshiharaCommonContainer
         this.cookData = cookData;
 
         // 食材槽 0-3
-        for (int i = 0; i < INGREDIENT_SLOTS; i++)
-        {
-            this.addSlot(new SlotItemHandler(be.inventory, i, 0, 0));
-        }
+        this.addSlotRange(be.inventory, 0, 0, 0, INGREDIENT_SLOTS, 0);
 
         // 玩家物品栏（背包 + 快捷栏）
         this.layoutPlayerInventorySlots(playerInventory, 8, 84);

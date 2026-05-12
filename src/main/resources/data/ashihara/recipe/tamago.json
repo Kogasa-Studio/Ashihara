@@ -1,9 +1,9 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-    {
-      "item": "minecraft:salmon"
-    }
+    [
+      "minecraft:salmon"
+    ]
   ],
   "result": {
     "id": "ashihara:tamago",

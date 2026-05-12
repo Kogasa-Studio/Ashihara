@@ -2,18 +2,11 @@
   "required": true,
   "minVersion": "0.8",
   "package": "kogasastudio.ashihara.mixin",
-  "compatibilityLevel": "JAVA_21",
+  "compatibilityLevel": "JAVA_25",
   "refmap": "ashihara.refmap.json",
   "mixins": [
-    "MixinPlayer",
-    "geckolib.MixinGeoObjectRenderer",
-    "geckolib.MixinGeoRenderer"
   ],
   "client": [
-    "MixinLivingEntityRenderer",
-    "MixinLocalPlayer",
-    "MixinMinecraft",
-    "MixinRemotePlayer"
   ],
   "injectors": {
     "defaultRequire": 1

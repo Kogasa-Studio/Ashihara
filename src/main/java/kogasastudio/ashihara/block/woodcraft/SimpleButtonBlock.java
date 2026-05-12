@@ -7,14 +7,17 @@ import net.minecraft.world.level.material.PushReaction;
 
 public class SimpleButtonBlock extends ButtonBlock
 {
+    public SimpleButtonBlock(BlockBehaviour.Properties properties)
+    {
+        super(BlockSetType.OAK, 30, properties);
+    }
+
     public SimpleButtonBlock()
     {
-        super
+        this
         (
-            BlockSetType.OAK,
-            30,
             BlockBehaviour.Properties.of()
-            .noCollission()
+            .noCollision()
             .pushReaction(PushReaction.DESTROY)
             .strength(0.5F)
         );

@@ -3,14 +3,12 @@ package kogasastudio.ashihara.block.blockentity;
 import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.registry.BlockEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import static kogasastudio.ashihara.helper.MathHelper.simplifyDouble;
 
@@ -85,37 +83,33 @@ public class CandleBE extends AshiharaMachineBE
     }
 
     @Override
-    protected void loadAdditional(CompoundTag pTag, HolderLookup.Provider pRegistries)
+    protected void loadAdditional(ValueInput input)
     {
-        super.loadAdditional(pTag, pRegistries);
-        ListTag poses = pTag.getList("posList", Tag.TAG_COMPOUND);
-        for (int i = 0; i < poses.size(); i += 1)
+        super.loadAdditional(input);
+        for (ValueInput child : input.childrenListOrEmpty("posList"))
         {
-            CompoundTag array = poses.getCompound(i);
-            double x = array.getDouble("x");
-            double y = array.getDouble("y");
-            double z = array.getDouble("z");
+            double x = child.getDoubleOr("x", 0.0);
+            double y = child.getDoubleOr("y", 0.0);
+            double z = child.getDoubleOr("z", 0.0);
             this.posList.add(new double[]{x, z, y});
         }
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compound, HolderLookup.Provider pRegistries)
+    protected void saveAdditional(ValueOutput output)
     {
-        super.saveAdditional(compound, pRegistries);
-        ListTag nbt = new ListTag();
+        super.saveAdditional(output);
+        var listOut = output.childrenList("posList");
         for (double[] d : this.posList)
         {
             if (d.length == 3)
             {
-                CompoundTag arrays = new CompoundTag();
-                arrays.putDouble("x", d[0]);
-                arrays.putDouble("z", d[1]);
-                arrays.putDouble("y", d[2]);
-                nbt.add(arrays);
+                ValueOutput child = listOut.addChild();
+                child.putDouble("x", d[0]);
+                child.putDouble("z", d[1]);
+                child.putDouble("y", d[2]);
             }
         }
-        compound.put("posList", nbt);
     }
 
     public NonNullList<double[]> getPosList()

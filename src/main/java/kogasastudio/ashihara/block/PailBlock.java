@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.block.blockentity.PailBE;
+import kogasastudio.ashihara.inventory.BEFluidStackHandler;
 import kogasastudio.ashihara.registry.BlockEntities;
 import kogasastudio.ashihara.helper.FluidHelper;
 import kogasastudio.ashihara.registry.Items;
@@ -11,7 +12,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -31,7 +31,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.Nullable;
 
 import static kogasastudio.ashihara.registry.Items.MINATO_AQUA;
@@ -41,29 +40,47 @@ import static net.minecraft.world.level.block.state.properties.BlockStatePropert
 public class PailBlock extends Block implements EntityBlock
 {
     public static final EnumProperty<Direction.Axis> AXIS = HORIZONTAL_AXIS;
+    public static final VoxelShape sideN = box(3.0d, 0.0d, 3.0d, 13.0d, 10.0d, 4.0d);
+    public static final VoxelShape sideE = box(12.0d, 0.0d, 4.0d, 13.0d, 10.0d, 12.0d);
+    public static final VoxelShape sideS = box(3.0d, 0.0d, 12.0d, 13.0d, 10.0d, 13.0d);
+    public static final VoxelShape sideW = box(3.0d, 0.0d, 4.0d, 4.0d, 10.0d, 12.0d);
+    public static final VoxelShape bottom = box(4.0d, 0.5d, 4.0d, 12.0d, 1.5d, 12.0d);
+    public static final VoxelShape plankLeftX = box(7.0d, 10.0d, 3.0d, 9.0d, 16.0d, 4.0d);
+    public static final VoxelShape plankRightX = box(7.0d, 10.0d, 12.0d, 9.0d, 16.0d, 13.0d);
+    public static final VoxelShape stickX = box(7.5d, 14.5d, 4.0d, 8.5d, 15.5d, 12.0d);
+    public static final VoxelShape plankLeftZ = box(3.0d, 10.0d, 7.0d, 4.0d, 16.0d, 9.0d);
+    public static final VoxelShape plankRightZ = box(12.0d, 10.0d, 7.0d, 13.0d, 16.0d, 9.0d);
+    public static final VoxelShape stickZ = box(4.0d, 14.5d, 7.5d, 12.0d, 15.5d, 8.5d);
+
+    public static final VoxelShape bucket = Shapes.or(bottom, sideN, sideE, sideS, sideW);
+    public static final VoxelShape handleX = Shapes.or(stickX, plankLeftX, plankRightX);
+    public static final VoxelShape handleZ = Shapes.or(stickZ, plankLeftZ, plankRightZ);
+
+    public static final VoxelShape SHAPE_X = Shapes.or(bucket, handleX);
+    public static final VoxelShape SHAPE_Z = Shapes.or(bucket, handleZ);
+
+    public PailBlock(Properties properties)
+    {
+        super(properties);
+    }
 
     public PailBlock()
     {
-        super
-                (
-                        Properties.of()
-                                .mapColor(MapColor.WOOD)
-                                .strength(3.0F)
-                                // todo tag .harvestTool(ToolType.AXE)
-                                .sound(SoundType.WOOD)
-                                .noOcclusion()
-                );
+        this
+        (
+            Properties.of()
+            .mapColor(MapColor.WOOD)
+            .strength(3.0F)
+            // todo tag .harvestTool(ToolType.AXE)
+            .sound(SoundType.WOOD)
+            .noOcclusion()
+        );
     }
 
     private ItemStack getIdentifiedItem(Level worldIn, BlockPos pos)
     {
-        PailBE te = (PailBE) worldIn.getBlockEntity(pos);
+        PailBE be = (PailBE) worldIn.getBlockEntity(pos);
         ItemStack stack = new ItemStack(PAIL.get());
-        if (te != null && !worldIn.isClientSide() && !te.getTank().isEmpty())
-        {
-            CompoundTag nbt = te.getPersistentData();
-            PailBlockItem.setBlockEntityData(stack, BlockEntities.PAIL_BE.get(), nbt);
-        }
         return stack;
     }
 
@@ -91,7 +108,7 @@ public class PailBlock extends Block implements EntityBlock
         if (tileEntity != null && tileEntity.getType().equals(BlockEntities.PAIL_BE.get()))
         {
             PailBE te = (PailBE) tileEntity;
-            FluidStack fluid = te.getTank().getFluid();
+            FluidStack fluid = te.getTank().getFluidStack();
             if (!fluid.isEmpty())
             {
                 ambientLight = fluid.getFluid().getFluidType().getLightLevel();
@@ -130,17 +147,17 @@ public class PailBlock extends Block implements EntityBlock
     }
 
     @Override
-    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public InteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         PailBE te = (PailBE) worldIn.getBlockEntity(pos);
-        if (te == null) return ItemInteractionResult.FAIL;
-        FluidTank bucket = te.getTank();
+        if (te == null) return InteractionResult.FAIL;
+        BEFluidStackHandler<PailBE> bucket = te.getTank();
 
-        if (FluidHelper.notifyFluidTankInteraction(player, handIn, stack, bucket, worldIn, pos))
+        if (FluidHelper.notifyFluidTankInteraction(player, handIn, bucket, pos))
         {
             player.getInventory().setChanged();
             worldIn.sendBlockUpdated(pos, state, state, 3);
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
 
         if (stack.getItem().equals(Items.KOISHI.get()))
@@ -151,18 +168,18 @@ public class PailBlock extends Block implements EntityBlock
                         (
                                 Component.translatable
                                         (
-                                                "\n{\n    fluid: " + bucket.getFluid().getHoverName()
+                                                "\n{\n    fluid: " + bucket.getFluidStack().getHoverName()
                                                         + ";\n    amount: " + bucket.getFluidAmount() + ";\n}"
                                         )
                         );
             }
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
 
         if (stack.getItem().equals(MINATO_AQUA.get()) && !worldIn.isClientSide())
         {
             player.sendSystemMessage(Component.literal("Debu!"));
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
 
         /*if (!bucket.isEmpty())
@@ -188,23 +205,8 @@ public class PailBlock extends Block implements EntityBlock
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
     {
-        VoxelShape sideN = box(3.0d, 0.0d, 3.0d, 13.0d, 10.0d, 4.0d);
-        VoxelShape sideE = box(12.0d, 0.0d, 4.0d, 13.0d, 10.0d, 12.0d);
-        VoxelShape sideS = box(3.0d, 0.0d, 12.0d, 13.0d, 10.0d, 13.0d);
-        VoxelShape sideW = box(3.0d, 0.0d, 4.0d, 4.0d, 10.0d, 12.0d);
-        VoxelShape bottom = box(4.0d, 0.5d, 4.0d, 12.0d, 1.5d, 12.0d);
-        VoxelShape plankLeftX = box(7.0d, 10.0d, 3.0d, 9.0d, 16.0d, 4.0d);
-        VoxelShape plankRightX = box(7.0d, 10.0d, 12.0d, 9.0d, 16.0d, 13.0d);
-        VoxelShape stickX = box(7.5d, 14.5d, 4.0d, 8.5d, 15.5d, 12.0d);
-        VoxelShape plankLeftZ = box(3.0d, 10.0d, 7.0d, 4.0d, 16.0d, 9.0d);
-        VoxelShape plankRightZ = box(12.0d, 10.0d, 7.0d, 13.0d, 16.0d, 9.0d);
-        VoxelShape stickZ = box(4.0d, 14.5d, 7.5d, 12.0d, 15.5d, 8.5d);
 
-        VoxelShape bucket = Shapes.or(bottom, sideN, sideE, sideS, sideW);
-        VoxelShape handleX = Shapes.or(stickX, plankLeftX, plankRightX);
-        VoxelShape handleZ = Shapes.or(stickZ, plankLeftZ, plankRightZ);
-
-        return state.getValue(AXIS).equals(Direction.Axis.X) ? Shapes.or(bucket, handleX) : Shapes.or(bucket, handleZ);
+        return state.getValue(AXIS).equals(Direction.Axis.X) ? SHAPE_X : SHAPE_Z;
     }
 
     @Nullable

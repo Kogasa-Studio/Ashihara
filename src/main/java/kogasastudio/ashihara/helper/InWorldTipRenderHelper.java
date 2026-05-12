@@ -6,8 +6,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -15,7 +16,7 @@ import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.joml.Quaternionf;
 import oshi.util.tuples.Pair;
-import software.bernie.geckolib.util.RenderUtil;
+import com.geckolib.util.RenderUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +43,13 @@ public class InWorldTipRenderHelper
 
     public static void renderItemStack(ItemStack stack, PoseStack poseStack, MultiBufferSource bufferSource, int light, float sizeInPixel)
     {
-        BakedModel model = Minecraft.getInstance().getItemRenderer().getModel(stack, null, null, 42);
+        //BakedModel model = Minecraft.getInstance().getItemRenderer().getModel(stack, null, null, 42);
         poseStack.pushPose();
         poseStack.translate(1f, 1f, 0f);
         poseStack.pushPose();
         poseStack.mulPose(new Quaternionf().rotateXYZ(0f, (float) Math.toRadians(180), (float) Math.toRadians(180)));
         poseStack.scale(sizeInPixel, sizeInPixel, sizeInPixel);
-        Minecraft.getInstance().getItemRenderer().render(stack, ItemDisplayContext.GUI, false, poseStack, bufferSource, light, OverlayTexture.NO_OVERLAY, model);
+        //Minecraft.getInstance().getItemRenderer().render(stack, ItemDisplayContext.GUI, false, poseStack, bufferSource, light, OverlayTexture.NO_OVERLAY, model);
         poseStack.popPose();
         poseStack.pushPose();
         poseStack.scale(sizeInPixel, sizeInPixel, sizeInPixel);
@@ -85,12 +86,12 @@ public class InWorldTipRenderHelper
 
     public static void renderIngredient(SizedIngredient ingredient, PoseStack poseStack, MultiBufferSource bufferSource, int light, float sizeInPixel)
     {
-        List<ItemStack> stacks = List.of(ingredient.getItems());
-        double ticks = RenderUtil.getCurrentTick();
+        List<Item> stacks = ingredient.ingredient().getValues().stream().map(Holder::value).toList();
+        double ticks = Minecraft.getInstance().level == null ? 0 : Minecraft.getInstance().level.getGameTime();
         int i = (int) (ticks / 20);
         int cat = i % stacks.size();
         cat = Math.clamp(cat, 0, stacks.size() - 1);
-        ItemStack itemStack = stacks.get(cat);
+        ItemStack itemStack = new ItemStack(stacks.get(cat));
         renderItemStack(itemStack, poseStack, bufferSource, light, sizeInPixel);
     }
 

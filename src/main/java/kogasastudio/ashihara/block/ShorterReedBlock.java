@@ -3,16 +3,32 @@ package kogasastudio.ashihara.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class ShorterReedBlock extends ReedBlock
 {
+    public ShorterReedBlock(Properties properties)
+    {
+        super(properties);
+    }
+
     public ShorterReedBlock()
     {
-        super();
+        this
+        (
+            Properties.of()
+            .mapColor(MapColor.PLANT)
+            .offsetType(OffsetType.XZ)
+            .noCollision()
+            .instabreak()
+            .sound(SoundType.GRASS)
+            .noOcclusion()
+        );
     }
 
     @Override

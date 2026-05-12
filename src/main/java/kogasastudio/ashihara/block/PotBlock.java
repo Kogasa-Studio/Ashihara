@@ -6,12 +6,13 @@ import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.registry.Items;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
@@ -55,9 +56,15 @@ public class PotBlock extends Block implements EntityBlock
     public static final BooleanProperty ON_STOVE = BooleanProperty.create("on_stove");
     public static final BooleanProperty HAS_LID = BooleanProperty.create("has_lid");
 
+    public PotBlock(Properties properties)
+    {
+        super(properties);
+        this.registerDefaultState(defaultBlockState().setValue(HAS_LID, true).setValue(ON_STOVE, false));
+    }
+
     public PotBlock()
     {
-        super
+        this
         (
             Properties.of()
             .noOcclusion()
@@ -65,7 +72,6 @@ public class PotBlock extends Block implements EntityBlock
             .strength(0.5F)
             .sound(SoundType.LANTERN)
         );
-        this.registerDefaultState(defaultBlockState().setValue(HAS_LID, true).setValue(ON_STOVE, false));
     }
 
     @Override
@@ -93,7 +99,7 @@ public class PotBlock extends Block implements EntityBlock
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
         if (stack.isEmpty() && !player.isShiftKeyDown())
         {
@@ -102,19 +108,19 @@ public class PotBlock extends Block implements EntityBlock
             {
                 player.openMenu(be, buf -> buf.writeBlockPos(pos));
             }
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         if (stack.isEmpty() && state.getValue(HAS_LID))
         {
             player.setItemInHand(hand, Items.POT_LID.toStack());
             level.setBlockAndUpdate(pos, state.setValue(HAS_LID, false));
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         else if (stack.is(Items.POT_LID))
         {
             stack.shrink(1);
             level.setBlockAndUpdate(pos, state.setValue(HAS_LID, true));
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }
@@ -148,15 +154,12 @@ public class PotBlock extends Block implements EntityBlock
     }
 
     @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston)
+    public void destroy(LevelAccessor level, BlockPos pos, BlockState state)
     {
-        if (!state.is(newState.getBlock()))
+        if (level.getBlockEntity(pos) instanceof PotBlockEntity potBE)
         {
-            if (level.getBlockEntity(pos) instanceof PotBlockEntity potBE)
-            {
-                potBE.dropContents(level, pos);
-            }
+            potBE.dropContents((Level) level, pos);
         }
-        super.onRemove(state, level, pos, newState, movedByPiston);
+        super.destroy(level, pos, state);
     }
 }

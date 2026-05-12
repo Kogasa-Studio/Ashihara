@@ -4,25 +4,26 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import kogasastudio.ashihara.block.blockentity.PailBE;
 import kogasastudio.ashihara.helper.RenderHelper;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 
-public class PailTER implements BlockEntityRenderer<PailBE>
+public class PailTER implements BlockEntityRenderer<PailBE, BlockEntityRenderState>
 {
     public PailTER(BlockEntityRendererProvider.Context rendererDispatcherIn)
     {
     }
 
     @Override
-    public void render(PailBE tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
+    public BlockEntityRenderState createRenderState()
     {
-        RenderHelper.renderLeveledFluidStack
-                (
-                        tileEntityIn, matrixStackIn, bufferIn,
-                        combinedLightIn, combinedOverlayIn,
-                        0.25f, 0.09375f, 0.25f,
-                        0.75f, 0.5f, 0.75f,
-                        tileEntityIn.getLevel(), tileEntityIn.getBlockPos()
-                );
+        return new BlockEntityRenderState();
+    }
+
+    @Override
+    public void submit(BlockEntityRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera)
+    {
     }
 }

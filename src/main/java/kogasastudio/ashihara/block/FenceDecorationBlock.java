@@ -2,13 +2,11 @@ package kogasastudio.ashihara.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -18,10 +16,12 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jspecify.annotations.Nullable;
 
 import static kogasastudio.ashihara.block.AdvancedFenceBlock.*;
 import static kogasastudio.ashihara.utils.AshiharaTags.ADVANCED_FENCES;
@@ -31,17 +31,22 @@ public class FenceDecorationBlock extends Block
     public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
     public static final BooleanProperty ORB = BooleanProperty.create("orb");
 
+    public FenceDecorationBlock(Properties properties)
+    {
+        super(properties);
+        this.registerDefaultState(this.getStateDefinition().any().setValue(ORB, false));
+    }
+
     public FenceDecorationBlock()
     {
-        super
-                (
-                        Properties.of()
-                                .mapColor(MapColor.GOLD)
-                                .strength(0.2F)
-                                .sound(SoundType.LANTERN)
-                                .noOcclusion()
-                );
-        this.registerDefaultState(this.getStateDefinition().any().setValue(ORB, false));
+        this
+        (
+            Properties.of()
+            .mapColor(MapColor.GOLD)
+            .strength(0.2F)
+            .sound(SoundType.LANTERN)
+            .noOcclusion()
+        );
     }
 
     @Override
@@ -57,31 +62,31 @@ public class FenceDecorationBlock extends Block
     }
 
     @Override
-    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos)
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction directionToNeighbour, BlockPos neighbourPos, BlockState neighbourState, RandomSource random)
     {
-        return !this.canSurvive(stateIn, worldIn, currentPos) ? Blocks.AIR.defaultBlockState()
-                : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+        return !this.canSurvive(state, level, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean movedByPiston)
     {
-        BlockState fence = worldIn.getBlockState(pos.below());
+        BlockState fence = level.getBlockState(pos.below());
 
-        if (!this.canSurvive(state, worldIn, pos)) return;
+        if (!this.canSurvive(state, level, pos)) return;
 
         if (fence.getValue(COLUMN).equals(AdvancedFenceBlock.ColumnType.CORE))
         {
-            worldIn.setBlockAndUpdate(pos, state.setValue(ORB, true));
+            level.setBlockAndUpdate(pos, state.setValue(ORB, true));
         } else
         {
             if (fence.getValue(NORTH) && fence.getValue(SOUTH) && fence.getValue(EAST) && fence.getValue(WEST))
-                worldIn.setBlockAndUpdate(pos, state.setValue(AXIS, Direction.Axis.Y));
+                level.setBlockAndUpdate(pos, state.setValue(AXIS, Direction.Axis.Y));
             else if (fence.getValue(NORTH) && fence.getValue(SOUTH))
-                worldIn.setBlockAndUpdate(pos, state.setValue(AXIS, Direction.Axis.Z));
+                level.setBlockAndUpdate(pos, state.setValue(AXIS, Direction.Axis.Z));
             else if (fence.getValue(EAST) && fence.getValue(WEST))
-                worldIn.setBlockAndUpdate(pos, state.setValue(AXIS, Direction.Axis.X));
+                level.setBlockAndUpdate(pos, state.setValue(AXIS, Direction.Axis.X));
         }
+        super.neighborChanged(state, level, pos, block, orientation, movedByPiston);
     }
 
     @Override
@@ -101,7 +106,7 @@ public class FenceDecorationBlock extends Block
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player)
+    protected ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData)
     {
         return new ItemStack(Items.GOLD_INGOT);
     }

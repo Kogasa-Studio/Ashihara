@@ -5,7 +5,7 @@ import kogasastudio.ashihara.client.gui3d.components.ItemSlotComponent;
 import kogasastudio.ashihara.client.gui3d.components.PotLidComponent;
 import kogasastudio.ashihara.client.gui3d.components.PotModelComponent;
 import kogasastudio.ashihara.inventory.container.PotMenu;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -59,11 +59,11 @@ public class PotScreen extends ContainerScreen3D<PotMenu>
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a)
     {
         // 背景
-        guiGraphics.fill(0, 0, this.width, this.height, 0xCC050505);
+        graphics.fill(0, 0, this.width, this.height, 0xCC050505);
         // 组件 + carried-item（由父类处理）
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        super.extractRenderState(graphics, mouseX, mouseY, a);
     }
 }

@@ -12,9 +12,12 @@ import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.utils.AshiharaWoodTypes;
 import kogasastudio.ashihara.utils.WallTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -31,6 +34,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -50,48 +54,48 @@ public class Blocks
 {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Ashihara.MODID);
 
-    public static final DeferredBlock<Block> WATER_FIELD = BLOCKS.register("water_field", PaddyFieldBlock::new);
-    public static final DeferredBlock<Block> RICE_CROP = BLOCKS.register("rice_crop", RiceCropBlock::new);
-    public static final DeferredBlock<Block> DIRT_DEPRESSION = BLOCKS.register("dirt_depression", DirtDepressionBlock::new);
-    public static final DeferredBlock<Block> TETSUSENCHI = BLOCKS.register("tetsusenchi", TetsusenchiBlock::new);
-    public static final DeferredBlock<Block> RICE_DRYING_STICKS = BLOCKS.register("rice_drying_sticks", RiceDryingSticksBlock::new);
-    public static final DeferredBlock<Block> CHERRY_SAPLING = BLOCKS.register("cherry_sapling", () -> new SaplingBlock(TreeGrowers.CHERRY_BLOSSOM, BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
-    public static final DeferredBlock<Block> POTTED_CHERRY_SAPLING = BLOCKS.register("potted_cherry_sapling", () -> new FlowerPotBlock(Blocks.CHERRY_SAPLING.get(), BlockBehaviour.Properties.of().instabreak().noOcclusion()));
-    public static final DeferredBlock<Block> RED_MAPLE_SAPLING = BLOCKS.register("red_maple_sapling", () -> new SaplingBlock(TreeGrowers.RED_MAPLE, BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
-    public static final DeferredBlock<Block> POTTED_RED_MAPLE_SAPLING = BLOCKS.register("potted_red_maple_sapling", () -> new FlowerPotBlock(Blocks.RED_MAPLE_SAPLING.get(), BlockBehaviour.Properties.of().instabreak().noOcclusion()));
-    public static final DeferredBlock<Block> MORTAR = BLOCKS.register("mortar", MortarBlock::new);
-    public static final DeferredBlock<Block> POT = BLOCKS.register("pot", PotBlock::new);
-    public static final DeferredBlock<Block> IMMATURE_RICE = BLOCKS.register("immature_rice", ImmatureRiceCropBlock::new);
-    public static final DeferredBlock<Block> CHRYSANTHEMUM = BLOCKS.register("chrysanthemum", ChrysanthemumBushBlock::new);
-    public static final DeferredBlock<Block> WILD_RICE = BLOCKS.register("wild_rice", () -> new ChrysanthemumBushBlock()
+    public static ResourceKey<Block> getResourceKey(String name)
+    {
+        return ResourceKey.create(BLOCKS.getRegistryKey(), Identifier.fromNamespaceAndPath(Ashihara.MODID, name));
+    }
+
+    public static final DeferredBlock<Block> WATER_FIELD = BLOCKS.registerBlock("water_field", PaddyFieldBlock::new, properties -> properties.mapColor(MapColor.DIRT).strength(0.5F).sound(SoundType.GRAVEL));
+    public static final DeferredBlock<Block> RICE_CROP = BLOCKS.registerBlock("rice_crop", RiceCropBlock::new, properties -> properties.mapColor(MapColor.PLANT).noCollision().randomTicks().instabreak().sound(SoundType.CROP));
+    public static final DeferredBlock<Block> DIRT_DEPRESSION = BLOCKS.registerBlock("dirt_depression", DirtDepressionBlock::new, properties -> properties.mapColor(MapColor.DIRT).strength(0.5F).sound(SoundType.GRAVEL).noOcclusion());
+    public static final DeferredBlock<Block> TETSUSENCHI = BLOCKS.registerBlock("tetsusenchi", TetsusenchiBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F).sound(SoundType.WOOD).noOcclusion());
+    public static final DeferredBlock<Block> RICE_DRYING_STICKS = BLOCKS.registerBlock("rice_drying_sticks", RiceDryingSticksBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2).sound(SoundType.WOOD).noOcclusion().lightLevel(i -> 1));
+    public static final DeferredBlock<Block> CHERRY_SAPLING = BLOCKS.registerBlock("cherry_sapling", properties -> new SaplingBlock(TreeGrowers.CHERRY_BLOSSOM, properties), properties -> properties.mapColor(MapColor.PLANT).noCollision().randomTicks().instabreak().sound(SoundType.GRASS));
+    public static final DeferredBlock<Block> POTTED_CHERRY_SAPLING = BLOCKS.registerBlock("potted_cherry_sapling", properties -> new FlowerPotBlock(Blocks.CHERRY_SAPLING.get(), properties), properties -> properties.instabreak().noOcclusion());
+    public static final DeferredBlock<Block> RED_MAPLE_SAPLING = BLOCKS.registerBlock("red_maple_sapling", properties -> new SaplingBlock(TreeGrowers.RED_MAPLE, properties), properties -> properties.mapColor(MapColor.PLANT).noCollision().randomTicks().instabreak().sound(SoundType.GRASS));
+    public static final DeferredBlock<Block> POTTED_RED_MAPLE_SAPLING = BLOCKS.registerBlock("potted_red_maple_sapling", properties -> new FlowerPotBlock(Blocks.RED_MAPLE_SAPLING.get(), properties), properties -> properties.instabreak().noOcclusion());
+    public static final DeferredBlock<Block> MORTAR = BLOCKS.registerBlock("mortar", MortarBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(3.0F).sound(SoundType.WOOD).noOcclusion());
+    public static final DeferredBlock<Block> POT = BLOCKS.registerBlock("pot", PotBlock::new, properties -> properties.noOcclusion().mapColor(MapColor.TERRACOTTA_CYAN).strength(0.5F).sound(SoundType.LANTERN));
+    public static final DeferredBlock<Block> IMMATURE_RICE = BLOCKS.registerBlock("immature_rice", ImmatureRiceCropBlock::new, properties -> properties.mapColor(MapColor.PLANT).noCollision().randomTicks().instabreak().sound(SoundType.CROP));
+    public static final DeferredBlock<Block> CHRYSANTHEMUM = BLOCKS.registerBlock("chrysanthemum", ChrysanthemumBushBlock::new, properties -> properties.mapColor(MapColor.PLANT).noCollision().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XYZ));
+    public static final DeferredBlock<Block> WILD_RICE = BLOCKS.registerBlock("wild_rice", properties -> new ChrysanthemumBushBlock(properties)
     {
         @Override
         public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
         {
             return box(2,0,2,14,16,14);
         }
-    });
-    public static final DeferredBlock<Block> REED = BLOCKS.register("reed", ReedBlock::new);
-    public static final DeferredBlock<Block> SHORTER_REED = BLOCKS.register("shorter_reed", ShorterReedBlock::new);
-    public static final DeferredBlock<Block> MILL = BLOCKS.register("mill", MillBlock::new);
-    public static final DeferredBlock<Block> DIRT_COOKSTOVE = BLOCKS.register("dirt_cookstove", DirtCookStoveBlock::new);
-    public static final DeferredBlock<Block> HYDRANGEA_BUSH = BLOCKS.register("hydrangea_bush", () -> new HydrangeaBushBlock(false));
-    public static final DeferredBlock<Block> PAIL = BLOCKS.register("pail", PailBlock::new);
-    public static final DeferredBlock<Block> TEA_TREE = BLOCKS.register("tea_tree", TeaTreeBlock::new);
-    public static final DeferredBlock<Block> MEAL_TABLE = BLOCKS.register("meal_table", MealTableBlock::new);
-    public static final DeferredBlock<Block> CUTTING_BOARD = BLOCKS.register("cutting_board", CuttingBoardBlock::new);
-    public static final DeferredBlock<Block> CHERRY_VINES = BLOCKS.register("cherry_vines", CherryVinesBlock::new);
-    public static final DeferredBlock<Block> FALLEN_SAKURA = BLOCKS.register("fallen_sakura", () -> new AbstractFallenLeavesBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.1F).sound(SoundType.CHERRY_SAPLING).noOcclusion().noCollission()));
+    }, properties -> properties.mapColor(MapColor.PLANT).noCollision().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XYZ));
+    public static final DeferredBlock<Block> REED = BLOCKS.registerBlock("reed", ReedBlock::new, properties -> properties.mapColor(MapColor.PLANT).offsetType(BlockBehaviour.OffsetType.XZ).noCollision().instabreak().sound(SoundType.GRASS).noOcclusion());
+    public static final DeferredBlock<Block> SHORTER_REED = BLOCKS.registerBlock("shorter_reed", ShorterReedBlock::new, properties -> properties.mapColor(MapColor.PLANT).offsetType(BlockBehaviour.OffsetType.XZ).noCollision().instabreak().sound(SoundType.GRASS).noOcclusion());
+    public static final DeferredBlock<Block> MILL = BLOCKS.registerBlock("mill", MillBlock::new, properties -> properties.mapColor(MapColor.STONE).strength(2.0F, 6.0F).requiresCorrectToolForDrops().sound(SoundType.STONE));
+    public static final DeferredBlock<Block> DIRT_COOKSTOVE = BLOCKS.registerBlock("dirt_cookstove", DirtCookStoveBlock::new, properties -> properties.noOcclusion().mapColor(MapColor.DIRT).strength(0.5F).sound(SoundType.DRIPSTONE_BLOCK));
+    public static final DeferredBlock<Block> HYDRANGEA_BUSH = BLOCKS.registerBlock("hydrangea_bush", properties -> new HydrangeaBushBlock(properties, false), properties -> properties.mapColor(MapColor.PLANT).strength(0.05F).sound(SoundType.GRASS).noOcclusion().randomTicks().lightLevel((state) -> 1));
+    public static final DeferredBlock<Block> PAIL = BLOCKS.registerBlock("pail", PailBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(3.0F).sound(SoundType.WOOD).noOcclusion());
+    public static final DeferredBlock<Block> TEA_TREE = BLOCKS.registerBlock("tea_tree", TeaTreeBlock::new, properties -> properties.mapColor(MapColor.PLANT).noCollision().randomTicks().strength(0.2F).sound(SoundType.SWEET_BERRY_BUSH));
+    public static final DeferredBlock<Block> MEAL_TABLE = BLOCKS.registerBlock("meal_table", MealTableBlock::new, properties -> properties.mapColor(MapColor.WOOD).sound(SoundType.BAMBOO).strength(0.5f));
+    public static final DeferredBlock<Block> CUTTING_BOARD = BLOCKS.registerBlock("cutting_board", CuttingBoardBlock::new, properties -> properties.mapColor(MapColor.WOOD).sound(SoundType.WOOD).strength(0.4F));
+    public static final DeferredBlock<Block> CHERRY_VINES = BLOCKS.registerBlock("cherry_vines", CherryVinesBlock::new, properties -> properties.mapColor(DyeColor.PINK).strength(0.05f).sound(SoundType.PINK_PETALS).noOcclusion().noCollision().forceSolidOn());
+    public static final DeferredBlock<Block> FALLEN_SAKURA = BLOCKS.registerBlock("fallen_sakura", AbstractFallenLeavesBlock::new, properties -> properties.mapColor(MapColor.COLOR_PINK).strength(0.1F).sound(SoundType.CHERRY_SAPLING).noOcclusion().noCollision());
     //建筑
-    public static final DeferredBlock<Block> CHERRY_BLOSSOM = BLOCKS.register("cherry_blossom", () -> new AbstractFallingLeavesBlock
+    public static final DeferredBlock<Block> CHERRY_BLOSSOM = BLOCKS.registerBlock("cherry_blossom", properties -> new AbstractFallingLeavesBlock
     (
         5, false,
-         BlockBehaviour.Properties.of()
-         .mapColor(MapColor.COLOR_PINK)
-         .strength(0.05F)
-         .randomTicks()
-         .sound(SoundType.CHERRY_SAPLING)
-         .noOcclusion()
+        properties
     )
     {
         @Override
@@ -114,16 +118,11 @@ public class Blocks
             list.add(new ItemStack(Items.SAKURA_PETAL.get(), Ashihara.RANDOM.nextInt(1, 3)));
             return list;
         }
-    });
-    public static final DeferredBlock<Block> FALLEN_MAPLE_LEAVES_RED = BLOCKS.register("fallen_maple_leaves_red", () -> new AbstractFallenLeavesBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_RED).strength(0.1F).sound(SoundType.GRASS).noOcclusion().noCollission()));
-    public static final DeferredBlock<Block> MAPLE_LEAVES_RED = BLOCKS.register("maple_leaves_red", () -> new AbstractFallingLeavesBlock
+    }, properties -> properties.mapColor(MapColor.COLOR_PINK).strength(0.05F).randomTicks().sound(SoundType.CHERRY_SAPLING).noOcclusion());
+    public static final DeferredBlock<Block> FALLEN_MAPLE_LEAVES_RED = BLOCKS.registerBlock("fallen_maple_leaves_red", AbstractFallenLeavesBlock::new, properties -> properties.mapColor(MapColor.TERRACOTTA_RED).strength(0.1F).sound(SoundType.GRASS).noOcclusion().noCollision());
+    public static final DeferredBlock<Block> MAPLE_LEAVES_RED = BLOCKS.registerBlock("maple_leaves_red", properties -> new AbstractFallingLeavesBlock
     (
-        BlockBehaviour.Properties.of()
-        .mapColor(MapColor.TERRACOTTA_RED)
-        .strength(0.05F)
-        .randomTicks()
-        .sound(SoundType.GRASS)
-        .noOcclusion()
+        properties
     )
     {
         @Override
@@ -137,18 +136,14 @@ public class Blocks
         {
             return ParticleRegistryHandler.MAPLE_LEAF.get();
         }
-    });
+    }, properties -> properties.mapColor(MapColor.TERRACOTTA_RED).strength(0.05F).randomTicks().sound(SoundType.GRASS).noOcclusion());
 
     //灯具
-    public static final DeferredBlock<Block> JINJA_LANTERN = BLOCKS.register("jinja_lantern", JinjaLanternBlock::new);
-    public static final DeferredBlock<Block> STONE_LANTERN = BLOCKS.register("stone_lantern", StoneLanternBlock::new);
-    public static final DeferredBlock<Block> BONBURI_LAMP = BLOCKS.register("bonburi_lamp", () -> new DoubleLanternBlock.AxisAlignedVariant
+    public static final DeferredBlock<Block> JINJA_LANTERN = BLOCKS.registerBlock("jinja_lantern", JinjaLanternBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(0.5F).sound(SoundType.WOOD).lightLevel(getLightValueLit(15)));
+    public static final DeferredBlock<Block> STONE_LANTERN = BLOCKS.registerBlock("stone_lantern", StoneLanternBlock::new, properties -> properties.mapColor(MapColor.STONE).strength(4.0F).sound(SoundType.STONE).lightLevel(getLightValueLit(15)));
+    public static final DeferredBlock<Block> BONBURI_LAMP = BLOCKS.registerBlock("bonburi_lamp", properties -> new DoubleLanternBlock.AxisAlignedVariant
             (
-                    BlockBehaviour.Properties.of()
-                            .mapColor(MapColor.METAL)
-                            .strength(1F)
-                            .sound(SoundType.LANTERN)
-                            .lightLevel(getLightValueLit(15)),
+                            properties,
                             0.5d, 7.5d / 16d, 0.5d
             )
     {
@@ -166,14 +161,10 @@ public class Blocks
 
             return state.getValue(HALF).equals(DoubleBlockHalf.UPPER) ? upper : lower;
         }
-    });
-    public static final DeferredBlock<Block> CANDLESTICK = BLOCKS.register("candlestick", () -> new DoubleLanternBlock
+    }, properties -> properties.mapColor(MapColor.METAL).strength(1F).sound(SoundType.LANTERN).lightLevel(getLightValueLit(15)));
+    public static final DeferredBlock<Block> CANDLESTICK = BLOCKS.registerBlock("candlestick", properties -> new DoubleLanternBlock
             (
-                    BlockBehaviour.Properties.of()
-                            .mapColor(MapColor.METAL)
-                            .strength(1F)
-                            .sound(SoundType.LANTERN)
-                            .lightLevel(getLightValueLit(15)),
+                    properties,
                     0.5d, 9d / 16d, 0.5d
             )
     {
@@ -193,14 +184,10 @@ public class Blocks
 
             return state.getValue(HALF).equals(DoubleBlockHalf.UPPER) ? upper : lower;
         }
-    });
-    public static final DeferredBlock<Block> OIL_PLATE_STICK = BLOCKS.register("oil_plate_stick", () -> new DoubleLanternBlock.FourFacingVariant
+    }, properties -> properties.mapColor(MapColor.METAL).strength(1F).sound(SoundType.LANTERN).lightLevel(getLightValueLit(15)));
+    public static final DeferredBlock<Block> OIL_PLATE_STICK = BLOCKS.registerBlock("oil_plate_stick", properties -> new DoubleLanternBlock.FourFacingVariant
             (
-                    BlockBehaviour.Properties.of()
-                            .mapColor(MapColor.METAL)
-                            .strength(1F)
-                            .sound(SoundType.LANTERN)
-                            .lightLevel(getLightValueLit(15)),
+                    properties,
                     12d, 9d / 16d, 0.5d
             )
     {
@@ -221,7 +208,7 @@ public class Blocks
         }
 
         @Override
-        @OnlyIn(Dist.CLIENT)
+        
         public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand)
         {
             if (stateIn.getValue(HALF).equals(DoubleBlockHalf.LOWER)) return;
@@ -260,16 +247,12 @@ public class Blocks
                 worldIn.addParticle(ParticleTypes.FLAME, x, y, z, 0.0D, 0.0D, 0.0D);
             }
         }
-    });
-    public static final DeferredBlock<Block> LANTERN_LONG_WHITE = BLOCKS.register("lantern_long_white", MarkableHangingLanternBlock::new);
-    public static final DeferredBlock<Block> LANTERN_LONG_RED = BLOCKS.register("lantern_long_red", MarkableHangingLanternBlock::new);
-    public static final DeferredBlock<Block> HOUSE_LIKE_HANGING_LANTERN = BLOCKS.register("house_like_hanging_lantern", () -> new kogasastudio.ashihara.block.LanternBlock.HangingLanternBlock
+    }, properties -> properties.mapColor(MapColor.METAL).strength(1F).sound(SoundType.LANTERN).lightLevel(getLightValueLit(15)));
+    public static final DeferredBlock<Block> LANTERN_LONG_WHITE = BLOCKS.registerBlock("lantern_long_white", MarkableHangingLanternBlock::new, properties -> properties.mapColor(MapColor.WOOL).strength(1.0F).sound(SoundType.BAMBOO_SAPLING).lightLevel(getLightValueLit(15)));
+    public static final DeferredBlock<Block> LANTERN_LONG_RED = BLOCKS.registerBlock("lantern_long_red", MarkableHangingLanternBlock::new, properties -> properties.mapColor(MapColor.WOOL).strength(1.0F).sound(SoundType.BAMBOO_SAPLING).lightLevel(getLightValueLit(15)));
+    public static final DeferredBlock<Block> HOUSE_LIKE_HANGING_LANTERN = BLOCKS.registerBlock("house_like_hanging_lantern", properties -> new kogasastudio.ashihara.block.LanternBlock.HangingLanternBlock
             (
-                    BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.METAL)
-                    .strength(2.0F)
-                    .sound(SoundType.LANTERN)
-                    .lightLevel(getLightValueLit(15)),
+                    properties,
                     0.5d, 0.6875d, 0.5d
             )
     {
@@ -280,14 +263,10 @@ public class Blocks
             VoxelShape shape2 = Block.box(0,10,0,16,15,16);
             return Shapes.or(shape1, shape2);
         }
-    });
-    public static final DeferredBlock<Block> HEXAGONAL_HANGING_LANTERN = BLOCKS.register("hexagonal_hanging_lantern", () -> new LanternBlock.HangingLanternBlock
+    }, properties -> properties.mapColor(MapColor.METAL).strength(2.0F).sound(SoundType.LANTERN).lightLevel(getLightValueLit(15)));
+    public static final DeferredBlock<Block> HEXAGONAL_HANGING_LANTERN = BLOCKS.registerBlock("hexagonal_hanging_lantern", properties -> new LanternBlock.HangingLanternBlock
             (
-                    BlockBehaviour.Properties.of()
-                            .mapColor(MapColor.METAL)
-                            .strength(2.0F)
-                            .sound(SoundType.LANTERN)
-                            .lightLevel(getLightValueLit(15)),
+                    properties,
                     0.5d, 0.375d, 0.5d
             )
     {
@@ -312,10 +291,10 @@ public class Blocks
             VoxelShape shape2 = Block.box(-1.5,12.5,-1.5,17.5,16,17.5);
             return Shapes.or(shape1, shape2);
         }
-    });
-    public static final DeferredBlock<Block> CANDLE = BLOCKS.register("candle", CandleBlock::new);
-    public static final DeferredBlock<Block> TATAMI = BLOCKS.register("tatami", TatamiBlock::new);
-    public static final DeferredBlock<Block> RED_THIN_BEAM = BLOCKS.register("red_thin_beam", () -> new AbstractBeamBlock()
+    }, properties -> properties.mapColor(MapColor.METAL).strength(2.0F).sound(SoundType.LANTERN).lightLevel(getLightValueLit(15)));
+    public static final DeferredBlock<Block> CANDLE = BLOCKS.registerBlock("candle", CandleBlock::new, properties -> properties.mapColor(MapColor.SNOW).strength(0.05F).sound(SoundType.SNOW).lightLevel(getLightValueLit(15)).noOcclusion());
+    public static final DeferredBlock<Block> TATAMI = BLOCKS.registerBlock("tatami", TatamiBlock::new, properties -> properties.mapColor(MapColor.COLOR_YELLOW).strength(0.3F).sound(SoundType.BAMBOO_SAPLING));
+    public static final DeferredBlock<Block> RED_THIN_BEAM = BLOCKS.registerBlock("red_thin_beam", properties -> new AbstractBeamBlock(properties)
     {
         @Override
         public AshiharaWoodTypes getType()
@@ -328,131 +307,129 @@ public class Blocks
         {
             return Items.RED_THIN_BEAM.get();
         }
-    });
-    public static final DeferredBlock<BaseMultiBuiltBlock> BAMBOO_BONES_COMPONENT = BLOCKS.register("bamboo_bones_component", BaseMultiBuiltBlock.ComponentMaterial.BAMBOO_BONES::createStandardBlock);
-    public static final DeferredBlock<BaseMultiBuiltBlock> RAMMED_SOIL_COMPONENT = BLOCKS.register("rammed_soil_component", BaseMultiBuiltBlock.ComponentMaterial.RAMMED_SOIL::createStandardBlock);
-    public static final DeferredBlock<BaseMultiBuiltBlock> WHITE_SOIL_COMPONENT = BLOCKS.register("white_soil_component", BaseMultiBuiltBlock.ComponentMaterial.WHITE_SOIL::createStandardBlock);
-    public static final DeferredBlock<BaseMultiBuiltBlock> WHITE_WOOD_COMPONENT = BLOCKS.register("white_wood_component", BaseMultiBuiltBlock.ComponentMaterial.WHITE_WOOD::createStandardBlock);
+    }, properties -> properties.mapColor(MapColor.WOOD).strength(0.3F).sound(SoundType.WOOD).noOcclusion());
+    public static final DeferredBlock<BaseMultiBuiltBlock> BAMBOO_BONES_COMPONENT = BLOCKS.registerBlock("bamboo_bones_component", BaseMultiBuiltBlock.ComponentMaterial.BAMBOO_BONES::createStandardBlock, properties -> properties.sound(BaseMultiBuiltBlock.ComponentMaterial.BAMBOO_BONES.getSound()).forceSolidOn().mapColor(BaseMultiBuiltBlock.ComponentMaterial.BAMBOO_BONES.getColor()).strength(BaseMultiBuiltBlock.ComponentMaterial.BAMBOO_BONES.getStrength()));
+    public static final DeferredBlock<BaseMultiBuiltBlock> RAMMED_SOIL_COMPONENT = BLOCKS.registerBlock("rammed_soil_component", BaseMultiBuiltBlock.ComponentMaterial.RAMMED_SOIL::createStandardBlock, properties -> properties.sound(BaseMultiBuiltBlock.ComponentMaterial.RAMMED_SOIL.getSound()).forceSolidOn().mapColor(BaseMultiBuiltBlock.ComponentMaterial.RAMMED_SOIL.getColor()).strength(BaseMultiBuiltBlock.ComponentMaterial.RAMMED_SOIL.getStrength()));
+    public static final DeferredBlock<BaseMultiBuiltBlock> WHITE_SOIL_COMPONENT = BLOCKS.registerBlock("white_soil_component", BaseMultiBuiltBlock.ComponentMaterial.WHITE_SOIL::createStandardBlock, properties -> properties.sound(BaseMultiBuiltBlock.ComponentMaterial.WHITE_SOIL.getSound()).forceSolidOn().mapColor(BaseMultiBuiltBlock.ComponentMaterial.WHITE_SOIL.getColor()).strength(BaseMultiBuiltBlock.ComponentMaterial.WHITE_SOIL.getStrength()));
+    public static final DeferredBlock<BaseMultiBuiltBlock> WHITE_WOOD_COMPONENT = BLOCKS.registerBlock("white_wood_component", BaseMultiBuiltBlock.ComponentMaterial.WHITE_WOOD::createStandardBlock, properties -> properties.sound(BaseMultiBuiltBlock.ComponentMaterial.WHITE_WOOD.getSound()).forceSolidOn().mapColor(BaseMultiBuiltBlock.ComponentMaterial.WHITE_WOOD.getColor()).strength(BaseMultiBuiltBlock.ComponentMaterial.WHITE_WOOD.getStrength()));
 
-    public static final DeferredBlock<BaseMultiBuiltBlock> GREEN_WOOD_COMPONENT = BLOCKS.register("green_wood_component", BaseMultiBuiltBlock.ComponentMaterial.GREEN_WOOD::createStandardBlock);
+    public static final DeferredBlock<BaseMultiBuiltBlock> GREEN_WOOD_COMPONENT = BLOCKS.registerBlock("green_wood_component", BaseMultiBuiltBlock.ComponentMaterial.GREEN_WOOD::createStandardBlock, properties -> properties.sound(BaseMultiBuiltBlock.ComponentMaterial.GREEN_WOOD.getSound()).forceSolidOn().mapColor(BaseMultiBuiltBlock.ComponentMaterial.GREEN_WOOD.getColor()).strength(BaseMultiBuiltBlock.ComponentMaterial.GREEN_WOOD.getStrength()));
 
-    public static final DeferredBlock<BaseMultiBuiltBlock> MULTI_BUILT_BLOCK = BLOCKS.register("multi_built_block", BaseMultiBuiltBlock.ComponentMaterial.OAK_WOOD::createStandardBlock);
-    public static final DeferredBlock<BaseMultiBuiltBlock> SPRUCE_WOOD_COMPONENT = BLOCKS.register("spruce_wood_component", BaseMultiBuiltBlock.ComponentMaterial.SPRUCE_WOOD::createStandardBlock);
-    public static final DeferredBlock<BaseMultiBuiltBlock> RED_WOOD_COMPONENT = BLOCKS.register("red_wood_component", BaseMultiBuiltBlock.ComponentMaterial.RED_WOOD::createStandardBlock);
+    public static final DeferredBlock<BaseMultiBuiltBlock> MULTI_BUILT_BLOCK = BLOCKS.registerBlock("multi_built_block", BaseMultiBuiltBlock.ComponentMaterial.OAK_WOOD::createStandardBlock, properties -> properties.sound(BaseMultiBuiltBlock.ComponentMaterial.OAK_WOOD.getSound()).forceSolidOn().mapColor(BaseMultiBuiltBlock.ComponentMaterial.OAK_WOOD.getColor()).strength(BaseMultiBuiltBlock.ComponentMaterial.OAK_WOOD.getStrength()));
+    public static final DeferredBlock<BaseMultiBuiltBlock> SPRUCE_WOOD_COMPONENT = BLOCKS.registerBlock("spruce_wood_component", BaseMultiBuiltBlock.ComponentMaterial.SPRUCE_WOOD::createStandardBlock, properties -> properties.sound(BaseMultiBuiltBlock.ComponentMaterial.SPRUCE_WOOD.getSound()).forceSolidOn().mapColor(BaseMultiBuiltBlock.ComponentMaterial.SPRUCE_WOOD.getColor()).strength(BaseMultiBuiltBlock.ComponentMaterial.SPRUCE_WOOD.getStrength()));
+    public static final DeferredBlock<BaseMultiBuiltBlock> RED_WOOD_COMPONENT = BLOCKS.registerBlock("red_wood_component", BaseMultiBuiltBlock.ComponentMaterial.RED_WOOD::createStandardBlock, properties -> properties.sound(BaseMultiBuiltBlock.ComponentMaterial.RED_WOOD.getSound()).forceSolidOn().mapColor(BaseMultiBuiltBlock.ComponentMaterial.RED_WOOD.getColor()).strength(BaseMultiBuiltBlock.ComponentMaterial.RED_WOOD.getStrength()));
 
-    public static final DeferredBlock<BaseMultiBuiltBlock> GOLD_DECO_COMPONENT = BLOCKS.register("gold_deco_component", BaseMultiBuiltBlock.ComponentMaterial.GOLD_DECO::createStandardBlock);
-    public static final DeferredBlock<BaseMultiBuiltBlock> GOLD_STRUCTURAL_COMPONENT = BLOCKS.register("gold_structural_component", BaseMultiBuiltBlock.ComponentMaterial.GOLD_STRUCTURAL::createStandardBlock);
-    public static final DeferredBlock<BaseMultiBuiltBlock> STONE_COMPONENT = BLOCKS.register("stone_component", BaseMultiBuiltBlock.ComponentMaterial.STONE::createStandardBlock);
+    public static final DeferredBlock<BaseMultiBuiltBlock> GOLD_DECO_COMPONENT = BLOCKS.registerBlock("gold_deco_component", BaseMultiBuiltBlock.ComponentMaterial.GOLD_DECO::createStandardBlock, properties -> properties.sound(BaseMultiBuiltBlock.ComponentMaterial.GOLD_DECO.getSound()).forceSolidOn().mapColor(BaseMultiBuiltBlock.ComponentMaterial.GOLD_DECO.getColor()).strength(BaseMultiBuiltBlock.ComponentMaterial.GOLD_DECO.getStrength()));
+    public static final DeferredBlock<BaseMultiBuiltBlock> GOLD_STRUCTURAL_COMPONENT = BLOCKS.registerBlock("gold_structural_component", BaseMultiBuiltBlock.ComponentMaterial.GOLD_STRUCTURAL::createStandardBlock, properties -> properties.sound(BaseMultiBuiltBlock.ComponentMaterial.GOLD_STRUCTURAL.getSound()).forceSolidOn().mapColor(BaseMultiBuiltBlock.ComponentMaterial.GOLD_STRUCTURAL.getColor()).strength(BaseMultiBuiltBlock.ComponentMaterial.GOLD_STRUCTURAL.getStrength()));
+    public static final DeferredBlock<BaseMultiBuiltBlock> STONE_COMPONENT = BLOCKS.registerBlock("stone_component", BaseMultiBuiltBlock.ComponentMaterial.STONE::createStandardBlock, properties -> properties.sound(BaseMultiBuiltBlock.ComponentMaterial.STONE.getSound()).forceSolidOn().mapColor(BaseMultiBuiltBlock.ComponentMaterial.STONE.getColor()).strength(BaseMultiBuiltBlock.ComponentMaterial.STONE.getStrength()));
 
-    public static final DeferredBlock<BaseMultiBuiltBlock> CYPRESS_SKIN_COMPONENT = BLOCKS.register("cypress_skin_component", BaseMultiBuiltBlock.ComponentMaterial.CYPRESS_SKIN::createStandardBlock);
-    public static final DeferredBlock<BaseMultiBuiltBlock> TERRACOTTA_TILE_COMPONENT = BLOCKS.register("terracotta_tile_component", BaseMultiBuiltBlock.ComponentMaterial.TERRACOTTA_TILE::createStandardBlock);
+    public static final DeferredBlock<BaseMultiBuiltBlock> CYPRESS_SKIN_COMPONENT = BLOCKS.registerBlock("cypress_skin_component", BaseMultiBuiltBlock.ComponentMaterial.CYPRESS_SKIN::createStandardBlock, properties -> properties.sound(BaseMultiBuiltBlock.ComponentMaterial.CYPRESS_SKIN.getSound()).forceSolidOn().mapColor(BaseMultiBuiltBlock.ComponentMaterial.CYPRESS_SKIN.getColor()).strength(BaseMultiBuiltBlock.ComponentMaterial.CYPRESS_SKIN.getStrength()));
+    public static final DeferredBlock<BaseMultiBuiltBlock> TERRACOTTA_TILE_COMPONENT = BLOCKS.registerBlock("terracotta_tile_component", BaseMultiBuiltBlock.ComponentMaterial.TERRACOTTA_TILE::createStandardBlock, properties -> properties.sound(BaseMultiBuiltBlock.ComponentMaterial.TERRACOTTA_TILE.getSound()).forceSolidOn().mapColor(BaseMultiBuiltBlock.ComponentMaterial.TERRACOTTA_TILE.getColor()).strength(BaseMultiBuiltBlock.ComponentMaterial.TERRACOTTA_TILE.getStrength()));
 
     //作物
-    public static final DeferredBlock<Block> SOY_BEANS = BLOCKS.register("soy_beans", () -> new AbstractCropAge7Pickable(7, 3)
+    public static final DeferredBlock<Block> SOY_BEANS = BLOCKS.registerBlock("soy_beans", properties -> new AbstractCropAge7Pickable(7, 3, properties)
     {
         @Override
         protected ItemLike getBaseSeedId()
         {
             return Items.SOY_BEAN.get();
         }
-    });
-    public static final DeferredBlock<Block> SWEET_POTATOES = BLOCKS.register("sweet_potatoes", () -> new AbstractCropAge7()
+    }, properties -> properties.mapColor(MapColor.PLANT).noCollision().noOcclusion().randomTicks().instabreak().lightLevel(i -> 1).sound(SoundType.CROP));
+    public static final DeferredBlock<Block> SWEET_POTATOES = BLOCKS.registerBlock("sweet_potatoes", properties -> new AbstractCropAge7(properties)
     {
         @Override
         protected ItemLike getBaseSeedId()
         {
             return Items.SWEET_POTATO.get();
         }
-    });
-    public static final DeferredBlock<Block> CUCUMBERS = BLOCKS.register("cucumbers", () -> new CucumberCropBlock()
+    }, properties -> properties.mapColor(MapColor.PLANT).noCollision().noOcclusion().randomTicks().instabreak().lightLevel(i -> 1).sound(SoundType.CROP));
+    public static final DeferredBlock<Block> CUCUMBERS = BLOCKS.registerBlock("cucumbers", properties -> new CucumberCropBlock(properties)
     {
         @Override
         protected ItemLike getBaseSeedId()
         {
             return Items.CUCUMBER.get();
         }
-    });
-    public static final DeferredBlock<Block> STRIPPED_CHERRY_LOG = BLOCKS.register("stripped_cherry_log", SimpleLogBlock::new);
+    }, properties -> properties.mapColor(MapColor.PLANT).noCollision().noOcclusion().randomTicks().instabreak().lightLevel(i -> 1).sound(SoundType.CROP));
+    public static final DeferredBlock<Block> STRIPPED_CHERRY_LOG = BLOCKS.registerBlock("stripped_cherry_log", SimpleLogBlock::new, properties -> properties.mapColor((state) -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? MapColor.WOOD : MapColor.STONE).strength(2.0F).sound(SoundType.WOOD));
     //木制品
-    public static final DeferredBlock<Block> CHERRY_LOG = BLOCKS.register("cherry_log", () -> new StrippableLogBlock()
+    public static final DeferredBlock<Block> CHERRY_LOG = BLOCKS.registerBlock("cherry_log", properties -> new StrippableLogBlock(properties)
     {
         @Override
         public Block getStrippedBlock()
         {
             return STRIPPED_CHERRY_LOG.get();
         }
-    });
-    public static final DeferredBlock<Block> CHERRY_WOOD = BLOCKS.register("cherry_wood", SimpleWoodBlock::new);
-    public static final DeferredBlock<Block> CHERRY_PLANKS = BLOCKS.register("cherry_planks", SimplePlanksBlock::new);
-    public static final DeferredBlock<Block> CHERRY_STAIRS = BLOCKS.register("cherry_stairs", SimpleStairsBlock::new);
-    public static final DeferredBlock<Block> RED_STAIRS = BLOCKS.register("red_stairs", SimpleStairsBlock::new);
-    public static final DeferredBlock<Block> MAPLE_STAIRS = BLOCKS.register("maple_stairs", SimpleStairsBlock::new);
-    public static final DeferredBlock<Block> CHERRY_SLAB = BLOCKS.register("cherry_slab", SimpleSlabBlock::new);
-    public static final DeferredBlock<Block> CHERRY_FENCE = BLOCKS.register("cherry_fence", SimpleFenceBlock::new);
-    public static final DeferredBlock<Block> CHERRY_FENCE_GATE = BLOCKS.register("cherry_fence_gate", SimpleFenceGateBlock::new);
-    public static final DeferredBlock<Block> CHERRY_BUTTON = BLOCKS.register("cherry_button", SimpleButtonBlock::new);
-    public static final DeferredBlock<Block> STRIPPED_RED_LOG = BLOCKS.register("stripped_red_log", SimpleLogBlock::new);
-    public static final DeferredBlock<Block> RED_PLANKS = BLOCKS.register("red_planks", SimplePlanksBlock::new);
-    public static final DeferredBlock<Block> RED_SLAB = BLOCKS.register("red_slab", SimpleSlabBlock::new);
-    public static final DeferredBlock<Block> RED_FENCE = BLOCKS.register("red_fence", SimpleFenceBlock::new);
-    public static final DeferredBlock<Block> RED_FENCE_GATE = BLOCKS.register("red_fence_gate", SimpleFenceGateBlock::new);
-    public static final DeferredBlock<Block> STRIPPED_MAPLE_LOG = BLOCKS.register("stripped_maple_log", SimpleLogBlock::new);
-    public static final DeferredBlock<Block> MAPLE_LOG = BLOCKS.register("maple_log", () -> new StrippableLogBlock()
+    }, properties -> properties.mapColor((state) -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? MapColor.WOOD : MapColor.STONE).strength(2.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> CHERRY_WOOD = BLOCKS.registerBlock("cherry_wood", SimpleWoodBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(0.2F, 0.3F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> CHERRY_PLANKS = BLOCKS.registerBlock("cherry_planks", SimplePlanksBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> CHERRY_STAIRS = BLOCKS.registerBlock("cherry_stairs", SimpleStairsBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> RED_STAIRS = BLOCKS.registerBlock("red_stairs", SimpleStairsBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> MAPLE_STAIRS = BLOCKS.registerBlock("maple_stairs", SimpleStairsBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> CHERRY_SLAB = BLOCKS.registerBlock("cherry_slab", SimpleSlabBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> CHERRY_FENCE = BLOCKS.registerBlock("cherry_fence", SimpleFenceBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> CHERRY_FENCE_GATE = BLOCKS.registerBlock("cherry_fence_gate", SimpleFenceGateBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> CHERRY_BUTTON = BLOCKS.registerBlock("cherry_button", SimpleButtonBlock::new, properties -> properties.noCollision().pushReaction(PushReaction.DESTROY).strength(0.5F));
+    public static final DeferredBlock<Block> STRIPPED_RED_LOG = BLOCKS.registerBlock("stripped_red_log", SimpleLogBlock::new, properties -> properties.mapColor((state) -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? MapColor.WOOD : MapColor.STONE).strength(2.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> RED_PLANKS = BLOCKS.registerBlock("red_planks", SimplePlanksBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> RED_SLAB = BLOCKS.registerBlock("red_slab", SimpleSlabBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> RED_FENCE = BLOCKS.registerBlock("red_fence", SimpleFenceBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> RED_FENCE_GATE = BLOCKS.registerBlock("red_fence_gate", SimpleFenceGateBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> STRIPPED_MAPLE_LOG = BLOCKS.registerBlock("stripped_maple_log", SimpleLogBlock::new, properties -> properties.mapColor((state) -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? MapColor.WOOD : MapColor.STONE).strength(2.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> MAPLE_LOG = BLOCKS.registerBlock("maple_log", properties -> new StrippableLogBlock(properties)
     {
         @Override
         public Block getStrippedBlock()
         {
             return STRIPPED_MAPLE_LOG.get();
         }
-    });
-    public static final DeferredBlock<Block> MAPLE_WOOD = BLOCKS.register("maple_wood", SimpleWoodBlock::new);
-    public static final DeferredBlock<Block> MAPLE_PLANKS = BLOCKS.register("maple_planks", SimplePlanksBlock::new);
-    public static final DeferredBlock<Block> MAPLE_SLAB = BLOCKS.register("maple_slab", SimpleSlabBlock::new);
-    public static final DeferredBlock<Block> MAPLE_FENCE = BLOCKS.register("maple_fence", SimpleFenceBlock::new);
-    public static final DeferredBlock<Block> MAPLE_FENCE_GATE = BLOCKS.register("maple_fence_gate", SimpleFenceGateBlock::new);
-    public static final DeferredBlock<Block> MAPLE_BUTTON = BLOCKS.register("maple_button", SimpleButtonBlock::new);
+    }, properties -> properties.mapColor((state) -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? MapColor.WOOD : MapColor.STONE).strength(2.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> MAPLE_WOOD = BLOCKS.registerBlock("maple_wood", SimpleWoodBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(0.2F, 0.3F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> MAPLE_PLANKS = BLOCKS.registerBlock("maple_planks", SimplePlanksBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> MAPLE_SLAB = BLOCKS.registerBlock("maple_slab", SimpleSlabBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> MAPLE_FENCE = BLOCKS.registerBlock("maple_fence", SimpleFenceBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> MAPLE_FENCE_GATE = BLOCKS.registerBlock("maple_fence_gate", SimpleFenceGateBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> MAPLE_BUTTON = BLOCKS.registerBlock("maple_button", SimpleButtonBlock::new, properties -> properties.noCollision().pushReaction(PushReaction.DESTROY).strength(0.5F));
 
 
-    public static final DeferredBlock<Block> CYPRESS_SKIN_BLOCK = BLOCKS.register("cypress_skin_block", SimplePlanksBlock::new);
-    public static final DeferredBlock<Block> CYPRESS_SKIN_SLAB = BLOCKS.register("cypress_skin_slab", SimpleSlabBlock::new);
-    public static final DeferredBlock<Block> CYPRESS_SKIN_STAIRS = BLOCKS.register("cypress_skin_stairs", SimpleStairsBlock::new);
-    public static final DeferredBlock<Block> RED_FENCE_EXPANSION = BLOCKS.register("red_fence_expansion", () -> new FenceExpansionBlock(AshiharaWoodTypes.RED));
-    public static final DeferredBlock<Block> RED_ADVANCED_FENCE = BLOCKS.register("advanced_red_fence", () -> new AdvancedFenceBlock(AshiharaWoodTypes.RED)
+    public static final DeferredBlock<Block> CYPRESS_SKIN_BLOCK = BLOCKS.registerBlock("cypress_skin_block", SimplePlanksBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> CYPRESS_SKIN_SLAB = BLOCKS.registerBlock("cypress_skin_slab", SimpleSlabBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> CYPRESS_SKIN_STAIRS = BLOCKS.registerBlock("cypress_skin_stairs", SimpleStairsBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> RED_FENCE_EXPANSION = BLOCKS.registerBlock("red_fence_expansion", properties -> new FenceExpansionBlock(properties, AshiharaWoodTypes.RED), properties -> properties.mapColor(MapColor.WOOD).strength(0.2F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> RED_ADVANCED_FENCE = BLOCKS.registerBlock("advanced_red_fence", properties -> new AdvancedFenceBlock(properties, AshiharaWoodTypes.RED)
     {
         @Override
         protected Block getExpansion()
         {
             return RED_FENCE_EXPANSION.get();
         }
-    });
-    public static final DeferredBlock<Block> SPRUCE_FENCE_EXPANSION = BLOCKS.register("spruce_fence_expansion", () -> new FenceExpansionBlock(AshiharaWoodTypes.SPRUCE));
-    public static final DeferredBlock<Block> SPRUCE_ADVANCED_FENCE = BLOCKS.register("advanced_spruce_fence", () -> new AdvancedFenceBlock(AshiharaWoodTypes.SPRUCE)
+    }, properties -> properties.mapColor(MapColor.WOOD).strength(0.5F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> SPRUCE_FENCE_EXPANSION = BLOCKS.registerBlock("spruce_fence_expansion", properties -> new FenceExpansionBlock(properties, AshiharaWoodTypes.SPRUCE), properties -> properties.mapColor(MapColor.WOOD).strength(0.2F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> SPRUCE_ADVANCED_FENCE = BLOCKS.registerBlock("advanced_spruce_fence", properties -> new AdvancedFenceBlock(properties, AshiharaWoodTypes.SPRUCE)
     {
         @Override
         protected Block getExpansion()
         {
             return SPRUCE_FENCE_EXPANSION.get();
         }
-    });
-    public static final DeferredBlock<Block> GOLD_FENCE_DECORATION = BLOCKS.register("gold_fence_decoration", FenceDecorationBlock::new);
-    public static final DeferredBlock<Block> RED_THICK_COLUMN = BLOCKS.register("red_thick_column", () -> new ColumnBlock(AshiharaWoodTypes.RED));
-    public static final DeferredBlock<Block> RED_KUMIMONO = BLOCKS.register("red_kumimono", () -> new KumimonoBlock(AshiharaWoodTypes.RED));
-    public static final DeferredBlock<Block> RED_KAWAKI = BLOCKS.register("red_kawaki", () -> new KawakiBlock(AshiharaWoodTypes.RED));
-    public static final DeferredBlock<Block> THIN_WHITE_SOIL_WALL = BLOCKS.register("thin_white_soil_wall", () -> new AbstractWallBlock()
+    }, properties -> properties.mapColor(MapColor.WOOD).strength(0.5F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> GOLD_FENCE_DECORATION = BLOCKS.registerBlock("gold_fence_decoration", FenceDecorationBlock::new, properties -> properties.mapColor(MapColor.GOLD).strength(0.2F).sound(SoundType.LANTERN).noOcclusion());
+    public static final DeferredBlock<Block> RED_THICK_COLUMN = BLOCKS.registerBlock("red_thick_column", properties -> new ColumnBlock(properties, AshiharaWoodTypes.RED), properties -> properties.mapColor(MapColor.WOOD).strength(1.5F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> RED_KUMIMONO = BLOCKS.registerBlock("red_kumimono", properties -> new KumimonoBlock(properties, AshiharaWoodTypes.RED), properties -> properties.mapColor(MapColor.WOOD).strength(0.5F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> RED_KAWAKI = BLOCKS.registerBlock("red_kawaki", properties -> new KawakiBlock(properties, AshiharaWoodTypes.RED), properties -> properties.mapColor(MapColor.WOOD).strength(0.5F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> THIN_WHITE_SOIL_WALL = BLOCKS.registerBlock("thin_white_soil_wall", properties -> new AbstractWallBlock(properties)
     {
         @Override
         public WallTypes getType()
         {
             return WallTypes.WHITE_SOIL;
         }
-    });
-    public static final DeferredBlock<Block> STRAIGHT_BAR_WINDOW_GREEN = BLOCKS.register("straight_bar_window_green", () -> new StraightBarWindowBlock(BlockBehaviour.Properties.of().mapColor(DyeColor.GREEN).strength(1.5f).sound(SoundType.BAMBOO)));
-    public static final DeferredBlock<Block> CHARLOTTE = BLOCKS.register("charlotte", CharlotteBlock::new);
+    }, properties -> properties.mapColor(DyeColor.WHITE).strength(1.5f).sound(SoundType.BAMBOO));
+    public static final DeferredBlock<Block> STRAIGHT_BAR_WINDOW_GREEN = BLOCKS.registerBlock("straight_bar_window_green", StraightBarWindowBlock::new, properties -> properties.mapColor(DyeColor.GREEN).strength(1.5f).sound(SoundType.BAMBOO));
+    public static final DeferredBlock<Block> CHARLOTTE = BLOCKS.registerBlock("charlotte", CharlotteBlock::new, properties -> properties.noOcclusion().strength(1.0F).mapColor(DyeColor.PINK).sound(SoundType.WOOL));
 
     public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(BuiltInRegistries.FLUID, Ashihara.MODID);
 
-    public static final DeferredBlock<LiquidBlock> SOY_MILK_BLOCK = BLOCKS.register
-    ("soy_milk", () -> new LiquidBlock(FluidRegistryHandler.SOY_MILK.get(), Block.Properties.of().mapColor(MapColor.SNOW).noCollission().strength(100.0F).replaceable().noLootTable()));
-    public static final DeferredBlock<LiquidBlock> OIL_BLOCK = BLOCKS.register
-    ("oil", () -> new LiquidBlock(FluidRegistryHandler.OIL.get(), Block.Properties.of().mapColor(MapColor.COLOR_YELLOW).noCollission().strength(100.0F).replaceable().noLootTable()));
+    public static final DeferredBlock<LiquidBlock> SOY_MILK_BLOCK = BLOCKS.registerBlock("soy_milk", properties -> new LiquidBlock(FluidRegistryHandler.SOY_MILK.get(), properties), properties -> properties.mapColor(MapColor.SNOW).noCollision().strength(100.0F).replaceable().noLootTable());
+    public static final DeferredBlock<LiquidBlock> OIL_BLOCK = BLOCKS.registerBlock("oil", properties -> new LiquidBlock(FluidRegistryHandler.OIL.get(), properties), properties -> properties.mapColor(MapColor.COLOR_YELLOW).noCollision().strength(100.0F).replaceable().noLootTable());
 }

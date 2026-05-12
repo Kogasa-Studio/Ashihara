@@ -1,23 +1,24 @@
 package kogasastudio.ashihara.client.render.geo.worldui;
 
+import com.geckolib.renderer.base.BoneSnapshots;
+import com.geckolib.renderer.base.RenderPassInfo;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import kogasastudio.ashihara.client.models.geo.UIPanelModel;
+import kogasastudio.ashihara.client.render.state.GUI3DComponentRenderState;
 import kogasastudio.ashihara.helper.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.renderer.GeoObjectRenderer;
-import software.bernie.geckolib.util.Color;
+import com.geckolib.model.GeoModel;
+import com.geckolib.renderer.GeoObjectRenderer;
 
-public class PanelRenderer extends GeoObjectRenderer<UIPanelModel>
+public class PanelRenderer extends GeoObjectRenderer<UIPanelModel, Void, GUI3DComponentRenderState>
 {
-    private static final Color COLOR = Color.ofARGB(255, 255, 255, 255);
+    //private static final Color COLOR = Color.ofARGB(255, 255, 255, 255);
     private AdditionalRenderer additionalRenderer = null;
 
     public PanelRenderer(GeoModel<UIPanelModel> model)
@@ -30,17 +31,16 @@ public class PanelRenderer extends GeoObjectRenderer<UIPanelModel>
         this.additionalRenderer = infoRenderer;
     }
 
-    @Override
     public void render(PoseStack poseStack, UIPanelModel animatable, @Nullable MultiBufferSource bufferSource, @Nullable RenderType renderType, @Nullable VertexConsumer buffer, int packedLight, float partialTick)
     {
         poseStack.pushPose();
         poseStack.translate(0.5, 0.5, 0.5);
-        poseStack.mulPose(Axis.YP.rotationDegrees(-Minecraft.getInstance().cameraEntity.yRotO));
+        poseStack.mulPose(Axis.YP.rotationDegrees(-Minecraft.getInstance().getCameraEntity().yRotO));
         poseStack.translate(-0.5, -0.5, -0.5);
 
         poseStack.pushPose();
         poseStack.translate(0.8, -0.51f, 0);
-        super.render(poseStack, animatable, bufferSource, renderType, buffer, packedLight, partialTick);
+        //super.render(poseStack, animatable, bufferSource, renderType, buffer, packedLight, partialTick);
         poseStack.popPose();
 
         poseStack.pushPose();
@@ -54,6 +54,16 @@ public class PanelRenderer extends GeoObjectRenderer<UIPanelModel>
     }
 
     @Override
+    public void adjustModelBonesForRender(RenderPassInfo renderPassInfo, BoneSnapshots snapshots)
+    {
+        snapshots.ifPresent("main", bone ->
+        {
+            bone.setRotY(-Minecraft.getInstance().getCameraEntity().getYRot());
+            bone.setTranslation(0.8f, -0.51f, 0);
+        });
+    }
+
+    /*@Override
     public void renderRecursively(PoseStack poseStack, UIPanelModel animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour)
     {
         if (bone.getName().equals("main"))
@@ -82,7 +92,7 @@ public class PanelRenderer extends GeoObjectRenderer<UIPanelModel>
                 0, 0, animatable.progress, 0, animatable.progress,
                 packedOverlay,
                 packedLight
-            );*/
+            ); *
             RenderHelper.blitTiles
             (
                 poseStack,
@@ -111,13 +121,7 @@ public class PanelRenderer extends GeoObjectRenderer<UIPanelModel>
             animatable.edge.syncFrame(xStart * 16, xEnd * 16, yStart * 16, yEnd * 16, bone.getScaleX(), bone.getScaleY());
         }
         super.renderRecursively(poseStack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
-    }
-
-    @Override
-    public Color getRenderColor(UIPanelModel animatable, float partialTick, int packedLight)
-    {
-        return COLOR;
-    }
+    }*/
 
     @FunctionalInterface
     public interface AdditionalRenderer

@@ -1,5 +1,10 @@
 package kogasastudio.ashihara.block.blockentity;
 
+import com.geckolib.animation.object.EasingType;
+import com.geckolib.animation.object.LoopType;
+import com.geckolib.cache.animation.Animation;
+import com.geckolib.cache.model.GeoBone;
+import com.geckolib.renderer.base.GeoRenderState;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import kogasastudio.ashihara.Ashihara;
@@ -10,7 +15,9 @@ import kogasastudio.ashihara.client.models.geo.InternalControlGeoModel;
 import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
 import kogasastudio.ashihara.client.models.geo.UIPanelModel;
 import kogasastudio.ashihara.helper.ParticleHelper;
+import kogasastudio.ashihara.helper.RecipeHelper;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
+import kogasastudio.ashihara.inventory.BEFluidStackHandler;
 import kogasastudio.ashihara.inventory.BEItemStackHandler;
 import kogasastudio.ashihara.item.Otsuchi;
 import kogasastudio.ashihara.registry.Items;
@@ -18,37 +25,31 @@ import kogasastudio.ashihara.registry.RecipeTypes;
 import kogasastudio.ashihara.registry.BlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.wrapper.RangedWrapper;
-import software.bernie.geckolib.animation.Animation;
-import software.bernie.geckolib.animation.EasingType;
-import software.bernie.geckolib.cache.object.GeoBone;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.Predicate;
 
@@ -65,7 +66,7 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
             this.fluid_display_position.triggerInternal
             (
                 p, this.fluid_display_position.hashCode(),
-                new InternalControlGeoModel.InternalAnimationBuilder("sync_liquid_level", Animation.LoopType.HOLD_ON_LAST_FRAME)
+                new InternalControlGeoModel.InternalAnimationBuilder("sync_liquid_level", LoopType.HOLD_ON_LAST_FRAME)
                 .startBone("main")
                 .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, this.lastLiquidLevel, this.getLiquidLevel(), EasingType.EASE_IN_OUT_QUAD)
                 .endBone().build()
@@ -76,7 +77,7 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
         this::stillTransiting,
         () -> !this.stillTransiting()
     );
-    public FluidTank fluidTank = new FluidTank(16000);
+    public BEFluidStackHandler<MortarBE> fluidTank = new BEFluidStackHandler<>(16000, this);
 
     public SimpleInternalControlGeoModel item_display_positions;
     public SimpleInternalControlGeoModel fluid_display_position;
@@ -88,7 +89,7 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
     public int progress = 0;
     public float productionMultiplier = 1.0f;
     public MortarRecipe currentRecipe;
-    public ResourceLocation lastRecipe;
+    public Identifier lastRecipe;
     private Queue<MortarToolType> queue = new ConcurrentLinkedDeque<>();
     public BEItemStackHandler<MortarBE> inventory = new BEItemStackHandler<>(4, this);
 
@@ -113,8 +114,8 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
 
     public boolean stillTransiting()
     {
-        Optional<GeoBone> b = this.fluid_display_position.getBakedModel(this.fluid_display_position.getModelResource(this.fluid_display_position)).getBone("main");
-        return b.isPresent() && (Math.abs(b.get().getPosY() - this.getLiquidLevel()) > 0.001);
+        Optional<GeoBone> b = this.fluid_display_position.getBakedModel(this.fluid_display_position.getModelResource(new GeoRenderState.Impl(Map.of()))).getBone("main");
+        return b.isPresent() && (Math.abs(/*b.get().getPosY()*/ - this.getLiquidLevel()) > 0.001);
     }
 
     /**
@@ -146,28 +147,21 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
         return 1 - ((float) this.queue.size() / currentRecipe.getSequence().size());
     }
 
-    public static IItemHandler getInv(MortarBE te, Direction side)
-    {
-        return new RangedWrapper(te.inventory, 0, 4);
-    }
-
-    public static IFluidHandler getFluid(MortarBE te, Direction side)
-    {
-        return te.fluidTank;
-    }
+    public static ResourceHandler<ItemResource>  getInv  (MortarBE te, Direction side) { return te.inventory; }
+    public static ResourceHandler<FluidResource> getFluid(MortarBE te, Direction side) { return te.fluidTank; }
 
     public void refreshRecipe()
     {
         if (this.level == null) return;
         if (this.queue.isEmpty()) acceptRecipe(null);
-        RecipeManager recipeManager =  this.level.getRecipeManager();
-        List<RecipeHolder<MortarRecipe>> recipes = recipeManager.getAllRecipesFor(RecipeTypes.MORTAR.get());
+        Collection<RecipeHolder<MortarRecipe>> recipes = RecipeHelper.getRecipesByType(this.level, RecipeTypes.MORTAR.get());
 
         Optional<RecipeHolder<MortarRecipe>> recipeOptional = Optional.empty();
         boolean flag = true;
         if (this.lastRecipe != null)
         {
-            recipeOptional = recipes.stream().filter(h -> h.value().getId().equals(this.lastRecipe) && h.value().testBE(this)).findFirst();
+            Identifier lastId = this.lastRecipe;
+            recipeOptional = recipes.stream().filter(h -> h.value().getId().equals(lastId) && h.value().testBE(this)).findFirst();
             if (recipeOptional.isPresent()) flag = false;
         }
         if (flag) recipeOptional = recipes.stream().filter(h -> h.value().testBE(this)).findFirst();
@@ -208,7 +202,7 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
                     }
                 }
             }
-            recipe.testFluidOption(this.fluidTank, multiplier, IFluidHandler.FluidAction.EXECUTE);
+            recipe.testFluidOption(this.fluidTank, multiplier, false);
         }
         acceptRecipe(null);
     }
@@ -235,42 +229,49 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries)
+    protected void loadAdditional(ValueInput input)
     {
-        if (this.level != null)
+        if (this.level instanceof ServerLevel serverLevel)
         {
-            Optional<RecipeHolder<?>> holderOptional = this.level.getRecipeManager().byKey(ResourceLocation.parse(tag.getString("currentRecipe")));
-            holderOptional.ifPresent(recipeHolder -> this.currentRecipe = (MortarRecipe) recipeHolder.value());
+            RecipeManager recipeManager = (RecipeManager) serverLevel.recipeAccess();
+            input.getString("currentRecipe").ifPresent(id ->
+            {
+                if (!id.isEmpty())
+                {
+                    ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE, Identifier.parse(id));
+                    recipeManager.byKey(key).ifPresent(holder -> this.currentRecipe = (MortarRecipe) holder.value());
+                }
+            });
             this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), UPDATE_ALL);
         }
-        this.lastRecipe = ResourceLocation.parse(tag.getString("lastRecipe"));
-        this.inventory.deserializeNBT(registries, tag.getCompound("contents"));
-        this.fluidTank = this.fluidTank.readFromNBT(registries, tag.getCompound("fluid"));
-        this.queue = new ConcurrentLinkedDeque<>();
-        ListTag listTag = tag.getList("queue", Tag.TAG_STRING);
-        for (int i = 0; i < listTag.size(); i++)
+        input.getString("lastRecipe").ifPresent(id ->
         {
-            MortarToolType mortarToolType = MortarToolType.get(listTag.getString(i));
-            this.queue.add(mortarToolType);
+            if (!id.isEmpty()) this.lastRecipe = Identifier.parse(id);
+        });
+        input.readChild("contents", this.inventory);
+        input.readChild("fluid",    this.fluidTank);
+        this.queue = new ConcurrentLinkedDeque<>();
+        for (MortarToolType type : input.listOrEmpty("queue", MortarToolType.CODEC))
+        {
+            this.queue.add(type);
         }
         refreshRecipe();
-        super.loadAdditional(tag, registries);
+        super.loadAdditional(input);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries)
+    protected void saveAdditional(ValueOutput output)
     {
-        tag.putString("currentRecipe", this.currentRecipe == null ? "" : this.currentRecipe.getId().toString());
-        tag.putString("lastRecipe", this.lastRecipe == null ? "" : this.lastRecipe.toString());
-        tag.put("contents", this.inventory.serializeNBT(registries));
-        tag.put("fluid", this.fluidTank.writeToNBT(registries, new CompoundTag()));
-        ListTag listTag = new ListTag();
+        output.putString("currentRecipe", this.currentRecipe == null ? "" : this.currentRecipe.getId().toString());
+        output.putString("lastRecipe",    this.lastRecipe    == null ? "" : this.lastRecipe.toString());
+        output.putChild("contents", this.inventory);
+        output.putChild("fluid",    this.fluidTank);
+        var queueList = output.list("queue", MortarToolType.CODEC);
         for (MortarToolType type : this.queue)
         {
-            listTag.add(StringTag.valueOf(type.id));
+            queueList.add(type);
         }
-        tag.put("queue", listTag);
-        super.saveAdditional(tag, registries);
+        super.saveAdditional(output);
     }
 
     @Override
@@ -287,8 +288,8 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
 
     public enum MortarToolType
     {
-        PESTLE("pestle", i -> i.is(Items.PESTLE) || i.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "pestle"))), Component.translatable("tooltip.ashihara.mortar.pestle"), SoundEvents.PLAYER_ATTACK_WEAK),
-        OTSUCHI("otsuchi", i -> i.getItem() instanceof Otsuchi || i.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "otsuchi"))), Component.translatable("tooltip.ashihara.mortar.otsuchi"), SoundEvents.PLAYER_ATTACK_STRONG),
+        PESTLE("pestle", i -> i.is(Items.PESTLE) || i.is(ItemTags.create(Identifier.fromNamespaceAndPath(Ashihara.MODID, "pestle"))), Component.translatable("tooltip.ashihara.mortar.pestle"), SoundEvents.PLAYER_ATTACK_WEAK),
+        OTSUCHI("otsuchi", i -> i.getItem() instanceof Otsuchi || i.is(ItemTags.create(Identifier.fromNamespaceAndPath(Ashihara.MODID, "otsuchi"))), Component.translatable("tooltip.ashihara.mortar.otsuchi"), SoundEvents.PLAYER_ATTACK_STRONG),
         HAND("hand", ItemStack::isEmpty, Component.translatable("tooltip.ashihara.mortar.hand"), SoundEvents.ARMOR_EQUIP_ELYTRA.value());
 
         public final Predicate<ItemStack> itemPredicate;

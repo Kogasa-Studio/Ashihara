@@ -13,7 +13,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-@EventBusSubscriber(modid = Ashihara.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Ashihara.MODID, value = Dist.CLIENT)
 public class ToastEventHandler
 {
     private static int toastTipTicks = 0;
@@ -32,7 +32,7 @@ public class ToastEventHandler
                 toastTipTicks++;
                 if (toastTipTicks >= 100)
                 {
-                    Minecraft.getInstance().getToasts().addToast(new InWorldToolTipTipToast());
+                    Minecraft.getInstance().getToastManager().addToast(new InWorldToolTipTipToast());
                     showedToast = true;
                 }
             }

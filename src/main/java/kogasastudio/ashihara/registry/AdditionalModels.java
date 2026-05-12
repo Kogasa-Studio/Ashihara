@@ -2,20 +2,25 @@ package kogasastudio.ashihara.registry;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.utils.BuildingComponentModelResourceLocation;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.ModelEvent;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class AdditionalModels
 {
     public static final String STANDALONE_VARIANT = "standalone";
     private static final List<BuildingComponentModelResourceLocation> models = new ArrayList<>();
+
+    public static List<BuildingComponentModelResourceLocation> getModels()
+    {
+        return models;
+    }
+
+    public static BuildingComponentModelResourceLocation get(Identifier id)
+    {
+        return models.stream().filter(rl -> rl.id().equals(id)).findFirst().orElse(null);
+    }
 
     //Structural
     public static final BuildingComponentModelResourceLocation RED_THICK_COLUMN = register("block/building_blocks/column/column_thick_red");
@@ -149,15 +154,11 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation ONI_TILE_1 = register("block/components/oni_tile_1");
     public static final BuildingComponentModelResourceLocation ONI_TILE_1_OBLIQUE = register("block/components/oni_tile_1_oblique");
 
-    @SubscribeEvent
-    public static void onRegisterAdditionalModels(ModelEvent.RegisterAdditional event)
-    {
-        models.forEach(location -> event.register(location.toModelResourceLocation()));
-    }
 
     private static BuildingComponentModelResourceLocation register(String path)
     {
-        BuildingComponentModelResourceLocation rl = new BuildingComponentModelResourceLocation(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, path), STANDALONE_VARIANT);
+        Identifier id = Identifier.fromNamespaceAndPath(Ashihara.MODID, path);
+        BuildingComponentModelResourceLocation rl = new BuildingComponentModelResourceLocation(id, STANDALONE_VARIANT);
         models.add(rl);
         return rl;
     }

@@ -1,29 +1,31 @@
 package kogasastudio.ashihara.client.models.geo;
 
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.renderer.base.GeoRenderState;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.item.Otsuchi;
 import kogasastudio.ashihara.registry.Items;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.player.PlayerModel;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
-import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.renderer.GeoObjectRenderer;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.SingletonGeoAnimatable;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.model.GeoModel;
+import com.geckolib.renderer.GeoObjectRenderer;
+import com.geckolib.util.GeckoLibUtil;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 public class PlayerProxyModel extends GeoModel<PlayerProxyModel> implements SingletonGeoAnimatable
 {
-    public static final ResourceLocation MODEL = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "geo/entity/player_proxy.geo.json");
-    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "textures/geo/empty.png");
-    public static final ResourceLocation ANIMATION = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "animations/entity/player_proxy.animation.json");
-    public final GeoObjectRenderer<PlayerProxyModel> RENDERER = new GeoObjectRenderer<>(this);
+    public static final Identifier MODEL = Identifier.fromNamespaceAndPath(Ashihara.MODID, "geo/entity/player_proxy.geo.json");
+    public static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Ashihara.MODID, "textures/geo/empty.png");
+    public static final Identifier ANIMATION = Identifier.fromNamespaceAndPath(Ashihara.MODID, "animations/entity/player_proxy.animation.json");
+    public final GeoObjectRenderer<PlayerProxyModel, PlayerModel, ?> RENDERER = new GeoObjectRenderer<>(this);
 
     public final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public final Player player;
@@ -57,25 +59,19 @@ public class PlayerProxyModel extends GeoModel<PlayerProxyModel> implements Sing
     }
 
     @Override
-    public double getTick(Object object)
-    {
-        return 0;
-    }
-
-    @Override
-    public ResourceLocation getModelResource(PlayerProxyModel animatable)
+    public Identifier getModelResource(GeoRenderState animatable)
     {
         return MODEL;
     }
 
     @Override
-    public ResourceLocation getTextureResource(PlayerProxyModel animatable)
+    public Identifier getTextureResource(GeoRenderState animatable)
     {
         return TEXTURE;
     }
 
     @Override
-    public ResourceLocation getAnimationResource(PlayerProxyModel animatable)
+    public Identifier getAnimationResource(PlayerProxyModel animatable)
     {
         return ANIMATION;
     }
@@ -85,7 +81,7 @@ public class PlayerProxyModel extends GeoModel<PlayerProxyModel> implements Sing
         public final Function<Player, Boolean> triggerCondition;
         public final BiConsumer<PlayerProxyModel, ProxiedPlayerAnimationController> outroAnim;
 
-        public static final BiConsumer<PlayerProxyModel, ProxiedPlayerAnimationController> OUTRO_DEFAULT = (model, animationController) -> animationController.forceAnimationReset();
+        public static final BiConsumer<PlayerProxyModel, ProxiedPlayerAnimationController> OUTRO_DEFAULT = (model, animationController) -> animationController.stopTriggeredAnimation();
 
         public ProxiedPlayerAnimationController
         (
@@ -96,7 +92,7 @@ public class PlayerProxyModel extends GeoModel<PlayerProxyModel> implements Sing
             BiConsumer<PlayerProxyModel, ProxiedPlayerAnimationController> outroAnim
         )
         {
-            super(animatable, name, animationHandler);
+            super(animationHandler);
             this.triggerCondition = triggerCondition;
             this.outroAnim = outroAnim;
         }

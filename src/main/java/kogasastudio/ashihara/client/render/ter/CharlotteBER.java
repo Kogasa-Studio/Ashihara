@@ -12,9 +12,12 @@ import kogasastudio.ashihara.utils.InWorldTooltipInfoWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -23,7 +26,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
-public class CharlotteBER implements BlockEntityRenderer<CharlotteBE>, WithLevelRenderer<CharlotteBE>, InWorldToolTipBER<CharlotteBE>
+public class CharlotteBER implements BlockEntityRenderer<CharlotteBE, BlockEntityRenderState>, WithLevelRenderer<CharlotteBE>, InWorldToolTipBER<CharlotteBE>
 {
     public CharlotteBER(BlockEntityRendererProvider.Context dispatcherIn) {}
 
@@ -34,15 +37,19 @@ public class CharlotteBER implements BlockEntityRenderer<CharlotteBE>, WithLevel
     {
     }
 
-    RenderType renderType = RenderType.entityTranslucent(UIPanelModel.DEFAULT_TEXTURE);
+    @Override
+    public BlockEntityRenderState createRenderState()
+    {
+        return new BlockEntityRenderState();
+    }
 
     @Override
-    public void render(CharlotteBE blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay)
+    public void submit(BlockEntityRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera)
     {
         poseStack.pushPose();
         poseStack.translate(0, 0.8 - 0.16 / 16f, 0);
-        blockEntity.model.RENDERER.setupInformationRenderer(this.getInfoRenderer(blockEntity));
-        blockEntity.model.RENDERER.render(poseStack, blockEntity.model, buffer, renderType, buffer.getBuffer(renderType), packedLight, partialTick);
+        //state.model.RENDERER.setupInformationRenderer(this.getInfoRenderer(blockEntity));
+        //state.model.RENDERER.render(poseStack, blockEntity.model, buffer, renderType, buffer.getBuffer(renderType), packedLight, partialTick);
         poseStack.popPose();
     }
 

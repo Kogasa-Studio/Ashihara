@@ -18,17 +18,22 @@ import static kogasastudio.ashihara.block.PaddyFieldBlock.LEVEL;
 
 public class RiceCropBlock extends CropBlock
 {
+    public RiceCropBlock(Properties properties)
+    {
+        super(properties);
+    }
+
     public RiceCropBlock()
     {
-        super
-                (
-                        Properties.of()
-                                .mapColor(MapColor.PLANT)
-                                .noCollission()
-                                .randomTicks()
-                                .instabreak()
-                                .sound(SoundType.CROP)
-                );
+        this
+        (
+            Properties.of()
+            .mapColor(MapColor.PLANT)
+            .noCollision()
+            .randomTicks()
+            .instabreak()
+            .sound(SoundType.CROP)
+        );
     }
 
     @Override

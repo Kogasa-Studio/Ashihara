@@ -2,11 +2,11 @@ package kogasastudio.ashihara.client.models;// Made with Blockbench 3.5.4
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import kogasastudio.ashihara.client.render.AshiharaRenderTypes;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 
 public class CandleModel extends Model
 {
@@ -14,7 +14,7 @@ public class CandleModel extends Model
 
     public CandleModel(ModelPart root)
     {
-        super(t -> AshiharaRenderTypes.CHUNK_ENTITY_SOLID);
+        super(root, t -> RenderTypes.solidMovingBlock());
         this.candle = root.getChild("candle");
     }
 
@@ -32,9 +32,8 @@ public class CandleModel extends Model
         return LayerDefinition.create(meshdefinition, 16, 16);
     }
 
-    @Override
-    public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, int color)
+    public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float color)
     {
-        this.candle.render(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, color);
+        this.candle.render(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, (int) color);
     }
 }

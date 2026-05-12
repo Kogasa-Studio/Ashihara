@@ -2,15 +2,18 @@ package kogasastudio.ashihara.client.particles;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.util.RandomSource;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.jspecify.annotations.Nullable;
 
-public class RiceParticle extends TextureSheetParticle
+public class RiceParticle extends SingleQuadParticle
 {
-    protected RiceParticle(ClientLevel world, double x, double y, double z)
+    protected RiceParticle(ClientLevel world, double x, double y, double z, TextureAtlasSprite sprite)
     {
-        super(world, x, y, z, 0.0D, 0.0D, 0.0D);
+        super(world, x, y, z, sprite);
         this.xd *= 0.8F;
         this.yd *= 0.8F;
         this.zd *= 0.8F;
@@ -20,15 +23,15 @@ public class RiceParticle extends TextureSheetParticle
     }
 
     @Override
-    public ParticleRenderType getRenderType()
-    {
-        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
-    }
-
-    @Override
     public float getQuadSize(float scaleFactor)
     {
         return 0.2F;
+    }
+
+    @Override
+    protected Layer getLayer()
+    {
+        return SingleQuadParticle.Layer.OPAQUE;
     }
 
     @Override
@@ -55,7 +58,7 @@ public class RiceParticle extends TextureSheetParticle
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    
     public static class RiceParticleProvider implements ParticleProvider<SimpleParticleType>
     {
         private final SpriteSet spriteSet;
@@ -66,10 +69,9 @@ public class RiceParticle extends TextureSheetParticle
         }
 
         @Override
-        public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
+        public Particle createParticle(SimpleParticleType options, ClientLevel level, double x, double y, double z, double xAux, double yAux, double zAux, RandomSource random)
         {
-            RiceParticle riceparticle = new RiceParticle(worldIn, x, y, z);
-            riceparticle.pickSprite(this.spriteSet);
+            RiceParticle riceparticle = new RiceParticle(level, x, y, z, spriteSet.get(random));
             return riceparticle;
         }
     }

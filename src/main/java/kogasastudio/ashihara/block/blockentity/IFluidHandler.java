@@ -1,15 +1,12 @@
 package kogasastudio.ashihara.block.blockentity;
 
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import kogasastudio.ashihara.inventory.BEFluidStackHandler;
 
+/**
+ * Marker interface for block entities that expose a {@link BEFluidStackHandler}.
+ * Used by items (e.g. MinatoAqua) that interact with fluid storage generically.
+ */
 public interface IFluidHandler
 {
-    FluidTank createTank();
-
-    default FluidTank createTank(int capacity)
-    {
-        return this.createTank();
-    }
-
-    FluidTank getTank();
+    BEFluidStackHandler<?> getTank();
 }

@@ -6,7 +6,7 @@ import kogasastudio.ashihara.helper.PlayerAnimationHelper;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public record AnimatePlayerPacket(String id, UUID player_uuid) implements CustomPacketPayload
 {
-    public static final Type<AnimatePlayerPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "animate_player_packet"));
+    public static final Type<AnimatePlayerPacket> TYPE = new Type<>(Identifier.fromNamespaceAndPath(Ashihara.MODID, "animate_player_packet"));
 
     @Override
     public Type<? extends CustomPacketPayload> type()

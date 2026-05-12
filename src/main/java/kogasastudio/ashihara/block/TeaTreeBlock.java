@@ -1,6 +1,5 @@
 package kogasastudio.ashihara.block;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -8,9 +7,10 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -46,18 +46,23 @@ public class TeaTreeBlock extends BushBlock implements BonemealableBlock
     public static final BooleanProperty BLOOMED = BooleanProperty.create("bloomed");
     public static final EnumProperty<Direction.Axis> AXIS = HORIZONTAL_AXIS;
 
+    public TeaTreeBlock(BlockBehaviour.Properties properties)
+    {
+        super(properties);
+        this.registerDefaultState(this.getStateDefinition().any().setValue(AGE, 0).setValue(BLOOMED, false));
+    }
+
     public TeaTreeBlock()
     {
-        super
-                (
-                        BlockBehaviour.Properties.of()
-                                .mapColor(MapColor.PLANT)
-                                .noCollission()
-                                .randomTicks()
-                                .strength(0.2F)
-                                .sound(SoundType.SWEET_BERRY_BUSH)
-                );
-        this.registerDefaultState(this.getStateDefinition().any().setValue(AGE, 0).setValue(BLOOMED, false));
+        this
+        (
+            BlockBehaviour.Properties.of()
+            .mapColor(MapColor.PLANT)
+            .noCollision()
+            .randomTicks()
+            .strength(0.2F)
+            .sound(SoundType.SWEET_BERRY_BUSH)
+        );
     }
 
     @Override
@@ -108,14 +113,14 @@ public class TeaTreeBlock extends BushBlock implements BonemealableBlock
         return state.getValue(AGE) < 4;
     }
 
-    //抄浆果丛实现减缓移动
     @Override
-    public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn)
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise)
     {
-        if (state.getValue(AGE) > 1 && entityIn instanceof LivingEntity && entityIn.getType() != EntityType.FOX && entityIn.getType() != EntityType.BEE)
+        if (state.getValue(AGE) > 1 && entity instanceof LivingEntity && entity.getType() != EntityType.FOX && entity.getType() != EntityType.BEE)
         {
-            entityIn.makeStuckInBlock(state, new Vec3(0.8F, 1.0D, 0.8F));
+            entity.makeStuckInBlock(state, new Vec3(0.8F, 1.0D, 0.8F));
         }
+        super.entityInside(state, level, pos, entity, effectApplier, isPrecise);
     }
 
     @Override
@@ -137,7 +142,7 @@ public class TeaTreeBlock extends BushBlock implements BonemealableBlock
     }
 
     @Override
-    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public InteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         int age = state.getValue(AGE);
         if (age < 4 && stack.getItem().equals(BONE_MEAL))
@@ -146,18 +151,18 @@ public class TeaTreeBlock extends BushBlock implements BonemealableBlock
         }
         if (state.getValue(BLOOMED))
         {
-            popResource(worldIn, pos, new ItemStack(TEA_FLOWER.get(), 1 + worldIn.random.nextInt(2)));
-            worldIn.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + worldIn.random.nextFloat() * 0.4F);
+            popResource(worldIn, pos, new ItemStack(TEA_FLOWER.get(), 1 + worldIn.getRandom().nextInt(2)));
+            worldIn.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + worldIn.getRandom().nextFloat() * 0.4F);
             worldIn.setBlockAndUpdate(pos, state.setValue(BLOOMED, false));
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         if (age == 4)
         {
-            popResource(worldIn, pos, new ItemStack(TEA_LEAF.get(), 1 + worldIn.random.nextInt(3)));
-            popResource(worldIn, pos, new ItemStack(TEA_SEED.get(), 1 + worldIn.random.nextInt(2)));
-            worldIn.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + worldIn.random.nextFloat() * 0.4F);
+            popResource(worldIn, pos, new ItemStack(TEA_LEAF.get(), 1 + worldIn.getRandom().nextInt(3)));
+            popResource(worldIn, pos, new ItemStack(TEA_SEED.get(), 1 + worldIn.getRandom().nextInt(2)));
+            worldIn.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + worldIn.getRandom().nextFloat() * 0.4F);
             worldIn.setBlockAndUpdate(pos, state.setValue(AGE, 2));
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return super.useItemOn(stack, state, worldIn, pos, player, handIn, hit);
     }
@@ -178,11 +183,5 @@ public class TeaTreeBlock extends BushBlock implements BonemealableBlock
     public void performBonemeal(ServerLevel worldIn, RandomSource rand, BlockPos pos, BlockState state)
     {
         worldIn.setBlockAndUpdate(pos, state.setValue(AGE, state.getValue(AGE) + 1));
-    }
-
-    @Override
-    protected MapCodec<? extends BushBlock> codec()
-    {
-        return simpleCodec(p -> new TeaTreeBlock());
     }
 }

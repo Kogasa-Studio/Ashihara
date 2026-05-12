@@ -5,7 +5,7 @@ import kogasastudio.ashihara.registry.Items;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -27,19 +27,23 @@ import static kogasastudio.ashihara.helper.BlockActionHelper.getLightValueLit;
 
 public class MarkableHangingLanternBlock extends LanternBlock.HangingLanternBlock implements EntityBlock
 {
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
+    public MarkableHangingLanternBlock(Properties properties)
+    {
+        super(properties, 0.5d, 0.5d, 0.5d);
+        this.registerDefaultState(this.defaultBlockState().setValue(LIT, false).setValue(FACING, Direction.NORTH));
+    }
+
     public MarkableHangingLanternBlock()
     {
-        super
-                (
-                        Properties.of()
-                                .mapColor(MapColor.WOOL)
-                                .strength(1.0F)
-                                .sound(SoundType.BAMBOO_SAPLING)
-                                .lightLevel(getLightValueLit(15)),
-                        0.5d, 0.5d, 0.5d
-                );
-        this.registerDefaultState(this.defaultBlockState().setValue(LIT, false).setValue(FACING, Direction.NORTH));
+        this
+        (
+            Properties.of()
+            .mapColor(MapColor.WOOL)
+            .strength(1.0F)
+            .sound(SoundType.BAMBOO_SAPLING)
+            .lightLevel(getLightValueLit(15))
+        );
     }
 
     @Override
@@ -65,7 +69,7 @@ public class MarkableHangingLanternBlock extends LanternBlock.HangingLanternBloc
     }
 
     @Override
-    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public InteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         if (player.getItemInHand(handIn).getItem() == Items.KOISHI.get())
         {
@@ -74,8 +78,8 @@ public class MarkableHangingLanternBlock extends LanternBlock.HangingLanternBloc
             {
                 te.nextIcon();
                 te.setChanged();
-                return ItemInteractionResult.SUCCESS;
-            } else return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+                return InteractionResult.SUCCESS;
+            } else return InteractionResult.PASS;
         } else return super.useItemOn(stack, state, worldIn, pos, player, handIn, hit);
     }
 

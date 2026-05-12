@@ -1,32 +1,37 @@
 package kogasastudio.ashihara.client.models.geo;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.object.EasingType;
+import com.geckolib.animation.object.LoopType;
+import com.geckolib.animation.object.PlayState;
 import kogasastudio.ashihara.utils.mixin.GeoRendererPoseSyncProvider;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.entity.Entity;
-import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
-import software.bernie.geckolib.animation.*;
-import software.bernie.geckolib.animation.keyframe.BoneAnimation;
-import software.bernie.geckolib.animation.keyframe.Keyframe;
-import software.bernie.geckolib.animation.keyframe.KeyframeStack;
-import software.bernie.geckolib.animation.keyframe.event.data.CustomInstructionKeyframeData;
-import software.bernie.geckolib.animation.keyframe.event.data.ParticleKeyframeData;
-import software.bernie.geckolib.animation.keyframe.event.data.SoundKeyframeData;
-import software.bernie.geckolib.loading.math.MathValue;
-import software.bernie.geckolib.loading.math.value.Constant;
-import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.renderer.GeoObjectRenderer;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+import com.geckolib.animatable.SingletonGeoAnimatable;
+import com.geckolib.animation.*;
+import com.geckolib.cache.animation.*;
+import com.geckolib.cache.animation.BoneAnimation;
+import com.geckolib.cache.animation.Keyframe;
+import com.geckolib.cache.animation.KeyframeStack;
+import com.geckolib.cache.animation.keyframeevent.CustomInstructionKeyframeData;
+import com.geckolib.cache.animation.keyframeevent.ParticleKeyframeData;
+import com.geckolib.cache.animation.keyframeevent.SoundKeyframeData;
+import com.geckolib.loading.math.value.Constant;
+import com.geckolib.model.GeoModel;
+import com.geckolib.renderer.GeoObjectRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+@NullMarked
 public abstract class InternalControlGeoModel<T extends SingletonGeoAnimatable> extends GeoModel<T> implements SingletonGeoAnimatable
 {
-    public Animation triggeredInternal;
+    public @Nullable Animation triggeredInternal;
     public static final RawAnimation INTERNAL = RawAnimation.begin().thenPlay("internal");
 
-    public final GeoObjectRenderer<T> RENDERER = new GeoObjectRenderer<>(this);
+    public final GeoObjectRenderer<T, ?, ?> RENDERER = new GeoObjectRenderer<>(this);
 
     public GeoRendererPoseSyncProvider getRendererPoseSync()
     {
@@ -34,10 +39,11 @@ public abstract class InternalControlGeoModel<T extends SingletonGeoAnimatable> 
     }
 
     @Override
-    public @Nullable Animation getAnimation(T animatable, String name)
+    @SuppressWarnings("UnstableApiUsage")
+    public @Nullable Animation getBakedAnimation(T animatable, String name)
     {
         if (name.equals("internal") && triggeredInternal != null) return triggeredInternal;
-        return super.getAnimation(animatable, name);
+        return super.getBakedAnimation(animatable, name);
     }
 
     public void triggerInternal(Entity entity, long instanceID, Animation anim)
@@ -50,12 +56,12 @@ public abstract class InternalControlGeoModel<T extends SingletonGeoAnimatable> 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
     {
-        controllers.add(new AnimationController<>(this, "internal", animationState -> PlayState.STOP).triggerableAnim("internal", INTERNAL));
+        controllers.add(new AnimationController<>("internal", animationState -> PlayState.STOP).triggerableAnim("internal", INTERNAL));
     }
 
     public Animation lerpTest()
     {
-        return new InternalAnimationBuilder("in", Animation.LoopType.HOLD_ON_LAST_FRAME)
+        return new InternalAnimationBuilder("in", LoopType.HOLD_ON_LAST_FRAME)
         .startBone("cat")
         .lerpSingle(InternalAnimationBuilder.VarType.POSITION, 10, 1, 2, 3, 4, 5, 6, EasingType.EASE_IN_OUT_CUBIC)
         .lerpSingle(InternalAnimationBuilder.VarType.ROTATION, 10, Math.toRadians(30), Math.toRadians(60), Math.toRadians(90), Math.toRadians(120), Math.toRadians(150), Math.toRadians(180), EasingType.EASE_IN_BOUNCE)
@@ -69,12 +75,12 @@ public abstract class InternalControlGeoModel<T extends SingletonGeoAnimatable> 
     public static class InternalAnimationBuilder
     {
         private final String name;
-        private final Animation.LoopType loopType;
+        private final LoopType loopType;
         public double lengthInTicks = 0;
 
         public List<BoneAnimation> anims = new ArrayList<>();
 
-        public InternalAnimationBuilder(String name, Animation.LoopType loopType)
+        public InternalAnimationBuilder(String name, LoopType loopType)
         {
             this.name = name;
             this.loopType = loopType;
@@ -87,7 +93,7 @@ public abstract class InternalControlGeoModel<T extends SingletonGeoAnimatable> 
 
         public Animation build()
         {
-            return new Animation(name, lengthInTicks, loopType, anims.toArray(new BoneAnimation[0]), new Animation.Keyframes(new SoundKeyframeData[0], new ParticleKeyframeData[0], new CustomInstructionKeyframeData[0]));
+            return new Animation(name, lengthInTicks, loopType, anims.toArray(new BoneAnimation[0]), Set.of(), new Animation.KeyframeMarkers(new SoundKeyframeData[0], new ParticleKeyframeData[0], new CustomInstructionKeyframeData[0]));
         }
 
         public static class InternalBoneAnimationBuilder
@@ -95,9 +101,9 @@ public abstract class InternalControlGeoModel<T extends SingletonGeoAnimatable> 
             private final String boneName;
             private final InternalAnimationBuilder parent;
 
-            private KeyframeStack<Keyframe<MathValue>> positionStack = new KeyframeStack<>();
-            private KeyframeStack<Keyframe<MathValue>> rotationStack = new KeyframeStack<>();
-            private KeyframeStack<Keyframe<MathValue>> scaleStack = new KeyframeStack<>();
+            private RawKeyframeStack positionStack = new RawKeyframeStack(new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+            private RawKeyframeStack rotationStack = new RawKeyframeStack(new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+            private RawKeyframeStack scaleStack = new RawKeyframeStack(new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
             public InternalBoneAnimationBuilder(String boneName, InternalAnimationBuilder parent)
             {
@@ -137,20 +143,21 @@ public abstract class InternalControlGeoModel<T extends SingletonGeoAnimatable> 
 
             public InternalBoneAnimationBuilder lerpSingle(VarType type, double length, double xStart, double xEnd, double yStart, double yEnd, double zStart, double zEnd, EasingType easingType)
             {
-                get(type).xKeyframes().add(new Keyframe<>(length, new Constant(xStart), new Constant(xEnd), easingType));
-                get(type).yKeyframes().add(new Keyframe<>(length, new Constant(yStart), new Constant(yEnd), easingType));
-                get(type).zKeyframes().add(new Keyframe<>(length, new Constant(zStart), new Constant(zEnd), easingType));
+                get(type).xKeyframes().add(new Keyframe(0, length, new Constant(xStart), new Constant(xEnd), easingType));
+                get(type).yKeyframes().add(new Keyframe(0, length, new Constant(yStart), new Constant(yEnd), easingType));
+                get(type).zKeyframes().add(new Keyframe(0, length, new Constant(zStart), new Constant(zEnd), easingType));
                 return this;
             }
 
             public InternalAnimationBuilder endBone()
             {
-                this.parent.anims.add(new BoneAnimation(boneName, rotationStack, positionStack, scaleStack));
-                this.parent.lengthInTicks = Math.max(this.parent.lengthInTicks, Math.max(this.positionStack.getLastKeyframeTime(), Math.max(this.rotationStack.getLastKeyframeTime(), this.scaleStack.getLastKeyframeTime())));
+                KeyframeStack rot = rotationStack.finalizeKeyframe(), pos = positionStack.finalizeKeyframe(), scl = scaleStack.finalizeKeyframe();
+                this.parent.anims.add(new BoneAnimation(boneName, rot, pos, scl));
+                this.parent.lengthInTicks = Math.max(this.parent.lengthInTicks, Math.max(pos.getTotalKeyframeTime(), Math.max(rot.getTotalKeyframeTime(), scl.getTotalKeyframeTime())));
                 return this.parent;
             }
 
-            public KeyframeStack<Keyframe<MathValue>> get(VarType type)
+            public RawKeyframeStack get(VarType type)
             {
                 return switch (type)
                 {
@@ -165,7 +172,15 @@ public abstract class InternalControlGeoModel<T extends SingletonGeoAnimatable> 
         {
             POSITION,
             ROTATION,
-            SCALE;
+            SCALE
+        }
+
+        public record RawKeyframeStack(List<Keyframe> xKeyframes, List<Keyframe> yKeyframes, List<Keyframe> zKeyframes)
+        {
+            public KeyframeStack finalizeKeyframe()
+            {
+                return new KeyframeStack(xKeyframes, yKeyframes, zKeyframes);
+            }
         }
     }
 }

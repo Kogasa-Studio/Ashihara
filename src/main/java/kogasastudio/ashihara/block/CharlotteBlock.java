@@ -12,15 +12,16 @@ import kogasastudio.ashihara.utils.json.JsonUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryOps;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -47,9 +48,14 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class CharlotteBlock extends Block implements EntityBlock
 {
+    public CharlotteBlock(BlockBehaviour.Properties properties)
+    {
+        super(properties);
+    }
+
     public CharlotteBlock()
     {
-        super
+        this
         (
             BlockBehaviour.Properties.of()
             .noOcclusion()
@@ -72,7 +78,7 @@ public class CharlotteBlock extends Block implements EntityBlock
     public BlockState getStateForPlacement(BlockPlaceContext context) {return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());}
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
         if (stack.is(Items.RICE.asItem()) && level.isClientSide())
         {
@@ -88,7 +94,7 @@ public class CharlotteBlock extends Block implements EntityBlock
                 {
                     te.reScale(stack.getCount() * 8, stack.getCount() * 4, player);
                 }
-                return ItemInteractionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
         if (stack.is(Items.CHISEL.asItem()) && level.isClientSide())
@@ -96,8 +102,8 @@ public class CharlotteBlock extends Block implements EntityBlock
             final DynamicOps<JsonElement> dynamicOps = new ConditionalOps<>(RegistryOps.create(JsonOps.INSTANCE, level.registryAccess()), ICondition.IContext.EMPTY);
             MortarRecipe recipe = new MortarRecipe
             (
-                ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "chick"),
-                NonNullList.of(SizedIngredient.of(ItemStack.EMPTY.getItem(), 1), SizedIngredient.of(ItemTags.WOLF_FOOD, 4), SizedIngredient.of(Items.KOISHI, 1)),
+                Identifier.fromNamespaceAndPath(Ashihara.MODID, "chick"),
+                NonNullList.of(SizedIngredient.of(ItemStack.EMPTY.getItem(), 1), new SizedIngredient(Ingredient.of(level.registryAccess().getOrThrow(ItemTags.WOLF_FOOD)), 4), SizedIngredient.of(Items.KOISHI, 1)),
                 NonNullList.of(ItemStack.EMPTY, Items.RICE.toStack(), Items.RICE.toStack(7)),
                 new FluidStack(Fluids.WATER.getSource(), 1000),
                 0,

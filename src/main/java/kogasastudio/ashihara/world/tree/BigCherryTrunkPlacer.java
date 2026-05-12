@@ -1,21 +1,16 @@
 package kogasastudio.ashihara.world.tree;
 
-import com.google.common.collect.Lists;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import kogasastudio.ashihara.registry.WorldGenEventRegistryHandler;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.LevelSimulatedReader;
-import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
-import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -42,21 +37,21 @@ public class BigCherryTrunkPlacer extends TrunkPlacer
     }
 
     @Override
-    public List<FoliagePlacer.FoliageAttachment> placeTrunk(LevelSimulatedReader level, BiConsumer<BlockPos, BlockState> biConsumer, RandomSource random, int height, BlockPos blockPos, TreeConfiguration treeConfiguration) {
+    public List<FoliagePlacer.FoliageAttachment> placeTrunk(WorldGenLevel level, BiConsumer<BlockPos, BlockState> trunkSetter, RandomSource random, int treeHeight, BlockPos origin, TreeConfiguration config) {
 
         // Place the base trunk
         for (int y = 0; y < baseHeight; ++y) {
-            placeLog(level, biConsumer, random, blockPos.above(y), treeConfiguration);
+            placeLog(level, trunkSetter, random, origin.above(y), config);
         }
 
         // Place the branches
         int branchHeight = baseHeight + heightRandA;
-        placeBranch(level, biConsumer, random, blockPos.above(branchHeight), treeConfiguration, 0, heightRandB);
+        placeBranch(level, trunkSetter, random, origin.above(branchHeight), config, 0, heightRandB);
 
-        return List.of(new FoliagePlacer.FoliageAttachment(blockPos.above(baseHeight + heightRandA), 0, false));
+        return List.of(new FoliagePlacer.FoliageAttachment(origin.above(baseHeight + heightRandA), 0, false));
     }
 
-    private void placeBranch(LevelSimulatedReader level, BiConsumer<BlockPos, BlockState> biConsumer, RandomSource random, BlockPos pos, TreeConfiguration treeConfiguration, int offset, int length) {
+    private void placeBranch(WorldGenLevel level, BiConsumer<BlockPos, BlockState> biConsumer, RandomSource random, BlockPos pos, TreeConfiguration treeConfiguration, int offset, int length) {
         for (int i = offset; i <= length; ++i) {
             placeLog(level, biConsumer, random, pos.offset(0, i, 0), treeConfiguration);
         }

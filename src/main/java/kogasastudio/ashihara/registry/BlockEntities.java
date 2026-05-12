@@ -13,62 +13,62 @@ public class BlockEntities
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, Ashihara.MODID);
 
     public static final Supplier<BlockEntityType<MarkableLanternBE>> MARKABLE_LANTERN_BE = BLOCK_ENTITIES.register("markable_lantern_blockentity",
-                                                                                                                   () -> BlockEntityType.Builder.of
+                                                                                                                   () -> new BlockEntityType<>
             (
             MarkableLanternBE::new,
             Blocks.LANTERN_LONG_RED.get(),
             Blocks.LANTERN_LONG_WHITE.get()
-            ).build(null));
+            ));
 
     public static final Supplier<BlockEntityType<MortarBE>> MORTAR_BE = BLOCK_ENTITIES.register("mortar_be",
-                                                                                                () -> BlockEntityType.Builder.of
+                                                                                                () -> new BlockEntityType<>
             (
             MortarBE::new,
             Blocks.MORTAR.get()
-            ).build(null));
+            ));
 
     public static final Supplier<BlockEntityType<PotBlockEntity>> POT_BE = BLOCK_ENTITIES.register("pot_be",
-            () -> BlockEntityType.Builder.of(PotBlockEntity::new, Blocks.POT.get()).build(null));
+            () -> new BlockEntityType<>(PotBlockEntity::new, Blocks.POT.get()));
 
     /*public static final Supplier<BlockEntityType<MillBE>> MILL_TE = TILE_ENTITIES.register("mill_blockentity",
-            () -> BlockEntityType.Builder.of
+            () -> new BlockEntityType<
                 (
                     MillBE::new,
                     Blocks.MILL.get()
-                ).build(null));*/
+                ));*/
 
     public static final Supplier<BlockEntityType<PailBE>> PAIL_BE = BLOCK_ENTITIES.register("pail_blockentity",
-                                                                                            () -> BlockEntityType.Builder.of
+                                                                                            () -> new BlockEntityType<>
                 (
                 PailBE::new,
                 Blocks.PAIL.get()
-                ).build(null));
+                ));
 
     public static final Supplier<BlockEntityType<CandleBE>> CANDLE_BE = BLOCK_ENTITIES.register("candle_blockentity",
-                                                                                                () -> BlockEntityType.Builder.of
+                                                                                                () -> new BlockEntityType<>
                 (
                 CandleBE::new,
                 Blocks.CANDLE.get()
-                ).build(null));
+                ));
 
     public static final Supplier<BlockEntityType<CuttingBoardBE>> CUTTING_BOARD_BE = BLOCK_ENTITIES.register("cutting_board_blockentity",
-                                                                                                             () -> BlockEntityType.Builder.of
+                                                                                                             () -> new BlockEntityType<>
                 (
                 CuttingBoardBE::new,
                 Blocks.CUTTING_BOARD.get()
-                ).build(null));
+                ));
 
     public static final Supplier<BlockEntityType<CharlotteBE>> CHARLOTTE_BE = BLOCK_ENTITIES.register("charlotte_blockentity",
-                                                                                                      () -> BlockEntityType.Builder.of
+                                                                                                      () -> new BlockEntityType<>
                 (
                 CharlotteBE::new,
                 Blocks.CHARLOTTE.get()
-                ).build(null));
+                ));
 
     public static final Supplier<BlockEntityType<MultiBuiltBlockEntity>> MULTI_BUILT_BLOCKENTITY = BLOCK_ENTITIES.register
     (
         "multi_built_blockentity",
-        () -> BlockEntityType.Builder.of
+        () -> new BlockEntityType<>
         (
         MultiBuiltBlockEntity::new,
         Blocks.BAMBOO_BONES_COMPONENT.get(),
@@ -87,13 +87,13 @@ public class BlockEntities
 
         Blocks.CYPRESS_SKIN_COMPONENT.get(),
         Blocks.TERRACOTTA_TILE_COMPONENT.get()
-        ).build(null)
+        )
     );
 
     /*public static final Supplier<BlockEntityType<MealTableTE>> MEAL_TABLE_TE = TILE_ENTITIES.register("meal_table_blockentity",
-            () -> BlockEntityType.Builder.of
+            () -> new BlockEntityType<
                 (
                     MealTableTE::new,
                     Blocks.MEAL_TABLE.get()
-                ).build(null));*/
+                ));*/
 }

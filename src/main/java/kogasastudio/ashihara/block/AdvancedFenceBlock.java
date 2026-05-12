@@ -9,7 +9,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.BlockItem;
@@ -29,10 +29,12 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jspecify.annotations.Nullable;
 
 import static kogasastudio.ashihara.block.FenceDecorationBlock.AXIS;
 import static kogasastudio.ashihara.block.FenceDecorationBlock.ORB;
@@ -48,18 +50,24 @@ public class AdvancedFenceBlock extends Block implements SimpleWaterloggedBlock,
     public static final EnumProperty<ColumnType> COLUMN = EnumProperty.create("column", ColumnType.class);
     public static AshiharaWoodTypes type;
 
-    public AdvancedFenceBlock(AshiharaWoodTypes typeIn)
+    public AdvancedFenceBlock(Properties properties, AshiharaWoodTypes typeIn)
     {
-        super
-                (
-                        Properties.of()
-                                .mapColor(MapColor.WOOD)
-                                .strength(0.5F)
-                                // todo tag .harvestTool(ToolType.AXE)
-                                .sound(SoundType.WOOD)
-                );
+        super(properties);
         this.registerDefaultState(this.defaultBlockState().setValue(COLUMN, ColumnType.CORE).setValue(WATERLOGGED, false));
         type = typeIn;
+    }
+
+    public AdvancedFenceBlock(AshiharaWoodTypes typeIn)
+    {
+        this
+        (
+            Properties.of()
+            .mapColor(MapColor.WOOD)
+            .strength(0.5F)
+            // todo tag .harvestTool(ToolType.AXE)
+            .sound(SoundType.WOOD),
+            typeIn
+        );
     }
 
     @Override
@@ -159,10 +167,11 @@ public class AdvancedFenceBlock extends Block implements SimpleWaterloggedBlock,
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean movedByPiston)
     {
-        BlockState updated = this.updateState(worldIn, pos);
-        if (!updated.equals(state)) worldIn.setBlockAndUpdate(pos, updated);
+        BlockState updated = this.updateState(level, pos);
+        if (!updated.equals(state)) level.setBlockAndUpdate(pos, updated);
+        super.neighborChanged(state, level, pos, block, orientation, movedByPiston);
     }
 
     @Override
@@ -174,7 +183,7 @@ public class AdvancedFenceBlock extends Block implements SimpleWaterloggedBlock,
     }
 
     @Override
-    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public InteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         if (stack.getItem().equals(Items.GOLD_INGOT))
         {
@@ -191,7 +200,7 @@ public class AdvancedFenceBlock extends Block implements SimpleWaterloggedBlock,
                 worldIn.playSound(player, pos, SoundEvents.LANTERN_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
                 if (!player.isCreative()) player.getItemInHand(handIn).shrink(1);
 
-                return ItemInteractionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         } else if
         (
@@ -203,7 +212,7 @@ public class AdvancedFenceBlock extends Block implements SimpleWaterloggedBlock,
             worldIn.setBlockAndUpdate(pos, state);
             worldIn.playSound(player, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
 
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         } else if
         (
                 stack.getItem() instanceof AxeItem
@@ -216,10 +225,10 @@ public class AdvancedFenceBlock extends Block implements SimpleWaterloggedBlock,
             worldIn.setBlockAndUpdate(pos, this.updateState(worldIn, pos));
             worldIn.playSound(player, pos, SoundEvents.WOOD_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
 
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         } else if (!state.getValue(COLUMN).equals(ColumnType.SHORT) && stack.getItem().equals(Items.STICK) && (player.isCreative() || stack.getCount() >= 3))
         {
-            if (!(this.getExpansion() instanceof FenceExpansionBlock)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            if (!(this.getExpansion() instanceof FenceExpansionBlock)) return InteractionResult.PASS;
             Direction direction = hit.getDirection();
             if (direction.getAxis().isHorizontal() && worldIn.getBlockState(pos.relative(direction)).isAir())
             {
@@ -229,10 +238,10 @@ public class AdvancedFenceBlock extends Block implements SimpleWaterloggedBlock,
                 worldIn.playSound(player, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
                 if (!player.isCreative()) player.getItemInHand(handIn).shrink(3);
 
-                return ItemInteractionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return InteractionResult.PASS;
     }
 
     @Override

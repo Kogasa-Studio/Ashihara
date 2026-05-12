@@ -7,31 +7,38 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.component.TypedEntityData;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 public class PailBlockItem extends BlockItem
 {
+    public PailBlockItem(Properties properties)
+    {
+        super(Blocks.PAIL.get(), properties.useBlockDescriptionPrefix());
+    }
+
     public PailBlockItem()
     {
-        super(Blocks.PAIL.get(), new Properties());
+        this(new Properties());
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext pContext, List<Component> tooltip, TooltipFlag flagIn)
+    public void appendHoverText(ItemStack stack, TooltipContext pContext, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flagIn)
     {
-        super.appendHoverText(stack, pContext, tooltip, flagIn);
+        super.appendHoverText(stack, pContext, display, tooltip, flagIn);
         MutableComponent component = Component.translatable("tooltip.ashihara.pail_empty_message");
-        CompoundTag nbt = stack.getComponents().getOrDefault(DataComponents.BLOCK_ENTITY_DATA, CustomData.EMPTY).copyTag();
-        if (!nbt.isEmpty() && !nbt.getCompound("bucket").getString("FluidName").equals("minecraft:empty"))
+        CompoundTag nbt = ((TypedEntityData<?>) stack.getComponents().getOrDefault(DataComponents.BLOCK_ENTITY_DATA, CustomData.EMPTY)).copyTagWithoutId();
+        if (!nbt.isEmpty() && !nbt.getCompoundOrEmpty("bucket").getStringOr("FluidName", "").equals("minecraft:empty"))
         {
-            CompoundTag bucket = nbt.getCompound("bucket");
-            ResourceLocation rl = ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, bucket.getString("FluidName"));
+            CompoundTag bucket = nbt.getCompoundOrEmpty("bucket");
+            Identifier rl = Identifier.fromNamespaceAndPath(Ashihara.MODID, bucket.getStringOr("FluidName", ""));
             String nameSpace = rl.getNamespace();
             String fluidName = rl.getPath();
             String data = "block." + nameSpace + "." + fluidName;
@@ -41,7 +48,7 @@ public class PailBlockItem extends BlockItem
             component.append("§b: §a" + bucket.getInt("Amount") + " §6mB §7/ §64000mB");
         }
 
-        tooltip.add(Component.translatable("tooltip.ashihara.pail_display"));
-        tooltip.add(component);
+        tooltip.accept(Component.translatable("tooltip.ashihara.pail_display"));
+        tooltip.accept(component);
     }
 }

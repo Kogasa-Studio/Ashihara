@@ -7,16 +7,13 @@ import kogasastudio.ashihara.registry.MenuTypes;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.registry.Items;
-import kogasastudio.ashihara.loading.ReloadableResources;
 import kogasastudio.ashihara.registry.*;
 import kogasastudio.ashihara.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import org.slf4j.Logger;
 
@@ -64,11 +61,6 @@ public class Ashihara
         {
             throw new RuntimeException(e);
         }*/
-
-        if (FMLEnvironment.dist == Dist.CLIENT)
-        {
-            ReloadableResources.register();
-        }
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event)

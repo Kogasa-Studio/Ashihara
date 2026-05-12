@@ -9,12 +9,12 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,15 +35,9 @@ public class TatamiBlock extends Block
     public static final BooleanProperty LOCKED = BooleanProperty.create("locked");
     public static final EnumProperty<Direction.Axis> AXIS = HORIZONTAL_AXIS;
 
-    public TatamiBlock()
+    public TatamiBlock(Properties properties)
     {
-        super
-                (
-                        Properties.of()
-                                .mapColor(MapColor.COLOR_YELLOW)
-                                .strength(0.3F)
-                                .sound(SoundType.BAMBOO_SAPLING)
-                );
+        super(properties);
         this.registerDefaultState
                 (
                         getStateDefinition().any()
@@ -54,6 +48,17 @@ public class TatamiBlock extends Block
                                 .setValue(LOCKED, false)
                                 .setValue(AXIS, Direction.Axis.X)
                 );
+    }
+
+    public TatamiBlock()
+    {
+        this
+        (
+            Properties.of()
+            .mapColor(MapColor.COLOR_YELLOW)
+            .strength(0.3F)
+            .sound(SoundType.BAMBOO_SAPLING)
+        );
     }
 
     //获取和更新bs，输入操作前的bs，返回操作后的bs
@@ -89,13 +94,14 @@ public class TatamiBlock extends Block
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+    public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor)
     {
-        BlockState fromState = worldIn.getBlockState(fromPos);
+        BlockState fromState = level.getBlockState(neighbor);
         if (fromState.is(Blocks.TATAMI.get()) || fromState.is(net.minecraft.world.level.block.Blocks.AIR))
         {
-            worldIn.setBlockAndUpdate(pos, updateState(state, worldIn, pos));
+            ((Level) level).setBlockAndUpdate(pos, updateState(state, (Level) level, pos));
         }
+        super.onNeighborChange(state, level, pos, neighbor);
     }
 
     @Override
@@ -125,7 +131,7 @@ public class TatamiBlock extends Block
 
     //空手shift右键锁定，剪刀右键加中央边缘权重（剪开或合上）
     @Override
-    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public InteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         if (stack.getItem() instanceof ShearsItem && !player.isShiftKeyDown())
         {
@@ -139,7 +145,7 @@ public class TatamiBlock extends Block
                 worldIn.setBlockAndUpdate(pos, state.setValue(ZCUT, !state.getValue(ZCUT)));
                 worldIn.playSound(player, pos, SoundEvents.BAMBOO_SAPLING_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         return super.useItemOn(stack, state, worldIn, pos, player, handIn, hit);
     }

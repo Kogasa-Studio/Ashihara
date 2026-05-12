@@ -1,11 +1,9 @@
 package kogasastudio.ashihara.block;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -21,25 +19,25 @@ public class HydrangeaBushBlock extends BushBlock implements BonemealableBlock
 {
     public static final BooleanProperty BLOOMED = BooleanProperty.create("bloomed");
 
-    public HydrangeaBushBlock(boolean bloomed)
+    public HydrangeaBushBlock(Properties properties, boolean bloomed)
     {
-        super
-                (
-                        Properties.of()
-                                .mapColor(MapColor.PLANT)
-                                .strength(0.05F)
-                                .sound(SoundType.GRASS)
-                                .noOcclusion()
-                                .randomTicks()
-                                .lightLevel((state) -> 1)
-                );
+        super(properties);
         this.registerDefaultState(this.getStateDefinition().any().setValue(BLOOMED, bloomed));
     }
 
-    @Override
-    public int getLightBlock(BlockState state, BlockGetter worldIn, BlockPos pos)
+    public HydrangeaBushBlock(boolean bloomed)
     {
-        return 1;
+        this
+        (
+            Properties.of()
+            .mapColor(MapColor.PLANT)
+            .strength(0.05F)
+            .sound(SoundType.GRASS)
+            .noOcclusion()
+            .randomTicks()
+            .lightLevel((state) -> 1),
+            bloomed
+        );
     }
 
     @Override
@@ -80,11 +78,5 @@ public class HydrangeaBushBlock extends BushBlock implements BonemealableBlock
     public void performBonemeal(ServerLevel worldIn, RandomSource rand, BlockPos pos, BlockState state)
     {
         worldIn.setBlockAndUpdate(pos, state.setValue(BLOOMED, true));
-    }
-
-    @Override
-    protected MapCodec<? extends BushBlock> codec()
-    {
-        return simpleCodec(p -> new HydrangeaBushBlock(false));
     }
 }

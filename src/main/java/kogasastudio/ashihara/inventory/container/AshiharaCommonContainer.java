@@ -1,12 +1,12 @@
 package kogasastudio.ashihara.inventory.container;
 
+import kogasastudio.ashihara.inventory.BEItemStackHandler;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 
 public abstract class AshiharaCommonContainer extends AbstractContainerMenu
 {
@@ -37,11 +37,11 @@ public abstract class AshiharaCommonContainer extends AbstractContainerMenu
         return index;
     }
 
-    protected int addSlotRange(IItemHandler inventory, int index, int x, int y, int amount, int dx)
+    protected int addSlotRange(BEItemStackHandler<?> inventory, int index, int x, int y, int amount, int dx)
     {
         for (int i = 0; i < amount; i++)
         {
-            addSlot(new SlotItemHandler(inventory, index, x, y));
+            addSlot(new ResourceHandlerSlot(inventory, inventory::set, index, x, y));
             x += dx;
             index += 1;
         }
@@ -69,7 +69,7 @@ public abstract class AshiharaCommonContainer extends AbstractContainerMenu
         }
     }
 
-    protected void addSlotBox(IItemHandler inventory, int index, int x, int y, int horAmount, int dx, int verAmount, int dy)
+    protected void addSlotBox(BEItemStackHandler<?> inventory, int index, int x, int y, int horAmount, int dx, int verAmount, int dy)
     {
         for (int j = 0; j < verAmount; j++)
         {

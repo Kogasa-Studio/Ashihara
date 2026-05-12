@@ -15,9 +15,14 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class BeamBlockItem extends BlockItem
 {
+    public BeamBlockItem(Properties properties)
+    {
+        super(Blocks.RED_THIN_BEAM.get(), properties.useBlockDescriptionPrefix());
+    }
+
     public BeamBlockItem()
     {
-        super(Blocks.RED_THIN_BEAM.get(), new Properties());
+        this(new Properties());
     }
 
     @Override

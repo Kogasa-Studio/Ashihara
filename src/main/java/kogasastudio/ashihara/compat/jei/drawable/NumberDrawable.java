@@ -3,14 +3,11 @@ package kogasastudio.ashihara.compat.jei.drawable;
 import mezz.jei.api.gui.drawable.IDrawable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 
 import java.util.function.Supplier;
 
-/**
- * @author DustW
- **/
 public class NumberDrawable implements IDrawable
 {
 
@@ -35,8 +32,8 @@ public class NumberDrawable implements IDrawable
     }
 
     @Override
-    public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset)
+    public void draw(GuiGraphicsExtractor guiGraphics, int xOffset, int yOffset)
     {
-        guiGraphics.drawString(font, Component.translatable(numberSupplier.get().toString()), xOffset, yOffset, 0xFFFFFFFF);
+        guiGraphics.text(font, Component.translatable(numberSupplier.get().toString()), xOffset, yOffset, 0xFFFFFFFF);
     }
 }

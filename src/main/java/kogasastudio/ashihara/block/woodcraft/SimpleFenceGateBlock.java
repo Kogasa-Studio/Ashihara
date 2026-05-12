@@ -11,17 +11,20 @@ import net.minecraft.world.level.material.MapColor;
 
 public class SimpleFenceGateBlock extends FenceGateBlock
 {
+    public SimpleFenceGateBlock(Properties properties)
+    {
+        super(properties, SoundEvents.FENCE_GATE_OPEN, SoundEvents.FENCE_GATE_CLOSE);
+    }
+
     public SimpleFenceGateBlock()
     {
-        super
-                (
-                        Properties.of()
-                                .mapColor(MapColor.WOOD)
-                                .strength(2.0F, 3.0F)
-                                .sound(SoundType.WOOD),
-                        SoundEvents.FENCE_GATE_OPEN,
-                        SoundEvents.FENCE_GATE_CLOSE
-                );
+        this
+        (
+            Properties.of()
+            .mapColor(MapColor.WOOD)
+            .strength(2.0F, 3.0F)
+            .sound(SoundType.WOOD)
+        );
     }
 
     @Override

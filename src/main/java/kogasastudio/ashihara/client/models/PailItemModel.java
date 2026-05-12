@@ -7,7 +7,8 @@ import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
 
 public class PailItemModel extends Model
 {
@@ -17,7 +18,7 @@ public class PailItemModel extends Model
 
     public PailItemModel(ModelPart root)
     {
-        super(RenderType::entitySolid);
+        super(root, f -> RenderTypes.entitySolid(Identifier.parse("")));
         this.edges = root.getChild("edges");
         this.handle = root.getChild("handle");
         this.bone = root.getChild("bone");
@@ -42,11 +43,10 @@ public class PailItemModel extends Model
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
-    @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color)
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float color)
     {
-        edges.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        handle.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        bone.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+        edges.render(poseStack, vertexConsumer, packedLight, packedOverlay, (int) color);
+        handle.render(poseStack, vertexConsumer, packedLight, packedOverlay, (int) color);
+        bone.render(poseStack, vertexConsumer, packedLight, packedOverlay, (int) color);
     }
 }

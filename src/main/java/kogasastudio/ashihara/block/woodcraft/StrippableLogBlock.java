@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
@@ -18,6 +18,16 @@ import static net.minecraft.world.level.block.Blocks.STRIPPED_OAK_LOG;
 
 public class StrippableLogBlock extends SimpleLogBlock
 {
+    public StrippableLogBlock(Properties properties)
+    {
+        super(properties);
+    }
+
+    public StrippableLogBlock()
+    {
+        super();
+    }
+
     public ItemStack getStripItem()
     {
         return ItemStack.EMPTY;
@@ -29,7 +39,7 @@ public class StrippableLogBlock extends SimpleLogBlock
     }
 
     @Override
-    public ItemInteractionResult useItemOn(ItemStack pStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public InteractionResult useItemOn(ItemStack pStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         if (player.getItemInHand(handIn).getItem() instanceof AxeItem)
         {
@@ -48,8 +58,8 @@ public class StrippableLogBlock extends SimpleLogBlock
                     player.getItemInHand(handIn).hurtAndBreak(1, player, player.getItemInHand(handIn).getEquipmentSlot());
                 }
             }
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return InteractionResult.PASS;
     }
 }

@@ -6,7 +6,7 @@ import kogasastudio.ashihara.client.gui3d.util.OBB;
 import kogasastudio.ashihara.client.gui3d.util.ObbInterSector;
 import kogasastudio.ashihara.client.gui3d.util.Ray;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -28,9 +28,9 @@ public final class Gui3dDebugOverlay
     {
     }
 
-    public static void render(GuiGraphics guiGraphics, Screen3D screen, List<AbstractComponent> roots, int mouseX, int mouseY)
+    public static void render(GuiGraphicsExtractor guiGraphics, Screen3D screen, List<AbstractComponent> roots, int mouseX, int mouseY)
     {
-        guiGraphics.pose().translate(0,0,3000);
+        guiGraphics.pose().translate(0,0);
         Ray ray = screen.createMouseRay(mouseX, mouseY);
         List<HitInfo> hits = new ArrayList<>();
         List<String> frameDebugLines = new ArrayList<>();
@@ -42,9 +42,9 @@ public final class Gui3dDebugOverlay
 
         hits.sort(Comparator.comparingDouble(HitInfo::distance));
         int y = 8;
-        guiGraphics.drawString(Minecraft.getInstance().font, Component.literal("3D UI Debug [F9]"), 8, y, 0xFF7CFFB2, false);
+        guiGraphics.text(Minecraft.getInstance().font, Component.literal("3D UI Debug [F9]"), 8, y, 0xFF7CFFB2, false);
         y += 10;
-        guiGraphics.drawString(Minecraft.getInstance().font, Component.literal(String.format("mouse=(%d,%d) ray=(%.1f,%.1f,%.1f)->(%.1f,%.1f,%.1f)",
+        guiGraphics.text(Minecraft.getInstance().font, Component.literal(String.format("mouse=(%d,%d) ray=(%.1f,%.1f,%.1f)->(%.1f,%.1f,%.1f)",
             mouseX, mouseY,
             ray.origin().x, ray.origin().y, ray.origin().z,
             ray.direction().x, ray.direction().y, ray.direction().z)), 8, y, 0xFFD7E3F4, false);
@@ -52,7 +52,7 @@ public final class Gui3dDebugOverlay
 
         if (hits.isEmpty())
         {
-            guiGraphics.drawString(Minecraft.getInstance().font, Component.literal("hit: none"), 8, y, 0xFFFF9090, false);
+            guiGraphics.text(Minecraft.getInstance().font, Component.literal("hit: none"), 8, y, 0xFFFF9090, false);
             return;
         }
 
@@ -61,7 +61,7 @@ public final class Gui3dDebugOverlay
         {
             HitInfo hit = hits.get(i);
             int color = i == 0 ? 0xFF9DFF57 : 0xFFFFD36B;
-            guiGraphics.drawString(Minecraft.getInstance().font,
+            guiGraphics.text(Minecraft.getInstance().font,
                 Component.literal(String.format("hit[%d] %s t=%.2f", i, hit.name(), hit.distance())),
                 8, y, color, false);
             y += 10;
@@ -70,12 +70,12 @@ public final class Gui3dDebugOverlay
         int frameLimit = Math.min(4, frameDebugLines.size());
         for (int i = 0; i < frameLimit; i++)
         {
-            guiGraphics.drawString(Minecraft.getInstance().font, Component.literal(frameDebugLines.get(i)), 8, y, 0xFFB4C6FF, false);
+            guiGraphics.text(Minecraft.getInstance().font, Component.literal(frameDebugLines.get(i)), 8, y, 0xFFB4C6FF, false);
             y += 10;
         }
     }
 
-    private static void collectAndRender(GuiGraphics guiGraphics, Ray ray, AbstractComponent component, List<HitInfo> hits, List<String> frameDebugLines)
+    private static void collectAndRender(GuiGraphicsExtractor guiGraphics, Ray ray, AbstractComponent component, List<HitInfo> hits, List<String> frameDebugLines)
     {
         if (!component.isVisible())
         {
@@ -107,7 +107,7 @@ public final class Gui3dDebugOverlay
         }
     }
 
-    private static void drawObb(GuiGraphics guiGraphics, OBB obb, int color)
+    private static void drawObb(GuiGraphicsExtractor guiGraphics, OBB obb, int color)
     {
         Vector4f[] corners = projectCorners(obb);
         if (corners == null)
@@ -161,7 +161,7 @@ public final class Gui3dDebugOverlay
         return result;
     }
 
-    private static void drawLine(GuiGraphics guiGraphics, int x0, int y0, int x1, int y1, int color)
+    private static void drawLine(GuiGraphicsExtractor guiGraphics, int x0, int y0, int x1, int y1, int color)
     {
         int dx = Math.abs(x1 - x0);
         int sx = x0 < x1 ? 1 : -1;

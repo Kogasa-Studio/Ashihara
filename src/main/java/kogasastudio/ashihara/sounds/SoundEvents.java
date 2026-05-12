@@ -2,7 +2,7 @@ package kogasastudio.ashihara.sounds;
 
 import kogasastudio.ashihara.Ashihara;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -16,6 +16,6 @@ public class SoundEvents
 
     private static Supplier<SoundEvent> register(String key)
     {
-        return SOUNDS.register(key, () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, key)));
+        return SOUNDS.register(key, () -> SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(Ashihara.MODID, key)));
     }
 }

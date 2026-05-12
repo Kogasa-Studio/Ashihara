@@ -15,9 +15,14 @@ import java.util.Objects;
 
 public class RiceSeedling extends Item
 {
+    public RiceSeedling(Properties properties)
+    {
+        super(properties);
+    }
+
     public RiceSeedling()
     {
-        super(new Properties());
+        this(new Properties());
     }
 
     @Override

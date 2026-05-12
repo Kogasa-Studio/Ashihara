@@ -1,6 +1,5 @@
 package kogasastudio.ashihara.block;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.BlockGetter;
@@ -16,17 +15,22 @@ import net.neoforged.neoforge.common.IShearable;
 
 public class ChrysanthemumBushBlock extends BushBlock implements IShearable
 {
+    public ChrysanthemumBushBlock(Properties properties)
+    {
+        super(properties);
+    }
+
     public ChrysanthemumBushBlock()
     {
-        super
-                (
-                        Properties.of()
-                        .mapColor(MapColor.PLANT)
-                        .noCollission()
-                        .instabreak()
-                        .sound(SoundType.GRASS)
-                        .offsetType(OffsetType.XYZ)
-                );
+        this
+        (
+            Properties.of()
+            .mapColor(MapColor.PLANT)
+            .noCollision()
+            .instabreak()
+            .sound(SoundType.GRASS)
+            .offsetType(OffsetType.XYZ)
+        );
     }
 
     @Override
@@ -36,15 +40,9 @@ public class ChrysanthemumBushBlock extends BushBlock implements IShearable
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+    
     public long getSeed(BlockState state, BlockPos pos)
     {
         return Mth.getSeed(pos.getX(), pos.getY(), pos.getZ());
-    }
-
-    @Override
-    protected MapCodec<? extends BushBlock> codec()
-    {
-        return simpleCodec(p -> new ChrysanthemumBushBlock());
     }
 }

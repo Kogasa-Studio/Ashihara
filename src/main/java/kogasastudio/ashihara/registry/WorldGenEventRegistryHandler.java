@@ -7,7 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.OptionalInt;
 import java.util.function.Supplier;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber
 public class WorldGenEventRegistryHandler
 {
     public static final DeferredRegister<ConfiguredFeature<?, ?>> CONFIGURED_FEATURE = DeferredRegister.create(Registries.CONFIGURED_FEATURE.registry(), Ashihara.MODID);
@@ -47,9 +47,9 @@ public class WorldGenEventRegistryHandler
     @SubscribeEvent
     public static void registerTrunkPlacers(RegisterEvent registerEvent)
     {
-        registerEvent.register(Registries.TRUNK_PLACER_TYPE, ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "big_cherry_trunk_placer"), BIG_CHERRY_TRUNK_PLACER_TRUNK_PLACER);
+        registerEvent.register(Registries.TRUNK_PLACER_TYPE, Identifier.fromNamespaceAndPath(Ashihara.MODID, "big_cherry_trunk_placer"), BIG_CHERRY_TRUNK_PLACER_TRUNK_PLACER);
 
-        registerEvent.register(Registries.FOLIAGE_PLACER_TYPE, ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "big_cherry_foliage_placer"), BIG_CHERRY_TRUNK_PLACER_FOLIAGE_PLACER);
+        registerEvent.register(Registries.FOLIAGE_PLACER_TYPE, Identifier.fromNamespaceAndPath(Ashihara.MODID, "big_cherry_foliage_placer"), BIG_CHERRY_TRUNK_PLACER_FOLIAGE_PLACER);
     }
 
     public static final Supplier<ConfiguredFeature<?, ?>> FANCY_CHERRY =

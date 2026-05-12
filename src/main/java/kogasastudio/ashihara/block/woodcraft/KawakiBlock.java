@@ -5,11 +5,9 @@ import kogasastudio.ashihara.helper.BlockActionHelper;
 import kogasastudio.ashihara.utils.AshiharaWoodTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -19,9 +17,11 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jspecify.annotations.Nullable;
 
 public class KawakiBlock extends Block implements IVariable<AshiharaWoodTypes>
 {
@@ -29,16 +29,22 @@ public class KawakiBlock extends Block implements IVariable<AshiharaWoodTypes>
     public static final BooleanProperty ISLONG = BooleanProperty.create("is_long");
     private static AshiharaWoodTypes type;
 
+    public KawakiBlock(Properties properties, AshiharaWoodTypes typeIn)
+    {
+        super(properties);
+        type = typeIn;
+    }
+
     public KawakiBlock(AshiharaWoodTypes typeIn)
     {
-        super
-                (
-                        Properties.of()
-                                .mapColor(MapColor.WOOD)
-                                .strength(0.5F)
-                                .sound(SoundType.WOOD)
-                );
-        type = typeIn;
+        this
+        (
+            Properties.of()
+            .mapColor(MapColor.WOOD)
+            .strength(0.5F)
+            .sound(SoundType.WOOD),
+            typeIn
+        );
     }
 
     @Override
@@ -67,15 +73,16 @@ public class KawakiBlock extends Block implements IVariable<AshiharaWoodTypes>
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean movedByPiston)
     {
-        BlockState expandedState = worldIn.getBlockState(pos.relative(state.getValue(FACING)));
-        boolean shouldBeLong = expandedState.isFaceSturdy(worldIn, pos.relative(state.getValue(FACING)), state.getValue(FACING).getOpposite())
-                || canConnect(state, expandedState);
+        BlockState expandedState = level.getBlockState(pos.relative(state.getValue(FACING)));
+        boolean shouldBeLong = expandedState.isFaceSturdy(level, pos.relative(state.getValue(FACING)), state.getValue(FACING).getOpposite())
+        || canConnect(state, expandedState);
         if (state.getValue(ISLONG) != shouldBeLong)
         {
-            worldIn.setBlockAndUpdate(pos, state.setValue(ISLONG, shouldBeLong));
+            level.setBlockAndUpdate(pos, state.setValue(ISLONG, shouldBeLong));
         }
+        super.neighborChanged(state, level, pos, block, orientation, movedByPiston);
     }
 
     @Override
@@ -85,12 +92,9 @@ public class KawakiBlock extends Block implements IVariable<AshiharaWoodTypes>
     }
 
     @Override
-    public BlockState updateShape
-            (BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos)
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction directionToNeighbour, BlockPos neighbourPos, BlockState neighbourState, RandomSource random)
     {
-        return !this.canSurvive(stateIn, worldIn, currentPos)
-                ? Blocks.AIR.defaultBlockState()
-                : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+        return !this.canSurvive(state, level, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
     }
 
     @Override

@@ -11,15 +11,20 @@ import net.minecraft.world.level.material.MapColor;
 
 public class SimpleFenceBlock extends FenceBlock
 {
+    public SimpleFenceBlock(BlockBehaviour.Properties properties)
+    {
+        super(properties);
+    }
+
     public SimpleFenceBlock()
     {
-        super
-                (
-                        BlockBehaviour.Properties.of()
-                                .mapColor(MapColor.WOOD)
-                                .strength(2.0F, 3.0F)
-                                .sound(SoundType.WOOD)
-                );
+        this
+        (
+            BlockBehaviour.Properties.of()
+            .mapColor(MapColor.WOOD)
+            .strength(2.0F, 3.0F)
+            .sound(SoundType.WOOD)
+        );
     }
 
     @Override

@@ -3,6 +3,7 @@ package kogasastudio.ashihara.item;
 import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.block.blockentity.IFluidHandler;
 import kogasastudio.ashihara.block.trees.TreeGrowers;
+import kogasastudio.ashihara.inventory.BEFluidStackHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -15,19 +16,23 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 import java.util.Objects;
 
 import static kogasastudio.ashihara.fluid.FluidRegistryHandler.SOY_MILK;
-import static net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
 public class MinatoAqua extends Item
 {
+    public MinatoAqua(Properties properties)
+    {
+        super(properties);
+    }
+
     public MinatoAqua()
     {
-        super(new Properties().food(new FoodProperties.Builder().nutrition(8).build()));
+        this(new Properties().food(new FoodProperties.Builder().nutrition(8).build()));
     }
 
     @Override
@@ -42,11 +47,15 @@ public class MinatoAqua extends Item
         var tree = TreeGrowers.CHERRY_BLOSSOM;
         RandomSource rand = context.getLevel().getRandom();
 
-        if (te instanceof IFluidHandler)
+        if (te instanceof IFluidHandler fluidHolder)
         {
-            FluidTank tank = ((IFluidHandler) te).getTank();
-            if (!tank.isEmpty()) tank.getFluid().setAmount(tank.getFluidAmount() + 100);
-            else tank.fill(new FluidStack(SOY_MILK.get(), 100), EXECUTE);
+            BEFluidStackHandler<?> tank = fluidHolder.getTank();
+            FluidResource soyMilk = FluidResource.of(SOY_MILK.get());
+            try (Transaction tx = Transaction.openRoot())
+            {
+                tank.insert(soyMilk, 100, tx);
+                tx.commit();
+            }
             te.setChanged();
             return InteractionResult.SUCCESS;
         }

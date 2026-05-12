@@ -5,10 +5,10 @@ import kogasastudio.ashihara.Ashihara;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 /**
@@ -21,7 +21,7 @@ public record ContainerSlotClickPacket(int containerId, int slotId, int button, 
         implements CustomPacketPayload
 {
     public static final Type<ContainerSlotClickPacket> TYPE = new Type<>(
-            ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, "container_slot_click"));
+        Identifier.fromNamespaceAndPath(Ashihara.MODID, "container_slot_click"));
 
     @Override
     public Type<? extends CustomPacketPayload> type()
@@ -49,7 +49,7 @@ public record ContainerSlotClickPacket(int containerId, int slotId, int button, 
                 if (menu.containerId != packet.containerId()) return;
                 if (!menu.stillValid(player)) return;
 
-                ClickType[] types = ClickType.values();
+                ContainerInput[] types = ContainerInput.values();
                 int ord = packet.clickTypeOrdinal();
                 if (ord < 0 || ord >= types.length) return;
 

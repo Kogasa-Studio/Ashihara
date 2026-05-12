@@ -1,18 +1,18 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-    {
-      "item": "ashihara:cooked_rice"
-    },
-    {
-      "item": "minecraft:dried_kelp"
-    },
-    {
-      "item": "ashihara:sakura"
-    },
-    {
-      "item": "ashihara:sakura_petal"
-    }
+    [
+      "ashihara:cooked_rice"
+    ],
+    [
+      "minecraft:dried_kelp"
+    ],
+    [
+      "ashihara:sakura"
+    ],
+    [
+      "ashihara:sakura_petal"
+    ]
   ],
   "result": {
     "id": "ashihara:sushi_sakura",

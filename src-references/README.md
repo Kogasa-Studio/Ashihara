@@ -1,1 +1,0 @@
-注意：Minecraft和NeoForge的源码都包含在neoforge-21.1.125-sources中。具体的地址可参考neoforge-21.1.125-sources\net\minecraft和neoforge-21.1.125-sources\net\neoforged

@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -111,11 +112,11 @@ public class StraightBarWindowBlock extends Block implements SimpleWaterloggedBl
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos neighborPos, boolean b)
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @org.jspecify.annotations.Nullable Orientation orientation, boolean movedByPiston)
     {
         BlockState updated = this.updateState(level, pos, state);
         if (!updated.equals(state)) level.setBlockAndUpdate(pos, updated);
-        super.neighborChanged(state, level, pos, block, neighborPos, b);
+        super.neighborChanged(state, level, pos, block, orientation, movedByPiston);
     }
 
     @Override

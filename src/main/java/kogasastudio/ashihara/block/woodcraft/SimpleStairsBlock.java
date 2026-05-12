@@ -10,13 +10,14 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class SimpleStairsBlock extends StairBlock
 {
+    public SimpleStairsBlock(BlockBehaviour.Properties properties)
+    {
+        super(Blocks.CHERRY_PLANKS.get().defaultBlockState(), properties);
+    }
+
     public SimpleStairsBlock()
     {
-        super
-        (
-        Blocks.CHERRY_PLANKS.get().defaultBlockState(),
-        BlockBehaviour.Properties.ofFullCopy(Blocks.CHERRY_PLANKS.get())
-        );
+        this(BlockBehaviour.Properties.ofFullCopy(Blocks.CHERRY_PLANKS.get()));
     }
 
     @Override

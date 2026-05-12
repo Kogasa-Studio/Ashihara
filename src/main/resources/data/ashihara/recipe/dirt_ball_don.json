@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-    {
-      "item": "ashihara:dirt_ball"
-    },
-    {
-      "item": "ashihara:cooked_rice"
-    },
-    {
-      "item": "minecraft:dried_kelp"
-    },
-    {
-      "item": "minecraft:cooked_beef"
-    },
-    {
-      "item": "minecraft:cooked_porkchop"
-    },
+    [
+      "ashihara:dirt_ball"
+    ],
+    [
+      "ashihara:cooked_rice"
+    ],
+    [
+      "minecraft:dried_kelp"
+    ],
+    [
+      "minecraft:cooked_beef"
+    ],
+    [
+      "minecraft:cooked_porkchop"
+    ],
     {
       "item": "minecraft:cooked_mutton"
     },

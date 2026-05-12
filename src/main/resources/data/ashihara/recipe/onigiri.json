@@ -1,12 +1,12 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-    {
-      "item": "ashihara:cooked_rice"
-    },
-    {
-      "item": "minecraft:dried_kelp"
-    }
+    [
+      "ashihara:cooked_rice"
+    ],
+    [
+      "minecraft:dried_kelp"
+    ]
   ],
   "result": {
     "id": "ashihara:onigiri",

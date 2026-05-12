@@ -17,7 +17,12 @@ public class BuildingComponentItem extends BlockItem
 
     public BuildingComponentItem(Supplier<? extends BuildingComponent> componentIn, Supplier<BaseMultiBuiltBlock> block)
     {
-        super(block.get(), new Properties());
+        this(componentIn, block, new Properties());
+    }
+
+    public BuildingComponentItem(Supplier<? extends BuildingComponent> componentIn, Supplier<BaseMultiBuiltBlock> block, Properties properties)
+    {
+        super(block.get(), properties);
         this.component = componentIn;
     }
 
@@ -47,11 +52,5 @@ public class BuildingComponentItem extends BlockItem
         BlockEntity blockEntity = pContext.getLevel().getBlockEntity(pContext.getClickedPos());
         if (blockEntity instanceof MultiBuiltBlockEntity be && be.tryPlace(pContext, this.getComponent())) b = InteractionResult.SUCCESS;
         return b;
-    }
-
-    @Override
-    public String getDescriptionId()
-    {
-        return this.getOrCreateDescriptionId();
     }
 }

@@ -5,7 +5,7 @@ import kogasastudio.ashihara.client.models.CandleModel;
 import kogasastudio.ashihara.client.models.MillStoneModel;
 import kogasastudio.ashihara.client.models.PailItemModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -13,7 +13,7 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = Ashihara.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Ashihara.MODID, value = Dist.CLIENT)
 public class LayerRegistryHandler
 {
     public static final ModelLayerLocation PAIL_ITEM = register("pail_item");
@@ -36,6 +36,6 @@ public class LayerRegistryHandler
 
     private static ModelLayerLocation register(String path, String part)
     {
-        return new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Ashihara.MODID, path), part);
+        return new ModelLayerLocation(Identifier.fromNamespaceAndPath(Ashihara.MODID, path), part);
     }
 }

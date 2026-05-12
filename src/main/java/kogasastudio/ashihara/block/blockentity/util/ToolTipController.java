@@ -1,15 +1,14 @@
 package kogasastudio.ashihara.block.blockentity.util;
 
+import com.geckolib.animation.object.EasingType;
+import com.geckolib.animation.object.LoopType;
 import kogasastudio.ashihara.block.blockentity.IRenderInWorldToolTip;
 import kogasastudio.ashihara.client.models.geo.InternalControlGeoModel;
 import kogasastudio.ashihara.client.models.geo.UIPanelModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import software.bernie.geckolib.animation.Animation;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.EasingType;
-import software.bernie.geckolib.cache.object.GeoBone;
+import com.geckolib.animation.AnimationController;
 
 import static kogasastudio.ashihara.utils.OptionalUtil.getWithDefault;
 
@@ -18,7 +17,7 @@ public class ToolTipController<B extends BlockEntity & IRenderInWorldToolTip>
     protected final B be;
     protected final UIPanelModel model;
     protected final RenderSwitch renderSwitch = new RenderSwitch(this::initSwitch, this::hide, this::check);
-    protected BlockEntityRenderer<B> renderer;
+    protected BlockEntityRenderer<B, ?> renderer;
 
     public RenderSwitch getRenderSwitch()
     {
@@ -46,10 +45,10 @@ public class ToolTipController<B extends BlockEntity & IRenderInWorldToolTip>
 
     private boolean check()
     {
-        if (this.model != null && this.model.getBone("main").isPresent())
+        /*if (this.model != null && this.model.getBone("main").isPresent())
         {
-            return !this.model.getAnimatableInstanceCache().getManagerForId(this.model.hashCode()).getAnimationControllers().get(UIPanelModel.OUTRO).getAnimationState().equals(AnimationController.State.PAUSED);//.getBone("main").get().getScaleX() > 0.01;
-        }
+            return this.model.getAnimatableInstanceCache().getManagerForId(this.model.hashCode()).getAnimationControllers().get(UIPanelModel.OUTRO).getPlayState() != com.geckolib.animation.object.PlayState.PAUSE;//.getBone("main").get().getScaleX() > 0.01;
+        }*/
         return false;
     }
 
@@ -58,15 +57,15 @@ public class ToolTipController<B extends BlockEntity & IRenderInWorldToolTip>
         model.triggerInternal
         (
             player, model.hashCode(),
-            new InternalControlGeoModel.InternalAnimationBuilder("scale", Animation.LoopType.HOLD_ON_LAST_FRAME)
+            new InternalControlGeoModel.InternalAnimationBuilder("scale", LoopType.HOLD_ON_LAST_FRAME)
             .startBone("scale_sim")
             .lerpSingle
             (
                 InternalControlGeoModel.InternalAnimationBuilder.VarType.SCALE,
                 40,
-                getWithDefault(1f, model.getBone("scale_sim"), GeoBone::getScaleX),
+                1,//getWithDefault(1f, model.getBone("scale_sim"), GeoBone::getScaleX),
                 scaleX,
-                getWithDefault(1f, model.getBone("scale_sim"), GeoBone::getScaleY),
+                1,//getWithDefault(1f, model.getBone("scale_sim"), GeoBone::getScaleY),
                 scaleY,
                 1, 1,
                 EasingType.EASE_IN_OUT_QUAD

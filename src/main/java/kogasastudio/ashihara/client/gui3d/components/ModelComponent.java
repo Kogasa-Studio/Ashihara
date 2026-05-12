@@ -4,7 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
 import kogasastudio.ashihara.client.gui3d.util.OBB;
 import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
-import net.minecraft.client.gui.GuiGraphics;
+import kogasastudio.ashihara.client.render.state.GUI3DComponentRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import org.joml.Matrix4f;
 
 import java.util.*;
@@ -62,21 +63,32 @@ public class ModelComponent extends AbstractComponent
         super.init();
     }
 
-    public void renderModel(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+    @Override
+    protected void renderSelf(GUI3DComponentRenderState guiGraphics, int mouseX, int mouseY, float partialTick)
     {
-        PoseStack poseStack = guiGraphics.pose();
-        poseStack.pushPose();
-        poseStack.mulPose(getPresetTransform());
-        poseStack.scale(1, -1, 1);  // Y轴取反以修正倒向
-        this.model.render(poseStack, guiGraphics.bufferSource(), 15728880, 0);
-        poseStack.popPose();
+        super.renderSelf(guiGraphics, mouseX, mouseY, partialTick);
+        //if (renderModel) renderModel(guiGraphics, mouseX, mouseY, partialTick);
     }
 
     @Override
-    protected void renderSelf(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+    protected void collectSelfRenderStates(List<GUI3DComponentRenderState> output, int mouseX, int mouseY, float partialTick)
     {
-        super.renderSelf(guiGraphics, mouseX, mouseY, partialTick);
-        if (renderModel) renderModel(guiGraphics, mouseX, mouseY, partialTick);
+        if (!this.renderModel)
+        {
+            return;
+        }
+
+        output.add(
+            GUI3DComponentRenderState.of
+            (
+                this.model,
+                this.model.RENDERER,
+                null,
+                new CameraRenderState(),
+                0xF000F0,
+                partialTick
+            )
+        );
     }
 
     public List<OBB> getBoneCollisionBoxes(String boneName)
@@ -96,7 +108,7 @@ public class ModelComponent extends AbstractComponent
 
     public BoneTracer bindBone(String boneName)
     {
-        BoneTracer tracer = this.boneTracers.computeIfAbsent(boneName, name -> new BoneTracer(bone -> bone.getName().equals(name)));
+        BoneTracer tracer = this.boneTracers.computeIfAbsent(boneName, name -> new BoneTracer(bone -> bone.name().equals(name)));
         if (this.tracerAttached && this.attachedTracers.add(tracer))
         {
             this.model.getRendererPoseSync().ashihara_1_21$addTracer(tracer);

@@ -2,21 +2,15 @@ package kogasastudio.ashihara.client.render;
 
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.SectionBufferBuilderPack;
-import net.minecraft.client.renderer.chunk.SectionCompiler;
-import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.fml.ModList;
-import net.neoforged.neoforge.client.model.data.ModelData;
-
-import java.util.Map;
+import net.neoforged.neoforge.model.data.ModelData;
 
 @SuppressWarnings("unchecked")
 public interface WithLevelRenderer<T extends BlockEntity>
@@ -29,30 +23,20 @@ public interface WithLevelRenderer<T extends BlockEntity>
     default int getPackedLight(BlockEntity be)
     {
         if (be == null || be.getLevel() == null) return 0;
-        return LevelRenderer.getLightColor(be.getLevel(), be.getBlockPos());
+        return LevelRenderer.getLightCoords(be.getLevel(), be.getBlockPos());
     }
 
-    @OnlyIn(Dist.CLIENT)
-    static boolean isBasicRenderType(RenderType renderType)
+    
+    default void resetToBlock000(BlockEntity be, PoseStack poseStack)
     {
-        return renderType == RenderType.solid()
-        || renderType == RenderType.cutout()
-        || renderType == RenderType.translucent()
-        || renderType == RenderType.cutoutMipped()
-        || renderType == RenderType.tripwire();
+        resetToBlock000(be.getBlockPos(), poseStack);
     }
 
-    @OnlyIn(Dist.CLIENT)
-    default void resetToBlock000(BlockEntity be, RenderType renderType, PoseStack poseStack)
-    {
-        resetToBlock000(be.getBlockPos(), renderType, poseStack);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    static void resetToBlock000(BlockPos pos, RenderType renderType, PoseStack poseStack)
+    
+    static void resetToBlock000(BlockPos pos, PoseStack poseStack)
     {
         poseStack.setIdentity();
-        if (isBasicRenderType(renderType) || ModList.get().isLoaded("sodium"))
+        if (ModList.get().isLoaded("sodium"))
         {
             poseStack.translate(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
         } else
@@ -61,11 +45,11 @@ public interface WithLevelRenderer<T extends BlockEntity>
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    
     void renderStatic(SectionRenderContext context, ModelRenderer renderer);
 
     interface ModelRenderer
     {
-        void renderModel(BakedModel model, PoseStack stack, RenderType renderType, int overlay, ModelData modelData);
+        void renderBlockStateModel(BlockStateModel model, PoseStack stack, int overlay, ModelData modelData);
     }
 }

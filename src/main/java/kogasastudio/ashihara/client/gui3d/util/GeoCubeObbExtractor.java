@@ -3,10 +3,9 @@ package kogasastudio.ashihara.client.gui3d.util;
 import com.mojang.blaze3d.vertex.PoseStack;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import software.bernie.geckolib.cache.object.GeoCube;
-import software.bernie.geckolib.cache.object.GeoQuad;
-import software.bernie.geckolib.cache.object.GeoVertex;
-import software.bernie.geckolib.util.RenderUtil;
+import com.geckolib.cache.model.cuboid.GeoCube;
+import com.geckolib.cache.model.GeoQuad;
+import com.geckolib.cache.model.GeoVertex;
 
 public final class GeoCubeObbExtractor
 {
@@ -19,9 +18,9 @@ public final class GeoCubeObbExtractor
         PoseStack poseStack = new PoseStack();
         poseStack.pushPose();
         poseStack.mulPose(new Matrix4f(bonePose));
-        RenderUtil.translateToPivotPoint(poseStack, cube);
-        RenderUtil.rotateMatrixAroundCube(poseStack, cube);
-        RenderUtil.translateAwayFromPivotPoint(poseStack, cube);
+        cube.translateToPivotPoint(poseStack);
+        cube.rotate(poseStack);
+        cube.translateAwayFromPivotPoint(poseStack);
         Matrix4f cubePose = new Matrix4f(poseStack.last().pose());
         poseStack.popPose();
 
@@ -38,13 +37,15 @@ public final class GeoCubeObbExtractor
 
             for (GeoVertex vertex : quad.vertices())
             {
-                Vector3f p = vertex.position();
-                min.x = Math.min(min.x, p.x);
-                min.y = Math.min(min.y, p.y);
-                min.z = Math.min(min.z, p.z);
-                max.x = Math.max(max.x, p.x);
-                max.y = Math.max(max.y, p.y);
-                max.z = Math.max(max.z, p.z);
+                float px = vertex.posX();
+                float py = vertex.posY();
+                float pz = vertex.posZ();
+                min.x = Math.min(min.x, px);
+                min.y = Math.min(min.y, py);
+                min.z = Math.min(min.z, pz);
+                max.x = Math.max(max.x, px);
+                max.y = Math.max(max.y, py);
+                max.z = Math.max(max.z, pz);
                 hasVertices = true;
             }
         }

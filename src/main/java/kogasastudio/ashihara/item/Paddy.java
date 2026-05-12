@@ -15,9 +15,14 @@ import java.util.Objects;
 
 public class Paddy extends Item
 {
+    public Paddy(Properties properties)
+    {
+        super(properties);
+    }
+
     public Paddy()
     {
-        super(new Properties());
+        this(new Properties());
     }
 
     @Override

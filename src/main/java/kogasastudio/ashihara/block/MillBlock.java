@@ -1,8 +1,9 @@
 package kogasastudio.ashihara.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -13,51 +14,33 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-// todo Block 默认没有 BlockEntity 了，需要手动实现 EntityBlock
-public class MillBlock extends Block // implements EntityBlock
+public class MillBlock extends Block
 {
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
+
+    public MillBlock(Properties properties)
+    {
+        super(properties);
+    }
 
     public MillBlock()
     {
-        super
-                (
-                        Properties.of()
-                                .mapColor(MapColor.STONE)
-                                .strength(2.0F, 6.0F)
-                                // todo tag .harvestTool(ToolType.PICKAXE)
-                                .requiresCorrectToolForDrops()
-                                .sound(SoundType.STONE)
-                );
-    }
-
-    @Override
-    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState state1, boolean b)
-    {
-        /*BlockEntity te = worldIn.getBlockEntity(pos);
-        if (te instanceof MillBE)
-        {
-            NonNullList<ItemStack> stacks = NonNullList.create();
-            for (int i = 0; i < ((MillBE) te).getInput().getSlots(); i += 1)
-            {
-                ItemStack stack1 = ((MillBE) te).getInput().getStackInSlot(i);
-                if (!stack1.isEmpty())
-                {
-                    stacks.add(stack1);
-                }
-            }
-            Containers.dropContents(worldIn, pos, stacks);
-            Containers.dropContents(worldIn, pos, ((MillBE) te).getOutput().getContent());
-            worldIn.updateNeighbourForOutputSignal(pos, this);
-        }*/
-        super.onRemove(state, worldIn, pos, state1, b);
+        this
+        (
+            Properties.of()
+            .mapColor(MapColor.STONE)
+            .strength(2.0F, 6.0F)
+            // todo tag .harvestTool(ToolType.PICKAXE)
+            .requiresCorrectToolForDrops()
+            .sound(SoundType.STONE)
+        );
     }
 
     @Override
@@ -75,7 +58,7 @@ public class MillBlock extends Block // implements EntityBlock
     }
 
     @Override
-    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+    public InteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
     {
         /*MillBE te = (MillBE) worldIn.getBlockEntity(pos);
 

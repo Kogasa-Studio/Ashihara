@@ -1,11 +1,10 @@
 package kogasastudio.ashihara.client.gui3d.components;
 
+import com.geckolib.animation.object.EasingType;
 import kogasastudio.ashihara.client.gui3d.util.OBB;
 import kogasastudio.ashihara.client.models.geo.SelectionFrameModel;
-import net.minecraft.client.gui.GuiGraphics;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import software.bernie.geckolib.animation.EasingType;
 
 import java.util.List;
 import java.util.Locale;
@@ -73,8 +72,8 @@ public class SelectionFrameComponent extends AbstractComponent
         this.frameModel.syncFrame(new Vector3f(), new Vector3f());
     }
 
-    @Override
-    protected void renderSelf(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+    //@Override
+    protected void renderSelf(int mouseX, int mouseY, float partialTick)
     {
         if (!this.visible) return;
 
@@ -93,12 +92,12 @@ public class SelectionFrameComponent extends AbstractComponent
             this.state = FrameState.EXPANDED;
         }
 
-        var poseStack = guiGraphics.pose();
+        /*var poseStack = guiGraphics.pose();
         poseStack.pushPose();
         poseStack.mulPose(this.targetMatrix);
         poseStack.translate(-0.5f, -0.51f, -0.5f);
         this.frameModel.render(poseStack, guiGraphics.bufferSource(), 15728880, 0);
-        poseStack.popPose();
+        poseStack.popPose();*/
     }
 
     // ---- 外部驱动接口 ----
