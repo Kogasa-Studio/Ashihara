@@ -15,7 +15,7 @@ public class PotModelComponent extends ModelComponent
     public PotModelComponent(float centerX, float centerY, float modelScale)
     {
         super(
-            new SimpleInternalControlGeoModel("geo/block/pot.geo.json", "textures/block/pot.png", Minecraft.getInstance().player),
+            new SimpleInternalControlGeoModel("block/pot", "textures/block/pot.png", Minecraft.getInstance().player),
             true,
             new Matrix4f()
                 .translation(centerX, centerY, 40)

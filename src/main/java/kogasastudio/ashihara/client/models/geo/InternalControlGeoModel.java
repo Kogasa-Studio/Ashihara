@@ -19,23 +19,50 @@ import com.geckolib.cache.animation.keyframeevent.ParticleKeyframeData;
 import com.geckolib.cache.animation.keyframeevent.SoundKeyframeData;
 import com.geckolib.loading.math.value.Constant;
 import com.geckolib.model.GeoModel;
-import com.geckolib.renderer.GeoObjectRenderer;
+import kogasastudio.ashihara.client.render.geo.GUI3DObjectRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@SuppressWarnings("rawtypes")
 @NullMarked
 public abstract class InternalControlGeoModel<T extends SingletonGeoAnimatable> extends GeoModel<T> implements SingletonGeoAnimatable
 {
     public @Nullable Animation triggeredInternal;
     public static final RawAnimation INTERNAL = RawAnimation.begin().thenPlay("internal");
 
-    public final GeoObjectRenderer<T, ?, ?> RENDERER = new GeoObjectRenderer<>(this);
+    /**
+     * 此模型的专属渲染器。类型为 {@link GUI3DObjectRenderer} 以支持骨骼修改中间层；
+     * 同时通过 {@link kogasastudio.ashihara.mixin.geckolib.MixinGeoObjectRenderer}
+     * 植入了 BoneTracer 列表（用于 OBB 追踪）。
+     *
+     * <p>使用 {@link #addBoneModifier} / {@link #clearBoneModifiers} 操作骨骼，
+     * 而非直接覆写 GeoRenderer 方法。
+     */
+    public final GUI3DObjectRenderer RENDERER = new GUI3DObjectRenderer<>(this);
 
     public GeoRendererPoseSyncProvider getRendererPoseSync()
     {
         return (GeoRendererPoseSyncProvider) this.RENDERER;
+    }
+
+    /** 注册一个骨骼修改回调，每帧渲染前（动画计算之后）调用。 */
+    public void addBoneModifier(GUI3DObjectRenderer.BoneModifier modifier)
+    {
+        this.RENDERER.addBoneModifier(modifier);
+    }
+
+    /** 移除一个骨骼修改回调。 */
+    public boolean removeBoneModifier(GUI3DObjectRenderer.BoneModifier modifier)
+    {
+        return this.RENDERER.removeBoneModifier(modifier);
+    }
+
+    /** 清除所有骨骼修改回调（关闭 GUI 时应调用）。 */
+    public void clearBoneModifiers()
+    {
+        this.RENDERER.clearBoneModifiers();
     }
 
     @Override

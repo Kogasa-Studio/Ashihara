@@ -1,10 +1,11 @@
-package kogasastudio.ashihara.client.gui;
+package kogasastudio.ashihara.client.gui3d;
 
-import kogasastudio.ashihara.client.gui3d.ContainerScreen3D;
 import kogasastudio.ashihara.client.gui3d.components.ItemSlotComponent;
 import kogasastudio.ashihara.client.gui3d.components.PotLidComponent;
 import kogasastudio.ashihara.client.gui3d.components.PotModelComponent;
+import kogasastudio.ashihara.client.render.state.Screen3DPiPRenderState;
 import kogasastudio.ashihara.inventory.container.PotMenu;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -62,8 +63,9 @@ public class PotScreen extends ContainerScreen3D<PotMenu>
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a)
     {
         // 背景
-        graphics.fill(0, 0, this.width, this.height, 0xCC050505);
+        //graphics.fill(0, 0, this.width, this.height, 0xCC050505);
         // 组件 + carried-item（由父类处理）
+        graphics.text(Minecraft.getInstance().font, "x: "+mouseX+"; y: "+mouseY, mouseX, mouseY, 0xFF196884);
         super.extractRenderState(graphics, mouseX, mouseY, a);
     }
 }

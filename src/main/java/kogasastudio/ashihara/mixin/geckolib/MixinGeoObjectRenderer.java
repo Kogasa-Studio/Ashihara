@@ -9,7 +9,7 @@ import com.geckolib.renderer.GeoObjectRenderer;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Mixin(GeoObjectRenderer.class)
+@Mixin(value = GeoObjectRenderer.class, remap = false)
 public class MixinGeoObjectRenderer implements GeoRendererPoseSyncProvider
 {
     @Unique

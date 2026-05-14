@@ -7,6 +7,8 @@
   "mixins": [
   ],
   "client": [
+    "geckolib.MixinGeoBone",
+    "geckolib.MixinGeoObjectRenderer"
   ],
   "injectors": {
     "defaultRequire": 1
