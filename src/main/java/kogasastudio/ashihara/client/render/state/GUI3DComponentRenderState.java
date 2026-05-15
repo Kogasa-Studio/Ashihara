@@ -5,6 +5,7 @@ import com.geckolib.constant.dataticket.DataTicket;
 import com.geckolib.renderer.GeoObjectRenderer;
 import com.geckolib.renderer.base.GeoRenderState;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
@@ -22,10 +23,15 @@ public record GUI3DComponentRenderState(
         Map<DataTicket<?>, Object> dataMap
 ) implements GeoRenderState
 {
+    public static Map<DataTicket<?>, Object> newDataMap()
+    {
+        return new Reference2ObjectOpenHashMap<>();
+    }
+
     /** 便捷构造器：自动创建新的空 dataMap。 */
     public GUI3DComponentRenderState(BiConsumer<PoseStack, SubmitNodeCollector> submitRenderPass)
     {
-        this(submitRenderPass, new Reference2ObjectOpenHashMap<>());
+        this(submitRenderPass, newDataMap());
     }
 
     @Override
@@ -48,7 +54,11 @@ public record GUI3DComponentRenderState(
         (poseStack, submitNodeCollector) ->
             {
                 poseStack.pushPose();
-                poseStack.scale(64f, 64f, 64f);
+                poseStack.mulPose(Axis.XP.rotation(45));
+                poseStack.mulPose(Axis.YP.rotation(-45));
+                poseStack.mulPose(Axis.ZP.rotation(0));
+                poseStack.scale(64f, -64f, 64f);
+                poseStack.translate(-0.5, -1, -0.5);
                 renderer.performRenderPass
                 (
                     model,

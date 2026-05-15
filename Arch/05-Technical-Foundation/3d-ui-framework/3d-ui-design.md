@@ -1,7 +1,7 @@
 # 3D UI 框架架构设计
 
 > 状态：架构已确定
-> 最后更新：2026-04-21
+> 最后更新：2026-05-15
 > 相关文档：[pot-gui-spec.md](./pot-gui-spec.md)、[3d-ui-quickref.md](./3d-ui-quickref.md)、[decisions/](./decisions/)
 
 ## 四层架构
@@ -169,6 +169,17 @@ public abstract class Screen3D extends Screen {
 - origin = `(mouseX, mouseY, -2000)`
 - direction = `(0, 0, 1)`
 - 与各组件 OBB 做相交测试，取最近命中
+
+### HitPolicy（命中策略）
+
+当前主链已接入命中策略分流：
+- `BLOCK`：命中后消费事件（点击/拖拽目标）
+- `PENETRATE`：命中可参与 hover，但不消费点击，事件继续向后
+- `MIXED`：运行时由组件状态决定阻挡或穿透
+
+`Screen3D` 事件分发与 hover 更新都通过统一命中链路完成：
+- 交互目标优先选最近 `BLOCK` 命中
+- 若无 `BLOCK`，保留最近 `PENETRATE` 作为悬停目标
 
 ### OBB 碰撞检测
 

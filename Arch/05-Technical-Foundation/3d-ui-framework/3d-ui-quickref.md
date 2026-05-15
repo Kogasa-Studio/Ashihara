@@ -3,7 +3,7 @@
 > 标签：[快速参考、代码模板、API查询]
 > 用途：AI实现者的快速查询手册
 > 相关文档：[3d-ui-design.md](./3d-ui-design.md)、[pot-gui-spec.md](./pot-gui-spec.md)
-> 最后更新：2026-04-18（更新：3D 选框、F9 调试覆盖层、GeoBone/GeoCube 多 OBB 绑定、SelectionFrame scale_sim 重构）
+> 最后更新：2026-05-15（更新：HitPolicy 主链接入、DebugOverlay 分层、里程碑文档同步）
 
 ## 核心API速查
 
@@ -412,6 +412,30 @@ poseStack.popPose();
 | 线框颜色 | 绿色=被射线命中，黄色=当前 hovered，灰色=仅显示 OBB |
 | 文本输出 | 左上角显示命中组件名与 `t` 值 |
 | 主要用途 | 验证锅盖 / 锅内槽位的骨骼矩阵与 OBB 是否对齐 |
+
+#### 当前分层结构（P2.1）
+
+```text
+Screen3D.extractRenderState()
+  -> Gui3dDebugOverlay.render(...)        // 编排与文本输出
+      -> Gui3dDebugCollector.collect(...) // 命中与调试数据采集
+      -> Gui3dDebugDrawer.drawObb(...)    // 线框/顶点绘制
+          -> Gui3dDebugProjector.projectCorners(...) // OBB 投影
+```
+
+#### 对应代码入口
+
+- 开关与入口：`src/main/java/kogasastudio/ashihara/client/gui3d/Screen3D.java`
+- 编排层：`src/main/java/kogasastudio/ashihara/client/gui3d/Gui3dDebugOverlay.java`
+- 采集层：`src/main/java/kogasastudio/ashihara/client/gui3d/debug/Gui3dDebugCollector.java`
+- 投影层：`src/main/java/kogasastudio/ashihara/client/gui3d/debug/Gui3dDebugProjector.java`
+- 绘制层：`src/main/java/kogasastudio/ashihara/client/gui3d/debug/Gui3dDebugDrawer.java`
+
+#### 维护约定
+
+- 新增调试统计优先放在 `Gui3dDebugCollector`，避免把业务逻辑塞回 Overlay。
+- 新增投影策略放在 `Gui3dDebugProjector`，Overlay 不做矩阵计算。
+- `Gui3dDebugOverlay` 保持轻量，只负责编排与文本展示。
 
 ### Q：为什么我的射线检测不工作？
 

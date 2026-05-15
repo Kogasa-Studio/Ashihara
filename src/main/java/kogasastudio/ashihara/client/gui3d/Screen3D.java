@@ -1,6 +1,8 @@
 package kogasastudio.ashihara.client.gui3d;
 
 import kogasastudio.ashihara.client.gui3d.components.AbstractComponent;
+import kogasastudio.ashihara.client.gui3d.interaction.HitPolicy;
+import kogasastudio.ashihara.client.gui3d.interaction.HitResult;
 import kogasastudio.ashihara.client.gui3d.util.Ray;
 import kogasastudio.ashihara.client.render.state.GUI3DComponentRenderState;
 import kogasastudio.ashihara.client.render.state.Screen3DPiPRenderState;
@@ -24,6 +26,14 @@ public abstract class Screen3D extends Screen
     public AbstractComponent draggingComponent;
     public boolean componentsInitialized = false;
     public boolean debugOverlayEnabled = false;
+
+    // Active PiP context used for picking (same space as OBB.pose generated during PiP render).
+    protected int pickingPipX0 = 0;
+    protected int pickingPipY0 = 0;
+    protected int pickingPipX1 = 0;
+    protected int pickingPipY1 = 0;
+    protected float pickingPipScale = 1.0f;
+    protected float pickingGuiScale = 1.0f;
 
     public Screen3D(Component title)
     {
@@ -61,20 +71,27 @@ public abstract class Screen3D extends Screen
         List<GUI3DComponentRenderState> renderStates = new ArrayList<>();
         this.components.forEach(component -> component.collectRenderStates(renderStates, mouseX, mouseY, a));
 
-        graphics.submitPictureInPictureRenderState
+        Screen3DPiPRenderState state = new Screen3DPiPRenderState
         (
-            new Screen3DPiPRenderState
-            (
-                0, 0, this.width, this.height, 1.0f,
-                graphics.peekScissorStack(),
-                renderStates,
-                0xF000F0,
-                a
-            )
+            0, 0, this.width, this.height, 1.0f,
+            graphics.peekScissorStack(),
+            renderStates,
+            0xF000F0,
+            a
         );
+
+        // Picking must use the same coordinate space as PiP texture rendering.
+        this.pickingPipX0 = state.x0();
+        this.pickingPipY0 = state.y0();
+        this.pickingPipX1 = state.x1();
+        this.pickingPipY1 = state.y1();
+        this.pickingPipScale = state.scale();
+        this.pickingGuiScale = computeCurrentGuiScale();
+
+        graphics.submitPictureInPictureRenderState(state);
         if (this.debugOverlayEnabled)
         {
-            //Gui3dDebugOverlay.render(graphics, this, this.components, mouseX, mouseY);
+            Gui3dDebugOverlay.render(graphics, this, this.components, mouseX, mouseY);
         }
     }
 
@@ -103,12 +120,21 @@ public abstract class Screen3D extends Screen
     public void removeComponent(AbstractComponent component)
     {
         this.components.remove(component);
+        component.dispose();
     }
 
     public void clearComponents()
     {
+        this.components.forEach(AbstractComponent::dispose);
         this.components.clear();
         this.draggingComponent = null;
+    }
+
+    @Override
+    public void onClose()
+    {
+        this.clearComponents();
+        super.onClose();
     }
 
     public Vector3f screenToGuiSpace(double screenX, double screenY, float guiZ)
@@ -123,11 +149,57 @@ public abstract class Screen3D extends Screen
 
     public Ray createMouseRay(double mouseX, double mouseY)
     {
+        // Convert from GUI space into PiP texture pixel space to match OBB.pose space.
+        float localGuiX = (float) mouseX - this.pickingPipX0;
+        float localGuiY = (float) mouseY - this.pickingPipY0;
+        float pipPixelX = localGuiX * this.pickingGuiScale * this.pickingPipScale;
+        float pipPixelY = localGuiY * this.pickingGuiScale * this.pickingPipScale;
+
         return new Ray
         (
-            new Vector3f((float) mouseX, (float) mouseY, -2000.0f),
+            new Vector3f(pipPixelX, pipPixelY, -2000.0f),
             new Vector3f(0.0f, 0.0f, 1.0f)
         );
+    }
+
+    protected float computeCurrentGuiScale()
+    {
+        if (this.width <= 0)
+        {
+            return 1.0f;
+        }
+
+        return (float) Minecraft.getInstance().getWindow().getWidth() / (float) this.width;
+    }
+
+    public float getPickingGuiScale()
+    {
+        return this.pickingGuiScale;
+    }
+
+    public int getPickingPipX0()
+    {
+        return this.pickingPipX0;
+    }
+
+    public int getPickingPipY0()
+    {
+        return this.pickingPipY0;
+    }
+
+    public int getPickingPipX1()
+    {
+        return this.pickingPipX1;
+    }
+
+    public int getPickingPipY1()
+    {
+        return this.pickingPipY1;
+    }
+
+    public float getPickingPipScale()
+    {
+        return this.pickingPipScale;
     }
 
     public boolean isDebugOverlayEnabled()
@@ -199,7 +271,7 @@ public abstract class Screen3D extends Screen
     public void mouseMoved(double mouseX, double mouseY)
     {
         this.updateHoverState(mouseX, mouseY);
-        AbstractComponent target = this.findTopComponent(mouseX, mouseY);
+        AbstractComponent target = this.findTopHoverComponent(mouseX, mouseY);
         if (target != null)
         {
             target.mouseMoved(mouseX, mouseY);
@@ -214,7 +286,7 @@ public abstract class Screen3D extends Screen
             component.clearHoverState();
         }
 
-        AbstractComponent target = this.findTopComponent(mouseX, mouseY);
+        AbstractComponent target = this.findTopHoverComponent(mouseX, mouseY);
         if (target != null)
         {
             target.setHoveredChain();
@@ -228,17 +300,48 @@ public abstract class Screen3D extends Screen
 
     protected AbstractComponent findTopComponent(double mouseX, double mouseY)
     {
+        HitResult hitResult = this.findTopHit(mouseX, mouseY);
+        if (hitResult == null || hitResult.policy() != HitPolicy.BLOCK)
+        {
+            return null;
+        }
+
+        return hitResult.component();
+    }
+
+    protected AbstractComponent findTopHoverComponent(double mouseX, double mouseY)
+    {
+        HitResult hitResult = this.findTopHit(mouseX, mouseY);
+        return hitResult == null ? null : hitResult.component();
+    }
+
+    protected HitResult findTopHit(double mouseX, double mouseY)
+    {
+        Ray ray = this.createMouseRay(mouseX, mouseY);
         List<AbstractComponent> ordered = new ArrayList<>(this.components);
         ordered.sort(Comparator.comparingDouble(AbstractComponent::getAbsoluteInteractionDepth).reversed());
+
+        HitResult nearestPenetrate = null;
         for (AbstractComponent component : ordered)
         {
-            AbstractComponent hit = component.findHitComponent(mouseX, mouseY);
-            if (hit != null)
+            HitResult hit = component.findTopHit(ray);
+            if (hit == null)
+            {
+                continue;
+            }
+
+            if (hit.policy() == HitPolicy.BLOCK)
             {
                 return hit;
             }
+
+            if (nearestPenetrate == null || hit.t() < nearestPenetrate.t())
+            {
+                nearestPenetrate = hit;
+            }
         }
-        return null;
+
+        return nearestPenetrate;
     }
 
     public static double mouseX()

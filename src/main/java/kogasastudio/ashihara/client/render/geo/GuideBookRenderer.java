@@ -2,10 +2,10 @@ package kogasastudio.ashihara.client.render.geo;
 
 import com.geckolib.constant.dataticket.DataTicket;
 import kogasastudio.ashihara.client.models.geo.GuideBookModel;
+import kogasastudio.ashihara.client.render.state.GUI3DComponentRenderState;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
@@ -32,6 +32,7 @@ public class GuideBookRenderer extends GeoObjectRenderer<GuideBookModel, Void, G
     }
 
     // Temporary compatibility shim for old call sites (GuideBookScreen) during stage-2 migration.
+    // Remove this method after Stage 2.2 when all call-sites submit render-pass state directly.
     public void render(PoseStack poseStack,
                        GuideBookModel animatable,
                        MultiBufferSource bufferSource,
@@ -44,6 +45,7 @@ public class GuideBookRenderer extends GeoObjectRenderer<GuideBookModel, Void, G
     }
 
     // Stage 2.1 fallback entrypoint used by GuideBookScreen while we migrate to full render-pass submission.
+    // Planned removal milestone: Stage 2.2 closure.
     public void renderCompat(PoseStack poseStack,
                              GuideBookModel animatable,
                              MultiBufferSource bufferSource,
@@ -74,7 +76,7 @@ public class GuideBookRenderer extends GeoObjectRenderer<GuideBookModel, Void, G
 
     public static class GuideBookRenderState implements GeoRenderState
     {
-        private final Map<DataTicket<?>, Object> dataMap = new Reference2ObjectOpenHashMap<>();
+        private final Map<DataTicket<?>, Object> dataMap = GUI3DComponentRenderState.newDataMap();
 
         @Override
         public Map<DataTicket<?>, Object> getDataMap()

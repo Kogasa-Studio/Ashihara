@@ -12,7 +12,7 @@
 **核心功能**：
 - GeckoLib骨骼动画（锅盖打开/关闭）
 - 流体渲染（液体高度、颜色）
-- 物品槽位与交互（8个进料口）
+- 物品槽位与交互（4个进料口，当前实现）
 - 配方匹配系统
 - 进度条和特效系统
 
@@ -153,7 +153,7 @@ public class SelectionFrameComponent extends AbstractComponent {
 
 显示：
 - 流体面片（高度反映体积）
-- 8个物品显示位置（基于GeckoLib骨骼）
+- 4个物品显示位置（基于GeckoLib骨骼）
 - 物品数量标签
 
 调试：
@@ -448,20 +448,16 @@ private void playCompletionEffect() {
 PotScreen extends Screen3D
   ├─ PotPanel extends Panel
   │   ├─ PotModelComponent (3D模型)
-  │   │   └─ 骨骼：lid, pot_body, 8个item_slot
+  │   │   └─ 骨骼：lid, pot_body, 4个item_slot（`item_slot_0..3`）
   │   │
   │   ├─ FluidDisplayComponent (液体面片)
   │   │   └─ 高度 = fluid.getAmount() / maxCapacity * height
   │   │
   │   ├─ ItemSlotContainer extends Panel
-  │   │   ├─ ItemSlotComponent[0] 
+  │   │   ├─ ItemSlotComponent[0]
   │   │   ├─ ItemSlotComponent[1]
   │   │   ├─ ItemSlotComponent[2]
-  │   │   ├─ ItemSlotComponent[3]
-  │   │   ├─ ItemSlotComponent[4]
-  │   │   ├─ ItemSlotComponent[5]
-  │   │   ├─ ItemSlotComponent[6]
-  │   │   └─ ItemSlotComponent[7]
+  │   │   └─ ItemSlotComponent[3]
   │   │
   │   ├─ RecipeDisplayPanel (配方信息，淡入/淡出)
   │   │   ├─ 输入物品列表
@@ -524,7 +520,7 @@ public interface IHeatSource {
 
 ```java
 public class PotBlockEntity extends BlockEntity {
-    private ItemStackHandler itemHandler = new ItemStackHandler(8) {
+    private ItemStackHandler itemHandler = new ItemStackHandler(4) {
         @Override
         protected void onContentsChanged(int slot) {
             // 当物品改变时更新UI

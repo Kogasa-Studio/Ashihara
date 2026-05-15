@@ -1,6 +1,5 @@
 package kogasastudio.ashihara.client.gui3d.components;
 
-import kogasastudio.ashihara.client.gui3d.Screen3D;
 import kogasastudio.ashihara.client.gui3d.util.OBB;
 import kogasastudio.ashihara.client.models.geo.SelectionFrameModel;
 import net.minecraft.client.Minecraft;
@@ -35,7 +34,7 @@ public class PotLidComponent extends AbstractComponent implements ISelectable
         this.scaleY = 20;
 
         SelectionFrameModel frameModel = new SelectionFrameModel(
-            "geo/assistance/cubic_selection_frame.geo.json",
+            "assistance/cubic_selection_frame",
             "textures/geo/highlight_outline.png",
             Minecraft.getInstance().player
         );
@@ -82,36 +81,6 @@ public class PotLidComponent extends AbstractComponent implements ISelectable
         return boxes.isEmpty() ? List.of(this.buildFallbackBox()) : boxes;
     }
 
-    // ---- 渲染 ----
-
-    //@Override
-    protected void renderSelf(int mouseX, int mouseY, float partialTick)
-    {
-        /*// 锅盖打开后强制隐藏选框
-        if (this.modelComponent.isLidRemoved()
-            && this.selectionFrame.getFrameState() != SelectionFrameComponent.FrameState.HIDDEN)
-        {
-            this.selectionFrame.forceHide();
-        }*/
-
-        // 调试模式下绘制2D包围框
-        Screen3D screen = this.getScreen();
-        if (screen == null || !screen.debugOverlayEnabled || !this.hovered) return;
-
-        float[] bounds = this.getScreenBounds();
-        if (bounds == null) return;
-
-        int left   = Math.round(bounds[0]);
-        int top    = Math.round(bounds[1]);
-        int right  = Math.round(bounds[2]);
-        int bottom = Math.round(bounds[3]);
-        int color  = 0xFFFFD36B;
-
-        /*guiGraphics.fill(left, top, right, top + 1, color);
-        guiGraphics.fill(left, bottom - 1, right, bottom, color);
-        guiGraphics.fill(left, top, left + 1, bottom, color);
-        guiGraphics.fill(right - 1, top, right, bottom, color);*/
-    }
 
     // ---- 交互 ----
 

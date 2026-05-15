@@ -1,6 +1,5 @@
 package kogasastudio.ashihara.client.gui3d.components;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import kogasastudio.ashihara.client.gui3d.ContainerScreen3D;
 import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
 import kogasastudio.ashihara.client.gui3d.util.OBB;
@@ -59,7 +58,7 @@ public class ItemSlotComponent extends ModelComponent implements ISelectable
         this.bindBone(boneName);
 
         SelectionFrameModel frameModel = new SelectionFrameModel(
-                "geo/assistance/cubic_selection_frame.geo.json",
+                "assistance/cubic_selection_frame",
                 "textures/geo/highlight_outline.png",
                 Minecraft.getInstance().player
         );
@@ -88,27 +87,6 @@ public class ItemSlotComponent extends ModelComponent implements ISelectable
 
     // ── 渲染 ─────────────────────────────────────────────────────────────────
 
-    protected void renderSelf(PoseStack poseStack, int mouseX, int mouseY, float partialTick)
-    {
-        //super.renderSelf(poseStack, mouseX, mouseY, partialTick);
-
-        ItemStack stack = this.menuSlot.getItem();
-        if (stack.isEmpty()) return;
-
-        BoneTracer tracer = this.boneTracers.get(this.boneName);
-        if (tracer == null || tracer.collisionBoxes().isEmpty()) return;
-
-        OBB obb = tracer.collisionBoxes().get(0);
-
-        poseStack.pushPose();
-        poseStack.mulPose(obb.pose());
-        poseStack.scale(this.itemRenderScale, this.itemRenderScale, this.itemRenderScale);
-        poseStack.translate(-0.5, -0.5, -0.5);
-
-        //RenderHelper.renderItem(poseStack, guiGraphics.bufferSource(), stack);
-
-        poseStack.popPose();
-    }
 
     @Override
     protected void collectSelfRenderStates(List<GUI3DComponentRenderState> output, int mouseX, int mouseY, float partialTick)
@@ -125,7 +103,7 @@ public class ItemSlotComponent extends ModelComponent implements ISelectable
             return;
         }
 
-        OBB obb = tracer.collisionBoxes().get(0);
+        OBB obb = tracer.collisionBoxes().getFirst();
         output.add(new GUI3DComponentRenderState((poseStack, submitNodeCollector) ->
         {
             poseStack.pushPose();

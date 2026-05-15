@@ -137,4 +137,18 @@ public class ModelComponent extends AbstractComponent
     {
         this.model.clearBoneModifiers();
     }
+
+    @Override
+    public void dispose()
+    {
+        if (this.tracerAttached)
+        {
+            this.model.getRendererPoseSync().ashihara_1_21$getTracers().removeAll(this.attachedTracers);
+            this.attachedTracers.clear();
+            this.tracerAttached = false;
+        }
+
+        this.clearBoneModifiers();
+        super.dispose();
+    }
 }

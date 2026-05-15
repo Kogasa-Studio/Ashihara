@@ -3,7 +3,7 @@ package kogasastudio.ashihara.client.gui3d;
 import kogasastudio.ashihara.client.gui3d.components.ItemSlotComponent;
 import kogasastudio.ashihara.client.gui3d.components.PotLidComponent;
 import kogasastudio.ashihara.client.gui3d.components.PotModelComponent;
-import kogasastudio.ashihara.client.render.state.Screen3DPiPRenderState;
+import kogasastudio.ashihara.client.gui3d.util.Ray;
 import kogasastudio.ashihara.inventory.container.PotMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -62,10 +62,17 @@ public class PotScreen extends ContainerScreen3D<PotMenu>
     @Override
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a)
     {
-        // 背景
-        //graphics.fill(0, 0, this.width, this.height, 0xCC050505);
-        // 组件 + carried-item（由父类处理）
-        graphics.text(Minecraft.getInstance().font, "x: "+mouseX+"; y: "+mouseY, mouseX, mouseY, 0xFF196884);
         super.extractRenderState(graphics, mouseX, mouseY, a);
+
+        // PotScreen 作为统一空间测试对象：输出 GUI->PiP 转换后的射线数据与命中距离。
+        Ray mouseRay = this.createMouseRay(mouseX, mouseY);
+        float nearestHit = this.potModelComponent == null ? -1.0f : this.potModelComponent.rayHitDistance(mouseRay);
+
+        graphics.text(Minecraft.getInstance().font,
+                String.format("gui=(%d,%d) ray=(%.1f,%.1f,%.1f)", mouseX, mouseY, mouseRay.origin().x, mouseRay.origin().y, mouseRay.origin().z),
+                6, 6, 0xFF196884);
+        graphics.text(Minecraft.getInstance().font,
+                String.format("pickScale gui=%.2f hit=%.3f", this.getPickingGuiScale(), nearestHit),
+                6, 18, 0xFF88CCAA);
     }
 }

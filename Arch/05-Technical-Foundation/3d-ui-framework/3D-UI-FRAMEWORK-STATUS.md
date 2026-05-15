@@ -1,8 +1,8 @@
-# 3D UI 框架文档系统 - 验收完成
+# 3D UI 框架文档系统 - 实施状态
 
-> 完成日期：2026-04-18
-> 版本：v1.0 (优化版)
-> 状态：✅ 准备验收
+> 完成日期：2026-04-18（文档重组）
+> 版本：v1.1 (实施期更新)
+> 状态：🚧 实施中（主链已落地，迁移收口中）
 > 入口点：[3d-ui-framework/README.md](README.md)
 
 ## 快速导航
@@ -25,8 +25,7 @@
 验收关键点：
 1. 检查 [3d-ui-framework/roadmap.md](roadmap.md) - 时间可行性
 2. 检查 [3d-ui-framework/pot-gui-spec.md](pot-gui-spec.md) - 功能完整性
-3. 检查 [3d-ui-framework/VERIFICATION-CHECKLIST.md](VERIFICATION-CHECKLIST.md) - 交付物清单
-4. 浏览 [3d-ui-framework/3d-ui-design.md](3d-ui-design.md) - 架构合理性
+3. 浏览 [3d-ui-framework/3d-ui-design.md](3d-ui-design.md) - 架构合理性
 
 ### 我想查阅完整细节
 
@@ -108,8 +107,6 @@
 - **3d-ui-framework/3d-ui-quickref.md** - 快速参考和模板库
 - **3d-ui-framework/roadmap.md** - 快速交付路线图
 - **3d-ui-framework/decisions/INDEX.md** - 决策索引
-- **3d-ui-framework/REORGANIZATION-REPORT.md** - 重组报告
-- **3d-ui-framework/VERIFICATION-CHECKLIST.md** - 验收清单
 - **DOCUMENTATION-RULES.md** - 文档编纂规则（新建）
 - **3D-UI-FRAMEWORK-STATUS.md** - 本文件
 
@@ -162,8 +159,7 @@
 
 1. 阅读本文件（5分钟）
 2. 快速浏览 [3d-ui-framework/README.md](README.md)（10分钟）
-3. 检查 [3d-ui-framework/VERIFICATION-CHECKLIST.md](VERIFICATION-CHECKLIST.md)（5分钟）
-4. 确认时间规划 [roadmap.md](roadmap.md)（10分钟）
+3. 确认时间规划 [roadmap.md](roadmap.md)（10分钟）
 
 ### 深入理解（2小时）
 
@@ -182,20 +178,18 @@
 
 ## 一句话总结
 
-用户的3D UI库文档已根据快速开发场景进行了全面优化，保留完整功能的同时大幅精简和提升可用性，现已准备好支持1-3天内完成代码实现。
+3D UI 文档系统已完成重组，代码侧主链已落地，当前重点从“准备实现”转为“迁移收口与文档同步”。
 
-## 何时启动代码实现？
+## 当前执行重点
 
 **检查清单**：
 
-- [ ] 用户审查了新文档系统
-- [ ] 确认了改进方向正确
-- [ ] 时间规划合理
-- [ ] 代码示例方向正确
-- [ ] 美术资源准备就绪
-- [ ] 开发环境配置完成
+- [ ] 核心文档状态字段与代码事实一致
+- [ ] Pot 规格中的槽位数量与当前实现一致
+- [ ] GuideBook 兼容桥接入口设置明确移除里程碑
+- [ ] 临时迁移文档汇总到单一状态板
 
-**确认无误后**，可以新开session启动代码实现。
+**确认无误后**，进入阶段化收口与清理任务。
 
 ---
 
@@ -211,9 +205,9 @@
 
 ---
 
-**状态**：✅ 文档系统完成，准备验收
+**状态**：🚧 文档系统可用，实施与收口进行中
 
-**下一步**：等待用户确认，准备启动代码实现session
+**下一步**：按 P0/P1/P2 整改计划推进文档对齐、兼容收口与结构优化
 
-**预期**：1-3天完成土锅GUI的完整实现和验证
+**预期**：先完成 P0 文档与事实对齐，再推进代码收口
 

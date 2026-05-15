@@ -3,7 +3,7 @@
 > 标签：[架构决策、决策记录]
 > 状态：✅ 10项决策完整
 > 相关文档：[3d-ui-design.md](../3d-ui-design.md)
-> 最后更新：2026-04-18
+> 最后更新：2026-05-15
 
 ## 决策概览
 
@@ -66,7 +66,7 @@
 
 原始的完整技术决策文档位于：
 ```
-E:\WORKSPACE\Ashihara_1.21\Arch\05-Technical-Foundation\3d-ui-technical-decisions.md
+E:\WORKSPACE\Ashihara_26.1.2\Arch\05-Technical-Foundation\3d-ui-technical-decisions.md
 ```
 
 ### 如何查看完整决策
@@ -155,5 +155,5 @@ E:\WORKSPACE\Ashihara_1.21\Arch\05-Technical-Foundation\3d-ui-technical-decision
 ---
 
 **查看完整的决策论证、权衡分析和风险缓解：**
-打开 `E:\WORKSPACE\Ashihara_1.21\Arch\05-Technical-Foundation\3d-ui-technical-decisions.md`
+打开 `E:\WORKSPACE\Ashihara_26.1.2\Arch\05-Technical-Foundation\3d-ui-technical-decisions.md`
 

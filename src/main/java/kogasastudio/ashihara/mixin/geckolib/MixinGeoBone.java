@@ -6,6 +6,7 @@ import com.geckolib.renderer.base.RenderPassInfo;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
 import kogasastudio.ashihara.utils.mixin.GeoRendererPoseSyncProvider;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,9 +19,9 @@ import java.util.List;
  * 附加到该渲染器的所有 BoneTracer。
  *
  * <p>注入点：{@code GeoBone.updateBonePositionListeners} 方法头部。
- * 此时 poseStack 已由 {@code RenderUtil.prepMatrixForBoneAndUpdateListeners}
- * 完整累积（pivot + BoneSnapshot 旋转/缩放/位移 + 父链变换），
- * 可直接用于 OBB 构建。
+ * 该时机位于 {@code RenderUtil.prepMatrixForBoneAndUpdateListeners} 的
+ * {@code bone.translateAwayFromPivotPoint(...)} 之前，因此这里需要手动补偿
+ * 一次 pivot-away，才能得到与实际 cube 渲染一致的骨骼基矩阵。
  *
  * <p>对普通渲染对象（未附加 BoneTracer），tracer 列表为空，本注入体
  * 在检查后立即返回，实际开销为零。
@@ -42,13 +43,14 @@ public abstract class MixinGeoBone
         if (tracers.isEmpty()) return;
 
         GeoBone bone = (GeoBone) (Object) this;
+        Matrix4f correctedBonePose = new Matrix4f(poseStack.last().pose())
+            .translate(-bone.pivotX() / 16.0f, -bone.pivotY() / 16.0f, -bone.pivotZ() / 16.0f);
+
         for (BoneTracer tracer : tracers)
         {
             if (tracer.testBone(bone))
             {
-                // poseStack.last().pose() 是此骨骼从模型根到自身的完整累积 Matrix4f。
-                // BoneTracer.syncFromBone 内部会拷贝，无需在此处额外 new Matrix4f。
-                tracer.syncFromBone(bone, poseStack.last().pose());
+                tracer.syncFromBone(bone, correctedBonePose);
             }
         }
     }

@@ -144,6 +144,21 @@ public class GuideBookScreen extends Screen3D
         );
     }
 
+    private Ray createGuidebookPageRay(double mouseX, double mouseY)
+    {
+        Ray pipRay = this.createMouseRay(mouseX, mouseY);
+        float toGui = this.getPickingGuiScale() * this.getPickingPipScale();
+
+        if (!Float.isFinite(toGui) || Math.abs(toGui) < 1e-6f)
+        {
+            return new Ray(new Vector3f((float) mouseX, (float) mouseY, -2000f), new Vector3f(0f, 0f, 1f));
+        }
+
+        float guiX = pipRay.origin().x / toGui + this.getPickingPipX0();
+        float guiY = pipRay.origin().y / toGui + this.getPickingPipY0();
+        return new Ray(new Vector3f(guiX, guiY, pipRay.origin().z), pipRay.direction());
+    }
+
     public @Nullable Pair<MutableFloat, String> appendBufferedFlip(boolean flipToLeft)
     {
         for (int i = 0; i < 6; i++)
@@ -199,8 +214,8 @@ public class GuideBookScreen extends Screen3D
         boolean buffered = false;
         boolean resetBuffer = true;
 
-        // 3D UI picking: same ray convention as Screen3D (origin z=-2000, dir +Z).
-        final Ray mouseRay = new Ray(new Vector3f((float)event.x(), (float)event.y(), -2000f), new Vector3f(0f, 0f, 1f));
+        // Reuse Screen3D picking path, then convert back to GUI-space for current page OBBs.
+        final Ray mouseRay = this.createGuidebookPageRay(event.x(), event.y());
         final float tLeft = this.leftPageObb != null ? ObbInterSector.rayOBBIntersect(mouseRay, this.leftPageObb) : -1f;
         final float tRight = this.rightPageObb != null ? ObbInterSector.rayOBBIntersect(mouseRay, this.rightPageObb) : -1f;
 

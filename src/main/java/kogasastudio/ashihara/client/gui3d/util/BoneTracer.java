@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.client.gui3d.util;
 
+import com.geckolib.animation.state.BoneSnapshot;
 import org.joml.Matrix4f;
 import com.geckolib.cache.model.GeoBone;
 import com.geckolib.cache.model.cuboid.CuboidGeoBone;
@@ -15,6 +16,7 @@ public class BoneTracer
     protected Matrix4f matrix = new Matrix4f();
     protected final Predicate<GeoBone> bone;
     protected final List<OBB> collisionBoxes = new ArrayList<>();
+    protected BoneSnapshot boneSnapshot;
 
     public BoneTracer(Predicate<GeoBone> bone) {this.bone = bone;}
 
@@ -28,6 +30,7 @@ public class BoneTracer
     public void syncFromBone(GeoBone bone, Matrix4f matrix)
     {
         this.matrix = new Matrix4f(matrix);
+        this.boneSnapshot = bone.frameSnapshot == null ? BoneSnapshot.create(bone) : bone.frameSnapshot;
         this.collisionBoxes.clear();
 
         if (bone instanceof CuboidGeoBone cuboidBone)
@@ -38,6 +41,8 @@ public class BoneTracer
             }
         }
     }
+
+    public BoneSnapshot snapshot() {return this.boneSnapshot;}
 
     public Matrix4f matrix() {return this.matrix;}
 

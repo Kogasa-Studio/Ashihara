@@ -62,6 +62,7 @@ public class SelectionFrameComponent extends AbstractComponent
         this.interactionPriority = -1000;
         this.enabled = false;
         this.visible = false;
+        this.enableTick();
     }
 
     @Override
@@ -72,10 +73,14 @@ public class SelectionFrameComponent extends AbstractComponent
         this.frameModel.syncFrame(new Vector3f(), new Vector3f());
     }
 
-    //@Override
-    protected void renderSelf(int mouseX, int mouseY, float partialTick)
+    @Override
+    public void tick()
     {
-        if (!this.visible) return;
+        super.tick();
+        if (!this.visible)
+        {
+            return;
+        }
 
         // 收缩动画结束 → 隐藏
         if (this.state == FrameState.CONTRACTING && this.frameModel.isInternalAnimFinished())
@@ -91,14 +96,8 @@ public class SelectionFrameComponent extends AbstractComponent
         {
             this.state = FrameState.EXPANDED;
         }
-
-        /*var poseStack = guiGraphics.pose();
-        poseStack.pushPose();
-        poseStack.mulPose(this.targetMatrix);
-        poseStack.translate(-0.5f, -0.51f, -0.5f);
-        this.frameModel.render(poseStack, guiGraphics.bufferSource(), 15728880, 0);
-        poseStack.popPose();*/
     }
+
 
     // ---- 外部驱动接口 ----
 
@@ -114,7 +113,7 @@ public class SelectionFrameComponent extends AbstractComponent
         if (obbs == null || obbs.isEmpty()) return;
 
         // 合并所有OBB边界（以第一个OBB的矩阵为参考系）
-        OBB ref = obbs.get(0);
+        OBB ref = obbs.getFirst();
         Vector3f min = new Vector3f(ref.minXYZ()).mul(16f);
         Vector3f max = new Vector3f(ref.maxXYZ()).mul(16f);
         for (int i = 1; i < obbs.size(); i++)
@@ -129,9 +128,6 @@ public class SelectionFrameComponent extends AbstractComponent
 
         // 从打断处的当前尺寸出发
         float[] cur = this.frameModel.readCurrentEdgeScales();
-        float xTo = max.x - min.x;
-        float yTo = max.y - min.y;
-        float zTo = max.z - min.z;
 
         this.frameModel.syncFrame(min, max);
         this.frameModel.triggerFrameAnimation(min, max, cur[0], cur[1], cur[2], 1, 1, 1, duration, this.expandEasing);

@@ -1,6 +1,8 @@
 package kogasastudio.ashihara.client.gui3d.components;
 
 import kogasastudio.ashihara.client.gui3d.Screen3D;
+import kogasastudio.ashihara.client.gui3d.interaction.HitPolicy;
+import kogasastudio.ashihara.client.gui3d.interaction.HitResult;
 import kogasastudio.ashihara.client.gui3d.util.OBB;
 import kogasastudio.ashihara.client.gui3d.util.ObbInterSector;
 import kogasastudio.ashihara.client.gui3d.util.Ray;
@@ -36,6 +38,7 @@ public class AbstractComponent
     protected boolean dragging = false;
     protected boolean doTick = false;
     protected int interactionPriority = 0;
+    protected HitPolicy hitPolicy = HitPolicy.BLOCK;
 
     public AbstractComponent()
     {
@@ -81,8 +84,17 @@ public class AbstractComponent
     public void removeChild(AbstractComponent child)
     {
         this.children.remove(child);
+        child.dispose();
         child.parent = null;
         child.screen = null;
+    }
+
+    public void dispose()
+    {
+        for (AbstractComponent child : this.children)
+        {
+            child.dispose();
+        }
     }
 
     public void init()
@@ -217,6 +229,28 @@ public class AbstractComponent
         return this.interactionPriority;
     }
 
+    public HitPolicy getHitPolicy()
+    {
+        return this.hitPolicy;
+    }
+
+    public void setHitPolicy(HitPolicy hitPolicy)
+    {
+        this.hitPolicy = hitPolicy;
+    }
+
+    protected boolean isPenetrating()
+    {
+        return false;
+    }
+
+    protected HitPolicy resolveHitPolicy()
+    {
+        return this.hitPolicy == HitPolicy.MIXED
+            ? (this.isPenetrating() ? HitPolicy.PENETRATE : HitPolicy.BLOCK)
+            : this.hitPolicy;
+    }
+
     public void setInteractionPriority(int interactionPriority)
     {
         this.interactionPriority = interactionPriority;
@@ -303,27 +337,70 @@ public class AbstractComponent
     @Nullable
     public AbstractComponent findHitComponent(double mouseX, double mouseY)
     {
+        if (this.screen == null)
+        {
+            return null;
+        }
+
+        HitResult hitResult = this.findTopHit(this.screen.createMouseRay(mouseX, mouseY));
+        if (hitResult == null)
+        {
+            return null;
+        }
+
+        return hitResult.policy() == HitPolicy.BLOCK ? hitResult.component() : null;
+    }
+
+    @Nullable
+    public HitResult findTopHit(Ray ray)
+    {
         if (!this.visible)
         {
             return null;
         }
 
+        HitResult nearestPenetrate = null;
+
         List<AbstractComponent> orderedChildren = new ArrayList<>(this.children);
         orderedChildren.sort(Comparator.comparingDouble(AbstractComponent::getAbsoluteInteractionDepth).reversed());
         for (AbstractComponent child : orderedChildren)
         {
-            AbstractComponent hit = child.findHitComponent(mouseX, mouseY);
-            if (hit != null)
+            HitResult childHit = child.findTopHit(ray);
+            if (childHit == null)
             {
-                return hit;
+                continue;
+            }
+
+            if (childHit.policy() == HitPolicy.BLOCK)
+            {
+                return childHit;
+            }
+
+            if (nearestPenetrate == null || childHit.t() < nearestPenetrate.t())
+            {
+                nearestPenetrate = childHit;
             }
         }
 
-        if (this.enabled && this.containsPoint(mouseX, mouseY))
+        if (this.enabled)
         {
-            return this;
+            float t = this.rayHitDistance(ray);
+            if (t >= 0.0f)
+            {
+                HitResult selfHit = HitResult.of(this, t, ray.origin(), ray.direction(), this.resolveHitPolicy());
+                if (selfHit.policy() == HitPolicy.BLOCK)
+                {
+                    return selfHit;
+                }
+
+                if (nearestPenetrate == null || selfHit.t() < nearestPenetrate.t())
+                {
+                    nearestPenetrate = selfHit;
+                }
+            }
         }
-        return null;
+
+        return nearestPenetrate;
     }
 
     public void clearHoverState()

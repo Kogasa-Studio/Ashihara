@@ -10,8 +10,17 @@ public class ObbInterSector
     {
         Matrix4f invPose = new Matrix4f(obb.pose()).invert();
 
+        if (!invPose.isFinite())
+        {
+            return -1;
+        }
+
         Vector4f originWorld = new Vector4f(ray.origin(), 1.0f);  // Homogeneous coordinates (w==1)
         Vector4f originLocal = new Vector4f(originWorld).mul(invPose);  // local homogeneous coordinates
+        if (!Float.isFinite(originLocal.w) || Math.abs(originLocal.w) < 1e-6f)
+        {
+            return -1;
+        }
         Vector3f rayOriginLocal = new Vector3f(originLocal.x, originLocal.y, originLocal.z).div(originLocal.w);  // Dehomogenize (make sure w!=0)
 
         Vector4f dirWorld = new Vector4f(ray.direction(), 0.0f);  // Homogeneous coordinates (w==0)

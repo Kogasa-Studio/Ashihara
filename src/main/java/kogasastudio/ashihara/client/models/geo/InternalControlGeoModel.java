@@ -170,17 +170,29 @@ public abstract class InternalControlGeoModel<T extends SingletonGeoAnimatable> 
 
             public InternalBoneAnimationBuilder lerpSingle(VarType type, double length, double xStart, double xEnd, double yStart, double yEnd, double zStart, double zEnd, EasingType easingType)
             {
-                get(type).xKeyframes().add(new Keyframe(0, length, new Constant(xStart), new Constant(xEnd), easingType));
-                get(type).yKeyframes().add(new Keyframe(0, length, new Constant(yStart), new Constant(yEnd), easingType));
-                get(type).zKeyframes().add(new Keyframe(0, length, new Constant(zStart), new Constant(zEnd), easingType));
+                appendLerpSegment(get(type).xKeyframes(), length, xStart, xEnd, easingType);
+                appendLerpSegment(get(type).yKeyframes(), length, yStart, yEnd, easingType);
+                appendLerpSegment(get(type).zKeyframes(), length, zStart, zEnd, easingType);
                 return this;
+            }
+
+            private void appendLerpSegment(List<Keyframe> keyframes, double length, double start, double end, EasingType easingType)
+            {
+                if (keyframes.isEmpty())
+                {
+                    // Anchor frame: gives GeckoLib a valid "from" keyframe at t=0.
+                    keyframes.add(new Keyframe(0, 0, new Constant(start), new Constant(start), easingType));
+                }
+
+                final double segmentStart = keyframes.get(keyframes.size() - 1).startTime();
+                keyframes.add(new Keyframe(segmentStart + length, length, new Constant(start), new Constant(end), easingType));
             }
 
             public InternalAnimationBuilder endBone()
             {
                 KeyframeStack rot = rotationStack.finalizeKeyframe(), pos = positionStack.finalizeKeyframe(), scl = scaleStack.finalizeKeyframe();
+                this.parent.lengthInTicks = Math.max(this.parent.lengthInTicks, Math.max(positionStack.getAnimationDuration(), Math.max(rotationStack.getAnimationDuration(), scaleStack.getAnimationDuration())));
                 this.parent.anims.add(new BoneAnimation(boneName, rot, pos, scl));
-                this.parent.lengthInTicks = Math.max(this.parent.lengthInTicks, Math.max(pos.getTotalKeyframeTime(), Math.max(rot.getTotalKeyframeTime(), scl.getTotalKeyframeTime())));
                 return this.parent;
             }
 
@@ -207,6 +219,21 @@ public abstract class InternalControlGeoModel<T extends SingletonGeoAnimatable> 
             public KeyframeStack finalizeKeyframe()
             {
                 return new KeyframeStack(xKeyframes, yKeyframes, zKeyframes);
+            }
+
+            public double getAnimationDuration()
+            {
+                return Math.max(getAxisDuration(xKeyframes), Math.max(getAxisDuration(yKeyframes), getAxisDuration(zKeyframes)));
+            }
+
+            private double getAxisDuration(List<Keyframe> keyframes)
+            {
+                if (keyframes.isEmpty())
+                {
+                    return 0;
+                }
+
+                return keyframes.get(keyframes.size() - 1).startTime();
             }
         }
     }
