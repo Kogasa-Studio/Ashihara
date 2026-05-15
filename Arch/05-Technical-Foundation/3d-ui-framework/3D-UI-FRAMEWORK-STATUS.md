@@ -182,14 +182,18 @@
 
 ## 当前执行重点
 
-**检查清单**：
+**检查清单**（更新：2026-05-15）：
 
-- [ ] 核心文档状态字段与代码事实一致
-- [ ] Pot 规格中的槽位数量与当前实现一致
-- [ ] GuideBook 兼容桥接入口设置明确移除里程碑
-- [ ] 临时迁移文档汇总到单一状态板
-
-**确认无误后**，进入阶段化收口与清理任务。
+- [x] 核心文档状态字段与代码事实一致 → P0 已完成
+- [x] Pot 规格中的槽位数量与当前实现一致 → P0 已完成（4 槽）
+- [x] GuideBook 兼容桥接入口设置明确移除里程碑 → P0 已完成（`GuideBookRenderer.renderCompat` 标注 Stage 2.2 移除）
+- [x] 临时迁移文档汇总到单一状态板 → P0 已完成（`temp-*` 已清理，正式状态板：`Plans/3d-ui-current-state-and-rectification-plan.md`）
+- [x] `HitPolicy`/`HitResult` 接入命中主链 → P1 已完成
+- [x] `GuideBookScreen` 命中射线复用 `Screen3D.createMouseRay(...)` → P1 已完成
+- [x] 生命周期补全（tracer / bone modifier detach） → P1 已完成
+- [x] DebugOverlay 完成采集/投影/绘制三层分离 → P2 已完成
+- [x] 渲染状态抽象收敛（`newDataMap()` 统一工厂） → P2 已完成
+- [ ] 收口 GuideBook 阶段性兼容路径（移除 `renderCompat`） → **待 Stage 2.2**
 
 ---
 
@@ -201,13 +205,15 @@
 - 有新发现的问题，添加到 [3d-ui-quickref.md](3d-ui-quickref.md) 的FAQ
 - 有新的代码模板，添加到相应的快速参考
 - 有架构变更，更新决策文档
-- 有时间变化，更新roadmap.md
+- 有里程碑进展，更新 [roadmap.md](roadmap.md)
 
 ---
 
-**状态**：🚧 文档系统可用，实施与收口进行中
+**状态**：🚧 P0/P1/P2 整改已完成，当前进入 M4 可扩展交付阶段准备
 
-**下一步**：按 P0/P1/P2 整改计划推进文档对齐、兼容收口与结构优化
+**下一步**：
+1. Stage 2.2 移除 GuideBookRenderer 阶段性兼容桥接
+2. 推进 M4：新组件模板、测试清单、回归流程可复用
 
-**预期**：先完成 P0 文档与事实对齐，再推进代码收口
+**预期**：迁移收口（M2 后半）→ M4 可扩展交付
 

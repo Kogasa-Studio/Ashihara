@@ -150,10 +150,10 @@ A：原生支持骨骼动画，在GUI中使用和在世界中一样流畅。参�
 
 ## 后续步骤
 
-- [ ] 文档状态与代码事实对齐（README/STATUS/规格）
-- [ ] 收口 GuideBook 阶段性兼容路径（移除临时桥接入口）
-- [ ] 统一 Screen3D 命中与坐标约定，减少双路径
-- [ ] 将临时迁移记录整合为单一正式状态板
+- [x] 文档状态与代码事实对齐（README/STATUS/规格）→ 已完成（2026-05-15 P0）
+- [x] 统一 Screen3D 命中与坐标约定，减少双路径 → 已完成（2026-05-15 P1，HitPolicy 接入主链）
+- [x] 将临时迁移记录整合为单一正式状态板 → 已完成（temp-* 已清理，状态板见 `Plans/3d-ui-current-state-and-rectification-plan.md`）
+- [ ] 收口 GuideBook 阶段性兼容路径（移除 `renderCompat`）→ 计划于 Stage 2.2 完成
 
 ---
 

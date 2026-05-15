@@ -7,8 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 /** GeckoLib guidebook PiP renderer. */
 
@@ -29,7 +27,7 @@ public class Screen3DPiPRenderer extends PictureInPictureRenderer<Screen3DPiPRen
     protected void renderToTexture(Screen3DPiPRenderState renderState, PoseStack poseStack)
     {
         Minecraft mc = Minecraft.getInstance();
-        mc.gameRenderer.getLighting().setupFor(Lighting.Entry.ENTITY_IN_UI);
+        mc.gameRenderer.getLighting().setupFor(Lighting.Entry.LEVEL);
         FeatureRenderDispatcher featureRenderDispatcher = mc.gameRenderer.getFeatureRenderDispatcher();
         renderState.components().forEach(component ->
         {

@@ -192,13 +192,23 @@
 
 ---
 
-## 5. 建议的“一次性交付物”
+## 5. 建议的"一次性交付物"
 
 为避免继续堆临时文档，建议后续只维护一份正式状态板：
 
-- `Plans/3d-ui-migration-status.md`（建议新建，替代多个 `temp-*`）
+- `Plans/3d-ui-current-state-and-rectification-plan.md`（本文件，正式状态板，替代多个 `temp-*`）
   - 模块维度：GuideBook / Pot / Tracer / PiP / Docs
   - 每项包含：当前状态、阻塞、下一步、回滚点、预计完成时间
+
+### 文档更新记录（2026-05-15 本轮末）
+
+以下文档已同步至整改后的事实状态：
+
+| 文件 | 更新内容 |
+|---|---|
+| `Arch/05-Technical-Foundation/3d-ui-framework/README.md` | 后续步骤检查清单打勾，保留待完成项（GuideBook 桥接收口） |
+| `Arch/05-Technical-Foundation/3d-ui-framework/3D-UI-FRAMEWORK-STATUS.md` | 当前执行重点检查清单全部打勾，补充 P1/P2 已完成项，更新"下一步" |
+| `Arch/05-Technical-Foundation/3d-ui-framework/roadmap.md` | DoD 检查清单全部打勾，M2/M3 里程碑状态更新（M3 ✅，M2 后半待完成） |
 
 > 注：本次按你的要求，仅输出本文件，不新增其他文件。
 
