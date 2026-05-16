@@ -76,7 +76,7 @@ public class PotMenu extends AshiharaCommonContainer
         throw new IllegalStateException("Expected PotBlockEntity but got: " + be);
     }
 
-    // ── 进度查询（供 PotScreen 读取） ─────────────────────────────────────────────
+    // ── 进度查询（供 PotScreen3D 读取） ─────────────────────────────────────────────
 
     public int getCookTime()    { return this.cookData.get(0); }
     public int getMaxCookTime() { return this.cookData.get(1); }

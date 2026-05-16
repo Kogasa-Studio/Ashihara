@@ -83,9 +83,10 @@ public class ModelComponent extends AbstractComponent
             (
                 this.model,
                 this.model.RENDERER,
+                this.presetTransform,
                 null,
                 new CameraRenderState(),
-                0xF000F0,
+                15728880,
                 partialTick
             )
         );

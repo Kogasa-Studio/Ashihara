@@ -1,8 +1,9 @@
 package kogasastudio.ashihara.event;
 
+import kogasastudio.ashihara.client.gui3d.PotScreen;
 import kogasastudio.ashihara.client.render.state.Screen3DPiPRenderState;
 import kogasastudio.ashihara.registry.BlockEntities;
-import kogasastudio.ashihara.client.gui3d.PotScreen;
+import kogasastudio.ashihara.client.gui3d.PotScreen3D;
 import kogasastudio.ashihara.registry.MenuTypes;
 import kogasastudio.ashihara.client.particles.MapleLeafParticle;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;

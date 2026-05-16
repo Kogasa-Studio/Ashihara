@@ -103,7 +103,7 @@ public class PotBlock extends Block implements EntityBlock
     {
         if (stack.isEmpty() && !player.isShiftKeyDown())
         {
-            // 服务端发起 openMenu，客户端通过 RegisterMenuScreensEvent 绑定收到 OpenScreen 包后自动打开 PotScreen
+            // 服务端发起 openMenu，客户端通过 RegisterMenuScreensEvent 绑定收到 OpenScreen 包后自动打开 PotScreen3D
             if (!level.isClientSide() && level.getBlockEntity(pos) instanceof PotBlockEntity be)
             {
                 player.openMenu(be, buf -> buf.writeBlockPos(pos));

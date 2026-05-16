@@ -41,6 +41,7 @@ public class ItemSlotComponent extends ModelComponent implements ISelectable
     protected final String boneName;
     protected final Slot menuSlot;
     protected final SelectionFrameComponent selectionFrame;
+    protected final SelectionFrameModel frameModel = new SelectionFrameModel("assistance/cubic_selection_frame", "textures/geo/highlight_outline.png", Minecraft.getInstance().player);
 
     /**
      * @param model     父级 ModelComponent 持有的 GeoModel 实例（共享引用，用于骨骼追踪）
@@ -57,12 +58,7 @@ public class ItemSlotComponent extends ModelComponent implements ISelectable
         // 预先绑定骨骼，使 ModelComponent.init() 能在首次渲染前注册到 rendererPoseSync
         this.bindBone(boneName);
 
-        SelectionFrameModel frameModel = new SelectionFrameModel(
-                "assistance/cubic_selection_frame",
-                "textures/geo/highlight_outline.png",
-                Minecraft.getInstance().player
-        );
-        this.selectionFrame = new SelectionFrameComponent(frameModel);
+        this.selectionFrame = new SelectionFrameComponent(this.frameModel);
     }
 
     // ── 生命周期 ─────────────────────────────────────────────────────────────
@@ -79,9 +75,7 @@ public class ItemSlotComponent extends ModelComponent implements ISelectable
     @Override
     public List<OBB> getCollisionBoxes()
     {
-        BoneTracer tracer = this.boneTracers.get(this.boneName);
-        if (tracer == null) return Collections.emptyList();
-        List<OBB> boxes = tracer.collisionBoxes();
+        List<OBB> boxes = this.getBoneCollisionBoxes(this.boneName);
         return boxes.isEmpty() ? Collections.emptyList() : boxes;
     }
 

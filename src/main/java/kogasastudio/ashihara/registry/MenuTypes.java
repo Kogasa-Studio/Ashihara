@@ -18,7 +18,7 @@ public class MenuTypes
     public static final DeferredRegister<MenuType<?>> MENU_TYPES =
             DeferredRegister.create(Registries.MENU, Ashihara.MODID);
 
-    /** 土锅容器菜单类型。客户端通过 MenuScreens 绑定到 PotScreen。 */
+    /** 土锅容器菜单类型。客户端通过 MenuScreens 绑定到 PotScreen3D。 */
     public static final Supplier<MenuType<PotMenu>> POT_MENU =
             MENU_TYPES.register("pot_menu", () -> IMenuTypeExtension.create(PotMenu::new));
 }

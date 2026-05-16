@@ -12,17 +12,19 @@ public class PotModelComponent extends ModelComponent
     protected boolean lidRemoved = false;
     protected final float modelScale;
 
-    public PotModelComponent(float centerX, float centerY, float modelScale)
+    public PotModelComponent(SimpleInternalControlGeoModel model, float centerX, float centerY, float modelScale)
     {
-        super(
-            new SimpleInternalControlGeoModel("block/pot", "textures/block/pot.png", Minecraft.getInstance().player),
-            true,
-            new Matrix4f()
-                .translation(centerX, centerY, 40)
-                .scale(modelScale, modelScale, modelScale)
-                .rotateX((float) Math.toRadians(-58.0f))
-                .rotateY((float) Math.toRadians(-35.0f))
-        );
+        this(model, modelScale,
+             new Matrix4f()
+             .translation(centerX, centerY, 40)
+             .scale(modelScale, modelScale, modelScale)
+             .rotateX((float) Math.toRadians(-58.0f))
+             .rotateY((float) Math.toRadians(-35.0f)));
+    }
+
+    public PotModelComponent(SimpleInternalControlGeoModel model, float modelScale, Matrix4f presetTransform)
+    {
+        super(model, true, presetTransform);
         this.modelScale = modelScale;
         // 初始化关键骨骼追踪
         this.bindBone("main");

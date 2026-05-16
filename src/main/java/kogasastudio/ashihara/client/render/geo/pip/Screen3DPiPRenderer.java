@@ -1,7 +1,9 @@
 package kogasastudio.ashihara.client.render.geo.pip;
 
+import com.geckolib.util.ClientUtil;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import kogasastudio.ashihara.client.render.state.Screen3DPiPRenderState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
@@ -27,7 +29,7 @@ public class Screen3DPiPRenderer extends PictureInPictureRenderer<Screen3DPiPRen
     protected void renderToTexture(Screen3DPiPRenderState renderState, PoseStack poseStack)
     {
         Minecraft mc = Minecraft.getInstance();
-        mc.gameRenderer.getLighting().setupFor(Lighting.Entry.LEVEL);
+        mc.gameRenderer.getLighting().setupFor(Lighting.Entry.ITEMS_FLAT);
         FeatureRenderDispatcher featureRenderDispatcher = mc.gameRenderer.getFeatureRenderDispatcher();
         renderState.components().forEach(component ->
         {
