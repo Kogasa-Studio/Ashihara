@@ -68,7 +68,7 @@ public class PotScreen3D extends Screen3D
         this.playerInventoryComponent = new PlayerInventoryComponent(
                 playerInventoryModel,
                 this.playerInventory,
-                new Matrix4f().translate(-8.0f, 2f, -100f).scale(16.0f, -16.0f, 16.0f)
+                new Matrix4f().translate(-8.0f, 2.1f, 0f).scale(16.0f, -16.0f, 16.0f)
         );
 
         this.addComponent(this.potModelComponent);

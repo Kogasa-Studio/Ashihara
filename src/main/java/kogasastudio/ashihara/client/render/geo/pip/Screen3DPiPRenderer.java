@@ -1,9 +1,7 @@
 package kogasastudio.ashihara.client.render.geo.pip;
 
-import com.geckolib.util.ClientUtil;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import kogasastudio.ashihara.client.render.state.Screen3DPiPRenderState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
