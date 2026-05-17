@@ -128,15 +128,7 @@ public class ItemSlotComponent extends ModelComponent implements ISelectable
     @Override
     public boolean mouseClicked(MouseButtonEvent event)
     {
-        super.mouseClicked(event);
-        if (!(this.screen instanceof ContainerScreen3D<?> cs)) return false;
-
-        ClickAction clickType = (event.button() == 0 && event.hasShiftDown())
-                ? ClickAction.PRIMARY
-                : ClickAction.SECONDARY;
-
-        cs.sendSlotClick(this.menuSlot.index, event.button(), clickType);
-        return true;
+        return super.mouseClicked(event);
     }
 
     // ── 悬停钩子 ─────────────────────────────────────────────────────────────
@@ -146,12 +138,20 @@ public class ItemSlotComponent extends ModelComponent implements ISelectable
     {
         List<OBB> boxes = this.getCollisionBoxes();
         if (!boxes.isEmpty()) this.selectionFrame.onHoverEnter(boxes);
+        if (this.screen instanceof ContainerScreen3D<?> cs)
+        {
+            cs.getContainerScreen().setHoveredSlot(this.menuSlot);
+        }
     }
 
     @Override
     protected void onHoverExit()
     {
         this.selectionFrame.onHoverExit();
+        if (this.screen instanceof ContainerScreen3D<?> cs && cs.getContainerScreen().getHoveredSlot() == this.menuSlot)
+        {
+            cs.getContainerScreen().setHoveredSlot(null);
+        }
     }
 
     // ── ISelectable ───────────────────────────────────────────────────────────

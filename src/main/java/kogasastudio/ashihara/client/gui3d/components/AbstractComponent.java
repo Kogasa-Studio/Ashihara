@@ -162,22 +162,28 @@ public class AbstractComponent
     {
     }
 
+    public boolean draggable() {return false;}
+
     public boolean mouseClicked(MouseButtonEvent event)
     {
-        this.dragging = event.button() == 0;
+        if (this.draggable()) this.dragging = event.button() == 0;
         return false;
     }
 
     public boolean mouseReleased(MouseButtonEvent event)
     {
-        boolean wasDragging = this.dragging;
-        this.dragging = false;
-        return wasDragging;
+        if (this.draggable())
+        {
+            boolean wasDragging = this.dragging;
+            this.dragging = false;
+            return wasDragging;
+        }
+        return false;
     }
 
     public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY)
     {
-        return this.dragging;
+        return this.draggable() && this.dragging;
     }
 
     public boolean mouseScrolled(double mouseX, double mouseY, double delta)

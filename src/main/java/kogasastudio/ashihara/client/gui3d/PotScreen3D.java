@@ -5,7 +5,6 @@ import kogasastudio.ashihara.client.gui3d.components.ItemSlotComponent;
 import kogasastudio.ashihara.client.gui3d.components.PlayerInventoryComponent;
 import kogasastudio.ashihara.client.gui3d.components.PotLidComponent;
 import kogasastudio.ashihara.client.gui3d.components.PotModelComponent;
-import kogasastudio.ashihara.client.gui3d.util.Ray;
 import kogasastudio.ashihara.client.models.geo.PlayerInventoryModel;
 import kogasastudio.ashihara.client.models.geo.PotModel;
 import kogasastudio.ashihara.inventory.container.PotMenu;
@@ -98,8 +97,7 @@ public class PotScreen3D extends ContainerScreen3D<PotScreen>
     {
         super.extractRenderState(graphics, mouseX, mouseY, a);
         graphics.blit(INV_BG, x0, y0, x1, y1, 0, u1, 0, v1);
-
-        // PotScreen3D 作为统一空间测试对象：输出 GUI->PiP 转换后的射线数据与命中距离。
+        /*// PotScreen3D 作为统一空间测试对象：输出 GUI->PiP 转换后的射线数据与命中距离。
         Ray mouseRay = this.createMouseRay(mouseX, mouseY);
         float nearestHit = this.potModelComponent == null ? -1.0f : this.potModelComponent.rayHitDistance(mouseRay);
 
@@ -108,6 +106,6 @@ public class PotScreen3D extends ContainerScreen3D<PotScreen>
                       6, 6, 0xFF196884);
         graphics.text(Minecraft.getInstance().font,
                       String.format("pickScale gui=%.2f hit=%.3f", this.getPickingGuiScale(), nearestHit),
-                      6, 18, 0xFF88CCAA);
+                      6, 18, 0xFF88CCAA);*/
     }
 }

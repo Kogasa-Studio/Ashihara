@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.client.gui3d;
 
+import kogasastudio.ashihara.utils.mixin.ICustomSlotHover;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.KeyEvent;
@@ -11,7 +12,7 @@ import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import org.jspecify.annotations.Nullable;
 
-public abstract class WrappedContainerScreen3D<T extends AbstractContainerMenu> extends AbstractContainerScreen<T>
+public abstract class WrappedContainerScreen3D<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> implements ICustomSlotHover
 {
     public WrappedContainerScreen3D(T menu, Inventory inventory, Component title)
     {
@@ -27,10 +28,15 @@ public abstract class WrappedContainerScreen3D<T extends AbstractContainerMenu> 
         this.getWrappedScreen().init(this.width, this.height);
     }
 
-    @Override
-    public @Nullable Slot getHoveredSlot()
+    public void setHoveredSlot(Slot hoveredSlot)
     {
-        return super.getHoveredSlot();
+        this.hoveredSlot = hoveredSlot;
+    }
+
+    @Override
+    public @Nullable Slot ashihara$findCustomHoveredSlot(double mouseX, double mouseY)
+    {
+        return this.getWrappedScreen().findCustomHoveredSlot(mouseX, mouseY);
     }
 
     @Override
@@ -55,7 +61,7 @@ public abstract class WrappedContainerScreen3D<T extends AbstractContainerMenu> 
     @Override
     public boolean mouseReleased(MouseButtonEvent event)
     {
-        return  this.getWrappedScreen().mouseReleased(event) || super.mouseReleased(event);
+        return this.getWrappedScreen().mouseReleased(event) || super.mouseReleased(event);
     }
 
     @Override

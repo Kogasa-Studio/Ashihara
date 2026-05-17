@@ -1,24 +1,14 @@
 package kogasastudio.ashihara.client.gui3d;
 
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import kogasastudio.ashihara.client.gui3d.components.AbstractComponent;
+import kogasastudio.ashihara.client.gui3d.components.ItemSlotComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.inventory.Slot;
+import org.jspecify.annotations.Nullable;
 
-/**
- * 基于 Screen3D 的容器屏幕基类，持有 {@link AbstractContainerMenu} 并提供：
- * <ul>
- *   <li>跟随鼠标的 carried-item 2D 渲染</li>
- *   <li>{@link #sendSlotClick} 统一发送泛用槽位点击包</li>
- *   <li>关闭时向服务端发送 closeContainer 包（保证 carried-item 归还逻辑由服务端处理）</li>
- * </ul>
- *
- * <p>所有未来的 3D 容器屏幕均应继承此类，而非直接继承 {@link Screen3D}。
- *
- * @param <S> 对应的 AbstractContainerScreen 子类型
- */
-public abstract class ContainerScreen3D<S extends AbstractContainerScreen<? extends AbstractContainerMenu>> extends Screen3D
+public abstract class ContainerScreen3D<S extends WrappedContainerScreen3D<? extends AbstractContainerMenu>> extends Screen3D
 {
     protected final S containerScreen;
 
@@ -38,12 +28,25 @@ public abstract class ContainerScreen3D<S extends AbstractContainerScreen<? exte
     }
 
     /**
-     * 渲染跟随鼠标的拾取物品（2D 平面，与原版槽位 UI 一致）。
+     * Optional bridge hook for custom hover pipelines (e.g. 3D ray picking).
+     *
+     * <p>Return null to keep vanilla container hover behavior for this query.
      */
-    @Override
-    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a)
+
+    public @Nullable Slot findCustomHoveredSlot(double mouseX, double mouseY)
     {
-        super.extractRenderState(graphics, mouseX, mouseY, a);
+        AbstractComponent hit = this.findTopHoverComponent(mouseX, mouseY);
+        while (hit != null)
+        {
+            if (hit instanceof ItemSlotComponent itemSlot)
+            {
+                return itemSlot.getMenuSlot();
+            }
+
+            hit = hit.parent;
+        }
+
+        return null;
     }
 
     @Override
