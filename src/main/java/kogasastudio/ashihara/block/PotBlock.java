@@ -101,7 +101,7 @@ public class PotBlock extends Block implements EntityBlock
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
-        if (stack.isEmpty() && !player.isShiftKeyDown())
+        if (!stack.is(Items.POT_LID) && !player.isShiftKeyDown())
         {
             // 服务端发起 openMenu，客户端通过 RegisterMenuScreensEvent 绑定收到 OpenScreen 包后自动打开 PotScreen3D
             if (!level.isClientSide() && level.getBlockEntity(pos) instanceof PotBlockEntity be)

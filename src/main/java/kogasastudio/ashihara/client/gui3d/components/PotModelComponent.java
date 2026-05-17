@@ -1,10 +1,6 @@
 package kogasastudio.ashihara.client.gui3d.components;
 
-import com.geckolib.animation.object.EasingType;
-import com.geckolib.animation.object.LoopType;
-import kogasastudio.ashihara.client.models.geo.InternalControlGeoModel;
-import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
-import net.minecraft.client.Minecraft;
+import kogasastudio.ashihara.client.models.geo.PotModel;
 import org.joml.Matrix4f;
 
 public class PotModelComponent extends ModelComponent
@@ -12,7 +8,7 @@ public class PotModelComponent extends ModelComponent
     protected boolean lidRemoved = false;
     protected final float modelScale;
 
-    public PotModelComponent(SimpleInternalControlGeoModel model, float centerX, float centerY, float modelScale)
+    public PotModelComponent(PotModel model, float centerX, float centerY, float modelScale)
     {
         this(model, modelScale,
              new Matrix4f()
@@ -22,7 +18,7 @@ public class PotModelComponent extends ModelComponent
              .rotateY((float) Math.toRadians(-35.0f)));
     }
 
-    public PotModelComponent(SimpleInternalControlGeoModel model, float modelScale, Matrix4f presetTransform)
+    public PotModelComponent(PotModel model, float modelScale, Matrix4f presetTransform)
     {
         super(model, true, presetTransform);
         this.modelScale = modelScale;
@@ -38,22 +34,8 @@ public class PotModelComponent extends ModelComponent
     public boolean toggleLid()
     {
         this.lidRemoved = !this.lidRemoved;
-        float targetYOffset = this.lidRemoved ? 4.0f : 0.0f;
-        float targetRotation = this.lidRemoved ? (float) Math.toRadians(-20.0f) : 0.0f;
-        float currentYOffset = this.boneTracers.get("lid").snapshot().getTranslateY();//this.model.getBone("lid").map(GeoBone::getPosY).orElse(0.0f);
-        float currentRotation = this.boneTracers.get("lid").snapshot().getRotZ();//this.model.getBone("lid").map(GeoBone::getRotZ).orElse(0.0f);
-
-        this.model.triggerInternal
-        (
-            Minecraft.getInstance().player,
-            this.model.hashCode(),
-            new InternalControlGeoModel.InternalAnimationBuilder("pot_lid_toggle", LoopType.HOLD_ON_LAST_FRAME)
-                .startBone("lid")
-                .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 8 / 20f, currentYOffset, targetYOffset, EasingType.EASE_OUT_CUBIC)
-                .lerpZ(InternalControlGeoModel.InternalAnimationBuilder.VarType.ROTATION, 8 / 20f, currentRotation, targetRotation, EasingType.EASE_OUT_CUBIC)
-                .endBone()
-                .build()
-        );
+        String anim = this.lidRemoved ? PotModel.LID_OPEN : PotModel.LID_CLOSE;
+        this.model.triggerAnim(this.model.player, this.model.hashCode(), PotModel.LID_STATE_CONTROLLER, anim);
         return this.lidRemoved;
     }
 }
