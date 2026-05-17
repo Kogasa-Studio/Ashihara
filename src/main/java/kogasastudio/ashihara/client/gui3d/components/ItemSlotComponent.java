@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.client.gui3d.components;
 
+import com.mojang.math.Axis;
 import kogasastudio.ashihara.client.gui3d.ContainerScreen3D;
 import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
 import kogasastudio.ashihara.client.gui3d.util.OBB;
@@ -9,10 +10,10 @@ import kogasastudio.ashihara.client.render.state.GUI3DComponentRenderState;
 import kogasastudio.ashihara.helper.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Vector3f;
 
 import java.util.Collections;
 import java.util.List;
@@ -36,7 +37,7 @@ import java.util.List;
 public class ItemSlotComponent extends ModelComponent implements ISelectable
 {
     /** 渲染 3D 物品时的缩放系数（在骨骼局部空间中）。可在实例上直接赋值覆盖。 */
-    public float itemRenderScale = 8.0f;
+    public float itemRenderScale = 0.45f;
 
     protected final String boneName;
     protected final Slot menuSlot;
@@ -101,24 +102,27 @@ public class ItemSlotComponent extends ModelComponent implements ISelectable
         output.add(new GUI3DComponentRenderState((poseStack, submitNodeCollector) ->
         {
             poseStack.pushPose();
-            poseStack.mulPose(obb.pose());
-            poseStack.scale(this.itemRenderScale, this.itemRenderScale, this.itemRenderScale);
-            poseStack.translate(-0.5f, -0.5f, -0.5f);
+            poseStack.last().pose().set(obb.pose());
+            Vector3f t = obb.maxXYZ().min(obb.minXYZ()).mul(1f);
+            poseStack.translate(t.x()+2.5/16, t.y()+2.5/16, t.z()+2.5/16);
+            poseStack.mulPose(Axis.YP.rotationDegrees(-90f));
+            poseStack.mulPose(Axis.XP.rotationDegrees(-90f));
+            poseStack.scale(-this.itemRenderScale, this.itemRenderScale, this.itemRenderScale);
 
+            poseStack.last().normal().identity();
             RenderHelper.renderItem
             (
                 poseStack,
                 submitNodeCollector,
                 stack,
-                ItemDisplayContext.FIXED,
+                ItemDisplayContext.GUI,
                 Minecraft.getInstance().level,
                 Minecraft.getInstance().player,
                 this.menuSlot.index,
-                0xF000F0,
+                15728880,
                 0,
                 0
             );
-
             poseStack.popPose();
         }));
     }
