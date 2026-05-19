@@ -3,6 +3,10 @@ package kogasastudio.ashihara.client.gui3d.components;
 import com.geckolib.animation.object.EasingType;
 import kogasastudio.ashihara.client.gui3d.util.OBB;
 import kogasastudio.ashihara.client.models.geo.SelectionFrameModel;
+import kogasastudio.ashihara.client.render.state.GUI3DComponentRenderState;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.network.chat.Component;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -18,7 +22,7 @@ import java.util.Locale;
  *   EXPANDING/EXPANDED → (onHoverExit) → CONTRACTING → (anim done, scale=0) → HIDDEN
  *   CONTRACTING → (onHoverEnter) → EXPANDING（从当前尺寸继续膨胀）
  */
-public class SelectionFrameComponent extends AbstractComponent
+public class SelectionFrameComponent extends ModelComponent
 {
     public enum FrameState { HIDDEN, EXPANDING, EXPANDED, CONTRACTING }
 
@@ -43,12 +47,11 @@ public class SelectionFrameComponent extends AbstractComponent
     }
 
     /** 默认动画时长（ticks）。可在实例上直接赋值以覆盖。 */
-    public double animDuration = 8.0d;
-    public double thickness = 1.0d;
+    public double animDuration = 0.5d;
+    public double thickness = 0.25d;
     public EasingType expandEasing  = EasingType.EASE_OUT_CUBIC;
     public EasingType contractEasing = EasingType.EASE_IN_CUBIC;
 
-    public final SelectionFrameModel frameModel;
     public final Matrix4f targetMatrix = new Matrix4f();
     public final Vector3f minBounds = new Vector3f();
     public final Vector3f maxBounds = new Vector3f();
@@ -57,20 +60,12 @@ public class SelectionFrameComponent extends AbstractComponent
 
     public SelectionFrameComponent(SelectionFrameModel model)
     {
-        super();
-        this.frameModel = model;
+        super(model, true);
+        ((SelectionFrameModel) this.model).setThickness(this.thickness);
         this.interactionPriority = -1000;
         this.enabled = false;
         this.visible = false;
         this.enableTick();
-    }
-
-    @Override
-    public void init()
-    {
-        super.init();
-        // 零初始化：所有棱缩放为0，位于原点
-        this.frameModel.syncFrame(new Vector3f(), new Vector3f());
     }
 
     @Override
@@ -83,23 +78,26 @@ public class SelectionFrameComponent extends AbstractComponent
         }
 
         // 收缩动画结束 → 隐藏
-        if (this.state == FrameState.CONTRACTING && this.frameModel.isInternalAnimFinished())
+        if (this.state == FrameState.CONTRACTING && this.model.hasAnimFinished(SelectionFrameModel.EXPAND))
         {
-            this.frameModel.syncFrame(this.minBounds, this.maxBounds);
             this.state = FrameState.HIDDEN;
             this.visible = false;
             return;
         }
 
         // 膨胀动画结束 → 进入稳定状态
-        if (this.state == FrameState.EXPANDING && this.frameModel.isInternalAnimFinished())
+        if (this.state == FrameState.EXPANDING && this.model.hasAnimFinished(SelectionFrameModel.EXPAND))
         {
             this.state = FrameState.EXPANDED;
         }
     }
 
-
-    // ---- 外部驱动接口 ----
+    @Override
+    public Object getRelatedObject()
+    {
+        return this.model;
+    }
+// ---- 外部驱动接口 ----
 
     /** 光标进入：从当前尺寸膨胀到OBB目标尺寸。使用默认 animDuration。 */
     public void onHoverEnter(List<OBB> obbs)
@@ -114,24 +112,22 @@ public class SelectionFrameComponent extends AbstractComponent
 
         // 合并所有OBB边界（以第一个OBB的矩阵为参考系）
         OBB ref = obbs.getFirst();
-        Vector3f min = new Vector3f(ref.minXYZ()).mul(16f);
-        Vector3f max = new Vector3f(ref.maxXYZ()).mul(16f);
+        Vector3f min = new Vector3f(ref.minXYZ());
+        Vector3f max = new Vector3f(ref.maxXYZ());
         for (int i = 1; i < obbs.size(); i++)
         {
-            min.min(obbs.get(i).minXYZ());
-            max.max(obbs.get(i).maxXYZ());
+            min.min(new Vector3f(obbs.get(i).minXYZ()));
+            max.max(new Vector3f(obbs.get(i).maxXYZ()));
         }
 
-        this.targetMatrix.set(ref.pose());
+        this.presetTransform = (ref.pose().scale(1, -1, 1));
         this.minBounds.set(min);
         this.maxBounds.set(max);
 
         // 从打断处的当前尺寸出发
-        float[] cur = this.frameModel.readCurrentEdgeScales();
-
-        this.frameModel.syncFrame(min, max);
-        this.frameModel.triggerFrameAnimation(min, max, cur[0], cur[1], cur[2], 1, 1, 1, duration, this.expandEasing);
-
+        ((SelectionFrameModel) this.model).setTarget(ref);
+        if (!this.model.hasAnimFinished(SelectionFrameModel.EXPAND)) this.model.triggerAnim(this.model.player, this.model.hashCode(), SelectionFrameModel.EXPAND, SelectionFrameModel.EXPAND);
+        else this.model.setAnimSpeed(SelectionFrameModel.EXPAND, 2d / duration);
         this.visible = true;
         this.state = FrameState.EXPANDING;
     }
@@ -142,41 +138,45 @@ public class SelectionFrameComponent extends AbstractComponent
         onHoverExit(this.animDuration);
     }
 
+    @Override
+    protected void collectSelfRenderStates(List<GUI3DComponentRenderState> output, int mouseX, int mouseY, float partialTick)
+    {
+        super.collectSelfRenderStates(output, mouseX, mouseY, partialTick);
+        output.add(new GUI3DComponentRenderState((poseStack, submitNodeCollector) ->
+        {
+            poseStack.pushPose();
+            poseStack.last().pose().set(this.presetTransform);
+            poseStack.last().normal().identity();
+            poseStack.scale(16f,-16f,16f);
+            poseStack.translate(0, 0, -16f);
+            submitNodeCollector.submitText(poseStack, 0, 0, Component.literal("ADASDWADAW").getVisualOrderText(), false, Font.DisplayMode.NORMAL, 15728880, 0xff9c86f2, 0, 0);
+            poseStack.popPose();
+        }));
+    }
+
     /** 光标离开：从当前尺寸收缩到0。使用自定义 duration。 */
     public void onHoverExit(double duration)
     {
+        this.model.setAnimSpeed(SelectionFrameModel.EXPAND, -2d / duration);
         if (this.state == FrameState.HIDDEN) return;
-
-        float[] cur = this.frameModel.readCurrentEdgeScales();
-        this.frameModel.syncFrame(this.minBounds, this.maxBounds);
-        this.frameModel.triggerFrameAnimation(
-            this.minBounds, this.maxBounds,
-            cur[0], cur[1], cur[2], 0, 0, 0,
-            duration, this.contractEasing
-        );
         this.state = FrameState.CONTRACTING;
     }
 
     /** 立即隐藏（不播放收缩动画，用于强制清除场景）。 */
     public void forceHide()
     {
-        this.frameModel.syncFrame(this.minBounds, this.maxBounds);
         this.state = FrameState.HIDDEN;
         this.visible = false;
     }
-
-    public FrameState getFrameState() { return this.state; }
 
     // ---- 调试 ----
 
     public String getDebugStateLine()
     {
-        float[] scales = this.frameModel.readCurrentEdgeScales();
         return String.format(Locale.ROOT,
-            "SelectionFrame state=%s vis=%s min=(%.3f,%.3f,%.3f) max=(%.3f,%.3f,%.3f) scale=(%.3f,%.3f,%.3f)",
+            "SelectionFrame state=%s vis=%s min=(%.3f,%.3f,%.3f) max=(%.3f,%.3f,%.3f)",
             this.state, this.visible,
             this.minBounds.x, this.minBounds.y, this.minBounds.z,
-            this.maxBounds.x, this.maxBounds.y, this.maxBounds.z,
-            scales[0], scales[1], scales[2]);
+            this.maxBounds.x, this.maxBounds.y, this.maxBounds.z);
     }
 }

@@ -5,7 +5,6 @@ import com.geckolib.constant.dataticket.DataTicket;
 import com.geckolib.renderer.GeoObjectRenderer;
 import com.geckolib.renderer.base.GeoRenderState;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
@@ -17,8 +16,7 @@ import java.util.function.BiConsumer;
 
 public record GUI3DComponentRenderState(
         BiConsumer<PoseStack, SubmitNodeCollector> submitRenderPass,
-        Map<DataTicket<?>, Object> dataMap,
-        Matrix4f presetTransform
+        Map<DataTicket<?>, Object> dataMap
 ) implements GeoRenderState
 {
     public static Map<DataTicket<?>, Object> newDataMap()
@@ -26,14 +24,9 @@ public record GUI3DComponentRenderState(
         return new Reference2ObjectOpenHashMap<>();
     }
 
-    public GUI3DComponentRenderState(BiConsumer<PoseStack, SubmitNodeCollector> submitRenderPass, Matrix4f presetTransform)
-    {
-        this(submitRenderPass, newDataMap(), presetTransform);
-    }
-
     public GUI3DComponentRenderState(BiConsumer<PoseStack, SubmitNodeCollector> submitRenderPass)
     {
-        this(submitRenderPass, new Matrix4f());
+        this(submitRenderPass, newDataMap());
     }
 
     @Override
@@ -70,8 +63,7 @@ public record GUI3DComponentRenderState(
                     partialTick
                 );
                 poseStack.popPose();
-            },
-            presetTransform
+            }
         );
     }
 

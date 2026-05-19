@@ -65,6 +65,27 @@ public abstract class InternalControlGeoModel<T extends SingletonGeoAnimatable> 
         this.RENDERER.clearBoneModifiers();
     }
 
+    public boolean hasAnimFinished(String controllerName)
+    {
+        AnimationController<?> controller = this.getAnimatableInstanceCache().getManagerForId(this.hashCode()).getAnimationControllers().get(controllerName);
+        if (controller == null) return false;
+        return controller.hasAnimationFinished();
+    }
+
+    public void setAnimSpeed(String controllerName, double speed)
+    {
+        AnimationController<?> controller = this.getAnimatableInstanceCache().getManagerForId(this.hashCode()).getAnimationControllers().get(controllerName);
+        if (controller == null) return;
+        controller.setAnimationSpeed(speed);
+    }
+
+    public void setAnimTime(String controllerName, double time)
+    {
+        AnimationController<?> controller = this.getAnimatableInstanceCache().getManagerForId(this.hashCode()).getAnimationControllers().get(controllerName);
+        if (controller == null) return;
+        controller.setAnimationTime(time);
+    }
+
     @Override
     @SuppressWarnings("UnstableApiUsage")
     public @Nullable Animation getBakedAnimation(T animatable, String name)

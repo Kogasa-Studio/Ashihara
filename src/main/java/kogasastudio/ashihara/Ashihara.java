@@ -23,6 +23,7 @@ public class Ashihara
     public static final String MODID = "ashihara";
     public static final Logger LOGGER_MAIN = LogUtils.getLogger();
     public static final RandomSource RANDOM = RandomSource.createThreadSafe();
+    public static final double TEST_VALUE = 0d;
 
     public static RandomSource getRandom() {return RANDOM;}
 
@@ -50,6 +51,7 @@ public class Ashihara
         DataComponentTypes.ATTACHMENT_TYPES.register(modEventBus);
         RecipeTypes.register(modEventBus);
         RecipeSerializers.register(modEventBus);
+        MolangValues.registerMolangValues();
         /*try
         {
             Map<Integer, GuideBook.Page> iMap = new HashMap<>();

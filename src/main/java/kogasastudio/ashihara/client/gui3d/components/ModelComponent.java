@@ -51,6 +51,11 @@ public class ModelComponent extends AbstractComponent
         this.presetTransform = transform;
     }
 
+    public Object getRelatedObject()
+    {
+        return null;
+    }
+
     @Override
     public void init()
     {
@@ -84,7 +89,7 @@ public class ModelComponent extends AbstractComponent
                 this.model,
                 this.model.RENDERER,
                 this.presetTransform,
-                null,
+                this.getRelatedObject(),
                 new CameraRenderState(),
                 15728880,
                 partialTick

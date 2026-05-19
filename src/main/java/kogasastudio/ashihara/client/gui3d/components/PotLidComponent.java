@@ -92,7 +92,7 @@ public class PotLidComponent extends AbstractComponent implements ISelectable
         boolean lidRemoved = this.modelComponent.toggleLid();
         if (this.toggleCallback != null) this.toggleCallback.accept(lidRemoved);
 
-        if (lidRemoved) this.selectionFrame.forceHide();
+        //if (lidRemoved) this.selectionFrame.forceHide();
 
         this.dragging = false;
         return true;
