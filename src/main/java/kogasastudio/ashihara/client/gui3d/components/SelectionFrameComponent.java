@@ -4,9 +4,7 @@ import com.geckolib.animation.object.EasingType;
 import kogasastudio.ashihara.client.gui3d.util.OBB;
 import kogasastudio.ashihara.client.models.geo.SelectionFrameModel;
 import kogasastudio.ashihara.client.render.state.GUI3DComponentRenderState;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
-import net.minecraft.network.chat.Component;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -52,17 +50,19 @@ public class SelectionFrameComponent extends ModelComponent
     public EasingType expandEasing  = EasingType.EASE_OUT_CUBIC;
     public EasingType contractEasing = EasingType.EASE_IN_CUBIC;
 
-    public final Matrix4f targetMatrix = new Matrix4f();
+    public Matrix4f targetMatrix = new Matrix4f();
     public final Vector3f minBounds = new Vector3f();
     public final Vector3f maxBounds = new Vector3f();
 
     protected FrameState state = FrameState.HIDDEN;
+    protected double animProgress = 0.0;
 
     public SelectionFrameComponent(SelectionFrameModel model)
     {
         super(model, true);
         ((SelectionFrameModel) this.model).setThickness(this.thickness);
         this.interactionPriority = -1000;
+        this.doTick = true;
         this.enabled = false;
         this.visible = false;
         this.enableTick();
@@ -72,23 +72,28 @@ public class SelectionFrameComponent extends ModelComponent
     public void tick()
     {
         super.tick();
-        if (!this.visible)
-        {
-            return;
-        }
+        if (!this.visible) return;
 
-        // 收缩动画结束 → 隐藏
-        if (this.state == FrameState.CONTRACTING && this.model.hasAnimFinished(SelectionFrameModel.EXPAND))
-        {
-            this.state = FrameState.HIDDEN;
-            this.visible = false;
-            return;
-        }
+        double delta = (1.0 / 20.0) / this.animDuration;
 
-        // 膨胀动画结束 → 进入稳定状态
-        if (this.state == FrameState.EXPANDING && this.model.hasAnimFinished(SelectionFrameModel.EXPAND))
+        if (this.state == FrameState.EXPANDING)
         {
-            this.state = FrameState.EXPANDED;
+            this.animProgress += delta;
+            if (this.animProgress >= 1.0)
+            {
+                this.animProgress = 1.0;
+                this.state = FrameState.EXPANDED;
+            }
+        }
+        else if (this.state == FrameState.CONTRACTING)
+        {
+            this.animProgress -= delta;
+            if (this.animProgress <= 0.0)
+            {
+                this.animProgress = 0.0;
+                this.state = FrameState.HIDDEN;
+                this.visible = false;
+            }
         }
     }
 
@@ -120,14 +125,20 @@ public class SelectionFrameComponent extends ModelComponent
             max.max(new Vector3f(obbs.get(i).maxXYZ()));
         }
 
-        this.presetTransform = (ref.pose().scale(1, -1, 1));
+        this.targetMatrix = new Matrix4f(ref.pose()).scale(1, 1, 1);
         this.minBounds.set(min);
         this.maxBounds.set(max);
 
-        // 从打断处的当前尺寸出发
         ((SelectionFrameModel) this.model).setTarget(ref);
-        if (!this.model.hasAnimFinished(SelectionFrameModel.EXPAND)) this.model.triggerAnim(this.model.player, this.model.hashCode(), SelectionFrameModel.EXPAND, SelectionFrameModel.EXPAND);
-        else this.model.setAnimSpeed(SelectionFrameModel.EXPAND, 2d / duration);
+
+        if (this.state == FrameState.HIDDEN || this.state == FrameState.EXPANDED)
+        {
+            this.animProgress = 0.0;
+            this.model.triggerAnim(this.model.player, this.model.hashCode(), SelectionFrameModel.EXPAND, SelectionFrameModel.EXPAND);
+        }
+
+        this.model.setAnimSpeed(SelectionFrameModel.EXPAND, 2.0 / duration);
+        this.animDuration = duration;
         this.visible = true;
         this.state = FrameState.EXPANDING;
     }
@@ -141,24 +152,37 @@ public class SelectionFrameComponent extends ModelComponent
     @Override
     protected void collectSelfRenderStates(List<GUI3DComponentRenderState> output, int mouseX, int mouseY, float partialTick)
     {
-        super.collectSelfRenderStates(output, mouseX, mouseY, partialTick);
-        output.add(new GUI3DComponentRenderState((poseStack, submitNodeCollector) ->
+        // presetTransform is derived from obb.pose() which already contains the PiP base matrix.
+        // Use set() to avoid doubling the PiP transform (ModelComponent's mul-based path would apply it twice).
+        if (this.renderModel && this.visible)
         {
-            poseStack.pushPose();
-            poseStack.last().pose().set(this.presetTransform);
-            poseStack.last().normal().identity();
-            poseStack.scale(16f,-16f,16f);
-            poseStack.translate(0, 0, -16f);
-            submitNodeCollector.submitText(poseStack, 0, 0, Component.literal("ADASDWADAW").getVisualOrderText(), false, Font.DisplayMode.NORMAL, 15728880, 0xff9c86f2, 0, 0);
-            poseStack.popPose();
-        }));
+            output.add(new GUI3DComponentRenderState((poseStack, submitNodeCollector) ->
+            {
+                poseStack.pushPose();
+                poseStack.last().pose().set(this.targetMatrix);
+                poseStack.translate(-0.5f, -0.5f, -0.5f);
+                poseStack.last().normal().identity();
+                this.model.RENDERER.performRenderPass
+                (
+                    this.model,
+                    this.getRelatedObject(),
+                    poseStack,
+                    submitNodeCollector,
+                    new CameraRenderState(),
+                    15728880,
+                    partialTick
+                );
+                poseStack.popPose();
+            }));
+        }
     }
 
     /** 光标离开：从当前尺寸收缩到0。使用自定义 duration。 */
     public void onHoverExit(double duration)
     {
-        this.model.setAnimSpeed(SelectionFrameModel.EXPAND, -2d / duration);
         if (this.state == FrameState.HIDDEN) return;
+        this.model.setAnimSpeed(SelectionFrameModel.EXPAND, -2.0 / duration);
+        this.animDuration = duration;
         this.state = FrameState.CONTRACTING;
     }
 
@@ -167,6 +191,7 @@ public class SelectionFrameComponent extends ModelComponent
     {
         this.state = FrameState.HIDDEN;
         this.visible = false;
+        this.animProgress = 0.0;
     }
 
     // ---- 调试 ----

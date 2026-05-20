@@ -103,7 +103,7 @@ public class ItemSlotComponent extends ModelComponent implements ISelectable
         {
             poseStack.pushPose();
             poseStack.last().pose().set(obb.pose());
-            Vector3f t = obb.maxXYZ().min(obb.minXYZ()).mul(1f);
+            Vector3f t = new Vector3f(obb.maxXYZ()).min(obb.minXYZ()).mul(1f);
             poseStack.translate(t.x()+2.5/16, t.y()+2.5/16, t.z()+2.5/16);
             poseStack.mulPose(Axis.YP.rotationDegrees(-90f));
             poseStack.mulPose(Axis.XP.rotationDegrees(-90f));
