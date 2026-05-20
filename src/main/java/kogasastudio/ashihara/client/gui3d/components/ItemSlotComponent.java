@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.client.gui3d.components;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import kogasastudio.ashihara.client.gui3d.ContainerScreen3D;
 import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
@@ -10,6 +11,7 @@ import kogasastudio.ashihara.client.render.state.GUI3DComponentRenderState;
 import kogasastudio.ashihara.helper.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -17,6 +19,7 @@ import org.joml.Vector3f;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 /**
  * 物品槽位组件。
@@ -80,6 +83,18 @@ public class ItemSlotComponent extends ModelComponent implements ISelectable
         return boxes.isEmpty() ? Collections.emptyList() : boxes;
     }
 
+    public BiConsumer<PoseStack, OBB> getItemTranslate()
+    {
+        return (poseStack, obb) ->
+        {
+            Vector3f t = new Vector3f(obb.maxXYZ()).min(obb.minXYZ()).mul(1f);
+            poseStack.translate(t.x()+2.5/16, t.y()+2.5/16, t.z()+2.5/16);
+            poseStack.mulPose(Axis.YP.rotationDegrees(-90f));
+            poseStack.mulPose(Axis.XP.rotationDegrees(-90f));
+            poseStack.scale(-this.itemRenderScale, this.itemRenderScale, this.itemRenderScale);
+        };
+    }
+
     // ── 渲染 ─────────────────────────────────────────────────────────────────
 
 
@@ -103,12 +118,7 @@ public class ItemSlotComponent extends ModelComponent implements ISelectable
         {
             poseStack.pushPose();
             poseStack.last().pose().set(obb.pose());
-            Vector3f t = new Vector3f(obb.maxXYZ()).min(obb.minXYZ()).mul(1f);
-            poseStack.translate(t.x()+2.5/16, t.y()+2.5/16, t.z()+2.5/16);
-            poseStack.mulPose(Axis.YP.rotationDegrees(-90f));
-            poseStack.mulPose(Axis.XP.rotationDegrees(-90f));
-            poseStack.scale(-this.itemRenderScale, this.itemRenderScale, this.itemRenderScale);
-
+            this.getItemTranslate().accept(poseStack, obb);
             poseStack.last().normal().identity();
             RenderHelper.renderItem
             (
@@ -120,7 +130,7 @@ public class ItemSlotComponent extends ModelComponent implements ISelectable
                 Minecraft.getInstance().player,
                 this.menuSlot.index,
                 15728880,
-                0,
+                OverlayTexture.NO_OVERLAY,
                 0
             );
             poseStack.popPose();
