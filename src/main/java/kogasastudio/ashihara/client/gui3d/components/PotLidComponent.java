@@ -60,10 +60,7 @@ public class PotLidComponent extends AbstractComponent implements ISelectable
     @Override
     protected void onHoverEnter()
     {
-        if (!this.modelComponent.isLidRemoved())
-        {
-            this.selectionFrame.onHoverEnter(this.getCollisionBoxes());
-        }
+        this.selectionFrame.onHoverEnter();
     }
 
     @Override

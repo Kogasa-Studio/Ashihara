@@ -150,8 +150,7 @@ public class ItemSlotComponent extends ModelComponent implements ISelectable
     @Override
     protected void onHoverEnter()
     {
-        List<OBB> boxes = this.getCollisionBoxes();
-        if (!boxes.isEmpty()) this.selectionFrame.onHoverEnter(boxes);
+        this.selectionFrame.onHoverEnter();
         if (this.screen instanceof ContainerScreen3D<?> cs)
         {
             cs.getContainerScreen().setHoveredSlot(this.menuSlot);

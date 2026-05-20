@@ -124,7 +124,7 @@ public class AbstractComponent
     {
         for (AbstractComponent child : this.children)
         {
-            if (child.ticks()) child.tick();
+            child.tick();
         }
     }
 

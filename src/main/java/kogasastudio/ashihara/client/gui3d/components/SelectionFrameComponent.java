@@ -45,17 +45,18 @@ public class SelectionFrameComponent extends ModelComponent
     }
 
     /** 默认动画时长（ticks）。可在实例上直接赋值以覆盖。 */
-    public double animDuration = 0.5d;
+    public double animDuration = 1d;
     public double thickness = 0.25d;
     public EasingType expandEasing  = EasingType.EASE_OUT_CUBIC;
     public EasingType contractEasing = EasingType.EASE_IN_CUBIC;
 
-    public Matrix4f targetMatrix = new Matrix4f();
     public final Vector3f minBounds = new Vector3f();
     public final Vector3f maxBounds = new Vector3f();
 
     protected FrameState state = FrameState.HIDDEN;
     protected double animProgress = 0.0;
+
+    private OBB targetOBB;
 
     public SelectionFrameComponent(SelectionFrameModel model)
     {
@@ -72,6 +73,7 @@ public class SelectionFrameComponent extends ModelComponent
     public void tick()
     {
         super.tick();
+        updateOBB();
         if (!this.visible) return;
 
         double delta = (1.0 / 20.0) / this.animDuration;
@@ -105,15 +107,19 @@ public class SelectionFrameComponent extends ModelComponent
 // ---- 外部驱动接口 ----
 
     /** 光标进入：从当前尺寸膨胀到OBB目标尺寸。使用默认 animDuration。 */
-    public void onHoverEnter(List<OBB> obbs)
+    public void onHoverEnter()
     {
-        onHoverEnter(obbs, this.animDuration);
+        onHoverEnter(this.animDuration);
     }
 
-    /** 光标进入：从当前尺寸膨胀到OBB目标尺寸。使用自定义 duration。 */
-    public void onHoverEnter(List<OBB> obbs, double duration)
+    private void updateOBB()
     {
-        if (obbs == null || obbs.isEmpty()) return;
+        List<OBB> obbs = this.parent.getCollisionBoxes();
+        if (obbs == null || obbs.isEmpty())
+        {
+            this.targetOBB = null;
+            return;
+        }
 
         // 合并所有OBB边界（以第一个OBB的矩阵为参考系）
         OBB ref = obbs.getFirst();
@@ -124,12 +130,17 @@ public class SelectionFrameComponent extends ModelComponent
             min.min(new Vector3f(obbs.get(i).minXYZ()));
             max.max(new Vector3f(obbs.get(i).maxXYZ()));
         }
+        this.targetOBB = new OBB(ref.center(), min, max, ref.pose());
+    }
 
-        this.targetMatrix = new Matrix4f(ref.pose()).scale(1, 1, 1);
-        this.minBounds.set(min);
-        this.maxBounds.set(max);
+    /** 光标进入：从当前尺寸膨胀到OBB目标尺寸。使用自定义 duration。 */
+    public void onHoverEnter(double duration)
+    {
+        updateOBB();
+        this.minBounds.set(this.targetOBB.minXYZ());
+        this.maxBounds.set(this.targetOBB.maxXYZ());
 
-        ((SelectionFrameModel) this.model).setTarget(ref);
+        ((SelectionFrameModel) this.model).setTarget(this.targetOBB);
 
         if (this.state == FrameState.HIDDEN || this.state == FrameState.EXPANDED)
         {
@@ -159,7 +170,7 @@ public class SelectionFrameComponent extends ModelComponent
             output.add(new GUI3DComponentRenderState((poseStack, submitNodeCollector) ->
             {
                 poseStack.pushPose();
-                poseStack.last().pose().set(this.targetMatrix);
+                poseStack.last().pose().set(this.targetOBB.pose());
                 poseStack.translate(-0.5f, -0.5f, -0.5f);
                 poseStack.last().normal().identity();
                 this.model.RENDERER.performRenderPass
@@ -191,6 +202,7 @@ public class SelectionFrameComponent extends ModelComponent
     {
         this.state = FrameState.HIDDEN;
         this.visible = false;
+        this.targetOBB = null;
         this.animProgress = 0.0;
     }
 
