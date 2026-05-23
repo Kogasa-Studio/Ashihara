@@ -5,6 +5,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidUtil;
+import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.world.level.block.Block.UPDATE_ALL;
 
@@ -20,6 +21,7 @@ public class BEFluidStackHandler<B extends BlockEntity> extends FluidStacksResou
 {
     public final B be;
     private final int capacityMb;
+    private final Runnable onChange;
 
     /**
      * Creates a single-slot fluid tank with the given capacity, backed by the supplied BE.
@@ -29,9 +31,15 @@ public class BEFluidStackHandler<B extends BlockEntity> extends FluidStacksResou
      */
     public BEFluidStackHandler(int capacityMb, B be)
     {
+        this(capacityMb, be, null);
+    }
+
+    public BEFluidStackHandler(int capacityMb, B be, @Nullable Runnable onChange)
+    {
         super(1, capacityMb);
         this.capacityMb = capacityMb;
         this.be = be;
+        this.onChange = onChange;
     }
 
     @Override
@@ -42,6 +50,7 @@ public class BEFluidStackHandler<B extends BlockEntity> extends FluidStacksResou
         {
             be.getLevel().sendBlockUpdated(be.getBlockPos(), be.getBlockState(), be.getBlockState(), UPDATE_ALL);
         }
+        if (onChange != null) onChange.run();
     }
 
     // ── Convenience accessors ─────────────────────────────────────────────────

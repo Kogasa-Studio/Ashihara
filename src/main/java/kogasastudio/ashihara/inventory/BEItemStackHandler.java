@@ -7,6 +7,7 @@ import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,23 +18,35 @@ import static net.minecraft.world.level.block.Block.UPDATE_ALL;
 public class BEItemStackHandler<B extends BlockEntity> extends ItemStacksResourceHandler
 {
     public final B be;
+    private final Runnable onChange;
 
     public BEItemStackHandler(B be)
     {
-        super(1);
-        this.be = be;
+        this(1, be, null);
     }
 
     public BEItemStackHandler(int size, B be)
     {
-        super(size);
-        this.be = be;
+        this(size, be, null);
     }
 
     public BEItemStackHandler(NonNullList<ItemStack> stacks, B be)
     {
+        this(stacks, be, null);
+    }
+
+    public BEItemStackHandler(int size, B be, @Nullable Runnable onChange)
+    {
+        super(size);
+        this.be = be;
+        this.onChange = onChange;
+    }
+
+    private BEItemStackHandler(NonNullList<ItemStack> stacks, B be, @Nullable Runnable onChange)
+    {
         super(stacks);
         this.be = be;
+        this.onChange = onChange;
     }
 
     @Override
@@ -41,6 +54,7 @@ public class BEItemStackHandler<B extends BlockEntity> extends ItemStacksResourc
     {
         be.setChanged();
         if (be.getLevel() != null) be.getLevel().sendBlockUpdated(be.getBlockPos(), be.getBlockState(), be.getBlockState(), UPDATE_ALL);
+        if (onChange != null) onChange.run();
     }
 
     public ItemStack getStackInSlot(int i)
@@ -78,6 +92,12 @@ public class BEItemStackHandler<B extends BlockEntity> extends ItemStacksResourc
                 remaining -= toConsume;
             }
         }
+    }
+
+    @Override
+    public boolean isValid(int index, ItemResource resource)
+    {
+        return super.isValid(index, resource);
     }
 
     /**

@@ -3,6 +3,7 @@ package kogasastudio.ashihara.registry;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.interaction.recipes.CuttingBoardRecipe;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
+import kogasastudio.ashihara.interaction.recipes.PotRecipe;
 import kogasastudio.ashihara.interaction.recipes.base.WrappedRecipe;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -18,6 +19,7 @@ public class RecipeTypes
 
     public static final Supplier<RecipeType<CuttingBoardRecipe>> CUTTING_BOARD = register("cutting_board");
     public static final Supplier<RecipeType<MortarRecipe>> MORTAR = register("mortar");
+    public static final Supplier<RecipeType<PotRecipe>> POT = register("pot");
     //public static final Supplier<RecipeType<MillRecipe>> MILL = register("mill");
 
     private static <TYPE extends WrappedRecipe<?, ?>> Supplier<RecipeType<TYPE>> register(String name)
