@@ -252,9 +252,9 @@ public class AbstractComponent
 
     protected HitPolicy resolveHitPolicy()
     {
-        return this.hitPolicy == HitPolicy.MIXED
+        return this.getHitPolicy() == HitPolicy.MIXED
             ? (this.isPenetrating() ? HitPolicy.PENETRATE : HitPolicy.BLOCK)
-            : this.hitPolicy;
+            : this.getHitPolicy();
     }
 
     public void setInteractionPriority(int interactionPriority)
@@ -318,45 +318,6 @@ public class AbstractComponent
         return nearest == Float.POSITIVE_INFINITY ? -1.0f : nearest;
     }
 
-    public boolean containsPoint(double mouseX, double mouseY)
-    {
-        if (!this.visible)
-        {
-            return false;
-        }
-
-        if (this.screen != null)
-        {
-            Ray ray = this.screen.createMouseRay(mouseX, mouseY);
-            return this.rayHitDistance(ray) >= 0.0f;
-        }
-
-        return false;
-        /*float[] bounds = this.getScreenBounds();
-        return bounds != null
-        && mouseX >= bounds[0]
-        && mouseX <= bounds[2]
-        && mouseY >= bounds[1]
-        && mouseY <= bounds[3];*/
-    }
-
-    @Nullable
-    public AbstractComponent findHitComponent(double mouseX, double mouseY)
-    {
-        if (this.screen == null)
-        {
-            return null;
-        }
-
-        HitResult hitResult = this.findTopHit(this.screen.createMouseRay(mouseX, mouseY));
-        if (hitResult == null)
-        {
-            return null;
-        }
-
-        return hitResult.policy() == HitPolicy.BLOCK ? hitResult.component() : null;
-    }
-
     @Nullable
     public HitResult findTopHit(Ray ray)
     {
@@ -365,6 +326,7 @@ public class AbstractComponent
             return null;
         }
 
+        HitResult nearestBlock     = null;
         HitResult nearestPenetrate = null;
 
         List<AbstractComponent> orderedChildren = new ArrayList<>(this.children);
@@ -372,14 +334,15 @@ public class AbstractComponent
         for (AbstractComponent child : orderedChildren)
         {
             HitResult childHit = child.findTopHit(ray);
-            if (childHit == null)
-            {
-                continue;
-            }
+            if (childHit == null) continue;
 
             if (childHit.policy() == HitPolicy.BLOCK)
             {
-                return childHit;
+                if (nearestBlock == null || childHit.t() < nearestBlock.t())
+                {
+                    nearestBlock = childHit;
+                }
+                continue;
             }
 
             if (nearestPenetrate == null || childHit.t() < nearestPenetrate.t())
@@ -396,17 +359,19 @@ public class AbstractComponent
                 HitResult selfHit = HitResult.of(this, t, ray.origin(), ray.direction(), this.resolveHitPolicy());
                 if (selfHit.policy() == HitPolicy.BLOCK)
                 {
-                    return selfHit;
+                    if (nearestBlock == null || t < nearestBlock.t())
+                    {
+                        nearestBlock = selfHit;
+                    }
                 }
-
-                if (nearestPenetrate == null || selfHit.t() < nearestPenetrate.t())
+                else if (nearestPenetrate == null || t < nearestPenetrate.t())
                 {
                     nearestPenetrate = selfHit;
                 }
             }
         }
 
-        return nearestPenetrate;
+        return nearestBlock != null ? nearestBlock : nearestPenetrate;
     }
 
     public void clearHoverState()

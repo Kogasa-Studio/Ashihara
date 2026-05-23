@@ -25,7 +25,12 @@ public class ObbInterSector
 
         Vector4f dirWorld = new Vector4f(ray.direction(), 0.0f);  // Homogeneous coordinates (w==0)
         Vector4f dirLocal = new Vector4f(dirWorld).mul(invPose);  // local direction
-        Vector3f rayDirLocal = new Vector3f(dirLocal.x, dirLocal.y, dirLocal.z).normalize();// 4. 局部空间中，OBB是轴对齐的AABB（范围：minXYZ ~ maxXYZ）
+        // Normalise for numerical stability in the slab test, then divide result back to world-space.
+        // t_world = t_normalised / |dirUnscaled|
+        Vector3f dirUnscaled  = new Vector3f(dirLocal.x, dirLocal.y, dirLocal.z);
+        float    dirScale     = dirUnscaled.length();
+        if (dirScale < 1e-12f) return -1;
+        Vector3f rayDirLocal  = dirUnscaled.div(dirScale);
         Vector3f aabbMin = obb.minXYZ();
         Vector3f aabbMax = obb.maxXYZ();
 
@@ -86,7 +91,7 @@ public class ObbInterSector
 
         // 6. 判断有效交集（t>0表示在射线前方）
         if (tMin < tMax && tMax > 0) {
-            return Math.max(tMin, 0f);  // 取t≥0（射线起点在OBB内部时t为负）
+            return Math.max(tMin, 0f) / dirScale;  // Convert local t back to world-space t
         }
         return -1;
     }
