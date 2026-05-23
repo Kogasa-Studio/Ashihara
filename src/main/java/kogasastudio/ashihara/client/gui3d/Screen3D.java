@@ -157,8 +157,8 @@ public abstract class Screen3D extends Screen
 
         return new Ray
         (
-            new Vector3f(pipPixelX, pipPixelY, -2000.0f),
-            new Vector3f(0.0f, 0.0f, 1.0f)
+            new Vector3f(pipPixelX, pipPixelY, 2000.0f),
+            new Vector3f(0.0f, 0.0f, -1.0f)
         );
     }
 

@@ -3,6 +3,7 @@ package kogasastudio.ashihara.client.gui3d.components;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import kogasastudio.ashihara.client.gui3d.ContainerScreen3D;
+import kogasastudio.ashihara.client.gui3d.interaction.HitPolicy;
 import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
 import kogasastudio.ashihara.client.gui3d.util.OBB;
 import kogasastudio.ashihara.client.models.geo.SelectionFrameModel;
@@ -95,7 +96,19 @@ public class ItemSlotComponent extends ModelComponent implements ISelectable
         };
     }
 
-    // ── 渲染 ─────────────────────────────────────────────────────────────────
+    @Override
+    protected boolean isPenetrating()
+    {
+        if (this.menuSlot.getItem().isEmpty()) return true;
+        return super.isPenetrating();
+    }
+
+    @Override
+    public HitPolicy getHitPolicy()
+    {
+        return HitPolicy.MIXED;
+    }
+// ── 渲染 ─────────────────────────────────────────────────────────────────
 
 
     @Override

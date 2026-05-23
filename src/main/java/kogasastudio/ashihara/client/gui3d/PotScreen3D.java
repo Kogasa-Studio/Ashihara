@@ -2,10 +2,8 @@ package kogasastudio.ashihara.client.gui3d;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.client.gui3d.components.ItemSlotComponent;
-import kogasastudio.ashihara.client.gui3d.components.PlayerInventoryComponent;
 import kogasastudio.ashihara.client.gui3d.components.PotLidComponent;
 import kogasastudio.ashihara.client.gui3d.components.PotModelComponent;
-import kogasastudio.ashihara.client.models.geo.PlayerInventoryModel;
 import kogasastudio.ashihara.client.models.geo.PotModel;
 import kogasastudio.ashihara.inventory.container.PotMenu;
 import net.minecraft.client.Minecraft;
@@ -27,10 +25,8 @@ import org.joml.Matrix4f;
 public class PotScreen3D extends ContainerScreen3D<PotScreen>
 {
     public static PotModel potModel = new PotModel("block/pot", "textures/block/pot.png", "gui/pot", Minecraft.getInstance().player);
-    public static PlayerInventoryModel playerInventoryModel = new PlayerInventoryModel("player_inventory", "textures/gui/player_inventory.png", "gui/player_inventory", Minecraft.getInstance().player);
     public static final Identifier INV_BG = Identifier.fromNamespaceAndPath(Ashihara.MODID, "textures/gui/player_inventory.png");
     protected PotModelComponent potModelComponent;
-    protected PlayerInventoryComponent playerInventoryComponent;
     protected PotMenu menu;
     protected Inventory playerInventory;
     private static final int INV_BG_WIDTH = 176;
@@ -78,16 +74,11 @@ public class PotScreen3D extends ContainerScreen3D<PotScreen>
             );
             this.potModelComponent.addChild(slot);
         }
+        ItemSlotComponent output = new ItemSlotComponent(this.potModelComponent.getModel(), "item_slot_4", this.menu.getSlot(4));
 
-        this.playerInventoryComponent = new PlayerInventoryComponent(
-        playerInventoryModel,
-        this.playerInventory,
-        new Matrix4f().translate(-8.0f, 2.1f, 0f).scale(16.0f, -16.0f, 16.0f)
-        );
+        this.potModelComponent.addChild(output);
 
         this.addComponent(this.potModelComponent);
-        //this.addComponent(this.playerInventoryComponent);
-        this.playerInventoryComponent.getModel().triggerAnim(this.playerInventoryComponent.getModel().player, this.playerInventoryComponent.getModel().hashCode(), "intro", "intro");
 
         super.init();
     }

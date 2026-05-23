@@ -102,6 +102,23 @@
 					}
 				}
 			}
+		},
+		"fluid_livel_sync": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.5,
+			"bones": {
+				"fluid_display": {
+					"scale": {
+						"0.0": {
+							"vector": [1, "pot.fluid_level_cur", 1]
+						},
+						"0.5": {
+							"vector": [1, "pot.fluid_level_tgt", 1],
+							"easing": "easeOutExpo"
+						}
+					}
+				}
+			}
 		}
 	}
 }
