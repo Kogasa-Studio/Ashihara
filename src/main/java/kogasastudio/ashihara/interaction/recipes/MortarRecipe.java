@@ -130,16 +130,6 @@ public class MortarRecipe extends WrappedRecipe<MortarRecipe, MortarBE>
         return RecipeTypes.MORTAR.get();
     }
 
-    public boolean canCraftInDimensions(int width, int height)
-    {
-        return width * height >= this.input.size();
-    }
-
-    public @NotNull ItemStack getResultItem()
-    {
-        return this.output.get(0).copy();
-    }
-
     @Override
     public @NotNull ItemStack assemble(@NotNull BERecipeInput input)
     {

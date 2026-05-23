@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.inventory.container;
 
 import kogasastudio.ashihara.inventory.BEItemStackHandler;
+import kogasastudio.ashihara.inventory.SlotFactory;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -39,9 +40,15 @@ public abstract class AshiharaCommonContainer extends AbstractContainerMenu
 
     protected int addSlotRange(BEItemStackHandler<?> inventory, int index, int x, int y, int amount, int dx)
     {
+        return addSlotRange(inventory, index, x, y, amount, dx,
+            (inv, idx, sx, sy) -> new ResourceHandlerSlot(inv, inv::set, idx, sx, sy));
+    }
+
+    protected int addSlotRange(BEItemStackHandler<?> inventory, int index, int x, int y, int amount, int dx, SlotFactory factory)
+    {
         for (int i = 0; i < amount; i++)
         {
-            addSlot(new ResourceHandlerSlot(inventory, inventory::set, index, x, y));
+            addSlot(factory.create(inventory, index, x, y));
             x += dx;
             index += 1;
         }
@@ -71,9 +78,15 @@ public abstract class AshiharaCommonContainer extends AbstractContainerMenu
 
     protected void addSlotBox(BEItemStackHandler<?> inventory, int index, int x, int y, int horAmount, int dx, int verAmount, int dy)
     {
+        addSlotBox(inventory, index, x, y, horAmount, dx, verAmount, dy,
+            (inv, idx, sx, sy) -> new ResourceHandlerSlot(inv, inv::set, idx, sx, sy));
+    }
+
+    protected void addSlotBox(BEItemStackHandler<?> inventory, int index, int x, int y, int horAmount, int dx, int verAmount, int dy, SlotFactory factory)
+    {
         for (int j = 0; j < verAmount; j++)
         {
-            index = addSlotRange(inventory, index, x, y, horAmount, dx);
+            index = addSlotRange(inventory, index, x, y, horAmount, dx, factory);
             y += dy;
         }
     }

@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.inventory.container;
 
 import kogasastudio.ashihara.block.blockentity.PotBlockEntity;
+import kogasastudio.ashihara.inventory.OutputSlot;
 import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.registry.MenuTypes;
 import net.minecraft.network.FriendlyByteBuf;
@@ -20,7 +21,8 @@ import java.util.Objects;
  * <p>槽位布局：
  * <ul>
  *   <li>0-3：{@link PotBlockEntity} 的 4 个食材槽</li>
- *   <li>4-39：玩家物品栏（36 格）</li>
+ *   <li>4: 1个产物槽</li>
+ *   <li>5-40：玩家物品栏（36 格）</li>
  * </ul>
  *
  * <p>ContainerData（索引）：
@@ -33,8 +35,9 @@ public class PotMenu extends AshiharaCommonContainer
 {
     /** BE 食材槽数量。 */
     public static final int INGREDIENT_SLOTS = 4;
+    public static final int OUTPUT_SLOT = 1;
     /** 玩家槽位起始索引。 */
-    public static final int PLAYER_SLOT_START = INGREDIENT_SLOTS;
+    public static final int PLAYER_SLOT_START = 5;
 
     public final PotBlockEntity blockEntity;
 
@@ -57,6 +60,8 @@ public class PotMenu extends AshiharaCommonContainer
 
         // 食材槽 0-3
         this.addSlotRange(be.inventory, 0, 0, 0, INGREDIENT_SLOTS, 0);
+
+        this.addSlot(new OutputSlot(be.output, be.output::set, 0, 0, 18));
 
         // 玩家物品栏（背包 + 快捷栏）
         this.layoutPlayerInventorySlots(playerInventory, 8, 84);
@@ -109,6 +114,11 @@ public class PotMenu extends AshiharaCommonContainer
         if (index < INGREDIENT_SLOTS)
         {
             // BE 槽 → 玩家物品栏
+            if (!this.moveItemStackTo(stack, PLAYER_SLOT_START, this.slots.size(), true))
+                return ItemStack.EMPTY;
+        }
+        else if (index == 4)
+        {
             if (!this.moveItemStackTo(stack, PLAYER_SLOT_START, this.slots.size(), true))
                 return ItemStack.EMPTY;
         }
