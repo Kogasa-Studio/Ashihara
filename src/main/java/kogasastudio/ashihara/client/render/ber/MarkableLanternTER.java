@@ -1,31 +1,21 @@
-package kogasastudio.ashihara.client.render.ter;
+package kogasastudio.ashihara.client.render.ber;
 
-import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import com.mojang.math.Transformation;
 import kogasastudio.ashihara.block.blockentity.MarkableLanternBE;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import org.joml.Matrix4f;
-import org.joml.Matrix4fc;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import com.geckolib.util.RenderUtil;
-import org.lwjgl.glfw.GLFW;
 
-import static kogasastudio.ashihara.block.MarkableHangingLanternBlock.FACING;
-import static kogasastudio.ashihara.helper.BlockActionHelper.getRotationByFacing;
 import static kogasastudio.ashihara.helper.RenderHelper.buildMatrix;
 
 public class MarkableLanternTER implements BlockEntityRenderer<MarkableLanternBE, BlockEntityRenderState>

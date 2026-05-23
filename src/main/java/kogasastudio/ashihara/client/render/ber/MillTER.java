@@ -1,4 +1,4 @@
-package kogasastudio.ashihara.client.render.ter;
+package kogasastudio.ashihara.client.render.ber;
 
 public class MillTER //implements BlockEntityRenderer<MillBE>
 {

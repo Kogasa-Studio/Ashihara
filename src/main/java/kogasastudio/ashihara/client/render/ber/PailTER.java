@@ -1,9 +1,7 @@
-package kogasastudio.ashihara.client.render.ter;
+package kogasastudio.ashihara.client.render.ber;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import kogasastudio.ashihara.block.blockentity.PailBE;
-import kogasastudio.ashihara.helper.RenderHelper;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;

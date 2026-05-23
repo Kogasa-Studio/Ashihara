@@ -1,18 +1,15 @@
-package kogasastudio.ashihara.client.render.ter;
+package kogasastudio.ashihara.client.render.ber;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import kogasastudio.ashihara.block.blockentity.CuttingBoardBE;
 import kogasastudio.ashihara.client.render.SectionRenderContext;
 import kogasastudio.ashihara.client.render.WithLevelRenderer;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
-import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
