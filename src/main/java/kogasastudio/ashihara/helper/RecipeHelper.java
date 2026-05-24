@@ -7,7 +7,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -19,22 +18,19 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>
  * Uses {@link net.minecraft.world.item.crafting.RecipeManager#recipeMap()} → {@link net.minecraft.world.item.crafting.RecipeMap#byType(RecipeType)}
  * which is the approach used by Mekanism in {@code MekanismRecipeType.getRecipesUncached()}.
- * This avoids streaming all recipes and then filtering by type (O(n) → O(1) map lookup).
  * <p>
  * In 1.21, recipes are server-side only. For client access, this helper maintains a
- * client-side cache populated via {@code SyncRecipesPayload} from the server.
+ * client-side cache populated via NeoForge's {@code OnDatapackSyncEvent} →
+ * {@code RecipesReceivedEvent} pipeline.
  */
 public class RecipeHelper
 {
-    /** Client-side recipe cache populated by SyncRecipesPayload. */
+    /** Client-side recipe cache populated by RecipesReceivedEvent. */
     private static final Map<RecipeType<?>, List<RecipeHolder<?>>> CLIENT_RECIPES = new ConcurrentHashMap<>();
 
-    /** Server-side recipe cache for sending to clients on login. */
-    private static final Map<RecipeType<?>, List<RecipeHolder<?>>> SERVER_CACHE = new ConcurrentHashMap<>();
-
     /**
-     * Returns all registered recipes of the given type, or an empty collection if the level
-     * is null or not a server level (i.e. recipes are not accessible client-side via recipeAccess).
+     * Returns all registered recipes of the given type, or an empty collection if on client
+     * and the cache hasn't been populated yet.
      *
      * @param level the current world
      * @param type  the recipe type to query
@@ -43,19 +39,14 @@ public class RecipeHelper
      * @return typed collection of recipe holders; never null
      */
     @SuppressWarnings("unchecked")
-    public static <I extends RecipeInput, T extends Recipe<I>> Collection<RecipeHolder<T>> getRecipesByType(Level level, RecipeType<T> type)
+    public static <I extends RecipeInput, T extends Recipe<I>> Collection<RecipeHolder<T>> getRecipesByType(
+            Level level, RecipeType<T> type)
     {
         if (level instanceof ServerLevel serverLevel)
         {
-            var recipes = serverLevel.recipeAccess().recipeMap().byType(type);
-            // Cache for client sync
-            if (!recipes.isEmpty())
-            {
-                SERVER_CACHE.put(type, (List<RecipeHolder<?>>) (List<?>) List.copyOf(recipes));
-            }
-            return recipes;
+            return serverLevel.recipeAccess().recipeMap().byType(type);
         }
-        // Client side: check local cache
+        // Client side: check local cache (populated by RecipesReceivedEvent)
         List<RecipeHolder<?>> cached = CLIENT_RECIPES.get(type);
         if (cached != null)
         {
@@ -65,19 +56,11 @@ public class RecipeHelper
     }
 
     /**
-     * Called on client when SyncRecipesPayload is received.
+     * Called on client when RecipesReceivedEvent fires.
      */
     public static void cacheClientRecipes(RecipeType<?> type, List<RecipeHolder<?>> recipes)
     {
         CLIENT_RECIPES.put(type, List.copyOf(recipes));
-    }
-
-    /**
-     * Returns the server-side cached recipes to be sent to a newly connected client.
-     */
-    public static Map<RecipeType<?>, List<RecipeHolder<?>>> getServerCachedRecipes()
-    {
-        return Map.copyOf(SERVER_CACHE);
     }
 
     private RecipeHelper() {}

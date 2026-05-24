@@ -105,7 +105,7 @@ public class MortarBlock extends Block implements EntityBlock
             te.pushLastLiquidLevel();
             if (FluidHelper.notifyFluidTankInteraction(player, handIn, te.fluidTank, pos))
             {
-                te.switchFluid.switchRender(player);
+                //te.switchFluid.switchRender(player);
                 player.getInventory().setChanged();
                 te.setChanged();
                 te.updateBlock();

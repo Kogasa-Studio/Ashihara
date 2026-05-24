@@ -1,18 +1,9 @@
 package kogasastudio.ashihara.block.blockentity;
 
-import com.geckolib.animation.object.EasingType;
-import com.geckolib.animation.object.LoopType;
-import com.geckolib.cache.model.GeoBone;
-import com.geckolib.renderer.base.GeoRenderState;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.block.blockentity.util.RenderAutoSwitch;
-import kogasastudio.ashihara.block.blockentity.util.RenderSwitch;
 import kogasastudio.ashihara.block.blockentity.util.ToolTipController;
-import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
-import kogasastudio.ashihara.client.models.geo.InternalControlGeoModel;
-import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
 import kogasastudio.ashihara.client.models.geo.UIPanelModel;
 import kogasastudio.ashihara.helper.ParticleHelper;
 import kogasastudio.ashihara.helper.RecipeHelper;
@@ -23,7 +14,6 @@ import kogasastudio.ashihara.item.Otsuchi;
 import kogasastudio.ashihara.registry.Items;
 import kogasastudio.ashihara.registry.RecipeTypes;
 import kogasastudio.ashihara.registry.BlockEntities;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
@@ -57,9 +47,9 @@ import java.util.function.Predicate;
 import static net.minecraft.world.level.block.Block.UPDATE_ALL;
 import static net.minecraft.world.level.block.Block.popResource;
 
-public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IRenderInWorldToolTip
+public class MortarBE extends AshiharaMachineBE implements IRenderInWorldToolTip
 {
-    public final RenderSwitch switchFluid = new RenderAutoSwitch
+    /*public final RenderSwitch switchFluid = new RenderAutoSwitch
     (
         p ->
         {
@@ -77,20 +67,9 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
         p -> this.setNeedBlockUpdate(),
         this::stillTransiting,
         () -> !this.stillTransiting()
-    );
+    );*/
     public BEFluidStackHandler<MortarBE> fluidTank = new BEFluidStackHandler<>(16000, this);
 
-    public SimpleInternalControlGeoModel item_display_positions;
-    public Map<String, BoneTracer> boneTracers = new LinkedHashMap<>();
-    public final BoneTracer level0 = createTracer("level0");
-    public final BoneTracer level1 = createTracer("level1");
-    public final BoneTracer level2 = createTracer("level2");
-    public final BoneTracer level3 = createTracer("level3");
-    public final BoneTracer level4 = createTracer("level4");
-    public final BoneTracer level5 = createTracer("level5");
-    public final BoneTracer level6 = createTracer("level6");
-    public final BoneTracer level7 = createTracer("level7");
-    public SimpleInternalControlGeoModel fluid_display_position;
     public UIPanelModel ui_panel_model;
     public ToolTipController<MortarBE> toolTipController;
 
@@ -106,19 +85,6 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
     public MortarBE(BlockPos pos, BlockState state)
     {
         super(BlockEntities.MORTAR_BE.get(), pos, state);
-        this.item_display_positions = new SimpleInternalControlGeoModel("assistance/mortar_item_display_loc", "textures/geo/empty.png", Minecraft.getInstance().player);
-        this.fluid_display_position = new SimpleInternalControlGeoModel("assistance/mortar_fluid_display_loc", "textures/geo/empty.png", Minecraft.getInstance().player);
-        for (BoneTracer tracer : boneTracers.values())
-        {
-            this.item_display_positions.getRendererPoseSync().ashihara_1_21$addTracer(tracer);
-        }
-    }
-
-    private BoneTracer createTracer(String name)
-    {
-        BoneTracer tracer = new BoneTracer(b -> b.name().equals(name));
-        boneTracers.put(name, tracer);
-        return tracer;
     }
 
     @Override
@@ -131,12 +97,6 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
     public void pushLastLiquidLevel()
     {
         this.lastLiquidLevel = (float) getLiquidLevel();
-    }
-
-    public boolean stillTransiting()
-    {
-        Optional<GeoBone> b = this.fluid_display_position.getBakedModel(this.fluid_display_position.getModelResource(new GeoRenderState.Impl(Map.of()))).getBone("main");
-        return b.isPresent() && (Math.abs(/*b.get().getPosY()*/ - this.getLiquidLevel()) > 0.001);
     }
 
     /**
@@ -296,12 +256,6 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
             queueList.add(type);
         }
         super.saveAdditional(output);
-    }
-
-    @Override
-    public RenderSwitch getSwitch()
-    {
-        return this.switchFluid;
     }
 
     @Override

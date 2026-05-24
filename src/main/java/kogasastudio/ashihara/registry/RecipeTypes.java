@@ -11,11 +11,14 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class RecipeTypes
 {
     private static final DeferredRegister<RecipeType<?>> TYPES = DeferredRegister.create(BuiltInRegistries.RECIPE_TYPE, Ashihara.MODID);
+    public static List<RecipeType<?>> VALUES = new ArrayList<>();
 
     public static final Supplier<RecipeType<CuttingBoardRecipe>> CUTTING_BOARD = register("cutting_board");
     public static final Supplier<RecipeType<MortarRecipe>> MORTAR = register("mortar");
