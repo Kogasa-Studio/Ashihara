@@ -36,13 +36,7 @@ public interface WithLevelRenderer<T extends BlockEntity>
     static void resetToBlock000(BlockPos pos, PoseStack poseStack)
     {
         poseStack.setIdentity();
-        if (ModList.get().isLoaded("sodium"))
-        {
-            poseStack.translate(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
-        } else
-        {
-            poseStack.translate(pos.getX(), pos.getY(), pos.getZ());
-        }
+        poseStack.translate(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
     }
 
     
