@@ -8,9 +8,9 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 
-public class PailTER implements BlockEntityRenderer<PailBE, BlockEntityRenderState>
+public class PailBER implements BlockEntityRenderer<PailBE, BlockEntityRenderState>
 {
-    public PailTER(BlockEntityRendererProvider.Context rendererDispatcherIn)
+    public PailBER(BlockEntityRendererProvider.Context rendererDispatcherIn)
     {
     }
 

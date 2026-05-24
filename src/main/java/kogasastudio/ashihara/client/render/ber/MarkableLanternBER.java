@@ -18,11 +18,11 @@ import org.joml.Vector3f;
 
 import static kogasastudio.ashihara.helper.RenderHelper.buildMatrix;
 
-public class MarkableLanternTER implements BlockEntityRenderer<MarkableLanternBE, BlockEntityRenderState>
+public class MarkableLanternBER implements BlockEntityRenderer<MarkableLanternBE, BlockEntityRenderState>
 {
     private static RandomSource RANDOM = RandomSource.create(432L);
 
-    public MarkableLanternTER(BlockEntityRendererProvider.Context dispatcher)
+    public MarkableLanternBER(BlockEntityRendererProvider.Context dispatcher)
     {
     }
 
@@ -123,7 +123,7 @@ public class MarkableLanternTER implements BlockEntityRenderer<MarkableLanternBE
     @Override
     public void submit(BlockEntityRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera)
     {
-        submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.dragonRays(), MarkableLanternTER::renderRays);
+        submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.dragonRays(), MarkableLanternBER::renderRays);
     }
 
     @Override

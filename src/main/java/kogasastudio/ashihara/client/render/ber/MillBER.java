@@ -1,11 +1,11 @@
 package kogasastudio.ashihara.client.render.ber;
 
-public class MillTER //implements BlockEntityRenderer<MillBE>
+public class MillBER //implements BlockEntityRenderer<MillBE>
 {
     /*private static final ResourceLocation tex = new ResourceLocation("ashihara:textures/block/mill_stone.png");
     private final MillStoneModel millStone;
 
-    public MillTER(BlockEntityRendererProvider.Context rendererDispatcherIn)
+    public MillBER(BlockEntityRendererProvider.Context rendererDispatcherIn)
     {
         this.millStone = new MillStoneModel(rendererDispatcherIn.bakeLayer(LayerRegistryHandler.MILL_STONE));
     }

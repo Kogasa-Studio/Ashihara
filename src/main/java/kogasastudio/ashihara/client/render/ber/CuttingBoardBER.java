@@ -19,9 +19,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import static kogasastudio.ashihara.block.CuttingBoardBlock.FACING;
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 
-public class CuttingBoardTER implements BlockEntityRenderer<CuttingBoardBE, BlockEntityRenderState>, WithLevelRenderer<CuttingBoardBE>
+public class CuttingBoardBER implements BlockEntityRenderer<CuttingBoardBE, BlockEntityRenderState>, WithLevelRenderer<CuttingBoardBE>
 {
-    public CuttingBoardTER(BlockEntityRendererProvider.Context rendererDispatcherIn)
+    public CuttingBoardBER(BlockEntityRendererProvider.Context rendererDispatcherIn)
     {
     }
 

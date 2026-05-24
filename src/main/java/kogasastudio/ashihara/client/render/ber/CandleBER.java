@@ -16,10 +16,10 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.model.data.ModelData;
 
-public class CandleTER implements BlockEntityRenderer<CandleBE, BlockEntityRenderState>, WithLevelRenderer<CandleBE>
+public class CandleBER implements BlockEntityRenderer<CandleBE, BlockEntityRenderState>, WithLevelRenderer<CandleBE>
 {
     //public static final CandleModel candleSingle = new CandleModel(Minecraft.getInstance().getEntityModels().bakeLayer(LayerRegistryHandler.CANDLE));
-    public CandleTER(BlockEntityRendererProvider.Context dispatcherIn)
+    public CandleBER(BlockEntityRendererProvider.Context dispatcherIn)
     {
     }
 

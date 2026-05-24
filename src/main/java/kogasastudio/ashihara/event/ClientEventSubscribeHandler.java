@@ -72,13 +72,13 @@ public class ClientEventSubscribeHandler
     @SubscribeEvent
     public static void onTERBind(EntityRenderersEvent.RegisterRenderers event)
     {
-        event.registerBlockEntityRenderer(BlockEntities.MARKABLE_LANTERN_BE.get(), MarkableLanternTER::new);
-        event.registerBlockEntityRenderer(BlockEntities.PAIL_BE.get(), PailTER::new);
-        event.registerBlockEntityRenderer(BlockEntities.CANDLE_BE.get(), CandleTER::new);
+        event.registerBlockEntityRenderer(BlockEntities.MARKABLE_LANTERN_BE.get(), MarkableLanternBER::new);
+        event.registerBlockEntityRenderer(BlockEntities.PAIL_BE.get(), PailBER::new);
+        event.registerBlockEntityRenderer(BlockEntities.CANDLE_BE.get(), CandleBER::new);
         event.registerBlockEntityRenderer(BlockEntities.MULTI_BUILT_BLOCKENTITY.get(), MultiBuiltBlockRenderer::new);
         event.registerBlockEntityRenderer(BlockEntities.CHARLOTTE_BE.get(), CharlotteBER::new);
-        event.registerBlockEntityRenderer(BlockEntities.MORTAR_BE.get(), MortarTER::new);
-        event.registerBlockEntityRenderer(BlockEntities.CUTTING_BOARD_BE.get(), CuttingBoardTER::new);
+        event.registerBlockEntityRenderer(BlockEntities.MORTAR_BE.get(), MortarBER::new);
+        event.registerBlockEntityRenderer(BlockEntities.CUTTING_BOARD_BE.get(), CuttingBoardBER::new);
     }
 
     // TODO(migration): PailModel 注册需迁移到 ModelEvent.RegisterAdditional 或 UnbakedModelLoader

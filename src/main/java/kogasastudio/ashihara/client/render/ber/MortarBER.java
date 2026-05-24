@@ -23,7 +23,6 @@ import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -34,7 +33,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
-public class MortarTER implements BlockEntityRenderer<MortarBE, BlockEntityRenderState>, WithLevelRenderer<MortarBE>, InWorldToolTipBER<MortarBE>
+public class MortarBER implements BlockEntityRenderer<MortarBE, BlockEntityRenderState>, WithLevelRenderer<MortarBE>, InWorldToolTipBER<MortarBE>
 {
     public SimpleInternalControlGeoModel item_display_positions;
     public Map<String, BoneTracer> boneTracers = new LinkedHashMap<>();
@@ -51,7 +50,7 @@ public class MortarTER implements BlockEntityRenderer<MortarBE, BlockEntityRende
     private final ItemModelResolver itemModelResolver;
     private float partialTicks = 0f;
 
-    public MortarTER(BlockEntityRendererProvider.Context context)
+    public MortarBER(BlockEntityRendererProvider.Context context)
     {
         this.itemModelResolver = context.itemModelResolver();
         this.item_display_positions = new SimpleInternalControlGeoModel("assistance/mortar_item_display_loc", "textures/geo/empty.png", Minecraft.getInstance().player);
