@@ -35,8 +35,7 @@ public class PotLidComponent extends AbstractComponent implements ISelectable
 
         SelectionFrameModel frameModel = new SelectionFrameModel(
             "assistance/cubic_selection_frame",
-            "textures/geo/highlight_outline.png",
-            Minecraft.getInstance().player
+            "textures/geo/highlight_outline.png"
         );
         this.selectionFrame = new SelectionFrameComponent(frameModel);
         this.selectionFrame.setThickness(0.25d);

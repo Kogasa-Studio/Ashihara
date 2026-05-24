@@ -5,9 +5,9 @@ import net.minecraft.world.entity.player.Player;
 
 public class HemmingCornerModel extends SimpleInternalControlGeoModel
 {
-    public HemmingCornerModel(String modelPrefix, String texturePrefix, Player player)
+    public HemmingCornerModel(String modelPrefix, String texturePrefix)
     {
-        super(modelPrefix, texturePrefix, player);
+        super(modelPrefix, texturePrefix);
     }
 
     public void syncFrame(float xStart, float xEnd, float yStart, float yEnd)

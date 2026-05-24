@@ -5,27 +5,24 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import kogasastudio.ashihara.Ashihara;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.player.Player;
 import com.geckolib.animatable.instance.AnimatableInstanceCache;
 import com.geckolib.util.GeckoLibUtil;
 
 public class SimpleInternalControlGeoModel extends InternalControlGeoModel<SimpleInternalControlGeoModel>
 {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    public final Player player;
 
     private final Identifier MODEL;
     private final Identifier TEXTURES;
     private final Identifier ANIMATIONS;
     //private final RenderType RENDER_TYPE;
 
-    public SimpleInternalControlGeoModel(String modelPrefix, String texturePrefix, String animationsPrefix, Player player)
+    public SimpleInternalControlGeoModel(String modelPrefix, String texturePrefix, String animationsPrefix)
     {
         this.MODEL = Identifier.fromNamespaceAndPath(Ashihara.MODID, modelPrefix);
         this.TEXTURES = Identifier.fromNamespaceAndPath(Ashihara.MODID, texturePrefix);
         this.ANIMATIONS = Identifier.fromNamespaceAndPath(Ashihara.MODID, animationsPrefix);
         //this.RENDER_TYPE = RenderType.entityTranslucent(TEXTURES);
-        this.player = player;
     }
 
     public void render(PoseStack stack, MultiBufferSource buffers, int light, int overlay)
@@ -33,9 +30,9 @@ public class SimpleInternalControlGeoModel extends InternalControlGeoModel<Simpl
         //this.RENDERER.render(stack, this, buffers, RENDER_TYPE, buffers.getBuffer(RENDER_TYPE), light, overlay);
     }
 
-    public SimpleInternalControlGeoModel(String modelPrefix, String texturePrefix, Player player)
+    public SimpleInternalControlGeoModel(String modelPrefix, String texturePrefix)
     {
-        this(modelPrefix, texturePrefix, "", player);
+        this(modelPrefix, texturePrefix, "");
     }
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache()

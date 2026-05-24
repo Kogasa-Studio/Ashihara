@@ -1,5 +1,7 @@
 package kogasastudio.ashihara.block.blockentity;
 
+import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
+import kogasastudio.ashihara.client.models.geo.PotModel;
 import kogasastudio.ashihara.helper.RecipeHelper;
 import kogasastudio.ashihara.interaction.recipes.PotRecipe;
 import kogasastudio.ashihara.inventory.BEFluidStackHandler;
@@ -35,9 +37,7 @@ import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
 {
@@ -64,6 +64,13 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
     @Nullable
     private List<Component> unavailabilityMessages;
     private boolean refreshing;
+
+    // ── Misc ──────────────────────────────────────────────────────────────────
+
+    public float prevFluidLevel = 0f;
+    public float fluidLevel = 0f;
+    private PotModel potModel;
+    public Map<String, BoneTracer> boneTracers = new LinkedHashMap<>();
 
     // ── Constructor ───────────────────────────────────────────────────────────
 
@@ -119,6 +126,27 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
     public int     getMaxCookTime()      { return maxCookTime; }
     public float   getCookProgress()     { return maxCookTime > 0 ? (float) cookTime / maxCookTime : 0f; }
     public void    setParallel(int val)  { this.parallel = val; }
+
+    public PotModel getPotModel()
+    {
+        if (this.level == null || !this.level.isClientSide()) return null;
+        if (this.potModel == null)
+        {
+            this.potModel = new PotModel("block/pot", /*"textures/block/pot.png"*/"textures/geo/empty.png", "gui/pot");
+            for (int i = 0; i < 5; i++)
+            {
+                String id = "item_display_" + i;
+                BoneTracer tracer = createTracer(id);
+                this.boneTracers.put(id, tracer);
+                this.potModel.getRendererPoseSync().ashihara_1_21$addTracer(tracer);
+            }
+            String fid = "fluid_display";
+            BoneTracer tracer = createTracer(fid);
+            this.boneTracers.put(fid, tracer);
+            this.potModel.getRendererPoseSync().ashihara_1_21$addTracer(tracer);
+        }
+        return this.potModel;
+    }
 
     public List<Component> getUnavailabilityMessages()
     {
@@ -372,6 +400,8 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
         }
 
         refreshRecipe();
+        this.fluidLevel = (float) this.fluidTank.getFluidAmount() / (float) this.fluidTank.getCapacity();
+        this.prevFluidLevel = this.fluidLevel;
     }
 
     // ── Utilities ─────────────────────────────────────────────────────────────
@@ -387,5 +417,20 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
                 Block.popResource(level, pos, stack);
             }
         }
+    }
+
+    @Override
+    public void setChanged()
+    {
+        super.setChanged();
+        this.prevFluidLevel = this.fluidLevel;
+        this.fluidLevel = (float) this.fluidTank.getFluidAmount() / (float) this.fluidTank.getCapacity();
+    }
+
+    private BoneTracer createTracer(String name)
+    {
+        BoneTracer tracer = new BoneTracer(b -> b.name().equals(name));
+        boneTracers.put(name, tracer);
+        return tracer;
     }
 }

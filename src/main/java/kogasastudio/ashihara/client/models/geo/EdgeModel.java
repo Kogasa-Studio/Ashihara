@@ -8,9 +8,9 @@ public class EdgeModel extends SimpleInternalControlGeoModel
     final float baseScaleX;
     final float baseScaleY;
 
-    public EdgeModel(String modelPrefix, String texturePrefix, Player player, float baseScaleX, float baseScaleY)
+    public EdgeModel(String modelPrefix, String texturePrefix, float baseScaleX, float baseScaleY)
     {
-        super(modelPrefix, texturePrefix, player);
+        super(modelPrefix, texturePrefix);
         this.baseScaleX = baseScaleX;
         this.baseScaleY = baseScaleY;
     }

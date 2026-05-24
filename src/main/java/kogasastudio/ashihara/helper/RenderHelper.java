@@ -1,6 +1,9 @@
 package kogasastudio.ashihara.helper;
 
+import com.geckolib.cache.model.GeoBone;
+import com.geckolib.util.RenderUtil;
 import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Axis;
 import kogasastudio.ashihara.block.blockentity.IFluidHandler;
 import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
 import kogasastudio.ashihara.inventory.BEFluidStackHandler;
@@ -10,11 +13,13 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -458,5 +463,62 @@ public class RenderHelper
         }
     }
 
-    public static final SimpleInternalControlGeoModel INDICATOR = new SimpleInternalControlGeoModel("geo/assistance/indicator.geo.json", "textures/geo/indicator.png", Minecraft.getInstance().player);
+    public static void extractItemToGeoBone(PoseStack poseStack, GeoBone bone, ItemStackRenderState itemState, SubmitNodeCollector submitNodeCollector, int lightCoords, float scale)
+    {
+        poseStack.pushPose();
+        poseStack.scale(1f / 16f, 1f / 16f, 1f / 16f);
+        poseStack.translate(bone.pivotX(), bone.pivotY(), bone.pivotZ());
+
+        poseStack.pushPose();
+
+        poseStack.translate(8f, 0, 8f);
+
+        RenderUtil.translateAndRotateMatrixForBone(poseStack, bone);
+        poseStack.mulPose(Axis.XP.rotationDegrees(90));
+        poseStack.translate(0, -1 / 16f, 0);
+
+        poseStack.scale(scale, scale, scale);
+        itemState.submit(poseStack, submitNodeCollector, lightCoords, OverlayTexture.NO_OVERLAY, 0);
+        poseStack.popPose();
+
+        poseStack.popPose();
+    }
+
+    public static void renderFluidToGeoBone(PoseStack poseStack, GeoBone bone, FluidStack fluidStack, SubmitNodeCollector nodeCollector, int lightCoords, float scale)
+    {
+        if (fluidStack.isEmpty()) return;
+        TextureAtlasSprite sprite = getFluidStillSprite(fluidStack);
+        int tint = getFluidTintColor(fluidStack);
+
+        poseStack.pushPose();
+        poseStack.scale(1f / 16f, 1f / 16f, 1f / 16f);
+        poseStack.translate(bone.pivotX(), bone.pivotY(), bone.pivotZ());
+
+        poseStack.pushPose();
+        poseStack.translate(8f, 0, 8f);
+
+        RenderUtil.translateAndRotateMatrixForBone(poseStack, bone);
+        poseStack.translate(0, -1 / 16f, 0);
+
+        poseStack.scale(scale, scale, scale);
+
+        float u0 = sprite.getU0();
+        float v0 = sprite.getV0();
+        float u1 = sprite.getU1();
+        float v1 = sprite.getV1();
+
+        PoseStack.Pose pose = poseStack.last();
+        nodeCollector.submitCustomGeometry(poseStack, Sheets.translucentBlockSheet(), (p, consumer) ->
+        {
+            buildMatrix(pose.pose(), consumer, 0, 0, 0, u0, v0, OverlayTexture.NO_OVERLAY, tint, 1f, lightCoords);
+            buildMatrix(pose.pose(), consumer, 0, 1, 0, u0, v1, OverlayTexture.NO_OVERLAY, tint, 1f, lightCoords);
+            buildMatrix(pose.pose(), consumer, 1, 1, 0, u1, v1, OverlayTexture.NO_OVERLAY, tint, 1f, lightCoords);
+            buildMatrix(pose.pose(), consumer, 1, 0, 0, u1, v0, OverlayTexture.NO_OVERLAY, tint, 1f, lightCoords);
+        });
+
+        poseStack.popPose();
+        poseStack.popPose();
+    }
+
+    public static final SimpleInternalControlGeoModel INDICATOR = new SimpleInternalControlGeoModel("geo/assistance/indicator.geo.json", "textures/geo/indicator.png");
 }

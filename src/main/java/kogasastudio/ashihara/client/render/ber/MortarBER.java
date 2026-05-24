@@ -53,8 +53,8 @@ public class MortarBER implements BlockEntityRenderer<MortarBE, BlockEntityRende
     public MortarBER(BlockEntityRendererProvider.Context context)
     {
         this.itemModelResolver = context.itemModelResolver();
-        this.item_display_positions = new SimpleInternalControlGeoModel("assistance/mortar_item_display_loc", "textures/geo/empty.png", Minecraft.getInstance().player);
-        this.fluid_display_position = new SimpleInternalControlGeoModel("assistance/mortar_fluid_display_loc", "textures/geo/empty.png", Minecraft.getInstance().player);
+        this.item_display_positions = new SimpleInternalControlGeoModel("assistance/mortar_item_display_loc", "textures/geo/empty.png");
+        this.fluid_display_position = new SimpleInternalControlGeoModel("assistance/mortar_fluid_display_loc", "textures/geo/empty.png");
         for (BoneTracer tracer : boneTracers.values())
         {
             this.item_display_positions.getRendererPoseSync().ashihara_1_21$addTracer(tracer);
@@ -104,6 +104,7 @@ public class MortarBER implements BlockEntityRenderer<MortarBE, BlockEntityRende
         for (int i = 0; i < this.items.size(); ++i)
         {
             ItemStack item = this.items.get(i);
+            if (item.isEmpty()) continue;
             BoneTracer tracer = this.boneTracers.get("level" + i);
             if (tracer == null || tracer.collisionBoxes().isEmpty()) continue;
             ItemStackRenderState itemState = new ItemStackRenderState();

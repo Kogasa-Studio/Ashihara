@@ -9,9 +9,9 @@ import net.minecraft.world.entity.player.Player;
 public class PlayerInventoryModel extends SimpleInternalControlGeoModel
 {
     public static final RawAnimation INTRO = RawAnimation.begin().thenPlay("intro");
-    public PlayerInventoryModel(String modelPrefix, String texturePrefix, String animationsPrefix, Player player)
+    public PlayerInventoryModel(String modelPrefix, String texturePrefix, String animationsPrefix)
     {
-        super(modelPrefix, texturePrefix, animationsPrefix, player);
+        super(modelPrefix, texturePrefix, animationsPrefix);
     }
 
     @Override

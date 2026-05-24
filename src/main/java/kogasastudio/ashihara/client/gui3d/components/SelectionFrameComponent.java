@@ -4,8 +4,8 @@ import com.geckolib.animation.object.EasingType;
 import kogasastudio.ashihara.client.gui3d.util.OBB;
 import kogasastudio.ashihara.client.models.geo.SelectionFrameModel;
 import kogasastudio.ashihara.client.render.state.GUI3DComponentRenderState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
-import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import java.util.List;
@@ -145,7 +145,7 @@ public class SelectionFrameComponent extends ModelComponent
         if (this.state == FrameState.HIDDEN || this.state == FrameState.EXPANDED)
         {
             this.animProgress = 0.0;
-            this.model.triggerAnim(this.model.player, this.model.hashCode(), SelectionFrameModel.EXPAND, SelectionFrameModel.EXPAND);
+            if (Minecraft.getInstance().player != null) this.model.triggerAnim(Minecraft.getInstance().player, this.model.hashCode(), SelectionFrameModel.EXPAND, SelectionFrameModel.EXPAND);
         }
 
         this.model.setAnimSpeed(SelectionFrameModel.EXPAND, 2.0 / duration);

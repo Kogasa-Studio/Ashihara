@@ -21,9 +21,9 @@ public class SelectionFrameModel extends SimpleInternalControlGeoModel
         controllers.add(new AnimationController<>(EXPAND, animatable -> PlayState.STOP).triggerableAnim(EXPAND, ANIM_EXPAND));
     }
 
-    public SelectionFrameModel(String modelPrefix, String texturePrefix, Player player)
+    public SelectionFrameModel(String modelPrefix, String texturePrefix)
     {
-        super(modelPrefix, texturePrefix, "gui/cubic_selection_frame", player);
+        super(modelPrefix, texturePrefix, "gui/cubic_selection_frame");
     }
 
     public double getThickness()

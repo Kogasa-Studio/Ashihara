@@ -1,10 +1,16 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.block.blockentity.PotBlockEntity;
+import kogasastudio.ashihara.client.render.ber.PotBER;
+import kogasastudio.ashihara.helper.InventoryHelper;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.registry.Items;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -28,6 +34,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import org.jetbrains.annotations.Nullable;
 
 public class PotBlock extends Block implements EntityBlock
@@ -101,7 +108,7 @@ public class PotBlock extends Block implements EntityBlock
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
-        if (!stack.is(Items.POT_LID) && !player.isShiftKeyDown())
+        if (!stack.is(Items.POT_LID) && player.isShiftKeyDown())
         {
             // 服务端发起 openMenu，客户端通过 RegisterMenuScreensEvent 绑定收到 OpenScreen 包后自动打开 PotScreen3D
             if (!level.isClientSide() && level.getBlockEntity(pos) instanceof PotBlockEntity be)
@@ -110,7 +117,7 @@ public class PotBlock extends Block implements EntityBlock
             }
             return InteractionResult.SUCCESS;
         }
-        if (stack.isEmpty() && state.getValue(HAS_LID))
+        if (stack.isEmpty() && state.getValue(HAS_LID) && hitResult.getDirection().equals(Direction.UP))
         {
             player.setItemInHand(hand, Items.POT_LID.toStack());
             level.setBlockAndUpdate(pos, state.setValue(HAS_LID, false));
@@ -121,6 +128,24 @@ public class PotBlock extends Block implements EntityBlock
             stack.shrink(1);
             level.setBlockAndUpdate(pos, state.setValue(HAS_LID, true));
             return InteractionResult.SUCCESS;
+        }
+        else if (level.getBlockEntity(pos) instanceof PotBlockEntity be)
+        {
+            boolean flag = false;
+            if
+            (
+                FluidUtil.interactWithFluidHandler(player, hand, pos, be.fluidTank)
+                || InventoryHelper.interactWithInventory(be.inventory, stack, player, hand, 64)
+                || InventoryHelper.interactWithInventory(be.output, stack, player, hand, 64)
+            )
+            {
+                player.getInventory().setChanged();
+                be.updateBlock();
+                be.refreshRecipe();
+                be.setChanged();
+                flag = true;
+            }
+            if (flag) return InteractionResult.SUCCESS;
         }
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
     }

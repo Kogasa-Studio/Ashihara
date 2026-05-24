@@ -78,6 +78,7 @@ public class ClientEventSubscribeHandler
         event.registerBlockEntityRenderer(BlockEntities.MULTI_BUILT_BLOCKENTITY.get(), MultiBuiltBlockRenderer::new);
         event.registerBlockEntityRenderer(BlockEntities.CHARLOTTE_BE.get(), CharlotteBER::new);
         event.registerBlockEntityRenderer(BlockEntities.MORTAR_BE.get(), MortarBER::new);
+        event.registerBlockEntityRenderer(BlockEntities.POT_BE.get(), PotBER::new);
         event.registerBlockEntityRenderer(BlockEntities.CUTTING_BOARD_BE.get(), CuttingBoardBER::new);
     }
 

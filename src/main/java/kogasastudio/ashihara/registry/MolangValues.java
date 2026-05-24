@@ -4,6 +4,7 @@ import com.geckolib.loading.math.MathParser;
 import com.geckolib.loading.math.MolangQueries;
 import com.geckolib.loading.math.value.Variable;
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.client.models.geo.PotModel;
 import kogasastudio.ashihara.client.models.geo.SelectionFrameModel;
 
 public class MolangValues
@@ -19,5 +20,8 @@ public class MolangValues
         MolangQueries.<SelectionFrameModel>setActorVariable("obb.max_y", obbActor -> obbActor.animatable().getOBB().maxXYZ().y() * 16);
         MolangQueries.<SelectionFrameModel>setActorVariable("obb.max_z", obbActor -> obbActor.animatable().getOBB().maxXYZ().z() * 16);
         MolangQueries.<SelectionFrameModel>setActorVariable("selection_frame.thickness", sf -> sf.animatable().getThickness());
+
+        MolangQueries.<PotModel>setActorVariable("pot.fluid_level_cur", pot -> pot.animatable().getLevelCurrent());
+        MolangQueries.<PotModel>setActorVariable("pot.fluid_level_tgt", pot -> pot.animatable().getLevelTarget());
     }
 }

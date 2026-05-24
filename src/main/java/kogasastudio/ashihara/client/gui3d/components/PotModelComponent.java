@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.client.gui3d.components;
 
 import kogasastudio.ashihara.client.models.geo.PotModel;
+import net.minecraft.client.Minecraft;
 import org.joml.Matrix4f;
 
 public class PotModelComponent extends ModelComponent
@@ -35,7 +36,7 @@ public class PotModelComponent extends ModelComponent
     {
         this.lidRemoved = !this.lidRemoved;
         String anim = this.lidRemoved ? PotModel.LID_OPEN : PotModel.LID_CLOSE;
-        this.model.triggerAnim(this.model.player, this.model.hashCode(), PotModel.LID_STATE_CONTROLLER, anim);
+        if (Minecraft.getInstance().player != null) this.model.triggerAnim(Minecraft.getInstance().player, this.model.hashCode(), PotModel.LID_STATE_CONTROLLER, anim);
         return this.lidRemoved;
     }
 }

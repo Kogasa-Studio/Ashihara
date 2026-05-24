@@ -103,7 +103,7 @@
 				}
 			}
 		},
-		"fluid_livel_sync": {
+		"fluid_level_sync": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 0.5,
 			"bones": {
@@ -115,6 +115,48 @@
 						"0.5": {
 							"vector": [1, "pot.fluid_level_tgt", 1],
 							"easing": "easeOutExpo"
+						}
+					}
+				}
+			}
+		},
+		"item_float_sync": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.5,
+			"bones": {
+				"item_display": {
+					"position": {
+						"0.0": {
+							"vector": [0, "math.max(0,pot.fluid_level_cur*5-2.5)", 0]
+						},
+						"0.5": {
+							"vector": [0, "math.max(0,pot.fluid_level_tgt*5-2.5)", 0],
+							"easing": "easeOutExpo"
+						}
+					}
+				}
+			}
+		},
+		"item_float_idle": {
+			"loop": true,
+			"animation_length": 4,
+			"bones": {
+				"item_display": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, 0.25, 0],
+							"easing": "easeOutSine"
+						},
+						"3.0": {
+							"vector": [0, -0.25, 0],
+							"easing": "easeInOutSine"
+						},
+						"4.0": {
+							"vector": [0, 0, 0],
+							"easing": "easeInSine"
 						}
 					}
 				}

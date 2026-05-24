@@ -46,7 +46,7 @@ public class ItemSlotComponent extends ModelComponent implements ISelectable
     protected final String boneName;
     protected final Slot menuSlot;
     protected final SelectionFrameComponent selectionFrame;
-    protected final SelectionFrameModel frameModel = new SelectionFrameModel("assistance/cubic_selection_frame", "textures/geo/highlight_outline.png", Minecraft.getInstance().player);
+    protected final SelectionFrameModel frameModel = new SelectionFrameModel("assistance/cubic_selection_frame", "textures/geo/highlight_outline.png");
 
     /**
      * @param model     父级 ModelComponent 持有的 GeoModel 实例（共享引用，用于骨骼追踪）

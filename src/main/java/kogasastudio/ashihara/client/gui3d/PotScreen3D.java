@@ -6,7 +6,6 @@ import kogasastudio.ashihara.client.gui3d.components.PotLidComponent;
 import kogasastudio.ashihara.client.gui3d.components.PotModelComponent;
 import kogasastudio.ashihara.client.models.geo.PotModel;
 import kogasastudio.ashihara.inventory.container.PotMenu;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -24,7 +23,7 @@ import org.joml.Matrix4f;
  */
 public class PotScreen3D extends ContainerScreen3D<PotScreen>
 {
-    public static PotModel potModel = new PotModel("block/pot", "textures/block/pot.png", "gui/pot", Minecraft.getInstance().player);
+    public static PotModel potModel = new PotModel("block/pot", "textures/block/pot.png", "gui/pot");
     public static final Identifier INV_BG = Identifier.fromNamespaceAndPath(Ashihara.MODID, "textures/gui/player_inventory.png");
     protected PotModelComponent potModelComponent;
     protected PotMenu menu;
