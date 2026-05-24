@@ -11,6 +11,7 @@ import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.blockentity.util.RenderAutoSwitch;
 import kogasastudio.ashihara.block.blockentity.util.RenderSwitch;
 import kogasastudio.ashihara.block.blockentity.util.ToolTipController;
+import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
 import kogasastudio.ashihara.client.models.geo.InternalControlGeoModel;
 import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
 import kogasastudio.ashihara.client.models.geo.UIPanelModel;
@@ -23,6 +24,7 @@ import kogasastudio.ashihara.item.Otsuchi;
 import kogasastudio.ashihara.registry.Items;
 import kogasastudio.ashihara.registry.RecipeTypes;
 import kogasastudio.ashihara.registry.BlockEntities;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
@@ -80,6 +82,15 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
     public BEFluidStackHandler<MortarBE> fluidTank = new BEFluidStackHandler<>(16000, this);
 
     public SimpleInternalControlGeoModel item_display_positions;
+    public Map<String, BoneTracer> boneTracers = new LinkedHashMap<>();
+    public final BoneTracer level0 = createTracer("level0");
+    public final BoneTracer level1 = createTracer("level1");
+    public final BoneTracer level2 = createTracer("level2");
+    public final BoneTracer level3 = createTracer("level3");
+    public final BoneTracer level4 = createTracer("level4");
+    public final BoneTracer level5 = createTracer("level5");
+    public final BoneTracer level6 = createTracer("level6");
+    public final BoneTracer level7 = createTracer("level7");
     public SimpleInternalControlGeoModel fluid_display_position;
     public UIPanelModel ui_panel_model;
     public ToolTipController<MortarBE> toolTipController;
@@ -96,13 +107,24 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
     public MortarBE(BlockPos pos, BlockState state)
     {
         super(BlockEntities.MORTAR_BE.get(), pos, state);
+        this.item_display_positions = new SimpleInternalControlGeoModel("assistance/mortar_item_display_loc", "textures/geo/empty.png", Minecraft.getInstance().player);
+        this.fluid_display_position = new SimpleInternalControlGeoModel("assistance/mortar_fluid_display_loc", "textures/geo/empty.png", Minecraft.getInstance().player);
+        for (BoneTracer tracer : boneTracers.values())
+        {
+            this.item_display_positions.getRendererPoseSync().ashihara_1_21$addTracer(tracer);
+        }
+    }
+
+    private BoneTracer createTracer(String name)
+    {
+        BoneTracer tracer = new BoneTracer(b -> b.name().equals(name));
+        boneTracers.put(name, tracer);
+        return tracer;
     }
 
     @Override
     public void init(Player player)
     {
-        this.item_display_positions = new SimpleInternalControlGeoModel("geo/assistance/mortar_item_display_loc.geo.json", "", player);
-        this.fluid_display_position = new SimpleInternalControlGeoModel("geo/assistance/mortar_fluid_display_loc.geo.json", "", player);
         this.ui_panel_model = new UIPanelModel(player).showHemmingEdge(true);
         this.toolTipController = new ToolTipController<>(this, this.ui_panel_model);
     }
