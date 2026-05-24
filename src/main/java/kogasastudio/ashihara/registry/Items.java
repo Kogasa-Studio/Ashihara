@@ -136,7 +136,7 @@ public class Items
     public static final DeferredItem<? extends Item> REED = ITEMS.registerSimpleBlockItem("reed", Blocks.REED);
     public static final DeferredItem<? extends Item> SHORTER_REED = ITEMS.registerSimpleBlockItem("shorter_reed", Blocks.SHORTER_REED);
     public static final DeferredItem<? extends Item> HYDRANGEA_BUSH = ITEMS.registerSimpleBlockItem("hydrangea_bush", Blocks.HYDRANGEA_BUSH);
-    public static final DeferredItem<? extends Item> PAIL = ITEMS.registerItem("pail", PailBlockItem::new, properties -> properties.useBlockDescriptionPrefix());
+    //public static final DeferredItem<? extends Item> PAIL = ITEMS.registerItem("pail", PailBlockItem::new, properties -> properties.useBlockDescriptionPrefix());
     public static final DeferredItem<? extends Item> MEAL_TABLE = ITEMS.registerSimpleBlockItem("meal_table", Blocks.MEAL_TABLE);
     public static final DeferredItem<? extends Item> CUTTING_BOARD = ITEMS.registerSimpleBlockItem("cutting_board", Blocks.CUTTING_BOARD);
     public static final DeferredItem<? extends Item> CHARLOTTE = ITEMS.registerSimpleBlockItem("charlotte", Blocks.CHARLOTTE);

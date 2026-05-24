@@ -275,7 +275,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.TETSUSENCHI.get());
                                         output.accept(Items.RICE_DRYING_STICKS.get());
                                         output.accept(Items.CUTTING_BOARD.get());
-                                        output.accept(Items.PAIL.get());
+                                        //output.accept(Items.PAIL.get());
                                         output.accept(Items.CANDLE.get());
                                         output.accept(Items.MEAL_TABLE.get());
                                         output.accept(Items.WOOD_OTSUCHI.get());

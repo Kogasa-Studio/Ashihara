@@ -34,7 +34,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 import static kogasastudio.ashihara.registry.Items.MINATO_AQUA;
-import static kogasastudio.ashihara.registry.Items.PAIL;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_AXIS;
 
 public class PailBlock extends Block implements EntityBlock
@@ -80,8 +79,8 @@ public class PailBlock extends Block implements EntityBlock
     private ItemStack getIdentifiedItem(Level worldIn, BlockPos pos)
     {
         PailBE be = (PailBE) worldIn.getBlockEntity(pos);
-        ItemStack stack = new ItemStack(PAIL.get());
-        return stack;
+        //ItemStack stack = new ItemStack(PAIL.get());
+        return ItemStack.EMPTY;
     }
 
     @Override
