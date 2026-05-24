@@ -1,12 +1,8 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-    [
-      "ashihara:lantern_long_white"
-    ],
-    [
-      "minecraft:red_dye"
-    ]
+    "ashihara:lantern_long_white",
+    "minecraft:red_dye"
   ],
   "result": {
     "id": "ashihara:lantern_long_red",

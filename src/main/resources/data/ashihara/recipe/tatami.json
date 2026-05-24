@@ -5,12 +5,8 @@
     "YYY"
   ],
   "key": {
-    "A": {
-      "item": "minecraft:paper"
-    },
-    "Y": {
-      "item": "ashihara:straw"
-    }
+    "A": "minecraft:paper",
+    "Y": "ashihara:straw"
   },
   "result": {
     "id": "ashihara:tatami",

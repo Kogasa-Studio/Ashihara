@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "group": "planks",
   "ingredients": [
-    [
-      "ashihara:cherry_logs"
-    ]
+    "#ashihara:cherry_logs"
   ],
   "result": {
     "id": "ashihara:cherry_planks",

@@ -5,9 +5,7 @@
     "S S"
   ],
   "key": {
-    "S": {
-      "item": "minecraft:stick"
-    }
+    "S": "minecraft:stick"
   },
   "result": {
     "id": "ashihara:rice_drying_sticks"

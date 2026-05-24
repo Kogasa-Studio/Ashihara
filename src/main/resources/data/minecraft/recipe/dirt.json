@@ -5,9 +5,7 @@
     "oo"
   ],
   "key": {
-    "o": {
-      "item": "ashihara:dirt_ball"
-    }
+    "o": "ashihara:dirt_ball"
   },
   "result": {
     "id": "minecraft:dirt",

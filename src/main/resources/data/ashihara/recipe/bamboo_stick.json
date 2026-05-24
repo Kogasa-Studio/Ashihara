@@ -5,9 +5,7 @@
     "M"
   ],
   "key": {
-    "M": {
-      "item": "ashihara:bamboo_material"
-    }
+    "M": "ashihara:bamboo_material"
   },
   "result": {
     "id": "ashihara:bamboo_stick",

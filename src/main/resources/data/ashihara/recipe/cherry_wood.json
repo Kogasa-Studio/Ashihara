@@ -6,9 +6,7 @@
     "##"
   ],
   "key": {
-    "#": {
-      "item": "ashihara:cherry_log"
-    }
+    "#": "ashihara:cherry_log"
   },
   "result": {
     "id": "ashihara:cherry_wood",

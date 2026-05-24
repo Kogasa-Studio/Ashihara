@@ -7,18 +7,10 @@
     " S "
   ],
   "key": {
-    "C": {
-      "item": "minecraft:clay"
-    },
-    "H": {
-      "item": "minecraft:honeycomb"
-    },
-    "#": {
-      "item": "minecraft:iron_nugget"
-    },
-    "S": {
-      "item": "minecraft:stick"
-    }
+    "C": "minecraft:clay",
+    "H": "minecraft:honeycomb",
+    "#": "minecraft:iron_nugget",
+    "S": "minecraft:stick"
   },
   "result": {
     "id": "ashihara:oil_plate_stick",

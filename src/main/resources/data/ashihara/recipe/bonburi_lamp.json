@@ -7,18 +7,10 @@
     " S "
   ],
   "key": {
-    "C": {
-      "item": "ashihara:candle"
-    },
-    "#": {
-      "item": "minecraft:iron_nugget"
-    },
-    "P": {
-      "item": "minecraft:paper"
-    },
-    "S": {
-      "item": "minecraft:stick"
-    }
+    "C": "ashihara:candle",
+    "#": "minecraft:iron_nugget",
+    "P": "minecraft:paper",
+    "S": "minecraft:stick"
   },
   "result": {
     "id": "ashihara:bonburi_lamp",

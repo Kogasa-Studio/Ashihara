@@ -7,9 +7,7 @@
     "###"
   ],
   "key": {
-    "#": {
-      "item": "ashihara:red_planks"
-    }
+    "#": "ashihara:red_planks"
   },
   "result": {
     "id": "ashihara:red_stairs",

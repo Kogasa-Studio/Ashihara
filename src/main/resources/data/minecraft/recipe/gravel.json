@@ -5,9 +5,7 @@
     "oo"
   ],
   "key": {
-    "o": {
-      "item": "ashihara:stone_shatter"
-    }
+    "o": "ashihara:stone_shatter"
   },
   "result": {
     "id": "minecraft:gravel",

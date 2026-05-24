@@ -4,9 +4,7 @@
     "BBB"
   ],
   "key": {
-    "B": {
-      "tag": "neoforge:stripped_logs"
-    }
+    "B": "#neoforge:stripped_logs"
   },
   "result": {
     "id": "ashihara:cutting_board",

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "group": "planks",
   "ingredients": [
-    [
-      "ashihara:stripped_red_log"
-    ]
+    "ashihara:stripped_red_log"
   ],
   "result": {
     "id": "ashihara:red_planks",

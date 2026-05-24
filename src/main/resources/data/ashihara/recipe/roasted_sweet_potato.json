@@ -1,8 +1,6 @@
 {
   "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "ashihara:sweet_potato"
-  },
+  "ingredient": "ashihara:sweet_potato",
   "result": {
     "id": "ashihara:roasted_sweet_potato"
   },

@@ -7,15 +7,9 @@
     " D "
   ],
   "key": {
-    "C": {
-      "item": "ashihara:candle"
-    },
-    "#": {
-      "item": "minecraft:iron_nugget"
-    },
-    "D": {
-      "item": "minecraft:copper_ingot"
-    }
+    "C": "ashihara:candle",
+    "#": "minecraft:iron_nugget",
+    "D": "minecraft:copper_ingot"
   },
   "result": {
     "id": "ashihara:hexagonal_hanging_lantern",

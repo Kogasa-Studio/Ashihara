@@ -6,24 +6,12 @@
     "ele"
   ],
   "key": {
-    "A": {
-      "item": "minecraft:spruce_planks"
-    },
-    "v": {
-      "item": "minecraft:spruce_slab"
-    },
-    "O": {
-      "item": "minecraft:acacia_planks"
-    },
-    "i": {
-      "item": "minecraft:honeycomb"
-    },
-    "e": {
-      "item": "minecraft:acacia_slab"
-    },
-    "l": {
-      "item": "minecraft:stick"
-    }
+    "A": "minecraft:spruce_planks",
+    "v": "minecraft:spruce_slab",
+    "O": "minecraft:acacia_planks",
+    "i": "minecraft:honeycomb",
+    "e": "minecraft:acacia_slab",
+    "l": "minecraft:stick"
   },
   "result": {
     "id": "ashihara:jinja_lantern",

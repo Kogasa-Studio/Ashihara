@@ -12,7 +12,7 @@
   "id": "ashihara:mortar_brown_rice",
   "ingredients": [
     {
-      "item": "ashihara:paddy_pile",
+      "ingredient": "ashihara:paddy_pile",
       "count": 1
     }
   ],

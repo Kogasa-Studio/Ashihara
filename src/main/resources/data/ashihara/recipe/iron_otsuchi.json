@@ -6,15 +6,9 @@
     "I  "
   ],
   "key": {
-    "T": {
-      "item": "minecraft:iron_ingot"
-    },
-    "O": {
-      "tag": "neoforge:stripped_logs"
-    },
-    "I": {
-      "item": "minecraft:stick"
-    }
+    "T": "minecraft:iron_ingot",
+    "O": "#neoforge:stripped_logs",
+    "I": "minecraft:stick"
   },
   "result": {
     "id": "ashihara:iron_otsuchi",

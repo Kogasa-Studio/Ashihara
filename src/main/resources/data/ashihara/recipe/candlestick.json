@@ -7,15 +7,9 @@
     " S "
   ],
   "key": {
-    "C": {
-      "item": "ashihara:candle"
-    },
-    "#": {
-      "item": "minecraft:iron_nugget"
-    },
-    "S": {
-      "item": "minecraft:stick"
-    }
+    "C": "ashihara:candle",
+    "#": "minecraft:iron_nugget",
+    "S": "minecraft:stick"
   },
   "result": {
     "id": "ashihara:candlestick",

@@ -1,12 +1,8 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-    [
-      "ashihara:mochi"
-    ],
-    [
-      "ashihara:soy_bean"
-    ]
+    "ashihara:mochi",
+    "ashihara:soy_bean"
   ],
   "result": {
     "id": "ashihara:daifuku",

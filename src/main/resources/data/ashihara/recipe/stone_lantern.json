@@ -6,12 +6,8 @@
     "AAA"
   ],
   "key": {
-    "A": {
-      "item": "minecraft:cobblestone"
-    },
-    "i": {
-      "item": "minecraft:honeycomb"
-    }
+    "A": "minecraft:cobblestone",
+    "i": "minecraft:honeycomb"
   },
   "result": {
     "id": "ashihara:stone_lantern",

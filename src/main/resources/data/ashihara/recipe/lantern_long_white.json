@@ -6,15 +6,9 @@
     " _ "
   ],
   "key": {
-    "_": {
-      "item": "minecraft:bamboo"
-    },
-    "O": {
-      "item": "minecraft:paper"
-    },
-    "i": {
-      "item": "minecraft:coal"
-    }
+    "_": "minecraft:bamboo",
+    "O": "minecraft:paper",
+    "i": "minecraft:coal"
   },
   "result": {
     "id": "ashihara:lantern_long_white",

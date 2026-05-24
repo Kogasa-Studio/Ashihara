@@ -5,9 +5,7 @@
     "###"
   ],
   "key": {
-    "#": {
-      "item": "ashihara:maple_planks"
-    }
+    "#": "ashihara:maple_planks"
   },
   "result": {
     "id": "ashihara:maple_slab",

@@ -1,8 +1,8 @@
 {
   "type": "minecraft:blasting",
-  "ingredient": {
-    "item": "ashihara:iron_ore_shatter"
-  },
+  "ingredient": [
+    "ashihara:iron_ore_shatter"
+  ],
   "result": {
     "id": "minecraft:iron_ingot"
   },

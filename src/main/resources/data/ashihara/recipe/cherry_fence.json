@@ -6,12 +6,8 @@
     "W#W"
   ],
   "key": {
-    "#": {
-      "item": "minecraft:stick"
-    },
-    "W": {
-      "item": "ashihara:cherry_planks"
-    }
+    "#": "minecraft:stick",
+    "W": "ashihara:cherry_planks"
   },
   "result": {
     "id": "ashihara:cherry_fence",

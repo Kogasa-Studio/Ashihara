@@ -20,6 +20,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.BlockGetter;
@@ -38,12 +39,13 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.common.conditions.ConditionalOps;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
-import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStackTemplate;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class CharlotteBlock extends Block implements EntityBlock
@@ -103,13 +105,13 @@ public class CharlotteBlock extends Block implements EntityBlock
             MortarRecipe recipe = new MortarRecipe
             (
                 Identifier.fromNamespaceAndPath(Ashihara.MODID, "chick"),
-                NonNullList.of(SizedIngredient.of(ItemStack.EMPTY.getItem(), 1), new SizedIngredient(Ingredient.of(level.registryAccess().getOrThrow(ItemTags.WOLF_FOOD)), 4), SizedIngredient.of(Items.KOISHI, 1)),
-                NonNullList.of(ItemStack.EMPTY, Items.RICE.toStack(), Items.RICE.toStack(7)),
-                new FluidStack(Fluids.WATER.getSource(), 1000),
+                NonNullList.of(SizedIngredient.of(net.minecraft.world.item.Items.ACACIA_BOAT, 1), new SizedIngredient(Ingredient.of(level.registryAccess().getOrThrow(ItemTags.WOLF_FOOD)), 4), SizedIngredient.of(Items.KOISHI, 1)),
+                NonNullList.of(ItemStackTemplate.fromNonEmptyStack(net.minecraft.world.item.Items.ACACIA_BOAT.getDefaultInstance()), ItemStackTemplate.fromNonEmptyStack(Items.RICE.toStack()), ItemStackTemplate.fromNonEmptyStack(Items.RICE.toStack(7))),
+                Optional.of(new FluidStackTemplate(Fluids.WATER.getSource(), 1000)),
                 0,
                 new ConcurrentLinkedQueue<>(List.of(MortarBE.MortarToolType.PESTLE, MortarBE.MortarToolType.HAND, MortarBE.MortarToolType.OTSUCHI))
             );
-            JsonElement element = MortarRecipe.CODEC.encodeStart(dynamicOps, recipe).getOrThrow(msg -> new RuntimeException("Failed to encode %s: %s".formatted("test/test_recipe.json", msg)));
+            JsonElement element = MortarRecipe.MAP_CODEC.codec().encodeStart(dynamicOps, recipe).getOrThrow(msg -> new RuntimeException("Failed to encode %s: %s".formatted("test/test_recipe.json", msg)));
             try
             {
                 JsonUtils.writeToJson(JsonUtils.INSTANCE.pretty, Path.of("test/test_recipe.json"), element.getAsJsonObject());

@@ -6,15 +6,9 @@
     "I I"
   ],
   "key": {
-    "A": {
-      "item": "minecraft:iron_ingot"
-    },
-    "I": {
-      "item": "minecraft:stick"
-    },
-    "O": {
-      "tag": "minecraft:planks"
-    }
+    "A": "minecraft:iron_ingot",
+    "I": "minecraft:stick",
+    "O": "#minecraft:planks"
   },
   "result": {
     "id": "ashihara:tetsusenchi",

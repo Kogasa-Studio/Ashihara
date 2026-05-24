@@ -1,8 +1,8 @@
 {
   "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "ashihara:gold_ore_shatter"
-  },
+  "ingredient": [
+    "ashihara:gold_ore_shatter"
+  ],
   "result": {
     "id": "minecraft:gold_ingot"
   },

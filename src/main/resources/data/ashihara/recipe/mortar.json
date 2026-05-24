@@ -6,12 +6,8 @@
     "___"
   ],
   "key": {
-    "#": {
-      "tag": "neoforge:stripped_logs"
-    },
-    "_": {
-      "tag": "minecraft:planks"
-    }
+    "#": "#neoforge:stripped_logs",
+    "_": "#minecraft:planks"
   },
   "result": {
     "id": "ashihara:mortar",

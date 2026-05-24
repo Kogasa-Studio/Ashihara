@@ -1,12 +1,8 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-    [
-      "ashihara:mochi"
-    ],
-    [
-      "ashihara:bamboo_stick"
-    ]
+    "ashihara:mochi",
+    "ashihara:bamboo_stick"
   ],
   "result": {
     "id": "ashihara:dango",

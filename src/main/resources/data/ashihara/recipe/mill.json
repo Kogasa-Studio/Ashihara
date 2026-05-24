@@ -7,12 +7,8 @@
     "###"
   ],
   "key": {
-    "#": {
-      "item": "minecraft:cobblestone"
-    },
-    "I": {
-      "item": "minecraft:stick"
-    }
+    "#": "minecraft:cobblestone",
+    "I": "minecraft:stick"
   },
   "result": {
     "id": "ashihara:mill",

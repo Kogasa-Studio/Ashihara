@@ -3,6 +3,7 @@ package kogasastudio.ashihara.registry;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.interaction.recipes.CuttingBoardRecipe;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
+import kogasastudio.ashihara.interaction.recipes.PotRecipe;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.bus.api.IEventBus;
@@ -21,6 +22,9 @@ public class RecipeSerializers
 
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<MortarRecipe>> MORTAR =
         SERIALIZER.register("mortar", () -> MortarRecipe.SERIALIZER);
+
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<PotRecipe>> POT =
+        SERIALIZER.register("pot", () -> PotRecipe.SERIALIZER);
 
     /*public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<MillRecipe>> MILL =
         SERIALIZER.register("mill", () -> MillRecipe.SERIALIZER);*/

@@ -6,12 +6,8 @@
     "#"
   ],
   "key": {
-    "#": {
-      "tag": "minecraft:planks"
-    },
-    "I": {
-      "item": "minecraft:stick"
-    }
+    "#": "#minecraft:planks",
+    "I": "minecraft:stick"
   },
   "result": {
     "id": "ashihara:pestle",

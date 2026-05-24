@@ -6,15 +6,9 @@
     "I  "
   ],
   "key": {
-    "T": {
-      "item": "minecraft:diamond"
-    },
-    "O": {
-      "tag": "neoforge:stripped_logs"
-    },
-    "I": {
-      "item": "minecraft:stick"
-    }
+    "T": "minecraft:diamond",
+    "O": "#neoforge:stripped_logs",
+    "I": "minecraft:stick"
   },
   "result": {
     "id": "ashihara:diamond_otsuchi",

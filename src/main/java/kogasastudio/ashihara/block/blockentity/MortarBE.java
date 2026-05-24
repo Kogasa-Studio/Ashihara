@@ -2,7 +2,6 @@ package kogasastudio.ashihara.block.blockentity;
 
 import com.geckolib.animation.object.EasingType;
 import com.geckolib.animation.object.LoopType;
-import com.geckolib.cache.animation.Animation;
 import com.geckolib.cache.model.GeoBone;
 import com.geckolib.renderer.base.GeoRenderState;
 import com.mojang.serialization.Codec;
@@ -277,7 +276,10 @@ public class MortarBE extends AshiharaMachineBE implements IRenderSwitchable, IR
         {
             this.queue.add(type);
         }
-        refreshRecipe();
+        if (this.level instanceof ServerLevel)
+        {
+            refreshRecipe();
+        }
         super.loadAdditional(input);
     }
 

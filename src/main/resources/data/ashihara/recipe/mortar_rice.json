@@ -12,7 +12,7 @@
   "id": "ashihara:mortar_rice",
   "ingredients": [
     {
-      "item": "ashihara:brown_rice",
+      "ingredient": "ashihara:brown_rice",
       "count": 1
     }
   ],

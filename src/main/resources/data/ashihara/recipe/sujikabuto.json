@@ -6,18 +6,10 @@
     "ITI"
   ],
   "key": {
-    "A": {
-      "item": "minecraft:gold_ingot"
-    },
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
-    "Y": {
-      "item": "minecraft:string"
-    },
-    "T": {
-      "item": "minecraft:leather"
-    }
+    "A": "minecraft:gold_ingot",
+    "I": "minecraft:iron_ingot",
+    "Y": "minecraft:string",
+    "T": "minecraft:leather"
   },
   "result": {
     "id": "ashihara:sujikabuto",
