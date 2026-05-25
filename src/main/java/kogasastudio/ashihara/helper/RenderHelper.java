@@ -1,6 +1,8 @@
 package kogasastudio.ashihara.helper;
 
+import com.geckolib.animation.state.BoneSnapshot;
 import com.geckolib.cache.model.GeoBone;
+import com.geckolib.cache.model.cuboid.CuboidGeoBone;
 import com.geckolib.util.RenderUtil;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
@@ -34,6 +36,7 @@ import org.joml.Matrix4f;
 import com.geckolib.animatable.GeoAnimatable;
 import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.object.PlayState;
+import org.joml.Matrix4fc;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -63,7 +66,7 @@ public class RenderHelper
      * @param overlay 覆盖
      * @param light   光照
      */
-    public static void buildMatrix(Matrix4f matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int overlay, int RGBA, float alpha, int light)
+    public static void buildMatrix(Matrix4fc matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int overlay, int RGBA, float alpha, int light)
     {
         float red = ((RGBA >> 16) & 0xFF) / 255f;
         float green = ((RGBA >> 8) & 0xFF) / 255f;
@@ -80,7 +83,7 @@ public class RenderHelper
     /**
      * 通过RGBA色值渲染顶点
      */
-    public static void buildMatrix(Matrix4f matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int RGBA)
+    public static void buildMatrix(Matrix4fc matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int RGBA)
     {
         int red = ARGB.red(RGBA);
         int green = ARGB.green(RGBA);
@@ -484,7 +487,7 @@ public class RenderHelper
         poseStack.popPose();
     }
 
-    public static void renderFluidToGeoBone(PoseStack poseStack, GeoBone bone, FluidStack fluidStack, SubmitNodeCollector nodeCollector, int lightCoords, float scale)
+    public static void renderFluidToBoneSnapshot(PoseStack poseStack, BoneSnapshot bone, FluidStack fluidStack, SubmitNodeCollector nodeCollector, int lightCoords, float scale)
     {
         if (fluidStack.isEmpty()) return;
         TextureAtlasSprite sprite = getFluidStillSprite(fluidStack);
@@ -492,14 +495,13 @@ public class RenderHelper
 
         poseStack.pushPose();
         poseStack.scale(1f / 16f, 1f / 16f, 1f / 16f);
-        poseStack.translate(bone.pivotX(), bone.pivotY(), bone.pivotZ());
+        poseStack.translate(bone.getBone().pivotX(), bone.getBone().pivotY(), bone.getBone().pivotZ());
 
         poseStack.pushPose();
-        poseStack.translate(8f, 0, 8f);
+        poseStack.translate((16-scale)/2f, 0, (16-scale)/2f);
 
-        RenderUtil.translateAndRotateMatrixForBone(poseStack, bone);
-        poseStack.translate(0, -1 / 16f, 0);
-
+        RenderUtil.translateAndRotateMatrixForBone(poseStack, bone.getBone());
+        //poseStack.translate(0, -1 / 16f, 0);
         poseStack.scale(scale, scale, scale);
 
         float u0 = sprite.getU0();
@@ -507,13 +509,14 @@ public class RenderHelper
         float u1 = sprite.getU1();
         float v1 = sprite.getV1();
 
-        PoseStack.Pose pose = poseStack.last();
+        float height = (float) (bone.getScaleY() * (bone.getBone() instanceof CuboidGeoBone cb ? cb.cubes[0].size().y : 1)) / scale;
+
         nodeCollector.submitCustomGeometry(poseStack, Sheets.translucentBlockSheet(), (p, consumer) ->
         {
-            buildMatrix(pose.pose(), consumer, 0, 0, 0, u0, v0, OverlayTexture.NO_OVERLAY, tint, 1f, lightCoords);
-            buildMatrix(pose.pose(), consumer, 0, 1, 0, u0, v1, OverlayTexture.NO_OVERLAY, tint, 1f, lightCoords);
-            buildMatrix(pose.pose(), consumer, 1, 1, 0, u1, v1, OverlayTexture.NO_OVERLAY, tint, 1f, lightCoords);
-            buildMatrix(pose.pose(), consumer, 1, 0, 0, u1, v0, OverlayTexture.NO_OVERLAY, tint, 1f, lightCoords);
+            buildMatrix(p.pose(), consumer, 0, height, 0, u0, v0, OverlayTexture.NO_OVERLAY, tint, 1f, lightCoords);
+            buildMatrix(p.pose(), consumer, 0, height, 1, u0, v1, OverlayTexture.NO_OVERLAY, tint, 1f, lightCoords);
+            buildMatrix(p.pose(), consumer, 1, height, 1, u1, v1, OverlayTexture.NO_OVERLAY, tint, 1f, lightCoords);
+            buildMatrix(p.pose(), consumer, 1, height, 0, u1, v0, OverlayTexture.NO_OVERLAY, tint, 1f, lightCoords);
         });
 
         poseStack.popPose();

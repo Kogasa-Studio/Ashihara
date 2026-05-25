@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.client.render.ber;
 
+import com.geckolib.animation.state.BoneSnapshot;
 import com.geckolib.cache.model.GeoBone;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kogasastudio.ashihara.block.blockentity.PotBlockEntity;
@@ -15,6 +16,7 @@ import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -25,7 +27,6 @@ public class PotBER implements BlockEntityRenderer<PotBlockEntity, BlockEntityRe
 {
     private final ItemModelResolver itemModelResolver;
     private float partialTicks = 0f;
-    private boolean inited = false;
 
     public PotBER(BlockEntityRendererProvider.Context context)
     {
@@ -50,6 +51,14 @@ public class PotBER implements BlockEntityRenderer<PotBlockEntity, BlockEntityRe
         poseStack.translate(0, -0.5, 0);
         potBE.getPotModel().RENDERER.performRenderPass(potBE.getPotModel(), null, poseStack, submitNodeCollector, camera, state.lightCoords, partialTicks);
         poseStack.popPose();
+
+        poseStack.pushPose(); //————————————————————————————————————————————————————————————————————————————————————————————————————————————————物品开始
+        BoneTracer item_float_level = potBE.boneTracers.get("item_display");
+        if (item_float_level != null && item_float_level.snapshot() != null)
+        {
+            BoneSnapshot snapshot = item_float_level.snapshot();
+            poseStack.translate(snapshot.getTranslateX() / 16f, snapshot.getTranslateY() / 16f, snapshot.getTranslateZ() / 16f);
+        }
         if (!potBE.inventory.isEmpty())
         {
 
@@ -58,7 +67,7 @@ public class PotBER implements BlockEntityRenderer<PotBlockEntity, BlockEntityRe
                 ItemStack item = potBE.inventory.getStackInSlot(i);
                 if (item.isEmpty()) continue;
                 BoneTracer tracer = potBE.boneTracers.get("item_display_" + i);
-                if (tracer == null || tracer.collisionBoxes().isEmpty()) continue;
+                if (tracer == null || tracer.snapshot() == null) continue;
                 ItemStackRenderState itemState = new ItemStackRenderState();
                 this.itemModelResolver.updateForTopItem(itemState, item, ItemDisplayContext.FIXED, potBE.getLevel(), null, 42);
                 GeoBone bone = tracer.snapshot().getBone();
@@ -70,8 +79,8 @@ public class PotBER implements BlockEntityRenderer<PotBlockEntity, BlockEntityRe
         if (!potBE.output.isEmpty())
         {
             ItemStack outputItem = potBE.output.getStackInSlot(0);
-            BoneTracer tracer = potBE.boneTracers.get("item_display_5");
-            if (tracer != null && !tracer.collisionBoxes().isEmpty())
+            BoneTracer tracer = potBE.boneTracers.get("item_display_4");
+            if (tracer != null && tracer.snapshot() != null)
             {
                 ItemStackRenderState itemState = new ItemStackRenderState();
                 this.itemModelResolver.updateForTopItem(itemState, outputItem, ItemDisplayContext.FIXED, potBE.getLevel(), null, 42);
@@ -80,44 +89,49 @@ public class PotBER implements BlockEntityRenderer<PotBlockEntity, BlockEntityRe
                 RenderHelper.extractItemToGeoBone(poseStack, bone, itemState, submitNodeCollector, state.lightCoords, 7f);
             }
         }
+        poseStack.popPose();//————————————————————————————————————————————————————————————————————————————————————————————————————————————————————物品结束
 
         if (!potBE.fluidTank.isEmpty())
         {
             BoneTracer fTracer = potBE.boneTracers.get("fluid_display");
             if (fTracer != null && !fTracer.collisionBoxes().isEmpty())
             {
-                GeoBone bone = fTracer.snapshot().getBone();
-                RenderHelper.renderFluidToGeoBone(poseStack, bone, potBE.fluidTank.getFluidStack(), submitNodeCollector, state.lightCoords, 8f);
+                RenderHelper.renderFluidToBoneSnapshot(poseStack, fTracer.snapshot(), potBE.fluidTank.getFluidStack(), submitNodeCollector, state.lightCoords, 10f);
             }
         }
     }
 
-    public void updateModelStat(PotBlockEntity blockEntity)
+    public void updateModelStat(PotBlockEntity be)
     {
         if (Minecraft.getInstance().player == null) return;
-        boolean levelChanged = blockEntity.prevFluidLevel != blockEntity.fluidLevel;
+        PotModel model = be.getPotModel();
+        Player player = Minecraft.getInstance().player;
+        long instanceId = model.hashCode();
 
-        if (levelChanged || !inited)
+        if (be.fluidLevelChanged || !be.inited)
         {
-            blockEntity.getPotModel().syncFluid(blockEntity.prevFluidLevel, blockEntity.fluidLevel);
-            blockEntity.getPotModel().triggerAnim(Minecraft.getInstance().player, blockEntity.getPotModel().hashCode(), PotModel.FLUID_LEVEL_SYNC_CONTROLLER, PotModel.FLUID_LEVEL_SYNC);
-            blockEntity.getPotModel().triggerAnim(Minecraft.getInstance().player, blockEntity.getPotModel().hashCode(), PotModel.FLUID_LEVEL_SYNC_CONTROLLER, PotModel.ITEM_FLOAT_SYNC);
-            if (!inited)
+            model.syncFluid(be.prevFluidLevel, be.fluidLevel);
+            model.triggerAnim(player, instanceId, PotModel.FLUID_LEVEL_SYNC, PotModel.FLUID_LEVEL_SYNC);
+            model.triggerAnim(player, instanceId, PotModel.ITEM_FLOAT_SYNC, PotModel.ITEM_FLOAT_SYNC);
+            if (!be.inited)
             {
-                blockEntity.getPotModel().setAnimTime(PotModel.FLUID_LEVEL_SYNC_CONTROLLER, Double.MAX_VALUE);
-                this.inited = true;
+                model.setAnimTime(PotModel.FLUID_LEVEL_SYNC, Double.MAX_VALUE);
+                model.setAnimTime(PotModel.ITEM_FLOAT_SYNC, Double.MAX_VALUE);
+                be.inited = true;
             }
+            be.fluidLevelChanged = false;
         }
-        if (blockEntity.fluidLevel >= 0.25f)
+        if (be.fluidLevel >= 0.2f)
         {
-            if (!RenderHelper.animControllerPlaying(blockEntity.getPotModel(), c -> c.getName().equals(PotModel.ITEM_FLOAT_IDLE)))
+            model.setAnimSpeed(PotModel.ITEM_FLOAT_IDLE, 1);
+            if (!RenderHelper.animControllerPlaying(model, c -> c.getName().equals(PotModel.ITEM_FLOAT_IDLE)))
             {
-                blockEntity.getPotModel().triggerAnim(Minecraft.getInstance().player, blockEntity.getPotModel().hashCode(), PotModel.ITEM_FLOAT_IDLE, PotModel.ITEM_FLOAT_IDLE);
+                model.triggerAnim(player, instanceId, PotModel.ITEM_FLOAT_IDLE, PotModel.ITEM_FLOAT_IDLE);
             }
         }
         else
         {
-            blockEntity.getPotModel().stopTriggeredAnim(Minecraft.getInstance().player, blockEntity.getPotModel().hashCode(), PotModel.ITEM_FLOAT_IDLE, PotModel.ITEM_FLOAT_IDLE);
+            model.setAnimSpeed(PotModel.ITEM_FLOAT_IDLE, 0);
         }
     }
 

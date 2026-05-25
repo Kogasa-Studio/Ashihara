@@ -69,6 +69,8 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
 
     public float prevFluidLevel = 0f;
     public float fluidLevel = 0f;
+    public boolean fluidLevelChanged = false;
+    public boolean inited = false;
     private PotModel potModel;
     public Map<String, BoneTracer> boneTracers = new LinkedHashMap<>();
 
@@ -136,14 +138,10 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
             for (int i = 0; i < 5; i++)
             {
                 String id = "item_display_" + i;
-                BoneTracer tracer = createTracer(id);
-                this.boneTracers.put(id, tracer);
-                this.potModel.getRendererPoseSync().ashihara_1_21$addTracer(tracer);
+                createTracer(id);
             }
-            String fid = "fluid_display";
-            BoneTracer tracer = createTracer(fid);
-            this.boneTracers.put(fid, tracer);
-            this.potModel.getRendererPoseSync().ashihara_1_21$addTracer(tracer);
+            createTracer("fluid_display");
+            createTracer("item_display");
         }
         return this.potModel;
     }
@@ -400,8 +398,7 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
         }
 
         refreshRecipe();
-        this.fluidLevel = (float) this.fluidTank.getFluidAmount() / (float) this.fluidTank.getCapacity();
-        this.prevFluidLevel = this.fluidLevel;
+        setChanged();
     }
 
     // ── Utilities ─────────────────────────────────────────────────────────────
@@ -423,14 +420,19 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
     public void setChanged()
     {
         super.setChanged();
-        this.prevFluidLevel = this.fluidLevel;
-        this.fluidLevel = (float) this.fluidTank.getFluidAmount() / (float) this.fluidTank.getCapacity();
+        float t = (float) this.fluidTank.getFluidAmount() / (float) this.fluidTank.getCapacity();
+        if (this.fluidLevel != t)
+        {
+            this.prevFluidLevel = this.fluidLevel;
+            this.fluidLevel = t;
+            this.fluidLevelChanged = true;
+        }
     }
 
-    private BoneTracer createTracer(String name)
+    private void createTracer(String name)
     {
         BoneTracer tracer = new BoneTracer(b -> b.name().equals(name));
         boneTracers.put(name, tracer);
-        return tracer;
+        this.potModel.getRendererPoseSync().ashihara_1_21$addTracer(tracer);
     }
 }

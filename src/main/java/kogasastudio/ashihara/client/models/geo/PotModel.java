@@ -10,7 +10,6 @@ public class PotModel extends SimpleInternalControlGeoModel
     public static final String LID_STATE_CONTROLLER = "lid_state";
     public static final String LID_OPEN = "lid_open";
     public static final String LID_CLOSE = "lid_close";
-    public static final String FLUID_LEVEL_SYNC_CONTROLLER = "fluid_level_sync";
     public static final String FLUID_LEVEL_SYNC = "fluid_level_sync";
     public static final String ITEM_FLOAT_SYNC = "item_float_sync";
     public static final String ITEM_FLOAT_IDLE = "item_float_idle";
@@ -20,7 +19,7 @@ public class PotModel extends SimpleInternalControlGeoModel
 
     public static final RawAnimation ANIM_FLUID_LEVEL_SYNC = RawAnimation.begin().thenPlay(FLUID_LEVEL_SYNC);
     public static final RawAnimation ANIM_ITEM_FLOAT_SYNC = RawAnimation.begin().thenPlay(ITEM_FLOAT_SYNC);
-    public static final RawAnimation ANIM_ITEM_FLOAT_IDLE = RawAnimation.begin().thenLoop(ITEM_FLOAT_IDLE);
+    public static final RawAnimation ANIM_ITEM_FLOAT_IDLE = RawAnimation.begin().thenPlay(ITEM_FLOAT_IDLE);
 
     private float fluid_level_cur = 0;
     private float fluid_level_tgt = 0;
@@ -35,7 +34,6 @@ public class PotModel extends SimpleInternalControlGeoModel
 
     public void syncFluid(float cur, float tgt)
     {
-        if (cur == tgt || tgt == this.fluid_level_cur) return;
         this.fluid_level_cur = cur;
         this.fluid_level_tgt = tgt;
     }
@@ -52,14 +50,20 @@ public class PotModel extends SimpleInternalControlGeoModel
         );
         controllers.add
         (
-            new AnimationController<>(FLUID_LEVEL_SYNC_CONTROLLER, animatable -> PlayState.STOP)
+            new AnimationController<>(FLUID_LEVEL_SYNC, animatable -> PlayState.STOP)
             .triggerableAnim(FLUID_LEVEL_SYNC, ANIM_FLUID_LEVEL_SYNC)
+        );
+        controllers.add
+        (
+            new AnimationController<>(ITEM_FLOAT_SYNC, animatable -> PlayState.STOP)
             .triggerableAnim(ITEM_FLOAT_SYNC, ANIM_ITEM_FLOAT_SYNC)
+            .additiveAnimations()
         );
         controllers.add
         (
             new AnimationController<>(ITEM_FLOAT_IDLE, animatable -> PlayState.STOP)
             .triggerableAnim(ITEM_FLOAT_IDLE, ANIM_ITEM_FLOAT_IDLE)
+            .additiveAnimations()
         );
     }
 }
