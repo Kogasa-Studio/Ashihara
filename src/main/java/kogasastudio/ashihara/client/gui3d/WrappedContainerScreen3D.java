@@ -108,4 +108,11 @@ public abstract class WrappedContainerScreen3D<T extends AbstractContainerMenu> 
         this.getWrappedScreen().mouseMoved(x, y);
         super.mouseMoved(x, y);
     }
+
+    @Override
+    protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY)
+    {
+        this.getWrappedScreen().extractTooltip(graphics, mouseX, mouseY);
+        super.extractTooltip(graphics, mouseX, mouseY);
+    }
 }

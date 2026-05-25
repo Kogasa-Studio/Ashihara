@@ -16,7 +16,7 @@ import java.util.function.BiConsumer;
 
 public record GUI3DComponentRenderState(
         BiConsumer<PoseStack, SubmitNodeCollector> submitRenderPass,
-        Map<DataTicket<?>, Object> dataMap
+        Map<DataTicket<?>, Object> dataMap, boolean translucent
 ) implements GeoRenderState
 {
     public static Map<DataTicket<?>, Object> newDataMap()
@@ -24,9 +24,14 @@ public record GUI3DComponentRenderState(
         return new Reference2ObjectOpenHashMap<>();
     }
 
+    public GUI3DComponentRenderState(BiConsumer<PoseStack, SubmitNodeCollector> submitRenderPass, boolean translucent)
+    {
+        this(submitRenderPass, newDataMap(), translucent);
+    }
+
     public GUI3DComponentRenderState(BiConsumer<PoseStack, SubmitNodeCollector> submitRenderPass)
     {
-        this(submitRenderPass, newDataMap());
+        this(submitRenderPass, newDataMap(), false);
     }
 
     @Override

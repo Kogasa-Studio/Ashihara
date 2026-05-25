@@ -427,6 +427,10 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
             this.fluidLevel = t;
             this.fluidLevelChanged = true;
         }
+        if (this.level != null && !this.level.isClientSide())
+        {
+            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
+        }
     }
 
     private void createTracer(String name)

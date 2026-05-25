@@ -7,6 +7,7 @@ import com.geckolib.util.RenderUtil;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import kogasastudio.ashihara.block.blockentity.IFluidHandler;
+import kogasastudio.ashihara.client.gui3d.util.OBB;
 import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
 import kogasastudio.ashihara.inventory.BEFluidStackHandler;
 import net.minecraft.client.Minecraft;
@@ -66,7 +67,7 @@ public class RenderHelper
      * @param overlay 覆盖
      * @param light   光照
      */
-    public static void buildMatrix(Matrix4fc matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int overlay, int RGBA, float alpha, int light)
+    public static void buildMatrix(Matrix4fc matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int overlay, int RGBA, float alpha, int light, float nx, float ny, float nz)
     {
         float red = ((RGBA >> 16) & 0xFF) / 255f;
         float green = ((RGBA >> 8) & 0xFF) / 255f;
@@ -77,7 +78,13 @@ public class RenderHelper
                 .setUv(u, v)
                 .setOverlay(overlay)
                 .setLight(light)
-                .setNormal(0f, 1f, 0f);
+                .setNormal(nx, ny, nz);
+    }
+
+    /** Simplified overload: calls the full version with default normal (0,1,0) for backward-compat. */
+    public static void buildMatrix(Matrix4fc matrix, VertexConsumer builder, float x, float y, float z, float u, float v, int overlay, int RGBA, float alpha, int light)
+    {
+        buildMatrix(matrix, builder, x, y, z, u, v, overlay, RGBA, alpha, light, 0f, 1f, 0f);
     }
 
     /**
@@ -520,6 +527,119 @@ public class RenderHelper
         });
 
         poseStack.popPose();
+        poseStack.popPose();
+    }
+
+    // ── Face enum for tiled face rendering ───────────────────────────────────
+
+    /** Vertex order indices: 0=SW(d1a,d2a) 1=SE(d1b,d2a) 2=NE(d1b,d2b) 3=NW(d1a,d2b) */
+    private enum Face
+    {
+        TOP   (0, -1, 0, 1,2,3,0),  // SW→NW→NE→SE (CCW from +Y)
+        BOTTOM(0,1, 0, 0,3,2,1),  // SE→NE→NW→SW (CCW from -Y)
+        NORTH (0, 0,1, 0,1,2,3),  // SW→SE→NE→NW (CCW from -Z)
+        SOUTH (0, 0, -1, 2,3,0,1),  // SE→SW→NW→NE (CCW from +Z)
+        WEST  (1,0, 0, 2,1,0,3),  // NW→SW→SE→NE (CCW from -X)
+        EAST  (-1, 0, 0, 3,2,1,0);  // SW→SE→NE→NW (CCW from +X)
+
+        final float nx, ny, nz;
+        final int i0, i1, i2, i3;  // permutation indices for the 4 pre-computed corners
+
+        Face(float nx, float ny, float nz, int i0, int i1, int i2, int i3)
+        {
+            this.nx = nx; this.ny = ny; this.nz = nz;
+            this.i0 = i0; this.i1 = i1; this.i2 = i2; this.i3 = i3;
+        }
+    }
+
+    /** Emit one vertex, routing d1/d2 to the correct world axes per face. */
+    private static void emitVertex(VertexConsumer c, Matrix4fc m,
+        float d1, float d2, float cx, float cy, float cz,
+        float u, float v, int tint, int light, Face face)
+    {
+        float x = cx, y = cy, z = cz;
+        if (face == Face.TOP || face == Face.BOTTOM)     { x = d1; z = d2; }
+        else if (face == Face.NORTH || face == Face.SOUTH) { x = d1; y = d2; }
+        else /* WEST | EAST */                             { z = d1; y = d2; }
+        buildMatrix(m, c, x, y, z, u, v, OverlayTexture.NO_OVERLAY, tint, 1f, light, face.nx, face.ny, face.nz);
+    }
+
+    /**
+     * Tile a single face on the d1×d2 plane. d1→U, d2→V in sprite UV space.
+     * 这个方法是一坨大的。最好不要让LLM以外的东西尝试理解它。
+     */
+    private static void renderTiledFace(VertexConsumer c, Matrix4fc m, int tint, int light,
+        float su0, float suR, float sv0, float svR, float obbScale, float tileSize,
+        float d1Min, float d1Max, float d2Min, float d2Max,
+        float constX, float constY, float constZ, Face face)
+    {
+        float d1Len = (d1Max - d1Min) * obbScale;
+        float d2Len = (d2Max - d2Min) * obbScale;
+        int d1Tiles = Math.max(1, (int)(d1Len / tileSize));
+        float extraD1 = (d1Tiles == 1 && d1Len < tileSize) ? d1Len : (d1Len - (d1Tiles - 1) * tileSize);
+        int d2Tiles = Math.max(1, (int)(d2Len / tileSize));
+        float extraD2 = (d2Tiles == 1 && d2Len < tileSize) ? d2Len : (d2Len - (d2Tiles - 1) * tileSize);
+
+        for (int i1 = 0; i1 < d1Tiles; i1++)
+        {
+            float d1s = d1Min + i1 * tileSize / obbScale;
+            float d1Size = (i1 == d1Tiles - 1) ? extraD1 / obbScale : tileSize / obbScale;
+            float uMax = (i1 == d1Tiles - 1 && extraD1 < tileSize) ? su0 + suR * (extraD1 / tileSize) : su0 + suR;
+
+            for (int i2 = 0; i2 < d2Tiles; i2++)
+            {
+                float d2s = d2Min + i2 * tileSize / obbScale;
+                float d2Size = (i2 == d2Tiles - 1) ? extraD2 / obbScale : tileSize / obbScale;
+                float vMax = (i2 == d2Tiles - 1 && extraD2 < tileSize) ? sv0 + svR * (extraD2 / tileSize) : sv0 + svR;
+
+                // Pre-compute 4 corners: SW(ua,va) SE(ub,va) NE(ub,vb) NW(ua,vb)
+                float[][] corners = {
+                    {d1s,        d2s,        su0,  sv0 },  // 0=SW
+                    {d1s + d1Size, d2s,        uMax, sv0 },  // 1=SE
+                    {d1s + d1Size, d2s + d2Size, uMax, vMax},  // 2=NE
+                    {d1s,        d2s + d2Size, su0,  vMax},  // 3=NW
+                };
+                for (int idx : new int[]{face.i0, face.i1, face.i2, face.i3})
+                {
+                    float[] cr = corners[idx];
+                    emitVertex(c, m, cr[0], cr[1], constX, constY, constZ, cr[2], cr[3], tint, light, face);
+                }
+            }
+        }
+    }
+
+    // ── Public entry point ──────────────────────────────────────────────────
+
+    private static final float OBB_SCALE = 32f;  // GeoCubeObbExtractor divides by 32
+    private static final float TILE = 16f;        // 16 BlockBench units per tile
+
+    public static void renderFluidOnOBB(PoseStack poseStack, OBB obb, FluidStack fluidStack, SubmitNodeCollector nodeCollector, int lightCoords)
+    {
+        if (fluidStack.isEmpty()) return;
+        TextureAtlasSprite sprite = getFluidStillSprite(fluidStack);
+        int tint = getFluidTintColor(fluidStack);
+
+        float su0 = sprite.getU0(), suR = sprite.getU1() - su0;
+        float sv0 = sprite.getV0(), svR = sprite.getV1() - sv0;
+
+        float mx = obb.minXYZ().x, Mx = obb.maxXYZ().x;
+        float my = obb.minXYZ().y, My = obb.maxXYZ().y;
+        float mz = obb.minXYZ().z, Mz = obb.maxXYZ().z;
+
+        poseStack.pushPose();
+        poseStack.last().pose().set(obb.pose());
+
+        nodeCollector.submitCustomGeometry(poseStack, Sheets.translucentBlockSheet(), (p, consumer) ->
+        {
+            var m = p.pose();
+            renderTiledFace(consumer, m, tint, lightCoords, su0, suR, sv0, svR, OBB_SCALE, TILE, mx, Mx, mz, Mz, 0, My, 0, Face.TOP);
+            renderTiledFace(consumer, m, tint, lightCoords, su0, suR, sv0, svR, OBB_SCALE, TILE, mx, Mx, mz, Mz, 0, my, 0, Face.BOTTOM);
+            renderTiledFace(consumer, m, tint, lightCoords, su0, suR, sv0, svR, OBB_SCALE, TILE, mx, Mx, my, My, 0, 0, mz, Face.NORTH);
+            renderTiledFace(consumer, m, tint, lightCoords, su0, suR, sv0, svR, OBB_SCALE, TILE, mx, Mx, my, My, 0, 0, Mz, Face.SOUTH);
+            renderTiledFace(consumer, m, tint, lightCoords, su0, suR, sv0, svR, OBB_SCALE, TILE, mz, Mz, my, My, mx, 0, 0, Face.WEST);
+            renderTiledFace(consumer, m, tint, lightCoords, su0, suR, sv0, svR, OBB_SCALE, TILE, mz, Mz, my, My, Mx, 0, 0, Face.EAST);
+        });
+
         poseStack.popPose();
     }
 

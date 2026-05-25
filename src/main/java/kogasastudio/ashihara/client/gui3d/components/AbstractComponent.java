@@ -7,6 +7,7 @@ import kogasastudio.ashihara.client.gui3d.util.OBB;
 import kogasastudio.ashihara.client.gui3d.util.ObbInterSector;
 import kogasastudio.ashihara.client.gui3d.util.Ray;
 import kogasastudio.ashihara.client.render.state.GUI3DComponentRenderState;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
@@ -151,6 +152,10 @@ public class AbstractComponent
 
         this.collectSelfRenderStates(output, mouseX, mouseY, partialTick);
         this.children.forEach(child -> child.collectRenderStates(output, mouseX, mouseY, partialTick));
+    }
+
+    public void extractTooltip(GuiGraphicsExtractor graphics, double mouseX, double mouseY)
+    {
     }
 
     /** Hook for subclasses to append their own render-state submissions. */

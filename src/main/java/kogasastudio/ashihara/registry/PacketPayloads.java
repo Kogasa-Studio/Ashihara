@@ -2,6 +2,7 @@ package kogasastudio.ashihara.registry;
 
 import kogasastudio.ashihara.network.AnimatePlayerPacket;
 import kogasastudio.ashihara.network.ContainerSlotClickPacket;
+import kogasastudio.ashihara.network.FluidSlotClickPayload;
 import kogasastudio.ashihara.network.GuidebookProgressPacket;
 import kogasastudio.ashihara.network.OpenGuidebookPacket;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -27,5 +28,7 @@ public class PacketPayloads
         registrar.playToClient(AnimatePlayerPacket.TYPE, AnimatePlayerPacket.STREAM_CODEC, AnimatePlayerPacket.ClientHandler::handle);
         // 泛用容器槽位点击包（所有基于 ContainerScreen3D 的容器共用）
         registrar.playToServer(ContainerSlotClickPacket.TYPE, ContainerSlotClickPacket.STREAM_CODEC, ContainerSlotClickPacket.ServerHandler::handle);
+        // 流体槽位点击包
+        registrar.playToServer(FluidSlotClickPayload.TYPE, FluidSlotClickPayload.STREAM_CODEC, FluidSlotClickPayload.ServerHandler::handle);
     }
 }

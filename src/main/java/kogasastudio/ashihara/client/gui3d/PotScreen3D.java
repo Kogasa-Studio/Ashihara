@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.client.gui3d;
 
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.client.gui3d.components.FluidSlotComponent;
 import kogasastudio.ashihara.client.gui3d.components.ItemSlotComponent;
 import kogasastudio.ashihara.client.gui3d.components.PotLidComponent;
 import kogasastudio.ashihara.client.gui3d.components.PotModelComponent;
@@ -23,7 +24,7 @@ import org.joml.Matrix4f;
  */
 public class PotScreen3D extends ContainerScreen3D<PotScreen>
 {
-    public static PotModel potModel = new PotModel("block/pot", "textures/block/pot.png", "gui/pot");
+    public final PotModel potModel = new PotModel("block/pot", "textures/block/pot.png", "gui/pot");
     public static final Identifier INV_BG = Identifier.fromNamespaceAndPath(Ashihara.MODID, "textures/gui/player_inventory.png");
     protected PotModelComponent potModelComponent;
     protected PotMenu menu;
@@ -66,16 +67,15 @@ public class PotScreen3D extends ContainerScreen3D<PotScreen>
         // 4 个食材槽位，绑定到 PotMenu 的 Slot 0-3 及对应骨骼 item_slot_0..3
         for (int i = 0; i < PotMenu.INGREDIENT_SLOTS; i++)
         {
-            ItemSlotComponent slot = new ItemSlotComponent(
-            this.potModelComponent.getModel(),
-            "item_slot_" + i,
-            this.menu.getSlot(i)
-            );
+            ItemSlotComponent slot = new ItemSlotComponent(this.potModelComponent.getModel(), "item_slot_" + i, this.menu.getSlot(i));
             this.potModelComponent.addChild(slot);
         }
         ItemSlotComponent output = new ItemSlotComponent(this.potModelComponent.getModel(), "item_slot_4", this.menu.getSlot(4));
-
         this.potModelComponent.addChild(output);
+
+        // 流体槽位，绑定到 fluid_display 骨骼
+        FluidSlotComponent fluidSlot = new FluidSlotComponent(this.potModelComponent.getModel(), "fluid_display", this.menu.blockEntity.getBlockPos(), this);
+        this.potModelComponent.addChild(fluidSlot);
 
         this.addComponent(this.potModelComponent);
 

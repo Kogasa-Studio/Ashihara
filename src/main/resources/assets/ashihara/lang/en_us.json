@@ -276,6 +276,8 @@
   "tooltip.ashihara.current_parallel": "Current parallel: ",
   "tooltip.ashihara.fluid_output_exception": "Excepted fluid output: ",
   "tooltip.ashihara.fluid_consume_exception": "Excepted fluid consume: ",
+  "tooltip.ashihara.fluid_slot": "Fluid Storage",
+  "tooltip.ashihara.fluid_type": "Fluid: ",
 
   "key.category.in_world_tooltip": "Ashihara: In world ToolTip",
   "key.show_in_world_tooltip": "Show in world ToolTip"

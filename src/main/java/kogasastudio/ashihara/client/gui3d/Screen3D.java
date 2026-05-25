@@ -95,6 +95,15 @@ public abstract class Screen3D extends Screen
         }
     }
 
+    protected void extractTooltip(GuiGraphicsExtractor graphics, double mouseX, double mouseY)
+    {
+        AbstractComponent target = this.findTopHoverComponent(mouseX, mouseY);
+        if (target != null)
+        {
+            target.extractTooltip(graphics, mouseX, mouseY);
+        }
+    }
+
     @Override
     public boolean keyPressed(KeyEvent event)
     {
