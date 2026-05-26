@@ -22,9 +22,9 @@ import java.util.function.Function;
 
 public class PlayerProxyModel extends GeoModel<PlayerProxyModel> implements SingletonGeoAnimatable
 {
-    public static final Identifier MODEL = Identifier.fromNamespaceAndPath(Ashihara.MODID, "geo/entity/player_proxy.geo.json");
+    public static final Identifier MODEL = Identifier.fromNamespaceAndPath(Ashihara.MODID, "entity/player_proxy");
     public static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Ashihara.MODID, "textures/geo/empty.png");
-    public static final Identifier ANIMATION = Identifier.fromNamespaceAndPath(Ashihara.MODID, "animations/entity/player_proxy.animation.json");
+    public static final Identifier ANIMATION = Identifier.fromNamespaceAndPath(Ashihara.MODID, "entity/player_proxy");
     public final GeoObjectRenderer<PlayerProxyModel, PlayerModel, ?> RENDERER = new GeoObjectRenderer<>(this);
 
     public final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -92,7 +92,7 @@ public class PlayerProxyModel extends GeoModel<PlayerProxyModel> implements Sing
             BiConsumer<PlayerProxyModel, ProxiedPlayerAnimationController> outroAnim
         )
         {
-            super(animationHandler);
+            super(name, animationHandler);
             this.triggerCondition = triggerCondition;
             this.outroAnim = outroAnim;
         }

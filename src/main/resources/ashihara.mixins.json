@@ -5,9 +5,13 @@
   "compatibilityLevel": "JAVA_25",
   "refmap": "ashihara.refmap.json",
   "mixins": [
+    "MixinPlayer"
   ],
   "client": [
     "MixinAbstractContainerScreen",
+    "MixinLocalPlayer",
+    "MixinPlayerModel",
+    "MixinRemotePlayer",
     "geckolib.MixinEasingType",
     "geckolib.MixinGeoBone",
     "geckolib.MixinGeoObjectRenderer"

@@ -1,26 +1,31 @@
 package kogasastudio.ashihara.client.render;
 
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.AnimationProcessor;
 import com.geckolib.animation.state.BoneSnapshot;
+import com.geckolib.animation.state.ControllerState;
 import com.geckolib.cache.model.BakedGeoModel;
-import com.geckolib.cache.model.GeoBone;
+import com.geckolib.constant.DataTickets;
+import com.geckolib.renderer.base.BoneSnapshots;
+import com.geckolib.renderer.base.GeoRenderState;
+import com.geckolib.util.ClientUtil;
 import kogasastudio.ashihara.client.models.geo.PlayerProxyModel;
 import kogasastudio.ashihara.client.render.state.CommonGeoRenderState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.player.PlayerModel;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.world.entity.player.Player;
-import com.geckolib.animation.AnimationController;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class PlayerAnimationProxy
 {
     public final Player player;
     public final PlayerProxyModel model;
-    private PlayerModel playerModel;
     private boolean activated = false;
+    private Map<String, BoneSnapshot> currentSnapshots;
 
     public PlayerAnimationProxy(Player player)
     {
@@ -28,10 +33,6 @@ public class PlayerAnimationProxy
         this.model = new PlayerProxyModel(player);
     }
 
-    /**
-     * Actually triggers player animation.
-     * @param modelConsumer play your animation via lambda here.
-     */
     public void startProxy(BiConsumer<Player, PlayerProxyModel> modelConsumer)
     {
         this.activated = true;
@@ -43,22 +44,83 @@ public class PlayerAnimationProxy
         this.activated = false;
     }
 
-    public void proxy()
+    public boolean isActivated()
+    {
+        return this.activated;
+    }
+
+    /**
+     * Per-frame animation processing. Advances all GeckoLib animation controllers,
+     * computes bone snapshots, and caches them for {@link #applyToModel}.
+     */
+    public void tick(float partialTick)
     {
         if (!activated) return;
-        if (!checkAnimationStat())
+        if (!checkAnimationStat()) { endProxy(); return; }
+
+        GeoRenderState rs = new CommonGeoRenderState();
+        long iid = this.model.hashCode();
+        rs.addGeckolibData(DataTickets.ANIMATABLE_INSTANCE_ID, iid);
+        rs.addGeckolibData(DataTickets.ANIMATABLE_MANAGER,
+            this.model.getAnimatableInstanceCache().getManagerForId(iid));
+        rs.addGeckolibData(DataTickets.PARTIAL_TICK, partialTick);
+        rs.addGeckolibData(DataTickets.TICK, ClientUtil.getCurrentTick());
+        rs.addGeckolibData(DataTickets.ANIMATABLE_CLASS, PlayerProxyModel.class);
+
+        AnimationProcessor.extractControllerStates(this.model, rs, this.model);
+
+        ControllerState[] states = rs.getGeckolibData(DataTickets.ANIMATION_CONTROLLER_STATES);
+        if (states == null || states.length == 0) return;
+
+        BakedGeoModel baked = this.model.getBakedModel(this.model.getModelResource(rs));
+
+        Map<String, BoneSnapshot> snapshotMap = new HashMap<>();
+        BoneSnapshots snapshots = name -> Optional.ofNullable(
+            snapshotMap.computeIfAbsent(name, k ->
+                baked.getBone(k).map(BoneSnapshot::create).orElse(null)));
+
+        for (ControllerState state : states)
         {
-            endProxy();
-            return;
+            AnimationProcessor.createBoneSnapshots(state, snapshots);
         }
-        PlayerModel playerModel = (PlayerModel) ((LivingEntityRenderer<?, ?, ?>) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(player)).getModel();
-        BakedGeoModel bakedGeoModel = model.getBakedModel(model.getModelResource(new CommonGeoRenderState()));
-        bakedGeoModel.getBone("head").ifPresent(b -> {syncBones(b, playerModel.head);syncBones(b, playerModel.hat);});
-        bakedGeoModel.getBone("body").ifPresent(b -> {syncBones(b, playerModel.body);syncBones(b, playerModel.jacket);});
-        bakedGeoModel.getBone("left_arm").ifPresent(b -> {syncBones(b, playerModel.leftArm);syncBones(b, playerModel.leftSleeve);});
-        bakedGeoModel.getBone("right_arm").ifPresent(b -> {syncBones(b, playerModel.rightArm);syncBones(b, playerModel.rightSleeve);});
-        bakedGeoModel.getBone("left_leg").ifPresent(b -> {syncBones(b, playerModel.leftLeg);syncBones(b, playerModel.leftPants);});
-        bakedGeoModel.getBone("right_leg").ifPresent(b -> {syncBones(b, playerModel.rightLeg);syncBones(b, playerModel.rightPants);});
+
+        this.currentSnapshots = snapshotMap;
+    }
+
+    /**
+     * Applies cached bone-snapshot transforms to the vanilla PlayerModel parts.
+     */
+    public void applyToModel(PlayerModel playerModel)
+    {
+        if (!activated || currentSnapshots == null) return;
+
+        applySnapshot("head",       playerModel.head,       playerModel.hat);
+        applySnapshot("body",       playerModel.body,       playerModel.jacket);
+        applySnapshot("left_arm",   playerModel.leftArm,    playerModel.leftSleeve);
+        applySnapshot("right_arm",  playerModel.rightArm,   playerModel.rightSleeve);
+        applySnapshot("left_leg",   playerModel.leftLeg,    playerModel.leftPants);
+        applySnapshot("right_leg",  playerModel.rightLeg,   playerModel.rightPants);
+    }
+
+    private void applySnapshot(String boneName, ModelPart part, ModelPart overlay)
+    {
+        BoneSnapshot snapshot = currentSnapshots.get(boneName);
+        if (snapshot == null) return;
+        addToPart(snapshot, part);
+        //addToPart(snapshot, overlay);
+    }
+
+    private static void addToPart(BoneSnapshot snapshot, ModelPart part)
+    {
+        part.x += snapshot.getTranslateX();
+        part.y -= snapshot.getTranslateY();
+        part.z += snapshot.getTranslateZ();
+        part.xRot += snapshot.getRotX();
+        part.yRot += snapshot.getRotY();
+        part.zRot += snapshot.getRotZ();
+        part.xScale *= snapshot.getScaleX();
+        part.yScale *= snapshot.getScaleY();
+        part.zScale *= snapshot.getScaleZ();
     }
 
     private boolean checkAnimationStat()
@@ -71,20 +133,5 @@ public class PlayerAnimationProxy
             else pController.outro(this.model);
         }
         return flag;
-    }
-
-    private void syncBones(GeoBone oriBone, ModelPart part)
-    {
-        if (oriBone.frameSnapshot == null) return;
-        BoneSnapshot bone = oriBone.frameSnapshot;
-        part.x += bone.getTranslateX();
-        part.y -= bone.getTranslateY();
-        part.z += bone.getTranslateZ();
-        part.xRot += (bone.getRotX());
-        part.yRot += (bone.getRotY());
-        part.zRot += (bone.getRotZ());
-        part.xScale *= bone.getScaleX();
-        part.yScale *= bone.getScaleY();
-        part.zScale *= bone.getScaleZ();
     }
 }
