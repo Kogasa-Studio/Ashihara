@@ -1,10 +1,9 @@
 package kogasastudio.ashihara.client.gui3d;
 
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.client.gui3d.components.FluidSlotComponent;
-import kogasastudio.ashihara.client.gui3d.components.ItemSlotComponent;
-import kogasastudio.ashihara.client.gui3d.components.PotLidComponent;
-import kogasastudio.ashihara.client.gui3d.components.PotModelComponent;
+import kogasastudio.ashihara.client.gui3d.components.*;
+import kogasastudio.ashihara.client.gui3d.util.OBB;
+import kogasastudio.ashihara.client.models.geo.BubbleModel;
 import kogasastudio.ashihara.client.models.geo.PotModel;
 import kogasastudio.ashihara.inventory.container.PotMenu;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -12,6 +11,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
+
+import java.util.List;
 
 /**
  * 土锅 3D 容器屏幕。
@@ -25,8 +27,10 @@ import org.joml.Matrix4f;
 public class PotScreen3D extends ContainerScreen3D<PotScreen>
 {
     public final PotModel potModel = new PotModel("block/pot", "textures/block/pot.png", "gui/pot");
+    public final BubbleModel bubbleModel = new BubbleModel("bubble", "textures/gui/bubble.png", "gui/bubble");
     public static final Identifier INV_BG = Identifier.fromNamespaceAndPath(Ashihara.MODID, "textures/gui/player_inventory.png");
     protected PotModelComponent potModelComponent;
+    protected BubbleComponent bubbleComponent;
     protected PotMenu menu;
     protected Inventory playerInventory;
     private static final int INV_BG_WIDTH = 176;
@@ -77,9 +81,37 @@ public class PotScreen3D extends ContainerScreen3D<PotScreen>
         FluidSlotComponent fluidSlot = new FluidSlotComponent(this.potModelComponent.getModel(), "fluid_display", this.menu.blockEntity.getBlockPos(), this);
         this.potModelComponent.addChild(fluidSlot);
 
+        this.bubbleComponent = new BubbleComponent(this.bubbleModel, new Matrix4f().scale(16f, -16f, 16f).translate(1.5f, 1.0f, 0).rotateXYZ(0, (float) Math.toRadians(180), 0));
+
+        this.addComponent(this.bubbleComponent);
         this.addComponent(this.potModelComponent);
+        this.bubbleComponent.model().init(this.minecraft.player, this.menu.blockEntity.getAvailableRecipe() != null);
+        ItemDisplayComponent output_display = new ItemDisplayComponent(() -> this.menu.blockEntity.getAvailableOutput(), () ->
+        {
+            List<OBB> obb = this.bubbleComponent.getBoneCollisionBoxes("item_slot_0");
+            if (obb.isEmpty()) return new Matrix4f();
+            OBB o = obb.getFirst();
+            Matrix4f mat = new Matrix4f(o.pose());
+            Vector3f t = new Vector3f(o.maxXYZ()).min(o.minXYZ());
+            mat.translate((float) (t.x()+0.5), (float) (t.y()+0.5), (float) (t.z()+0.5));
+            mat.translate(0, 0, 0.5f);
+            return mat;
+        });
+        this.bubbleComponent.addChild(output_display);
 
         super.init();
+    }
+
+    public void setChanged()
+    {
+        if (this.menu.blockEntity.getAvailableRecipe() != null)
+        {
+            this.bubbleComponent.appear();
+        }
+        else
+        {
+            this.bubbleComponent.hide();
+        }
     }
 
     @Override

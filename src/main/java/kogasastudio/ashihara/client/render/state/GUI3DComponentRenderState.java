@@ -56,7 +56,7 @@ public record GUI3DComponentRenderState(
             {
                 poseStack.pushPose();
                 poseStack.last().pose().mul(presetTransform);
-                poseStack.last().normal().identity();
+                //poseStack.last().normal().identity();
                 renderer.performRenderPass
                 (
                     model,

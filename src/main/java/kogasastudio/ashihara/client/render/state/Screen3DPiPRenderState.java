@@ -9,7 +9,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 
 /**
- * PiP 渲染状态，携带指南书模型渲染所需的全部数据。
+ * PiP 渲染状态，携带3D UI渲染所需的全部数据。
  *
  * <p>在 {@code GuideBookScreen.extractRenderState} 中构建并提交到
  * {@link net.minecraft.client.gui.GuiGraphicsExtractor#submitPictureInPictureRenderState}。

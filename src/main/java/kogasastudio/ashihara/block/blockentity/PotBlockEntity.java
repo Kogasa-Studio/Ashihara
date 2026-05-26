@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block.blockentity;
 
+import kogasastudio.ashihara.client.gui3d.PotScreen;
 import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
 import kogasastudio.ashihara.client.models.geo.PotModel;
 import kogasastudio.ashihara.helper.RecipeHelper;
@@ -9,6 +10,7 @@ import kogasastudio.ashihara.inventory.BEItemStackHandler;
 import kogasastudio.ashihara.inventory.container.PotMenu;
 import kogasastudio.ashihara.registry.BlockEntities;
 import kogasastudio.ashihara.registry.RecipeTypes;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
@@ -61,6 +63,8 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
     public  PotRecipe currentRecipe;
     @Nullable
     private Identifier lastRecipe;
+    @Nullable
+    private PotRecipe availableRecipe;
     @Nullable
     private List<Component> unavailabilityMessages;
     private boolean refreshing;
@@ -128,6 +132,8 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
     public int     getMaxCookTime()      { return maxCookTime; }
     public float   getCookProgress()     { return maxCookTime > 0 ? (float) cookTime / maxCookTime : 0f; }
     public void    setParallel(int val)  { this.parallel = val; }
+    public int     getMaxParallel()      { return 64; }
+    public @Nullable PotRecipe getAvailableRecipe() { return availableRecipe; }
 
     public PotModel getPotModel()
     {
@@ -155,7 +161,7 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
 
     public void refreshRecipe()
     {
-        if (this.refreshing || this.level == null || !(this.level instanceof ServerLevel)) return;
+        if (this.refreshing || this.level == null) return;
         this.refreshing = true;
         try
         {
@@ -179,6 +185,8 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
                     .findFirst().orElse(null);
             }
 
+            this.availableRecipe = match;
+            setScreenChanged();
             if (match == null)
             {
                 acceptRecipe(null);
@@ -255,12 +263,22 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
         this.unavailabilityMessages = null;
         if (recipe != null)
         {
+            this.availableRecipe = recipe;
             startCooking(recipe);
         }
         else
         {
             stopCooking();
         }
+    }
+
+    public ItemStack getAvailableOutput()
+    {
+        if (this.availableRecipe != null)
+        {
+            return this.availableRecipe.getOutput();
+        }
+        return ItemStack.EMPTY;
     }
 
     // ── Cooking lifecycle ─────────────────────────────────────────────────────
@@ -430,6 +448,17 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
         if (this.level != null && !this.level.isClientSide())
         {
             this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
+        }
+    }
+
+    protected void setScreenChanged()
+    {
+        if (this.level != null && this.level.isClientSide())
+        {
+            if (Minecraft.getInstance().screen instanceof PotScreen pt)
+            {
+                pt.potScreen3D.setChanged();
+            }
         }
     }
 

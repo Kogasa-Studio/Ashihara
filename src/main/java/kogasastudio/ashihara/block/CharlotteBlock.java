@@ -7,6 +7,7 @@ import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.blockentity.CharlotteBE;
 import kogasastudio.ashihara.block.blockentity.MortarBE;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
+import kogasastudio.ashihara.interaction.recipes.PotRecipe;
 import kogasastudio.ashihara.registry.Items;
 import kogasastudio.ashihara.utils.json.JsonUtils;
 import net.minecraft.core.BlockPos;
@@ -99,25 +100,48 @@ public class CharlotteBlock extends Block implements EntityBlock
                 return InteractionResult.SUCCESS;
             }
         }
-        if (stack.is(Items.CHISEL.asItem()) && level.isClientSide())
+        if (stack.is(Items.CUCUMBER.asItem()) && level.isClientSide())
         {
             final DynamicOps<JsonElement> dynamicOps = new ConditionalOps<>(RegistryOps.create(JsonOps.INSTANCE, level.registryAccess()), ICondition.IContext.EMPTY);
-            MortarRecipe recipe = new MortarRecipe
-            (
-                Identifier.fromNamespaceAndPath(Ashihara.MODID, "chick"),
-                NonNullList.of(SizedIngredient.of(net.minecraft.world.item.Items.ACACIA_BOAT, 1), new SizedIngredient(Ingredient.of(level.registryAccess().getOrThrow(ItemTags.WOLF_FOOD)), 4), SizedIngredient.of(Items.KOISHI, 1)),
-                NonNullList.of(ItemStackTemplate.fromNonEmptyStack(net.minecraft.world.item.Items.ACACIA_BOAT.getDefaultInstance()), ItemStackTemplate.fromNonEmptyStack(Items.RICE.toStack()), ItemStackTemplate.fromNonEmptyStack(Items.RICE.toStack(7))),
-                Optional.of(new FluidStackTemplate(Fluids.WATER.getSource(), 1000)),
-                0,
-                new ConcurrentLinkedQueue<>(List.of(MortarBE.MortarToolType.PESTLE, MortarBE.MortarToolType.HAND, MortarBE.MortarToolType.OTSUCHI))
-            );
-            JsonElement element = MortarRecipe.MAP_CODEC.codec().encodeStart(dynamicOps, recipe).getOrThrow(msg -> new RuntimeException("Failed to encode %s: %s".formatted("test/test_recipe.json", msg)));
-            try
+            if (stack.count() == 1)
             {
-                JsonUtils.writeToJson(JsonUtils.INSTANCE.pretty, Path.of("test/test_recipe.json"), element.getAsJsonObject());
-            } catch (IOException e)
+                MortarRecipe recipe = new MortarRecipe
+                (
+                    Identifier.fromNamespaceAndPath(Ashihara.MODID, "chick"),
+                    NonNullList.of(SizedIngredient.of(net.minecraft.world.item.Items.ACACIA_BOAT, 1), new SizedIngredient(Ingredient.of(level.registryAccess().getOrThrow(ItemTags.WOLF_FOOD)), 4), SizedIngredient.of(Items.KOISHI, 1)),
+                    NonNullList.of(ItemStackTemplate.fromNonEmptyStack(net.minecraft.world.item.Items.ACACIA_BOAT.getDefaultInstance()), ItemStackTemplate.fromNonEmptyStack(Items.RICE.toStack()), ItemStackTemplate.fromNonEmptyStack(Items.RICE.toStack(7))),
+                    Optional.of(new FluidStackTemplate(Fluids.WATER.getSource(), 1000)),
+                    0,
+                    new ConcurrentLinkedQueue<>(List.of(MortarBE.MortarToolType.PESTLE, MortarBE.MortarToolType.HAND, MortarBE.MortarToolType.OTSUCHI))
+                );
+                JsonElement element = MortarRecipe.MAP_CODEC.codec().encodeStart(dynamicOps, recipe).getOrThrow(msg -> new RuntimeException("Failed to encode %s: %s".formatted("test/test_recipe.json", msg)));
+                try
+                {
+                    JsonUtils.writeToJson(JsonUtils.INSTANCE.pretty, Path.of("test/test_recipe.json"), element.getAsJsonObject());
+                } catch (IOException e)
+                {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (stack.getCount() == 2)
             {
-                throw new RuntimeException(e);
+                PotRecipe potRecipe = new PotRecipe
+                (
+                    Identifier.fromNamespaceAndPath(Ashihara.MODID, "test"),
+                    NonNullList.of(SizedIngredient.of(Items.RICE, 1), SizedIngredient.of(Items.RICE, 1)),
+                    ItemStackTemplate.fromNonEmptyStack(Items.COOKED_RICE.toStack()),
+                    Optional.of(new FluidStackTemplate(Fluids.WATER.getSource(), 100)),
+                    Optional.empty(),
+                    600
+                );
+                JsonElement element = PotRecipe.MAP_CODEC.codec().encodeStart(dynamicOps, potRecipe).getOrThrow(msg -> new RuntimeException("Failed to encode %s: %s".formatted("test/test_pot_recipe.json", msg)));
+                try
+                {
+                    JsonUtils.writeToJson(JsonUtils.INSTANCE.pretty, Path.of("test/test_pot_recipe.json"), element.getAsJsonObject());
+                } catch (IOException e)
+                {
+                    throw new RuntimeException(e);
+                }
             }
         }
         return super.useItemOn(stack, state, level, pos, player, hand, hitResult);

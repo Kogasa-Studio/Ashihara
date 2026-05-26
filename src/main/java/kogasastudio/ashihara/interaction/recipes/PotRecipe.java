@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import kogasastudio.ashihara.block.blockentity.PotBlockEntity;
 import kogasastudio.ashihara.interaction.recipes.base.BERecipeInput;
 import kogasastudio.ashihara.interaction.recipes.base.WrappedRecipe;
+import kogasastudio.ashihara.inventory.BEFluidStackHandler;
 import kogasastudio.ashihara.inventory.BEItemStackHandler;
 import kogasastudio.ashihara.registry.RecipeTypes;
 import net.minecraft.core.NonNullList;
@@ -14,34 +15,43 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStackTemplate;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
 {
     private final NonNullList<SizedIngredient> input;
-    private final ItemStack output;
-    public final FluidStack fluidCost;
-    public final FluidStack fluidProduction;
+    private final ItemStackTemplate output;
+    @Nullable
+    public final FluidStackTemplate fluidCost;
+    @Nullable
+    public final FluidStackTemplate fluidProduction;
     //in ticks
     public final int cookTime;
 
-    // --- Serialization (RecipeSerializer is now a record) ---
+    // --- Serialization ---
     public static final MapCodec<PotRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec
     (
-        mortarRecipeInstance ->
-        mortarRecipeInstance.group
+        instance ->
+        instance.group
         (
             Identifier.CODEC.fieldOf("id").forGetter(PotRecipe::getId),
             NonNullList.codecOf(SizedIngredient.NESTED_CODEC).fieldOf("ingredients").forGetter(PotRecipe::getInput),
-            ItemStack.CODEC.optionalFieldOf("output", ItemStack.EMPTY).forGetter(PotRecipe::getOutput),
-            FluidStack.CODEC.optionalFieldOf("fluid_cost", FluidStack.EMPTY).forGetter(PotRecipe::getFluidCost),
-            FluidStack.CODEC.optionalFieldOf("fluid_production", FluidStack.EMPTY).forGetter(PotRecipe::getFluidProduction),
+            ItemStackTemplate.CODEC.fieldOf("output").forGetter(r -> r.output),
+            FluidStackTemplate.CODEC.optionalFieldOf("fluid_cost").forGetter(r -> Optional.ofNullable(r.fluidCost)),
+            FluidStackTemplate.CODEC.optionalFieldOf("fluid_production").forGetter(r -> Optional.ofNullable(r.fluidProduction)),
             Codec.INT.fieldOf("cook_time").forGetter(PotRecipe::getCookTime)
-        ).apply(mortarRecipeInstance, PotRecipe::new)
+        ).apply(instance, PotRecipe::new)
     );
 
     public static final StreamCodec<RegistryFriendlyByteBuf, PotRecipe> STREAM_CODEC = StreamCodec.of(PotRecipe::toNetwork, PotRecipe::fromNetwork);
@@ -50,47 +60,77 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
 
     public NonNullList<SizedIngredient> getInput() {return input;}
 
-    public ItemStack getOutput() {return output;}
+    public ItemStack getOutput()
+    {
+        return this.output.create();
+    }
 
-    public FluidStack getFluidCost() {return fluidCost;}
+    public FluidStack getFluidCost()
+    {
+        return fluidCost == null ? FluidStack.EMPTY : fluidCost.create();
+    }
 
-    public FluidStack getFluidProduction() {return fluidProduction;}
+    public FluidStack getFluidProduction()
+    {
+        return fluidProduction == null ? FluidStack.EMPTY : fluidProduction.create();
+    }
 
     public int getCookTime() {return cookTime;}
 
-    public PotRecipe(Identifier id, NonNullList<SizedIngredient> input, ItemStack output, FluidStack fluidCost, FluidStack fluidProduction, int cookTime)
+    public PotRecipe(Identifier id,
+                     NonNullList<SizedIngredient> input,
+                     ItemStackTemplate output,
+                     Optional<FluidStackTemplate> fluidCost,
+                     Optional<FluidStackTemplate> fluidProduction,
+                     int cookTime)
     {
         super(id);
         this.input = input;
         this.output = output;
-        this.fluidCost = fluidCost;
-        this.fluidProduction = fluidProduction;
+        this.fluidCost = fluidCost.orElse(null);
+        this.fluidProduction = fluidProduction.orElse(null);
         this.cookTime = cookTime;
+    }
+
+    // ── Fluid option helpers (仿 MortarRecipe) ────────────────────────────────
+
+    public int testFluidCost(@Nullable BEFluidStackHandler<?> tank, int multiplier, boolean simulate)
+    {
+        if (fluidCost == null || multiplier == 0) return multiplier;
+        if (tank == null) return 0;
+        FluidStack stack = fluidCost.create();
+        int totalAmount = stack.getAmount() * multiplier;
+        FluidResource resource = FluidResource.of(stack);
+        try (Transaction tx = Transaction.openRoot())
+        {
+            int moved = tank.extract(resource, totalAmount, tx);
+            if (!simulate) tx.commit();
+            return stack.getAmount() > 0 ? moved / stack.getAmount() : multiplier;
+        }
+    }
+
+    public int testFluidProduction(@Nullable BEFluidStackHandler<?> tank, int multiplier, boolean simulate)
+    {
+        if (fluidProduction == null || multiplier == 0) return multiplier;
+        if (tank == null) return 0;
+        FluidStack stack = fluidProduction.create();
+        int totalAmount = stack.getAmount() * multiplier;
+        FluidResource resource = FluidResource.of(stack);
+        try (Transaction tx = Transaction.openRoot())
+        {
+            int moved = tank.insert(resource, totalAmount, tx);
+            if (!simulate) tx.commit();
+            return stack.getAmount() > 0 ? moved / stack.getAmount() : multiplier;
+        }
     }
 
     @Override
     public boolean testBE(PotBlockEntity be)
     {
         BEItemStackHandler<?> inv = be.inventory;
-        int maxParallel = 64;
-        for (SizedIngredient ingredient : input)
-        {
-            boolean anyMatch = false;
-            for (ItemStack stack : inv.getAllContents())
-            {
-                if (ingredient.test(stack))
-                {
-                    anyMatch = true;
-                    maxParallel = Math.min(maxParallel, stack.getCount() / ingredient.count());
-                    break;
-                }
-            }
-            if (!anyMatch)
-            {
-                return false;
-            }
-        }
-        be.setParallel(maxParallel);
+        int multiplier = inv.testIngredients(this.getInput(), be.getMaxParallel(), true);
+        if (multiplier < 1) return false;
+        be.setParallel(multiplier);
         return true;
     }
 
@@ -112,21 +152,19 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
     {
         Identifier id = Identifier.STREAM_CODEC.decode(buffer);
         NonNullList<SizedIngredient> iListN = NonNullList.copyOf(SizedIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buffer));
-        ItemStack oN = ItemStack.STREAM_CODEC.decode(buffer);
-        FluidStack fCostN;
+        ItemStack stack = ItemStack.STREAM_CODEC.decode(buffer);
+        Optional<FluidStackTemplate> fCostN = Optional.empty();
         if (buffer.readBoolean())
         {
-            fCostN = FluidStack.STREAM_CODEC.decode(buffer);
+            fCostN = Optional.of(FluidStackTemplate.fromNonEmptyStack(FluidStack.STREAM_CODEC.decode(buffer)));
         }
-        else fCostN = FluidStack.EMPTY;
-        FluidStack fProdN;
+        Optional<FluidStackTemplate> fProdN = Optional.empty();
         if (buffer.readBoolean())
         {
-            fProdN = FluidStack.STREAM_CODEC.decode(buffer);
+            fProdN = Optional.of(FluidStackTemplate.fromNonEmptyStack(FluidStack.STREAM_CODEC.decode(buffer)));
         }
-        else fProdN = FluidStack.EMPTY;
         int cookTimeN = buffer.readInt();
-        return new PotRecipe(id, iListN, oN, fCostN, fProdN, cookTimeN);
+        return new PotRecipe(id, iListN, ItemStackTemplate.fromNonEmptyStack(stack), fCostN, fProdN, cookTimeN);
     }
 
     private static void toNetwork(RegistryFriendlyByteBuf buffer, PotRecipe recipe)
@@ -134,13 +172,13 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
         Identifier.STREAM_CODEC.encode(buffer, recipe.getId());
         SizedIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buffer, recipe.getInput());
         ItemStack.STREAM_CODEC.encode(buffer, recipe.getOutput());
-        if (!recipe.getFluidCost().isEmpty())
+        if (recipe.fluidCost != null)
         {
             buffer.writeBoolean(true);
             FluidStack.STREAM_CODEC.encode(buffer, recipe.getFluidCost());
         }
         else buffer.writeBoolean(false);
-        if (!recipe.getFluidProduction().isEmpty())
+        if (recipe.fluidProduction != null)
         {
             buffer.writeBoolean(true);
             FluidStack.STREAM_CODEC.encode(buffer, recipe.getFluidProduction());
