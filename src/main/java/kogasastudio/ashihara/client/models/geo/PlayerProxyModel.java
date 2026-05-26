@@ -41,7 +41,7 @@ public class PlayerProxyModel extends GeoModel<PlayerProxyModel> implements Sing
     public PlayerProxyModel(Player player)
     {
         this.player = player;
-        //SingletonGeoAnimatable.registerSyncedAnimatable(this);
+        SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class PlayerProxyModel extends GeoModel<PlayerProxyModel> implements Sing
     {
         controllers.add(new ProxiedPlayerAnimationController(this, TEST, h -> PlayState.STOP, p -> p.getOffhandItem().is(Items.CUCUMBER.get())).triggerableAnim(TEST, ANIM_TEST).additiveAnimations());
         controllers.add(new ProxiedPlayerAnimationController(this, OTSUCHI_HOLD, h -> PlayState.STOP, p -> p.getMainHandItem().getItem() instanceof Otsuchi).triggerableAnim(OTSUCHI_HOLD, ANIM_OTSUCHI_HOLD).additiveAnimations());
-        controllers.add(new ProxiedPlayerAnimationController(this, OTSUCHI_SMASH, h -> PlayState.STOP, p -> p.getMainHandItem().getItem() instanceof Otsuchi).triggerableAnim(OTSUCHI_SMASH, ANIM_OTSUCHI_SMASH).additiveAnimations());
+        controllers.add(new ProxiedPlayerAnimationController(this, OTSUCHI_SMASH, h -> PlayState.STOP, p -> p.getMainHandItem().getItem() instanceof Otsuchi).triggerableAnim(OTSUCHI_SMASH, ANIM_OTSUCHI_SMASH));
     }
 
     @Override
