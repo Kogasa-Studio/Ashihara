@@ -12,7 +12,6 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class PlayerAnimationHelper
 {
@@ -30,7 +29,7 @@ public class PlayerAnimationHelper
 
     public static void pushPlayerAnimation(Player player, String id)
     {
-        if (!(player instanceof ServerPlayer)) return;
-        PacketDistributor.sendToAllPlayers(new AnimatePlayerPacket(id, player.getUUID()));
+        if (!(player instanceof ServerPlayer serverPlayer)) return;
+        PacketDistributor.sendToPlayer(serverPlayer, new AnimatePlayerPacket(id, player.getUUID()));
     }
 }
