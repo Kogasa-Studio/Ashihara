@@ -10,10 +10,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -24,9 +21,11 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jspecify.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -164,10 +163,10 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
      * 否：不做更改
      */
     @Override
-    public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor)
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction directionToNeighbour, BlockPos neighbourPos, BlockState neighbourState, RandomSource random)
     {
         Level worldIn = (Level) level;
-        BlockState fromState = worldIn.getBlockState(neighbor);
+        BlockState fromState = worldIn.getBlockState(neighbourPos);
         if (!fromState.is(Blocks.RICE_CROP.get()))
         {
             boolean watered = fourWaysFluidsIncludesWater(worldIn, pos);
@@ -202,7 +201,7 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
                     {
                         if (watered)
                         {
-                            worldIn.setBlockAndUpdate(neighbor, fromState.setValue(HAS_WATER, true));
+                            worldIn.setBlockAndUpdate(neighbourPos, fromState.setValue(HAS_WATER, true));
                         } else
                         {
                             worldIn.setBlockAndUpdate(pos, state.setValue(HAS_WATER, false));
@@ -221,7 +220,7 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
                     {
                         if (watered)
                         {
-                            worldIn.setBlockAndUpdate(neighbor, fromState.setValue(LEVEL, levelT));
+                            worldIn.setBlockAndUpdate(neighbourPos, fromState.setValue(LEVEL, levelT));
                         } else
                         {
                             worldIn.setBlockAndUpdate(pos, state.setValue(LEVEL, levelF));
@@ -250,6 +249,7 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
                 }
             }
         }
+        return super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
     }
 
     @Override
