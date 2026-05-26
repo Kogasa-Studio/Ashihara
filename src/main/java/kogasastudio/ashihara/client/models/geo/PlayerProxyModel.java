@@ -47,9 +47,9 @@ public class PlayerProxyModel extends GeoModel<PlayerProxyModel> implements Sing
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
     {
-        controllers.add(new ProxiedPlayerAnimationController(this, TEST, h -> PlayState.STOP, p -> p.getOffhandItem().is(Items.CUCUMBER.get())).triggerableAnim(TEST, ANIM_TEST));
-        controllers.add(new ProxiedPlayerAnimationController(this, OTSUCHI_HOLD, h -> PlayState.STOP, p -> p.getMainHandItem().getItem() instanceof Otsuchi).triggerableAnim(OTSUCHI_HOLD, ANIM_OTSUCHI_HOLD));
-        controllers.add(new ProxiedPlayerAnimationController(this, OTSUCHI_SMASH, h -> PlayState.STOP, p -> p.getMainHandItem().getItem() instanceof Otsuchi).triggerableAnim(OTSUCHI_SMASH, ANIM_OTSUCHI_SMASH));
+        controllers.add(new ProxiedPlayerAnimationController(this, TEST, h -> PlayState.STOP, p -> p.getOffhandItem().is(Items.CUCUMBER.get())).triggerableAnim(TEST, ANIM_TEST).additiveAnimations());
+        controllers.add(new ProxiedPlayerAnimationController(this, OTSUCHI_HOLD, h -> PlayState.STOP, p -> p.getMainHandItem().getItem() instanceof Otsuchi).triggerableAnim(OTSUCHI_HOLD, ANIM_OTSUCHI_HOLD).additiveAnimations());
+        controllers.add(new ProxiedPlayerAnimationController(this, OTSUCHI_SMASH, h -> PlayState.STOP, p -> p.getMainHandItem().getItem() instanceof Otsuchi).triggerableAnim(OTSUCHI_SMASH, ANIM_OTSUCHI_SMASH).additiveAnimations());
     }
 
     @Override
