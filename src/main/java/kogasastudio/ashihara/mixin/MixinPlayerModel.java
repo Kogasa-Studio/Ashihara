@@ -5,6 +5,7 @@ import kogasastudio.ashihara.utils.mixin.PlayerProxyProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,15 +21,13 @@ public class MixinPlayerModel
     )
     private void afterSetupAnim(AvatarRenderState state, CallbackInfo ci)
     {
-        for (Player player : Minecraft.getInstance().level.players())
+        Entity entity = Minecraft.getInstance().level.getEntity(state.id);
+        if (!(entity instanceof Player player)) return;
+        PlayerAnimationProxy proxy = ((PlayerProxyProvider) player).ashihara_1_21$getAnimationProxy();
+        if (proxy.isActivated())
         {
-            PlayerAnimationProxy proxy = ((PlayerProxyProvider) player).ashihara_1_21$getAnimationProxy();
-            if (proxy.isActivated())
-            {
-                proxy.tick(state.partialTick);
-                proxy.applyToModel((PlayerModel) (Object) this);
-                return;
-            }
+            proxy.tick(state.partialTick);
+            proxy.applyToModel((PlayerModel) (Object) this);
         }
     }
 }

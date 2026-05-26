@@ -41,7 +41,7 @@ public class PlayerProxyModel extends GeoModel<PlayerProxyModel> implements Sing
     public PlayerProxyModel(Player player)
     {
         this.player = player;
-        SingletonGeoAnimatable.registerSyncedAnimatable(this);
+        //SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
     @Override
