@@ -1,6 +1,5 @@
 package kogasastudio.ashihara.block.blockentity;
 
-import kogasastudio.ashihara.client.gui3d.PotScreen;
 import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
 import kogasastudio.ashihara.client.models.geo.PotModel;
 import kogasastudio.ashihara.helper.RecipeHelper;
@@ -10,11 +9,11 @@ import kogasastudio.ashihara.inventory.BEItemStackHandler;
 import kogasastudio.ashihara.inventory.container.PotMenu;
 import kogasastudio.ashihara.registry.BlockEntities;
 import kogasastudio.ashihara.registry.RecipeTypes;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -83,9 +82,9 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
     public PotBlockEntity(BlockPos pos, BlockState state)
     {
         super(BlockEntities.POT_BE.get(), pos, state);
-        this.inventory = new BEItemStackHandler<>(INVENTORY_SIZE, this, () -> { if (!isCooking) refreshRecipe(); });
-        this.output    = new BEItemStackHandler<>(OUTPUT_SIZE,    this, () -> { if (!isCooking) refreshRecipe(); });
-        this.fluidTank = new BEFluidStackHandler<>(FLUID_CAPACITY, this, () -> { if (!isCooking) refreshRecipe(); });
+        this.inventory = new BEItemStackHandler<>(INVENTORY_SIZE, this, this::refreshRecipe);
+        this.output    = new BEItemStackHandler<>(OUTPUT_SIZE, this, this::refreshRecipe);
+        this.fluidTank = new BEFluidStackHandler<>(FLUID_CAPACITY, this, this::refreshRecipe);
     }
 
     // ── Capability providers ──────────────────────────────────────────────────
@@ -180,13 +179,14 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
             if (match == null)
             {
                 match = recipes.stream()
-                    .filter(h -> h.value().testBE(this))
-                    .map(RecipeHolder::value)
-                    .findFirst().orElse(null);
+                .filter(h -> h.value().testBE(this))
+                .map(RecipeHolder::value)
+                .max(Comparator.comparingInt(PotRecipe::getPriority))
+                .orElse(null);
             }
 
             this.availableRecipe = match;
-            setScreenChanged();
+            //setScreenChanged();
             if (match == null)
             {
                 acceptRecipe(null);
@@ -198,6 +198,7 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
             {
                 this.unavailabilityMessages = issues;
                 this.currentRecipe = match;
+                pauseCooking();
                 return;
             }
 
@@ -232,8 +233,7 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
             FluidStack required  = recipe.getFluidCost().copyWithAmount(recipe.getFluidCost().getAmount() * p);
             if (!tankFluid.is(required.getFluid()) || tankFluid.getAmount() < required.getAmount())
             {
-                issues.add(Component.translatable("tooltip.ashihara.pot.need_fluid",
-                    required.getAmount(), required.getHoverName()));
+                issues.add(Component.translatable("tooltip.ashihara.pot.need_fluid").append(Component.empty().append(required.getHoverName()).append(" * ").append(String.valueOf(required.amount())).setStyle(Style.EMPTY.withColor(0xffa7d888))));
             }
         }
 
@@ -259,12 +259,14 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
     private void acceptRecipe(@Nullable PotRecipe recipe)
     {
         if (this.currentRecipe != null) this.lastRecipe = this.currentRecipe.getId();
+        boolean isSameRecipe = recipe == this.currentRecipe;
         this.currentRecipe = recipe;
         this.unavailabilityMessages = null;
         if (recipe != null)
         {
             this.availableRecipe = recipe;
-            startCooking(recipe);
+            if (!isSameRecipe) startCooking(recipe);
+            else resumeCooking();
         }
         else
         {
@@ -292,6 +294,22 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
         this.sync();
     }
 
+    private void pauseCooking()
+    {
+        this.isCooking = false;
+        this.setChanged();
+        this.sync();
+    }
+
+    private void resumeCooking()
+    {
+        if (this.currentRecipe == null) return;
+        this.isCooking = true;
+        this.maxCookTime = this.currentRecipe.getCookTime();
+        this.setChanged();
+        this.sync();
+    }
+
     private void stopCooking()
     {
         this.isCooking     = false;
@@ -305,7 +323,11 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
     private void finishRecipe()
     {
         PotRecipe recipe = this.currentRecipe;
-        if (recipe == null) return;
+        if (recipe == null)
+        {
+            stopCooking();
+            return;
+        }
         int p = this.parallel;
 
         // Consume input items
@@ -363,7 +385,7 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
             be.finishRecipe();
             return;
         }
-        be.setChanged();
+        //be.setChanged();
     }
 
     // ── Persistence ───────────────────────────────────────────────────────────
@@ -416,7 +438,7 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
         }
 
         refreshRecipe();
-        setChanged();
+        //setChanged();
     }
 
     // ── Utilities ─────────────────────────────────────────────────────────────
@@ -451,7 +473,7 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
         }
     }
 
-    protected void setScreenChanged()
+    /*protected void setScreenChanged()
     {
         if (this.level != null && this.level.isClientSide())
         {
@@ -460,7 +482,7 @@ public class PotBlockEntity extends AshiharaMachineBE implements MenuProvider
                 pt.potScreen3D.setChanged();
             }
         }
-    }
+    }*/
 
     private void createTracer(String name)
     {

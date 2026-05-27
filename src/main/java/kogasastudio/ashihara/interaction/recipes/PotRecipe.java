@@ -38,6 +38,7 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
     public final FluidStackTemplate fluidProduction;
     //in ticks
     public final int cookTime;
+    public final int priority;
 
     // --- Serialization ---
     public static final MapCodec<PotRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec
@@ -50,8 +51,9 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
             ItemStackTemplate.CODEC.fieldOf("output").forGetter(r -> r.output),
             FluidStackTemplate.CODEC.optionalFieldOf("fluid_cost").forGetter(r -> Optional.ofNullable(r.fluidCost)),
             FluidStackTemplate.CODEC.optionalFieldOf("fluid_production").forGetter(r -> Optional.ofNullable(r.fluidProduction)),
-            Codec.INT.fieldOf("cook_time").forGetter(PotRecipe::getCookTime)
-        ).apply(instance, PotRecipe::new)
+            Codec.INT.fieldOf("cook_time").forGetter(PotRecipe::getCookTime),
+            Codec.INT.optionalFieldOf("priority", 0).forGetter(PotRecipe::getPriority)
+        ).apply(instance, (id1, input1, output1, fluidCost1, fluidProduction1, cookTime1, priority1) -> new PotRecipe(id1, input1, output1, fluidCost1, fluidProduction1, cookTime1, priority1))
     );
 
     public static final StreamCodec<RegistryFriendlyByteBuf, PotRecipe> STREAM_CODEC = StreamCodec.of(PotRecipe::toNetwork, PotRecipe::fromNetwork);
@@ -77,12 +79,15 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
 
     public int getCookTime() {return cookTime;}
 
+    public int getPriority() {return priority;}
+
     public PotRecipe(Identifier id,
                      NonNullList<SizedIngredient> input,
                      ItemStackTemplate output,
                      Optional<FluidStackTemplate> fluidCost,
                      Optional<FluidStackTemplate> fluidProduction,
-                     int cookTime)
+                     int cookTime,
+                     int priority)
     {
         super(id);
         this.input = input;
@@ -90,6 +95,7 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
         this.fluidCost = fluidCost.orElse(null);
         this.fluidProduction = fluidProduction.orElse(null);
         this.cookTime = cookTime;
+        this.priority = priority;
     }
 
     // ── Fluid option helpers (仿 MortarRecipe) ────────────────────────────────
@@ -164,7 +170,8 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
             fProdN = Optional.of(FluidStackTemplate.fromNonEmptyStack(FluidStack.STREAM_CODEC.decode(buffer)));
         }
         int cookTimeN = buffer.readInt();
-        return new PotRecipe(id, iListN, ItemStackTemplate.fromNonEmptyStack(stack), fCostN, fProdN, cookTimeN);
+        int priorityN = buffer.readInt();
+        return new PotRecipe(id, iListN, ItemStackTemplate.fromNonEmptyStack(stack), fCostN, fProdN, cookTimeN, priorityN);
     }
 
     private static void toNetwork(RegistryFriendlyByteBuf buffer, PotRecipe recipe)
@@ -185,5 +192,6 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
         }
         else buffer.writeBoolean(false);
         buffer.writeInt(recipe.cookTime);
+        buffer.writeInt(recipe.priority);
     }
 }

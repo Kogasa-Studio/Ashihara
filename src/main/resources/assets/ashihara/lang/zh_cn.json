@@ -269,6 +269,7 @@
   "tooltip.ashihara.fluid_existence": "流体: ",
   "tooltip.ashihara.current_recipe": "当前配方: ",
   "tooltip.ashihara.current_parallel": "当前并行数: ",
+  "tooltip.ashihara.pot.need_fluid": "此配方需要流体: ",
   "tooltip.ashihara.fluid_output_exception": "预期流体产出: ",
   "tooltip.ashihara.fluid_consume_exception": "预期流体消耗: ",
   "tooltip.ashihara.fluid_slot": "流体储存",

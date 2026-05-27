@@ -271,6 +271,7 @@
   "tooltip.ashihara.current_parallel": "今の並行数: ",
   "tooltip.ashihara.fluid_output_exception": "予期液体産出: ",
   "tooltip.ashihara.fluid_consume_exception": "予期液体消耗: ",
+  "tooltip.ashihara.pot.need_fluid": "この料理をするには液体を必要とす：",
   "tooltip.ashihara.fluid_slot": "流体貯蔵",
   "tooltip.ashihara.fluid_type": "流体：",
   "key.category.in_world_tooltip": "葦原：世界内ToolTip",

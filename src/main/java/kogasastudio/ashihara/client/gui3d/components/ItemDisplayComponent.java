@@ -1,9 +1,6 @@
 package kogasastudio.ashihara.client.gui3d.components;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
-import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
-import kogasastudio.ashihara.client.gui3d.util.OBB;
 import kogasastudio.ashihara.client.render.state.GUI3DComponentRenderState;
 import kogasastudio.ashihara.helper.RenderHelper;
 import net.minecraft.client.Minecraft;
@@ -14,10 +11,8 @@ import net.minecraft.network.chat.FormattedText;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
 
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -37,9 +32,6 @@ public class ItemDisplayComponent extends AbstractComponent
     {
         return (poseStack) ->
         {
-            /*Vector3f t = new Vector3f(obb.maxXYZ()).min(obb.minXYZ()).mul(1f);*/
-            //poseStack.mulPose(Axis.YP.rotationDegrees(-90f));
-            //poseStack.mulPose(Axis.XP.rotationDegrees(-90f));
             poseStack.scale(-this.itemRenderScale, this.itemRenderScale, this.itemRenderScale);
         };
     }

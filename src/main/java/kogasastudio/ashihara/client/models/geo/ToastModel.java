@@ -6,7 +6,7 @@ import com.geckolib.animation.RawAnimation;
 import com.geckolib.animation.object.PlayState;
 import net.minecraft.world.entity.Entity;
 
-public class BubbleModel extends SimpleInternalControlGeoModel
+public class ToastModel extends SimpleInternalControlGeoModel implements IToast
 {
     public static final String INTRO = "intro";
     public static final String OUTRO = "outro";
@@ -16,7 +16,7 @@ public class BubbleModel extends SimpleInternalControlGeoModel
     public static final RawAnimation ANIM_OUTRO = RawAnimation.begin().thenPlay(OUTRO);
     public static final RawAnimation ANIM_IDLE = RawAnimation.begin().thenPlay(IDLE);
 
-    public BubbleModel(String modelPrefix, String texturePrefix, String animationsPrefix)
+    public ToastModel(String modelPrefix, String texturePrefix, String animationsPrefix)
     {
         super(modelPrefix, texturePrefix, animationsPrefix);
     }
@@ -30,6 +30,7 @@ public class BubbleModel extends SimpleInternalControlGeoModel
         controllers.add(new AnimationController<>(IDLE, a -> PlayState.STOP).triggerableAnim(IDLE, ANIM_IDLE).additiveAnimations());
     }
 
+    @Override
     public void init(Entity entity, boolean instant)
     {
         this.triggerAnim(entity, this.hashCode(), INTRO, INTRO);
@@ -38,7 +39,8 @@ public class BubbleModel extends SimpleInternalControlGeoModel
         this.triggerIdle(entity);
     }
 
-    public void triggerIntro(Entity entity)
+    @Override
+    public void intro(Entity entity)
     {
         this.triggerAnim(entity, this.hashCode(), OUTRO, OUTRO);
         this.setAnimTime(OUTRO, 0);
@@ -48,7 +50,8 @@ public class BubbleModel extends SimpleInternalControlGeoModel
         this.triggerAnim(entity, this.hashCode(), INTRO, INTRO);
     }
 
-    public void triggerOutro(Entity entity)
+    @Override
+    public void outro(Entity entity)
     {
         this.setAnimTime(OUTRO, 0);
         this.setAnimSpeed(OUTRO, 1);

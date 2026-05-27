@@ -38,6 +38,7 @@ import com.geckolib.animatable.GeoAnimatable;
 import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.object.PlayState;
 import org.joml.Matrix4fc;
+import org.joml.Vector3f;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -642,6 +643,17 @@ public class RenderHelper
 
         poseStack.popPose();
     }
+
+    public static Matrix4f getOBBCenterTransform(OBB obb, Vector3f cubeScale)
+    {
+        if (obb == null) return new Matrix4f();
+        Matrix4f mat = new Matrix4f(obb.pose());
+        Vector3f t = new Vector3f(obb.maxXYZ()).min(obb.minXYZ());
+        mat.translate(t.x() + cubeScale.x() / 16f, t.y() + cubeScale.x() / 16f, t.z() + cubeScale.z() / 16f);
+        return mat;
+    }
+
+    public static Matrix4f getOBBCenterTransform(OBB obb, float cubeScale) {return getOBBCenterTransform(obb, new Vector3f(cubeScale));}
 
     public static final SimpleInternalControlGeoModel INDICATOR = new SimpleInternalControlGeoModel("geo/assistance/indicator.geo.json", "textures/geo/indicator.png");
 }

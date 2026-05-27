@@ -132,8 +132,8 @@ public class CharlotteBlock extends Block implements EntityBlock
                     ItemStackTemplate.fromNonEmptyStack(Items.COOKED_RICE.toStack()),
                     Optional.of(new FluidStackTemplate(Fluids.WATER.getSource(), 100)),
                     Optional.empty(),
-                    600
-                );
+                    600,
+                    0);
                 JsonElement element = PotRecipe.MAP_CODEC.codec().encodeStart(dynamicOps, potRecipe).getOrThrow(msg -> new RuntimeException("Failed to encode %s: %s".formatted("test/test_pot_recipe.json", msg)));
                 try
                 {

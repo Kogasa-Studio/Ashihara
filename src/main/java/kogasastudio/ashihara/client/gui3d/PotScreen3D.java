@@ -3,15 +3,15 @@ package kogasastudio.ashihara.client.gui3d;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.client.gui3d.components.*;
 import kogasastudio.ashihara.client.gui3d.util.OBB;
-import kogasastudio.ashihara.client.models.geo.BubbleModel;
+import kogasastudio.ashihara.client.models.geo.ToastModel;
 import kogasastudio.ashihara.client.models.geo.PotModel;
+import kogasastudio.ashihara.helper.RenderHelper;
 import kogasastudio.ashihara.inventory.container.PotMenu;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
 
 import java.util.List;
 
@@ -27,10 +27,11 @@ import java.util.List;
 public class PotScreen3D extends ContainerScreen3D<PotScreen>
 {
     public final PotModel potModel = new PotModel("block/pot", "textures/block/pot.png", "gui/pot");
-    public final BubbleModel bubbleModel = new BubbleModel("bubble", "textures/gui/bubble.png", "gui/bubble");
+    public final ToastModel bubbleModel = new ToastModel("bubble", "textures/gui/bubble.png", "gui/bubble");
     public static final Identifier INV_BG = Identifier.fromNamespaceAndPath(Ashihara.MODID, "textures/gui/player_inventory.png");
     protected PotModelComponent potModelComponent;
-    protected BubbleComponent bubbleComponent;
+    protected ToastComponent bubbleComponent;
+    protected RecipeWarningComponent warningComponent;
     protected PotMenu menu;
     protected Inventory playerInventory;
     private static final int INV_BG_WIDTH = 176;
@@ -81,28 +82,31 @@ public class PotScreen3D extends ContainerScreen3D<PotScreen>
         FluidSlotComponent fluidSlot = new FluidSlotComponent(this.potModelComponent.getModel(), "fluid_display", this.menu.blockEntity.getBlockPos(), this);
         this.potModelComponent.addChild(fluidSlot);
 
-        this.bubbleComponent = new BubbleComponent(this.bubbleModel, new Matrix4f().scale(16f, -16f, 16f).translate(1.5f, 1.0f, 0).rotateXYZ(0, (float) Math.toRadians(180), 0));
-
-        this.addComponent(this.bubbleComponent);
-        this.addComponent(this.potModelComponent);
-        this.bubbleComponent.model().init(this.minecraft.player, this.menu.blockEntity.getAvailableRecipe() != null);
+        this.bubbleComponent = new ToastComponent(this.bubbleModel, true, new Matrix4f().scale(16f, -16f, 16f).translate(1.5f, 1.0f, 0).rotateXYZ(0, (float) Math.toRadians(180), 0));
+        this.bubbleComponent.withBiCondition(() -> this.menu.blockEntity.getAvailableRecipe() != null);
+        //((ToastModel) this.bubbleComponent.model()).init(this.minecraft.player, this.menu.blockEntity.getAvailableRecipe() != null);
         ItemDisplayComponent output_display = new ItemDisplayComponent(() -> this.menu.blockEntity.getAvailableOutput(), () ->
         {
             List<OBB> obb = this.bubbleComponent.getBoneCollisionBoxes("item_slot_0");
             if (obb.isEmpty()) return new Matrix4f();
             OBB o = obb.getFirst();
-            Matrix4f mat = new Matrix4f(o.pose());
-            Vector3f t = new Vector3f(o.maxXYZ()).min(o.minXYZ());
-            mat.translate((float) (t.x()+0.5), (float) (t.y()+0.5), (float) (t.z()+0.5));
+            Matrix4f mat = RenderHelper.getOBBCenterTransform(o, 8);
             mat.translate(0, 0, 0.5f);
             return mat;
         });
         this.bubbleComponent.addChild(output_display);
 
+        this.warningComponent = new RecipeWarningComponent(new Matrix4f().scale(-16f, -16f, 16f).translate(3f, 1.0f, 0), () -> this.menu.blockEntity.getUnavailabilityMessages());
+        this.warningComponent.withBiCondition(() -> !this.menu.blockEntity.getUnavailabilityMessages().isEmpty());
+
+        this.addComponent(this.potModelComponent);
+        this.addComponent(this.bubbleComponent);
+        this.addComponent(this.warningComponent);
+
         super.init();
     }
 
-    public void setChanged()
+    /*public void setChanged()
     {
         if (this.menu.blockEntity.getAvailableRecipe() != null)
         {
@@ -112,7 +116,7 @@ public class PotScreen3D extends ContainerScreen3D<PotScreen>
         {
             this.bubbleComponent.hide();
         }
-    }
+    }*/
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a)
