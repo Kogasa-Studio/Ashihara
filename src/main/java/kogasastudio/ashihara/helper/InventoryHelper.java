@@ -18,9 +18,9 @@ public class InventoryHelper
      *
      * @return {@code true} if the interaction succeeded
      */
-    public static boolean interactWithInventory(ItemStacksResourceHandler inventory, ItemStack item, Player player, InteractionHand hand, int maxAmount)
+    public static boolean interactWithInventory(ItemStacksResourceHandler inventory, ItemStack item, Player player, InteractionHand hand, int maxAmount, boolean allowInsert, boolean allowExtract)
     {
-        if (item.isEmpty())
+        if (item.isEmpty() && allowExtract)
         {
             // Extract from last occupied slot
             for (int i = inventory.size() - 1; i >= 0; i--)
@@ -35,13 +35,13 @@ public class InventoryHelper
                     if (extracted > 0)
                     {
                         tx.commit();
-                        player.setItemInHand(hand, resource.toStack(extracted));
+                        player.getInventory().add(resource.toStack(extracted));
                         return true;
                     }
                 }
             }
         }
-        else
+        else if (allowInsert)
         {
             // Insert into first accepting slot
             ItemResource resource = ItemResource.of(item);
@@ -62,5 +62,10 @@ public class InventoryHelper
             }
         }
         return false;
+    }
+
+    public static boolean interactWithInventory(ItemStacksResourceHandler inventory, ItemStack item, Player player, InteractionHand hand, int maxAmount)
+    {
+        return interactWithInventory(inventory, item, player, hand, maxAmount, true, true);
     }
 }

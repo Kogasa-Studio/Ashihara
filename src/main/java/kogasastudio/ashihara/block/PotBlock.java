@@ -1,19 +1,13 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.block.blockentity.PotBlockEntity;
-import kogasastudio.ashihara.client.render.ber.PotBER;
 import kogasastudio.ashihara.helper.InventoryHelper;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.registry.Items;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -22,7 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
@@ -140,7 +133,7 @@ public class PotBlock extends Block implements EntityBlock
             (
                 FluidUtil.interactWithFluidHandler(player, hand, pos, be.fluidTank)
                 || InventoryHelper.interactWithInventory(be.inventory, stack, player, hand, 64)
-                || InventoryHelper.interactWithInventory(be.output, stack, player, hand, 64)
+                || InventoryHelper.interactWithInventory(be.output, stack, player, hand, 64, false, true)
             )
             {
                 player.getInventory().setChanged();

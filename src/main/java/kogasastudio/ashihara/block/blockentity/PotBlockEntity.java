@@ -91,7 +91,7 @@ public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider
 
     public static ResourceHandler<ItemResource>  getItemHandler (PotBlockEntity be, Direction side)
     {
-        return side == Direction.UP ? be.inventory : be.output;
+        return be.output.isEmpty() ? be.inventory : be.output;
     }
     public static ResourceHandler<FluidResource> getFluidHandler(PotBlockEntity be, Direction side)
     {
@@ -474,13 +474,13 @@ public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider
     }
 
     @Override
-    public void setRemoved()
+    public void preRemoveSideEffects(BlockPos pos, BlockState state)
     {
         if (this.level != null && !this.level.isClientSide())
         {
             dropContents(this.level, this.getBlockPos());
         }
-        super.setRemoved();
+        super.preRemoveSideEffects(pos, state);
     }
 
     private void createTracer(String name)

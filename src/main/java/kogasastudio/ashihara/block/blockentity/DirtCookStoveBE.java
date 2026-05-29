@@ -170,12 +170,12 @@ public class DirtCookStoveBE extends AshiharaCommonBE
     }
 
     @Override
-    public void setRemoved()
+    public void preRemoveSideEffects(BlockPos pos, BlockState state)
     {
         if (this.level != null && !this.level.isClientSide())
         {
             dropContents(this.level, this.getBlockPos());
         }
-        super.setRemoved();
+        super.preRemoveSideEffects(pos, state);
     }
 }
