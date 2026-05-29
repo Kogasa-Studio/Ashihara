@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.helper;
 
 import org.joml.Quaternionf;
+import org.joml.Vector2f;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
@@ -35,5 +36,20 @@ public class MathHelper
     public static Quaternionf convertToQuaternionf(Vector3d eulerAngles)
     {
         return new Quaternionf().rotateXYZ((float) eulerAngles.x, (float) eulerAngles.y, (float) eulerAngles.z);
+    }
+
+    public static float distance(Vector3f v1, Vector3f v2)
+    {
+        float dx = v2.x - v1.x;
+        float dy = v2.y - v1.y;
+        float dz = v2.z - v1.z;
+        return (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
+    public static float distance(Vector2f v1, Vector2f v2)
+    {
+        float dx = v2.x - v1.x;
+        float dy = v2.y - v1.y;
+        return (float) Math.sqrt(dx * dx + dy * dy);
     }
 }

@@ -53,5 +53,33 @@ public final class Gui3dDebugProjector
 
 		return result;
 	}
+
+	public static Vector3f getProjectionCenter(OBB obb, Screen3D screen)
+	{
+		Vector4f[] corners = projectCorners(obb, screen);
+		if (corners == null)
+		{
+			return null;
+		}
+
+		float minX = Float.POSITIVE_INFINITY;
+		float minY = Float.POSITIVE_INFINITY;
+		float maxX = Float.NEGATIVE_INFINITY;
+		float maxY = Float.NEGATIVE_INFINITY;
+		float depth = 0.0f;
+
+		for (Vector4f corner : corners)
+		{
+			float cx = corner.x;
+			float cy = corner.y;
+			if (cx < minX) minX = cx;
+			if (cy < minY) minY = cy;
+			if (cx > maxX) maxX = cx;
+			if (cy > maxY) maxY = cy;
+			depth += corner.z;
+		}
+
+		return new Vector3f((minX + maxX) * 0.5f, (minY + maxY) * 0.5f, depth / corners.length);
+	}
 }
 

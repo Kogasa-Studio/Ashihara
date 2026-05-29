@@ -11,6 +11,10 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -168,23 +172,35 @@ public class PotBlock extends Block implements EntityBlock
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
     {
-        if (level.isClientSide()) return null;
         return (lvl, pos, st, be) ->
         {
             if (be instanceof PotBlockEntity potBE)
             {
-                PotBlockEntity.serverTick(lvl, pos, st, potBE);
+                if (lvl.isClientSide())
+                {
+                    potBE.clientTick();
+                }
+                else
+                {
+                    PotBlockEntity.serverTick(lvl, pos, st, potBE);
+                }
             }
         };
     }
 
     @Override
-    public void destroy(LevelAccessor level, BlockPos pos, BlockState state)
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random)
     {
-        if (level.getBlockEntity(pos) instanceof PotBlockEntity potBE)
+        BlockEntity be = level.getBlockEntity(pos);
+        if (be instanceof PotBlockEntity potBE && potBE.isCooking())
         {
-            potBE.dropContents((Level) level, pos);
+            if (random.nextInt(2) == 0)
+            {
+                for (int i = 0; i < random.nextInt(1) + 1; i++)
+                {
+                    level.addParticle(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, random.nextFloat() / 200.0F, 5.0E-2, random.nextFloat() / 200.0F);
+                }
+            }
         }
-        super.destroy(level, pos, state);
     }
 }

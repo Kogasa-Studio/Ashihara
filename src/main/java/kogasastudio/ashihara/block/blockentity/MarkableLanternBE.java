@@ -10,7 +10,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 
 import java.util.List;
 
-public class MarkableLanternBE extends AshiharaMachineBE
+public class MarkableLanternBE extends AshiharaCommonBE
 {
     //获取处理过的可用来渲染的rl
     private static final List<Identifier> cookedTextures = AshiharaAtlas.ALL_ICON;

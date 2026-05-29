@@ -8,5 +8,14 @@
         "stream": false
       }
     ]
+  },
+  "boil": {
+    "subtitle": "subtitles.ashihara.boil",
+    "sounds": [
+      {
+        "name": "ashihara:boil",
+        "stream": false
+      }
+    ]
   }
 }

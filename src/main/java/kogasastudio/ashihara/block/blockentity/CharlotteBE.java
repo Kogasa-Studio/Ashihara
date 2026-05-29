@@ -8,7 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 
-public class CharlotteBE extends AshiharaMachineBE implements IRenderInWorldToolTip
+public class CharlotteBE extends AshiharaCommonBE implements IRenderInWorldToolTip
 {
     public UIPanelModel model;
     public ToolTipController toolTipController;

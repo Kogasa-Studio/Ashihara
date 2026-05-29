@@ -274,6 +274,9 @@
   "tooltip.ashihara.fluid_consume_exception": "预期流体消耗: ",
   "tooltip.ashihara.fluid_slot": "流体储存",
   "tooltip.ashihara.fluid_type": "流体：",
+  "message.ashihara.cookstove.fuel_left": "燃料剩余: ",
   "key.category.in_world_tooltip": "苇原：世界内ToolTip",
-  "key.show_in_world_tooltip": "显示世界内ToolTip"
+  "key.show_in_world_tooltip": "显示世界内ToolTip",
+
+  "subtitles.ashihara.boil": "土锅：沸腾"
 }

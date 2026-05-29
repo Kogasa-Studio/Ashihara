@@ -1,4 +1,4 @@
-package kogasastudio.ashihara.sounds;
+package kogasastudio.ashihara.registry;
 
 import kogasastudio.ashihara.Ashihara;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -13,6 +13,7 @@ public class SoundEvents
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, Ashihara.MODID);
 
     public static final Supplier<SoundEvent> UNTHRESH = register("unthresh");
+    public static final Supplier<SoundEvent> BOIL = register("boil");
 
     private static Supplier<SoundEvent> register(String key)
     {

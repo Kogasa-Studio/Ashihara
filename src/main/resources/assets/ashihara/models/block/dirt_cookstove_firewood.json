@@ -1,0 +1,51 @@
+{
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"texture_size": [64, 64],
+	"textures": {
+		"0": "ashihara:block/dirt_cookstove",
+		"particle": "ashihara:block/dirt_cookstove"
+	},
+	"elements": [
+		{
+			"from": [7, 8, 4],
+			"to": [9, 9.75, 12],
+			"rotation": {"angle": -45, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [6, 10.75, 6.5, 11.25], "texture": "#0"},
+				"east": {"uv": [6, 11, 6.5, 13], "rotation": 90, "texture": "#0"},
+				"south": {"uv": [6, 12.5, 6.5, 13], "texture": "#0"},
+				"west": {"uv": [6, 11, 6.5, 13], "rotation": 90, "texture": "#0"},
+				"up": {"uv": [6, 11, 6.5, 13], "texture": "#0"},
+				"down": {"uv": [6, 11, 6.5, 13], "texture": "#0"}
+			}
+		},
+		{
+			"from": [7, 8, 4],
+			"to": [9, 10.25, 12],
+			"rotation": {"x": 0, "y": -90, "z": 0, "origin": [8, 8.25, 8]},
+			"faces": {
+				"north": {"uv": [6, 10.75, 6.5, 11.25], "texture": "#0"},
+				"east": {"uv": [6, 10.75, 6.5, 12.75], "rotation": 90, "texture": "#0"},
+				"south": {"uv": [6, 12.5, 6.5, 13], "texture": "#0"},
+				"west": {"uv": [6, 10.75, 6.5, 12.75], "rotation": 90, "texture": "#0"},
+				"up": {"uv": [6, 10.75, 6.5, 12.75], "texture": "#0"},
+				"down": {"uv": [6, 10.75, 6.5, 12.75], "texture": "#0"}
+			}
+		},
+		{
+			"from": [7, 8, 3],
+			"to": [9, 10, 12],
+			"rotation": {"angle": 22.5, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [6, 10.75, 6.5, 11.25], "texture": "#0"},
+				"east": {"uv": [6, 10.75, 6.5, 13], "rotation": 90, "texture": "#0"},
+				"south": {"uv": [6, 12.5, 6.5, 13], "texture": "#0"},
+				"west": {"uv": [6, 10.75, 6.5, 13], "rotation": 90, "texture": "#0"},
+				"up": {"uv": [6, 10.75, 6.5, 13], "texture": "#0"},
+				"down": {"uv": [6, 10.75, 6.5, 13], "texture": "#0"}
+			}
+		}
+	]
+}

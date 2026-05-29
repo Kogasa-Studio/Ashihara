@@ -6,7 +6,6 @@ import kogasastudio.ashihara.helper.MathHelper;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.Items;
 import kogasastudio.ashihara.registry.BlockEntities;
-import kogasastudio.ashihara.utils.OptionalUtil;
 import kogasastudio.ashihara.utils.shape.VoxelShapeSerializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,7 +33,7 @@ import java.util.List;
 import static kogasastudio.ashihara.block.building.BaseMultiBuiltBlock.FACING;
 
 @SuppressWarnings("NullableProblems")
-public class MultiBuiltBlockEntity extends AshiharaMachineBE implements IMultiBuiltBlock
+public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBuiltBlock
 {
     public static final int OPCODE_COMPONENT = 0;
     public static final int OPCODE_ADDITIONAL = 1;

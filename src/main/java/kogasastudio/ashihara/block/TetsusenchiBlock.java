@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.registry.Items;
-import kogasastudio.ashihara.sounds.SoundEvents;
+import kogasastudio.ashihara.registry.SoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;

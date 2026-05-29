@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
-public class PailBE extends AshiharaMachineBE implements IFluidHandler
+public class PailBE extends AshiharaCommonBE implements IFluidHandler
 {
     public final BEFluidStackHandler<PailBE> bucket = new BEFluidStackHandler<>(16000, this);
 

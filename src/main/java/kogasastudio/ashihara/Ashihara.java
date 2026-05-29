@@ -8,7 +8,7 @@ import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.registry.Items;
 import kogasastudio.ashihara.registry.*;
-import kogasastudio.ashihara.sounds.SoundEvents;
+import kogasastudio.ashihara.registry.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.bus.api.IEventBus;

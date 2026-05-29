@@ -12,7 +12,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 
 import static kogasastudio.ashihara.helper.MathHelper.simplifyDouble;
 
-public class CandleBE extends AshiharaMachineBE
+public class CandleBE extends AshiharaCommonBE
 {
     private final NonNullList<double[]> posList = NonNullList.create();
     private final BlockState state = Blocks.CANDLE.get().defaultBlockState();

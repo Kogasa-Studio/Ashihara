@@ -47,7 +47,7 @@ import java.util.function.Predicate;
 import static net.minecraft.world.level.block.Block.UPDATE_ALL;
 import static net.minecraft.world.level.block.Block.popResource;
 
-public class MortarBE extends AshiharaMachineBE implements IRenderInWorldToolTip
+public class MortarBE extends AshiharaCommonBE implements IRenderInWorldToolTip
 {
     /*public final RenderSwitch switchFluid = new RenderAutoSwitch
     (

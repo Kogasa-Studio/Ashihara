@@ -38,6 +38,68 @@
         "model": "ashihara:block/dirt_cookstove",
         "y": 270
       }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "ash": "true",
+        "fore_hind": "hind"
+      },
+      "apply": {
+        "model": "ashihara:block/dirt_cookstove_ash"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "ash": "true",
+        "fore_hind": "hind"
+      },
+      "apply": {
+        "model": "ashihara:block/dirt_cookstove_ash",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "ash": "true",
+        "fore_hind": "hind"
+      },
+      "apply": {
+        "model": "ashihara:block/dirt_cookstove_ash",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "ash": "true",
+        "fore_hind": "hind"
+      },
+      "apply": {
+        "model": "ashihara:block/dirt_cookstove_ash",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "firewood": "true",
+        "burning": "false",
+        "fore_hind": "hind"
+      },
+      "apply": {
+        "model": "ashihara:block/dirt_cookstove_firewood"
+      }
+    },
+    {
+      "when": {
+        "burning": "true",
+        "fore_hind": "hind"
+      },
+      "apply": {
+        "model": "ashihara:block/dirt_cookstove_firewood_burning"
+      }
     }
   ]
 }

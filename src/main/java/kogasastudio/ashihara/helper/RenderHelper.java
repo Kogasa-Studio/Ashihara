@@ -556,20 +556,20 @@ public class RenderHelper
     /** Emit one vertex, routing d1/d2 to the correct world axes per face. */
     private static void emitVertex(VertexConsumer c, Matrix4fc m,
         float d1, float d2, float cx, float cy, float cz,
-        float u, float v, int tint, int light, Face face)
+        float u, float v, int tint, float alpha, int light, Face face)
     {
         float x = cx, y = cy, z = cz;
         if (face == Face.TOP || face == Face.BOTTOM)     { x = d1; z = d2; }
         else if (face == Face.NORTH || face == Face.SOUTH) { x = d1; y = d2; }
         else /* WEST | EAST */                             { z = d1; y = d2; }
-        buildMatrix(m, c, x, y, z, u, v, OverlayTexture.NO_OVERLAY, tint, 1f, light, face.nx, face.ny, face.nz);
+        buildMatrix(m, c, x, y, z, u, v, OverlayTexture.NO_OVERLAY, tint, alpha, light, face.nx, face.ny, face.nz);
     }
 
     /**
      * Tile a single face on the d1×d2 plane. d1→U, d2→V in sprite UV space.
      * 这个方法是一坨大的。最好不要让LLM以外的东西尝试理解它。
      */
-    private static void renderTiledFace(VertexConsumer c, Matrix4fc m, int tint, int light,
+    private static void renderTiledFace(VertexConsumer c, Matrix4fc m, int tint, int light, float alpha,
         float su0, float suR, float sv0, float svR, float obbScale, float tileSize,
         float d1Min, float d1Max, float d2Min, float d2Max,
         float constX, float constY, float constZ, Face face)
@@ -603,7 +603,7 @@ public class RenderHelper
                 for (int idx : new int[]{face.i0, face.i1, face.i2, face.i3})
                 {
                     float[] cr = corners[idx];
-                    emitVertex(c, m, cr[0], cr[1], constX, constY, constZ, cr[2], cr[3], tint, light, face);
+                    emitVertex(c, m, cr[0], cr[1], constX, constY, constZ, cr[2], cr[3], tint, alpha, light, face);
                 }
             }
         }
@@ -614,7 +614,7 @@ public class RenderHelper
     private static final float OBB_SCALE = 32f;  // GeoCubeObbExtractor divides by 32
     private static final float TILE = 16f;        // 16 BlockBench units per tile
 
-    public static void renderFluidOnOBB(PoseStack poseStack, OBB obb, FluidStack fluidStack, SubmitNodeCollector nodeCollector, int lightCoords)
+    public static void renderFluidOnOBB(PoseStack poseStack, OBB obb, FluidStack fluidStack, SubmitNodeCollector nodeCollector, int lightCoords, float alpha)
     {
         if (fluidStack.isEmpty()) return;
         TextureAtlasSprite sprite = getFluidStillSprite(fluidStack);
@@ -633,12 +633,12 @@ public class RenderHelper
         nodeCollector.submitCustomGeometry(poseStack, Sheets.translucentBlockSheet(), (p, consumer) ->
         {
             var m = p.pose();
-            renderTiledFace(consumer, m, tint, lightCoords, su0, suR, sv0, svR, OBB_SCALE, TILE, mx, Mx, mz, Mz, 0, My, 0, Face.TOP);
-            renderTiledFace(consumer, m, tint, lightCoords, su0, suR, sv0, svR, OBB_SCALE, TILE, mx, Mx, mz, Mz, 0, my, 0, Face.BOTTOM);
-            renderTiledFace(consumer, m, tint, lightCoords, su0, suR, sv0, svR, OBB_SCALE, TILE, mx, Mx, my, My, 0, 0, mz, Face.NORTH);
-            renderTiledFace(consumer, m, tint, lightCoords, su0, suR, sv0, svR, OBB_SCALE, TILE, mx, Mx, my, My, 0, 0, Mz, Face.SOUTH);
-            renderTiledFace(consumer, m, tint, lightCoords, su0, suR, sv0, svR, OBB_SCALE, TILE, mz, Mz, my, My, mx, 0, 0, Face.WEST);
-            renderTiledFace(consumer, m, tint, lightCoords, su0, suR, sv0, svR, OBB_SCALE, TILE, mz, Mz, my, My, Mx, 0, 0, Face.EAST);
+            renderTiledFace(consumer, m, tint, lightCoords, alpha, su0, suR, sv0, svR, OBB_SCALE, TILE, mx, Mx, mz, Mz, 0, My, 0, Face.TOP);
+            renderTiledFace(consumer, m, tint, lightCoords, alpha, su0, suR, sv0, svR, OBB_SCALE, TILE, mx, Mx, mz, Mz, 0, my, 0, Face.BOTTOM);
+            renderTiledFace(consumer, m, tint, lightCoords, alpha, su0, suR, sv0, svR, OBB_SCALE, TILE, mx, Mx, my, My, 0, 0, mz, Face.NORTH);
+            renderTiledFace(consumer, m, tint, lightCoords, alpha, su0, suR, sv0, svR, OBB_SCALE, TILE, mx, Mx, my, My, 0, 0, Mz, Face.SOUTH);
+            renderTiledFace(consumer, m, tint, lightCoords, alpha, su0, suR, sv0, svR, OBB_SCALE, TILE, mz, Mz, my, My, mx, 0, 0, Face.WEST);
+            renderTiledFace(consumer, m, tint, lightCoords, alpha, su0, suR, sv0, svR, OBB_SCALE, TILE, mz, Mz, my, My, Mx, 0, 0, Face.EAST);
         });
 
         poseStack.popPose();

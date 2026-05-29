@@ -18,11 +18,11 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minecraft.world.level.block.Block.UPDATE_ALL;
 
-public abstract class AshiharaMachineBE extends BlockEntity
+public abstract class AshiharaCommonBE extends BlockEntity
 {
     protected boolean needBlockUpdate = false;
 
-    public AshiharaMachineBE(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+    public AshiharaCommonBE(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 

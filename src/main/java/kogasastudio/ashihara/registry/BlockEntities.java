@@ -30,6 +30,8 @@ public class BlockEntities
     public static final Supplier<BlockEntityType<PotBlockEntity>> POT_BE = BLOCK_ENTITIES.register("pot_be",
             () -> new BlockEntityType<>(PotBlockEntity::new, Blocks.POT.get()));
 
+    public static final Supplier<BlockEntityType<DirtCookStoveBE>> DIRT_COOKSTOVE_BE = BLOCK_ENTITIES.register("dirt_cookstove_be", () -> new BlockEntityType<>(DirtCookStoveBE::new, Blocks.DIRT_COOKSTOVE.get()));
+
     /*public static final Supplier<BlockEntityType<MillBE>> MILL_TE = TILE_ENTITIES.register("mill_blockentity",
             () -> new BlockEntityType<
                 (

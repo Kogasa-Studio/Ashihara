@@ -280,6 +280,10 @@
   "tooltip.ashihara.fluid_slot": "Fluid Storage",
   "tooltip.ashihara.fluid_type": "Fluid: ",
 
+  "message.ashihara.cookstove.fuel_left": "Fuel left: ",
+
   "key.category.in_world_tooltip": "Ashihara: In world ToolTip",
-  "key.show_in_world_tooltip": "Show in world ToolTip"
+  "key.show_in_world_tooltip": "Show in world ToolTip",
+
+  "subtitles.ashihara.boil": "Pot boiling"
 }

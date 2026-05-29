@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.client.gui3d.components;
 
 import kogasastudio.ashihara.client.gui3d.ContainerScreen3D;
+import kogasastudio.ashihara.client.gui3d.debug.Gui3dDebugProjector;
 import kogasastudio.ashihara.client.gui3d.interaction.HitPolicy;
 import kogasastudio.ashihara.client.gui3d.interaction.HitResult;
 import kogasastudio.ashihara.client.gui3d.util.OBB;
@@ -8,6 +9,7 @@ import kogasastudio.ashihara.client.gui3d.util.Ray;
 import kogasastudio.ashihara.client.models.geo.SelectionFrameModel;
 import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
 import kogasastudio.ashihara.client.render.state.GUI3DComponentRenderState;
+import kogasastudio.ashihara.helper.MathHelper;
 import kogasastudio.ashihara.helper.RenderHelper;
 import kogasastudio.ashihara.inventory.BEFluidStackHandler;
 import kogasastudio.ashihara.inventory.container.PotMenu;
@@ -26,6 +28,8 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
 
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
@@ -101,6 +105,15 @@ public class FluidSlotComponent extends ModelComponent implements ISelectable
         return HitPolicy.MIXED;
     }
 
+    private float getFluidRenderAlpha(int mouseX, int mouseY)
+    {
+        OBB obb = this.getCollisionBoxes().getFirst();
+        if (obb == null) return 1f;
+        Vector3f obbCenter = Gui3dDebugProjector.getProjectionCenter(obb, this.screen);
+        if (obbCenter == null) return 1f;
+        return Math.clamp(1 - 10 / MathHelper.distance(new Vector2f(obbCenter.x, obbCenter.y), new Vector2f(mouseX, mouseY)), 0.1f, 0.5f);
+    }
+
     // ── 渲染 ─────────────────────────────────────────────────────────────────
 
     @Override
@@ -115,7 +128,7 @@ public class FluidSlotComponent extends ModelComponent implements ISelectable
         OBB obb = tracer.collisionBoxes().getFirst();
         output.add(new GUI3DComponentRenderState((poseStack, submitNodeCollector) ->
         {
-            RenderHelper.renderFluidOnOBB(poseStack, obb, fluidStack, submitNodeCollector, 15728880);
+            RenderHelper.renderFluidOnOBB(poseStack, obb, fluidStack, submitNodeCollector, 15728880, getFluidRenderAlpha(mouseX, mouseY));
         }, true));
     }
 

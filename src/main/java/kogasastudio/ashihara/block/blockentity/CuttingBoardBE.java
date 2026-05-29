@@ -24,7 +24,7 @@ import java.util.Optional;
 
 //import static kogasastudio.ashihara.Ashihara.LOGGER_MAIN;
 
-public class CuttingBoardBE extends AshiharaMachineBE
+public class CuttingBoardBE extends AshiharaCommonBE
 {
     private ItemStack content = ItemStack.EMPTY;
 

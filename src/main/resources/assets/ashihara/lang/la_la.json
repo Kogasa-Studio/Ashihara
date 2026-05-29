@@ -137,5 +137,7 @@
   "tooltip.ashihara.pail_display": "§e§lSitula: §n",
   "tooltip.ashihara.pail_empty_message": "    §7Situla nunc vacua est",
   "tooltip.ashihara.pail_fluid_existence": "    §7Fluidum: ",
-  "tooltip.ashihara.fluid_existence": "Fluidum: "
+  "tooltip.ashihara.fluid_existence": "Fluidum: ",
+
+  "subtitles.ashihara.boil": "Olla fervens"
 }
