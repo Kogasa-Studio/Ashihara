@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import kogasastudio.ashihara.block.blockentity.PotBlockEntity;
 import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
 import kogasastudio.ashihara.client.models.geo.PotModel;
+import kogasastudio.ashihara.client.sounds.PotSoundManager;
 import kogasastudio.ashihara.helper.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -139,6 +140,7 @@ public class PotBER implements BlockEntityRenderer<PotBlockEntity, BlockEntityRe
     public void extractRenderState(PotBlockEntity blockEntity, BlockEntityRenderState state, float partialTicks, Vec3 cameraPosition, ModelFeatureRenderer.@Nullable CrumblingOverlay breakProgress)
     {
         BlockEntityRenderer.super.extractRenderState(blockEntity, state, partialTicks, cameraPosition, breakProgress);
+        PotSoundManager.tick(blockEntity);
         updateModelStat(blockEntity);
         this.partialTicks = partialTicks;
     }

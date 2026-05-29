@@ -2,7 +2,6 @@ package kogasastudio.ashihara.block.blockentity;
 
 import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
 import kogasastudio.ashihara.client.models.geo.PotModel;
-import kogasastudio.ashihara.client.sounds.BoilSoundInstance;
 import kogasastudio.ashihara.helper.RecipeHelper;
 import kogasastudio.ashihara.interaction.recipes.PotRecipe;
 import kogasastudio.ashihara.inventory.BEFluidStackHandler;
@@ -13,7 +12,6 @@ import kogasastudio.ashihara.registry.RecipeTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
@@ -77,8 +75,6 @@ public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider
     public boolean fluidLevelChanged = false;
     public boolean inited = false;
     private PotModel potModel;
-    @Nullable
-    private BoilSoundInstance boilSound;
     public Map<String, BoneTracer> boneTracers = new LinkedHashMap<>();
 
     // ── Constructor ───────────────────────────────────────────────────────────
@@ -392,27 +388,6 @@ public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider
         //be.setChanged();
     }
 
-    // ── Tick (client-side: looping sound) ─────────────────────────────────────
-
-    public void clientTick()
-    {
-        if (this.level == null || !this.level.isClientSide()) return;
-
-        if (this.isCooking)
-        {
-            if (this.boilSound == null)
-            {
-                this.boilSound = new BoilSoundInstance(this);
-                Minecraft.getInstance().getSoundManager().play(this.boilSound);
-            }
-        }
-        else if (this.boilSound != null)
-        {
-            Minecraft.getInstance().getSoundManager().stop(this.boilSound);
-            this.boilSound = null;
-        }
-    }
-
     // ── Persistence ───────────────────────────────────────────────────────────
 
     @Override
@@ -501,17 +476,9 @@ public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider
     @Override
     public void setRemoved()
     {
-        if (this.level != null)
+        if (this.level != null && !this.level.isClientSide())
         {
-            if (this.level.isClientSide() && this.boilSound != null)
-            {
-                Minecraft.getInstance().getSoundManager().stop(this.boilSound);
-                this.boilSound = null;
-            }
-            else
-            {
-                dropContents(this.level, this.getBlockPos());
-            }
+            dropContents(this.level, this.getBlockPos());
         }
         super.setRemoved();
     }
