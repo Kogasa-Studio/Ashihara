@@ -31,6 +31,7 @@ import java.util.Optional;
 public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
 {
     private final NonNullList<SizedIngredient> input;
+    @Nullable
     private final ItemStackTemplate output;
     @Nullable
     public final FluidStackTemplate fluidCost;
@@ -48,12 +49,12 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
         (
             Identifier.CODEC.fieldOf("id").forGetter(PotRecipe::getId),
             NonNullList.codecOf(SizedIngredient.NESTED_CODEC).fieldOf("ingredients").forGetter(PotRecipe::getInput),
-            ItemStackTemplate.CODEC.fieldOf("output").forGetter(r -> r.output),
+            ItemStackTemplate.CODEC.optionalFieldOf("output").forGetter(r -> Optional.ofNullable(r.output)),
             FluidStackTemplate.CODEC.optionalFieldOf("fluid_cost").forGetter(r -> Optional.ofNullable(r.fluidCost)),
             FluidStackTemplate.CODEC.optionalFieldOf("fluid_production").forGetter(r -> Optional.ofNullable(r.fluidProduction)),
             Codec.INT.fieldOf("cook_time").forGetter(PotRecipe::getCookTime),
             Codec.INT.optionalFieldOf("priority", 0).forGetter(PotRecipe::getPriority)
-        ).apply(instance, (id1, input1, output1, fluidCost1, fluidProduction1, cookTime1, priority1) -> new PotRecipe(id1, input1, output1, fluidCost1, fluidProduction1, cookTime1, priority1))
+        ).apply(instance, PotRecipe::new)
     );
 
     public static final StreamCodec<RegistryFriendlyByteBuf, PotRecipe> STREAM_CODEC = StreamCodec.of(PotRecipe::toNetwork, PotRecipe::fromNetwork);
@@ -64,7 +65,7 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
 
     public ItemStack getOutput()
     {
-        return this.output.create();
+        return output == null ? ItemStack.EMPTY : this.output.create();
     }
 
     public FluidStack getFluidCost()
@@ -83,7 +84,7 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
 
     public PotRecipe(Identifier id,
                      NonNullList<SizedIngredient> input,
-                     ItemStackTemplate output,
+                     Optional<ItemStackTemplate> output,
                      Optional<FluidStackTemplate> fluidCost,
                      Optional<FluidStackTemplate> fluidProduction,
                      int cookTime,
@@ -91,7 +92,7 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
     {
         super(id);
         this.input = input;
-        this.output = output;
+        this.output = output.orElse(null);
         this.fluidCost = fluidCost.orElse(null);
         this.fluidProduction = fluidProduction.orElse(null);
         this.cookTime = cookTime;
@@ -158,7 +159,11 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
     {
         Identifier id = Identifier.STREAM_CODEC.decode(buffer);
         NonNullList<SizedIngredient> iListN = NonNullList.copyOf(SizedIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buffer));
-        ItemStack stack = ItemStack.STREAM_CODEC.decode(buffer);
+        Optional<ItemStackTemplate> optStack = Optional.empty();
+        if (buffer.readBoolean())
+        {
+            optStack = Optional.of(ItemStackTemplate.fromNonEmptyStack(ItemStack.STREAM_CODEC.decode(buffer)));
+        }
         Optional<FluidStackTemplate> fCostN = Optional.empty();
         if (buffer.readBoolean())
         {
@@ -171,14 +176,19 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
         }
         int cookTimeN = buffer.readInt();
         int priorityN = buffer.readInt();
-        return new PotRecipe(id, iListN, ItemStackTemplate.fromNonEmptyStack(stack), fCostN, fProdN, cookTimeN, priorityN);
+        return new PotRecipe(id, iListN, optStack, fCostN, fProdN, cookTimeN, priorityN);
     }
 
     private static void toNetwork(RegistryFriendlyByteBuf buffer, PotRecipe recipe)
     {
         Identifier.STREAM_CODEC.encode(buffer, recipe.getId());
         SizedIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buffer, recipe.getInput());
-        ItemStack.STREAM_CODEC.encode(buffer, recipe.getOutput());
+        if (recipe.output != null)
+        {
+            buffer.writeBoolean(true);
+            ItemStack.STREAM_CODEC.encode(buffer, recipe.getOutput());
+        }
+        else buffer.writeBoolean(false);
         if (recipe.fluidCost != null)
         {
             buffer.writeBoolean(true);

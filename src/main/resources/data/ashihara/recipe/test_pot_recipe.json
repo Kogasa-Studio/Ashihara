@@ -1,0 +1,15 @@
+{
+  "type": "ashihara:pot",
+  "id": "ashihara:test",
+  "ingredients": [
+    {
+      "ingredient": "minecraft:cobblestone",
+      "count": 1
+    }
+  ],
+  "fluid_production": {
+    "id": "minecraft:lava",
+    "amount": 100
+  },
+  "cook_time": 2000
+}

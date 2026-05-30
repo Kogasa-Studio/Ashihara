@@ -3,6 +3,7 @@ package kogasastudio.ashihara.client.gui3d;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.client.gui3d.components.*;
 import kogasastudio.ashihara.client.gui3d.util.OBB;
+import kogasastudio.ashihara.client.models.geo.ProgressBarModel;
 import kogasastudio.ashihara.client.models.geo.ToastModel;
 import kogasastudio.ashihara.client.models.geo.PotModel;
 import kogasastudio.ashihara.helper.RenderHelper;
@@ -28,6 +29,7 @@ public class PotScreen3D extends ContainerScreen3D<PotScreen>
 {
     public final PotModel potModel = new PotModel("block/pot", "textures/block/pot.png", "gui/pot");
     public final ToastModel bubbleModel = new ToastModel("bubble", "textures/gui/bubble.png", "gui/bubble");
+    public final ProgressBarModel progressBarModel = new ProgressBarModel("diamond_progress_bar", "textures/gui/indicator.png", "gui/diamond_progress_bar");
     public static final Identifier INV_BG = Identifier.fromNamespaceAndPath(Ashihara.MODID, "textures/gui/player_inventory.png");
     protected PotModelComponent potModelComponent;
     protected ToastComponent bubbleComponent;
@@ -82,19 +84,31 @@ public class PotScreen3D extends ContainerScreen3D<PotScreen>
         FluidSlotComponent fluidSlot = new FluidSlotComponent(this.potModelComponent.getModel(), "fluid_display", this.menu.blockEntity.getBlockPos(), this);
         this.potModelComponent.addChild(fluidSlot);
 
-        this.bubbleComponent = new ToastComponent(this.bubbleModel, true, new Matrix4f().scale(16f, -16f, 16f).translate(1.5f, 1.0f, 0).rotateXYZ(0, (float) Math.toRadians(180), 0));
+        this.bubbleComponent = new ToastComponent(this.bubbleModel, true, new Matrix4f().scale(-16f, -16f, 16f).translate(-1.5f, 1.0f, 0));
         this.bubbleComponent.withBiCondition(() -> this.menu.blockEntity.getAvailableRecipe() != null);
-        //((ToastModel) this.bubbleComponent.model()).init(this.minecraft.player, this.menu.blockEntity.getAvailableRecipe() != null);
+        this.bubbleComponent.withTooltip(() -> this.menu.blockEntity.currentRecipe == null ? null : this.menu.blockEntity.getProductionTooltip());
+        this.bubbleComponent.withBoundingBox(() -> this.bubbleComponent.getBoneCollisionBoxes("4"));
+        //((ToastModel) this.bubbleComponent.model()).init(this.minecraft.pl>ayer, this.menu.blockEntity.getAvailableRecipe() != null);
         ItemDisplayComponent output_display = new ItemDisplayComponent(() -> this.menu.blockEntity.getAvailableOutput(), () ->
         {
-            List<OBB> obb = this.bubbleComponent.getBoneCollisionBoxes("item_slot_0");
-            if (obb.isEmpty()) return new Matrix4f();
-            OBB o = obb.getFirst();
-            Matrix4f mat = RenderHelper.getOBBCenterTransform(o, 8);
-            mat.translate(0, 0, 0.5f);
-            return mat;
+            OBB obb = this.bubbleComponent.getFirstBoneCollisionBox("item_slot_0");
+            if (obb == null) return new Matrix4f();
+            return RenderHelper.getOBBCenterTransform(obb, 8).translate(0, 0, -0.5f);
         });
+        output_display.withCount(() -> this.menu.blockEntity.getAvailableOutput().getCount() * this.menu.blockEntity.parallel);
         this.bubbleComponent.addChild(output_display);
+
+        FluidDisplayComponent fluid_display = new FluidDisplayComponent(() -> this.menu.blockEntity.getAvailableFluidOutput(), () -> this.bubbleComponent.getFirstBoneCollisionBox("fluid_slot_0"));
+        this.bubbleComponent.addChild(fluid_display);
+
+        ProgressBarComponent progress = new ProgressBarComponent(this.progressBarModel)
+            .withOBB(() ->
+            {
+                var boxes = this.bubbleComponent.getBoneCollisionBoxes("item_slot_0");
+                return boxes.isEmpty() ? null : boxes.getFirst();
+            })
+            .withProgress(() -> this.menu.blockEntity.getCookProgress());
+        this.bubbleComponent.addChild(progress);
 
         this.warningComponent = new RecipeWarningComponent(new Matrix4f().scale(-16f, -16f, 16f).translate(3f, 1.0f, 0), () -> this.menu.blockEntity.getUnavailabilityMessages());
         this.warningComponent.withBiCondition(() -> !this.menu.blockEntity.getUnavailabilityMessages().isEmpty());

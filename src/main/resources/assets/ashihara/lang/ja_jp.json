@@ -274,6 +274,10 @@
   "tooltip.ashihara.pot.need_fluid": "この料理をするには液体を必要とす：",
   "tooltip.ashihara.fluid_slot": "流体貯蔵",
   "tooltip.ashihara.fluid_type": "流体：",
+  "tooltip.ashihara.pot_production": "予期生産物：",
+  "tooltip.ashihara.item_production": "アイテム：",
+  "tooltip.ashihara.fluid_production": "液体：",
+
   "message.ashihara.cookstove.fuel_left": "燃料残量: ",
   "key.category.in_world_tooltip": "葦原：世界内ToolTip",
   "key.show_in_world_tooltip": "世界内ToolTipを示す",

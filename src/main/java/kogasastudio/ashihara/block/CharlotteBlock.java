@@ -128,11 +128,11 @@ public class CharlotteBlock extends Block implements EntityBlock
                 PotRecipe potRecipe = new PotRecipe
                 (
                     Identifier.fromNamespaceAndPath(Ashihara.MODID, "test"),
-                    NonNullList.of(SizedIngredient.of(Items.RICE, 1), SizedIngredient.of(Items.RICE, 1)),
-                    ItemStackTemplate.fromNonEmptyStack(Items.COOKED_RICE.toStack()),
-                    Optional.of(new FluidStackTemplate(Fluids.WATER.getSource(), 100)),
+                    NonNullList.of(SizedIngredient.of(Items.RICE, 1), SizedIngredient.of(net.minecraft.world.item.Items.COBBLESTONE, 1)),
                     Optional.empty(),
-                    600,
+                    Optional.empty(),
+                    Optional.of(new FluidStackTemplate(Fluids.LAVA.getSource(), 100)),
+                    100,
                     0);
                 JsonElement element = PotRecipe.MAP_CODEC.codec().encodeStart(dynamicOps, potRecipe).getOrThrow(msg -> new RuntimeException("Failed to encode %s: %s".formatted("test/test_pot_recipe.json", msg)));
                 try

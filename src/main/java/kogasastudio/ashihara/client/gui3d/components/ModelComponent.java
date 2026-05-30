@@ -6,6 +6,7 @@ import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
 import kogasastudio.ashihara.client.render.geo.GUI3DObjectRenderer;
 import kogasastudio.ashihara.client.render.state.GUI3DComponentRenderState;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 
 import java.util.*;
@@ -88,13 +89,20 @@ public class ModelComponent extends AbstractComponent
             (
                 this.model,
                 this.model.RENDERER,
-                this.presetTransform,
+                this.getPresetTransform(),
                 this.getRelatedObject(),
                 new CameraRenderState(),
                 15728880,
                 partialTick
             )
         );
+    }
+
+    @Nullable
+    public OBB getFirstBoneCollisionBox(String boneName)
+    {
+        List<OBB> collisionBoxes = this.getBoneCollisionBoxes(boneName);
+        return collisionBoxes.isEmpty() ? null : collisionBoxes.getFirst();
     }
 
     public List<OBB> getBoneCollisionBoxes(String boneName)

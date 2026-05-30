@@ -57,6 +57,12 @@ public final class GeoCubeObbExtractor
             max.set(half.x, half.y, half.z);
         }
 
+        // Ensure each axis has non-zero thickness for reliable ray intersection
+        float epsilon = 0.001f;
+        if (max.x - min.x < epsilon) { float mid = (min.x + max.x) * 0.5f; min.x = mid - epsilon; max.x = mid + epsilon; }
+        if (max.y - min.y < epsilon) { float mid = (min.y + max.y) * 0.5f; min.y = mid - epsilon; max.y = mid + epsilon; }
+        if (max.z - min.z < epsilon) { float mid = (min.z + max.z) * 0.5f; min.z = mid - epsilon; max.z = mid + epsilon; }
+
         return new OBB(new Vector3f(), min, max, cubePose);
     }
 }

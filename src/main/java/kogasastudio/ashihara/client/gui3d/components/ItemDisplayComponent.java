@@ -10,6 +10,7 @@ import net.minecraft.locale.Language;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 
 import java.util.List;
@@ -19,6 +20,8 @@ import java.util.function.Supplier;
 public class ItemDisplayComponent extends AbstractComponent
 {
     public Supplier<ItemStack> item;
+    @Nullable
+    public Supplier<Integer> count;
     public Supplier<Matrix4f> transform;
     public float itemRenderScale = 1f;
 
@@ -34,6 +37,12 @@ public class ItemDisplayComponent extends AbstractComponent
         {
             poseStack.scale(-this.itemRenderScale, this.itemRenderScale, this.itemRenderScale);
         };
+    }
+
+    public ItemDisplayComponent withCount(Supplier<Integer> count)
+    {
+        this.count = count;
+        return this;
     }
 
     @Override
@@ -69,7 +78,8 @@ public class ItemDisplayComponent extends AbstractComponent
             );
             poseStack.scale(1/32f, -1/32f, 1/32f);
             poseStack.translate(0, 0, 2f);
-            submitNodeCollector.submitText(poseStack, 8f, 8f, Language.getInstance().getVisualOrder(FormattedText.of(String.valueOf(this.item.get().count()))), true, Font.DisplayMode.NORMAL, 15728880, 0xffa7d888, 0, 0);
+            if (this.count != null && this.count.get() != 0)
+                submitNodeCollector.submitText(poseStack, 8f, 8f, Language.getInstance().getVisualOrder(FormattedText.of(String.valueOf(this.count.get()))), true, Font.DisplayMode.NORMAL, 15728880, 0xffa7d888, 0, 0);
             poseStack.popPose();
         }));
     }

@@ -536,11 +536,11 @@ public class RenderHelper
     /** Vertex order indices: 0=SW(d1a,d2a) 1=SE(d1b,d2a) 2=NE(d1b,d2b) 3=NW(d1a,d2b) */
     private enum Face
     {
-        TOP   (0, -1, 0, 1,2,3,0),  // SW→NW→NE→SE (CCW from +Y)
-        BOTTOM(0,1, 0, 0,3,2,1),  // SE→NE→NW→SW (CCW from -Y)
-        NORTH (0, 0,1, 0,1,2,3),  // SW→SE→NE→NW (CCW from -Z)
+        TOP   (0, -1, 0, 0,3,2,1),  // SW→NW→NE→SE (CCW from +Y)
+        BOTTOM(0,1, 0, 1,2,3,0),  // SE→NE→NW→SW (CCW from -Y)
+        NORTH (0, 0,1, 3,2,1,0),  // SW→SE→NE→NW (CCW from -Z)
         SOUTH (0, 0, -1, 2,3,0,1),  // SE→SW→NW→NE (CCW from +Z)
-        WEST  (1,0, 0, 2,1,0,3),  // NW→SW→SE→NE (CCW from -X)
+        WEST  (1,0, 0, 3,0,1,2),  // NW→SW→SE→NE (CCW from -X)
         EAST  (-1, 0, 0, 3,2,1,0);  // SW→SE→NE→NW (CCW from +X)
 
         final float nx, ny, nz;
@@ -572,7 +572,7 @@ public class RenderHelper
     private static void renderTiledFace(VertexConsumer c, Matrix4fc m, int tint, int light, float alpha,
         float su0, float suR, float sv0, float svR, float obbScale, float tileSize,
         float d1Min, float d1Max, float d2Min, float d2Max,
-        float constX, float constY, float constZ, Face face)
+        float constX, float constY, float constZ, Face face, boolean flip)
     {
         float d1Len = (d1Max - d1Min) * obbScale;
         float d2Len = (d2Max - d2Min) * obbScale;
@@ -580,6 +580,10 @@ public class RenderHelper
         float extraD1 = (d1Tiles == 1 && d1Len < tileSize) ? d1Len : (d1Len - (d1Tiles - 1) * tileSize);
         int d2Tiles = Math.max(1, (int)(d2Len / tileSize));
         float extraD2 = (d2Tiles == 1 && d2Len < tileSize) ? d2Len : (d2Len - (d2Tiles - 1) * tileSize);
+
+        int[] order = flip
+            ? new int[]{face.i3, face.i2, face.i1, face.i0}
+            : new int[]{face.i0, face.i1, face.i2, face.i3};
 
         for (int i1 = 0; i1 < d1Tiles; i1++)
         {
@@ -600,7 +604,7 @@ public class RenderHelper
                     {d1s + d1Size, d2s + d2Size, uMax, vMax},  // 2=NE
                     {d1s,        d2s + d2Size, su0,  vMax},  // 3=NW
                 };
-                for (int idx : new int[]{face.i0, face.i1, face.i2, face.i3})
+                for (int idx : order)
                 {
                     float[] cr = corners[idx];
                     emitVertex(c, m, cr[0], cr[1], constX, constY, constZ, cr[2], cr[3], tint, alpha, light, face);
@@ -630,18 +634,28 @@ public class RenderHelper
         poseStack.pushPose();
         poseStack.last().pose().set(obb.pose());
 
+        float det = det3x3(obb.pose());
+        boolean flip = det > 0;
+
         nodeCollector.submitCustomGeometry(poseStack, Sheets.translucentBlockSheet(), (p, consumer) ->
         {
             var m = p.pose();
-            renderTiledFace(consumer, m, tint, lightCoords, alpha, su0, suR, sv0, svR, OBB_SCALE, TILE, mx, Mx, mz, Mz, 0, My, 0, Face.TOP);
-            renderTiledFace(consumer, m, tint, lightCoords, alpha, su0, suR, sv0, svR, OBB_SCALE, TILE, mx, Mx, mz, Mz, 0, my, 0, Face.BOTTOM);
-            renderTiledFace(consumer, m, tint, lightCoords, alpha, su0, suR, sv0, svR, OBB_SCALE, TILE, mx, Mx, my, My, 0, 0, mz, Face.NORTH);
-            renderTiledFace(consumer, m, tint, lightCoords, alpha, su0, suR, sv0, svR, OBB_SCALE, TILE, mx, Mx, my, My, 0, 0, Mz, Face.SOUTH);
-            renderTiledFace(consumer, m, tint, lightCoords, alpha, su0, suR, sv0, svR, OBB_SCALE, TILE, mz, Mz, my, My, mx, 0, 0, Face.WEST);
-            renderTiledFace(consumer, m, tint, lightCoords, alpha, su0, suR, sv0, svR, OBB_SCALE, TILE, mz, Mz, my, My, Mx, 0, 0, Face.EAST);
+            renderTiledFace(consumer, m, tint, lightCoords, alpha, su0, suR, sv0, svR, OBB_SCALE, TILE, mx, Mx, mz, Mz, 0, My, 0, Face.TOP, flip);
+            renderTiledFace(consumer, m, tint, lightCoords, alpha, su0, suR, sv0, svR, OBB_SCALE, TILE, mx, Mx, mz, Mz, 0, my, 0, Face.BOTTOM, flip);
+            renderTiledFace(consumer, m, tint, lightCoords, alpha, su0, suR, sv0, svR, OBB_SCALE, TILE, mx, Mx, my, My, 0, 0, mz, Face.NORTH, flip);
+            renderTiledFace(consumer, m, tint, lightCoords, alpha, su0, suR, sv0, svR, OBB_SCALE, TILE, mx, Mx, my, My, 0, 0, Mz, Face.SOUTH, flip);
+            renderTiledFace(consumer, m, tint, lightCoords, alpha, su0, suR, sv0, svR, OBB_SCALE, TILE, mz, Mz, my, My, mx, 0, 0, Face.WEST, flip);
+            renderTiledFace(consumer, m, tint, lightCoords, alpha, su0, suR, sv0, svR, OBB_SCALE, TILE, mz, Mz, my, My, Mx, 0, 0, Face.EAST, flip);
         });
 
         poseStack.popPose();
+    }
+
+    private static float det3x3(Matrix4fc m)
+    {
+        return m.m00() * (m.m11() * m.m22() - m.m12() * m.m21())
+             - m.m01() * (m.m10() * m.m22() - m.m12() * m.m20())
+             + m.m02() * (m.m10() * m.m21() - m.m11() * m.m20());
     }
 
     public static Matrix4f getOBBCenterTransform(OBB obb, Vector3f cubeScale)

@@ -67,6 +67,8 @@ public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider
     @Nullable
     private List<Component> unavailabilityMessages;
     private boolean refreshing;
+    @Nullable
+    private String pendingRecipeId;
 
     // ── Misc ──────────────────────────────────────────────────────────────────
 
@@ -283,6 +285,27 @@ public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider
         return ItemStack.EMPTY;
     }
 
+    public FluidStack getAvailableFluidOutput()
+    {
+        if (this.availableRecipe != null)
+        {
+            return this.availableRecipe.getFluidProduction();
+        }
+        return FluidStack.EMPTY;
+    }
+
+    public List<Component> getProductionTooltip()
+    {
+        if (this.availableRecipe == null) return List.of();
+        List<Component> tooltip = new ArrayList<>();
+        tooltip.add(Component.translatable("tooltip.ashihara.pot_production"));
+        ItemStack outputItem = this.getAvailableOutput();
+        FluidStack outputFluid = this.getAvailableFluidOutput();
+        if (!outputItem.isEmpty()) tooltip.add(Component.translatable("tooltip.ashihara.item_production").append(outputItem.getDisplayName()).append(" * ").append(String.valueOf(outputItem.getCount() * this.parallel)));
+        if (!outputFluid.isEmpty()) tooltip.add(Component.translatable("tooltip.ashihara.fluid_production").append(outputFluid.getHoverName()).append(" * ").append(String.valueOf(outputFluid.getAmount() * this.parallel)).append(" mB."));
+        return tooltip;
+    }
+
     // ── Cooking lifecycle ─────────────────────────────────────────────────────
 
     private void startCooking(PotRecipe recipe)
@@ -374,7 +397,7 @@ public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider
         refreshRecipe();
     }
 
-    // ── Tick (server-side only) ───────────────────────────────────────────────
+    // ── Tick ──────────────────────────────────────────────────────────────────
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, PotBlockEntity be)
     {
@@ -382,10 +405,9 @@ public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider
         be.cookTime++;
         if (be.cookTime >= be.maxCookTime)
         {
-            be.finishRecipe();
-            return;
+            be.cookTime = be.maxCookTime;
+            if (!level.isClientSide()) be.finishRecipe();
         }
-        //be.setChanged();
     }
 
     // ── Persistence ───────────────────────────────────────────────────────────
@@ -423,22 +445,25 @@ public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider
             if (!id.isEmpty()) this.lastRecipe = Identifier.parse(id);
         });
 
-        if (this.level instanceof ServerLevel serverLevel)
+        input.getString("currentRecipe").ifPresent(id ->
         {
-            input.getString("currentRecipe").ifPresent(id ->
-            {
-                if (!id.isEmpty())
-                {
-                    RecipeManager rm = serverLevel.recipeAccess();
-                    ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE, Identifier.parse(id));
-                    rm.byKey(key).ifPresent(holder -> this.currentRecipe = (PotRecipe) holder.value());
-                }
-            });
-            this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
+            this.pendingRecipeId = id.isEmpty() ? null : id;
+        });
+    }
+
+    @Override
+    public void onLoad()
+    {
+        super.onLoad();
+
+        if (this.pendingRecipeId != null && this.level instanceof ServerLevel serverLevel)
+        {
+            ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE, Identifier.parse(this.pendingRecipeId));
+            serverLevel.recipeAccess().byKey(key).ifPresent(holder -> this.currentRecipe = (PotRecipe) holder.value());
+            this.pendingRecipeId = null;
         }
 
         refreshRecipe();
-        //setChanged();
     }
 
     // ── Utilities ─────────────────────────────────────────────────────────────

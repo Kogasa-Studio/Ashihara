@@ -1,6 +1,6 @@
 {
   "type": "ashihara:pot",
-  "id": "ashihara:test",
+  "id": "ashihara:pot_cooked_rice",
   "ingredients": [
     {
       "ingredient": "ashihara:rice",

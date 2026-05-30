@@ -1,12 +1,16 @@
 package kogasastudio.ashihara.client.gui3d.components;
 
+import kogasastudio.ashihara.client.gui3d.util.OBB;
 import kogasastudio.ashihara.client.models.geo.IToast;
 import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 public class ToastComponent extends ModelComponent
@@ -18,6 +22,10 @@ public class ToastComponent extends ModelComponent
     public Supplier<Boolean> appearanceCondition;
     @Nullable
     public Supplier<Boolean> disappearanceCondition;
+    @Nullable
+    public Supplier<List<Component>> tooltip;
+    @Nullable
+    public Supplier<List<OBB>> boundingBox;
 
     public <M extends SimpleInternalControlGeoModel & IToast> ToastComponent(M model)
     {
@@ -34,6 +42,18 @@ public class ToastComponent extends ModelComponent
         super(model, renderModel, presetTransform);
     }
 
+    public ToastComponent withBoundingBox(Supplier<List<OBB>> boundingBox)
+    {
+        this.boundingBox = boundingBox;
+        return this;
+    }
+
+    public ToastComponent withTooltip(Supplier<List<Component>> tooltip)
+    {
+        this.tooltip = tooltip;
+        return this;
+    }
+
     public ToastComponent withAppearanceCondition(Supplier<Boolean> appearanceCondition)
     {
         this.appearanceCondition = appearanceCondition;
@@ -46,6 +66,13 @@ public class ToastComponent extends ModelComponent
         return this;
     }
 
+    public ToastComponent withBiCondition(Supplier<Boolean> biCondition)
+    {
+        this.appearanceCondition = biCondition;
+        this.disappearanceCondition = () -> !biCondition.get();
+        return this;
+    }
+
     @Override
     public void init()
     {
@@ -53,11 +80,18 @@ public class ToastComponent extends ModelComponent
         if (this.model() != null && this.appearanceCondition != null) this.model().init(p, this.appearanceCondition.get());
     }
 
-    public ToastComponent withBiCondition(Supplier<Boolean> biCondition)
+    @Override
+    public void extractTooltip(GuiGraphicsExtractor graphics, double mouseX, double mouseY)
     {
-        this.appearanceCondition = biCondition;
-        this.disappearanceCondition = () -> !biCondition.get();
-        return this;
+        super.extractTooltip(graphics, mouseX, mouseY);
+        if (this.tooltip != null && this.tooltip.get() != null && !this.tooltip.get().isEmpty()) graphics.setComponentTooltipForNextFrame(Minecraft.getInstance().font, this.tooltip.get(), (int) mouseX, (int) mouseY);
+    }
+
+    @Override
+    public List<OBB> getCollisionBoxes()
+    {
+        if (this.boundingBox != null && !this.boundingBox.get().isEmpty()) return this.boundingBox.get();
+        return super.getCollisionBoxes();
     }
 
     public void appear()

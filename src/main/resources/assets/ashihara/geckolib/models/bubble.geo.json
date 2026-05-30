@@ -6,7 +6,7 @@
 				"identifier": "geometry.unknown",
 				"texture_width": 64,
 				"texture_height": 64,
-				"visible_bounds_width": 7,
+				"visible_bounds_width": 8,
 				"visible_bounds_height": 5.5,
 				"visible_bounds_offset": [0, 2.25, 0]
 			},
@@ -74,11 +74,30 @@
 				{
 					"name": "item_slot_0",
 					"parent": "4",
-					"pivot": [38, 43, -1],
+					"pivot": [38, 41, -1],
 					"cubes": [
 						{
-							"origin": [30, 35, -9],
+							"origin": [30, 33, -9],
 							"size": [16, 16, 16],
+							"uv": {
+								"north": {"uv": [0.5, 0], "uv_size": [0.5, 0.5]},
+								"east": {"uv": [0.5, 0], "uv_size": [0.5, 0.5]},
+								"south": {"uv": [0.5, 0], "uv_size": [0.5, 0.5]},
+								"west": {"uv": [0.5, 0], "uv_size": [0.5, 0.5]},
+								"up": {"uv": [1, 0.5], "uv_size": [-0.5, -0.5]},
+								"down": {"uv": [1, 0.5], "uv_size": [-0.5, -0.5]}
+							}
+						}
+					]
+				},
+				{
+					"name": "fluid_slot_0",
+					"parent": "4",
+					"pivot": [38, 41, -1],
+					"cubes": [
+						{
+							"origin": [32, 35, -1],
+							"size": [12, 12, 1],
 							"uv": {
 								"north": {"uv": [0.5, 0], "uv_size": [0.5, 0.5]},
 								"east": {"uv": [0.5, 0], "uv_size": [0.5, 0.5]},
