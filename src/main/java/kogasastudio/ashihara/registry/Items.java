@@ -268,6 +268,7 @@ public class Items
     //閺堛劌鍩楅崫?
     public static final DeferredItem<? extends Item> CHERRY_LOG = ITEMS.registerSimpleBlockItem("cherry_log", Blocks.CHERRY_LOG);
     public static final DeferredItem<? extends Item> STRIPPED_CHERRY_LOG = ITEMS.registerSimpleBlockItem("stripped_cherry_log", Blocks.STRIPPED_CHERRY_LOG);
+    public static final DeferredItem<? extends Item> STRIPPED_CHERRY_WOOD = ITEMS.registerSimpleBlockItem("stripped_cherry_wood", Blocks.STRIPPED_CHERRY_WOOD);
     public static final DeferredItem<? extends Item> CHERRY_WOOD = ITEMS.registerSimpleBlockItem("cherry_wood", Blocks.CHERRY_WOOD);
     public static final DeferredItem<? extends Item> CHERRY_PLANKS = ITEMS.registerSimpleBlockItem("cherry_planks", Blocks.CHERRY_PLANKS);
     public static final DeferredItem<? extends Item> CHERRY_STAIRS = ITEMS.registerSimpleBlockItem("cherry_stairs", Blocks.CHERRY_STAIRS);

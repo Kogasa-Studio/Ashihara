@@ -32,9 +32,11 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.CHERRY_LOG.get());
                                         output.accept(Items.CHERRY_WOOD.get());
                                         output.accept(Items.STRIPPED_CHERRY_LOG.get());
+                                        output.accept(Items.STRIPPED_CHERRY_WOOD.get());
                                         output.accept(Items.CHERRY_BLOSSOM.get());
                                         output.accept(Items.FALLEN_SAKURA.get());
                                         output.accept(Items.CHERRY_VINES.get());
+                                        output.accept(Items.CHERRY_PLANKS.get());
                                         output.accept(Items.CHERRY_STAIRS.get());
                                         output.accept(Items.CHERRY_SLAB.get());
                                         output.accept(Items.CHERRY_FENCE.get());
@@ -47,6 +49,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.STRIPPED_MAPLE_LOG.get());
                                         output.accept(Items.MAPLE_LEAVES_RED.get());
                                         output.accept(Items.FALLEN_MAPLE_LEAVES_RED.get());
+                                        output.accept(Items.MAPLE_PLANKS.get());
                                         output.accept(Items.MAPLE_STAIRS.get());
                                         output.accept(Items.MAPLE_SLAB.get());
                                         output.accept(Items.MAPLE_FENCE.get());

@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/cube_column",
   "textures": {
-    "end": "ashihara:block/stripped_cherry_log_top",
+    "end": "ashihara:block/stripped_cherry_log",
     "side": "ashihara:block/stripped_cherry_log"
   }
 }

@@ -351,24 +351,18 @@ public class Blocks
             return Items.CUCUMBER.get();
         }
     }, properties -> properties.mapColor(MapColor.PLANT).noCollision().noOcclusion().randomTicks().instabreak().lightLevel(i -> 1).sound(SoundType.CROP));
-    public static final DeferredBlock<Block> STRIPPED_CHERRY_LOG = BLOCKS.registerBlock("stripped_cherry_log", SimpleLogBlock::new, properties -> properties.mapColor((state) -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? MapColor.WOOD : MapColor.STONE).strength(2.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> STRIPPED_CHERRY_LOG = BLOCKS.registerBlock("stripped_cherry_log", SimpleLogBlock::new, properties -> properties.mapColor((state) -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? MapColor.WOOD : MapColor.STONE).strength(2.0F).sound(SoundType.CHERRY_WOOD));
+    public static final DeferredBlock<Block> STRIPPED_CHERRY_WOOD = BLOCKS.registerBlock("stripped_cherry_wood", SimpleWoodBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(0.2F, 0.3F).sound(SoundType.CHERRY_WOOD));
     //木制品
-    public static final DeferredBlock<Block> CHERRY_LOG = BLOCKS.registerBlock("cherry_log", properties -> new StrippableLogBlock(properties)
-    {
-        @Override
-        public Block getStrippedBlock()
-        {
-            return STRIPPED_CHERRY_LOG.get();
-        }
-    }, properties -> properties.mapColor((state) -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? MapColor.WOOD : MapColor.STONE).strength(2.0F).sound(SoundType.WOOD));
-    public static final DeferredBlock<Block> CHERRY_WOOD = BLOCKS.registerBlock("cherry_wood", SimpleWoodBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(0.2F, 0.3F).sound(SoundType.WOOD));
-    public static final DeferredBlock<Block> CHERRY_PLANKS = BLOCKS.registerBlock("cherry_planks", SimplePlanksBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
-    public static final DeferredBlock<Block> CHERRY_STAIRS = BLOCKS.registerBlock("cherry_stairs", SimpleStairsBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> CHERRY_LOG = BLOCKS.registerBlock("cherry_log", SimpleLogBlock::new, properties -> properties.mapColor((state) -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? MapColor.WOOD : MapColor.STONE).strength(2.0F).sound(SoundType.CHERRY_WOOD));
+    public static final DeferredBlock<Block> CHERRY_WOOD = BLOCKS.registerBlock("cherry_wood", SimpleWoodBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(0.2F, 0.3F).sound(SoundType.CHERRY_WOOD));
+    public static final DeferredBlock<Block> CHERRY_PLANKS = BLOCKS.registerBlock("cherry_planks", SimplePlanksBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.CHERRY_WOOD));
+    public static final DeferredBlock<Block> CHERRY_STAIRS = BLOCKS.registerBlock("cherry_stairs", SimpleStairsBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.CHERRY_WOOD));
     public static final DeferredBlock<Block> RED_STAIRS = BLOCKS.registerBlock("red_stairs", SimpleStairsBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
     public static final DeferredBlock<Block> MAPLE_STAIRS = BLOCKS.registerBlock("maple_stairs", SimpleStairsBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
-    public static final DeferredBlock<Block> CHERRY_SLAB = BLOCKS.registerBlock("cherry_slab", SimpleSlabBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
-    public static final DeferredBlock<Block> CHERRY_FENCE = BLOCKS.registerBlock("cherry_fence", SimpleFenceBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
-    public static final DeferredBlock<Block> CHERRY_FENCE_GATE = BLOCKS.registerBlock("cherry_fence_gate", SimpleFenceGateBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> CHERRY_SLAB = BLOCKS.registerBlock("cherry_slab", SimpleSlabBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.CHERRY_WOOD));
+    public static final DeferredBlock<Block> CHERRY_FENCE = BLOCKS.registerBlock("cherry_fence", SimpleFenceBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.CHERRY_WOOD));
+    public static final DeferredBlock<Block> CHERRY_FENCE_GATE = BLOCKS.registerBlock("cherry_fence_gate", SimpleFenceGateBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.CHERRY_WOOD));
     public static final DeferredBlock<Block> CHERRY_BUTTON = BLOCKS.registerBlock("cherry_button", SimpleButtonBlock::new, properties -> properties.noCollision().pushReaction(PushReaction.DESTROY).strength(0.5F));
     public static final DeferredBlock<Block> STRIPPED_RED_LOG = BLOCKS.registerBlock("stripped_red_log", SimpleLogBlock::new, properties -> properties.mapColor((state) -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? MapColor.WOOD : MapColor.STONE).strength(2.0F).sound(SoundType.WOOD));
     public static final DeferredBlock<Block> RED_PLANKS = BLOCKS.registerBlock("red_planks", SimplePlanksBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
@@ -376,14 +370,7 @@ public class Blocks
     public static final DeferredBlock<Block> RED_FENCE = BLOCKS.registerBlock("red_fence", SimpleFenceBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
     public static final DeferredBlock<Block> RED_FENCE_GATE = BLOCKS.registerBlock("red_fence_gate", SimpleFenceGateBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
     public static final DeferredBlock<Block> STRIPPED_MAPLE_LOG = BLOCKS.registerBlock("stripped_maple_log", SimpleLogBlock::new, properties -> properties.mapColor((state) -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? MapColor.WOOD : MapColor.STONE).strength(2.0F).sound(SoundType.WOOD));
-    public static final DeferredBlock<Block> MAPLE_LOG = BLOCKS.registerBlock("maple_log", properties -> new StrippableLogBlock(properties)
-    {
-        @Override
-        public Block getStrippedBlock()
-        {
-            return STRIPPED_MAPLE_LOG.get();
-        }
-    }, properties -> properties.mapColor((state) -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? MapColor.WOOD : MapColor.STONE).strength(2.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<Block> MAPLE_LOG = BLOCKS.registerBlock("maple_log", SimpleLogBlock::new, properties -> properties.mapColor((state) -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? MapColor.WOOD : MapColor.STONE).strength(2.0F).sound(SoundType.WOOD));
     public static final DeferredBlock<Block> MAPLE_WOOD = BLOCKS.registerBlock("maple_wood", SimpleWoodBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(0.2F, 0.3F).sound(SoundType.WOOD));
     public static final DeferredBlock<Block> MAPLE_PLANKS = BLOCKS.registerBlock("maple_planks", SimplePlanksBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));
     public static final DeferredBlock<Block> MAPLE_SLAB = BLOCKS.registerBlock("maple_slab", SimpleSlabBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD));

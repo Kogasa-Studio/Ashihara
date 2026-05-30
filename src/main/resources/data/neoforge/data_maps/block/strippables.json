@@ -1,0 +1,13 @@
+{
+  "values": {
+    "ashihara:cherry_log": {
+      "stripped_block": "ashihara:stripped_cherry_log"
+    },
+    "ashihara:cherry_wood": {
+      "stripped_block": "ashihara:stripped_cherry_wood"
+    },
+    "ashihara:maple_log": {
+      "stripped_block": "ashihara:stripped_maple_log"
+    }
+  }
+}
