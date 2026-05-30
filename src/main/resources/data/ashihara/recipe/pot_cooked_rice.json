@@ -14,5 +14,6 @@
     "id": "minecraft:water",
     "amount": 100
   },
+  "heat_level_required": "high",
   "cook_time": 600
 }

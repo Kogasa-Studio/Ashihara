@@ -59,9 +59,9 @@ public class PotMenu extends AshiharaCommonContainer
         this.cookData = cookData;
 
         // 食材槽 0-3
-        this.addSlotRange(be.inventory, 0, 0, 0, INGREDIENT_SLOTS, 0);
+        this.addSlotRange(be.inventory, 0, 0, 1000, INGREDIENT_SLOTS, 0);
 
-        this.addSlot(new OutputSlot(be.output, be.output::set, 0, 0, 18));
+        this.addSlot(new OutputSlot(be.output, be.output::set, 0, 0, 1018));
 
         // 玩家物品栏（背包 + 快捷栏）
         this.layoutPlayerInventorySlots(playerInventory, 8, 84);

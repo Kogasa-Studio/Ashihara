@@ -13,25 +13,10 @@ import java.util.function.Supplier;
 
 public class RecipeWarningComponent extends ToastComponent
 {
-    protected final Supplier<List<Component>> tooltipSupplier;
     public RecipeWarningComponent(Matrix4f presetTransform, Supplier<List<Component>> tooltipSupplier)
     {
         super(new ToastModel("warning_sign", "textures/gui/warning.png", "gui/warning_sign"), true, presetTransform);
-        this.tooltipSupplier = tooltipSupplier;
-    }
-
-    @Override
-    public void extractTooltip(GuiGraphicsExtractor graphics, double mouseX, double mouseY)
-    {
-        super.extractTooltip(graphics, mouseX, mouseY);
-        if (!this.tooltipSupplier.get().isEmpty()) graphics.setComponentTooltipForNextFrame(Minecraft.getInstance().font, this.tooltipSupplier.get(), (int) mouseX, (int) mouseY);
-    }
-
-    @Override
-    public void init()
-    {
-        super.init();
-        this.model().init(p, true);
+        this.tooltip = tooltipSupplier;
     }
 
     @Override

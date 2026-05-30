@@ -3,17 +3,19 @@ package kogasastudio.ashihara.block.blockentity;
 import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
 import kogasastudio.ashihara.client.models.geo.PotModel;
 import kogasastudio.ashihara.helper.RecipeHelper;
+import kogasastudio.ashihara.interaction.HeatLevel;
 import kogasastudio.ashihara.interaction.recipes.PotRecipe;
 import kogasastudio.ashihara.inventory.BEFluidStackHandler;
 import kogasastudio.ashihara.inventory.BEItemStackHandler;
 import kogasastudio.ashihara.inventory.container.PotMenu;
 import kogasastudio.ashihara.registry.BlockEntities;
+import kogasastudio.ashihara.registry.Capabilities;
 import kogasastudio.ashihara.registry.RecipeTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
+
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -25,9 +27,9 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -160,6 +162,15 @@ public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider
 
     // ── Recipe detection (lazy) ───────────────────────────────────────────────
 
+    public HeatLevel checkHeatLevel()
+    {
+        if (this.level == null) return HeatLevel.NONE;
+        BlockState bs = this.level.getBlockState(this.getBlockPos().below());
+        BlockEntity be = this.level.getBlockEntity(this.getBlockPos().below());
+        HeatLevel h = Capabilities.HEAT_LEVEL.getCapability(this.level, this.getBlockPos().below(), bs, be, Direction.UP);
+        return h == null ? HeatLevel.NONE : h;
+    }
+
     public void refreshRecipe()
     {
         if (this.refreshing || this.level == null) return;
@@ -235,23 +246,47 @@ public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider
             FluidStack required  = recipe.getFluidCost().copyWithAmount(recipe.getFluidCost().getAmount() * p);
             if (!tankFluid.is(required.getFluid()) || tankFluid.getAmount() < required.getAmount())
             {
-                issues.add(Component.translatable("tooltip.ashihara.pot.need_fluid").append(Component.empty().append(required.getHoverName()).append(" * ").append(String.valueOf(required.amount())).setStyle(Style.EMPTY.withColor(0xffa7d888))));
+                issues.add(Component.translatable("tooltip.ashihara.pot.need_fluid", required.getHoverName(), required.getAmount()));
             }
         }
 
         // 3) Output fluid space
         if (!recipe.getFluidProduction().isEmpty())
         {
-            int produced = recipe.getFluidProduction().getAmount() * p;
+            FluidStack prodFluid = recipe.getFluidProduction();
+            FluidStack consFluid = recipe.getFluidCost();
+            int produced = prodFluid.getAmount() * p;
+            int consumed = consFluid.getAmount() * p;
             int space    = this.fluidTank.getCapacity() - this.fluidTank.getFluidAmount();
-            if (!this.fluidTank.isEmpty()
-                && !this.fluidTank.getFluidStack().is(recipe.getFluidProduction().getFluid()))
+            if (!this.fluidTank.isEmpty() && !this.fluidTank.getFluidStack().is(recipe.getFluidProduction().getFluid())
+            )
             {
-                issues.add(Component.translatable("tooltip.ashihara.pot.fluid_type_mismatch"));
+                FluidStack tankFluid = this.fluidTank.getFluidStack();
+                if (!consFluid.isEmpty() && tankFluid.is(consFluid.getFluid()))
+                {
+                    if (tankFluid.getAmount() != consFluid.getAmount())
+                        issues.add(Component.translatable("tooltip.ashihara.pot.fluid_consumption_not_equal_to_production", consumed, consFluid.getHoverName()));
+                }
+                else issues.add(Component.translatable("tooltip.ashihara.pot.fluid_type_mismatch"));
             }
             else if (produced > space)
             {
-                issues.add(Component.translatable("tooltip.ashihara.pot.fluid_output_full"));
+                issues.add(Component.translatable("tooltip.ashihara.pot.fluid_output_full", produced - space));
+            }
+        }
+
+        // 4) Heat level
+        HeatLevel heatRequired = recipe.getHeatLevelRequired();
+        HeatLevel current = checkHeatLevel();
+        if (heatRequired != HeatLevel.NONE && current != heatRequired)
+        {
+            if (current == HeatLevel.NONE || current.ordinal() < heatRequired.ordinal())
+            {
+                issues.add(Component.translatable("tooltip.ashihara.pot.heat_low", current.getDisplayName(), heatRequired.getDisplayName()));
+            }
+            else
+            {
+                issues.add(Component.translatable("tooltip.ashihara.pot.heat_high", current.getDisplayName(), heatRequired.getDisplayName()));
             }
         }
 

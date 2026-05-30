@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import kogasastudio.ashihara.block.blockentity.PotBlockEntity;
+import kogasastudio.ashihara.interaction.HeatLevel;
 import kogasastudio.ashihara.interaction.recipes.base.BERecipeInput;
 import kogasastudio.ashihara.interaction.recipes.base.WrappedRecipe;
 import kogasastudio.ashihara.inventory.BEFluidStackHandler;
@@ -37,6 +38,8 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
     public final FluidStackTemplate fluidCost;
     @Nullable
     public final FluidStackTemplate fluidProduction;
+    @Nullable
+    public final HeatLevel heatLevelRequired;
     //in ticks
     public final int cookTime;
     public final int priority;
@@ -52,6 +55,7 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
             ItemStackTemplate.CODEC.optionalFieldOf("output").forGetter(r -> Optional.ofNullable(r.output)),
             FluidStackTemplate.CODEC.optionalFieldOf("fluid_cost").forGetter(r -> Optional.ofNullable(r.fluidCost)),
             FluidStackTemplate.CODEC.optionalFieldOf("fluid_production").forGetter(r -> Optional.ofNullable(r.fluidProduction)),
+            HeatLevel.CODEC.optionalFieldOf("heat_level_required").forGetter(r -> Optional.ofNullable(r.heatLevelRequired)),
             Codec.INT.fieldOf("cook_time").forGetter(PotRecipe::getCookTime),
             Codec.INT.optionalFieldOf("priority", 0).forGetter(PotRecipe::getPriority)
         ).apply(instance, PotRecipe::new)
@@ -78,6 +82,8 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
         return fluidProduction == null ? FluidStack.EMPTY : fluidProduction.create();
     }
 
+    public HeatLevel getHeatLevelRequired() {return heatLevelRequired == null ? HeatLevel.NONE : heatLevelRequired;}
+
     public int getCookTime() {return cookTime;}
 
     public int getPriority() {return priority;}
@@ -87,6 +93,7 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
                      Optional<ItemStackTemplate> output,
                      Optional<FluidStackTemplate> fluidCost,
                      Optional<FluidStackTemplate> fluidProduction,
+                     Optional<HeatLevel> heatLevelRequired,
                      int cookTime,
                      int priority)
     {
@@ -95,6 +102,7 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
         this.output = output.orElse(null);
         this.fluidCost = fluidCost.orElse(null);
         this.fluidProduction = fluidProduction.orElse(null);
+        this.heatLevelRequired = heatLevelRequired.orElse(null);
         this.cookTime = cookTime;
         this.priority = priority;
     }
@@ -174,9 +182,14 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
         {
             fProdN = Optional.of(FluidStackTemplate.fromNonEmptyStack(FluidStack.STREAM_CODEC.decode(buffer)));
         }
+        Optional<HeatLevel> heatN = Optional.empty();
+        if (buffer.readBoolean())
+        {
+            heatN = Optional.of(HeatLevel.STREAM_CODEC.decode(buffer));
+        }
         int cookTimeN = buffer.readInt();
         int priorityN = buffer.readInt();
-        return new PotRecipe(id, iListN, optStack, fCostN, fProdN, cookTimeN, priorityN);
+        return new PotRecipe(id, iListN, optStack, fCostN, fProdN, heatN, cookTimeN, priorityN);
     }
 
     private static void toNetwork(RegistryFriendlyByteBuf buffer, PotRecipe recipe)
@@ -199,6 +212,12 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
         {
             buffer.writeBoolean(true);
             FluidStack.STREAM_CODEC.encode(buffer, recipe.getFluidProduction());
+        }
+        else buffer.writeBoolean(false);
+        if (recipe.heatLevelRequired != null)
+        {
+            buffer.writeBoolean(true);
+            HeatLevel.STREAM_CODEC.encode(buffer, recipe.heatLevelRequired);
         }
         else buffer.writeBoolean(false);
         buffer.writeInt(recipe.cookTime);

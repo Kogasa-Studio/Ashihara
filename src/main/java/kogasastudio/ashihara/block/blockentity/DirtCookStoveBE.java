@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.block.blockentity;
 
 import kogasastudio.ashihara.block.DirtCookStoveBlock;
+import kogasastudio.ashihara.interaction.HeatLevel;
 import kogasastudio.ashihara.inventory.BEItemStackHandler;
 import kogasastudio.ashihara.registry.BlockEntities;
 import net.minecraft.core.BlockPos;
@@ -51,6 +52,12 @@ public class DirtCookStoveBE extends AshiharaCommonBE
     public static ResourceHandler<ItemResource> getFuelStorage(DirtCookStoveBE be, Direction side)
     {
         return be.fuelStorage;
+    }
+
+    public static HeatLevel getHeatLevel(DirtCookStoveBE be, Direction side)
+    {
+        if (be.isBurning && side.equals(Direction.UP)) return HeatLevel.HIGH;
+        return HeatLevel.NONE;
     }
 
     public boolean consumeFuel()

@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.registry;
 
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.block.IHeatProvider;
 import kogasastudio.ashihara.block.blockentity.DirtCookStoveBE;
 import kogasastudio.ashihara.block.blockentity.MortarBE;
 import kogasastudio.ashihara.block.blockentity.PotBlockEntity;
@@ -39,5 +40,6 @@ public class Capabilities
             net.neoforged.neoforge.capabilities.Capabilities.Item.BLOCK,
             BlockEntities.DIRT_COOKSTOVE_BE.get(), DirtCookStoveBE::getFuelStorage
         );
+        event.registerBlockEntity(HEAT_LEVEL, BlockEntities.DIRT_COOKSTOVE_BE.get(), DirtCookStoveBE::getHeatLevel);
     }
 }

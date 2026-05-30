@@ -11,6 +11,9 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -19,6 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -175,6 +179,16 @@ public class PotBlock extends Block implements EntityBlock
     }
 
     @Override
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @org.jspecify.annotations.Nullable Orientation orientation, boolean movedByPiston)
+    {
+        if (level.getBlockEntity(pos) instanceof PotBlockEntity potBE)
+        {
+            potBE.refreshRecipe();
+        }
+        super.neighborChanged(state, level, pos, block, orientation, movedByPiston);
+    }
+
+    @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random)
     {
         BlockEntity be = level.getBlockEntity(pos);
@@ -187,6 +201,24 @@ public class PotBlock extends Block implements EntityBlock
                     level.addParticle(ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, random.nextFloat() / 200.0F, 5.0E-2, random.nextFloat() / 200.0F);
                 }
             }
+        }
+    }
+
+    @Override
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise)
+    {
+        if (state.getValue(HAS_LID)) return;
+        if (level.isClientSide()) return;
+        if (!(entity instanceof ItemEntity itemEntity) || !itemEntity.isAlive()) return;
+        if (!(level.getBlockEntity(pos) instanceof PotBlockEntity be)) return;
+
+        ItemStack stack = itemEntity.getItem().copy();
+        ItemStack remainder = be.inventory.insert(stack, false);
+        if (remainder.getCount() < stack.getCount())
+        {
+            if (remainder.isEmpty()) itemEntity.discard();
+            else itemEntity.setItem(remainder);
+            be.refreshRecipe();
         }
     }
 }

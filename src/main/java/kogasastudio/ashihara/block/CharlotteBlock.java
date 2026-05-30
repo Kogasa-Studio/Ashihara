@@ -6,6 +6,7 @@ import com.mojang.serialization.JsonOps;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.blockentity.CharlotteBE;
 import kogasastudio.ashihara.block.blockentity.MortarBE;
+import kogasastudio.ashihara.interaction.HeatLevel;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
 import kogasastudio.ashihara.interaction.recipes.PotRecipe;
 import kogasastudio.ashihara.registry.Items;
@@ -132,6 +133,7 @@ public class CharlotteBlock extends Block implements EntityBlock
                     Optional.empty(),
                     Optional.empty(),
                     Optional.of(new FluidStackTemplate(Fluids.LAVA.getSource(), 100)),
+                    Optional.of(HeatLevel.HIGH),
                     100,
                     0);
                 JsonElement element = PotRecipe.MAP_CODEC.codec().encodeStart(dynamicOps, potRecipe).getOrThrow(msg -> new RuntimeException("Failed to encode %s: %s".formatted("test/test_pot_recipe.json", msg)));

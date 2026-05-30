@@ -77,7 +77,20 @@ public class ToastComponent extends ModelComponent
     public void init()
     {
         super.init();
-        if (this.model() != null && this.appearanceCondition != null) this.model().init(p, this.appearanceCondition.get());
+        if (this.model() != null && this.appearanceCondition != null)
+        {
+            this.model().init(p, this.appearanceCondition.get());
+            if (this.appearanceCondition.get())
+            {
+                this.isActive = false;
+                appear();
+            }
+            else if (this.disappearanceCondition != null && this.disappearanceCondition.get())
+            {
+                this.isActive = true;
+                hide();
+            }
+        }
     }
 
     @Override
