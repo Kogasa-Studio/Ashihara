@@ -351,6 +351,30 @@ public class Blocks
             return Items.CUCUMBER.get();
         }
     }, properties -> properties.mapColor(MapColor.PLANT).noCollision().noOcclusion().randomTicks().instabreak().lightLevel(i -> 1).sound(SoundType.CROP));
+    public static final DeferredBlock<Block> TARE_CROP = BLOCKS.registerBlock("tare_crop", properties -> new AbstractCropAge7(properties)
+    {
+        @Override
+        protected ItemLike getBaseSeedId()
+        {
+            return Items.TARE_SEED.get();
+        }
+    }, properties -> properties.mapColor(MapColor.PLANT).noCollision().noOcclusion().randomTicks().instabreak().lightLevel(i -> 1).sound(SoundType.CROP));
+    public static final DeferredBlock<Block> SCALLION_CROP = BLOCKS.registerBlock("scallion_crop", properties -> new AbstractCropAge7(properties)
+    {
+        @Override
+        protected ItemLike getBaseSeedId()
+        {
+            return Items.SCALLION.get();
+        }
+    }, properties -> properties.mapColor(MapColor.PLANT).noCollision().noOcclusion().randomTicks().instabreak().lightLevel(i -> 1).sound(SoundType.CROP));
+    public static final DeferredBlock<Block> WASABI_CROP = BLOCKS.registerBlock("wasabi_crop", properties -> new AbstractCropAge7(properties)
+    {
+        @Override
+        protected ItemLike getBaseSeedId()
+        {
+            return Items.WASABI.get();
+        }
+    }, properties -> properties.mapColor(MapColor.PLANT).noCollision().noOcclusion().randomTicks().instabreak().lightLevel(i -> 1).sound(SoundType.CROP));
     public static final DeferredBlock<Block> STRIPPED_CHERRY_LOG = BLOCKS.registerBlock("stripped_cherry_log", SimpleLogBlock::new, properties -> properties.mapColor((state) -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? MapColor.WOOD : MapColor.STONE).strength(2.0F).sound(SoundType.CHERRY_WOOD));
     public static final DeferredBlock<Block> STRIPPED_CHERRY_WOOD = BLOCKS.registerBlock("stripped_cherry_wood", SimpleWoodBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(0.2F, 0.3F).sound(SoundType.CHERRY_WOOD));
     //木制品

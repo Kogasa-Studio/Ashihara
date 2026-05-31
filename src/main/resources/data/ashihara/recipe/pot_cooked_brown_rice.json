@@ -1,0 +1,19 @@
+{
+  "type": "ashihara:pot",
+  "id": "ashihara:pot_cooked_brown_rice",
+  "ingredients": [
+    {
+      "ingredient": "ashihara:brown_rice",
+      "count": 1
+    }
+  ],
+  "output": {
+    "id": "ashihara:cooked_brown_rice"
+  },
+  "fluid_cost": {
+    "id": "minecraft:water",
+    "amount": 100
+  },
+  "heat_level_required": "high",
+  "cook_time": 600
+}

@@ -50,6 +50,7 @@ public class Items
     //妞嬬喓澧?
     public static final DeferredItem<? extends Item> SAKURAMOCHI = ITEMS.registerSimpleItem("sakuramochi", properties -> properties.food(new FoodProperties.Builder().nutrition(4).saturationModifier(1).build(), Consumables.defaultFood().onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.INSTANT_HEALTH, 1, 2), 1.0F)).build()));
     public static final DeferredItem<? extends Item> COOKED_RICE = ITEMS.registerItem("cooked_rice", properties -> new EasyFood(5, properties));
+    public static final DeferredItem<? extends Item> COOKED_BROWN_RICE = ITEMS.registerItem("cooked_brown_rice", properties -> new EasyFood(5, properties));
     public static final DeferredItem<? extends Item> DIRT_BALL_DON = ITEMS.registerItem("dirt_ball_don", DirtBallDon::new);
     public static final DeferredItem<? extends Item> SUSHI_BASIC = ITEMS.registerItem("sushi_basic", properties -> new EasyFood(5, properties));
     public static final DeferredItem<? extends Item> SUSHI_RAW_FISH = ITEMS.registerItem("sushi_raw_fish", properties -> new EasyFood(6, properties));
@@ -57,7 +58,7 @@ public class Items
     public static final DeferredItem<? extends Item> SUSHI_TAMAGO = ITEMS.registerItem("sushi_tamago", properties -> new EasyFood(6, properties));
     public static final DeferredItem<? extends Item> ONIGIRI = ITEMS.registerItem("onigiri", properties -> new EasyFood(6, properties));
     public static final DeferredItem<? extends Item> TAMAGO = ITEMS.registerItem("tamago", properties -> new EasyFood(1, properties));
-    public static final DeferredItem<? extends Item> CUCUMBER = ITEMS.registerItem("cucumber", properties -> new BlockItem(Blocks.CUCUMBERS.get(), properties.food(new FoodProperties.Builder().nutrition(2).build()).useBlockDescriptionPrefix())
+    public static final DeferredItem<? extends Item> CUCUMBER = ITEMS.registerItem("cucumber", properties -> new BlockItem(Blocks.CUCUMBERS.get(), properties.food(new FoodProperties.Builder().nutrition(2).build()).useItemDescriptionPrefix())
     {
         @Override
         public InteractionResult use(Level level, Player player, InteractionHand usedHand)
@@ -71,7 +72,10 @@ public class Items
         }
     });
     public static final DeferredItem<? extends Item> TOMATO = ITEMS.registerItem("tomato", properties -> new EasyFood(2, properties));
-    public static final DeferredItem<? extends Item> SWEET_POTATO = ITEMS.registerItem("sweet_potato", properties -> new BlockItem(Blocks.SWEET_POTATOES.get(), properties.food(new FoodProperties.Builder().nutrition(2).build()).useBlockDescriptionPrefix()));
+    public static final DeferredItem<? extends Item> SWEET_POTATO = ITEMS.registerItem("sweet_potato", properties -> new BlockItem(Blocks.SWEET_POTATOES.get(), properties.food(new FoodProperties.Builder().nutrition(2).build()).useItemDescriptionPrefix()));
+    public static final DeferredItem<? extends Item> SCALLION = ITEMS.registerItem("scallion", properties -> new BlockItem(Blocks.SCALLION_CROP.get(), properties.food(new FoodProperties.Builder().nutrition(2).build()).useItemDescriptionPrefix()));
+    public static final DeferredItem<? extends Item> WASABI = ITEMS.registerItem("wasabi", properties -> new BlockItem(Blocks.WASABI_CROP.get(), properties.food(new FoodProperties.Builder().nutrition(2).build()).useItemDescriptionPrefix()));
+    public static final DeferredItem<? extends Item> TARE_SEED = ITEMS.registerItem("tare_seed", properties -> new BlockItem(Blocks.TARE_CROP.get(), properties.useItemDescriptionPrefix()));
     public static final DeferredItem<? extends Item> ROASTED_SWEET_POTATO = ITEMS.registerItem("roasted_sweet_potato", properties -> new EasyFood(5, properties));
     public static final DeferredItem<? extends Item> TOFU = ITEMS.registerItem("tofu", properties -> new EasyFood(4, properties));
     public static final DeferredItem<? extends Item> MOCHI = ITEMS.registerItem("mochi", properties -> new EasyFood(3, properties));
@@ -105,7 +109,7 @@ public class Items
     public static final DeferredItem<? extends Item> FLOUR = ITEMS.registerItem("flour", AshiharaItem::new);
     public static final DeferredItem<? extends Item> RICE_POWDER = ITEMS.registerItem("rice_powder", AshiharaItem::new);
     public static final DeferredItem<? extends Item> BEAN_POWDER = ITEMS.registerItem("bean_powder", AshiharaItem::new);
-    public static final DeferredItem<? extends Item> SOY_BEAN = ITEMS.registerSimpleBlockItem("soy_bean", Blocks.SOY_BEANS);
+    public static final DeferredItem<? extends Item> SOY_BEAN = ITEMS.registerItem("soy_bean", properties -> new BlockItem(Blocks.SOY_BEANS.get(), properties.useItemDescriptionPrefix()));
     public static final DeferredItem<? extends Item> COTTON = ITEMS.registerItem("cotton", AshiharaItem::new);
     public static final DeferredItem<? extends Item> TEA_LEAF = ITEMS.registerItem("tea_leaf", AshiharaItem::new);
     public static final DeferredItem<? extends Item> DRIED_TEA_LEAF = ITEMS.registerItem("dried_tea_leaf", AshiharaItem::new);

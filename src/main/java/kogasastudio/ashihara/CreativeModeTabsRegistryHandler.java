@@ -240,6 +240,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.BROWN_RICE.get());
                                         output.accept(Items.RICE.get());
                                         output.accept(Items.COOKED_RICE.get());
+                                        output.accept(Items.COOKED_BROWN_RICE.get());
                                         output.accept(Items.ONIGIRI.get());
                                         output.accept(Items.DIRT_BALL_DON.get());
                                         output.accept(Items.SAKURAMOCHI.get());
@@ -265,6 +266,9 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.TOFU.get());
                                         output.accept(Items.COTTON.get());
                                         output.accept(Items.SWEET_POTATO.get());
+                                        output.accept(Items.SCALLION.get());
+                                        output.accept(Items.WASABI.get());
+                                        output.accept(Items.TARE_SEED.get());
                                         output.accept(Items.ROASTED_SWEET_POTATO.get());
                                         output.accept(Items.REED.get());
                                         output.accept(Items.SHORTER_REED.get());

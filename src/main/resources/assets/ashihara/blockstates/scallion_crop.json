@@ -1,0 +1,172 @@
+{
+  "variants": {
+    "age=0": [
+      {
+        "model": "ashihara:block/scallion_age0",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age0",
+        "y": 90,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age0",
+        "y": 180,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age0",
+        "y": 270,
+        "weight": 1
+      }
+    ],
+    "age=1": [
+      {
+        "model": "ashihara:block/scallion_age0",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age0",
+        "y": 90,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age0",
+        "y": 180,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age0",
+        "y": 270,
+        "weight": 1
+      }
+    ],
+    "age=2": [
+      {
+        "model": "ashihara:block/scallion_age1",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age1",
+        "y": 90,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age1",
+        "y": 180,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age1",
+        "y": 270,
+        "weight": 1
+      }
+    ],
+    "age=3": [
+      {
+        "model": "ashihara:block/scallion_age1",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age1",
+        "y": 90,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age1",
+        "y": 180,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age1",
+        "y": 270,
+        "weight": 1
+      }
+    ],
+    "age=4": [
+      {
+        "model": "ashihara:block/scallion_age2",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age2",
+        "y": 90,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age2",
+        "y": 180,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age2",
+        "y": 270,
+        "weight": 1
+      }
+    ],
+    "age=5": [
+      {
+        "model": "ashihara:block/scallion_age2",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age2",
+        "y": 90,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age2",
+        "y": 180,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age2",
+        "y": 270,
+        "weight": 1
+      }
+    ],
+    "age=6": [
+      {
+        "model": "ashihara:block/scallion_age2",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age2",
+        "y": 90,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age2",
+        "y": 180,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age2",
+        "y": 270,
+        "weight": 1
+      }
+    ],
+    "age=7": [
+      {
+        "model": "ashihara:block/scallion_age3",
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age3",
+        "y": 90,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age3",
+        "y": 180,
+        "weight": 1
+      },
+      {
+        "model": "ashihara:block/scallion_age3",
+        "y": 270,
+        "weight": 1
+      }
+    ]
+  }
+}

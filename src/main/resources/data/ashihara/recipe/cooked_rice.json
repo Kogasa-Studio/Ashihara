@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": "ashihara:rice",
-  "cookingtime": 200,
-  "experience": 0.35,
-  "result": {
-    "id": "ashihara:cooked_rice"
-  }
-}
