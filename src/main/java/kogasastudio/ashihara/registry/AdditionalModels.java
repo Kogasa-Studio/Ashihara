@@ -154,6 +154,8 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation ONI_TILE_1 = register("block/components/oni_tile_1");
     public static final BuildingComponentModelResourceLocation ONI_TILE_1_OBLIQUE = register("block/components/oni_tile_1_oblique");
 
+    // Furniture
+    public static final BuildingComponentModelResourceLocation WOODEN_BOWL_MID = register("block/furnitures/bowl_mid");
 
     private static BuildingComponentModelResourceLocation register(String path)
     {

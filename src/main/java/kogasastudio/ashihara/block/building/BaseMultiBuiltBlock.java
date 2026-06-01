@@ -3,6 +3,7 @@ package kogasastudio.ashihara.block.building;
 import kogasastudio.ashihara.block.building.component.ComponentStateDefinition;
 import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.registry.Items;
+import kogasastudio.ashihara.block.furniture.FurnitureComponentItem;
 import kogasastudio.ashihara.item.block.BuildingComponentItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -115,9 +116,18 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
                 && (coordsInRangeFixedX(context.getClickedFace(), vec.x(), 0, 1) && coordsInRangeFixedY(context.getClickedFace(), vec.y(), 0, 1) && coordsInRangeFixedZ(context.getClickedFace(), vec.z(), 0, 1))
                 && be.tryPlace(context, componentItem.getComponent())
             ) return InteractionResult.SUCCESS;
+            else if
+            (
+                pStack.getItem() instanceof FurnitureComponentItem furnitureItem
+                && (coordsInRangeFixedX(context.getClickedFace(), vec.x(), 0, 1) && coordsInRangeFixedY(context.getClickedFace(), vec.y(), 0, 1) && coordsInRangeFixedZ(context.getClickedFace(), vec.z(), 0, 1))
+                && be.tryPlaceFurniture(context, furnitureItem.getComponent())
+            ) return InteractionResult.SUCCESS;
             else if ((pStack.is(Items.WOODEN_HAMMER) || pStack.is(Items.CHISEL)) && be.tryBreak(context))
             {
-                if (be.getComponents(MultiBuiltBlockEntity.OPCODE_COMPONENT).isEmpty() && be.getComponents(MultiBuiltBlockEntity.OPCODE_ADDITIONAL).isEmpty()) pLevel.removeBlock(pPos, false);
+                if (be.getComponents(MultiBuiltBlockEntity.OPCODE_COMPONENT).isEmpty()
+                    && be.getComponents(MultiBuiltBlockEntity.OPCODE_ADDITIONAL).isEmpty()
+                    && be.getComponents(MultiBuiltBlockEntity.OPCODE_FURNITURE).isEmpty())
+                    pLevel.removeBlock(pPos, false);
                 return InteractionResult.SUCCESS;
             }
         }

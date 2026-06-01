@@ -3,6 +3,7 @@ package kogasastudio.ashihara.block.building.component;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.AdditionalModels;
 import kogasastudio.ashihara.registry.BuildingComponents;
+import kogasastudio.ashihara.registry.FurnitureComponents;
 import kogasastudio.ashihara.utils.BuildingComponentModelResourceLocation;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.ValueInput;
@@ -40,8 +41,10 @@ public record ComponentStateDefinition(BuildingComponent component, Vec3 inBlock
 
     public static ComponentStateDefinition deserializeNBT(ValueInput input)
     {
-        BuildingComponent component = BuildingComponents.COMPONENTS.getOrDefault(input.getStringOr("component", ""), null);
-        if (component == null) throw new RuntimeException("Error loading component: Component \"" + input.getString("component") + "\" does not exist!");
+        String componentId = input.getStringOr("component", "");
+        BuildingComponent component = BuildingComponents.COMPONENTS.get(componentId);
+        if (component == null) component = FurnitureComponents.COMPONENTS.get(componentId);
+        if (component == null) throw new RuntimeException("Error loading component: Component \"" + componentId + "\" does not exist!");
         ValueInput posTag = input.childOrEmpty("inBlockPos");
         Vec3 inBlockPos = new Vec3(posTag.getDoubleOr("x", 0), posTag.getDoubleOr("y", 0), posTag.getDoubleOr("z", 0));
         float rotationX = input.getFloatOr("rotationX", 0);

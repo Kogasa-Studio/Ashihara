@@ -243,6 +243,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.COOKED_BROWN_RICE.get());
                                         output.accept(Items.ONIGIRI.get());
                                         output.accept(Items.DIRT_BALL_DON.get());
+                                        output.accept(Items.WOODEN_BOWL_MID.get());
                                         output.accept(Items.SAKURAMOCHI.get());
                                         output.accept(Items.CHRYSANTHEMUM.get());
                                         output.accept(Items.CHRYSANTHEMUM_FLOWER.get());

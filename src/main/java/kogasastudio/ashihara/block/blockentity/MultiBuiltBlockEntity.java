@@ -2,6 +2,7 @@ package kogasastudio.ashihara.block.blockentity;
 
 import kogasastudio.ashihara.block.building.*;
 import kogasastudio.ashihara.block.building.component.*;
+import kogasastudio.ashihara.block.furniture.FurnitureComponent;
 import kogasastudio.ashihara.helper.MathHelper;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.Items;
@@ -38,9 +39,11 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
     public static final int OPCODE_COMPONENT = 0;
     public static final int OPCODE_ADDITIONAL = 1;
     public static final int OPCODE_READALL = 2;
+    public static final int OPCODE_FURNITURE = 3;
 
     public List<ComponentStateDefinition> COMPONENTS = new ArrayList<>();
     public List<ComponentStateDefinition> ADDITIONAL_COMPONENTS = new ArrayList<>();
+    public List<ComponentStateDefinition> FURNITURE = new ArrayList<>();
     public List<Occupation> occupationCache = new ArrayList<>();
 
     public MultiBuiltBlockEntity(BlockPos pPos, BlockState pBlockState)
@@ -75,6 +78,20 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
         }
         if (flag)
         {
+            refresh();
+            SoundEvent event = definition.component().getSoundType().getPlaceSound();
+            this.level.playSound(null, this.worldPosition, event, SoundSource.BLOCKS, 1.0f, 1.0f);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean tryPlaceFurniture(UseOnContext context, FurnitureComponent component)
+    {
+        ComponentStateDefinition definition = component.definite(this, context);
+        if (definition != null)
+        {
+            this.FURNITURE.add(definition);
             refresh();
             SoundEvent event = definition.component().getSoundType().getPlaceSound();
             this.level.playSound(null, this.worldPosition, event, SoundSource.BLOCKS, 1.0f, 1.0f);
@@ -150,6 +167,10 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
             shape = Shapes.or(shape, definition.shape());
         }
         for (ComponentStateDefinition definition : this.ADDITIONAL_COMPONENTS)
+        {
+            shape = Shapes.or(shape, definition.shape());
+        }
+        for (ComponentStateDefinition definition : this.FURNITURE)
         {
             shape = Shapes.or(shape, definition.shape());
         }
@@ -376,6 +397,11 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
             SoundEvent event = model.component().getSoundType().getBreakSound();
             this.level.playSound(null, this.getBlockPos(), event, SoundSource.BLOCKS, 1.0f, 1.0f);
         }
+        for (ComponentStateDefinition model : this.FURNITURE)
+        {
+            SoundEvent event = model.component().getSoundType().getBreakSound();
+            this.level.playSound(null, this.getBlockPos(), event, SoundSource.BLOCKS, 1.0f, 1.0f);
+        }
         super.setRemoved();
     }
 
@@ -392,6 +418,10 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
         for (ValueInput child : input.childrenListOrEmpty("additional_models"))
         {
             this.ADDITIONAL_COMPONENTS.add(ComponentStateDefinition.deserializeNBT(child));
+        }
+        for (ValueInput child : input.childrenListOrEmpty("furniture"))
+        {
+            this.FURNITURE.add(ComponentStateDefinition.deserializeNBT(child));
         }
 
         boolean shapeLoaded = loadShape(input);
@@ -413,6 +443,12 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
             ValueOutput o = additionalListTag.addChild();
             definition.serialize(o);
         }
+        var furnitureListTag = output.childrenList("furniture");
+        for (ComponentStateDefinition definition : this.FURNITURE)
+        {
+            ValueOutput o = furnitureListTag.addChild();
+            definition.serialize(o);
+        }
         saveShape(output);
         super.saveAdditional(output);
     }
@@ -425,12 +461,14 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
             List<ComponentStateDefinition> components = new ArrayList<>();
             components.addAll(COMPONENTS);
             components.addAll(ADDITIONAL_COMPONENTS);
+            components.addAll(FURNITURE);
             return components;
         }
         return switch (opcode)
         {
             case OPCODE_COMPONENT -> this.COMPONENTS;
             case OPCODE_ADDITIONAL -> this.ADDITIONAL_COMPONENTS;
+            case OPCODE_FURNITURE -> this.FURNITURE;
             default -> List.of();
         };
     }
