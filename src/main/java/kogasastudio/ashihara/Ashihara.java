@@ -1,6 +1,7 @@
 package kogasastudio.ashihara;
 
 import com.mojang.logging.LogUtils;
+import kogasastudio.ashihara.client.render.preview.PlacementPreviewRenderer;
 import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.registry.BlockEntities;
 import kogasastudio.ashihara.registry.MenuTypes;
@@ -52,6 +53,7 @@ public class Ashihara
         RecipeTypes.register(modEventBus);
         RecipeSerializers.register(modEventBus);
         MolangValues.registerMolangValues();
+        PlacementPreviewRenderer.register();
         /*try
         {
             Map<Integer, GuideBook.Page> iMap = new HashMap<>();
