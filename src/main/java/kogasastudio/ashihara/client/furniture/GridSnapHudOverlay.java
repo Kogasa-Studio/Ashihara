@@ -33,7 +33,7 @@ public final class GridSnapHudOverlay implements GuiLayer
         int x = 0;
         int y = screenHeight / 8;
 
-        graphics.blitSprite(RenderPipelines.GUI, ICON, x, y, 16, 16);
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, ICON, x, y, 16, 16);
 
         graphics.text(mc.font, Component.translatable("tooltip.ashihara.grid_level", label), x + 18, y + 4, 0xFFFFFFFF);
     }
