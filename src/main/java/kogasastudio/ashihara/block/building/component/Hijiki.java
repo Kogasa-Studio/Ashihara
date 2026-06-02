@@ -108,7 +108,7 @@ public class Hijiki extends AdditionalComponent implements Connectable
             }
             else
             {
-                z = direction == Direction.SOUTH ? 0 : 0.5;
+                z = direction == Direction.SOUTH ? 0 : -0.5;
             }
             occz = (z == 0 && direction == Direction.SOUTH) ? 0 : 1;
         }
@@ -123,7 +123,7 @@ public class Hijiki extends AdditionalComponent implements Connectable
             }
             else
             {
-                x = direction == Direction.EAST ? 0 : 0.5;
+                x = direction == Direction.EAST ? 0 : -0.5;
             }
             occx = (x == 0 && direction == Direction.EAST) ? 0 : 1;
         }
