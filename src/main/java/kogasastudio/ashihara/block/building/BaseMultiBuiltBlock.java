@@ -4,6 +4,8 @@ import kogasastudio.ashihara.block.building.component.ComponentStateDefinition;
 import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.registry.Items;
 import kogasastudio.ashihara.block.furniture.FurnitureComponentItem;
+import kogasastudio.ashihara.block.furniture.SnappedUseOnContext;
+import kogasastudio.ashihara.utils.GridSnapHelper;
 import kogasastudio.ashihara.item.block.BuildingComponentItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -117,7 +119,11 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
             (
                 pStack.getItem() instanceof FurnitureComponentItem furnitureItem
                 && (coordsInRangeFixedX(context.getClickedFace(), vec.x(), 0, 1) && coordsInRangeFixedY(context.getClickedFace(), vec.y(), 0, 1) && coordsInRangeFixedZ(context.getClickedFace(), vec.z(), 0, 1))
-                && be.tryPlaceFurniture(context, furnitureItem.getComponent())
+                && be.tryPlaceFurniture
+                (
+                    new SnappedUseOnContext(context, GridSnapHelper.getGridStep(pPlayer)),
+                    furnitureItem.getComponent()
+                )
             ) return InteractionResult.SUCCESS;
             else if ((pStack.is(Items.WOODEN_HAMMER) || pStack.is(Items.CHISEL)) && be.tryBreak(context))
             {

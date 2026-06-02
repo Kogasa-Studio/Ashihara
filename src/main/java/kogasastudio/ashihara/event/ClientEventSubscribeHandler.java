@@ -1,8 +1,12 @@
 package kogasastudio.ashihara.event;
 
+import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.Window;
+import kogasastudio.ashihara.client.furniture.GridSnapHudOverlay;
 import kogasastudio.ashihara.client.gui3d.PotScreen;
 import kogasastudio.ashihara.client.render.preview.PlacementPreviewRenderer;
 import kogasastudio.ashihara.client.render.state.Screen3DPiPRenderState;
+import kogasastudio.ashihara.network.GridSnapPayload;
 import kogasastudio.ashihara.registry.BlockEntities;
 import kogasastudio.ashihara.registry.MenuTypes;
 import kogasastudio.ashihara.client.particles.MapleLeafParticle;
@@ -12,6 +16,7 @@ import kogasastudio.ashihara.client.particles.SakuraParticle;
 import kogasastudio.ashihara.client.render.ber.*;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.registry.Items;
+import kogasastudio.ashihara.utils.GridSnapHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
@@ -29,6 +34,7 @@ import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.model.standalone.SimpleUnbakedStandaloneModel;
 import net.neoforged.neoforge.client.model.standalone.StandaloneModelKey;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.Nullable;
 
@@ -136,5 +142,36 @@ public class ClientEventSubscribeHandler
     public static void onAfterRenderLevel(RenderLevelStageEvent.AfterLevel event)
     {
         PlacementPreviewRenderer.onRenderLevel(event);
+    }
+
+    @SubscribeEvent
+    public static void registerGuiLayers(RegisterGuiLayersEvent event)
+    {
+        event.registerAboveAll(GridSnapHudOverlay.LAYER_ID, new GridSnapHudOverlay());
+    }
+
+    @SubscribeEvent
+    public static void onMouseScroll(InputEvent.MouseScrollingEvent event)
+    {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null || mc.screen != null) return;
+
+        Window window = mc.getWindow();
+        boolean altDown = InputConstants.isKeyDown(window, InputConstants.KEY_LALT)
+        || InputConstants.isKeyDown(window, InputConstants.KEY_RALT);
+        if (!altDown) return;
+
+        double delta = event.getScrollDeltaY();
+        if (delta == 0) return;
+
+        event.setCanceled(true);
+
+        int current = GridSnapHelper.getGridStep(mc.player);
+        int next = delta > 0
+        ? GridSnapHelper.cyclePrev(current)
+        : GridSnapHelper.cycleNext(current);
+
+        GridSnapHelper.setGridStep(mc.player, next);
+        ClientPacketDistributor.sendToServer(new GridSnapPayload(next));
     }
 }

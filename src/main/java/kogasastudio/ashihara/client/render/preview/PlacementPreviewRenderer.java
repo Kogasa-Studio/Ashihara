@@ -8,6 +8,8 @@ import kogasastudio.ashihara.block.building.component.*;
 import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.block.furniture.FurnitureComponent;
 import kogasastudio.ashihara.block.furniture.FurnitureComponentItem;
+import kogasastudio.ashihara.block.furniture.SnappedUseOnContext;
+import kogasastudio.ashihara.utils.GridSnapHelper;
 import kogasastudio.ashihara.event.ClientEventSubscribeHandler;
 import kogasastudio.ashihara.item.block.BuildingComponentItem;
 import kogasastudio.ashihara.registry.Blocks;
@@ -29,10 +31,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 /**
  * Thanks to ZhuRuoLing for debugging.
@@ -78,6 +77,7 @@ public class PlacementPreviewRenderer
             && coordsInRange(mbe, blockHit))
         {
             UseOnContext context = new UseOnContext(level, player, InteractionHand.MAIN_HAND, held, blockHit);
+            context = maybeWrapSnap(context, player);
             def = component.definite(mbe, context);
             if (def != null && canPlace(component, def, mbe))
             {
@@ -90,6 +90,7 @@ public class PlacementPreviewRenderer
         if (level.getBlockEntity(placePos) instanceof MultiBuiltBlockEntity mbe)
         {
             UseOnContext context = new UseOnContext(level, player, InteractionHand.MAIN_HAND, held, blockHit);
+            context = maybeWrapSnap(context, player);
             def = component.definite(mbe, context);
             if (def != null && canPlace(component, def, mbe)) renderPreview(event, mc, level, placePos, mbe.getBlockState(), def, hitState);
         }
@@ -99,6 +100,7 @@ public class PlacementPreviewRenderer
         {
             MultiBuiltBlockEntity phantom = makePhantom(placePos);
             UseOnContext context = new UseOnContext(level, player, InteractionHand.MAIN_HAND, held, blockHit);
+            context = maybeWrapSnap(context, player);
             def = component.definite(phantom, context);
             if (def != null) renderPreview(event, mc, level, placePos, phantom.getBlockState(), def, hitState);
         }
@@ -181,6 +183,15 @@ public class PlacementPreviewRenderer
         if (stack.getItem() instanceof FurnitureComponentItem fci)
             return fci.getComponent();
         return null;
+    }
+
+    /** Wraps the context with grid snapping if the player has an active grid. */
+    private static UseOnContext maybeWrapSnap(UseOnContext context, Player player)
+    {
+        if (player == null) return context;
+        int gridStep = GridSnapHelper.getGridStep(player);
+        if (gridStep == GridSnapHelper.GRID_NONE) return context;
+        return new SnappedUseOnContext(context, gridStep);
     }
 
     private record AlphaMaskConsumer(VertexConsumer delegate) implements VertexConsumer

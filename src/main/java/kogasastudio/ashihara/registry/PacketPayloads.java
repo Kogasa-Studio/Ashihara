@@ -5,6 +5,7 @@ import kogasastudio.ashihara.network.ContainerSlotClickPacket;
 import kogasastudio.ashihara.network.FluidSlotClickPayload;
 import kogasastudio.ashihara.network.GuidebookProgressPacket;
 import kogasastudio.ashihara.network.OpenGuidebookPacket;
+import kogasastudio.ashihara.network.GridSnapPayload;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -29,6 +30,7 @@ public class PacketPayloads
         // 泛用容器槽位点击包（所有基于 ContainerScreen3D 的容器共用）
         registrar.playToServer(ContainerSlotClickPacket.TYPE, ContainerSlotClickPacket.STREAM_CODEC, ContainerSlotClickPacket.ServerHandler::handle);
         // 流体槽位点击包
-        registrar.playToServer(FluidSlotClickPayload.TYPE, FluidSlotClickPayload.STREAM_CODEC, FluidSlotClickPayload.ServerHandler::handle);
+registrar.playToServer(FluidSlotClickPayload.TYPE, FluidSlotClickPayload.STREAM_CODEC, FluidSlotClickPayload.ServerHandler::handle);
+registrar.playToServer(GridSnapPayload.TYPE, GridSnapPayload.STREAM_CODEC, GridSnapPayload.ServerHandler::handle);
     }
 }

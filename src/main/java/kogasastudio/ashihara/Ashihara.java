@@ -1,12 +1,9 @@
 package kogasastudio.ashihara;
 
 import com.mojang.logging.LogUtils;
-import kogasastudio.ashihara.registry.Blocks;
-import kogasastudio.ashihara.registry.BlockEntities;
-import kogasastudio.ashihara.registry.MenuTypes;
+import kogasastudio.ashihara.client.furniture.GridSnapHudOverlay;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
-import kogasastudio.ashihara.registry.Items;
 import kogasastudio.ashihara.registry.*;
 import kogasastudio.ashihara.registry.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -14,6 +11,7 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import org.slf4j.Logger;
 
@@ -42,9 +40,7 @@ public class Ashihara
         ParticleRegistryHandler.PARTICLE_TYPES.register(modEventBus);
         BlockEntities.BLOCK_ENTITIES.register(modEventBus);
         MenuTypes.MENU_TYPES.register(modEventBus);
-//        GLMRegistryHandler.MODIFIERS.register(bus);
 
-//        BiomeRegistryHandler.BIOMES.register(bus);
         Features.FEATURES.register(modEventBus);
         WorldGenEventRegistryHandler.PLACED_FEATURE.register(modEventBus);
         WorldGenEventRegistryHandler.CONFIGURED_FEATURE.register(modEventBus);
@@ -71,7 +67,8 @@ public class Ashihara
         {
             event.accept(Items.KOISHI);
             event.accept(Items.MINATO_AQUA);
-        } else if (event.getTabKey().equals(CreativeModeTabs.FUNCTIONAL_BLOCKS))
+        }
+        else if (event.getTabKey().equals(CreativeModeTabs.FUNCTIONAL_BLOCKS))
         {
             event.accept(Items.CHARLOTTE);
         }

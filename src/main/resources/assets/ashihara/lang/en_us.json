@@ -300,7 +300,9 @@
   "tooltip.ashihara.fluid_type": "Fluid: ",
   "tooltip.ashihara.pot_production": "Expected output: ",
   "tooltip.ashihara.item_production": "Item: ",
-  "tooltip.ashihara.fluid_production": "Fluid: ",
+"tooltip.ashihara.fluid_production": "Fluid: ",
+
+  "tooltip.ashihara.grid_level": "Building Grid Snapping: %s block",
 
   "message.ashihara.cookstove.fuel_left": "Fuel left: ",
 

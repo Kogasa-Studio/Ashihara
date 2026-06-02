@@ -295,7 +295,9 @@
   "tooltip.ashihara.fluid_type": "流体：",
   "tooltip.ashihara.pot_production": "预期产出：",
   "tooltip.ashihara.item_production": "物品：",
-  "tooltip.ashihara.fluid_production": "流体：",
+"tooltip.ashihara.fluid_production": "流体：",
+
+"tooltip.ashihara.grid_level": "建筑系统网格吸附：%s 方块",
 
   "message.ashihara.cookstove.fuel_left": "燃料剩余: ",
   "key.category.in_world_tooltip": "苇原：世界内ToolTip",
