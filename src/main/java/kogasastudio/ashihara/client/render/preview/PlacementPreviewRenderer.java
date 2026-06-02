@@ -30,6 +30,9 @@ import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Thanks to ZhuRuoLing for debugging.
+ */
 public class PlacementPreviewRenderer
 {
     private static ModelBlockRenderer blockRenderer;
@@ -80,9 +83,10 @@ public class PlacementPreviewRenderer
         PoseStack poseStack = event.getPoseStack();
         poseStack.pushPose();
 
-        // World-space transform: view/projection are shader uniforms,
-        // PoseStack carries the MODEL matrix.  Full world coords required.
-        poseStack.translate(pos.getX(), pos.getY(), pos.getZ());
+        poseStack.mulPose(event.getModelViewMatrix());
+        Vec3 cameraPos = event.getLevelRenderState().cameraRenderState.pos;
+        poseStack.translate(pos.getX() - cameraPos.x(), pos.getY() - cameraPos.y(), pos.getZ() - cameraPos.z());
+        translateCoordinateSystem(mbe, poseStack);
         translateCoordinateSystem(mbe, poseStack);
 
         Vec3 p = def.inBlockPos();
