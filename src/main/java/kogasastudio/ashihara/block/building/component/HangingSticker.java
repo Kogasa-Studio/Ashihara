@@ -54,10 +54,10 @@ public class HangingSticker extends AdditionalComponent implements Interactable
     @Override
     public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)
     {
-        Vec3 inBlockPos = beIn.transformVec3(beIn.inBlockVec(context.getClickLocation()));
+        Vec3 inBlockPos = beIn.inBlockVec(context.getClickLocation());
 
         Direction direction = context.getHorizontalDirection();
-        direction = beIn.fromAbsolute(direction);
+        direction = direction;
         float r = switch (direction)
         {
             case WEST -> 270;

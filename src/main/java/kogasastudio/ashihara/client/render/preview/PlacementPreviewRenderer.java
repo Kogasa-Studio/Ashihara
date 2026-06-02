@@ -86,8 +86,6 @@ public class PlacementPreviewRenderer
         poseStack.mulPose(event.getModelViewMatrix());
         Vec3 cameraPos = event.getLevelRenderState().cameraRenderState.pos;
         poseStack.translate(pos.getX() - cameraPos.x(), pos.getY() - cameraPos.y(), pos.getZ() - cameraPos.z());
-        translateCoordinateSystem(mbe, poseStack);
-        translateCoordinateSystem(mbe, poseStack);
 
         Vec3 p = def.inBlockPos();
         poseStack.translate(p.x, p.y, p.z);
@@ -121,20 +119,6 @@ public class PlacementPreviewRenderer
         if (stack.getItem() instanceof FurnitureComponentItem fci)
             return fci.getComponent();
         return null;
-    }
-
-    private static void translateCoordinateSystem(MultiBuiltBlockEntity be, PoseStack poseStack)
-    {
-        float rotation = switch (be.getBlockState().getValue(BaseMultiBuiltBlock.FACING))
-        {
-            case WEST -> 90;
-            case SOUTH -> 180;
-            case EAST -> 270;
-            default -> 0;
-        };
-        poseStack.translate(0.5, 0, 0.5);
-        poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
-        poseStack.translate(-0.5, 0, -0.5);
     }
 
     private record AlphaMaskConsumer(VertexConsumer delegate) implements VertexConsumer

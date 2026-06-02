@@ -56,11 +56,11 @@ public class BeamOblique extends AdditionalComponent implements Interactable
     public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)
     {
         Direction direction = context.getHorizontalDirection();
-        direction = beIn.fromAbsolute(direction);
+        direction = direction;
 
         float r = direction.getAxis() == Direction.Axis.Z ? 0 : 90;
 
-        Vec3 inBlockPos = beIn.transformVec3(beIn.inBlockVec(context.getClickLocation()));
+        Vec3 inBlockPos = beIn.inBlockVec(context.getClickLocation());
         double y = inBlockPos.y();
 
         y = coordsInRangeFixedY(context.getClickedFace(), y, 0, XTP(8)) ? 0 : XTP(8);

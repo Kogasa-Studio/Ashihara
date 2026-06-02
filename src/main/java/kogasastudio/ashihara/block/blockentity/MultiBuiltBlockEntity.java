@@ -3,13 +3,11 @@ package kogasastudio.ashihara.block.blockentity;
 import kogasastudio.ashihara.block.building.*;
 import kogasastudio.ashihara.block.building.component.*;
 import kogasastudio.ashihara.block.furniture.FurnitureComponent;
-import kogasastudio.ashihara.helper.MathHelper;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.Items;
 import kogasastudio.ashihara.registry.BlockEntities;
 import kogasastudio.ashihara.utils.shape.VoxelShapeSerializer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -30,8 +28,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-
-import static kogasastudio.ashihara.block.building.BaseMultiBuiltBlock.FACING;
 
 @SuppressWarnings("NullableProblems")
 public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBuiltBlock
@@ -104,7 +100,7 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
     {
         ItemStack stack = context.getItemInHand();
         Vec3 vec = context.getClickLocation();
-        Vec3 inBlockVec = transformVec3(inBlockVec(vec));
+        Vec3 inBlockVec = inBlockVec(vec);
         int opcode = stack.is(Items.WOODEN_HAMMER) ? OPCODE_COMPONENT : stack.is(Items.CHISEL) ? OPCODE_ADDITIONAL : -1;
         if (opcode == OPCODE_COMPONENT || opcode == OPCODE_ADDITIONAL)
         {
@@ -123,7 +119,7 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
         {
             SoundEvent event = definition.component().getSoundType().getBreakSound();
             List<ItemStack> drops = definition.component().drops;
-            Vec3 vec = outLayVec3(definition.inBlockPos());
+            Vec3 vec = definition.inBlockPos();
             this.level.playSound(null, this.worldPosition, event, SoundSource.BLOCKS, 1.0f, 1.0f);
             if (this.level.isClientSide() && !drops.getFirst().isEmpty())
             {
@@ -174,14 +170,6 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
         {
             shape = Shapes.or(shape, definition.shape());
         }
-        float rotation = switch (this.getBlockState().getValue(FACING))
-        {
-            case WEST -> -90;
-            case SOUTH -> -180;
-            case EAST -> -270;
-            default -> 0;
-        };
-        shape = ShapeHelper.rotateShape(shape, rotation);
         setShape(shape);
     }
 
@@ -222,7 +210,7 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
     {
         int opcode = OPCODE_COMPONENT;
         Vec3 vec = context.getClickLocation();
-        Vec3 inBlockPos = transformVec3(inBlockVec(vec));
+        Vec3 inBlockPos = inBlockVec(vec);
         ComponentStateDefinition definition = getComponentByPosition(inBlockPos, opcode);
         if (definition == null)
         {
@@ -286,88 +274,13 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
         return null;
     }
 
-    //将本方块的内部坐标系中的方向转换为绝对坐标系中的方向
-    public Direction toAbsolute(Direction dir)
-    {
-        Direction current = this.getBlockState().getValue(FACING);
-        return switch (current)
-        {
-            case WEST -> dir.getCounterClockWise();
-            case EAST -> dir.getClockWise();
-            case SOUTH -> dir.getOpposite();
-            default -> dir;
-        };
-    }
-
-    //将绝对坐标系的方向转换为方块内部坐标系的方向
-    public Direction fromAbsolute(Direction dir)
-    {
-        Direction current = this.getBlockState().getValue(FACING);
-        return switch (current)
-        {
-            case WEST -> dir.getClockWise();
-            case EAST -> dir.getCounterClockWise();
-            case SOUTH -> dir.getOpposite();
-            default -> dir;
-        };
-    }
-
+    //将绝对坐标转换为以本方块坐标为原点的局部坐标
     public Vec3 inBlockVec(Vec3 vec)
     {
         double x = vec.x() - this.getBlockPos().getX();
         double y = vec.y() - this.getBlockPos().getY();
         double z = vec.z() - this.getBlockPos().getZ();
         return new Vec3(x, y, z);
-    }
-
-    public Vec3 transformVec3(Vec3 vec3)
-    {
-        double rotation = switch (this.getBlockState().getValue(FACING))
-        {
-            case WEST -> 90;
-            case SOUTH -> 180;
-            case EAST -> 270;
-            default -> 0;
-        };
-        rotation = Math.toRadians(rotation);
-        double[] transformed = MathHelper.rotatePoint(vec3.x(), vec3.z(), 0.5, 0.5, rotation);
-        return new Vec3(transformed[0], vec3.y(), transformed[1]);
-    }
-
-    public Vec3 outLayVec3(Vec3 vec3)
-    {
-        double rotation = switch (this.getBlockState().getValue(FACING))
-        {
-            case WEST -> -90;
-            case SOUTH -> -180;
-            case EAST -> -270;
-            default -> 0;
-        };
-        rotation = Math.toRadians(rotation);
-        double[] transformed = MathHelper.rotatePoint(vec3.x(), vec3.z(), 0.5, 0.5, rotation);
-        return new Vec3(transformed[0], vec3.y(), transformed[1]);
-    }
-
-    public float transformRotation(float r)
-    {
-        return r + switch (this.getBlockState().getValue(FACING))
-        {
-            case WEST -> 90;
-            case SOUTH -> 180;
-            case EAST -> 270;
-            default -> 0;
-        };
-    }
-
-    public float outLayRotation(float r)
-    {
-        return r + switch (this.getBlockState().getValue(FACING))
-        {
-            case WEST -> -90;
-            case SOUTH -> -180;
-            case EAST -> -270;
-            default -> 0;
-        };
     }
 
     public void refresh()

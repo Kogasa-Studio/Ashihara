@@ -61,8 +61,8 @@ public class ClampJoint extends BuildingComponent
     public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)
     {
         Direction direction = context.getHorizontalDirection();
-        direction = beIn.fromAbsolute(direction);
-        Vec3 inBlockPos = beIn.transformVec3(beIn.inBlockVec(context.getClickLocation()));
+        direction = direction;
+        Vec3 inBlockPos = beIn.inBlockVec(context.getClickLocation());
 
         float r = switch (direction)
         {

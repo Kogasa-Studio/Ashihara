@@ -14,7 +14,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static kogasastudio.ashihara.block.building.BaseMultiBuiltBlock.FACING;
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 
 public class QuarterFloor extends AdditionalComponent
@@ -59,15 +58,8 @@ public class QuarterFloor extends AdditionalComponent
     @Override
     public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)
     {
-        Vec3 inBlockPos = beIn.transformVec3(beIn.inBlockVec(context.getClickLocation()));
+        Vec3 inBlockPos = beIn.inBlockVec(context.getClickLocation());
 
-        float r = switch (beIn.getBlockState().getValue(FACING))
-        {
-            case WEST -> -90;
-            case SOUTH -> -180;
-            case EAST -> -270;
-            default -> 0;
-        };
         double y = inBlockPos.y();
 
         int floor = (int) Math.clamp(Math.floor(y * 4), 0, 3);
@@ -86,7 +78,7 @@ public class QuarterFloor extends AdditionalComponent
         (
             BuildingComponents.get(this.id),
             new Vec3(x, y, z),
-            0, r, 0,
+            0, 0, 0,
             shape,
             MODEL,
             List.of(occupation)

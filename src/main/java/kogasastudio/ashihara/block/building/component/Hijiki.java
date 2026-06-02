@@ -77,8 +77,8 @@ public class Hijiki extends AdditionalComponent implements Connectable
     public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)
     {
         Direction direction = context.getHorizontalDirection();
-        direction = beIn.fromAbsolute(direction);
-        Vec3 inBlockPos = beIn.transformVec3(beIn.inBlockVec(context.getClickLocation()));
+        direction = direction;
+        Vec3 inBlockPos = beIn.inBlockVec(context.getClickLocation());
 
         float r = switch (direction)
         {
@@ -185,15 +185,15 @@ public class Hijiki extends AdditionalComponent implements Connectable
             }
         };
 
-        Direction pointed = be.toAbsolute(direction);
-        Vec3 relExpected = be.outLayVec3(expected);
+        Direction pointed = direction;
+        Vec3 relExpected = expected;
 
         boolean connectL = false;
         boolean connectR;
 
         if (level.getBlockEntity(pos.relative(pointed)) instanceof MultiBuiltBlockEntity mbe)
         {
-            relExpected = mbe.transformVec3(relExpected);
+            relExpected = relExpected;
             Vec3 vec = relExpected;
             connectL = mbe.getComponents(MultiBuiltBlockEntity.OPCODE_ADDITIONAL).stream().anyMatch(m -> m.component() == definition.component() && m.occupation().contains(Occupation.mapPosition(vec.x(), vec.y(), vec.z())));
         }

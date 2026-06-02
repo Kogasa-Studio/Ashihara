@@ -6,7 +6,6 @@ import kogasastudio.ashihara.registry.Items;
 import kogasastudio.ashihara.block.furniture.FurnitureComponentItem;
 import kogasastudio.ashihara.item.block.BuildingComponentItem;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -24,7 +23,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
@@ -44,7 +42,6 @@ import static kogasastudio.ashihara.helper.PositionHelper.*;
 
 public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWaterloggedBlock
 {
-    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public final ComponentMaterial material;
     VoxelShape debug = Block.box(5.0D, 0.0D, 5.0D, 11.0D, 2.0D, 11.0D);
@@ -53,7 +50,7 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
     {
         super(properties);
         this.material = materialIn;
-        this.registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
+        this.registerDefaultState(defaultBlockState().setValue(WATERLOGGED, false));
     }
 
     public BaseMultiBuiltBlock(ComponentMaterial materialIn)
@@ -153,7 +150,7 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder)
     {
-        pBuilder.add(FACING, WATERLOGGED);
+        pBuilder.add(WATERLOGGED);
         super.createBlockStateDefinition(pBuilder);
     }
 
@@ -163,7 +160,7 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
     {
         BlockState state = super.getStateForPlacement(pContext);
         if (state == null) return null;
-        state = state.setValue(FACING, pContext.getHorizontalDirection().getOpposite()).setValue(WATERLOGGED, pContext.getLevel().getFluidState(pContext.getClickedPos()).getType().equals(Fluids.WATER));
+        state = state.setValue(WATERLOGGED, pContext.getLevel().getFluidState(pContext.getClickedPos()).getType().equals(Fluids.WATER));
         return state;
     }
 
@@ -184,7 +181,6 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
     {
         BlockState state = this.defaultBlockState();
         if (origin == null) return state;
-        state = state.setValue(BaseMultiBuiltBlock.FACING, origin.getValue(BaseMultiBuiltBlock.FACING));
         state = state.setValue(BaseMultiBuiltBlock.WATERLOGGED, origin.getValue(BaseMultiBuiltBlock.WATERLOGGED));
         return state;
     }

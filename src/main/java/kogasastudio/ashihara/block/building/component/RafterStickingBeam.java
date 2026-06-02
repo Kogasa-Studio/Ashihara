@@ -55,8 +55,8 @@ public class RafterStickingBeam extends AdditionalComponent
     public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)
     {
         Direction direction = context.getHorizontalDirection();
-        direction = beIn.fromAbsolute(direction);
-        Vec3 inBlockPos = beIn.transformVec3(beIn.inBlockVec(context.getClickLocation()));
+        direction = direction;
+        Vec3 inBlockPos = beIn.inBlockVec(context.getClickLocation());
 
         float r = direction.getAxis().equals(Direction.Axis.X) ? 90 : 0;
 

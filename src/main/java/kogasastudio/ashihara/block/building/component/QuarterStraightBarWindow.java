@@ -87,9 +87,9 @@ public class QuarterStraightBarWindow extends AdditionalComponent implements Con
     public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)
     {
         Direction direction = context.getHorizontalDirection();
-        direction = beIn.fromAbsolute(direction);
+        direction = direction;
 
-        Vec3 inBlockPos = beIn.transformVec3(beIn.inBlockVec(context.getClickLocation()));
+        Vec3 inBlockPos = beIn.inBlockVec(context.getClickLocation());
         double y = inBlockPos.y();
 
         if (context.getClickedFace().equals(Direction.UP))

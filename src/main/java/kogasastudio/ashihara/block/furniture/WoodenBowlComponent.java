@@ -40,7 +40,7 @@ public class WoodenBowlComponent extends FurnitureComponent
     @Override
     public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)
     {
-        Vec3 inBlock = beIn.transformVec3(beIn.inBlockVec(context.getClickLocation()));
+        Vec3 inBlock = beIn.inBlockVec(context.getClickLocation());
         double x = inBlock.x() - 8f / 16;
         double y = inBlock.y();
         double z = inBlock.z() - 8f / 16;

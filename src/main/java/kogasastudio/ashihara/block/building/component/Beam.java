@@ -70,11 +70,11 @@ public class Beam extends BuildingComponent implements Connectable, Interactable
     public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)
     {
         Direction direction = context.getHorizontalDirection();
-        direction = beIn.fromAbsolute(direction);
+        direction = direction;
 
         float r = direction.getAxis().equals(Direction.Axis.X) ? 0 : 90;
 
-        Vec3 inBlockPos = beIn.transformVec3(beIn.inBlockVec(context.getClickLocation()));
+        Vec3 inBlockPos = beIn.inBlockVec(context.getClickLocation());
         double y = inBlockPos.y();
 
         y = coordsInRangeFixedY(context.getClickedFace(), y, 0, XTP(8)) ? 0 : XTP(8);
@@ -115,7 +115,7 @@ public class Beam extends BuildingComponent implements Connectable, Interactable
         Direction left;
         Direction right;
 
-        left = be.toAbsolute(r == 0 ? Direction.EAST : Direction.NORTH);
+        left = r == 0 ? Direction.EAST : Direction.NORTH;
         right = left.getOpposite();
 
         boolean connectL;
@@ -123,14 +123,14 @@ public class Beam extends BuildingComponent implements Connectable, Interactable
 
         if (level.getBlockEntity(pos.relative(left)) instanceof MultiBuiltBlockEntity mbe)
         {
-            connectL = !mbe.occupationCache.contains(Occupation.getEdged(mbe.fromAbsolute(right)).get(definition.inBlockPos().y < XTP(8) ? 0 : 2));
+            connectL = !mbe.occupationCache.contains(Occupation.getEdged(right).get(definition.inBlockPos().y < XTP(8) ? 0 : 2));
         }
         else connectL = !level.getBlockState(pos.relative(left)).isAir() && !level.getBlockState(pos.relative(left)).isFaceSturdy(level, pos.relative(left), right);
 
 
         if (level.getBlockEntity(pos.relative(right)) instanceof MultiBuiltBlockEntity mbe)
         {
-            connectR = !mbe.occupationCache.contains(Occupation.getEdged(mbe.fromAbsolute(left)).get(definition.inBlockPos().y < XTP(8) ? 0 : 2));
+            connectR = !mbe.occupationCache.contains(Occupation.getEdged(left).get(definition.inBlockPos().y < XTP(8) ? 0 : 2));
         }
         else connectR = !level.getBlockState(pos.relative(right)).isAir() && !level.getBlockState(pos.relative(right)).isFaceSturdy(level, pos.relative(right), left);
 

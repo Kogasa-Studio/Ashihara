@@ -94,10 +94,10 @@ public class HangingFish extends AdditionalComponent implements Interactable
     public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)
     {
         Direction direction = context.getHorizontalDirection();
-        direction = beIn.fromAbsolute(direction);
+        direction = direction;
         float r = direction.getAxis().equals(Direction.Axis.X) ? 90 : 0;
 
-        Vec3 inBlockPos = beIn.transformVec3(beIn.inBlockVec(context.getClickLocation()));
+        Vec3 inBlockPos = beIn.inBlockVec(context.getClickLocation());
 
         double y = inBlockPos.y();
 

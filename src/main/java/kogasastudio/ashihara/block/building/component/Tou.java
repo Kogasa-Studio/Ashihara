@@ -34,7 +34,7 @@ public class Tou extends BuildingComponent
     @Override
     public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)
     {
-        Vec3 inBlockPos = beIn.transformVec3(beIn.inBlockVec(context.getClickLocation()));
+        Vec3 inBlockPos = beIn.inBlockVec(context.getClickLocation());
 
         double x = inBlockPos.x();
         double y = inBlockPos.y();
