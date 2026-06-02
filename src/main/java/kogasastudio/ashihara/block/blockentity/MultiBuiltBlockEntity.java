@@ -277,10 +277,16 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
     //将绝对坐标转换为以本方块坐标为原点的局部坐标
     public Vec3 inBlockVec(Vec3 vec)
     {
-        double x = vec.x() - this.getBlockPos().getX();
-        double y = vec.y() - this.getBlockPos().getY();
-        double z = vec.z() - this.getBlockPos().getZ();
+        double x = snapEdge(vec.x() - this.getBlockPos().getX());
+        double y = snapEdge(vec.y() - this.getBlockPos().getY());
+        double z = snapEdge(vec.z() - this.getBlockPos().getZ());
         return new Vec3(x, y, z);
+    }
+
+    private static double snapEdge(double v)
+    {
+        double snapped = Math.round(v * 16.0) / 16.0;
+        return Math.abs(v - snapped) < 0.0001 ? snapped : v;
     }
 
     public void refresh()

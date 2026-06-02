@@ -4,12 +4,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
-import kogasastudio.ashihara.block.building.component.BuildingComponent;
-import kogasastudio.ashihara.block.building.component.ComponentStateDefinition;
+import kogasastudio.ashihara.block.building.component.*;
 import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
+import kogasastudio.ashihara.block.furniture.FurnitureComponent;
 import kogasastudio.ashihara.block.furniture.FurnitureComponentItem;
 import kogasastudio.ashihara.event.ClientEventSubscribeHandler;
 import kogasastudio.ashihara.item.block.BuildingComponentItem;
+import kogasastudio.ashihara.registry.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
@@ -23,12 +24,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 /**
  * Thanks to ZhuRuoLing for debugging.
@@ -62,16 +66,79 @@ public class PlacementPreviewRenderer
 
         Level level = mc.level;
         if (level == null) return;
+
         BlockPos pos = blockHit.getBlockPos();
-        if (!(level.getBlockState(pos).getBlock() instanceof BaseMultiBuiltBlock)) return;
-
+        BlockState hitState = level.getBlockState(pos);
         BlockEntity be = level.getBlockEntity(pos);
-        if (!(be instanceof MultiBuiltBlockEntity mbe)) return;
 
-        UseOnContext context = new UseOnContext(level, player, InteractionHand.MAIN_HAND, held, blockHit);
-        ComponentStateDefinition def = component.definite(mbe, context);
-        if (def == null) return;
+        ComponentStateDefinition def;
+        if (!player.isShiftKeyDown()
+            && hitState.getBlock() instanceof BaseMultiBuiltBlock
+            && be instanceof MultiBuiltBlockEntity mbe
+            && coordsInRange(mbe, blockHit))
+        {
+            UseOnContext context = new UseOnContext(level, player, InteractionHand.MAIN_HAND, held, blockHit);
+            def = component.definite(mbe, context);
+            if (def != null && canPlace(component, def, mbe))
+            {
+                renderPreview(event, mc, level, pos, mbe.getBlockState(), def, hitState);
+                return;
+            }
+        }
 
+        BlockPos placePos = blockHit.getBlockPos().relative(blockHit.getDirection());
+        if (level.getBlockEntity(placePos) instanceof MultiBuiltBlockEntity mbe)
+        {
+            UseOnContext context = new UseOnContext(level, player, InteractionHand.MAIN_HAND, held, blockHit);
+            def = component.definite(mbe, context);
+            if (def != null && canPlace(component, def, mbe)) renderPreview(event, mc, level, placePos, mbe.getBlockState(), def, hitState);
+        }
+        // Fallback: preview as new MBB placement.  BlockItem.place() creates
+        // the block at clickedPos.relative(clickedFace), not at clickedPos.
+        else if (level.getBlockState(placePos).canBeReplaced())
+        {
+            MultiBuiltBlockEntity phantom = makePhantom(placePos);
+            UseOnContext context = new UseOnContext(level, player, InteractionHand.MAIN_HAND, held, blockHit);
+            def = component.definite(phantom, context);
+            if (def != null) renderPreview(event, mc, level, placePos, phantom.getBlockState(), def, hitState);
+        }
+    }
+
+    private static MultiBuiltBlockEntity makePhantom(BlockPos pos)
+    {
+        return new MultiBuiltBlockEntity(pos, Blocks.MULTI_BUILT_BLOCK.get().defaultBlockState());
+    }
+
+    /** Same logic as BaseMultiBuiltBlock.useItemOn: hit must be within block bounds. */
+    private static boolean coordsInRange(MultiBuiltBlockEntity be, BlockHitResult hit)
+    {
+        return kogasastudio.ashihara.helper.PositionHelper.coordsInRangeFixedX(
+            hit.getDirection(), hit.getLocation().x - be.getBlockPos().getX(), 0, 1)
+            && kogasastudio.ashihara.helper.PositionHelper.coordsInRangeFixedY(
+            hit.getDirection(), hit.getLocation().y - be.getBlockPos().getY(), 0, 1)
+            && kogasastudio.ashihara.helper.PositionHelper.coordsInRangeFixedZ(
+            hit.getDirection(), hit.getLocation().z - be.getBlockPos().getZ(), 0, 1);
+    }
+
+    private static boolean canPlace(BuildingComponent component, ComponentStateDefinition def, MultiBuiltBlockEntity be)
+    {
+        if (component instanceof FurnitureComponent)
+            return true;
+        if (component instanceof AdditionalComponent)
+        {
+            for (ComponentStateDefinition existing : be.ADDITIONAL_COMPONENTS)
+            {
+                if (existing.occupation().hashCode() == def.occupation().hashCode() && existing.equals(def))
+                    return false;
+            }
+            return true;
+        }
+        return Occupation.join(def.occupation(), be.occupationCache);
+    }
+
+    private static void renderPreview(RenderLevelStageEvent.AfterLevel event, Minecraft mc, Level level,
+        BlockPos pos, BlockState state, ComponentStateDefinition def, BlockState hitState)
+    {
         BlockStateModel model = mc.getModelManager()
             .getStandaloneModel(ClientEventSubscribeHandler.getOrCreateKey(def.model().id()));
 
@@ -99,7 +166,7 @@ public class PlacementPreviewRenderer
             (x, y, z, quad, instance) ->
                 consumer.putBakedQuad(poseStack.last(), quad, instance),
             0, 0, 0,
-            (BlockAndTintGetter) level, pos, mbe.getBlockState(), model, 42L
+            (BlockAndTintGetter) level, pos, state, model, 42L
         );
 
         poseStack.popPose();
