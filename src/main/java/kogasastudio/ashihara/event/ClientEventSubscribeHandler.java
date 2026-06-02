@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.event;
 
 import kogasastudio.ashihara.client.gui3d.PotScreen;
+import kogasastudio.ashihara.client.render.preview.PlacementPreviewRenderer;
 import kogasastudio.ashihara.client.render.state.Screen3DPiPRenderState;
 import kogasastudio.ashihara.registry.BlockEntities;
 import kogasastudio.ashihara.registry.MenuTypes;
@@ -22,11 +23,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import kogasastudio.ashihara.client.render.geo.pip.Screen3DPiPRenderer;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.ModelEvent;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
-import net.neoforged.neoforge.client.event.RegisterPictureInPictureRenderersEvent;
+import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
@@ -133,5 +130,11 @@ public class ClientEventSubscribeHandler
     public static void onRegisterPiPRenderers(RegisterPictureInPictureRenderersEvent event)
     {
         event.register(Screen3DPiPRenderState.class, Screen3DPiPRenderer::new);
+    }
+
+    @SubscribeEvent
+    public static void onAfterRenderLevel(RenderLevelStageEvent.AfterLevel event)
+    {
+        PlacementPreviewRenderer.onRenderLevel(event);
     }
 }

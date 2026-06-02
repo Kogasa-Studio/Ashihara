@@ -37,11 +37,6 @@ public class PlacementPreviewRenderer
 {
     private static ModelBlockRenderer blockRenderer;
 
-    public static void register()
-    {
-        NeoForge.EVENT_BUS.addListener(PlacementPreviewRenderer::onRenderLevel);
-    }
-
     private static ModelBlockRenderer getBlockRenderer()
     {
         if (blockRenderer == null)
@@ -52,7 +47,7 @@ public class PlacementPreviewRenderer
         return blockRenderer;
     }
 
-    private static void onRenderLevel(RenderLevelStageEvent.AfterLevel event)
+    public static void onRenderLevel(RenderLevelStageEvent.AfterLevel event)
     {
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
