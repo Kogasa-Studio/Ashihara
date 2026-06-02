@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.QuadInstance;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
-import net.minecraft.client.renderer.block.BlockModelLighter;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
@@ -14,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.client.model.ao.EnhancedBlockModelLighter;
 import net.neoforged.neoforge.client.model.quad.MutableQuad;
 import org.joml.Matrix4f;
 
@@ -39,7 +39,8 @@ public class QuadBaker
         Function<ChunkSectionLayer, VertexConsumer> chunkBuffer
     )
     {
-        BlockModelLighter lighter = new BlockModelLighter();
+        EnhancedBlockModelLighter lighter = new EnhancedBlockModelLighter();
+        lighter.reset();
         List<BlockStateModelPart> parts = new java.util.ArrayList<>();
         model.collectParts(level, pos, state, RANDOM, parts);
 
@@ -64,7 +65,7 @@ public class QuadBaker
 
     private static void renderQuad(
         BakedQuad quad, Matrix4f transform, BlockPos pos,
-        BlockState state, BlockAndTintGetter level, BlockModelLighter lighter,
+        BlockState state, BlockAndTintGetter level, EnhancedBlockModelLighter lighter,
         PoseStack poseStack, Function<ChunkSectionLayer, VertexConsumer> chunkBuffer
     )
     {
@@ -74,7 +75,7 @@ public class QuadBaker
         BakedQuad transformed = mq.toBakedQuad();
 
         QuadInstance instance = new QuadInstance();
-        if (transformed.materialInfo().ambientOcclusion() != false)
+        if (transformed.materialInfo().ambientOcclusion())
         {
             lighter.prepareQuadAmbientOcclusion(level, state, pos, transformed, instance);
         }
