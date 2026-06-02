@@ -1,13 +1,14 @@
 package kogasastudio.ashihara.client.render.ber;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import kogasastudio.ashihara.block.building.component.ComponentStateDefinition;
+import org.joml.Matrix4f;
 import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.client.render.SectionRenderContext;
 import kogasastudio.ashihara.client.render.WithLevelRenderer;
-import kogasastudio.ashihara.registry.BuildingComponents;
+import kogasastudio.ashihara.client.render.quad.QuadBaker;
 import kogasastudio.ashihara.event.ClientEventSubscribeHandler;
+import kogasastudio.ashihara.registry.BuildingComponents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
@@ -15,10 +16,8 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.model.data.ModelData;
 
 public class MultiBuiltBlockRenderer implements BlockEntityRenderer<MultiBuiltBlockEntity, BlockEntityRenderState>, WithLevelRenderer<MultiBuiltBlockEntity>
 {
@@ -38,15 +37,9 @@ public class MultiBuiltBlockRenderer implements BlockEntityRenderer<MultiBuiltBl
             if (model.component().type.equals(BuildingComponents.Type.BAKED_MODEL))
             {
                 resetToBlock000(be, matrixStackIn);
-                Vec3 pos = model.inBlockPos();
-                matrixStackIn.translate(pos.x, pos.y, pos.z);
-                matrixStackIn.translate(0.5, 0, 0.5);
-                matrixStackIn.mulPose(Axis.YP.rotationDegrees(model.rotationY()));
-                matrixStackIn.mulPose(Axis.XP.rotationDegrees(model.rotationX()));
-                matrixStackIn.mulPose(Axis.ZP.rotationDegrees(model.rotationZ()));
-                matrixStackIn.translate(-0.5, 0, -0.5);
+                Matrix4f transform = buildQuadTransform(model);
                 BlockStateModel bakedModel = Minecraft.getInstance().getModelManager().getStandaloneModel(ClientEventSubscribeHandler.getOrCreateKey(model.model().id()));
-                modelRenderer.renderBlockStateModel(bakedModel, matrixStackIn, OverlayTexture.NO_OVERLAY, ModelData.EMPTY);
+                QuadBaker.renderModel(bakedModel, context.level(), context.pos(), tileEntityIn.getBlockState(), transform, matrixStackIn, context.consumerFunction());
             }
         }
     }
@@ -60,6 +53,17 @@ public class MultiBuiltBlockRenderer implements BlockEntityRenderer<MultiBuiltBl
     @Override
     public void submit(BlockEntityRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera)
     {
+    }
+
+    private static Matrix4f buildQuadTransform(ComponentStateDefinition def)
+    {
+        return new Matrix4f()
+            .translate((float) def.inBlockPos().x, (float) def.inBlockPos().y, (float) def.inBlockPos().z)
+            .translate(0.5f, 0, 0.5f)
+            .rotateY((float) Math.toRadians(def.rotationY()))
+            .rotateX((float) Math.toRadians(def.rotationX()))
+            .rotateZ((float) Math.toRadians(def.rotationZ()))
+            .translate(-0.5f, 0, -0.5f);
     }
 
     @Override
