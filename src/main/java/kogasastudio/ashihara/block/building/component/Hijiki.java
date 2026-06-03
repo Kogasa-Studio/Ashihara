@@ -102,7 +102,7 @@ public class Hijiki extends AdditionalComponent implements Connectable
             if (x >= 0 && x < XTP(4)) {x = -0.5; occx = 0;}
             else if (x >= XTP(4) && x < XTP(12)) {x = 0; occx = 0.5;}
             else {x = 0.5; occx = 1;}
-            if (z == 0.5) z = context.getClickedFace() == Direction.SOUTH ? 0.5 : 0;
+            if (z == 0.5) z = 0;
             else if (z > 0.5)
             {
                 z = direction == Direction.SOUTH ? 0.5 : 0;
@@ -118,7 +118,7 @@ public class Hijiki extends AdditionalComponent implements Connectable
             if (z >= 0 && z < XTP(4)) {z = -0.5; occz = 0;}
             else if (z >= XTP(4) && z < XTP(12)) {z = 0; occz = 0.5;}
             else {z = 0.5; occz = 1;}
-            if (x == 0.5) x = context.getClickedFace() == Direction.EAST ? 0.5 : 0;
+            if (x == 0.5) x = 0;
             else if (x >= 0.5)
             {
                 x = direction == Direction.EAST ? 0.5 : 0;
