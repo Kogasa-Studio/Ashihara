@@ -70,14 +70,18 @@ public class QuarterOrientedFloor extends AdditionalComponent
             case EAST -> 90;
             default -> 180;
         };
+        double x;
         double y = inBlockPos.y();
+        double z;
 
         int floor = (int) Math.clamp(Math.floor(y * 4), 0, 3);
 
         y = XTP((float) (floor * 4));
 
-        double x = inBlockPos.x() <= XTP(8) ? XTP(-4) : XTP(4);
-        double z = inBlockPos.z() <= XTP(8) ? XTP(-4) : XTP(4);
+        if (inBlockPos.x() == XTP(8)) x = context.getClickedFace() == Direction.WEST ? XTP(-4) : XTP(4);
+        else x = inBlockPos.x() < XTP(8) ? XTP(-4) : XTP(4);
+        if (inBlockPos.z() == XTP(8)) z = context.getClickedFace() == Direction.NORTH ? XTP(-4) : XTP(4);
+        else z = inBlockPos.z() < XTP(8) ? XTP(-4) : XTP(4);
 
         Occupation occupation = Occupation.mapPosition(x + XTP(8), y, z + XTP(8));
 
