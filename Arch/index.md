@@ -63,6 +63,8 @@ Ashihara 的核心特色系统之一。涵盖全新建造机制、特殊方块�
 | [block-entities.md](./02-Building-System/block-entities.md) | 建筑系统涉及的方块实体规范 | 1~2 |
 | [rendering.md](./02-Building-System/rendering.md) | 建筑方块的渲染策略、自定义模型、Render Type | 与阶段无关 |
 | [mod-compatibility.md](./02-Building-System/mod-compatibility.md) | 与 Sodium / Iris / WorldEdit 的兼容方案 | 与阶段无关 |
+| [furniture-interfaces.md](./02-Building-System/furniture-interfaces.md) | 家具组件接口体系：ICustomRender、ICustomData、IRenderOverlayProvider | 2 |
+| [container-system.md](./02-Building-System/container-system.md) | 容器组件系统：ContainerComponent、Meal、料理调合 | 2 |
 
 ---
 
@@ -113,6 +115,7 @@ Ashihara 的核心特色系统之一。涵盖全新建造机制、特殊方块�
 | [particles.md](./06-Rendering-Systems/particles.md) | 粒子系统：樱花、枫叶、稻米粒子 |
 | [shaders.md](./06-Rendering-Systems/shaders.md) | 着色器注册与使用规范 |
 | [geo-rendering.md](./06-Rendering-Systems/geo-rendering.md) | GeckoLib 模型渲染集成（指南书、特殊物品） |
+| [container-rendering.md](./06-Rendering-Systems/container-rendering.md) | 容器覆盖层渲染分发：MRD / SuBER | 2 |
 
 ---
 

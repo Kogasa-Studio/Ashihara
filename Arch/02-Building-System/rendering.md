@@ -253,3 +253,69 @@ for (double[] d : be.getPosList()) {
 | `client/render/ber/CandleBER.java` | 蜡烛渲染器（另一个实现） |
 | `event/ClientEventSubscribeHandler.java` | BER 注册 + StandaloneModel 注册 |
 | `registry/AdditionalModels.java` | 所有独立模型定义 |
+
+---
+
+## 附录 B：家具 BER 渲染管线（R4）
+
+### 概述
+
+与 BuildingComponent 的 chunk buffer 渲染不同，FurnitureComponent 中标记为
+`BER_DYNAMIC` 或 `GECKOLIB` 的组件需要独立的 per-frame BER pass。
+这是通过向 `MultiBuiltBlockRenderer` 添加 `submit()` 逻辑实现的——在常规
+`renderStatic()` 跳过非 CHUNK_BUFFER 组件后，`submit()` 轮询 FURNITURE 表
+收集并渲染 BER 组件。
+
+### 分发流程
+
+```
+submit() [per-frame]
+  └── 遍历 be.getComponents(OPCODE_FURNITURE)
+        ├── CHUNK_BUFFER → 跳过（已在 renderStatic 处理）
+        ├── BER_DYNAMIC & instanceof ICustomRender
+        │     ├── doRender(be) == false → 跳过
+        │     ├── collectRenderState() → FurnitureRenderState
+        │     │     ├── 渲染容器本体
+        │     │     └── 若 containerState != null：
+        │     │           MealRenderDispatch.getRenderer(state) → 渲染覆盖层
+        │     └── 提交到 SubmitNodeCollector
+        └── GECKOLIB → (R6 实现)
+```
+
+### 关键类
+
+| 类 | 角色 |
+|------|------|
+| `FurnitureComponentDispatcher` | BER 渲染器注册表，component class → IFurnitureBER |
+| `IFurnitureBER` | BER 函数接口 (component, definition, be) → FurnitureRenderState |
+| `FurnitureRenderState` | Record: component + definition + poseStack + optional containerState |
+| `MealRenderDispatch` | 覆盖层注册表，(type, size, content, count) → MealRenderer |
+| `MealRenderer` | 覆盖层渲染函数 (ctx, state) → void |
+| `ContainerState` | Record: 容器种类 + 内容物快照，用于 MRD 查表 |
+
+### 变换链（容器本体）
+
+```
+world pos → inBlockPos.translate → rotateY/X/Z → model center → render
+
+与 BuildingComponent 的 renderStatic 变换链一致（不含 FACING 旋转，
+因 R0 已移除），但通过 PoseStack 而非 QuadBaker Matrix4f 实现。
+```
+
+### 覆盖层变换链
+
+```
+容器本体定位后的 PoseStack → (容器内部偏移，如 0.16y) → 覆盖层模型渲染
+```
+
+### 与 Chunk Buffer 管线的关系
+
+| 维度 | Chunk Buffer (renderStatic) | BER (submit) |
+|------|---------------------------|--------------|
+| 调用频率 | Chunk rebuild 时 | 每帧 |
+| 适用组件 | CHUNK_BUFFER 类型的 Furniture + 所有 BuildingComponent | BER_DYNAMIC 类型 |
+| 渲染方式 | tesselateBlock → putBakedQuad → chunk buffer | 直接 tesselateBlock → SubmitNodeCollector |
+| 内容动态变化 | 需触发 chunk rebuild | 自动每帧重绘 |
+
+详见 [furniture-interfaces.md](furniture-interfaces.md) 和
+[container-rendering.md](../06-Rendering-Systems/container-rendering.md)。
