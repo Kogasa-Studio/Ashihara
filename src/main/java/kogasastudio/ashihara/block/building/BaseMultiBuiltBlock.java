@@ -75,13 +75,9 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
         List<ItemStack> ret = new ArrayList<>();
         if (be instanceof MultiBuiltBlockEntity mbe)
         {
-            for (ComponentStateDefinition model : mbe.getComponents(MultiBuiltBlockEntity.OPCODE_COMPONENT))
+            for (ComponentStateDefinition model : mbe.getComponents(MultiBuiltBlockEntity.OPCODE_READALL))
             {
-                ret.addAll(model.component().drops);
-            }
-            for (ComponentStateDefinition model : mbe.getComponents(MultiBuiltBlockEntity.OPCODE_ADDITIONAL))
-            {
-                ret.addAll(model.component().drops);
+                ret.addAll(model.component().getDrops(model, mbe));
             }
         }
         return ret.isEmpty() ? super.getDrops(pState, pParams) : ret;

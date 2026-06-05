@@ -1,16 +1,18 @@
 package kogasastudio.ashihara.block.furniture;
 
 import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
-import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.block.building.component.ComponentStateDefinition;
 import kogasastudio.ashihara.block.building.component.Interactable;
+import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.registry.BuildingComponents;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.transfer.StacksResourceHandler;
@@ -19,6 +21,7 @@ import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -56,12 +59,28 @@ public abstract class ContainerComponent extends FurnitureComponent
         return hasContent(def);
     }
 
+    @Override
+    public List<ItemStack> getDrops(ComponentStateDefinition def, MultiBuiltBlockEntity be)
+    {
+        List<ItemStack> result = new ArrayList<>(super.getDrops(def, be));
+        if (def.customData() instanceof ContainerContent cc
+            && cc.handler() instanceof ItemStacksResourceHandler handler)
+        {
+            for (int i = 0; i < handler.size(); i++)
+            {
+                if (!handler.getResource(i).isEmpty())
+                    result.add(handler.getResource(i).toStack((int) handler.getAmountAsLong(i)));
+            }
+        }
+        return result;
+    }
+
     // ── ICustomData ──
 
     @Override
     public void serializeCustom(ValueOutput output, Object customData)
     {
-             if (!(customData instanceof ContainerContent cc) || cc.isEmpty()) return;
+        if (!(customData instanceof ContainerContent cc) || cc.isEmpty()) return;
         output.putString("type", cc.type().name());
         cc.handler().serialize(output.child("handler"));
     }
@@ -77,7 +96,7 @@ public abstract class ContainerComponent extends FurnitureComponent
         return new ContainerContent(type, h);
     }
 
-    // ── Interactable — 所有容器共享的交互逻辑 ──
+    // ── Interactable ──
 
     @Override
     public ComponentStateDefinition handleInteraction(UseOnContext context,
@@ -94,9 +113,10 @@ public abstract class ContainerComponent extends FurnitureComponent
 
         if (held.isEmpty() && player.isShiftKeyDown())
         {
-            if (handler.getAmountAsLong(0) > 0)
-                popItem(player, handler.getResource(0).toStack((int) handler.getAmountAsLong(0)));
-            popItem(player, this.drops.getFirst().copy());
+            BlockEntity be = context.getLevel().getBlockEntity(context.getClickedPos());
+            if (be instanceof MultiBuiltBlockEntity mbe)
+                for (ItemStack s : getDrops(definition, mbe)) popItem(player, s.copy());
+            else popItem(player, this.drops.getFirst().copy());
             return null;
         }
 

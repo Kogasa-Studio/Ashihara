@@ -118,7 +118,7 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
         if (this.getComponents(opcode).contains(definition))
         {
             SoundEvent event = definition.component().getSoundType().getBreakSound();
-            List<ItemStack> drops = definition.component().drops;
+            List<ItemStack> drops = definition.component().getDrops(definition, this);
             Vec3 vec = definition.inBlockPos();
             this.level.playSound(null, this.worldPosition, event, SoundSource.BLOCKS, 1.0f, 1.0f);
             if (this.level.isClientSide() && !drops.getFirst().isEmpty())

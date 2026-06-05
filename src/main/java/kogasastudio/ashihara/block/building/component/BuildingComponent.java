@@ -34,6 +34,15 @@ public abstract class BuildingComponent
 
     public abstract ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context);
 
+    /**
+     * Returns the items to drop when this component is removed.
+     * Override in subclasses that have dynamic drops (e.g. containers with contents).
+     */
+    public List<ItemStack> getDrops(ComponentStateDefinition def, MultiBuiltBlockEntity be)
+    {
+        return this.drops;
+    }
+
     public Supplier<BaseMultiBuiltBlock> getMaterial() {return material;}
 
     public SoundType getSoundType() {return this.sound;}
