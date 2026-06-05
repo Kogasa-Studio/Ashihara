@@ -217,6 +217,11 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
             opcode = OPCODE_ADDITIONAL;
             definition = getComponentByPosition(inBlockPos, opcode);
         }
+        if (definition == null)
+        {
+            opcode = OPCODE_FURNITURE;
+            definition = getComponentByPosition(inBlockPos, opcode);
+        }
         if (definition == null) return false;
         for (int i = 0; i < this.getComponents(opcode).size(); i++)
         {
@@ -224,7 +229,20 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
             if (def == definition && definition.component() instanceof Interactable comp)
             {
                 ComponentStateDefinition interacted = comp.handleInteraction(context, def);
-                if (interacted == def) return false;
+                if (interacted == null)
+                {
+                    this.getComponents(opcode).remove(i);
+                    if (opcode == OPCODE_FURNITURE)
+                        refresh();
+                    else
+                    {
+                        refresh();
+                        SoundEvent event = definition.component().getSoundType().getBreakSound();
+                        this.level.playSound(null, this.worldPosition, event, SoundSource.BLOCKS, 1.0f, 1.0f);
+                    }
+                    return true;
+                }
+                if (interacted == def) return true;
                 this.getComponents(opcode).set(i, interacted);
                 this.level.playSound(null, this.worldPosition, comp.getInteractSound().getPlaceSound(), SoundSource.BLOCKS, 1.0f, 1.0f);
                 refresh();
@@ -298,6 +316,7 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
     {
         if (reloadShape) reloadShape();
         reloadOccupation();
+        sync();
         setChanged();
         checkMaterial();
         if (this.hasLevel()) this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
@@ -330,6 +349,7 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
         super.loadAdditional(input);
         this.COMPONENTS.clear();
         this.ADDITIONAL_COMPONENTS.clear();
+        this.FURNITURE.clear();
         for (ValueInput child : input.childrenListOrEmpty("models"))
         {
             this.COMPONENTS.add(ComponentStateDefinition.deserializeNBT(child));

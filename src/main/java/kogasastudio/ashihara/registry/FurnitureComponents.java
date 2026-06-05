@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.registry;
 
 import kogasastudio.ashihara.block.furniture.FurnitureComponent;
-import kogasastudio.ashihara.block.furniture.FurnitureRendererType;
+import kogasastudio.ashihara.block.furniture.FurnitureRenderPass;
 import kogasastudio.ashihara.block.furniture.WoodenBowlComponent;
 import net.minecraft.world.phys.shapes.Shapes;
 
@@ -17,13 +17,13 @@ public class FurnitureComponents
     (
         new WoodenBowlComponent
         (
-            "wooden_bowl_mid",
-            BuildingComponents.Type.BAKED_MODEL,
-            AdditionalModels.WOODEN_BOWL_MID,
-            Shapes.box(0.34375, 0, 0.34375, 0.65625, 0.21875, 0.65625),
-            () -> Blocks.MULTI_BUILT_BLOCK.get(),
-            List.of(Items.WOODEN_BOWL_MID.toStack()),
-            FurnitureRendererType.CHUNK_BUFFER
+        "wooden_bowl_mid",
+        BuildingComponents.Type.BAKED_MODEL,
+        AdditionalModels.WOODEN_BOWL_MID,
+        Shapes.box(0.34375, 0, 0.34375, 0.65625, 0.21875, 0.65625),
+        () -> Blocks.MULTI_BUILT_BLOCK.get(),
+        List.of(Items.WOODEN_BOWL_MID.toStack()),
+        FurnitureRenderPass.CHUNK_BUFFER
         )
     );
 

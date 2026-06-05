@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.block.furniture;
 
-public enum FurnitureRendererType
+public enum FurnitureRenderPass
 {
     /** 通过 chunk buffer 渲染（与建筑部件相同） */
     CHUNK_BUFFER,

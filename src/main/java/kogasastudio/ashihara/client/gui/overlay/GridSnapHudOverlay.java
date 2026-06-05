@@ -1,4 +1,4 @@
-package kogasastudio.ashihara.client.furniture;
+package kogasastudio.ashihara.client.gui.overlay;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.furniture.FurnitureComponentItem;

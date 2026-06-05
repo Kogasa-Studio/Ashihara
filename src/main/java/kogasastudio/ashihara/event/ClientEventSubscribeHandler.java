@@ -2,7 +2,7 @@ package kogasastudio.ashihara.event;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
-import kogasastudio.ashihara.client.furniture.GridSnapHudOverlay;
+import kogasastudio.ashihara.client.gui.overlay.GridSnapHudOverlay;
 import kogasastudio.ashihara.client.gui3d.PotScreen;
 import kogasastudio.ashihara.client.render.preview.PlacementPreviewRenderer;
 import kogasastudio.ashihara.client.render.state.Screen3DPiPRenderState;

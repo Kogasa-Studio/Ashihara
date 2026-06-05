@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 
 public abstract class FurnitureComponent extends BuildingComponent
 {
-    public final FurnitureRendererType rendererType;
+    public final FurnitureRenderPass rendererType;
 
     public FurnitureComponent
     (
@@ -23,7 +23,7 @@ public abstract class FurnitureComponent extends BuildingComponent
         List<ItemStack> dropsIn,
         Supplier<BaseMultiBuiltBlock> materialIn,
         SoundType soundIn,
-        FurnitureRendererType rendererTypeIn
+        FurnitureRenderPass rendererTypeIn
     )
     {
         super(idIn, typeIn, dropsIn, materialIn, soundIn);
@@ -36,7 +36,7 @@ public abstract class FurnitureComponent extends BuildingComponent
         BuildingComponents.Type typeIn,
         Supplier<BaseMultiBuiltBlock> materialIn,
         List<ItemStack> dropsIn,
-        FurnitureRendererType rendererTypeIn
+        FurnitureRenderPass rendererTypeIn
     )
     {
         super(idIn, typeIn, materialIn, dropsIn);
