@@ -242,7 +242,7 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
                     }
                     return true;
                 }
-                if (interacted == def) return true;
+                if (interacted == def) return false;
                 this.getComponents(opcode).set(i, interacted);
                 this.level.playSound(null, this.worldPosition, comp.getInteractSound().getPlaceSound(), SoundSource.BLOCKS, 1.0f, 1.0f);
                 refresh();
