@@ -1,6 +1,18 @@
 {
-  "model": {
-    "type": "minecraft:model",
-    "model": "ashihara:item/wooden_bowl_mid"
-  }
+    "model": {
+        "type": "minecraft:composite",
+        "models": [
+            {
+                "type": "minecraft:model",
+                "model": "ashihara:block/furnitures/bowl_mid"
+            },
+            {
+                "type": "minecraft:special",
+                "base": "ashihara:block/furnitures/bowl_mid",
+                "model": {
+                    "type": "ashihara:bowl_content"
+                }
+            }
+        ]
+    }
 }

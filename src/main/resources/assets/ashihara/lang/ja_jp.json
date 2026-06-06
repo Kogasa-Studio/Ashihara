@@ -295,9 +295,11 @@
   "tooltip.ashihara.fluid_type": "流体：",
   "tooltip.ashihara.pot_production": "予期生産物：",
   "tooltip.ashihara.item_production": "アイテム：",
-"tooltip.ashihara.fluid_production": "液体：",
+  "tooltip.ashihara.fluid_production": "液体：",
 
   "tooltip.ashihara.grid_level": "建築部品升目合わせ：%s升",
+
+  "tooltip.ashihara.bowl_content": "入物：%s",
 
   "message.ashihara.cookstove.fuel_left": "燃料残量: ",
   "key.category.in_world_tooltip": "葦原：世界内ToolTip",

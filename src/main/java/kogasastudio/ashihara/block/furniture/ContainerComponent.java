@@ -5,12 +5,12 @@ import kogasastudio.ashihara.block.building.component.ComponentStateDefinition;
 import kogasastudio.ashihara.block.building.component.Interactable;
 import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.registry.BuildingComponents;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.ValueInput;
@@ -33,6 +33,40 @@ public abstract class ContainerComponent extends FurnitureComponent
         FurnitureRenderPass rendererPassIn)
     {
         super(idIn, typeIn, materialIn, dropsIn, rendererPassIn);
+    }
+
+    
+    // ── ItemStack content (GUI inventory bundle behaviour) ──
+
+    private static final String CONTENT_TAG = "bowl_food";
+
+    public static ItemStack getContent(ItemStack container)
+    {
+        var cd = container.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY);
+        if (!cd.contains(CONTENT_TAG)) return ItemStack.EMPTY;
+        var tag = cd.copyTag().get(CONTENT_TAG);
+        return tag != null ? ItemStack.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, tag).result().orElse(ItemStack.EMPTY) : ItemStack.EMPTY;
+    }
+
+    public static void setContent(ItemStack container, ItemStack food)
+    {
+        CustomData.update(DataComponents.CUSTOM_DATA, container, tag ->
+        {
+            if (food.isEmpty()) tag.remove(CONTENT_TAG);
+            else tag.put(CONTENT_TAG, ItemStack.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, food).getOrThrow());
+        });
+    }
+
+    // ── Sound helpers ──
+
+    protected static void playInsertSound(net.minecraft.world.entity.Entity entity)
+    {
+        entity.playSound(net.minecraft.sounds.SoundEvents.BUNDLE_INSERT, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
+    }
+
+    protected static void playRemoveOneSound(net.minecraft.world.entity.Entity entity)
+    {
+        entity.playSound(net.minecraft.sounds.SoundEvents.BUNDLE_REMOVE_ONE, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
     }
 
     protected abstract StacksResourceHandler<?, ?> createContentHandler();
@@ -68,8 +102,7 @@ public abstract class ContainerComponent extends FurnitureComponent
         {
             for (int i = 0; i < handler.size(); i++)
             {
-                if (!handler.getResource(i).isEmpty())
-                    result.add(handler.getResource(i).toStack((int) handler.getAmountAsLong(i)));
+                if (!handler.getResource(i).isEmpty()) result.add(handler.getResource(i).toStack((int) handler.getAmountAsLong(i)));
             }
         }
         return result;

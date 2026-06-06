@@ -2,8 +2,10 @@ package kogasastudio.ashihara.event;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
+import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.client.gui.overlay.GridSnapHudOverlay;
 import kogasastudio.ashihara.client.gui3d.PotScreen;
+import kogasastudio.ashihara.client.render.item.BowlContentSpecialRenderer;
 import kogasastudio.ashihara.client.render.preview.PlacementPreviewRenderer;
 import kogasastudio.ashihara.client.render.state.Screen3DPiPRenderState;
 import kogasastudio.ashihara.network.GridSnapPayload;
@@ -62,7 +64,16 @@ public class ClientEventSubscribeHandler
         );
     }
 
-    // 注册粒子
+    @SubscribeEvent
+    public static void onRegisterSpecialModels(RegisterSpecialModelRendererEvent event)
+    {
+        event.register
+        (
+            Identifier.fromNamespaceAndPath(Ashihara.MODID, "bowl_content"),
+            BowlContentSpecialRenderer.Unbaked.MAP_CODEC
+        );
+    }
+
     @SubscribeEvent
     public static void onParticleFactoryRegister(RegisterParticleProvidersEvent event)
     {

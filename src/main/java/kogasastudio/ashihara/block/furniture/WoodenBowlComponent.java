@@ -14,7 +14,9 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.transfer.StacksResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -52,8 +54,16 @@ public class WoodenBowlComponent extends ContainerComponent
         double z = inBlock.z() - 8f / 16;
         VoxelShape shape = ShapeHelper.offsetShape(this.SHAPE, x, y, z);
         var cc = new ContainerContent(ContainerState.ContentType.ITEM, createContentHandler());
-        return new ComponentStateDefinition(FurnitureComponents.get(this.id),
-            new Vec3(x, y, z), 0, 0, 0, shape, MODEL, List.of(), cc);
+        ItemStack stack = getContent(context.getItemInHand());
+        if (cc.handler() instanceof ItemStacksResourceHandler is && !stack.isEmpty())
+        {
+            try (Transaction tx = Transaction.openRoot())
+            {
+                is.insert(ItemResource.of(stack), stack.count(), tx);
+                tx.commit();
+            }
+        }
+        return new ComponentStateDefinition(FurnitureComponents.get(this.id), new Vec3(x, y, z), 0, 0, 0, shape, MODEL, List.of(), cc);
     }
 
     @Override public SoundType getInteractSound() { return SoundType.WOOD; }
