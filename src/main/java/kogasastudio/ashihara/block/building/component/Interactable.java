@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.block.building.component;
 
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.SoundType;
 
@@ -10,5 +11,10 @@ public interface Interactable
     default SoundType getInteractSound()
     {
         return SoundType.WOOD;
+    }
+
+    default SoundEvent getCustomInteractSound()
+    {
+        return null;
     }
 }

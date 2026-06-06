@@ -117,7 +117,7 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
                 && (coordsInRangeFixedX(context.getClickedFace(), vec.x(), 0, 1) && coordsInRangeFixedY(context.getClickedFace(), vec.y(), 0, 1) && coordsInRangeFixedZ(context.getClickedFace(), vec.z(), 0, 1))
                 && be.tryPlaceFurniture
                 (
-                    new SnappedUseOnContext(context, GridSnapHelper.getGridStep(pPlayer)),
+                    new SnappedUseOnContext(context, GridSnapHelper.getGridStep(pPlayer), false),
                     furnitureItem.getComponent()
                 )
             ) return InteractionResult.SUCCESS;

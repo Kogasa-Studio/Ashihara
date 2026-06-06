@@ -9,14 +9,12 @@ import kogasastudio.ashihara.registry.FurnitureComponents;
 import kogasastudio.ashihara.utils.BuildingComponentModelResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.ItemCapability;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.StacksResourceHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
@@ -59,41 +57,42 @@ public class WoodenBowlComponent extends ContainerComponent
         VoxelShape shape = ShapeHelper.offsetShape(this.SHAPE, x, y, z);
         ItemStack held = context.getItemInHand();
 
-        // Try fluid first
-        if (!held.isEmpty())
+        if (!(context instanceof SnappedUseOnContext sc && sc.simulate()))
         {
-            @SuppressWarnings({"unchecked", "rawtypes"})
-            ResourceHandler<FluidResource> fluidCap =
-                (ResourceHandler<FluidResource>) (Object) held.getCapability((ItemCapability) Capabilities.Fluid.ITEM);
-            if (fluidCap != null && !fluidCap.getResource(0).isEmpty())
+            // Try fluid first
+            if (!held.isEmpty())
             {
-                FluidStacksResourceHandler fh = createFluidHandler();
+                @SuppressWarnings({"unchecked", "rawtypes"})
+                ResourceHandler<FluidResource> fluidCap = ContainerComponent.getFluidCap(held, ItemAccess.forStack(held));
+                if (fluidCap != null && !fluidCap.getResource(0).isEmpty())
+                {
+                    FluidStacksResourceHandler fh = createFluidHandler();
+                    try (Transaction tx = Transaction.openRoot())
+                    {
+                        FluidResource res = fluidCap.getResource(0);
+                        fh.insert(0, res, (int) fluidCap.getAmountAsLong(0), tx);
+                        tx.commit();
+                    }
+                    return new ComponentStateDefinition(FurnitureComponents.get(this.id),
+                                                        new Vec3(x, y, z), 0, 0, 0, shape, MODEL, List.of(),
+                                                        new ContainerContent(ContainerState.ContentType.FLUID, fh));
+                }
+            }
+
+            // Fallback: item content
+            var cc = new ContainerContent(ContainerState.ContentType.ITEM, createContentHandler());
+            ItemStack stack = getContent(context.getItemInHand());
+            if (cc.handler() instanceof ItemStacksResourceHandler is && !stack.isEmpty())
+            {
                 try (Transaction tx = Transaction.openRoot())
                 {
-                    FluidResource res = fluidCap.getResource(0);
-                    int moved = fh.insert(0, res, (int) fluidCap.getAmountAsLong(0), tx);
-                    if (moved > 0) { fluidCap.extract(0, res, moved, tx); tx.commit(); }
+                    is.insert(ItemResource.of(stack), stack.count(), tx);
+                    tx.commit();
                 }
-                return new ComponentStateDefinition(FurnitureComponents.get(this.id),
-                    new Vec3(x, y, z), 0, 0, 0, shape, MODEL, List.of(),
-                    new ContainerContent(ContainerState.ContentType.FLUID, fh));
             }
+            return new ComponentStateDefinition(FurnitureComponents.get(this.id), new Vec3(x, y, z), 0, 0, 0, shape, MODEL, List.of(), cc);
         }
 
-        // Fallback: item content
-        var cc = new ContainerContent(ContainerState.ContentType.ITEM, createContentHandler());
-        ItemStack stack = getContent(context.getItemInHand());
-        if (cc.handler() instanceof ItemStacksResourceHandler is && !stack.isEmpty())
-        {
-            try (Transaction tx = Transaction.openRoot())
-            {
-                is.insert(ItemResource.of(stack), stack.count(), tx);
-                tx.commit();
-            }
-        }
-        return new ComponentStateDefinition(FurnitureComponents.get(this.id),
-            new Vec3(x, y, z), 0, 0, 0, shape, MODEL, List.of(), cc);
+        return new ComponentStateDefinition(FurnitureComponents.get(this.id), new Vec3(x, y, z), 0, 0, 0, shape, MODEL, List.of(), null);
     }
-
-    @Override public SoundType getInteractSound() { return SoundType.WOOD; }
 }

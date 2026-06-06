@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -23,12 +24,15 @@ import net.neoforged.neoforge.capabilities.ItemCapability;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
 import net.neoforged.neoforge.transfer.StacksResourceHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
+import net.neoforged.neoforge.transfer.resource.ResourceStack;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import org.jspecify.annotations.Nullable;
 
@@ -42,16 +46,12 @@ public abstract class ContainerComponent extends FurnitureComponent
     public ContainerComponent(String idIn, BuildingComponents.Type typeIn,
         Supplier<BaseMultiBuiltBlock> materialIn, List<ItemStack> dropsIn,
         FurnitureRenderPass rendererPassIn)
-    {
-        super(idIn, typeIn, materialIn, dropsIn, rendererPassIn);
-    }
+    { super(idIn, typeIn, materialIn, dropsIn, rendererPassIn); }
 
     // --------------------------------------------------
     // ItemStack content
     // --------------------------------------------------
-
     private static final String CONTENT_TAG = "bowl_food";
-    private static final String FLUID_TAG = "bowl_fluid";
 
     public static ItemStack getContent(ItemStack container)
     {
@@ -64,116 +64,63 @@ public abstract class ContainerComponent extends FurnitureComponent
     public static void setContent(ItemStack container, ItemStack food)
     {
         CustomData.update(DataComponents.CUSTOM_DATA, container, tag ->
-        {
-            if (food.isEmpty()) { tag.remove(CONTENT_TAG); tag.remove(FLUID_TAG); }
-            else tag.put(CONTENT_TAG, ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, food).getOrThrow());
-        });
+        { if (food.isEmpty()) tag.remove(CONTENT_TAG); else tag.put(CONTENT_TAG, ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, food).getOrThrow()); });
     }
 
     // --------------------------------------------------
     // Fluid content
     // --------------------------------------------------
-
     public static FluidStack getFluidContent(ItemStack container)
-    {
-        return container.getOrDefault(DataComponentTypes.FLUID_CONTENT, SimpleFluidContent.EMPTY).copy();
-    }
+    { return container.getOrDefault(DataComponentTypes.FLUID_CONTENT, SimpleFluidContent.EMPTY).copy(); }
 
     public static void setFluidContent(ItemStack container, FluidStack fluid)
-    {
-        container.set(DataComponentTypes.FLUID_CONTENT, SimpleFluidContent.copyOf(fluid));
-    }
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private static ResourceHandler<FluidResource> getFluidCap(ItemStack stack)
-    {
-        return (ResourceHandler<FluidResource>) stack.getCapability((ItemCapability) Capabilities.Fluid.ITEM);
-    }
+    { container.set(DataComponentTypes.FLUID_CONTENT, SimpleFluidContent.copyOf(fluid)); }
 
     // --------------------------------------------------
     // Sound helpers
     // --------------------------------------------------
-
     public static void playInsertSound(net.minecraft.world.entity.Entity entity)
-    {
-        entity.playSound(SoundEvents.BUNDLE_INSERT, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
-    }
+    { entity.playSound(SoundEvents.BUNDLE_INSERT, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F); }
 
     public static void playRemoveOneSound(net.minecraft.world.entity.Entity entity)
-    {
-        entity.playSound(SoundEvents.BUNDLE_REMOVE_ONE, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
-    }
-
-    public static void playBucketFillSound(net.minecraft.world.entity.Entity entity, FluidStack fluid)
-    {
-        var s = fluid.getFluidType().getSound(fluid, net.neoforged.neoforge.common.SoundActions.BUCKET_FILL);
-        if (s != null) entity.playSound(s, 1.0F, 1.0F);
-    }
-
-    public static void playBucketEmptySound(net.minecraft.world.entity.Entity entity, FluidStack fluid)
-    {
-        var s = fluid.getFluidType().getSound(fluid, net.neoforged.neoforge.common.SoundActions.BUCKET_EMPTY);
-        if (s != null) entity.playSound(s, 1.0F, 1.0F);
-    }
+    { entity.playSound(SoundEvents.BUNDLE_REMOVE_ONE, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F); }
 
     protected abstract StacksResourceHandler<?, ?> createContentHandler();
     protected abstract FluidStacksResourceHandler createFluidHandler();
 
     public static ContainerContent contentOf(ComponentStateDefinition def)
-    {
-        return def.customData() instanceof ContainerContent cc ? cc : ContainerContent.EMPTY;
-    }
+    { return def.customData() instanceof ContainerContent cc ? cc : ContainerContent.EMPTY; }
 
-    @Nullable
-    public static StacksResourceHandler<?, ?> getHandler(ComponentStateDefinition def)
-    {
-        return contentOf(def).handler();
-    }
-
-    public static boolean hasContent(ComponentStateDefinition def)
-    {
-        return !contentOf(def).isEmpty();
-    }
-
-    @Override
-    public boolean doRender(MultiBuiltBlockEntity be, ComponentStateDefinition def)
-    {
-        return hasContent(def);
-    }
+    @Nullable public static StacksResourceHandler<?, ?> getHandler(ComponentStateDefinition def) { return contentOf(def).handler(); }
+    public static boolean hasContent(ComponentStateDefinition def) { return !contentOf(def).isEmpty(); }
+    @Override public boolean doRender(MultiBuiltBlockEntity be, ComponentStateDefinition def) { return hasContent(def); }
 
     @Override
     public List<ItemStack> getDrops(ComponentStateDefinition def, MultiBuiltBlockEntity be)
     {
         List<ItemStack> result = new ArrayList<>(super.getDrops(def, be));
         if (def.customData() instanceof ContainerContent cc && cc.handler() instanceof ItemStacksResourceHandler handler)
-        {
             for (int i = 0; i < handler.size(); i++)
-                if (!handler.getResource(i).isEmpty())
-                    result.add(handler.getResource(i).toStack((int) handler.getAmountAsLong(i)));
-        }
+                if (!handler.getResource(i).isEmpty()) result.add(handler.getResource(i).toStack((int) handler.getAmountAsLong(i)));
         return result;
     }
 
     // --------------------------------------------------
     // ICustomData
     // --------------------------------------------------
-
-    @Override
-    public void serializeCustom(ValueOutput output, Object customData)
+    @Override public void serializeCustom(ValueOutput output, Object customData)
     {
         if (!(customData instanceof ContainerContent cc) || cc.isEmpty()) return;
         output.putString("type", cc.type().name());
         cc.handler().serialize(output.child("handler"));
     }
 
-    @Override
-    public Object deserializeCustom(ValueInput input)
+    @Override public Object deserializeCustom(ValueInput input)
     {
         String t = input.getStringOr("type", "EMPTY");
         ContainerState.ContentType type = ContainerState.ContentType.valueOf(t);
         if (type == ContainerState.ContentType.EMPTY) return null;
-        StacksResourceHandler<?, ?> h = type == ContainerState.ContentType.FLUID
-            ? createFluidHandler() : createContentHandler();
+        StacksResourceHandler<?, ?> h = type == ContainerState.ContentType.FLUID ? createFluidHandler() : createContentHandler();
         h.deserialize(input.childOrEmpty("handler"));
         return new ContainerContent(type, h);
     }
@@ -181,7 +128,6 @@ public abstract class ContainerComponent extends FurnitureComponent
     // --------------------------------------------------
     // Interactable
     // --------------------------------------------------
-
     @Override
     public ComponentStateDefinition handleInteraction(UseOnContext context, ComponentStateDefinition definition)
     {
@@ -190,157 +136,164 @@ public abstract class ContainerComponent extends FurnitureComponent
 
         ContainerContent cc = contentOf(definition);
         ItemStack held = context.getItemInHand();
+        ItemAccess access = ItemAccess.forPlayerInteraction(context.getPlayer(), context.getHand());
 
-        // ---- EMPTY: try insert fluid or food ----
-        if (cc.handler() == null)
+        // ---- EMPTY: insert fluid or food ----
+        switch (cc.handler())
         {
-            if (!held.isEmpty())
+            case null ->
             {
-                var heldFluid = getFluidCap(held);
-                if (heldFluid != null && !heldFluid.getResource(0).isEmpty())
+                if (held.isEmpty()) return definition;
+
+                FluidStacksResourceHandler fh = createFluidHandler();
+                var heldFluid = getFluidCap(held, access);
+                if (heldFluid != null)
                 {
-                    FluidStacksResourceHandler fh = createFluidHandler();
-                    try (Transaction tx = Transaction.openRoot())
+                    ResourceStack<FluidResource> rs = tryMove(heldFluid, fh);
+                    if (rs != null)
                     {
-                        var res = heldFluid.getResource(0);
-                        int moved = fh.insert(0, res, (int) heldFluid.getAmountAsLong(0), tx);
-                        if (moved > 0) { heldFluid.extract(0, res, moved, tx); tx.commit(); }
+                        FluidUtil.triggerSoundAndGameEvent(rs.resource(), context.getLevel(), context.getClickedPos().getCenter(), player, false);
+                        return withContent(definition, ContainerState.ContentType.FLUID, fh);
                     }
-                    return new ComponentStateDefinition(definition.component(),
-                        definition.inBlockPos(), definition.rotationX(), definition.rotationY(), definition.rotationZ(),
-                        definition.shape(), definition.model(), definition.occupation(),
-                        new ContainerContent(ContainerState.ContentType.FLUID, fh));
                 }
+
                 if (held.has(DataComponents.FOOD))
                 {
                     var ih = (ItemStacksResourceHandler) createContentHandler();
+                    try (Transaction tx = Transaction.openRoot())
+                    {
+                        if (ih.insert(0, ItemResource.of(held.getItem(), DataComponentPatch.EMPTY), 1, tx) > 0)
+                        {
+                            tx.commit();
+                            held.shrink(1);
+                        }
+                    }
+                    playInsertSound(player);
+                    return withContent(definition, ContainerState.ContentType.ITEM, ih);
+                }
+                return definition;
+            }
+
+
+            // ---- FLUID bowl ----
+            case FluidStacksResourceHandler fh ->
+            {
+                if (held.isEmpty() && player.isShiftKeyDown() && fh.getAmountAsLong(0) > 0)
+                {
+                    try (Transaction tx = Transaction.openRoot())
+                    {
+                        fh.extract(0, fh.getResource(0), (int) fh.getAmountAsLong(0), tx);
+                        tx.commit();
+                    }
+                    FluidUtil.triggerSoundAndGameEvent(fh.getResource(0), context.getLevel(), context.getClickedPos().getCenter(), player, true);
+                    return withContent(definition, ContainerState.ContentType.FLUID, fh);
+                }
+                var heldFluid = getFluidCap(held, access);
+                if (heldFluid != null)
+                {
+                    boolean flag = false;
+                    ResourceStack<FluidResource> rs = tryMove(heldFluid, fh);
+                    if (rs != null)
+                    {
+                        flag = true;
+                        FluidUtil.triggerSoundAndGameEvent(rs.resource(), context.getLevel(), context.getClickedPos().getCenter(), player, false);
+                    }
+                    else
+                    {
+                        rs = tryMove(fh, heldFluid);
+                        if (rs != null)
+                        {
+                            flag = true;
+                            FluidUtil.triggerSoundAndGameEvent(rs.resource(), context.getLevel(), context.getClickedPos().getCenter(), player, true);
+                        }
+                    }
+                    if (flag)
+                    {
+                        ContainerState.ContentType t = fh.getResource(0).isEmpty() ? ContainerState.ContentType.EMPTY : ContainerState.ContentType.FLUID;
+                        fh = fh.getResource(0).isEmpty() ? null : fh;
+                        return withContent(definition, t, fh);
+                    }
+                }
+                return definition;
+            }
+
+
+            // ---- ITEM bowl ----
+            case ItemStacksResourceHandler ih ->
+            {
+                if (held.isEmpty() && player.isShiftKeyDown())
+                {
+                    BlockEntity be = context.getLevel().getBlockEntity(context.getClickedPos());
+                    if (be instanceof MultiBuiltBlockEntity mbe)
+                        for (ItemStack s : getDrops(definition, mbe)) popItem(player, s.copy());
+                    else popItem(player, this.drops.getFirst().copy());
+                    return null;
+                }
+                if (ih.getAmountAsLong(0) > 0)
+                {
+                    var res = ih.getResource(0);
+                    int amount = (int) ih.getAmountAsLong(0);
+                    try (Transaction tx = Transaction.openRoot())
+                    {
+                        ih.extract(0, res, amount, tx);
+                        tx.commit();
+                        popItem(player, res.toStack(amount));
+                    }
+                    playRemoveOneSound(player);
+                    return withContent(definition, ContainerState.ContentType.ITEM, ih);
+                }
+                if (!held.isEmpty() && held.has(DataComponents.FOOD))
+                {
                     var res = ItemResource.of(held.getItem(), DataComponentPatch.EMPTY);
                     try (Transaction tx = Transaction.openRoot())
                     {
-                        if (ih.insert(0, res, 1, tx) > 0) { tx.commit(); held.shrink(1); }
-                    }
-                    return new ComponentStateDefinition(definition.component(),
-                        definition.inBlockPos(), definition.rotationX(), definition.rotationY(), definition.rotationZ(),
-                        definition.shape(), definition.model(), definition.occupation(),
-                        new ContainerContent(ContainerState.ContentType.ITEM, ih));
-                }
-            }
-            return definition;
-        }
-
-        // ---- FLUID path ----
-        if (cc.handler() instanceof FluidStacksResourceHandler fh)
-        {
-            FluidStack stored = FluidStack.EMPTY;
-            if (fh.getAmountAsLong(0) > 0)
-                stored = fh.getResource(0).toStack((int) fh.getAmountAsLong(0));
-
-            // Shift + empty hand: dump fluid
-            if (held.isEmpty() && player.isShiftKeyDown() && !stored.isEmpty())
-            {
-                try (Transaction tx = Transaction.openRoot())
-                {
-                    fh.extract(0, fh.getResource(0), (int) fh.getAmountAsLong(0), tx);
-                    tx.commit();
-                }
-                return new ComponentStateDefinition(definition.component(),
-                    definition.inBlockPos(), definition.rotationX(), definition.rotationY(), definition.rotationZ(),
-                    definition.shape(), definition.model(), definition.occupation(),
-                    new ContainerContent(ContainerState.ContentType.FLUID, fh));
-            }
-
-            // Held fluid handler interaction
-            if (!held.isEmpty())
-            {
-                var heldFluid = getFluidCap(held);
-                if (heldFluid != null)
-                {
-                    if (!stored.isEmpty() && heldFluid.getResource(0).isEmpty())
-                    {
-                        // Drain bowl into held
-                        try (Transaction tx = Transaction.openRoot())
+                        if (ih.insert(0, res, 1, tx) > 0)
                         {
-                            int moved = heldFluid.insert(FluidResource.of(stored.getFluid()), stored.getAmount(), tx);
-                            if (moved > 0)
-                            {
-                                fh.extract(0, fh.getResource(0), moved, tx);
-                                tx.commit();
-                                playBucketFillSound(player, stored);
-                            }
+                            tx.commit();
+                            held.shrink(1);
                         }
                     }
-                    else if (stored.isEmpty() && !heldFluid.getResource(0).isEmpty())
-                    {
-                        // Fill bowl from held
-                        try (Transaction tx = Transaction.openRoot())
-                        {
-                            var res = heldFluid.getResource(0);
-                            int moved = fh.insert(0, res, (int) heldFluid.getAmountAsLong(0), tx);
-                            if (moved > 0)
-                            {
-                                heldFluid.extract(0, res, moved, tx);
-                                tx.commit();
-                            }
-                        }
-                    }
-                    return new ComponentStateDefinition(definition.component(),
-                        definition.inBlockPos(), definition.rotationX(), definition.rotationY(), definition.rotationZ(),
-                        definition.shape(), definition.model(), definition.occupation(),
-                        new ContainerContent(ContainerState.ContentType.FLUID, fh));
+                    playInsertSound(player);
+                    return withContent(definition, ContainerState.ContentType.ITEM, ih);
                 }
             }
-            return definition;
-        }
-
-        // ---- ITEM path ----
-        var ih = (ItemStacksResourceHandler) cc.handler();
-        if (ih == null) return definition;
-
-        if (held.isEmpty() && player.isShiftKeyDown())
-        {
-            BlockEntity be = context.getLevel().getBlockEntity(context.getClickedPos());
-            if (be instanceof MultiBuiltBlockEntity mbe)
-                for (ItemStack s : getDrops(definition, mbe)) popItem(player, s.copy());
-            else popItem(player, this.drops.getFirst().copy());
-            return null;
-        }
-
-        if (ih.getAmountAsLong(0) > 0)
-        {
-            var res = ih.getResource(0);
-            int amount = (int) ih.getAmountAsLong(0);
-            try (Transaction tx = Transaction.openRoot())
+            default ->
             {
-                ih.extract(0, res, amount, tx);
-                tx.commit();
-                popItem(player, res.toStack(amount));
             }
-            return new ComponentStateDefinition(definition.component(),
-                definition.inBlockPos(), definition.rotationX(), definition.rotationY(), definition.rotationZ(),
-                definition.shape(), definition.model(), definition.occupation(),
-                new ContainerContent(ContainerState.ContentType.ITEM, ih));
-        }
-
-        if (!held.isEmpty() && held.has(DataComponents.FOOD))
-        {
-            var res = ItemResource.of(held.getItem(), DataComponentPatch.EMPTY);
-            try (Transaction tx = Transaction.openRoot())
-            {
-                if (ih.insert(0, res, 1, tx) > 0) { tx.commit(); held.shrink(1); }
-            }
-            return new ComponentStateDefinition(definition.component(),
-                definition.inBlockPos(), definition.rotationX(), definition.rotationY(), definition.rotationZ(),
-                definition.shape(), definition.model(), definition.occupation(),
-                new ContainerContent(ContainerState.ContentType.ITEM, ih));
         }
 
         return definition;
     }
 
+    @Override
+    public SoundType getInteractSound()
+    {
+        return SoundType.EMPTY;
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    @Nullable
+    public static ResourceHandler<FluidResource> getFluidCap(ItemStack stack, ItemAccess access)
+    {
+        return (ResourceHandler<FluidResource>) stack.getCapability((ItemCapability) Capabilities.Fluid.ITEM, access);
+    }
+
+    private static ResourceStack<FluidResource> tryMove(ResourceHandler<FluidResource> from, ResourceHandler<FluidResource> to)
+    {
+        return ResourceHandlerUtil.moveFirst(from, to, fr -> true, Integer.MAX_VALUE, null);
+    }
+
+    private static ComponentStateDefinition withContent(ComponentStateDefinition def, ContainerState.ContentType type, StacksResourceHandler<?, ?> handler)
+    {
+        return new ComponentStateDefinition(def.component(),
+            def.inBlockPos(), def.rotationX(), def.rotationY(), def.rotationZ(),
+            def.shape(), def.model(), def.occupation(),
+            new ContainerContent(type, handler));
+    }
+
     protected static void popItem(Player p, ItemStack s)
     {
-        if (!p.getInventory().add(s))
-            p.level().addFreshEntity(new ItemEntity(p.level(), p.getX(), p.getY(), p.getZ(), s));
+        if (!p.getInventory().add(s)) p.level().addFreshEntity(new ItemEntity(p.level(), p.getX(), p.getY(), p.getZ(), s));
     }
 
     protected abstract ContainerState.ContainerType containerType();

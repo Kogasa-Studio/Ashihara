@@ -58,12 +58,12 @@ public class BowlContentSpecialRenderer implements SpecialModelRenderer<BowlCont
         if (arg.hasFluid && arg.fluid != null && !arg.fluid.isEmpty())
         {
             poseStack.pushPose();
-            poseStack.translate(3/16f, 0.05f, 13/16f);
+            poseStack.translate(4/16f, 0.05f, 12/16f);
             poseStack.mulPose(Axis.XP.rotationDegrees(-90));
-            poseStack.scale(0.3f, 0.3f, 0.3f);
+            poseStack.scale(1/4f, 1/4f, 1/4f);
             var buf = Minecraft.getInstance().renderBuffers().bufferSource();
             RenderHelper.blitFluid(poseStack, buf, arg.fluid,
-                2/16f, 15/16f, 2/16f, 15/16f, 0,
+                0, 1, 0, 1, 0,
                 OverlayTexture.NO_OVERLAY, lightCoords);
             //buf.endBatch();
             poseStack.popPose();

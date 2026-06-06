@@ -191,7 +191,7 @@ public class PlacementPreviewRenderer
         if (player == null) return context;
         int gridStep = GridSnapHelper.getGridStep(player);
         if (gridStep == GridSnapHelper.GRID_NONE) return context;
-        return new SnappedUseOnContext(context, gridStep);
+        return new SnappedUseOnContext(context, gridStep, true);
     }
 
     private record AlphaMaskConsumer(VertexConsumer delegate) implements VertexConsumer

@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.client.renderer.Sheets;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
@@ -63,15 +62,15 @@ public final class FurnitureRenderDispatcher
                 pose.pushPose();
                 Vec3 pos = def.inBlockPos();
                 pose.translate(pos.x, pos.y, pos.z);
-                pose.translate(0.5, 0, 0.5);
                 if (def.rotationY() != 0) pose.mulPose(Axis.YP.rotationDegrees(def.rotationY()));
                 if (def.rotationX() != 0) pose.mulPose(Axis.XP.rotationDegrees(def.rotationX()));
                 if (def.rotationZ() != 0) pose.mulPose(Axis.ZP.rotationDegrees(def.rotationZ()));
-                pose.translate(0, 0.15, 0);
+                pose.translate(4/16f, 0.05f, 12/16f);
+                pose.mulPose(Axis.XP.rotationDegrees(-90));
                 pose.scale(1/4f, 1/4f, 1/4f);
                 var buf = Minecraft.getInstance().renderBuffers().bufferSource();
                 RenderHelper.blitFluid(pose, buf, fluid,
-                    2/16f, 14/16f, 2/16f, 14/16f, 0,
+                    0, 1, 0, 1, 0,
                     OverlayTexture.NO_OVERLAY, packedLight);
                 buf.endBatch();
                 pose.popPose();

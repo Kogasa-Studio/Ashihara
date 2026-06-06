@@ -29,9 +29,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
-import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.ItemAccessFluidHandler;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -76,8 +74,7 @@ public class FurnitureComponentItem extends BlockItem
     public InteractionResult place(BlockPlaceContext pContext)
     {
         Player player = pContext.getPlayer();
-        BlockPlaceContext context = player != null
-            ? new SnappedUseOnContext(pContext, GridSnapHelper.getGridStep(player)) : pContext;
+        BlockPlaceContext context = new SnappedUseOnContext(pContext, GridSnapHelper.getGridStep(player), false);
         InteractionResult b = super.place(pContext);
         BlockEntity blockEntity = pContext.getLevel().getBlockEntity(pContext.getClickedPos());
         if (blockEntity instanceof MultiBuiltBlockEntity be && be.tryPlaceFurniture(context, this.getComponent()))
@@ -94,14 +91,16 @@ public class FurnitureComponentItem extends BlockItem
         return b;
     }
 
-    // ── Bundle-like inventory behaviour ──
+    // --------------------------------------------------
+    // Bundle-like inventory behaviour
+    // --------------------------------------------------
 
     @Override
     public boolean overrideStackedOnOther(ItemStack self, Slot slot, ClickAction clickAction, Player player)
     {
         if (self.getCount() != 1) return false;
-        if (!(self.getItem() instanceof FurnitureComponentItem fci
-            && fci.getComponent() instanceof ContainerComponent cc)) return false;
+        if (!(self.getItem() instanceof FurnitureComponentItem fci && fci.getComponent() instanceof ContainerComponent cc)) return false;
+        if (!ContainerComponent.getFluidContent(self).isEmpty()) return false;
 
         if (clickAction == ClickAction.SECONDARY && slot.hasItem()
             && slot.getItem().has(DataComponents.FOOD))
@@ -135,8 +134,8 @@ public class FurnitureComponentItem extends BlockItem
         ClickAction clickAction, Player player, SlotAccess carriedItem)
     {
         if (self.getCount() != 1) return false;
-        if (!(self.getItem() instanceof FurnitureComponentItem fci
-            && fci.getComponent() instanceof ContainerComponent cc)) return false;
+        if (!(self.getItem() instanceof FurnitureComponentItem fci && fci.getComponent() instanceof ContainerComponent cc)) return false;
+        if (!ContainerComponent.getFluidContent(self).isEmpty()) return false;
 
         if (clickAction == ClickAction.PRIMARY && !other.isEmpty()
             && other.has(DataComponents.FOOD))

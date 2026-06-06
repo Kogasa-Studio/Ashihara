@@ -4,7 +4,12 @@ import kogasastudio.ashihara.inventory.BEFluidStackHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 
 public class FluidHelper
@@ -41,5 +46,22 @@ public class FluidHelper
                                                      BEFluidStackHandler<?> fluidTank, BlockPos pos)
     {
         return FluidUtil.interactWithFluidHandler(player, hand, pos, fluidTank);
+    }
+
+    /**
+     * 让创造模式也会消耗流体的交互方式
+     */
+    public static boolean interactFluidStrict(Player player, InteractionHand hand, BlockPos pos, ResourceHandler<FluidResource> handler)
+    {
+        int slot = hand == InteractionHand.MAIN_HAND ? player.getInventory().getSelectedSlot() : 40; // 40 = offhand
+        var handAccess = ItemAccess.forPlayerSlot(player, slot).oneByOne();
+        var handFluid = handAccess.getCapability(Capabilities.Fluid.ITEM);
+        if (handFluid == null) return false;
+
+        var r = ResourceHandlerUtil.moveFirst(handler, handFluid, fr -> true, Integer.MAX_VALUE, null);
+        if (r != null) { FluidUtil.triggerSoundAndGameEvent(r.resource(), player.level(), pos.getCenter(), player, true); return true; }
+        r = ResourceHandlerUtil.moveFirst(handFluid, handler, fr -> true, Integer.MAX_VALUE, null);
+        if (r != null) { FluidUtil.triggerSoundAndGameEvent(r.resource(), player.level(), pos.getCenter(), player, false); return true; }
+        return false;
     }
 }

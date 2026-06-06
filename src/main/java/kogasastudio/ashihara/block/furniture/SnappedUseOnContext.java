@@ -16,14 +16,15 @@ import net.minecraft.world.phys.Vec3;
 public class SnappedUseOnContext extends BlockPlaceContext
 {
     private final Vec3 snappedLocation;
+    private final boolean simulate;
 
-    public SnappedUseOnContext(UseOnContext original, int gridStep)
+    public SnappedUseOnContext(UseOnContext original, int gridStep, boolean simulate)
     {
         super(
             original.getLevel(),
             original.getPlayer(),
             original.getHand(),
-            original.getItemInHand(),
+            original.getItemInHand().copy(),
             new BlockHitResult(
                 original.getClickLocation(),
                 original.getClickedFace(),
@@ -32,11 +33,17 @@ public class SnappedUseOnContext extends BlockPlaceContext
             )
         );
         this.snappedLocation = GridSnapHelper.snapClickLocation(original.getClickLocation(), original.getClickedPos(), gridStep);
+        this.simulate = simulate;
     }
 
     @Override
     public Vec3 getClickLocation()
     {
         return this.snappedLocation;
+    }
+
+    public boolean simulate()
+    {
+        return this.simulate;
     }
 }

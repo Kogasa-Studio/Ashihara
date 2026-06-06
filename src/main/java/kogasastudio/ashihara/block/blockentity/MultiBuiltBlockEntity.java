@@ -18,6 +18,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -244,7 +245,8 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
                 }
                 if (interacted == def) return false;
                 this.getComponents(opcode).set(i, interacted);
-                this.level.playSound(null, this.worldPosition, comp.getInteractSound().getPlaceSound(), SoundSource.BLOCKS, 1.0f, 1.0f);
+                SoundType interactSound = comp.getInteractSound();
+                if (interactSound != SoundType.EMPTY) this.level.playSound(null, this.worldPosition, comp.getInteractSound().getPlaceSound(), SoundSource.BLOCKS, 1.0f, 1.0f);
                 refresh();
                 return true;
             }
