@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.client.gui.overlay;
 
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.block.furniture.FurnitureComponentItem;
+import kogasastudio.ashihara.item.block.FurnitureComponentItem;
 import kogasastudio.ashihara.utils.GridSnapHelper;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;

@@ -4,7 +4,7 @@ import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.helper.PlayerAnimationHelper;
 import kogasastudio.ashihara.item.*;
-import kogasastudio.ashihara.block.furniture.FurnitureComponentItem;
+import kogasastudio.ashihara.item.block.FurnitureComponentItem;
 import kogasastudio.ashihara.item.block.*;
 import kogasastudio.ashihara.item.food.EasyFood;
 import kogasastudio.ashihara.item.food.DirtBallDon;
@@ -16,13 +16,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.Consumables;
-import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
-
-import java.util.List;
 
 @SuppressWarnings("unused")
 public class Items

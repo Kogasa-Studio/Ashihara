@@ -2,7 +2,7 @@ package kogasastudio.ashihara.network;
 
 import io.netty.buffer.ByteBuf;
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.registry.DataComponentTypes;
+import kogasastudio.ashihara.registry.DataAttachmentTypes;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -27,7 +27,7 @@ public record GridSnapPayload(int gridStep) implements CustomPacketPayload
     {
         public static void handle(GridSnapPayload payload, IPayloadContext context)
         {
-            context.player().setData(DataComponentTypes.GRID_SNAP_STEP.get(), payload.gridStep());
+            context.player().setData(DataAttachmentTypes.GRID_SNAP_STEP.get(), payload.gridStep());
         }
     }
 }

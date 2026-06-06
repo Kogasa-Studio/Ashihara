@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.item;
 
 import kogasastudio.ashihara.network.OpenGuidebookPacket;
-import kogasastudio.ashihara.registry.DataComponentTypes;
+import kogasastudio.ashihara.registry.DataAttachmentTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -40,7 +40,7 @@ public class GuideBook extends Item
         {
             if (ServerLifecycleHooks.getCurrentServer() != null && ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(pPlayer.getUUID()) != null)
             {
-                pPlayer.setData(DataComponentTypes.GUIDEBOOK_READING_PAGE, ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(pPlayer.getUUID()).getData(DataComponentTypes.GUIDEBOOK_READING_PAGE));
+                pPlayer.setData(DataAttachmentTypes.GUIDEBOOK_READING_PAGE, ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(pPlayer.getUUID()).getData(DataAttachmentTypes.GUIDEBOOK_READING_PAGE));
             }
         }
         return super.use(pLevel, pPlayer, pUsedHand);

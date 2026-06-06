@@ -7,7 +7,7 @@ import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.building.component.*;
 import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.block.furniture.FurnitureComponent;
-import kogasastudio.ashihara.block.furniture.FurnitureComponentItem;
+import kogasastudio.ashihara.item.block.FurnitureComponentItem;
 import kogasastudio.ashihara.block.furniture.SnappedUseOnContext;
 import kogasastudio.ashihara.utils.GridSnapHelper;
 import kogasastudio.ashihara.event.ClientEventSubscribeHandler;

@@ -3,7 +3,7 @@ package kogasastudio.ashihara.network;
 import io.netty.buffer.ByteBuf;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.client.models.geo.GuideBookModel;
-import kogasastudio.ashihara.registry.DataComponentTypes;
+import kogasastudio.ashihara.registry.DataAttachmentTypes;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -31,7 +31,7 @@ public record GuidebookProgressPacket(int UnlockProgress, int currentPage) imple
     {
         public static void handle(GuidebookProgressPacket packet, final IPayloadContext context)
         {
-            context.enqueueWork(() -> context.player().setData(DataComponentTypes.GUIDEBOOK_READING_PAGE, Math.clamp(packet.currentPage(), 0, GuideBookModel.getTotalPages())));
+            context.enqueueWork(() -> context.player().setData(DataAttachmentTypes.GUIDEBOOK_READING_PAGE, Math.clamp(packet.currentPage(), 0, GuideBookModel.getTotalPages())));
         }
     }
 }

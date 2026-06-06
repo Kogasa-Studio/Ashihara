@@ -1,6 +1,6 @@
 package kogasastudio.ashihara.item;
 
-import kogasastudio.ashihara.registry.DataComponentTypes;
+import kogasastudio.ashihara.registry.DataAttachmentTypes;
 import kogasastudio.ashihara.utils.PrePostSwingHandler;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -13,7 +13,7 @@ public interface IHasPreSwing
     default void prepareAttack(ItemStack stack, Player player, Entity target)
     {
         InteractionHand hand = player.getMainHandItem().is(stack.getItem()) ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
-        player.setData(DataComponentTypes.PRE_SWING_REMAINING, new PrePostSwingHandler(stack, hand, getDelayValue(false)));
+        player.setData(DataAttachmentTypes.PRE_SWING_REMAINING, new PrePostSwingHandler(stack, hand, getDelayValue(false)));
         playPrePostSwingAnim(player);
     }
 
@@ -26,19 +26,19 @@ public interface IHasPreSwing
         if (context.getPlayer() == null) return;
         Player player = context.getPlayer();
         ItemStack stack = context.getItemInHand();
-        if (!player.hasData(DataComponentTypes.PRE_SWING_REMAINING))
+        if (!player.hasData(DataAttachmentTypes.PRE_SWING_REMAINING))
         {
             InteractionHand hand = player.getMainHandItem().is(stack.getItem()) ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
-            player.setData(DataComponentTypes.PRE_SWING_REMAINING, new PrePostSwingHandler(stack, hand, true, getDelayValue(true)));
+            player.setData(DataAttachmentTypes.PRE_SWING_REMAINING, new PrePostSwingHandler(stack, hand, true, getDelayValue(true)));
             playPrePostSwingAnim(player);
         }
         else
         {
-            PrePostSwingHandler handler = player.getData(DataComponentTypes.PRE_SWING_REMAINING);
+            PrePostSwingHandler handler = player.getData(DataAttachmentTypes.PRE_SWING_REMAINING);
             if (!handler.isUse())
             {
                 handler.setUse(true);
-                player.setData(DataComponentTypes.PRE_SWING_REMAINING, handler);
+                player.setData(DataAttachmentTypes.PRE_SWING_REMAINING, handler);
             }
         }
     }

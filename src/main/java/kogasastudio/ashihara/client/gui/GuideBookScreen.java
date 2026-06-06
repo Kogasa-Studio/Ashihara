@@ -11,7 +11,7 @@ import kogasastudio.ashihara.client.models.geo.InternalControlGeoModel;
 import kogasastudio.ashihara.client.render.state.GUI3DComponentRenderState;
 import kogasastudio.ashihara.client.render.state.Screen3DPiPRenderState;
 import kogasastudio.ashihara.network.GuidebookProgressPacket;
-import kogasastudio.ashihara.registry.DataComponentTypes;
+import kogasastudio.ashihara.registry.DataAttachmentTypes;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
@@ -83,7 +83,7 @@ public class GuideBookScreen extends Screen3D
     public void init()
     {
         book.triggerAnim(player, book.hashCode(), "Intro", GuideBookModel.ANIM_INTRO);
-        this.currentPageIndex = this.player.getData(DataComponentTypes.GUIDEBOOK_READING_PAGE.get());
+        this.currentPageIndex = this.player.getData(DataAttachmentTypes.GUIDEBOOK_READING_PAGE.get());
         if (this.currentPageIndex != 0 && this.currentPageIndex <= GuideBookModel.getTotalPages())
         {
             String anim = GuideBookModel.getFlipAnim(currentPageIndex - 1, currentPageIndex, 0);
@@ -307,7 +307,7 @@ public class GuideBookScreen extends Screen3D
     @Override
     public void onClose()
     {
-        player.setData(DataComponentTypes.GUIDEBOOK_READING_PAGE, currentPageIndex);
+        player.setData(DataAttachmentTypes.GUIDEBOOK_READING_PAGE, currentPageIndex);
         ClientPacketDistributor.sendToServer(new GuidebookProgressPacket(0, this.currentPageIndex));
         super.onClose();
     }

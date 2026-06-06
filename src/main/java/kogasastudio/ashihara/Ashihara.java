@@ -42,7 +42,8 @@ public class Ashihara
         Features.FEATURES.register(modEventBus);
         WorldGenEventRegistryHandler.PLACED_FEATURE.register(modEventBus);
         WorldGenEventRegistryHandler.CONFIGURED_FEATURE.register(modEventBus);
-        DataComponentTypes.ATTACHMENT_TYPES.register(modEventBus);
+        DataAttachmentTypes.ATTACHMENT_TYPES.register(modEventBus);
+        DataComponentTypes.DC_TYPES.register(modEventBus);
         RecipeTypes.register(modEventBus);
         RecipeSerializers.register(modEventBus);
         MolangValues.registerMolangValues();

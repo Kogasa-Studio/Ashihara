@@ -1,5 +1,6 @@
 package kogasastudio.ashihara.utils;
 
+import kogasastudio.ashihara.registry.DataAttachmentTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -79,13 +80,13 @@ public final class GridSnapHelper
     public static int getGridStep(Player player)
     {
         if (player == null) return DEFAULT;
-        return player.getData(kogasastudio.ashihara.registry.DataComponentTypes.GRID_SNAP_STEP.get());
+        return player.getData(DataAttachmentTypes.GRID_SNAP_STEP.get());
     }
 
     public static void setGridStep(Player player, int level)
     {
         if (player == null) return;
-        player.setData(kogasastudio.ashihara.registry.DataComponentTypes.GRID_SNAP_STEP.get(), level);
+        player.setData(DataAttachmentTypes.GRID_SNAP_STEP.get(), level);
     }
 
     public static int cycleNext(int current)

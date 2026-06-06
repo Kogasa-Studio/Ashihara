@@ -1,10 +1,16 @@
-package kogasastudio.ashihara.block.furniture;
+package kogasastudio.ashihara.item.block;
 
 import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
+import kogasastudio.ashihara.block.furniture.ContainerComponent;
+import kogasastudio.ashihara.block.furniture.FurnitureComponent;
+import kogasastudio.ashihara.block.furniture.SnappedUseOnContext;
+import kogasastudio.ashihara.helper.RenderHelper;
+import kogasastudio.ashihara.registry.DataComponentTypes;
 import kogasastudio.ashihara.utils.GridSnapHelper;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
@@ -24,7 +30,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
-import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.ItemAccessFluidHandler;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -47,25 +53,11 @@ public class FurnitureComponentItem extends BlockItem
 
     public FurnitureComponent getComponent() { return this.component.get(); }
 
-    public static FluidStacksResourceHandler getFluidHandler(ItemStack stack, ItemAccess access)
+    public static ItemAccessFluidHandler getFluidHandler(ItemStack stack, ItemAccess access)
     {
-        if (!(stack.getItem() instanceof FurnitureComponentItem fci && fci.getComponent() instanceof ContainerComponent)) return null;
+        if (access == null || !(access.getResource().getItem() instanceof FurnitureComponentItem fci && fci.getComponent() instanceof ContainerComponent)) return null;
 
-        FluidStacksResourceHandler handler = new FluidStacksResourceHandler(1, 100)
-        {
-            @Override
-            protected void onContentsChanged(int index, FluidStack previous)
-            {
-                ContainerComponent.setFluidContent(stack, getAmountAsLong(0) > 0 ? getResource(0).toStack((int) getAmountAsLong(0)) : FluidStack.EMPTY);
-            }
-        };
-
-        FluidStack stored = ContainerComponent.getFluidContent(stack);
-        if (!stored.isEmpty())
-        {
-            handler.set(0, FluidResource.of(stored.getFluid()), stored.getAmount());
-        }
-        return handler;
+        return new ItemAccessFluidHandler(access, DataComponentTypes.FLUID_CONTENT.get(), 100);
     }
 
     @Override
@@ -175,14 +167,15 @@ public class FurnitureComponentItem extends BlockItem
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context,
-        TooltipDisplay display, Consumer<Component> builder, TooltipFlag flag)
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag flag)
     {
-        if (!(stack.getItem() instanceof FurnitureComponentItem fci
-            && fci.getComponent() instanceof ContainerComponent cc)) return;
+        if (!(stack.getItem() instanceof FurnitureComponentItem fci && fci.getComponent() instanceof ContainerComponent cc)) return;
         ItemStack food = ContainerComponent.getContent(stack);
-        if (!food.isEmpty())
-            builder.accept(Component.translatable("tooltip.ashihara.bowl_content",
-                food.getHoverName()));
+        if (!food.isEmpty()) builder.accept(Component.translatable("tooltip.ashihara.bowl_content", food.getHoverName()));
+        else
+        {
+            FluidStack fluidStack = ContainerComponent.getFluidContent(stack);
+            if (!fluidStack.isEmpty()) builder.accept(Component.translatable("tooltip.ashihara.fluid_type").append(Component.empty().append(fluidStack.getHoverName()).append(" * ").append(String.valueOf(fluidStack.amount())).setStyle(Style.EMPTY.withColor(RenderHelper.getFluidTintColor(fluidStack)))));
+        }
     }
 }

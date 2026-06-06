@@ -4,7 +4,7 @@ import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.blockentity.DirtCookStoveBE;
 import kogasastudio.ashihara.block.blockentity.MortarBE;
 import kogasastudio.ashihara.block.blockentity.PotBlockEntity;
-import kogasastudio.ashihara.block.furniture.FurnitureComponentItem;
+import kogasastudio.ashihara.item.block.FurnitureComponentItem;
 import kogasastudio.ashihara.interaction.HeatLevel;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;

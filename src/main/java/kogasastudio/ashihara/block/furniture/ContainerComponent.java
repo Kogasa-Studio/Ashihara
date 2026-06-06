@@ -5,6 +5,7 @@ import kogasastudio.ashihara.block.building.component.ComponentStateDefinition;
 import kogasastudio.ashihara.block.building.component.Interactable;
 import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.registry.BuildingComponents;
+import kogasastudio.ashihara.registry.DataComponentTypes;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.NbtOps;
@@ -20,10 +21,12 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.ItemCapability;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.StacksResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
@@ -73,48 +76,41 @@ public abstract class ContainerComponent extends FurnitureComponent
 
     public static FluidStack getFluidContent(ItemStack container)
     {
-        var cd = container.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
-        if (!cd.contains(FLUID_TAG)) return FluidStack.EMPTY;
-        var tag = cd.copyTag().get(FLUID_TAG);
-        return tag != null ? FluidStack.CODEC.parse(NbtOps.INSTANCE, tag).result().orElse(FluidStack.EMPTY) : FluidStack.EMPTY;
+        return container.getOrDefault(DataComponentTypes.FLUID_CONTENT, SimpleFluidContent.EMPTY).copy();
     }
 
     public static void setFluidContent(ItemStack container, FluidStack fluid)
     {
-        CustomData.update(DataComponents.CUSTOM_DATA, container, tag ->
-        {
-            if (fluid.isEmpty()) { tag.remove(FLUID_TAG); tag.remove(CONTENT_TAG); }
-            else tag.put(FLUID_TAG, FluidStack.CODEC.encodeStart(NbtOps.INSTANCE, fluid).getOrThrow());
-        });
+        container.set(DataComponentTypes.FLUID_CONTENT, SimpleFluidContent.copyOf(fluid));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private static ResourceHandler<FluidResource> getFluidCap(ItemStack stack)
     {
-        return (ResourceHandler<FluidResource>) (Object) stack.getCapability((ItemCapability) Capabilities.Fluid.ITEM);
+        return (ResourceHandler<FluidResource>) stack.getCapability((ItemCapability) Capabilities.Fluid.ITEM);
     }
 
     // --------------------------------------------------
     // Sound helpers
     // --------------------------------------------------
 
-    protected static void playInsertSound(net.minecraft.world.entity.Entity entity)
+    public static void playInsertSound(net.minecraft.world.entity.Entity entity)
     {
         entity.playSound(SoundEvents.BUNDLE_INSERT, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
     }
 
-    protected static void playRemoveOneSound(net.minecraft.world.entity.Entity entity)
+    public static void playRemoveOneSound(net.minecraft.world.entity.Entity entity)
     {
         entity.playSound(SoundEvents.BUNDLE_REMOVE_ONE, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
     }
 
-    protected static void playBucketFillSound(net.minecraft.world.entity.Entity entity, FluidStack fluid)
+    public static void playBucketFillSound(net.minecraft.world.entity.Entity entity, FluidStack fluid)
     {
         var s = fluid.getFluidType().getSound(fluid, net.neoforged.neoforge.common.SoundActions.BUCKET_FILL);
         if (s != null) entity.playSound(s, 1.0F, 1.0F);
     }
 
-    protected static void playBucketEmptySound(net.minecraft.world.entity.Entity entity, FluidStack fluid)
+    public static void playBucketEmptySound(net.minecraft.world.entity.Entity entity, FluidStack fluid)
     {
         var s = fluid.getFluidType().getSound(fluid, net.neoforged.neoforge.common.SoundActions.BUCKET_EMPTY);
         if (s != null) entity.playSound(s, 1.0F, 1.0F);

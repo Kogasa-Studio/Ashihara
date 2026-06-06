@@ -3,7 +3,7 @@ package kogasastudio.ashihara.block.building;
 import kogasastudio.ashihara.block.building.component.ComponentStateDefinition;
 import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.registry.Items;
-import kogasastudio.ashihara.block.furniture.FurnitureComponentItem;
+import kogasastudio.ashihara.item.block.FurnitureComponentItem;
 import kogasastudio.ashihara.block.furniture.SnappedUseOnContext;
 import kogasastudio.ashihara.utils.GridSnapHelper;
 import kogasastudio.ashihara.item.block.BuildingComponentItem;
