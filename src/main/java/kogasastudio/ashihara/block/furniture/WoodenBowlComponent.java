@@ -13,7 +13,12 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.ItemCapability;
+import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.StacksResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
@@ -37,10 +42,9 @@ public class WoodenBowlComponent extends ContainerComponent
             : Shapes.box(5.5f / 16, 0, 5.5f / 16, 10.5f / 16, 3.5f / 16, 10.5f / 16);
     }
 
-    @Override protected StacksResourceHandler<?, ?> createContentHandler()
-    {
-        return new ItemStacksResourceHandler(1);
-    }
+    @Override protected StacksResourceHandler<?, ?> createContentHandler() { return new ItemStacksResourceHandler(1); }
+
+    @Override protected FluidStacksResourceHandler createFluidHandler() { return new FluidStacksResourceHandler(1, 100); }
 
     @Override protected ContainerState.ContainerType containerType() { return ContainerState.ContainerType.BOWL; }
     @Override protected ContainerState.ContainerSize size() { return ContainerState.ContainerSize.MID; }
@@ -53,6 +57,30 @@ public class WoodenBowlComponent extends ContainerComponent
         double y = inBlock.y();
         double z = inBlock.z() - 8f / 16;
         VoxelShape shape = ShapeHelper.offsetShape(this.SHAPE, x, y, z);
+        ItemStack held = context.getItemInHand();
+
+        // Try fluid first
+        if (!held.isEmpty())
+        {
+            @SuppressWarnings({"unchecked", "rawtypes"})
+            ResourceHandler<FluidResource> fluidCap =
+                (ResourceHandler<FluidResource>) (Object) held.getCapability((ItemCapability) Capabilities.Fluid.ITEM);
+            if (fluidCap != null && !fluidCap.getResource(0).isEmpty())
+            {
+                FluidStacksResourceHandler fh = createFluidHandler();
+                try (Transaction tx = Transaction.openRoot())
+                {
+                    FluidResource res = fluidCap.getResource(0);
+                    int moved = fh.insert(0, res, (int) fluidCap.getAmountAsLong(0), tx);
+                    if (moved > 0) { fluidCap.extract(0, res, moved, tx); tx.commit(); }
+                }
+                return new ComponentStateDefinition(FurnitureComponents.get(this.id),
+                    new Vec3(x, y, z), 0, 0, 0, shape, MODEL, List.of(),
+                    new ContainerContent(ContainerState.ContentType.FLUID, fh));
+            }
+        }
+
+        // Fallback: item content
         var cc = new ContainerContent(ContainerState.ContentType.ITEM, createContentHandler());
         ItemStack stack = getContent(context.getItemInHand());
         if (cc.handler() instanceof ItemStacksResourceHandler is && !stack.isEmpty())
@@ -63,7 +91,8 @@ public class WoodenBowlComponent extends ContainerComponent
                 tx.commit();
             }
         }
-        return new ComponentStateDefinition(FurnitureComponents.get(this.id), new Vec3(x, y, z), 0, 0, 0, shape, MODEL, List.of(), cc);
+        return new ComponentStateDefinition(FurnitureComponents.get(this.id),
+            new Vec3(x, y, z), 0, 0, 0, shape, MODEL, List.of(), cc);
     }
 
     @Override public SoundType getInteractSound() { return SoundType.WOOD; }

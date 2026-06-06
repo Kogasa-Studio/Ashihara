@@ -21,6 +21,10 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -42,6 +46,27 @@ public class FurnitureComponentItem extends BlockItem
     }
 
     public FurnitureComponent getComponent() { return this.component.get(); }
+
+    public static FluidStacksResourceHandler getFluidHandler(ItemStack stack, ItemAccess access)
+    {
+        if (!(stack.getItem() instanceof FurnitureComponentItem fci && fci.getComponent() instanceof ContainerComponent)) return null;
+
+        FluidStacksResourceHandler handler = new FluidStacksResourceHandler(1, 100)
+        {
+            @Override
+            protected void onContentsChanged(int index, FluidStack previous)
+            {
+                ContainerComponent.setFluidContent(stack, getAmountAsLong(0) > 0 ? getResource(0).toStack((int) getAmountAsLong(0)) : FluidStack.EMPTY);
+            }
+        };
+
+        FluidStack stored = ContainerComponent.getFluidContent(stack);
+        if (!stored.isEmpty())
+        {
+            handler.set(0, FluidResource.of(stored.getFluid()), stored.getAmount());
+        }
+        return handler;
+    }
 
     @Override
     protected boolean canPlace(BlockPlaceContext pContext, BlockState pState)

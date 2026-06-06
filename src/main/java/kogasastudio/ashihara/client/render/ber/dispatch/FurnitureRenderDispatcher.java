@@ -2,16 +2,19 @@ package kogasastudio.ashihara.client.render.ber.dispatch;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.building.component.ComponentStateDefinition;
 import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.block.furniture.*;
 import kogasastudio.ashihara.client.render.state.FurnitureRenderState;
 import kogasastudio.ashihara.helper.RenderHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.client.renderer.Sheets;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 
 import java.util.HashMap;
@@ -20,12 +23,6 @@ import java.util.Map;
 public final class FurnitureRenderDispatcher
 {
     private static final Map<Class<?>, IFurnitureRenderer<?>> RENDERERS = new HashMap<>();
-
-    /*static
-    {
-        // Auto-register known containers with the default container renderer
-        register(WoodenBowlComponent.class, containerDefault());
-    }*/
 
     private FurnitureRenderDispatcher() {}
 
@@ -57,13 +54,32 @@ public final class FurnitureRenderDispatcher
             PoseStack pose = holder.poseStack();
             SubmitNodeCollector collector = holder.submitNodeCollector();
             int packedLight = holder.state().lightCoords;
-            if
-            (
-                component == null
-                || !(def.customData() instanceof ContainerContent content)
-                || ! (content.handler() instanceof ItemStacksResourceHandler handler)
-                || handler.getResource(0).isEmpty()
-            ) return;
+            if (component == null || !(def.customData() instanceof ContainerContent content)) return;
+
+            // ---- FLUID rendering ----
+            if (content.handler() instanceof FluidStacksResourceHandler fluidHandler && fluidHandler.getAmountAsLong(0) > 0)
+            {
+                FluidStack fluid = fluidHandler.getResource(0).toStack((int) fluidHandler.getAmountAsLong(0));
+                pose.pushPose();
+                Vec3 pos = def.inBlockPos();
+                pose.translate(pos.x, pos.y, pos.z);
+                pose.translate(0.5, 0, 0.5);
+                if (def.rotationY() != 0) pose.mulPose(Axis.YP.rotationDegrees(def.rotationY()));
+                if (def.rotationX() != 0) pose.mulPose(Axis.XP.rotationDegrees(def.rotationX()));
+                if (def.rotationZ() != 0) pose.mulPose(Axis.ZP.rotationDegrees(def.rotationZ()));
+                pose.translate(0, 0.15, 0);
+                pose.scale(1/4f, 1/4f, 1/4f);
+                var buf = Minecraft.getInstance().renderBuffers().bufferSource();
+                RenderHelper.blitFluid(pose, buf, fluid,
+                    2/16f, 14/16f, 2/16f, 14/16f, 0,
+                    OverlayTexture.NO_OVERLAY, packedLight);
+                buf.endBatch();
+                pose.popPose();
+                return;
+            }
+
+            // ---- ITEM rendering ----
+            if (!(content.handler() instanceof ItemStacksResourceHandler handler) || handler.getResource(0).isEmpty()) return;
 
             pose.pushPose();
             Vec3 pos = def.inBlockPos();
