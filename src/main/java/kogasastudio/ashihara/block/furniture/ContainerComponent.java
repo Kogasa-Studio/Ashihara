@@ -16,7 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -138,6 +137,36 @@ public abstract class ContainerComponent extends FurnitureComponent
         ItemStack held = context.getItemInHand();
         ItemAccess access = ItemAccess.forPlayerInteraction(context.getPlayer(), context.getHand()).oneByOne();
 
+        // ---- Shift + empty hand: pick up bowl with contents ----
+        if (held.isEmpty() && player.isShiftKeyDown())
+        {
+            ItemStack bowl = getDropItem();
+            if (cc.handler() != null)
+            {
+                switch (cc.handler())
+                {
+                    case ItemStacksResourceHandler ih when ih.getAmountAsLong(0) > 0 ->
+                    {
+                        ItemResource res = ih.getResource(0);
+                        int amount = (int) ih.getAmountAsLong(0);
+                        try (Transaction tx = Transaction.openRoot())
+                        { ih.extract(0, res, amount, tx); tx.commit(); }
+                        setContent(bowl, res.toStack(amount));
+                    }
+                    case FluidStacksResourceHandler fh when fh.getAmountAsLong(0) > 0 ->
+                    {
+                        FluidStack fluid = fh.getResource(0).toStack((int) fh.getAmountAsLong(0));
+                        try (Transaction tx = Transaction.openRoot())
+                        { fh.extract(0, fh.getResource(0), (int) fh.getAmountAsLong(0), tx); tx.commit(); }
+                        setFluidContent(bowl, fluid);
+                    }
+                    default -> {}
+                }
+            }
+            popItem(player, bowl);
+            return null;
+        }
+
         // ---- EMPTY: insert fluid or food ----
         switch (cc.handler())
         {
@@ -163,10 +192,7 @@ public abstract class ContainerComponent extends FurnitureComponent
                     try (Transaction tx = Transaction.openRoot())
                     {
                         if (ih.insert(0, ItemResource.of(held.getItem(), DataComponentPatch.EMPTY), 1, tx) > 0)
-                        {
-                            tx.commit();
-                            held.shrink(1);
-                        }
+                        { tx.commit(); held.shrink(1); }
                     }
                     playInsertSound(player);
                     return withContent(definition, ContainerState.ContentType.ITEM, ih);
@@ -174,20 +200,9 @@ public abstract class ContainerComponent extends FurnitureComponent
                 return definition;
             }
 
-
             // ---- FLUID bowl ----
             case FluidStacksResourceHandler fh ->
             {
-                if (held.isEmpty() && player.isShiftKeyDown() && fh.getAmountAsLong(0) > 0)
-                {
-                    try (Transaction tx = Transaction.openRoot())
-                    {
-                        fh.extract(0, fh.getResource(0), (int) fh.getAmountAsLong(0), tx);
-                        tx.commit();
-                    }
-                    FluidUtil.triggerSoundAndGameEvent(fh.getResource(0), context.getLevel(), context.getClickedPos().getCenter(), player, true);
-                    return withContent(definition, ContainerState.ContentType.FLUID, fh);
-                }
                 var heldFluid = getFluidCap(held, access);
                 if (heldFluid != null)
                 {
@@ -217,49 +232,30 @@ public abstract class ContainerComponent extends FurnitureComponent
                 return definition;
             }
 
-
             // ---- ITEM bowl ----
             case ItemStacksResourceHandler ih ->
             {
-                if (held.isEmpty() && player.isShiftKeyDown())
-                {
-                    BlockEntity be = context.getLevel().getBlockEntity(context.getClickedPos());
-                    if (be instanceof MultiBuiltBlockEntity mbe)
-                        for (ItemStack s : getDrops(definition, mbe)) popItem(player, s.copy());
-                    else popItem(player, this.drops.getFirst().copy());
-                    return null;
-                }
                 if (ih.getAmountAsLong(0) > 0)
                 {
                     var res = ih.getResource(0);
                     int amount = (int) ih.getAmountAsLong(0);
                     try (Transaction tx = Transaction.openRoot())
-                    {
-                        ih.extract(0, res, amount, tx);
-                        tx.commit();
-                        popItem(player, res.toStack(amount));
-                    }
+                    { ih.extract(0, res, amount, tx); tx.commit(); popItem(player, res.toStack(amount)); }
                     playRemoveOneSound(player);
-                    return withContent(definition, ContainerState.ContentType.ITEM, ih);
+                    ContainerState.ContentType ct = ih.getResource(0).isEmpty() ? ContainerState.ContentType.EMPTY : ContainerState.ContentType.ITEM;
+                    ih = ih.getResource(0).isEmpty() ? null : ih;
+                    return withContent(definition, ct, ih);
                 }
                 if (!held.isEmpty() && held.has(DataComponents.FOOD))
                 {
                     var res = ItemResource.of(held.getItem(), DataComponentPatch.EMPTY);
                     try (Transaction tx = Transaction.openRoot())
-                    {
-                        if (ih.insert(0, res, 1, tx) > 0)
-                        {
-                            tx.commit();
-                            held.shrink(1);
-                        }
-                    }
+                    { if (ih.insert(0, res, 1, tx) > 0) { tx.commit(); held.shrink(1); } }
                     playInsertSound(player);
                     return withContent(definition, ContainerState.ContentType.ITEM, ih);
                 }
             }
-            default ->
-            {
-            }
+            default -> {}
         }
 
         return definition;
@@ -295,6 +291,8 @@ public abstract class ContainerComponent extends FurnitureComponent
     {
         if (!p.getInventory().add(s)) p.level().addFreshEntity(new ItemEntity(p.level(), p.getX(), p.getY(), p.getZ(), s));
     }
+
+    protected ItemStack getDropItem() { return this.drops.getFirst().copy(); }
 
     protected abstract ContainerState.ContainerType containerType();
     protected abstract ContainerState.ContainerSize size();

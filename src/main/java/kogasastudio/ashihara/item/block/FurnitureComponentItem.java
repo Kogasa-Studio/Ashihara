@@ -79,14 +79,17 @@ public class FurnitureComponentItem extends BlockItem
         BlockEntity blockEntity = pContext.getLevel().getBlockEntity(pContext.getClickedPos());
         if (blockEntity instanceof MultiBuiltBlockEntity be && be.tryPlaceFurniture(context, this.getComponent()))
         {
+            if (b != InteractionResult.SUCCESS) pContext.getItemInHand().consume(1, player);
             b = InteractionResult.SUCCESS;
         }
         else
         {
-            BlockEntity be2 = context.getLevel().getBlockEntity(
-                context.getClickedPos().relative(context.getClickedFace().getOpposite()));
+            BlockEntity be2 = context.getLevel().getBlockEntity(context.getClickedPos().relative(context.getClickedFace().getOpposite()));
             if (be2 instanceof MultiBuiltBlockEntity be && be.tryPlaceFurniture(context, this.getComponent()))
+            {
+                if (b != InteractionResult.SUCCESS) pContext.getItemInHand().consume(1, player);
                 b = InteractionResult.SUCCESS;
+            }
         }
         return b;
     }

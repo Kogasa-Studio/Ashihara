@@ -40,7 +40,7 @@ public abstract class BuildingComponent
      */
     public List<ItemStack> getDrops(ComponentStateDefinition def, MultiBuiltBlockEntity be)
     {
-        return this.drops;
+        return List.copyOf(this.drops);
     }
 
     public Supplier<BaseMultiBuiltBlock> getMaterial() {return material;}

@@ -50,7 +50,11 @@ public class BuildingComponentItem extends BlockItem
     {
         InteractionResult b = super.place(pContext);
         BlockEntity blockEntity = pContext.getLevel().getBlockEntity(pContext.getClickedPos());
-        if (blockEntity instanceof MultiBuiltBlockEntity be && be.tryPlace(pContext, this.getComponent())) b = InteractionResult.SUCCESS;
+        if (blockEntity instanceof MultiBuiltBlockEntity be && be.tryPlace(pContext, this.getComponent()))
+        {
+            b = InteractionResult.SUCCESS;
+            pContext.getItemInHand().consume(1, pContext.getPlayer());
+        }
         return b;
     }
 }

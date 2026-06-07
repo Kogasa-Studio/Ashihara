@@ -322,6 +322,8 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
         setChanged();
         checkMaterial();
         if (this.hasLevel()) this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
+        if (COMPONENTS.isEmpty() && ADDITIONAL_COMPONENTS.isEmpty() && FURNITURE.isEmpty())
+            this.getLevel().removeBlock(this.getBlockPos(), false);
     }
 
     @Override
