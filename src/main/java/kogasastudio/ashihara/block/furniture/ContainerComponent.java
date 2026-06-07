@@ -136,7 +136,7 @@ public abstract class ContainerComponent extends FurnitureComponent
 
         ContainerContent cc = contentOf(definition);
         ItemStack held = context.getItemInHand();
-        ItemAccess access = ItemAccess.forPlayerInteraction(context.getPlayer(), context.getHand());
+        ItemAccess access = ItemAccess.forPlayerInteraction(context.getPlayer(), context.getHand()).oneByOne();
 
         // ---- EMPTY: insert fluid or food ----
         switch (cc.handler())

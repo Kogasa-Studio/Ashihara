@@ -89,8 +89,8 @@ public class WoodenBowlComponent extends ContainerComponent
                     is.insert(ItemResource.of(stack), stack.count(), tx);
                     tx.commit();
                 }
+                return new ComponentStateDefinition(FurnitureComponents.get(this.id), new Vec3(x, y, z), 0, 0, 0, shape, MODEL, List.of(), cc);
             }
-            return new ComponentStateDefinition(FurnitureComponents.get(this.id), new Vec3(x, y, z), 0, 0, 0, shape, MODEL, List.of(), cc);
         }
 
         return new ComponentStateDefinition(FurnitureComponents.get(this.id), new Vec3(x, y, z), 0, 0, 0, shape, MODEL, List.of(), null);
