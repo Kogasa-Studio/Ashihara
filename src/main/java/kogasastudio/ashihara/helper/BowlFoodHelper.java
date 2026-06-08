@@ -130,11 +130,11 @@ public final class BowlFoodHelper
         List<ConsumeEffect> effects = new ArrayList<>();
         if (!isFoodFluid(id))
         {
-            if ((id.contains("molten") || id.contains("lava") || id.contains("magma") || id.contains("plasma")) && !id.contains("chocolate"))
+            if ((id.contains("molten") || id.contains("lava") || id.contains("magma") || id.contains("plasma") || id.contains("superheat")) && !id.contains("chocolate"))
                 effects.add(new ConsumeEffectTypes.SetFire(4));
             if (id.contains("toxic") || id.contains("waste") || id.contains("poison") || id.contains("mercury") || id.contains("fuel"))
                 effects.add(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.POISON, 200, 1)));
-            if (id.contains("acid") || id.contains("chlorine") || id.contains("fluorine") || id.contains("corrosive") || id.contains("hydroxide") || id.contains("ammonia"))
+            if (id.contains("acid") || id.contains("chlorine") || id.contains("fluorine") || id.contains("corrosive") || id.contains("hydroxide") || id.contains("ammonia") || id.contains("hydrogen_chloride"))
                 effects.add(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.INSTANT_DAMAGE, 1, 3)));
             if (id.contains("nuclear") || id.contains("radio") || id.contains("uranium") || id.contains("plutonium") || id.contains("thorium") || id.contains("tritium") || id.contains("cyanide"))
                 effects.add(new ApplyStatusEffectsConsumeEffect(List.of(new MobEffectInstance(MobEffects.WITHER, 500, 3), new MobEffectInstance(MobEffects.NAUSEA, 900, 1))));
