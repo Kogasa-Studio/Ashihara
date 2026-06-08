@@ -305,5 +305,11 @@
   "key.category.in_world_tooltip": "苇原：世界内ToolTip",
   "key.show_in_world_tooltip": "显示世界内ToolTip",
 
-  "subtitles.ashihara.boil": "土锅：沸腾"
+  "subtitles.ashihara.boil": "土锅：沸腾",
+
+    "key.ashihara.eating_mode": "进食模式",
+    "key.categories.ashihara.main": "苇原",
+    "tooltip.ashihara.eating_mode_on": "开启",
+    "tooltip.ashihara.eating_mode_off": "关闭",
+    "tooltip.ashihara.eating_mode_toggle": "按下 %s 键 %s 进食模式"
 }

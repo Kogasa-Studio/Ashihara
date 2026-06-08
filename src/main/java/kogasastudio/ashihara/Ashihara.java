@@ -2,6 +2,7 @@ package kogasastudio.ashihara;
 
 import com.mojang.logging.LogUtils;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
+import kogasastudio.ashihara.registry.ConsumeEffectTypes;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.registry.*;
 import kogasastudio.ashihara.registry.SoundEvents;
@@ -47,6 +48,7 @@ public class Ashihara
         RecipeTypes.register(modEventBus);
         RecipeSerializers.register(modEventBus);
         MolangValues.registerMolangValues();
+        ConsumeEffectTypes.CONSUME_EFFECTS.register(modEventBus);
         /*try
         {
             Map<Integer, GuideBook.Page> iMap = new HashMap<>();

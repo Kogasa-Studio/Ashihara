@@ -305,5 +305,11 @@
   "key.category.in_world_tooltip": "葦原：世界内ToolTip",
   "key.show_in_world_tooltip": "世界内ToolTipを示す",
 
-  "subtitles.ashihara.boil": "土鍋：沸騰"
+  "subtitles.ashihara.boil": "土鍋：沸騰",
+
+  "tooltip.ashihara.eating_mode_toggle": "鍵 %s を押して食事仕様を %s",
+  "tooltip.ashihara.eating_mode_on": "有効",
+  "tooltip.ashihara.eating_mode_off": "無効",
+  "key.ashihara.eating_mode": "食事仕様切替",
+  "key.categories.ashihara.main": "葦原"
 }

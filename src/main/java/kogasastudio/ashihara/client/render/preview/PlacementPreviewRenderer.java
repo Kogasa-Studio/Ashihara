@@ -9,7 +9,9 @@ import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.block.furniture.FurnitureComponent;
 import kogasastudio.ashihara.item.block.FurnitureComponentItem;
 import kogasastudio.ashihara.block.furniture.SnappedUseOnContext;
+import kogasastudio.ashihara.utils.EatingModeHelper;
 import kogasastudio.ashihara.utils.GridSnapHelper;
+import kogasastudio.ashihara.block.furniture.ContainerComponent;
 import kogasastudio.ashihara.event.ClientEventSubscribeHandler;
 import kogasastudio.ashihara.item.block.BuildingComponentItem;
 import kogasastudio.ashihara.registry.Blocks;
@@ -59,6 +61,8 @@ public class PlacementPreviewRenderer
         ItemStack held = player.getMainHandItem();
         BuildingComponent component = getComponent(held);
         if (component == null) return;
+
+        if (EatingModeHelper.isEnabled(player) && (!ContainerComponent.getContent(held).isEmpty() || !ContainerComponent.getFluidContent(held).isEmpty())) return;
 
         HitResult hit = mc.hitResult;
         if (!(hit instanceof BlockHitResult blockHit) || blockHit.getType() == HitResult.Type.MISS) return;

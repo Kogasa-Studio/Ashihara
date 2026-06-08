@@ -27,4 +27,12 @@ public class DataAttachmentTypes
                 .serialize(MapCodec.assumeMapUnsafe(Codec.INT))
                 .build()
         );
+
+    public static final Supplier<AttachmentType<Boolean>> EATING_MODE =
+        ATTACHMENT_TYPES.register(
+            "eating_mode",
+            () -> AttachmentType.builder(() -> false)
+                .serialize(MapCodec.assumeMapUnsafe(Codec.BOOL))
+                .build()
+        );
 }

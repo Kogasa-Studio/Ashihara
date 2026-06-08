@@ -5,8 +5,10 @@ import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.block.furniture.ContainerComponent;
 import kogasastudio.ashihara.block.furniture.FurnitureComponent;
 import kogasastudio.ashihara.block.furniture.SnappedUseOnContext;
+import kogasastudio.ashihara.helper.BowlFoodHelper;
 import kogasastudio.ashihara.helper.RenderHelper;
 import kogasastudio.ashihara.registry.DataComponentTypes;
+import kogasastudio.ashihara.utils.EatingModeHelper;
 import kogasastudio.ashihara.utils.GridSnapHelper;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -27,9 +29,17 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.level.Level;
+
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.fluid.ItemAccessFluidHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -55,7 +65,25 @@ public class FurnitureComponentItem extends BlockItem
     {
         if (access == null || !(access.getResource().getItem() instanceof FurnitureComponentItem fci && fci.getComponent() instanceof ContainerComponent)) return null;
 
-        return new ItemAccessFluidHandler(access, DataComponentTypes.FLUID_CONTENT.get(), 100);
+        return new ItemAccessFluidHandler(access, DataComponentTypes.FLUID_CONTENT.get(), 100)
+        {
+            @Override
+            protected ItemResource update(ItemResource accessResource, int index, FluidResource newResource, int newAmount)
+            {
+                ItemResource result = super.update(accessResource, index, newResource, newAmount);
+                return BowlFoodHelper.applyFluidToItemResource(result, newResource.toStack(Math.max(newAmount, FluidType.BUCKET_VOLUME)), newAmount);
+            }
+        };
+    }
+
+    @Override
+    public InteractionResult use(Level level, Player player, InteractionHand hand)
+    {
+        ItemStack stack = player.getItemInHand(hand);
+        Consumable consumable = stack.get(DataComponents.CONSUMABLE);
+        boolean hasContent = consumable != null && consumable.canConsume(player, stack);
+        if (hasContent && EatingModeHelper.isEnabled(player)) return consumable.startConsuming(player, stack, hand);
+        return InteractionResult.PASS;
     }
 
     @Override
@@ -73,7 +101,12 @@ public class FurnitureComponentItem extends BlockItem
     @Override
     public InteractionResult place(BlockPlaceContext pContext)
     {
+        ItemStack stack = pContext.getItemInHand();
         Player player = pContext.getPlayer();
+        Consumable consumable = stack.get(DataComponents.CONSUMABLE);
+        boolean hasContent = consumable != null && consumable.canConsume(player, stack);
+        if (hasContent && EatingModeHelper.isEnabled(player)) return InteractionResult.PASS;
+
         BlockPlaceContext context = new SnappedUseOnContext(pContext, GridSnapHelper.getGridStep(player), false);
         InteractionResult b = super.place(pContext);
         BlockEntity blockEntity = pContext.getLevel().getBlockEntity(pContext.getClickedPos());

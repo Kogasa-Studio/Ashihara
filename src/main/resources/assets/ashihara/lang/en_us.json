@@ -311,5 +311,11 @@
   "key.category.in_world_tooltip": "Ashihara: In world ToolTip",
   "key.show_in_world_tooltip": "Show in world ToolTip",
 
-  "subtitles.ashihara.boil": "Pot boiling"
+  "subtitles.ashihara.boil": "Pot boiling",
+
+    "key.ashihara.eating_mode": "Eating Mode",
+    "key.categories.ashihara.main": "Ashihara",
+    "tooltip.ashihara.eating_mode_on": "activate",
+    "tooltip.ashihara.eating_mode_off": "inactivate",
+    "tooltip.ashihara.eating_mode_toggle": "§ePress %s to %s eating mode"
 }

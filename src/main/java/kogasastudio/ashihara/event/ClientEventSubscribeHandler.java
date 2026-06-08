@@ -3,27 +3,28 @@ package kogasastudio.ashihara.event;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.network.EatingModePayload;
+import kogasastudio.ashihara.registry.*;
+import kogasastudio.ashihara.utils.EatingModeHelper;
 import kogasastudio.ashihara.client.gui.overlay.GridSnapHudOverlay;
 import kogasastudio.ashihara.client.gui3d.PotScreen;
 import kogasastudio.ashihara.client.render.item.BowlContentSpecialRenderer;
 import kogasastudio.ashihara.client.render.preview.PlacementPreviewRenderer;
 import kogasastudio.ashihara.client.render.state.Screen3DPiPRenderState;
 import kogasastudio.ashihara.network.GridSnapPayload;
-import kogasastudio.ashihara.registry.BlockEntities;
-import kogasastudio.ashihara.registry.MenuTypes;
 import kogasastudio.ashihara.client.particles.MapleLeafParticle;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
+import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import kogasastudio.ashihara.client.particles.RiceParticle;
 import kogasastudio.ashihara.client.particles.SakuraParticle;
 import kogasastudio.ashihara.client.render.ber.*;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
-import kogasastudio.ashihara.registry.Items;
 import kogasastudio.ashihara.utils.GridSnapHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.world.item.ItemStack;
-import kogasastudio.ashihara.registry.AdditionalModels;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
@@ -36,7 +37,6 @@ import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.model.standalone.SimpleUnbakedStandaloneModel;
 import net.neoforged.neoforge.client.model.standalone.StandaloneModelKey;
-import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.Nullable;
 
@@ -153,6 +153,19 @@ public class ClientEventSubscribeHandler
     public static void onAfterRenderLevel(RenderLevelStageEvent.AfterLevel event)
     {
         PlacementPreviewRenderer.onRenderLevel(event);
+    }
+
+    @SubscribeEvent
+    public static void onKeyInput(InputEvent.Key event)
+    {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null || mc.screen != null) return;
+        if (KeyMappings.EATING_MODE_KEY.consumeClick())
+        {
+            boolean current = EatingModeHelper.isEnabled(mc.player);
+            EatingModeHelper.setEnabled(mc.player, !current);
+            ClientPacketDistributor.sendToServer(new EatingModePayload(!current));
+        }
     }
 
     @SubscribeEvent

@@ -1,13 +1,16 @@
 package kogasastudio.ashihara.client.gui.overlay;
 
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.registry.KeyMappings;
 import kogasastudio.ashihara.item.block.FurnitureComponentItem;
+import kogasastudio.ashihara.utils.EatingModeHelper;
 import kogasastudio.ashihara.utils.GridSnapHelper;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.neoforged.neoforge.client.gui.GuiLayer;
@@ -36,5 +39,11 @@ public final class GridSnapHudOverlay implements GuiLayer
         graphics.blitSprite(RenderPipelines.GUI_TEXTURED, ICON, x, y, 16, 16);
 
         graphics.text(mc.font, Component.translatable("tooltip.ashihara.grid_level", label), x + 18, y + 4, 0xFFFFFFFF);
+
+        boolean eating = EatingModeHelper.isEnabled(mc.player);
+        Component keyName = KeyMappings.EATING_MODE_KEY.getTranslatedKeyMessage();
+        Component status = Component.translatable(eating ? "tooltip.ashihara.eating_mode_on" : "tooltip.ashihara.eating_mode_off");
+        Component eatingMsg = Component.translatable("tooltip.ashihara.eating_mode_toggle", keyName, status).setStyle(Style.EMPTY.withColor(0xfffff8a5));
+        graphics.text(mc.font, eatingMsg, 0, y + 20, 0xFFFFFF00);
     }
 }

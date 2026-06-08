@@ -4,6 +4,7 @@ import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.building.component.ComponentStateDefinition;
 import kogasastudio.ashihara.block.building.component.Interactable;
 import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
+import kogasastudio.ashihara.helper.BowlFoodHelper;
 import kogasastudio.ashihara.registry.BuildingComponents;
 import kogasastudio.ashihara.registry.DataComponentTypes;
 import net.minecraft.core.component.DataComponentPatch;
@@ -63,7 +64,8 @@ public abstract class ContainerComponent extends FurnitureComponent
     public static void setContent(ItemStack container, ItemStack food)
     {
         CustomData.update(DataComponents.CUSTOM_DATA, container, tag ->
-        { if (food.isEmpty()) tag.remove(CONTENT_TAG); else tag.put(CONTENT_TAG, ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, food).getOrThrow()); });
+        { if (food.isEmpty()) { tag.remove(CONTENT_TAG); BowlFoodHelper.clear(container); }
+          else { tag.put(CONTENT_TAG, ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, food).getOrThrow()); BowlFoodHelper.applyFood(container, food); } });
     }
 
     // --------------------------------------------------
@@ -73,7 +75,11 @@ public abstract class ContainerComponent extends FurnitureComponent
     { return container.getOrDefault(DataComponentTypes.FLUID_CONTENT, SimpleFluidContent.EMPTY).copy(); }
 
     public static void setFluidContent(ItemStack container, FluidStack fluid)
-    { container.set(DataComponentTypes.FLUID_CONTENT, SimpleFluidContent.copyOf(fluid)); }
+    {
+        container.set(DataComponentTypes.FLUID_CONTENT, SimpleFluidContent.copyOf(fluid));
+        if (fluid.isEmpty()) BowlFoodHelper.clear(container);
+        else BowlFoodHelper.applyFluid(container, fluid);
+    }
 
     // --------------------------------------------------
     // Sound helpers
