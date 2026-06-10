@@ -13,8 +13,10 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.UseRemainder;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
+import net.minecraft.world.item.consume_effects.ClearAllStatusEffectsConsumeEffect;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.neoforged.neoforge.fluids.FluidStack;
+import org.jspecify.annotations.Nullable;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 
 import java.util.ArrayList;
@@ -58,7 +60,7 @@ public final class BowlFoodHelper
         bowl.set(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStackTemplate(bowl.getItem())));
     }
 
-    /** Apply fluid to bowl. Food fluids get FOOD boost; non-food fluids get keyword effects. */
+    /** Apply fluid to bowl. Inherits FOOD/CONSUMABLE from bucket item if registered; otherwise keyword effects. */
     public static void applyFluid(ItemStack bowl, FluidStack fluid)
     {
         bowl.set(DataComponents.FOOD, buildFluidFood(fluid));
@@ -85,6 +87,28 @@ public final class BowlFoodHelper
             return new ApplyStatusEffectsConsumeEffect(boosted, se.probability());
         }
         return e;
+    }
+
+    /** Check fluid stack itself first, then its bucket item. */
+    @Nullable
+    private static FoodProperties getFluidFood(FluidStack fluid)
+    {
+        if (fluid.has(DataComponents.FOOD))
+            return fluid.get(DataComponents.FOOD);
+        ItemStack bucket = fluid.getFluidType().getBucket(fluid);
+        if (bucket.isEmpty()) return null;
+        return bucket.has(DataComponents.FOOD) ? bucket.get(DataComponents.FOOD) : null;
+    }
+
+    /** Check fluid stack itself first, then its bucket item. */
+    @Nullable
+    private static Consumable getFluidConsumable(FluidStack fluid)
+    {
+        if (fluid.has(DataComponents.CONSUMABLE))
+            return fluid.get(DataComponents.CONSUMABLE);
+        ItemStack bucket = fluid.getFluidType().getBucket(fluid);
+        if (bucket.isEmpty()) return null;
+        return bucket.has(DataComponents.CONSUMABLE) ? bucket.get(DataComponents.CONSUMABLE) : null;
     }
 
     private static boolean isFoodFluid(String id)
@@ -118,6 +142,10 @@ public final class BowlFoodHelper
 
     private static FoodProperties buildFluidFood(FluidStack fluid)
     {
+        FoodProperties fluidFood = getFluidFood(fluid);
+        if (fluidFood != null)
+            return new FoodProperties(Math.round(fluidFood.nutrition() * BOOST), fluidFood.saturation() * BOOST, true);
+
         String id = BuiltInRegistries.FLUID.getKey(fluid.getFluid()).getPath();
         if (isFoodFluid(id))
             return new FoodProperties(Math.round(6 * BOOST), 0.6f * BOOST, true);
@@ -126,6 +154,21 @@ public final class BowlFoodHelper
 
     private static Consumable buildFluidConsumable(FluidStack fluid)
     {
+        Consumable fluidCons = getFluidConsumable(fluid);
+        if (fluidCons != null)
+        {
+            List<ConsumeEffect> boosted = new ArrayList<>();
+            for (ConsumeEffect e : fluidCons.onConsumeEffects())
+                boosted.add(boostEffect(e));
+            Consumable.Builder cb = Consumable.builder()
+                .consumeSeconds(fluidCons.consumeSeconds())
+                .animation(fluidCons.animation())
+                .sound(fluidCons.sound())
+                .hasConsumeParticles(fluidCons.hasConsumeParticles());
+            for (ConsumeEffect e : boosted) cb = cb.onConsume(e);
+            return cb.build();
+        }
+
         String id = BuiltInRegistries.FLUID.getKey(fluid.getFluid()).getPath();
         List<ConsumeEffect> effects = new ArrayList<>();
         if (!isFoodFluid(id))
@@ -142,8 +185,8 @@ public final class BowlFoodHelper
                 effects.add(new ApplyStatusEffectsConsumeEffect(List.of(new MobEffectInstance(MobEffects.NAUSEA, 100, 1), new MobEffectInstance(MobEffects.HUNGER, 200, 2))));
             if (id.contains("soup") || id.contains("heal"))
                 effects.add(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 2)));
-            if (id.equals("water") || id.contains("milk"))
-                effects.clear();
+            if (id.contains("milk"))
+                effects.add(new ClearAllStatusEffectsConsumeEffect());
         }
         Consumable.Builder cb = Consumable.builder()
             .consumeSeconds(1.6f)
