@@ -25,6 +25,8 @@ public class KeyMappings
     public static void registerKeyMappings(RegisterKeyMappingsEvent event)
     {
         event.registerCategory(IN_WORLD_TOOLTIP);
+        event.registerCategory(ASHIHARA_COMMON);
         event.register(SHOW_IN_WORLD_TOOLTIP);
+        event.register(EATING_MODE_KEY);
     }
 }

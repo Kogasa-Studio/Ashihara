@@ -42,7 +42,7 @@ public final class GridSnapHudOverlay implements GuiLayer
 
         boolean eating = EatingModeHelper.isEnabled(mc.player);
         Component keyName = KeyMappings.EATING_MODE_KEY.getTranslatedKeyMessage();
-        Component status = Component.translatable(eating ? "tooltip.ashihara.eating_mode_on" : "tooltip.ashihara.eating_mode_off");
+        Component status = Component.translatable(eating ? "tooltip.ashihara.eating_mode_off" : "tooltip.ashihara.eating_mode_on");
         Component eatingMsg = Component.translatable("tooltip.ashihara.eating_mode_toggle", keyName, status).setStyle(Style.EMPTY.withColor(0xfffff8a5));
         graphics.text(mc.font, eatingMsg, 0, y + 20, 0xFFFFFF00);
     }

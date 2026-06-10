@@ -173,7 +173,7 @@ public final class BowlFoodHelper
         List<ConsumeEffect> effects = new ArrayList<>();
         if (!isFoodFluid(id))
         {
-            if ((id.contains("molten") || id.contains("lava") || id.contains("magma") || id.contains("plasma") || id.contains("superheat")) && !id.contains("chocolate"))
+            if ((id.contains("molten") || id.contains("lava") || id.contains("magma") || id.contains("plasma") || id.contains("superheat") || id.contains("melt")) && !id.contains("chocolate"))
                 effects.add(new ConsumeEffectTypes.SetFire(4));
             if (id.contains("toxic") || id.contains("waste") || id.contains("poison") || id.contains("mercury") || id.contains("fuel"))
                 effects.add(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.POISON, 200, 1)));
