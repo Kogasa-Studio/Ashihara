@@ -2,6 +2,8 @@ package kogasastudio.ashihara.registry;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.blockentity.*;
+import kogasastudio.ashihara.block.blockentity.FermentationSubBlockEntity;
+import kogasastudio.ashihara.block.FermentationBlock;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -98,4 +100,16 @@ public class BlockEntities
                     MealTableTE::new,
                     Blocks.MEAL_TABLE.get()
                 ));*/
+
+    public static final Supplier<BlockEntityType<FermentationSubBlockEntity>> FERMENTATION_SUB_BE = BLOCK_ENTITIES.register(
+        "fermentation_sub_be",
+        () -> new BlockEntityType<>(FermentationSubBlockEntity::new,
+            Blocks.LARGE_FERMENTATION_VAT.get()));
+
+    public static final Supplier<BlockEntityType<FermentationBlockEntity>> FERMENTATION_BE = BLOCK_ENTITIES.register(
+        "fermentation_be",
+        () -> new BlockEntityType<>(FermentationBlockEntity::new,
+            Blocks.WOODEN_BASIN.get(),
+            Blocks.FERMENTATION_VAT.get(),
+            Blocks.LARGE_FERMENTATION_VAT.get()));
 }

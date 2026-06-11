@@ -1,0 +1,6 @@
+﻿{
+    "variants": {
+        "has_lid=true": { "model": "ashihara:block/wooden_basin" },
+        "has_lid=false": { "model": "ashihara:block/wooden_basin" }
+    }
+}

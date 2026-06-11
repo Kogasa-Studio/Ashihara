@@ -1,0 +1,12 @@
+﻿{
+    "variants": {
+        "facing=north,has_lid=true": { "model": "ashihara:block/fermentation_vat", "y": 0 },
+        "facing=east,has_lid=true": { "model": "ashihara:block/fermentation_vat", "y": 90 },
+        "facing=south,has_lid=true": { "model": "ashihara:block/fermentation_vat", "y": 180 },
+        "facing=west,has_lid=true": { "model": "ashihara:block/fermentation_vat", "y": 270 },
+        "facing=north,has_lid=false": { "model": "ashihara:block/fermentation_vat_lid_off", "y": 0 },
+        "facing=east,has_lid=false": { "model": "ashihara:block/fermentation_vat_lid_off", "y": 90 },
+        "facing=south,has_lid=false": { "model": "ashihara:block/fermentation_vat_lid_off", "y": 180 },
+        "facing=west,has_lid=false": { "model": "ashihara:block/fermentation_vat_lid_off", "y": 270 }
+    }
+}

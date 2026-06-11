@@ -311,5 +311,9 @@
     "key.categories.ashihara.main": "苇原",
     "tooltip.ashihara.eating_mode_on": "开启",
     "tooltip.ashihara.eating_mode_off": "关闭",
-    "tooltip.ashihara.eating_mode_toggle": "按下 %s 键 %s 进食模式"
+    "tooltip.ashihara.eating_mode_toggle": "按下 %s 键 %s 进食模式",
+
+  "block.ashihara.wooden_basin": "木盆",
+  "block.ashihara.fermentation_vat": "发酵桶",
+  "block.ashihara.large_fermentation_vat": "大型发酵桶"
 }

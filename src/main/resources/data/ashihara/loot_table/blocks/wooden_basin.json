@@ -1,0 +1,12 @@
+﻿{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        { "type": "minecraft:item", "name": "ashihara:wooden_basin" }
+      ],
+      "conditions": [ { "condition": "minecraft:survives_explosion" } ]
+    }
+  ]
+}

@@ -153,4 +153,27 @@ public class ShapeHelper
         );
         return tag;
     }
+
+    /** Slice a full VoxelShape spanning [0,size]^3 into the [0,1]^3 sub-block at subPos. Result is cached statically. */
+    public static VoxelShape sliceShape(VoxelShape fullShape, int size, net.minecraft.core.Vec3i subPos)
+    {
+        double ox = -subPos.getX();
+        double oy = -subPos.getY();
+        double oz = -subPos.getZ();
+        VoxelShape moved = fullShape.move(ox, oy, oz);
+        // Clamp to [0,1]^3
+        VoxelShape[] result = {Shapes.empty()};
+        moved.forAllBoxes((x1, y1, z1, x2, y2, z2) ->
+        {
+            double cx1 = Math.max(x1, 0);
+            double cy1 = Math.max(y1, 0);
+            double cz1 = Math.max(z1, 0);
+            double cx2 = Math.min(x2, 1);
+            double cy2 = Math.min(y2, 1);
+            double cz2 = Math.min(z2, 1);
+            if (cx1 < cx2 && cy1 < cy2 && cz1 < cz2)
+                result[0] = Shapes.or(result[0], Shapes.box(cx1, cy1, cz1, cx2, cy2, cz2));
+        });
+        return result[0];
+    }
 }

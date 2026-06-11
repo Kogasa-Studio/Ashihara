@@ -256,6 +256,11 @@ public class Items
     public static final DeferredItem<? extends Item> GOLD_PIN_FIN = ITEMS.registerItem("gold_pin_fin", properties -> new BuildingComponentItem(() -> BuildingComponents.GOLD_PIN_FIN, Blocks.GOLD_DECO_COMPONENT, properties), properties -> properties.useItemDescriptionPrefix().component(kogasastudio.ashihara.registry.DataComponentTypes.FLUID_CONTENT.get(), net.neoforged.neoforge.fluids.SimpleFluidContent.EMPTY));
 
     //家具
+    // 发酵容器
+    public static final DeferredItem<? extends BlockItem> WOODEN_BASIN = ITEMS.registerSimpleBlockItem("wooden_basin", Blocks.WOODEN_BASIN);
+    public static final DeferredItem<? extends BlockItem> FERMENTATION_VAT = ITEMS.registerSimpleBlockItem("fermentation_vat", Blocks.FERMENTATION_VAT);
+    public static final DeferredItem<? extends BlockItem> LARGE_FERMENTATION_VAT = ITEMS.registerSimpleBlockItem("large_fermentation_vat", Blocks.LARGE_FERMENTATION_VAT);
+
     public static final DeferredItem<? extends Item> WOODEN_BOWL_MID = ITEMS.registerItem("wooden_bowl_mid", properties -> new FurnitureComponentItem(() -> FurnitureComponents.WOODEN_BOWL_MID, Blocks.MULTI_BUILT_BLOCK, properties), properties -> properties.useItemDescriptionPrefix().component(kogasastudio.ashihara.registry.DataComponentTypes.FLUID_CONTENT.get(), net.neoforged.neoforge.fluids.SimpleFluidContent.EMPTY));
 
     //閻忣垰鍙?

@@ -311,5 +311,9 @@
   "tooltip.ashihara.eating_mode_on": "有効",
   "tooltip.ashihara.eating_mode_off": "無効",
   "key.ashihara.eating_mode": "食事仕様切替",
-  "key.categories.ashihara.main": "葦原"
+  "key.categories.ashihara.main": "葦原",
+
+  "block.ashihara.wooden_basin": "木盥",
+  "block.ashihara.fermentation_vat": "仕込桶",
+  "block.ashihara.large_fermentation_vat": "大仕込桶"
 }

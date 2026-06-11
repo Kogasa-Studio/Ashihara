@@ -5,6 +5,10 @@ import kogasastudio.ashihara.block.*;
 import kogasastudio.ashihara.block.CandleBlock;
 import kogasastudio.ashihara.block.LanternBlock;
 import kogasastudio.ashihara.block.building.*;
+import kogasastudio.ashihara.block.blockentity.*;
+import kogasastudio.ashihara.block.WoodenBasinBlock;
+import kogasastudio.ashihara.block.FermentationVatBlock;
+import kogasastudio.ashihara.block.LargeFermentationVatBlock;
 import kogasastudio.ashihara.block.trees.TreeGrowers;
 import kogasastudio.ashihara.block.woodcraft.*;
 import kogasastudio.ashihara.client.particles.ParticleRegistryHandler;
@@ -443,4 +447,12 @@ public class Blocks
 
     public static final DeferredBlock<LiquidBlock> SOY_MILK_BLOCK = BLOCKS.registerBlock("soy_milk", properties -> new LiquidBlock(FluidRegistryHandler.SOY_MILK.get(), properties), properties -> properties.mapColor(MapColor.SNOW).noCollision().strength(100.0F).replaceable().noLootTable());
     public static final DeferredBlock<LiquidBlock> OIL_BLOCK = BLOCKS.registerBlock("oil", properties -> new LiquidBlock(FluidRegistryHandler.OIL.get(), properties), properties -> properties.mapColor(MapColor.COLOR_YELLOW).noCollision().strength(100.0F).replaceable().noLootTable());
+
+    // 发酵容器
+    public static final DeferredBlock<Block> WOODEN_BASIN = BLOCKS.registerBlock("wooden_basin",
+        p -> new WoodenBasinBlock(p));
+    public static final DeferredBlock<Block> FERMENTATION_VAT = BLOCKS.registerBlock("fermentation_vat",
+        p -> new FermentationVatBlock(p));
+    public static final DeferredBlock<Block> LARGE_FERMENTATION_VAT = BLOCKS.registerBlock("large_fermentation_vat",
+        p -> new LargeFermentationVatBlock(p));
 }

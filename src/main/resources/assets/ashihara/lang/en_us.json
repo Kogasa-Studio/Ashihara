@@ -317,5 +317,9 @@
     "key.categories.ashihara.main": "Ashihara",
     "tooltip.ashihara.eating_mode_on": "activate",
     "tooltip.ashihara.eating_mode_off": "inactivate",
-    "tooltip.ashihara.eating_mode_toggle": "§ePress %s to %s eating mode"
+    "tooltip.ashihara.eating_mode_toggle": "§ePress %s to %s eating mode",
+
+  "block.ashihara.wooden_basin": "Wooden Basin",
+  "block.ashihara.fermentation_vat": "Fermentation Vat",
+  "block.ashihara.large_fermentation_vat": "Large Fermentation Vat"
 }
