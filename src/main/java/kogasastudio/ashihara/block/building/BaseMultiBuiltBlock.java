@@ -7,6 +7,7 @@ import kogasastudio.ashihara.item.block.FurnitureComponentItem;
 import kogasastudio.ashihara.block.furniture.SnappedUseOnContext;
 import kogasastudio.ashihara.utils.GridSnapHelper;
 import kogasastudio.ashihara.item.block.BuildingComponentItem;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -16,6 +17,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
@@ -32,6 +34,7 @@ import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -66,6 +69,36 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
             .strength(materialIn.getStrength()),
             materialIn
         );
+    }
+
+    @Override
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData, Player player)
+    {
+        BlockEntity be = level.getBlockEntity(pos);
+        if (be instanceof MultiBuiltBlockEntity mbe)
+        {
+            Vec3 vec = null;
+            if (level.isClientSide() && Minecraft.getInstance().hitResult != null)
+            {
+                vec = Minecraft.getInstance().hitResult.getLocation();
+            }
+            else
+            {
+                var hit = player.pick(player.blockInteractionRange(), 0, false);
+                if (hit instanceof BlockHitResult bhr && bhr.getBlockPos().equals(pos)) vec = bhr.getLocation();
+            }
+            if (vec != null)
+            {
+                Vec3 inBlockPos = mbe.inBlockVec(vec);
+                ComponentStateDefinition definition = mbe.getComponentByPosition(inBlockPos, MultiBuiltBlockEntity.OPCODE_READALL);
+                if (definition != null)
+                {
+                    List<ItemStack> itemList = definition.component().getDrops(definition, mbe);
+                    if (itemList != null && !itemList.getFirst().isEmpty()) return itemList.getFirst();
+                }
+            }
+        }
+        return super.getCloneItemStack(level, pos, state, includeData, player);
     }
 
     @Override
