@@ -42,7 +42,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider
+public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider, IItemHandler<PotBlockEntity>, IFluidHandler
 {
     public static final int INVENTORY_SIZE  = 4;
     public static final int OUTPUT_SIZE     = 1;
@@ -93,16 +93,12 @@ public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider
 
     // ── Capability providers ──────────────────────────────────────────────────
 
-    public static ResourceHandler<ItemResource>  getItemHandler (PotBlockEntity be, Direction side)
-    {
-        return be.output.isEmpty() ? be.inventory : be.output;
-    }
-    public static ResourceHandler<FluidResource> getFluidHandler(PotBlockEntity be, Direction side)
-    {
-        return be.fluidTank;
-    }
+    public static ResourceHandler<ItemResource>  getItemHandler (PotBlockEntity be, Direction side) {return be.output.isEmpty() ? be.inventory : be.output;}
+    public static ResourceHandler<FluidResource> getFluidHandler(PotBlockEntity be, Direction side) {return be.fluidTank;}
 
-    // ── MenuProvider ─────────────────────────────────────────────────────────
+    @Override public ResourceHandler<ItemResource> getItemResource(PotBlockEntity be, Direction direction) {return getItemHandler(be, direction);}
+    @Override public BEFluidStackHandler<?> getTank() {return this.fluidTank;}
+// ── MenuProvider ─────────────────────────────────────────────────────────
 
     @Override
     public Component getDisplayName()

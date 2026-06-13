@@ -1,9 +1,7 @@
 package kogasastudio.ashihara.registry;
 
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.block.blockentity.DirtCookStoveBE;
-import kogasastudio.ashihara.block.blockentity.MortarBE;
-import kogasastudio.ashihara.block.blockentity.PotBlockEntity;
+import kogasastudio.ashihara.block.blockentity.*;
 import kogasastudio.ashihara.item.block.FurnitureComponentItem;
 import kogasastudio.ashihara.interaction.HeatLevel;
 import net.minecraft.core.Direction;
@@ -21,17 +19,17 @@ public class Capabilities
     @SubscribeEvent
     public static void registerCaps(RegisterCapabilitiesEvent event)
     {
-        event.registerBlockEntity(
-            net.neoforged.neoforge.capabilities.Capabilities.Item.BLOCK, BlockEntities.MORTAR_BE.get(), MortarBE::getInv);
-        event.registerBlockEntity(
-            net.neoforged.neoforge.capabilities.Capabilities.Fluid.BLOCK, BlockEntities.MORTAR_BE.get(), MortarBE::getFluid);
-        event.registerBlockEntity(
-            net.neoforged.neoforge.capabilities.Capabilities.Item.BLOCK, BlockEntities.POT_BE.get(), PotBlockEntity::getItemHandler);
-        event.registerBlockEntity(
-            net.neoforged.neoforge.capabilities.Capabilities.Fluid.BLOCK, BlockEntities.POT_BE.get(), PotBlockEntity::getFluidHandler);
-        event.registerBlockEntity(
-            net.neoforged.neoforge.capabilities.Capabilities.Item.BLOCK, BlockEntities.DIRT_COOKSTOVE_BE.get(), DirtCookStoveBE::getFuelStorage);
+        event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.Item.BLOCK, BlockEntities.MORTAR_BE.get(), MortarBE::getInv);
+        event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.Fluid.BLOCK, BlockEntities.MORTAR_BE.get(), MortarBE::getFluid);
+        event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.Item.BLOCK, BlockEntities.POT_BE.get(), PotBlockEntity::getItemHandler);
+        event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.Fluid.BLOCK, BlockEntities.POT_BE.get(), PotBlockEntity::getFluidHandler);
+        event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.Item.BLOCK, BlockEntities.DIRT_COOKSTOVE_BE.get(), DirtCookStoveBE::getFuelStorage);
         event.registerBlockEntity(HEAT_LEVEL, BlockEntities.DIRT_COOKSTOVE_BE.get(), DirtCookStoveBE::getHeatLevel);
+        event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.Item.BLOCK, BlockEntities.FERMENTATION_BE.get(), FermentationBlockEntity::getItemHandler);
+        event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.Fluid.BLOCK, BlockEntities.FERMENTATION_BE.get(), FermentationBlockEntity::getFluidHandler);
+
+        event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.Item.BLOCK, BlockEntities.FERMENTATION_SUB_BE.get(), FermentationSubBlockEntity::getItemHandler);
+        event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.Fluid.BLOCK, BlockEntities.FERMENTATION_SUB_BE.get(), FermentationSubBlockEntity::getFluidHandler);
 
         event.registerItem(net.neoforged.neoforge.capabilities.Capabilities.Fluid.ITEM, FurnitureComponentItem::getFluidHandler, Items.WOODEN_BOWL_MID.get());
     }

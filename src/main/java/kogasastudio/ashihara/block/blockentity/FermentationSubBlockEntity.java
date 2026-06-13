@@ -2,16 +2,18 @@ package kogasastudio.ashihara.block.blockentity;
 
 import kogasastudio.ashihara.registry.BlockEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 
 public class FermentationSubBlockEntity extends AshiharaCommonBE
 {
-    private BlockPos mainPos = BlockPos.ZERO;
-    private VoxelShape cachedShape;
+    public BlockPos mainPos = BlockPos.ZERO;
     private int sliceIndex = -1;
 
     public FermentationSubBlockEntity(BlockPos pos, BlockState state)
@@ -22,14 +24,32 @@ public class FermentationSubBlockEntity extends AshiharaCommonBE
     public void setMainPos(BlockPos pos) { this.mainPos = pos; setChanged(); }
     public BlockPos getMainPos() { return mainPos; }
 
-    public void cacheShape(VoxelShape shape, int index)
+    public void setSliceIndex(int index) { this.sliceIndex = index; setChanged(); }
+    public int getSliceIndex() { return sliceIndex; }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static ResourceHandler<ItemResource> getItemHandler(FermentationSubBlockEntity be, Direction direction)
     {
-        this.cachedShape = shape;
-        this.sliceIndex = index;
+        if (be.getLevel() == null) return null;
+        BlockEntity ori = be.getLevel().getBlockEntity(be.getMainPos());
+        if (ori instanceof IItemHandler itemHandler)
+        {
+            return itemHandler.getItemResource(ori, direction);
+        }
+        return null;
     }
 
-    public VoxelShape getCachedShape() { return cachedShape; }
-    public int getSliceIndex() { return sliceIndex; }
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static ResourceHandler<FluidResource> getFluidHandler(FermentationSubBlockEntity be, Direction direction)
+    {
+        if (be.getLevel() == null) return null;
+        BlockEntity ori = be.getLevel().getBlockEntity(be.getMainPos());
+        if (ori instanceof IFluidHandler fluidHandler)
+        {
+            return fluidHandler.getTank();
+        }
+        return null;
+    }
 
     @Override
     protected void saveAdditional(ValueOutput output)

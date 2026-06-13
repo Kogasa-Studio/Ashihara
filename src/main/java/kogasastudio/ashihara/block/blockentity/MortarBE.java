@@ -47,7 +47,7 @@ import java.util.function.Predicate;
 import static net.minecraft.world.level.block.Block.UPDATE_ALL;
 import static net.minecraft.world.level.block.Block.popResource;
 
-public class MortarBE extends AshiharaCommonBE implements IRenderInWorldToolTip
+public class MortarBE extends AshiharaCommonBE implements IRenderInWorldToolTip, IItemHandler<MortarBE>, IFluidHandler
 {
     /*public final RenderSwitch switchFluid = new RenderAutoSwitch
     (
@@ -130,6 +130,11 @@ public class MortarBE extends AshiharaCommonBE implements IRenderInWorldToolTip
 
     public static ResourceHandler<ItemResource>  getInv  (MortarBE te, Direction side) { return te.inventory; }
     public static ResourceHandler<FluidResource> getFluid(MortarBE te, Direction side) { return te.fluidTank; }
+
+    @Override
+    public ResourceHandler<ItemResource> getItemResource(MortarBE be, Direction direction) {return this.inventory;}
+    @Override
+    public BEFluidStackHandler<?> getTank() {return this.fluidTank;}
 
     public void refreshRecipe()
     {

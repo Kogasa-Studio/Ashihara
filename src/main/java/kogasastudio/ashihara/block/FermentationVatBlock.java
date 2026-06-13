@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.block.blockentity.FermentationBlockEntity;
+import kogasastudio.ashihara.helper.InventoryHelper;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import org.jetbrains.annotations.Nullable;
 
 public class FermentationVatBlock extends FermentationBlock
@@ -99,6 +101,14 @@ public class FermentationVatBlock extends FermentationBlock
             level.playSound(player, pos, lidOpen ? SoundEvents.BARREL_OPEN : SoundEvents.BARREL_CLOSE, SoundSource.BLOCKS, 1.0F, 1.0F);
             level.setBlockAndUpdate(pos, state.setValue(HAS_LID, !lidOpen));
             return InteractionResult.SUCCESS;
+        }
+        if (level.getBlockEntity(pos) instanceof FermentationBlockEntity be)
+        {
+            if (FluidUtil.interactWithFluidHandler(player, hand, pos, be.fluid) || InventoryHelper.interactWithInventory(be.inventory, player.getItemInHand(hand), player, hand, 64))
+            {
+                be.setChanged();
+                return InteractionResult.SUCCESS;
+            }
         }
         return super.useItemOn(stack, state, level, pos, player, hand, hit);
     }

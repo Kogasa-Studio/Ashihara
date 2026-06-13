@@ -2,6 +2,7 @@ package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.block.blockentity.FermentationBlockEntity;
 import kogasastudio.ashihara.block.blockentity.FermentationSubBlockEntity;
+import kogasastudio.ashihara.helper.InventoryHelper;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -31,6 +32,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import org.jetbrains.annotations.Nullable;
 
 public class LargeFermentationVatBlock extends FermentationBlock
@@ -135,39 +138,43 @@ public class LargeFermentationVatBlock extends FermentationBlock
     // --------------------------------------------------
 
     @Override
-    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
-        Player player, InteractionHand hand, BlockHitResult hit)
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
-        if (hit.getDirection() != Direction.UP || !stack.isEmpty()) return InteractionResult.PASS;
-
-        BlockPos origin = getOrigin(level, pos);
-        if (origin == null) return InteractionResult.PASS;
-
-        BlockState originState = level.getBlockState(origin);
-        boolean newLid = !originState.getValue(HAS_LID);
-        int d = originState.getValue(FACING).get2DDataValue();
-
-        level.playSound(player, origin, newLid ? SoundEvents.BARREL_CLOSE : SoundEvents.BARREL_OPEN,
-            SoundSource.BLOCKS, 1.0F, 1.0F);
-
-        int cacheRow = (newLid ? 1 : 0) * 4 + d;
-        forEachSubBlock(origin, d, (target, ix, y, iz, dir) ->
+        if (hit.getDirection() == Direction.UP && stack.isEmpty())
         {
-            BlockState targetState = level.getBlockState(target);
-            level.setBlock(target, targetState.setValue(HAS_LID, newLid), Block.UPDATE_CLIENTS);
+            BlockPos origin = getOrigin(level, pos);
+            if (origin == null) return InteractionResult.PASS;
 
-            if (!targetState.getValue(IS_ORIGIN))
+            BlockState originState = level.getBlockState(origin);
+            boolean newLid = !originState.getValue(HAS_LID);
+            int d = originState.getValue(FACING).get2DDataValue();
+            level.playSound(player, origin, newLid ? SoundEvents.BARREL_CLOSE : SoundEvents.BARREL_OPEN, SoundSource.BLOCKS, 1.0F, 1.0F);
+            forEachSubBlock(origin, d, (target, ix, y, iz, dir) ->
             {
-                BlockEntity be = level.getBlockEntity(target);
-                if (be instanceof FermentationSubBlockEntity sub)
-                {
-                    int si = cacheSubIdx(ix, y, iz, dir);
-                    sub.cacheShape(SLICE_CACHE[cacheRow][si], si);
-                }
-            }
-        });
+                BlockState targetState = level.getBlockState(target);
+                level.setBlockAndUpdate(target, targetState.setValue(HAS_LID, newLid));
+            });
+            return InteractionResult.SUCCESS;
+        }
 
-        return InteractionResult.SUCCESS;
+        if (level.getBlockEntity(pos) instanceof FermentationBlockEntity be)
+        {
+            if (FluidUtil.interactWithFluidHandler(player, hand, pos, be.fluid) || InventoryHelper.interactWithInventory(be.inventory, player.getItemInHand(hand), player, hand, 64))
+            {
+                be.setChanged();
+                return InteractionResult.SUCCESS;
+            }
+        }
+        else if (level.getBlockEntity(pos) instanceof FermentationSubBlockEntity be)
+        {
+            if (FluidUtil.interactWithFluidHandler(player, hand, pos, FermentationSubBlockEntity.getFluidHandler(be, hit.getDirection()))
+            || InventoryHelper.interactWithInventory((ItemStacksResourceHandler) FermentationSubBlockEntity.getItemHandler(be, hit.getDirection()), player.getItemInHand(hand), player, hand, 64))
+            {
+                be.setChanged();
+                return InteractionResult.SUCCESS;
+            }
+        }
+        return super.useItemOn(stack, state, level, pos, player, hand, hit);
     }
 
     // --------------------------------------------------
@@ -199,7 +206,6 @@ public class LargeFermentationVatBlock extends FermentationBlock
         Direction facing = state.getValue(FACING);
         boolean lid = state.getValue(HAS_LID);
         int d = facing.get2DDataValue();
-        int cacheRow = (lid ? 1 : 0) * 4 + d;
 
         forEachSubBlock(pos, d, (target, ix, y, iz, dir) ->
         {
@@ -211,8 +217,7 @@ public class LargeFermentationVatBlock extends FermentationBlock
             if (be instanceof FermentationSubBlockEntity sub)
             {
                 sub.setMainPos(pos);
-                int si = cacheSubIdx(ix, y, iz, dir);
-                sub.cacheShape(SLICE_CACHE[cacheRow][si], si);
+                sub.setSliceIndex(cacheSubIdx(ix, y, iz, dir));
             }
         });
     }
@@ -262,14 +267,6 @@ public class LargeFermentationVatBlock extends FermentationBlock
         return null;
     }
 
-    @Nullable
-    public static FermentationBlockEntity getBE(Level level, BlockPos clickPos, BlockState clickState)
-    {
-        if (!(clickState.getBlock() instanceof LargeFermentationVatBlock fb)) return null;
-        BlockPos origin = fb.getOrigin(level, clickPos);
-        return origin != null ? level.getBlockEntity(origin) instanceof FermentationBlockEntity fbe ? fbe : null : null;
-    }
-
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx)
     {
@@ -284,15 +281,11 @@ public class LargeFermentationVatBlock extends FermentationBlock
         }
         if (be instanceof FermentationSubBlockEntity sub)
         {
-            VoxelShape cached = sub.getCachedShape();
-            if (cached != null) return cached;
             int si = sub.getSliceIndex();
             if (si >= 0)
             {
                 int row = (state.getValue(HAS_LID) ? 1 : 0) * 4 + state.getValue(FACING).get2DDataValue();
-                VoxelShape rebuilt = SLICE_CACHE[row][si];
-                sub.cacheShape(rebuilt, si);
-                return rebuilt;
+                return SLICE_CACHE[row][si];
             }
         }
         return Shapes.block();
