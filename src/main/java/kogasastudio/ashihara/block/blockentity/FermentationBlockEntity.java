@@ -4,9 +4,16 @@ import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
 import kogasastudio.ashihara.client.models.geo.FermentationDisplayModel;
 import kogasastudio.ashihara.inventory.BEFluidStackHandler;
 import kogasastudio.ashihara.inventory.BEItemStackHandler;
+import kogasastudio.ashihara.inventory.container.FermentationMenu;
 import kogasastudio.ashihara.registry.BlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
@@ -14,12 +21,25 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.item.ItemResource;
+import org.jspecify.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class FermentationBlockEntity extends AshiharaCommonBE implements IItemHandler<FermentationBlockEntity>, IFluidHandler
+public class FermentationBlockEntity extends AshiharaCommonBE implements MenuProvider, IItemHandler<FermentationBlockEntity>, IFluidHandler
 {
+    @Override
+    public Component getDisplayName()
+    {
+        return Component.empty();
+    }
+
+    @Override
+    public @Nullable AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player)
+    {
+        return new FermentationMenu(containerId, inventory, this, new SimpleContainerData(2));
+    }
+
     public enum Size
     {
         BASIN(1), VAT(1), LARGE_VAT(2);

@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.block.blockentity.FermentationBlockEntity;
+import kogasastudio.ashihara.block.blockentity.PotBlockEntity;
 import kogasastudio.ashihara.helper.InventoryHelper;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import net.minecraft.core.BlockPos;
@@ -95,6 +96,14 @@ public class FermentationVatBlock extends FermentationBlock
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
+        if (player.isShiftKeyDown() && stack.isEmpty())
+        {
+            if (!level.isClientSide() && level.getBlockEntity(pos) instanceof FermentationBlockEntity be)
+            {
+                player.openMenu(be, buf -> buf.writeBlockPos(pos));
+            }
+            return InteractionResult.SUCCESS;
+        }
         if (hit.getDirection() == Direction.UP && stack.isEmpty())
         {
             boolean lidOpen = state.getValue(HAS_LID);

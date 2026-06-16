@@ -3,19 +3,25 @@ package kogasastudio.ashihara.client.gui3d.components;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import kogasastudio.ashihara.client.gui3d.ContainerScreen3D;
+import kogasastudio.ashihara.client.gui3d.debug.Gui3dDebugProjector;
 import kogasastudio.ashihara.client.gui3d.interaction.HitPolicy;
 import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
 import kogasastudio.ashihara.client.gui3d.util.OBB;
 import kogasastudio.ashihara.client.models.geo.SelectionFrameModel;
 import kogasastudio.ashihara.client.models.geo.SimpleInternalControlGeoModel;
 import kogasastudio.ashihara.client.render.state.GUI3DComponentRenderState;
+import kogasastudio.ashihara.helper.MathHelper;
 import kogasastudio.ashihara.helper.RenderHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import java.util.Collections;
@@ -42,7 +48,9 @@ public class ItemSlotComponent extends ModelComponent implements ISelectable
 {
     /** 渲染 3D 物品时的缩放系数（在骨骼局部空间中）。可在实例上直接赋值覆盖。 */
     public float itemRenderScale = 0.45f;
+    public boolean drawItemCount = true;
 
+    protected BiConsumer<PoseStack, OBB> itemTranslate; // 从 OBB 转换到物品渲染位置的变换（局部空间）
     protected final String boneName;
     protected final Slot menuSlot;
     protected final SelectionFrameComponent selectionFrame;
@@ -84,16 +92,21 @@ public class ItemSlotComponent extends ModelComponent implements ISelectable
         return boxes.isEmpty() ? Collections.emptyList() : boxes;
     }
 
+    public void withItemTranslate(BiConsumer<PoseStack, OBB> itemTranslate)
+    {
+        this.itemTranslate = itemTranslate;
+    }
+
     public BiConsumer<PoseStack, OBB> getItemTranslate()
     {
-        return (poseStack, obb) ->
+        return this.itemTranslate == null ? (poseStack, obb) ->
         {
             Vector3f t = new Vector3f(obb.maxXYZ()).min(obb.minXYZ()).mul(1f);
             poseStack.translate(t.x()+2.5/16, t.y()+2.5/16, t.z()+2.5/16);
             poseStack.mulPose(Axis.YP.rotationDegrees(-90f));
             poseStack.mulPose(Axis.XP.rotationDegrees(-90f));
             poseStack.scale(-this.itemRenderScale, this.itemRenderScale, this.itemRenderScale);
-        };
+        } : this.itemTranslate;
     }
 
     @Override
@@ -147,6 +160,19 @@ public class ItemSlotComponent extends ModelComponent implements ISelectable
                 0
             );
             poseStack.popPose();
+
+            Vector3f obbCenter = Gui3dDebugProjector.getProjectionCenter(obb, this.screen);
+            if (obbCenter == null) return;
+
+            if (this.drawItemCount && MathHelper.distance(new Vector2f(obbCenter.x, obbCenter.y), new Vector2f(mouseX, mouseY)) < 20f)
+            {
+                poseStack.pushPose();
+                poseStack.scale(1f, 1f, -1f);
+                poseStack.translate((this.screen.width) / -2f + obbCenter.x, (this.screen.height) / -2f + obbCenter.y, 64f);
+                poseStack.scale(this.itemRenderScale*2f, this.itemRenderScale*2f, this.itemRenderScale*2f);
+                submitNodeCollector.submitText(poseStack, 0f, 0f, Language.getInstance().getVisualOrder(FormattedText.of(String.valueOf(stack.count()))), true, Font.DisplayMode.NORMAL, 15728880, 0xffffffff, 0, 0);
+                poseStack.popPose();
+            }
         }));
     }
 

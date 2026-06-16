@@ -14,8 +14,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import org.joml.Matrix4f;
 
-import java.util.List;
-
 /**
  * 土锅 3D 容器屏幕。
  *
@@ -36,12 +34,6 @@ public class PotScreen3D extends ContainerScreen3D<PotScreen>
     protected RecipeWarningComponent warningComponent;
     protected PotMenu menu;
     protected Inventory playerInventory;
-    private static final int INV_BG_WIDTH = 176;
-    private static final int INV_BG_HEIGHT = 90;
-    private static final int BG_OFFSET_X = 0;
-    private static final int BG_OFFSET_Y = 39;
-    private static final float u1 = INV_BG_WIDTH / 256f, v1 = INV_BG_HEIGHT / 256f;
-    private int x0, y0, x1, y1;
 
     /**
      * 由 MenuScreens 工厂调用（MenuType 绑定时传入 Inventory 和 title，此处忽略两者）。
@@ -57,10 +49,6 @@ public class PotScreen3D extends ContainerScreen3D<PotScreen>
     public void init()
     {
         this.clearComponents();
-        x0 = this.width / 2 - INV_BG_WIDTH / 2 + BG_OFFSET_X;
-        x1 = this.width / 2 + INV_BG_WIDTH / 2 + BG_OFFSET_X;
-        y0 = this.height / 2 - INV_BG_HEIGHT / 2 + BG_OFFSET_Y;
-        y1 = this.height / 2 + INV_BG_HEIGHT / 2 + BG_OFFSET_Y;
 
         // 主模型（土锅 + 锅盖）
         this.potModelComponent = new PotModelComponent(
@@ -82,6 +70,7 @@ public class PotScreen3D extends ContainerScreen3D<PotScreen>
 
         // 流体槽位，绑定到 fluid_display 骨骼
         FluidSlotComponent fluidSlot = new FluidSlotComponent(this.potModelComponent.getModel(), "fluid_display", this.menu.blockEntity.getBlockPos(), this);
+        fluidSlot.withTank(() -> this.menu.blockEntity.getTank());
         this.potModelComponent.addChild(fluidSlot);
 
         this.bubbleComponent = new ToastComponent(this.bubbleModel, true, new Matrix4f().scale(-16f, -16f, 16f).translate(-1.5f, 1.0f, 0));

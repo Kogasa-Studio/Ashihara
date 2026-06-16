@@ -14,6 +14,12 @@ public class PotScreen extends WrappedContainerScreen3D<PotMenu>
     }
 
     @Override
+    public Component getTitle()
+    {
+        return Component.empty();
+    }
+
+    @Override
     public ContainerScreen3D<?> getWrappedScreen()
     {
         return this.potScreen3D;

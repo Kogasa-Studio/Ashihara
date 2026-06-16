@@ -12,7 +12,6 @@ import kogasastudio.ashihara.client.render.state.GUI3DComponentRenderState;
 import kogasastudio.ashihara.helper.MathHelper;
 import kogasastudio.ashihara.helper.RenderHelper;
 import kogasastudio.ashihara.inventory.BEFluidStackHandler;
-import kogasastudio.ashihara.inventory.container.PotMenu;
 import kogasastudio.ashihara.network.FluidSlotClickPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -34,6 +33,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * 流体槽位组件。
@@ -43,6 +43,7 @@ import java.util.List;
  */
 public class FluidSlotComponent extends ModelComponent implements ISelectable
 {
+    public Supplier<BEFluidStackHandler<?>> fluidTank;
     protected final String boneName;
     protected final BlockPos blockEntityPos;
     protected final ContainerScreen3D<?> containerScreen3D;
@@ -191,6 +192,12 @@ public class FluidSlotComponent extends ModelComponent implements ISelectable
 
     // ── 工具方法 ──────────────────────────────────────────────────────────────
 
+    public FluidSlotComponent withTank(Supplier<BEFluidStackHandler<?>> fluidTank)
+    {
+        this.fluidTank = fluidTank;
+        return this;
+    }
+
     private ItemStack getCarriedItem()
     {
         return this.containerScreen3D.getContainerScreen().getMenu().getCarried();
@@ -203,10 +210,6 @@ public class FluidSlotComponent extends ModelComponent implements ISelectable
 
     private BEFluidStackHandler<?> getTank()
     {
-        if (this.containerScreen3D.getContainerScreen().getMenu() instanceof PotMenu potMenu)
-        {
-            return potMenu.blockEntity.fluidTank;
-        }
-        return null;
+        return this.fluidTank == null ? null : this.fluidTank.get();
     }
 }

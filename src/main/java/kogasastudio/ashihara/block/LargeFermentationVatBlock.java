@@ -140,6 +140,22 @@ public class LargeFermentationVatBlock extends FermentationBlock
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
+        if (player.isShiftKeyDown() && stack.isEmpty())
+        {
+            if (!level.isClientSide())
+            {
+                BlockEntity be = level.getBlockEntity(pos);
+                if (be instanceof FermentationSubBlockEntity suBe)
+                {
+                    be = level.getBlockEntity(suBe.getMainPos());
+                }
+                if (be instanceof FermentationBlockEntity fbe)
+                {
+                    player.openMenu(fbe, buf -> buf.writeBlockPos(fbe.getBlockPos()));
+                }
+            }
+            return InteractionResult.SUCCESS;
+        }
         if (hit.getDirection() == Direction.UP && stack.isEmpty())
         {
             BlockPos origin = getOrigin(level, pos);

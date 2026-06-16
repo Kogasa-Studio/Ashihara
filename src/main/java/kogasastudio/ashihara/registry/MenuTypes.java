@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.registry;
 
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.inventory.container.FermentationMenu;
 import kogasastudio.ashihara.inventory.container.PotMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.MenuType;
@@ -15,11 +16,10 @@ import java.util.function.Supplier;
  */
 public class MenuTypes
 {
-    public static final DeferredRegister<MenuType<?>> MENU_TYPES =
-            DeferredRegister.create(Registries.MENU, Ashihara.MODID);
+    public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(Registries.MENU, Ashihara.MODID);
 
     /** 土锅容器菜单类型。客户端通过 MenuScreens 绑定到 PotScreen3D。 */
-    public static final Supplier<MenuType<PotMenu>> POT_MENU =
-            MENU_TYPES.register("pot_menu", () -> IMenuTypeExtension.create(PotMenu::new));
-}
+    public static final Supplier<MenuType<PotMenu>> POT_MENU = MENU_TYPES.register("pot_menu", () -> IMenuTypeExtension.create(PotMenu::new));
 
+    public static final Supplier<MenuType<FermentationMenu>> FERMENTATION_MENU = MENU_TYPES.register("fermentation_menu", () -> IMenuTypeExtension.create(FermentationMenu::new));
+}

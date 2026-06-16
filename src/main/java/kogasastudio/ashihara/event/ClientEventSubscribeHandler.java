@@ -3,6 +3,7 @@ package kogasastudio.ashihara.event;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.client.gui3d.FermentationScreen;
 import kogasastudio.ashihara.network.EatingModePayload;
 import kogasastudio.ashihara.registry.*;
 import kogasastudio.ashihara.utils.EatingModeHelper;
@@ -106,6 +107,7 @@ public class ClientEventSubscribeHandler
     public static void onRegisterMenuScreens(RegisterMenuScreensEvent event)
     {
         event.register(MenuTypes.POT_MENU.get(), PotScreen::new);
+        event.register(MenuTypes.FERMENTATION_MENU.get(), FermentationScreen::new);
     }
 
     // 注册客户端扩展（流体、装备模型等）

@@ -33,6 +33,14 @@ public class WoodenBasinBlock extends FermentationBlock
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
     {
+        if (player.isShiftKeyDown() && stack.isEmpty())
+        {
+            if (!level.isClientSide() && level.getBlockEntity(pos) instanceof FermentationBlockEntity be)
+            {
+                player.openMenu(be, buf -> buf.writeBlockPos(pos));
+            }
+            return InteractionResult.SUCCESS;
+        }
         if (level.getBlockEntity(pos) instanceof FermentationBlockEntity be)
         {
             if (FluidUtil.interactWithFluidHandler(player, hand, pos, be.fluid) || InventoryHelper.interactWithInventory(be.inventory, player.getItemInHand(hand), player, hand, 64))
