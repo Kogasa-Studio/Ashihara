@@ -60,7 +60,6 @@ public class QuarterOrientedFloor extends AdditionalComponent
     public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)
     {
         Direction direction = context.getHorizontalDirection();
-        direction = direction;
         Vec3 inBlockPos = beIn.inBlockVec(context.getClickLocation());
 
         float r = switch (direction)

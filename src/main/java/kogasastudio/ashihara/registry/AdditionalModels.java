@@ -112,13 +112,18 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation WHITE_RAFTER_PLANKS_QUARTER = register("block/components/white_rafter_planks_quarter");
 
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF = register("block/components/cypress_roof");
+    public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_1_4 = register("block/components/cypress_roof_1_4");
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_CORNER = register("block/components/cypress_roof_corner");
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_EDGE = register("block/components/cypress_roof_edge");
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_EDGE_CORNER = register("block/components/cypress_roof_edge_corner");
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_EDGE_LAYER_BOTTOM = register("block/components/cypress_roof_edge_layer_bottom");
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_EDGE_LAYER_TOP = register("block/components/cypress_roof_edge_layer_top");
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_HALF = register("block/components/cypress_roof_half");
+    public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_HALF_1_2 = register("block/components/cypress_roof_half_1_2");
+    public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_HALF_1_1 = register("block/components/cypress_roof_half_1_1");
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_QUARTER = register("block/components/cypress_roof_quarter");
+    public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_QUARTER_1_2 = register("block/components/cypress_roof_quarter_1_2");
+    public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_QUARTER_1_1 = register("block/components/cypress_roof_quarter_1_1");
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_QUARTER_CORNER = register("block/components/cypress_roof_quarter_corner");
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_TOP = register("block/components/cypress_roof_top");
 

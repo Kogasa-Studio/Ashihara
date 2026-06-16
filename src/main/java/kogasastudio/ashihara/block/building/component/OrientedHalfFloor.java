@@ -1,7 +1,7 @@
 package kogasastudio.ashihara.block.building.component;
 
-import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
+import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.BuildingComponents;
 import kogasastudio.ashihara.utils.BuildingComponentModelResourceLocation;
@@ -17,13 +17,13 @@ import java.util.function.Supplier;
 
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
 
-public class OrientedFloor extends AdditionalComponent
+public class OrientedHalfFloor extends AdditionalComponent
 {
     private final BuildingComponentModelResourceLocation MODEL;
 
-    private VoxelShape SHAPE;
+    protected VoxelShape SHAPE;
 
-    public OrientedFloor
+    public OrientedHalfFloor
     (
         String idIn,
         BuildingComponents.Type typeIn,
@@ -38,7 +38,7 @@ public class OrientedFloor extends AdditionalComponent
         this.SHAPE = shape;
     }
 
-    public OrientedFloor
+    public OrientedHalfFloor
     (
         String idIn,
         BuildingComponents.Type typeIn,
@@ -53,7 +53,7 @@ public class OrientedFloor extends AdditionalComponent
 
     private void initShape()
     {
-        this.SHAPE = Shapes.box(0, 0, 0, 1, 0.25, 1);
+        this.SHAPE = Shapes.box(0, 0, 0.25, 1, 0.25625, 0.75);
     }
 
     @Override
@@ -69,22 +69,37 @@ public class OrientedFloor extends AdditionalComponent
             case EAST -> 90;
             default -> 180;
         };
+        double x;
         double y = inBlockPos.y();
+        double z;
 
         int floor = (int) Math.clamp(Math.floor(y * 4), 0, 3);
+        if (context.getClickedFace() == Direction.DOWN) floor = Math.clamp(floor - 1, 0, 3);
 
         y = XTP((float) (floor * 4));
+        if (direction.getAxis().equals(Direction.Axis.Z))
+        {
+            x = 0;
+            if (inBlockPos.z() == XTP(8)) z = context.getClickedFace() == Direction.NORTH ? XTP(-4) : XTP(4);
+            else z = inBlockPos.z() < XTP(8) ? XTP(-4) : XTP(4);
+        }
+        else
+        {
+            z = 0;
+            if (inBlockPos.x() == XTP(8)) x = context.getClickedFace() == Direction.WEST ? XTP(-4) : XTP(4);
+            else x = inBlockPos.x() <= XTP(8) ? XTP(-4) : XTP(4);
+        }
 
         Occupation occupation = Occupation.CENTER_ALL.get(floor);
 
         VoxelShape shape = SHAPE;
         shape = ShapeHelper.rotateShape(shape, -r);
-        shape = ShapeHelper.offsetShape(shape, 0, y, 0);
+        shape = ShapeHelper.offsetShape(shape, x, y, z);
 
         return new ComponentStateDefinition
         (
             BuildingComponents.get(this.id),
-            new Vec3(0, y, 0),
+            new Vec3(x, y, z),
             0, r, 0,
             shape,
             MODEL,
