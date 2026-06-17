@@ -6,6 +6,7 @@ import kogasastudio.ashihara.inventory.BEFluidStackHandler;
 import kogasastudio.ashihara.inventory.BEItemStackHandler;
 import kogasastudio.ashihara.inventory.container.FermentationMenu;
 import kogasastudio.ashihara.registry.BlockEntities;
+import kogasastudio.ashihara.block.LargeFermentationVatBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -82,6 +83,16 @@ public class FermentationBlockEntity extends AshiharaCommonBE implements MenuPro
 
     @Override public BEFluidStackHandler<?> getTank() {return this.fluid;}
     @Override public ResourceHandler<ItemResource> getItemResource(FermentationBlockEntity be, Direction direction) {return getItemHandler(be, direction);}
+
+    @Override
+    public void setRemoved()
+    {
+        super.setRemoved();
+        if (this.level != null && !this.level.isClientSide() && this.size == Size.LARGE_VAT)
+        {
+            LargeFermentationVatBlock.removeAllSubBlocks(this.level, this.worldPosition, this.getBlockState());
+        }
+    }
 
     public String getSizeId()
     {

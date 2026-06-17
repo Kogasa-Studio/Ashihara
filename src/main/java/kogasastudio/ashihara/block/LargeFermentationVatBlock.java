@@ -111,7 +111,7 @@ public class LargeFermentationVatBlock extends FermentationBlock
         void accept(BlockPos target, int ix, int y, int iz, int dirIdx);
     }
 
-    private void forEachSubBlock(BlockPos origin, int dirIdx, SubBlockAction action)
+    private static void forEachSubBlock(BlockPos origin, int dirIdx, SubBlockAction action)
     {
         int sx = X_SIGN[dirIdx], sz = Z_SIGN[dirIdx];
         for (int y = 0; y < 2; y++)
@@ -267,6 +267,18 @@ public class LargeFermentationVatBlock extends FermentationBlock
         forEachSubBlock(origin, d, (target, ix, y, iz, dir) ->
         {
             level.destroyBlock(target, drop);
+        });
+    }
+
+    // 当主BE被移除时，清除所有子块
+    public static void removeAllSubBlocks(Level level, BlockPos origin, BlockState state)
+    {
+        if (level.isClientSide()) return;
+        int d = state.getValue(FACING).get2DDataValue();
+        forEachSubBlock(origin, d, (target, ix, y, iz, dir) ->
+        {
+            if (ix == 0 && y == 0 && iz == 0) return;
+            level.removeBlock(target, false);
         });
     }
 

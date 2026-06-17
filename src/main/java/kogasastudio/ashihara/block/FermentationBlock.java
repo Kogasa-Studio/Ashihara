@@ -36,8 +36,7 @@ public abstract class FermentationBlock extends Block implements EntityBlock, Fe
             .mapColor(MapColor.WOOD)
             .strength(2.5F)
             .sound(SoundType.WOOD)
-            .noOcclusion()
-            .dynamicShape());
+            .noOcclusion());
         this.size = size;
         registerDefaultState(stateDefinition.any().setValue(HAS_LID, true));
     }

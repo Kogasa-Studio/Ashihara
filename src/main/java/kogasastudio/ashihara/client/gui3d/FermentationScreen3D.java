@@ -30,11 +30,11 @@ public class FermentationScreen3D extends ContainerScreen3D<FermentationScreen>
 
     private static final BiConsumer<PoseStack, OBB> itemTranslate = (poseStack, obb) ->
     {
-        Vector3f t = new Vector3f(obb.maxXYZ()).min(obb.minXYZ()).mul(1f);
+        Vector3f t = new Vector3f(obb.maxXYZ()).min(obb.minXYZ());
         poseStack.translate(t.x()+1.5/16, t.y()+1.5/16, t.z()+1.5/16);
         poseStack.mulPose(Axis.YP.rotationDegrees(0f));
         poseStack.mulPose(Axis.XP.rotationDegrees(0f));
-        poseStack.scale(0.25f, 0.25f, 0.25f);
+        poseStack.scale(0.25f, 0.25f, -0.25f);
     };
 
     public FermentationScreen3D(FermentationScreen containerScreen, FermentationMenu menu, Inventory playerInventory, Component title)
