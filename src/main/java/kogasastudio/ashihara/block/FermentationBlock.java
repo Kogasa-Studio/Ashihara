@@ -12,6 +12,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -36,6 +38,7 @@ public abstract class FermentationBlock extends Block implements EntityBlock, Fe
             .mapColor(MapColor.WOOD)
             .strength(2.5F)
             .sound(SoundType.WOOD)
+            .forceSolidOn()
             .noOcclusion());
         this.size = size;
         registerDefaultState(stateDefinition.any().setValue(HAS_LID, true));
@@ -88,5 +91,18 @@ public abstract class FermentationBlock extends Block implements EntityBlock, Fe
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
         return new FermentationBlockEntity(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
+    {
+        return (lvl, pos, st, be) ->
+        {
+            if (be instanceof FermentationBlockEntity fbe)
+            {
+                FermentationBlockEntity.serverTick(lvl, pos, st, fbe);
+            }
+        };
     }
 }

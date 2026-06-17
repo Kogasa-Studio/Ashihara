@@ -28,18 +28,18 @@ public class FermentationSubBlockEntity extends AshiharaCommonBE
     public int getSliceIndex() { return sliceIndex; }
 
     @Override
-    public void setRemoved()
+    public void preRemoveSideEffects(BlockPos pos, BlockState state)
     {
         if (this.level != null && !this.level.isClientSide() && !this.mainPos.equals(BlockPos.ZERO))
         {
             BlockEntity be = this.level.getBlockEntity(this.mainPos);
             if (be instanceof FermentationBlockEntity mbe && !mbe.isRemoved())
             {
-                mbe.setRemoved();
+                mbe.preRemoveSideEffects(pos, state);
                 this.level.removeBlock(this.mainPos, false);
             }
         }
-        super.setRemoved();
+        super.preRemoveSideEffects(pos, state);
     }
 
     public static ResourceHandler<ItemResource> getItemHandler(FermentationSubBlockEntity be, Direction direction)

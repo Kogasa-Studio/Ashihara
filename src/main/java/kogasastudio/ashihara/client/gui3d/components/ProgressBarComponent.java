@@ -17,7 +17,7 @@ public class ProgressBarComponent extends ModelComponent
     protected final ProgressBarModel model;
     public Supplier<Float> progress;
     @Nullable
-    public Supplier<OBB> obbSupplier;
+    public Supplier<Matrix4f> additionalTransform;
 
     public ProgressBarComponent(ProgressBarModel model)
     {
@@ -25,15 +25,15 @@ public class ProgressBarComponent extends ModelComponent
         this.model = model;
     }
 
-    public ProgressBarComponent withOBB(Supplier<OBB> obbSupplier)
-    {
-        this.obbSupplier = obbSupplier;
-        return this;
-    }
-
     public ProgressBarComponent withProgress(Supplier<Float> progress)
     {
         this.progress = progress;
+        return this;
+    }
+
+    public ProgressBarComponent withTransform(Supplier<Matrix4f> transform)
+    {
+        this.additionalTransform = transform;
         return this;
     }
 
@@ -50,29 +50,19 @@ public class ProgressBarComponent extends ModelComponent
         if (!this.renderModel) return;
         if (this.progress != null) this.model.setProgress(this.progress.get());
 
-        if (this.obbSupplier != null)
+        output.add(new GUI3DComponentRenderState((poseStack, submitNodeCollector) ->
         {
-            OBB obb = this.obbSupplier.get();
-            if (obb != null)
-            {
-                output.add(new GUI3DComponentRenderState((poseStack, submitNodeCollector) ->
-                {
-                    poseStack.pushPose();
-                    poseStack.last().pose().set(obb.pose());
-                    Vector3f t = new Vector3f(obb.maxXYZ()).min(obb.minXYZ());
-                    poseStack.translate(t.x(), t.y(), t.z());
-                    this.model.RENDERER.performRenderPass(
-                        this.model, null,
-                        poseStack, submitNodeCollector,
-                        new CameraRenderState(),
-                        15728880,
-                        partialTick
-                    );
-                    poseStack.popPose();
-                }, true));
-                return;
-            }
-        }
+            poseStack.pushPose();
+            if (this.additionalTransform != null && this.additionalTransform.get() != null) poseStack.last().pose().set(this.additionalTransform.get());
+            this.model.RENDERER.performRenderPass(
+                this.model, null,
+                poseStack, submitNodeCollector,
+                new CameraRenderState(),
+                15728880,
+                partialTick
+            );
+            poseStack.popPose();
+        }, true));
 
         super.collectSelfRenderStates(output, mouseX, mouseY, partialTick);
     }

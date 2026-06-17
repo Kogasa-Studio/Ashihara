@@ -272,6 +272,8 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.CUCUMBER.get());
                                         output.accept(Items.TOMATO.get());
                                         output.accept(Items.SOY_BEAN.get());
+                                        output.accept(Items.SOAKED_SOY_BEAN.get());
+                                        output.accept(Items.BOILED_SOY_BEAN.get());
                                         output.accept(Items.TOFU.get());
                                         output.accept(Items.COTTON.get());
                                         output.accept(Items.SWEET_POTATO.get());

@@ -449,10 +449,7 @@ public class Blocks
     public static final DeferredBlock<LiquidBlock> OIL_BLOCK = BLOCKS.registerBlock("oil", properties -> new LiquidBlock(FluidRegistryHandler.OIL.get(), properties), properties -> properties.mapColor(MapColor.COLOR_YELLOW).noCollision().strength(100.0F).replaceable().noLootTable());
 
     // 发酵容器
-    public static final DeferredBlock<Block> WOODEN_BASIN = BLOCKS.registerBlock("wooden_basin",
-        p -> new WoodenBasinBlock(p));
-    public static final DeferredBlock<Block> FERMENTATION_VAT = BLOCKS.registerBlock("fermentation_vat",
-        p -> new FermentationVatBlock(p));
-    public static final DeferredBlock<Block> LARGE_FERMENTATION_VAT = BLOCKS.registerBlock("large_fermentation_vat",
-        p -> new LargeFermentationVatBlock(p));
+    public static final DeferredBlock<Block> WOODEN_BASIN = BLOCKS.registerBlock("wooden_basin", p -> new WoodenBasinBlock(p));
+    public static final DeferredBlock<Block> FERMENTATION_VAT = BLOCKS.registerBlock("fermentation_vat", p -> new FermentationVatBlock(p));
+    public static final DeferredBlock<Block> LARGE_FERMENTATION_VAT = BLOCKS.registerBlock("large_fermentation_vat", p -> new LargeFermentationVatBlock(p));
 }

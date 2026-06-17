@@ -91,10 +91,10 @@ public class PotScreen3D extends ContainerScreen3D<PotScreen>
         this.bubbleComponent.addChild(fluid_display);
 
         ProgressBarComponent progress = new ProgressBarComponent(this.progressBarModel)
-            .withOBB(() ->
+            .withTransform(() ->
             {
                 var boxes = this.bubbleComponent.getBoneCollisionBoxes("item_slot_0");
-                return boxes.isEmpty() ? null : boxes.getFirst();
+                return boxes.isEmpty() ? null : RenderHelper.getOBBCenterTransform(boxes.getFirst(), 0);
             })
             .withProgress(() -> this.menu.blockEntity.getCookProgress());
         this.bubbleComponent.addChild(progress);

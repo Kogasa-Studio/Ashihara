@@ -108,6 +108,8 @@ public class Items
     public static final DeferredItem<? extends Item> RICE_POWDER = ITEMS.registerItem("rice_powder", AshiharaItem::new);
     public static final DeferredItem<? extends Item> BEAN_POWDER = ITEMS.registerItem("bean_powder", AshiharaItem::new);
     public static final DeferredItem<? extends Item> SOY_BEAN = ITEMS.registerItem("soy_bean", properties -> new BlockItem(Blocks.SOY_BEANS.get(), properties.useItemDescriptionPrefix()));
+    public static final DeferredItem<? extends Item> SOAKED_SOY_BEAN = ITEMS.registerItem("soaked_soy_bean", properties -> new EasyFood(1, properties));
+    public static final DeferredItem<? extends Item> BOILED_SOY_BEAN = ITEMS.registerItem("boiled_soy_bean", properties -> new EasyFood(2, properties));
     public static final DeferredItem<? extends Item> COTTON = ITEMS.registerItem("cotton", AshiharaItem::new);
     public static final DeferredItem<? extends Item> TEA_LEAF = ITEMS.registerItem("tea_leaf", AshiharaItem::new);
     public static final DeferredItem<? extends Item> DRIED_TEA_LEAF = ITEMS.registerItem("dried_tea_leaf", AshiharaItem::new);

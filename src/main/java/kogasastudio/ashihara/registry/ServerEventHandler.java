@@ -13,6 +13,7 @@ public class ServerEventHandler
         event.sendRecipes(
             RecipeTypes.MORTAR.get(),
             RecipeTypes.POT.get(),
+            RecipeTypes.FERMENTATION.get(),
             RecipeTypes.CUTTING_BOARD.get()
         );
     }

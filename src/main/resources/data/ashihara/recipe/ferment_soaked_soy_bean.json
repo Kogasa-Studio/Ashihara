@@ -1,0 +1,24 @@
+{
+  "type": "ashihara:fermentation",
+  "id": "ashihara:ferment_soaked_soy_bean",
+  "input_items": [
+    {
+      "ingredient": "ashihara:soy_bean",
+      "count": 1
+    }
+  ],
+  "input_fluids": [
+    {
+      "id": "minecraft:water",
+      "amount": 10
+    }
+  ],
+  "min_fluid_amount": 100,
+  "need_size": ["basin"],
+  "output": [
+    {
+      "id": "ashihara:soaked_soy_bean"
+    }
+  ],
+  "time": 200
+}

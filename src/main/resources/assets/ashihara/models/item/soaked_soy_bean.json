@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "ashihara:item/soaked_soy_bean"
+  }
+}
+

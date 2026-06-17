@@ -2,6 +2,7 @@ package kogasastudio.ashihara.registry;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.interaction.recipes.CuttingBoardRecipe;
+import kogasastudio.ashihara.interaction.recipes.FermentationRecipe;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
 import kogasastudio.ashihara.interaction.recipes.PotRecipe;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -25,6 +26,9 @@ public class RecipeSerializers
 
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<PotRecipe>> POT =
         SERIALIZER.register("pot", () -> PotRecipe.SERIALIZER);
+
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FermentationRecipe>> FERMENTATION =
+        SERIALIZER.register("fermentation", () -> FermentationRecipe.SERIALIZER);
 
     /*public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<MillRecipe>> MILL =
         SERIALIZER.register("mill", () -> MillRecipe.SERIALIZER);*/

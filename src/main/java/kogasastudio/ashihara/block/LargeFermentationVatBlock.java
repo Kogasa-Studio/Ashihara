@@ -89,9 +89,8 @@ public class LargeFermentationVatBlock extends FermentationBlock
 
     public LargeFermentationVatBlock(BlockBehaviour.Properties properties)
     {
-        super(properties, FermentationBlockEntity.Size.LARGE_VAT);
-        registerDefaultState(stateDefinition.any()
-            .setValue(HAS_LID, true).setValue(FACING, Direction.NORTH).setValue(IS_ORIGIN, false));
+        super(properties.dynamicShape(), FermentationBlockEntity.Size.LARGE_VAT);
+        registerDefaultState(stateDefinition.any().setValue(HAS_LID, true).setValue(FACING, Direction.NORTH).setValue(IS_ORIGIN, false));
     }
 
     @Override

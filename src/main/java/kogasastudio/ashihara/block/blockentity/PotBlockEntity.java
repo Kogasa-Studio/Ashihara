@@ -231,7 +231,7 @@ public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider, II
             ItemStack remainder = this.output.insert(outStack, true);
             if (!remainder.isEmpty())
             {
-                issues.add(Component.translatable("tooltip.ashihara.pot.output_full"));
+                issues.add(Component.translatable("tooltip.ashihara.recipe.output_full"));
             }
         }
 
@@ -242,7 +242,7 @@ public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider, II
             FluidStack required  = recipe.getFluidCost().copyWithAmount(recipe.getFluidCost().getAmount() * p);
             if (!tankFluid.is(required.getFluid()) || tankFluid.getAmount() < required.getAmount())
             {
-                issues.add(Component.translatable("tooltip.ashihara.pot.need_fluid", required.getHoverName(), required.getAmount()));
+                issues.add(Component.translatable("tooltip.ashihara.recipe.need_fluid", required.getHoverName(), required.getAmount()));
             }
         }
 
@@ -267,7 +267,7 @@ public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider, II
             }
             else if (produced > space)
             {
-                issues.add(Component.translatable("tooltip.ashihara.pot.fluid_output_full", produced - space));
+                issues.add(Component.translatable("tooltip.ashihara.recipe.fluid_output_full", produced - space));
             }
         }
 
