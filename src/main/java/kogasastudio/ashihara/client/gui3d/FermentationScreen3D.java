@@ -48,7 +48,7 @@ public class FermentationScreen3D extends ContainerScreen3D<FermentationScreen>
     public void init()
     {
         this.bg = new ModelComponent(this.BG_MODEL, true, new Matrix4f().translate(32f, 0f, 64f).scale(-64f, -64f, 64f));
-        this.vat = new ModelComponent(this.VAT_MODEL, true, new Matrix4f().scale(64f, -64f, 64f).translate(-1f, 0f, 0f));
+        this.vat = new ModelComponent(this.VAT_MODEL, true, new Matrix4f().scale(64f, -64f, 64f).translate(-0.75f, 0f, 0f));
         for (int i = 0; i < this.menu.blockEntity.inventory.size(); i++)
         {
             ItemSlotComponent slot = new ItemSlotComponent(this.vat.getModel(), "item_slot_" + i, this.menu.getSlot(i));
@@ -69,6 +69,6 @@ public class FermentationScreen3D extends ContainerScreen3D<FermentationScreen>
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a)
     {
         super.extractRenderState(graphics, mouseX, mouseY, a);
-        //graphics.blit(INV_BG, x0, y0, x1, y1, 0, u1, 0, v1);
+        graphics.blit(INV_BG, x0, y0, x1, y1, 0, u1, 0, v1);
     }
 }

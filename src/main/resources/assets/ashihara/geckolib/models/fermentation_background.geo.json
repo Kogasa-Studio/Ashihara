@@ -4,11 +4,11 @@
 		{
 			"description": {
 				"identifier": "geometry.unknown",
-				"texture_width": 64,
-				"texture_height": 64,
-				"visible_bounds_width": 4,
-				"visible_bounds_height": 2.5,
-				"visible_bounds_offset": [0, 0.75, 0]
+				"texture_width": 256,
+				"texture_height": 256,
+				"visible_bounds_width": 5,
+				"visible_bounds_height": 4,
+				"visible_bounds_offset": [0, 1, 0]
 			},
 			"bones": [
 				{
@@ -18,8 +18,10 @@
 						{
 							"origin": [-23, -6, 0],
 							"size": [46, 27, 0],
+							"pivot": [0, 7.5, 0],
+							"rotation": [0, 0, -15],
 							"uv": {
-								"north": {"uv": [0, 0], "uv_size": [46, 27]}
+								"north": {"uv": [0, 0], "uv_size": [184, 108]}
 							}
 						}
 					]
