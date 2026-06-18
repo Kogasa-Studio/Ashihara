@@ -3,6 +3,7 @@ package kogasastudio.ashihara.client.gui3d;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import kogasastudio.ashihara.Ashihara;
+import kogasastudio.ashihara.block.blockentity.FermentationBlockEntity;
 import kogasastudio.ashihara.client.gui3d.components.*;
 import kogasastudio.ashihara.client.gui3d.util.OBB;
 import kogasastudio.ashihara.client.models.geo.ProgressBarModel;
@@ -17,6 +18,7 @@ import net.minecraft.world.entity.player.Inventory;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
+import java.util.List;
 import java.util.function.BiConsumer;
 
 public class FermentationScreen3D extends ContainerScreen3D<FermentationScreen>
@@ -66,8 +68,15 @@ public class FermentationScreen3D extends ContainerScreen3D<FermentationScreen>
 
         this.signComponent = new ToastComponent(this.bubbleModel, true, new Matrix4f().scale(-64f, -64f, 64f).translate(-0.85f, 0.75f, 0));
         this.signComponent.withBiCondition(() -> this.menu.blockEntity.getAvailableRecipe() != null);
-        this.signComponent.withTooltip(() -> this.menu.blockEntity.currentRecipe == null ? null : this.menu.blockEntity.getProductionTooltip());
+        this.signComponent.withTooltip(() ->
+        {
+            List<Component> tooltip = this.menu.blockEntity.currentRecipe == null ? null : this.menu.blockEntity.getProductionTooltip();
+            if (tooltip == null) return List.of();
+            if (this.menu.getFermentTime() != 0) tooltip.add(Component.translatable("tooltip.ashihara.fermentation_time_left", FermentationBlockEntity.stylizeTime((this.menu.getMaxFermentTime() - this.menu.getFermentTime()) / 20)));
+            return tooltip;
+        });
         this.signComponent.withBoundingBox(() -> this.signComponent.getBoneCollisionBoxes("item_slot"));
+
         ItemDisplayComponent output_display = new ItemDisplayComponent(() -> this.menu.blockEntity.getAvailableOutput(), () ->
         {
             OBB obb = this.signComponent.getFirstBoneCollisionBox("item_slot");
@@ -86,7 +95,7 @@ public class FermentationScreen3D extends ContainerScreen3D<FermentationScreen>
              var boxes = this.signComponent.getBoneCollisionBoxes("item_slot");
              return boxes.isEmpty() ? null : RenderHelper.getOBBCenterTransform(boxes.getFirst(), 0).scale(0.25f);
          })
-        .withProgress(() -> this.menu.blockEntity.getFermentProgress());
+        .withProgress(() -> this.menu.getFermentProgress());
         this.signComponent.addChild(progress);
 
         this.warningComponent = new RecipeWarningComponent(new Matrix4f().scale(-16f, -16f, 16f).translate(3f, 1.0f, 0), () -> this.menu.blockEntity.getUnavailabilityMessages());

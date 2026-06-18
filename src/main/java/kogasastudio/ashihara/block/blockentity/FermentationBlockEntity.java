@@ -15,9 +15,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -395,6 +398,27 @@ public class FermentationBlockEntity extends AshiharaCommonBE implements MenuPro
         return tooltip;
     }
 
+    public static Component stylizeTime(int seconds)
+    {
+        MutableComponent component = Component.empty();
+        int mod = seconds;
+        if (mod >= 3600)
+        {
+            component.append(Component.translatable("tooltip.ashihara.hours", mod / 3600));
+            mod = mod % 3600;
+        }
+        if (mod >= 60)
+        {
+            component.append(Component.translatable("tooltip.ashihara.minutes", mod / 60));
+            mod = mod % 60;
+        }
+        if (mod > 0)
+        {
+            component.append(Component.translatable("tooltip.ashihara.seconds", mod));
+        }
+        return component;
+    }
+
     private void acceptRecipe(@Nullable FermentationRecipe recipe)
     {
         if (this.currentRecipe != null) this.lastRecipe = this.currentRecipe.getId();
@@ -510,6 +534,8 @@ public class FermentationBlockEntity extends AshiharaCommonBE implements MenuPro
                 Block.popResource(this.level, this.worldPosition, remainder);
             }
         }
+
+        if (this.level != null) this.level.playSound(null, this.getBlockPos(), SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 1F, 1F);
 
         acceptRecipe(null);
         refreshRecipe();

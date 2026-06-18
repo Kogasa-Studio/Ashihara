@@ -18,6 +18,7 @@ public class FermentationMenu extends AshiharaCommonContainer
 {
     public final FermentationBlockEntity blockEntity;
     private final ContainerLevelAccess access;
+    private final ContainerData cookData;
 
     public FermentationMenu(int windowId, Inventory playerInventory, FriendlyByteBuf data)
     {
@@ -29,6 +30,7 @@ public class FermentationMenu extends AshiharaCommonContainer
         super(MenuTypes.FERMENTATION_MENU.get(), windowId);
         this.blockEntity = be;
         this.access = ContainerLevelAccess.create(be.getLevel(), be.getBlockPos());
+        this.cookData = cookData;
 
         // 食材槽 0-3
         this.addSlotRange(be.inventory, 0, 0, 1000, be.inventory.size(), 0);
@@ -39,6 +41,11 @@ public class FermentationMenu extends AshiharaCommonContainer
         // 同步 cookTime / maxCookTime
         this.addDataSlots(cookData);
     }
+
+    // -- ContainerData accessors (auto-synced by vanilla) --
+    public int getFermentTime()      { return this.cookData.get(0); }
+    public int getMaxFermentTime()   { return this.cookData.get(1); }
+    public float getFermentProgress() { int max = getMaxFermentTime(); return max > 0 ? (float) getFermentTime() / max : 0f; }
 
     @Override
     public boolean stillValid(Player player)

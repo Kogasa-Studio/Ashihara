@@ -1,9 +1,17 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.block.blockentity.FermentationBlockEntity;
+import kogasastudio.ashihara.block.blockentity.FermentationSubBlockEntity;
+import kogasastudio.ashihara.block.blockentity.PotBlockEntity;
+import kogasastudio.ashihara.registry.Blocks;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -64,7 +72,9 @@ public abstract class FermentationBlock extends Block implements EntityBlock, Fe
     public static FermentationBlockEntity getBE(Level level, BlockPos clickPos, BlockState clickState)
     {
         if (!(clickState.getBlock() instanceof FermentationBlock)) return null;
-        return level.getBlockEntity(clickPos) instanceof FermentationBlockEntity be ? be : null;
+        BlockEntity oriBe = level.getBlockEntity(clickPos);
+        if (oriBe instanceof FermentationSubBlockEntity suBe) oriBe = level.getBlockEntity(suBe.getMainPos());
+        return oriBe instanceof FermentationBlockEntity be ? be : null;
     }
 
     @Override
@@ -104,5 +114,24 @@ public abstract class FermentationBlock extends Block implements EntityBlock, Fe
                 FermentationBlockEntity.serverTick(lvl, pos, st, fbe);
             }
         };
+    }
+
+    @Override
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise)
+    {
+        if (!state.is(Blocks.WOODEN_BASIN) && state.getValue(HAS_LID)) return;
+        if (level.isClientSide()) return;
+        if (!(entity instanceof ItemEntity itemEntity) || !itemEntity.isAlive()) return;
+        if (!(getBE(level, pos, state) instanceof FermentationBlockEntity be)) return;
+
+        ItemStack stack = itemEntity.getItem().copy();
+        ItemStack remainder = be.inventory.insert(stack, false);
+        if (remainder.getCount() < stack.getCount())
+        {
+            if (remainder.isEmpty()) itemEntity.discard();
+            else itemEntity.setItem(remainder);
+            if (!be.fluid.isEmpty()) level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 0.5F, 1.0F);
+            be.refreshRecipe();
+        }
     }
 }
