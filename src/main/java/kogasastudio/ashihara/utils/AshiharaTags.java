@@ -10,8 +10,8 @@ import net.minecraft.world.level.block.Block;
 
 public class AshiharaTags
 {
-    public static final TagKey<Item> AXE = tagForge("axe");
-    public static final TagKey<Item> KNIFE = tagForge("knife");
+    public static final TagKey<Item> AXE = tagCommon("axe");
+    public static final TagKey<Item> KNIFE = tagCommon("knife");
 
     public static final TagKey<Item> MASHABLE = tag("mashable");
     public static final TagKey<Item> CEREALS = tag("cereals");
@@ -26,9 +26,9 @@ public class AshiharaTags
         return ItemTags.create(Identifier.fromNamespaceAndPath(Ashihara.MODID, name));
     }
 
-    private static TagKey<Item> tagForge(String name)
+    private static TagKey<Item> tagCommon(String name)
     {
-        return ItemTags.create(Identifier.fromNamespaceAndPath("forge", name));
+        return ItemTags.create(Identifier.fromNamespaceAndPath("c", name));
     }
 
     private static TagKey<Block> tagBlock(String name)
@@ -36,8 +36,8 @@ public class AshiharaTags
         return BlockTags.create(Identifier.fromNamespaceAndPath(Ashihara.MODID, name));
     }
 
-    private static TagKey<Block> tagForgeBlock(String name)
+    private static TagKey<Block> tagCommonBlock(String name)
     {
-        return BlockTags.create(Identifier.fromNamespaceAndPath("forge", name));
+        return BlockTags.create(Identifier.fromNamespaceAndPath("c", name));
     }
 }

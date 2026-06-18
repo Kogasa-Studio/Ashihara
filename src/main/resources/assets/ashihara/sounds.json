@@ -17,5 +17,14 @@
         "stream": false
       }
     ]
+  },
+  "cut": {
+    "subtitle": "subtitles.ashihara.cut",
+    "sounds": [
+      {
+        "name": "ashihara:cut",
+        "stream": false
+      }
+    ]
   }
 }

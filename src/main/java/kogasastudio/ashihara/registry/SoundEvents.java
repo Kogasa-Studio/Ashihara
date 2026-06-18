@@ -14,6 +14,7 @@ public class SoundEvents
 
     public static final Supplier<SoundEvent> UNTHRESH = register("unthresh");
     public static final Supplier<SoundEvent> BOIL = register("boil");
+    public static final Supplier<SoundEvent> CUT = register("cut");
 
     private static Supplier<SoundEvent> register(String key)
     {

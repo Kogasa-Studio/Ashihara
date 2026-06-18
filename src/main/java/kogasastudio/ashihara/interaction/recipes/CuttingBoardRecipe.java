@@ -1,37 +1,35 @@
 package kogasastudio.ashihara.interaction.recipes;
 
-import com.google.gson.annotations.Expose;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import kogasastudio.ashihara.block.blockentity.CuttingBoardBE;
-import kogasastudio.ashihara.helper.DataHelper;
 import kogasastudio.ashihara.interaction.recipes.base.BERecipeInput;
 import kogasastudio.ashihara.interaction.recipes.base.WrappedRecipe;
 import kogasastudio.ashihara.registry.RecipeTypes;
 import kogasastudio.ashihara.utils.CuttingBoardToolType;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-public class CuttingBoardRecipe extends WrappedRecipe<CuttingBoardRecipe, CuttingBoardBE> {
-    @Expose
+import java.util.ArrayList;
+import java.util.List;
+
+public class CuttingBoardRecipe extends WrappedRecipe<CuttingBoardRecipe, CuttingBoardBE>
+{
     private final Ingredient ingredient;
-    @Expose
-    private final NonNullList<ItemStack> result;
-    @Expose
+    private final List<ItemStackTemplate> result;
     private final CuttingBoardToolType tool;
 
-    public CuttingBoardRecipe(Identifier idIn, Ingredient inputIn, NonNullList<ItemStack> outputIn, String typeIn) {
+    public CuttingBoardRecipe(Identifier idIn, Ingredient inputIn, List<ItemStackTemplate> outputIn, String typeIn) {
         super(idIn);
         this.ingredient = inputIn;
         this.result = outputIn;
@@ -39,17 +37,14 @@ public class CuttingBoardRecipe extends WrappedRecipe<CuttingBoardRecipe, Cuttin
     }
 
     @Override
-    public boolean matches(@NotNull BERecipeInput input, @NotNull Level level) {
-        return false;
+    public @NotNull ItemStack assemble(@NotNull BERecipeInput input)
+    {
+        return this.result.isEmpty() ? ItemStack.EMPTY : this.result.getFirst().create();
     }
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull BERecipeInput input) {
-        return this.result.isEmpty() ? ItemStack.EMPTY : this.result.getFirst().copy();
-    }
-
-    @Override
-    public boolean testBE(CuttingBoardBE be) {
+    public boolean testBE(CuttingBoardBE be)
+    {
         return false;
     }
 
@@ -61,8 +56,12 @@ public class CuttingBoardRecipe extends WrappedRecipe<CuttingBoardRecipe, Cuttin
         return this.tool;
     }
 
-    public NonNullList<ItemStack> getOutput() {
-        return DataHelper.copyAndCast(this.result);
+    public List<ItemStackTemplate> getOutputTemplates() {
+        return this.result;
+    }
+
+    public List<ItemStack> getOutput() {
+        return this.result.stream().map(ItemStackTemplate::create).toList();
     }
 
     @Override
@@ -75,7 +74,7 @@ public class CuttingBoardRecipe extends WrappedRecipe<CuttingBoardRecipe, Cuttin
         instance.group(
             Identifier.CODEC.fieldOf("id").forGetter(CuttingBoardRecipe::getId),
             Ingredient.CODEC.fieldOf("ingredient").forGetter(CuttingBoardRecipe::getInput),
-            NonNullList.codecOf(ItemStack.CODEC).fieldOf("output").forGetter(CuttingBoardRecipe::getOutput),
+            ItemStackTemplate.CODEC.listOf().fieldOf("output").forGetter(CuttingBoardRecipe::getOutputTemplates),
             Codec.STRING.fieldOf("tool").forGetter(recipe -> recipe.getTool().getName())
         ).apply(instance, CuttingBoardRecipe::new));
 
@@ -93,7 +92,9 @@ public class CuttingBoardRecipe extends WrappedRecipe<CuttingBoardRecipe, Cuttin
         Identifier id = Identifier.STREAM_CODEC.decode(buffer);
         Ingredient ingredientN = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
         String toolTypeN = buffer.readUtf();
-        NonNullList<ItemStack> outputN = DataHelper.copyAndCast(ItemStack.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buffer));
+        List<ItemStack> stacks = ItemStack.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buffer);
+        List<ItemStackTemplate> outputN = new ArrayList<>(stacks.size());
+        for (ItemStack s : stacks) outputN.add(ItemStackTemplate.fromNonEmptyStack(s));
         return new CuttingBoardRecipe(id, ingredientN, outputN, toolTypeN);
     }
 
@@ -101,6 +102,6 @@ public class CuttingBoardRecipe extends WrappedRecipe<CuttingBoardRecipe, Cuttin
         Identifier.STREAM_CODEC.encode(buffer, recipe.id);
         Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
         buffer.writeUtf(recipe.tool.getName());
-        ItemStack.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buffer, recipe.result);
+        ItemStack.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buffer, recipe.getOutput());
     }
 }

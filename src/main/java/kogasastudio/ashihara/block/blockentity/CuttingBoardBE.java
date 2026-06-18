@@ -6,15 +6,18 @@ import kogasastudio.ashihara.interaction.recipes.CuttingBoardRecipe;
 import kogasastudio.ashihara.registry.BlockEntities;
 import kogasastudio.ashihara.registry.RecipeTypes;
 import net.minecraft.core.BlockPos;
+import kogasastudio.ashihara.utils.CuttingBoardToolType;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -27,6 +30,7 @@ import java.util.Optional;
 public class CuttingBoardBE extends AshiharaCommonBE
 {
     private ItemStack content = ItemStack.EMPTY;
+    public float[] displayRot = new float[] {0, 0, 0, 0};
 
     public CuttingBoardBE(BlockPos pos, BlockState state)
     {
@@ -49,7 +53,9 @@ public class CuttingBoardBE extends AshiharaCommonBE
     public void cut(CuttingBoardRecipe recipe)
     {
         if (this.level == null) return;
-        SoundEvent event = SoundEvents.AXE_STRIP;
+        SoundEvent event = recipe.getTool() == CuttingBoardToolType.KNIFE
+                ? kogasastudio.ashihara.registry.SoundEvents.CUT.get()
+                : SoundEvents.AXE_STRIP;
         this.level.playSound(null, this.worldPosition, event, SoundSource.BLOCKS, 1.0f, 1.0f);
         if (this.level.isClientSide())
         {
@@ -59,10 +65,7 @@ public class CuttingBoardBE extends AshiharaCommonBE
         {
             for (ItemStack stack : recipe.getOutput())
             {
-                ItemEntity entity = new ItemEntity
-                        (this.level, this.worldPosition.getX() + 0.5d, this.worldPosition.getY() + 0.5d, this.worldPosition.getZ() + 0.5d, stack.copy());
-                entity.setDefaultPickUpDelay();
-                this.level.addFreshEntity(entity);
+                Block.popResource(this.level, this.worldPosition, stack.copy());
             }
         }
         this.content = ItemStack.EMPTY;
@@ -87,8 +90,7 @@ public class CuttingBoardBE extends AshiharaCommonBE
                 if (recipe.isPresent() && recipe.get().value().getTool().toolMatches(stack))
                 {
                     this.cut(recipe.get().value());
-                    if (!playerIn.isCreative())
-                        stack.hurtAndBreak(1, playerIn, stack.getEquipmentSlot());
+                    if (!playerIn.isCreative()) stack.hurtAndBreak(1, playerIn, stack.getEquipmentSlot());
                     return true;
                 }
             }
@@ -96,10 +98,34 @@ public class CuttingBoardBE extends AshiharaCommonBE
         {
             this.content = stack.split(Math.min(stack.getCount(), 4));
             worldIn.playSound(playerIn, posIn, SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, 1.0f, 1.0f);
+            this.cacheRot(worldIn.getGameTime());
             setChanged();
             return true;
         }
         return false;
+    }
+
+    private void cacheRot(long seed)
+    {
+        RandomSource displayRand = RandomSource.create(seed);
+        for (int i = 0; i < 4; i++)
+        {
+            this.displayRot[i] = displayRand.nextFloat();
+        }
+    }
+
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state)
+    {
+        if (this.level != null) Block.popResource(this.level, this.worldPosition, this.content.copy());
+        super.preRemoveSideEffects(pos, state);
+    }
+
+    @Override
+    public void onLoad()
+    {
+        this.cacheRot(42L);
+        super.onLoad();
     }
 
     @Override

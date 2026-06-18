@@ -31,8 +31,8 @@ public class CuttingBoardBlock extends Block implements EntityBlock
 {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-    public static final VoxelShape X = box(2.0d, 0.0d, 1.0d, 14.0d, 1.0d, 15.0d);
-    public static final VoxelShape Z = box(1.0d, 0.0d, 2.0d, 15.0d, 1.0d, 14.0d);
+    public static final VoxelShape X = box(2.0d, 0.0d, 1.0d, 14.0d, 2.0d, 15.0d);
+    public static final VoxelShape Z = box(1.0d, 0.0d, 2.0d, 15.0d, 2.0d, 14.0d);
 
     public CuttingBoardBlock(Properties properties)
     {
