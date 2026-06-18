@@ -336,5 +336,7 @@
 
   "block.ashihara.wooden_basin": "Wooden Basin",
   "block.ashihara.fermentation_vat": "Fermentation Vat",
-  "block.ashihara.large_fermentation_vat": "Large Fermentation Vat"
+  "block.ashihara.large_fermentation_vat": "Large Fermentation Vat",
+  "jei.ashihara.category.pot": "Pot",
+  "jei.ashihara.pot.heat_required": "Heat required: %s"
 }

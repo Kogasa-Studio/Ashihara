@@ -330,5 +330,7 @@
 
   "block.ashihara.wooden_basin": "木盆",
   "block.ashihara.fermentation_vat": "发酵桶",
-  "block.ashihara.large_fermentation_vat": "大型发酵桶"
+  "block.ashihara.large_fermentation_vat": "大型发酵桶",
+  "jei.ashihara.category.pot": "土锅",
+  "jei.ashihara.pot.heat_required": "需要火力：%s"
 }
