@@ -10,6 +10,7 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -20,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 public class CuttingBoardRecipeCategory extends BaseRecipeCategory<CuttingBoardRecipe>
 {
     protected static final Identifier BACKGROUND = Identifier.fromNamespaceAndPath(Ashihara.MODID, "textures/gui/jei/cutting_board.png");
+    protected static final IRecipeType<CuttingBoardRecipe> CUTTING_BOARD = IRecipeType.create(Ashihara.MODID, "cutting_board", CuttingBoardRecipe.class);
 
     //text area scale:(x: 40, y: 1, width: 60, height: 34);
     private int x = 40;
@@ -65,5 +67,11 @@ public class CuttingBoardRecipeCategory extends BaseRecipeCategory<CuttingBoardR
         {
             builder.addSlot(RecipeIngredientRole.OUTPUT, 20, 1 + i * 20).add(output.get(i));
         }
+    }
+
+    @Override
+    public IRecipeType<CuttingBoardRecipe> getRecipeType()
+    {
+        return CUTTING_BOARD;
     }
 }

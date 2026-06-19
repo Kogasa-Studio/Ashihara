@@ -43,6 +43,7 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
     //in ticks
     public final int cookTime;
     public final int priority;
+    @Nullable public final Integer maxFluidAmount;
 
     // --- Serialization ---
     public static final MapCodec<PotRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec
@@ -57,7 +58,8 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
             FluidStackTemplate.CODEC.optionalFieldOf("fluid_production").forGetter(r -> Optional.ofNullable(r.fluidProduction)),
             HeatLevel.CODEC.optionalFieldOf("heat_level_required").forGetter(r -> Optional.ofNullable(r.heatLevelRequired)),
             Codec.INT.fieldOf("cook_time").forGetter(PotRecipe::getCookTime),
-            Codec.INT.optionalFieldOf("priority", 0).forGetter(PotRecipe::getPriority)
+            Codec.INT.optionalFieldOf("priority", 0).forGetter(PotRecipe::getPriority),
+            Codec.INT.optionalFieldOf("max_fluid_amount").forGetter(r -> Optional.ofNullable(r.maxFluidAmount))
         ).apply(instance, PotRecipe::new)
     );
 
@@ -87,6 +89,7 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
     public int getCookTime() {return cookTime;}
 
     public int getPriority() {return priority;}
+    @Nullable public Integer getMaxFluidAmount() {return maxFluidAmount;}
 
     public PotRecipe(Identifier id,
                      NonNullList<SizedIngredient> input,
@@ -95,7 +98,8 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
                      Optional<FluidStackTemplate> fluidProduction,
                      Optional<HeatLevel> heatLevelRequired,
                      int cookTime,
-                     int priority)
+                     int priority,
+                     Optional<Integer> maxFluidAmount)
     {
         super(id);
         this.input = input;
@@ -105,6 +109,7 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
         this.heatLevelRequired = heatLevelRequired.orElse(null);
         this.cookTime = cookTime;
         this.priority = priority;
+        this.maxFluidAmount = maxFluidAmount.orElse(null);
     }
 
     // ── Fluid option helpers (仿 MortarRecipe) ────────────────────────────────
@@ -189,7 +194,8 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
         }
         int cookTimeN = buffer.readInt();
         int priorityN = buffer.readInt();
-        return new PotRecipe(id, iListN, optStack, fCostN, fProdN, heatN, cookTimeN, priorityN);
+        Optional<Integer> maxFluidN = buffer.readBoolean() ? Optional.of(buffer.readVarInt()) : Optional.empty();
+        return new PotRecipe(id, iListN, optStack, fCostN, fProdN, heatN, cookTimeN, priorityN, maxFluidN);
     }
 
     private static void toNetwork(RegistryFriendlyByteBuf buffer, PotRecipe recipe)
@@ -222,5 +228,7 @@ public class PotRecipe extends WrappedRecipe<PotRecipe, PotBlockEntity>
         else buffer.writeBoolean(false);
         buffer.writeInt(recipe.cookTime);
         buffer.writeInt(recipe.priority);
+        buffer.writeBoolean(recipe.maxFluidAmount != null);
+        if (recipe.maxFluidAmount != null) buffer.writeVarInt(recipe.maxFluidAmount);
     }
 }

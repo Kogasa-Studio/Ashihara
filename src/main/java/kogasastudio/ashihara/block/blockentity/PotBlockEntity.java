@@ -174,44 +174,72 @@ public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider, II
         try
         {
             Collection<RecipeHolder<PotRecipe>> recipes = RecipeHelper.getRecipesByType(this.level, RecipeTypes.POT.get());
-            PotRecipe match = null;
 
-            // 1) Sticky: prefer last-known recipe
+            // 1) Sticky: if last recipe still matches and validates, keep it
             if (this.lastRecipe != null)
             {
-                match = recipes.stream()
+                PotRecipe sticky = recipes.stream()
                     .filter(h -> h.value().getId().equals(this.lastRecipe) && h.value().testBE(this))
                     .map(RecipeHolder::value)
                     .findFirst().orElse(null);
-            }
-            // 2) Fallback: any matching recipe
-            if (match == null)
-            {
-                match = recipes.stream()
-                .filter(h -> h.value().testBE(this))
-                .map(RecipeHolder::value)
-                .max(Comparator.comparingInt(PotRecipe::getPriority))
-                .orElse(null);
+                if (sticky != null && validateRecipe(sticky).isEmpty())
+                {
+                    this.availableRecipe = sticky;
+                    acceptRecipe(sticky);
+                    return;
+                }
             }
 
-            this.availableRecipe = match;
-            //setScreenChanged();
-            if (match == null)
+            // 2) Collect all matching recipes, sorted by priority descending
+            List<PotRecipe> candidates = recipes.stream()
+                .filter(h -> h.value().testBE(this))
+                .map(RecipeHolder::value)
+                .sorted(Comparator.comparingInt(PotRecipe::getPriority).reversed())
+                .toList();
+
+            if (candidates.isEmpty())
             {
+                this.availableRecipe = null;
                 acceptRecipe(null);
                 return;
             }
 
-            List<Component> issues = validateRecipe(match);
-            if (!issues.isEmpty())
+            // 3) Validate each; first with zero issues wins
+            PotRecipe bestFluidOk = null;
+            List<Component> bestFluidOkIssues = null;
+            PotRecipe bestFluidFail = null;
+            List<Component> bestFluidFailIssues = null;
+
+            for (PotRecipe candidate : candidates)
             {
-                this.unavailabilityMessages = issues;
-                this.currentRecipe = match;
-                pauseCooking();
-                return;
+                candidate.testBE(this); // refresh parallel for this recipe
+                List<Component> issues = validateRecipe(candidate);
+                if (issues.isEmpty())
+                {
+                    this.availableRecipe = candidate;
+                    acceptRecipe(candidate);
+                    return;
+                }
+                boolean fluidOk = candidate.testFluidCost(this.fluidTank, this.parallel, true) >= this.parallel;
+                if (fluidOk && bestFluidOk == null)
+                {
+                    bestFluidOk = candidate;
+                    bestFluidOkIssues = issues;
+                }
+                else if (!fluidOk && bestFluidFail == null)
+                {
+                    bestFluidFail = candidate;
+                    bestFluidFailIssues = issues;
+                }
             }
 
-            acceptRecipe(match);
+            // No valid recipe; prefer the one whose fluid input is satisfied
+            PotRecipe bestFailed = bestFluidOk != null ? bestFluidOk : bestFluidFail;
+            List<Component> bestIssues = bestFluidOk != null ? bestFluidOkIssues : bestFluidFailIssues;
+            this.availableRecipe = bestFailed;
+            this.unavailabilityMessages = bestIssues;
+            this.currentRecipe = bestFailed;
+            pauseCooking();
         }
         finally
         {
@@ -244,6 +272,10 @@ public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider, II
             {
                 issues.add(Component.translatable("tooltip.ashihara.recipe.need_fluid", required.getHoverName(), required.getAmount()));
             }
+            else if (recipe.getMaxFluidAmount() != null && tankFluid.getAmount() > recipe.getMaxFluidAmount() * p)
+            {
+                issues.add(Component.translatable("tooltip.ashihara.recipe.fluid_excess", recipe.getMaxFluidAmount() * p));
+            }
         }
 
         // 3) Output fluid space
@@ -260,7 +292,7 @@ public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider, II
                 FluidStack tankFluid = this.fluidTank.getFluidStack();
                 if (!consFluid.isEmpty() && tankFluid.is(consFluid.getFluid()))
                 {
-                    if (tankFluid.getAmount() != consFluid.getAmount())
+                    if (tankFluid.getAmount() != consumed)
                         issues.add(Component.translatable("tooltip.ashihara.pot.fluid_consumption_not_equal_to_production", consumed, consFluid.getHoverName()));
                 }
                 else issues.add(Component.translatable("tooltip.ashihara.pot.fluid_type_mismatch"));

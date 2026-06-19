@@ -13,6 +13,7 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -89,6 +90,7 @@ public class PotRecipeCategory extends BaseRecipeCategory<PotRecipe>
         if (!fIn.isEmpty()) drawFluidAmount(guiGraphics, font, fIn.getAmount(), 55+8, 33+8);
         FluidStack fOut = recipe.getFluidProduction();
         if (!fOut.isEmpty()) drawFluidAmount(guiGraphics, font, fOut.getAmount(), 120+8, 33+8);
+        if (recipe.getMaxFluidAmount() != null) guiGraphics.text(font, Component.translatable("tooltip.ashihara.jei.max", recipe.getMaxFluidAmount()), 55-8, 33+24, 0xFFFFFFFF);
     }
 
     @Override
@@ -143,6 +145,13 @@ public class PotRecipeCategory extends BaseRecipeCategory<PotRecipe>
         String label = amount >= 1000 ? (amount / 1000) + "B" : amount + "mB";
         int textWidth = font.width(label);
         gfx.text(font, Component.literal(label), slotX + 16 - textWidth, slotY + 8, 0xFFFFFFFF);
+    }
+
+    private static final IRecipeType<PotRecipe> POT = IRecipeType.create(Ashihara.MODID, "pot", PotRecipe.class);
+    @Override
+    public IRecipeType<PotRecipe> getRecipeType()
+    {
+        return POT;
     }
 
     @Override

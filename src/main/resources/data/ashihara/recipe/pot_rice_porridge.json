@@ -1,20 +1,21 @@
 {
   "type": "ashihara:pot",
-  "id": "ashihara:pot_cooked_rice",
+  "id": "ashihara:pot_rice_porridge",
   "ingredients": [
     {
       "ingredient": "ashihara:rice",
       "count": 1
     }
   ],
-  "output": {
-    "id": "ashihara:cooked_rice"
-  },
   "fluid_cost": {
     "id": "minecraft:water",
-    "amount": 100
+    "amount": 250
   },
-  "max_fluid_amount": 150,
+  "fluid_production": {
+    "id": "ashihara:rice_porridge",
+    "amount": 300
+  },
   "heat_level_required": "high",
-  "cook_time": 600
+  "cook_time": 300,
+  "priority": 1
 }

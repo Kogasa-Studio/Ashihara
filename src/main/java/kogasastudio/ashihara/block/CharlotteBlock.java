@@ -135,7 +135,8 @@ public class CharlotteBlock extends Block implements EntityBlock
                     Optional.of(new FluidStackTemplate(Fluids.LAVA.getSource(), 100)),
                     Optional.of(HeatLevel.HIGH),
                     100,
-                    0);
+                    0,
+                    Optional.empty());
                 JsonElement element = PotRecipe.MAP_CODEC.codec().encodeStart(dynamicOps, potRecipe).getOrThrow(msg -> new RuntimeException("Failed to encode %s: %s".formatted("test/test_pot_recipe.json", msg)));
                 try
                 {

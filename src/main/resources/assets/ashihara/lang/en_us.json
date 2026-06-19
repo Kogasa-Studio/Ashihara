@@ -316,10 +316,9 @@
   "tooltip.ashihara.pot_production": "Expected output: ",
   "tooltip.ashihara.item_production": "Item: ",
   "tooltip.ashihara.fluid_production": "Fluid: ",
-
   "tooltip.ashihara.grid_level": "Building Grid Snapping: %s block",
-
   "tooltip.ashihara.bowl_content": "Contains: %s",
+  "tooltip.ashihara.jei.max": "Max: %s mB",
 
   "message.ashihara.cookstove.fuel_left": "Fuel left: ",
 
@@ -328,11 +327,11 @@
 
   "subtitles.ashihara.boil": "Pot boiling",
 
-    "key.ashihara.eating_mode": "Eating Mode",
-    "key.categories.ashihara.main": "Ashihara",
-    "tooltip.ashihara.eating_mode_on": "activate",
-    "tooltip.ashihara.eating_mode_off": "inactivate",
-    "tooltip.ashihara.eating_mode_toggle": "§ePress %s to %s eating mode",
+  "key.ashihara.eating_mode": "Eating Mode",
+  "key.categories.ashihara.main": "Ashihara",
+  "tooltip.ashihara.eating_mode_on": "activate",
+  "tooltip.ashihara.eating_mode_off": "inactivate",
+  "tooltip.ashihara.eating_mode_toggle": "§ePress %s to %s eating mode",
 
   "block.ashihara.wooden_basin": "Wooden Basin",
   "block.ashihara.fermentation_vat": "Fermentation Vat",
