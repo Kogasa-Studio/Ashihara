@@ -222,6 +222,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.RAMMED_SOIL.get());
                                         output.accept(Items.OIL_BUCKET.get());
                                         output.accept(Items.SOY_MILK_BUCKET.get());
+                                        output.accept(Items.RICE_PORRIDGE_BUCKET.get());
                                     })).build()
                     );
     public static final Supplier<CreativeModeTab> ASHIHARA =

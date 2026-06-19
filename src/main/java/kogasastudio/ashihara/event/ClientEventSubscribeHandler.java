@@ -21,6 +21,10 @@ import kogasastudio.ashihara.client.particles.RiceParticle;
 import kogasastudio.ashihara.client.particles.SakuraParticle;
 import kogasastudio.ashihara.client.render.ber.*;
 import kogasastudio.ashihara.fluid.FluidRegistryHandler;
+import net.minecraft.client.renderer.block.FluidModel;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.neoforged.neoforge.client.event.RegisterFluidModelsEvent;
+import net.neoforged.neoforge.client.fluid.FluidTintSources;
 import kogasastudio.ashihara.utils.GridSnapHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.Model;
@@ -44,7 +48,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-@EventBusSubscriber(value = Dist.CLIENT)
+@EventBusSubscriber(modid = Ashihara.MODID, value = Dist.CLIENT)
 public class ClientEventSubscribeHandler
 {
     // --- 独立模型 key 缓存（仅客户端） ---
@@ -143,9 +147,44 @@ public class ClientEventSubscribeHandler
                 return Identifier.withDefaultNamespace("textures/misc/underwater.png");
             }
         }, FluidRegistryHandler.AshiharaFluidTypes.TYPE_OIL.get());
+        event.registerFluidType(new IClientFluidTypeExtensions()
+        {
+            @Override
+            public @Nullable Identifier getRenderOverlayTexture(@NotNull Minecraft mc)
+            {
+                return Identifier.withDefaultNamespace("textures/misc/underwater.png");
+            }
+        }, FluidRegistryHandler.AshiharaFluidTypes.TYPE_RICE_PORRIDGE.get());
     }
 
-    /** 注册 GuideBook 的 PiP 渲染器工厂（Mod 事件总线，仅客户端）。 */
+    @SubscribeEvent
+    public static void onRegisterFluidModels(RegisterFluidModelsEvent event)
+    {
+        // 豆乳
+        event.register(new FluidModel.Unbaked(
+            new Material(FluidRegistryHandler.MILK_STILL),
+            new Material(FluidRegistryHandler.MILK_FLOW),
+            new Material(FluidRegistryHandler.WATER_OVERLAY),
+            FluidTintSources.constant(0xFFFFFFFF)
+        ), FluidRegistryHandler.SOY_MILK, FluidRegistryHandler.SOY_MILK_FLOWING);
+
+        // 油
+        event.register(new FluidModel.Unbaked(
+            new Material(FluidRegistryHandler.WATER_STILL),
+            new Material(FluidRegistryHandler.WATER_FLOW),
+            new Material(FluidRegistryHandler.WATER_OVERLAY),
+            FluidTintSources.constant(0xFFA8F4E9)
+        ), FluidRegistryHandler.OIL, FluidRegistryHandler.OIL_FLOWING);
+
+        // 白米粥
+        event.register(new FluidModel.Unbaked(
+            new Material(FluidRegistryHandler.PORRIDGE_STILL),
+            new Material(FluidRegistryHandler.PORRIDGE_FLOW),
+            new Material(FluidRegistryHandler.WATER_OVERLAY),
+            FluidTintSources.constant(0xFFF5EBE0)
+        ), FluidRegistryHandler.RICE_PORRIDGE, FluidRegistryHandler.RICE_PORRIDGE_FLOWING);
+    }
+        /** 注册 GuideBook 的 PiP 渲染器工厂（Mod 事件总线，仅客户端）。 */
     @SubscribeEvent
     public static void onRegisterPiPRenderers(RegisterPictureInPictureRenderersEvent event)
     {

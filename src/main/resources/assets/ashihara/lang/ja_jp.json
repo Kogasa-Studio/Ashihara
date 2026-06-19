@@ -332,5 +332,7 @@
   "block.ashihara.fermentation_vat": "仕込桶",
   "block.ashihara.large_fermentation_vat": "大仕込桶",
   "jei.ashihara.category.pot": "土鍋",
-  "jei.ashihara.pot.heat_required": "必要火力：%s"
+  "jei.ashihara.pot.heat_required": "必要火力：%s",
+  "block.ashihara.rice_porridge": "白粥",
+  "item.ashihara.rice_porridge_bucket": "白粥入り桶"
 }

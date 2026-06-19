@@ -447,6 +447,7 @@ public class Blocks
 
     public static final DeferredBlock<LiquidBlock> SOY_MILK_BLOCK = BLOCKS.registerBlock("soy_milk", properties -> new LiquidBlock(FluidRegistryHandler.SOY_MILK.get(), properties), properties -> properties.mapColor(MapColor.SNOW).noCollision().strength(100.0F).replaceable().noLootTable());
     public static final DeferredBlock<LiquidBlock> OIL_BLOCK = BLOCKS.registerBlock("oil", properties -> new LiquidBlock(FluidRegistryHandler.OIL.get(), properties), properties -> properties.mapColor(MapColor.COLOR_YELLOW).noCollision().strength(100.0F).replaceable().noLootTable());
+    public static final DeferredBlock<LiquidBlock> RICE_PORRIDGE_BLOCK = BLOCKS.registerBlock("rice_porridge", properties -> new LiquidBlock(FluidRegistryHandler.RICE_PORRIDGE.get(), properties), properties -> properties.mapColor(MapColor.SNOW).noCollision().strength(100.0F).replaceable().noLootTable());
 
     // 发酵容器
     public static final DeferredBlock<Block> WOODEN_BASIN = BLOCKS.registerBlock("wooden_basin", p -> new WoodenBasinBlock(p));

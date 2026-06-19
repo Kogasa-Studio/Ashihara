@@ -1,10 +1,33 @@
 {
-  "sources":
-  [
+  "sources": [
     {
       "type": "directory",
       "source": "icons",
       "prefix": "icons/"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "ashihara:fluid/porridge"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "ashihara:fluid/porridge_flow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "ashihara:fluid/milky_liquid_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "ashihara:fluid/milky_liquid_flow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "ashihara:fluid/water_still"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "ashihara:fluid/water_flow"
     }
   ]
 }

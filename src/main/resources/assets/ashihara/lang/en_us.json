@@ -338,5 +338,7 @@
   "block.ashihara.fermentation_vat": "Fermentation Vat",
   "block.ashihara.large_fermentation_vat": "Large Fermentation Vat",
   "jei.ashihara.category.pot": "Pot",
-  "jei.ashihara.pot.heat_required": "Heat required: %s"
+  "jei.ashihara.pot.heat_required": "Heat required: %s",
+  "block.ashihara.rice_porridge": "Rice Porridge",
+  "item.ashihara.rice_porridge_bucket": "Bucket of Rice Porridge"
 }

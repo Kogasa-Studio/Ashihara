@@ -13,6 +13,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.Consumables;
@@ -320,6 +321,7 @@ public class Items
     //濡?
     public static final DeferredItem<? extends Item> SOY_MILK_BUCKET = ITEMS.registerItem("soy_milk_bucket", properties -> new BucketItem(FluidRegistryHandler.SOY_MILK.get(), properties));
     public static final DeferredItem<? extends Item> OIL_BUCKET = ITEMS.registerItem("oil_bucket", properties -> new BucketItem(FluidRegistryHandler.OIL.get(), properties));
+    public static final DeferredItem<? extends Item> RICE_PORRIDGE_BUCKET = ITEMS.registerItem("rice_porridge_bucket", properties -> new BucketItem(FluidRegistryHandler.RICE_PORRIDGE.get(), properties.food(new FoodProperties.Builder().nutrition(5).saturationModifier(1.0f).build(), Consumables.defaultDrink().sound(SoundEvents.HONEY_DRINK).onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.INSTANT_HEALTH, 1, 1), 1.0F)).build())));
 
     private static class AshiharaItem extends Item
     {
