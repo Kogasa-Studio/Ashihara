@@ -302,7 +302,9 @@ public class FermentationBlockEntity extends AshiharaCommonBE implements MenuPro
             int consume = recipe.getTotalConsumeAmount();
             int absoluteMin = consume * p;
             Integer minFluid = recipe.getMinFluidAmount();
+            if (minFluid != null) minFluid *= p;
             Integer maxFluid = recipe.getMaxFluidAmount();
+            if (maxFluid != null) maxFluid *= p;
             int effectiveMin = Math.max(absoluteMin, minFluid != null ? minFluid : 0);
 
             FluidStack stored = this.fluid.getFluidStack();

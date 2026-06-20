@@ -1,0 +1,25 @@
+{
+  "type": "ashihara:fermentation",
+  "id": "ashihara:ferment_koji",
+  "input_items": [
+    {
+      "ingredient": "ashihara:cooked_rice",
+      "count": 2
+    }
+  ],
+  "input_fluids": [
+    {
+      "id": "minecraft:water",
+      "amount": 100
+    }
+  ],
+  "min_fluid_amount": 100,
+  "max_fluid_amount": 200,
+  "need_size": ["basin"],
+  "output": [
+    {
+      "id": "ashihara:koji"
+    }
+  ],
+  "time": 6000
+}

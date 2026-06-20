@@ -206,9 +206,12 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.BAMBOO_STRIPS.get());
                                         output.accept(Items.BAMBOO_STICK.get());
                                         output.accept(Items.LIME_POWDER.get());
+                                        output.accept(Items.COARSE_SALT.get());
                                         output.accept(Items.SALT.get());
                                         output.accept(Items.COAL_POWDER.get());
                                         output.accept(Items.RICE_POWDER.get());
+                                        output.accept(Items.BRAN.get());
+                                        output.accept(Items.KOJI.get());
                                         output.accept(Items.FLOUR.get());
                                         output.accept(Items.BEAN_POWDER.get());
                                         output.accept(Items.MACHA_POWDER.get());

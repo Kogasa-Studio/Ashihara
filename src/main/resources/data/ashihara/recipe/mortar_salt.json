@@ -9,21 +9,17 @@
       "pestle"
     ]
   },
-  "id": "ashihara:mortar_rice",
+  "id": "ashihara:mortar_salt",
   "ingredients": [
     {
-      "ingredient": "ashihara:brown_rice",
+      "ingredient": "ashihara:coarse_salt",
       "count": 1
     }
   ],
   "output": [
     {
-      "id": "ashihara:rice",
-      "count": 1
-    },
-    {
-      "id": "ashihara:bran",
-      "count": 1
+      "id": "ashihara:salt",
+      "count": 2
     }
   ],
   "type": "ashihara:mortar"

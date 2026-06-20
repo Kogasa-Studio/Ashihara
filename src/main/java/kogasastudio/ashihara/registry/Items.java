@@ -104,7 +104,10 @@ public class Items
     public static final DeferredItem<? extends Item> GOLD_ORE_SHATTER = ITEMS.registerItem("gold_ore_shatter", AshiharaItem::new);
     public static final DeferredItem<? extends Item> STONE_SHATTER = ITEMS.registerItem("stone_shatter", AshiharaItem::new);
     public static final DeferredItem<? extends Item> COAL_POWDER = ITEMS.registerItem("coal_powder", AshiharaItem::new);
+    public static final DeferredItem<? extends Item> COARSE_SALT = ITEMS.registerItem("coarse_salt", AshiharaItem::new);
     public static final DeferredItem<? extends Item> SALT = ITEMS.registerItem("salt", AshiharaItem::new);
+    public static final DeferredItem<? extends Item> BRAN = ITEMS.registerItem("bran", AshiharaItem::new);
+    public static final DeferredItem<? extends Item> KOJI = ITEMS.registerItem("koji", properties -> new EasyFood(4, properties));
     public static final DeferredItem<? extends Item> FLOUR = ITEMS.registerItem("flour", AshiharaItem::new);
     public static final DeferredItem<? extends Item> RICE_POWDER = ITEMS.registerItem("rice_powder", AshiharaItem::new);
     public static final DeferredItem<? extends Item> BEAN_POWDER = ITEMS.registerItem("bean_powder", AshiharaItem::new);
