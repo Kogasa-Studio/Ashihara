@@ -1,0 +1,51 @@
+{
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"ambientocclusion": false,
+	"textures": {
+		"2": "ashihara:block/salt_field_layer"
+	},
+	"elements": [
+		{
+			"from": [3, 8.5, 0],
+			"to": [11, 8.5, 8],
+			"rotation": {"x": 0, "y": -45, "z": 0, "origin": [10, 8.375, 7.5]},
+			"faces": {
+				"up": {"uv": [8, 8, 0, 0], "texture": "#2"}
+			}
+		},
+		{
+			"from": [0.10355, 8.5, 2.90381],
+			"to": [8.10355, 8.5, 10.90381],
+			"rotation": {"angle": -22.5, "axis": "y", "origin": [4.10355, 8.5, 6.90381]},
+			"faces": {
+				"up": {"uv": [8, 8, 0, 0], "rotation": 270, "texture": "#2"}
+			}
+		},
+		{
+			"from": [10.46497, 8.5, 4.6463],
+			"to": [18.46497, 8.5, 12.6463],
+			"rotation": {"x": 0, "y": -80, "z": 0, "origin": [10, 8.375, 7.5]},
+			"faces": {
+				"up": {"uv": [8, 8, 0, 0], "texture": "#2"}
+			}
+		},
+		{
+			"from": [9.2149, 8.25, 2.54373],
+			"to": [17.2149, 8.25, 10.54373],
+			"rotation": {"angle": -35, "axis": "y", "origin": [10, 8.375, 7.5]},
+			"faces": {
+				"up": {"uv": [8, 16, 0, 8], "rotation": 90, "texture": "#2"}
+			}
+		},
+		{
+			"from": [0.4649, 8.25, 6.54373],
+			"to": [8.4649, 8.25, 14.54373],
+			"rotation": {"angle": -35, "axis": "y", "origin": [1.25, 8.375, 11.5]},
+			"faces": {
+				"up": {"uv": [8, 16, 0, 8], "rotation": 180, "texture": "#2"}
+			}
+		}
+	]
+}

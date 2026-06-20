@@ -187,6 +187,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.GOLD_PIN_FIN.get());
                                         output.accept(Items.DIRT_DEPRESSION.get());
                                         output.accept(Items.WATER_FIELD.get());
+                                        output.accept(Items.SALT_FIELD.get());
                                     })).build()
                     );
     public static final Supplier<CreativeModeTab> MATERIALS =

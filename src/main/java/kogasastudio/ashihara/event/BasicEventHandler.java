@@ -6,6 +6,7 @@ import kogasastudio.ashihara.registry.Items;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.HoeItem;
@@ -34,17 +35,31 @@ public class BasicEventHandler
         if (world.getBlockState(pos.above()).getBlock() == net.minecraft.world.level.block.Blocks.AIR)
         {
             //铲土洼
-            if (item.getItem() instanceof ShovelItem && (clickState.is(net.minecraft.world.level.block.Blocks.DIRT) || (player.isShiftKeyDown() && clickState.is(net.minecraft.world.level.block.Blocks.DIRT_PATH))))
+            if (item.getItem() instanceof ShovelItem)
             {
-                world.playSound(player, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1.0F, 1.0F);
-                world.setBlockAndUpdate(pos, Blocks.DIRT_DEPRESSION.get().defaultBlockState());
-                player.swing(event.getHand());
-                Containers.dropItemStack(world, pos.getX(), pos.getY() + 0.5F, pos.getZ(), new ItemStack(Items.DIRT_BALL.get()));
-                if (!player.getAbilities().instabuild)
+                if (clickState.is(net.minecraft.world.level.block.Blocks.DIRT) || (player.isShiftKeyDown() && clickState.is(net.minecraft.world.level.block.Blocks.DIRT_PATH)))
                 {
-                    item.hurtAndBreak(1, player, item.getEquipmentSlot());
+                    world.playSound(player, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    world.setBlockAndUpdate(pos, Blocks.DIRT_DEPRESSION.get().defaultBlockState());
+                    player.swing(event.getHand());
+                    Containers.dropItemStack(world, pos.getX(), pos.getY() + 0.5F, pos.getZ(), new ItemStack(Items.DIRT_BALL.get()));
+                    if (!player.getAbilities().instabuild)
+                    {
+                        item.hurtAndBreak(1, player, item.getEquipmentSlot());
+                    }
+                    return;
                 }
-                return;
+                if (player.isShiftKeyDown() && clickState.is(BlockTags.SAND))
+                {
+                    world.playSound(player, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    world.setBlockAndUpdate(pos, Blocks.SALT_FIELD.get().defaultBlockState());
+                    player.swing(event.getHand());
+                    if (!player.getAbilities().instabuild)
+                    {
+                        item.hurtAndBreak(1, player, item.getEquipmentSlot());
+                    }
+                    return;
+                }
             }
         }
 

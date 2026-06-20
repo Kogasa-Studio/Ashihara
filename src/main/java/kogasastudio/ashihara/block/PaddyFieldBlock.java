@@ -1,7 +1,6 @@
 package kogasastudio.ashihara.block;
 
 import kogasastudio.ashihara.registry.Blocks;
-import kogasastudio.ashihara.registry.Items;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -20,14 +19,9 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.redstone.Orientation;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jspecify.annotations.Nullable;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,23 +39,12 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
         this.registerDefaultState(this.stateDefinition.any().setValue(HAS_WATER, false));
     }
 
-    public PaddyFieldBlock()
-    {
-        this
-        (
-            Properties.of()
-            .mapColor(MapColor.DIRT)
-            .strength(0.5F)
-            .sound(SoundType.GRAVEL)
-        );
-    }
-
-    private boolean matchesWaterField(BlockState state)
+    protected boolean matchesWaterField(BlockState state)
     {
         return state.is(Blocks.WATER_FIELD.get());
     }
 
-    private boolean hasExit(Level worldIn, BlockPos pos)
+    protected boolean hasExit(Level worldIn, BlockPos pos)
     {
         boolean flag = false;
         BlockPos.MutableBlockPos pos1 = pos.mutable();
@@ -92,7 +75,7 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
         return flag;
     }
 
-    private void onScheduleTick(Level worldIn, BlockPos pos, int time)
+    protected void onScheduleTick(Level worldIn, BlockPos pos, int time)
     {
         worldIn.scheduleTick(pos, this, time);
     }
@@ -107,14 +90,6 @@ public class PaddyFieldBlock extends Block implements BucketPickup, LiquidBlockC
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) //碰撞箱的设定
     {
         return Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
-    }
-
-    @Override
-    public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) //设置掉落物品为2土球
-    {
-        List<ItemStack> list = new LinkedList<>();
-        list.add(new ItemStack(Items.DIRT_BALL.get(), 2));
-        return list;
     }
 
     @Override

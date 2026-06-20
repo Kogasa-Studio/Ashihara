@@ -1,0 +1,10 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "ashihara:block/water_field",
+  "ambientocclusion": false,
+  "textures": {
+    "0": "block/sand",
+    "1": "block/sand",
+    "particle": "block/sand"
+  }
+}

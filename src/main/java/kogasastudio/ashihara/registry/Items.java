@@ -128,6 +128,7 @@ public class Items
     //TODO: public static final DeferredItem<? extends Item>  = ITEMS.register("", () -> new BlockItem(Blocks. .get(), new Item.Properties().group(ASHIHARA)));
     public static final DeferredItem<? extends Item> DIRT_DEPRESSION = ITEMS.registerSimpleBlockItem("dirt_depression", Blocks.DIRT_DEPRESSION);
     public static final DeferredItem<? extends Item> WATER_FIELD = ITEMS.registerSimpleBlockItem("water_field", Blocks.WATER_FIELD);
+    public static final DeferredItem<? extends Item> SALT_FIELD = ITEMS.registerSimpleBlockItem("salt_field", Blocks.SALT_FIELD);
     public static final DeferredItem<? extends Item> CHERRY_SAPLING = ITEMS.registerSimpleBlockItem("cherry_sapling", Blocks.CHERRY_SAPLING);
     public static final DeferredItem<? extends Item> RED_MAPLE_SAPLING = ITEMS.registerSimpleBlockItem("red_maple_sapling", Blocks.RED_MAPLE_SAPLING);
     public static final DeferredItem<? extends Item> TETSUSENCHI = ITEMS.registerSimpleBlockItem("tetsusenchi", Blocks.TETSUSENCHI);

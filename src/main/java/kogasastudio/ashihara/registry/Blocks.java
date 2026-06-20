@@ -42,8 +42,6 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.jetbrains.annotations.Nullable;
@@ -64,6 +62,7 @@ public class Blocks
     }
 
     public static final DeferredBlock<Block> WATER_FIELD = BLOCKS.registerBlock("water_field", PaddyFieldBlock::new, properties -> properties.mapColor(MapColor.DIRT).strength(0.5F).sound(SoundType.GRAVEL));
+    public static final DeferredBlock<Block> SALT_FIELD = BLOCKS.registerBlock("salt_field", SaltFieldBlock::new, properties -> properties.mapColor(MapColor.SAND).strength(0.3F).sound(SoundType.SAND));
     public static final DeferredBlock<Block> RICE_CROP = BLOCKS.registerBlock("rice_crop", RiceCropBlock::new, properties -> properties.mapColor(MapColor.PLANT).noCollision().randomTicks().instabreak().sound(SoundType.CROP));
     public static final DeferredBlock<Block> DIRT_DEPRESSION = BLOCKS.registerBlock("dirt_depression", DirtDepressionBlock::new, properties -> properties.mapColor(MapColor.DIRT).strength(0.5F).sound(SoundType.GRAVEL).noOcclusion());
     public static final DeferredBlock<Block> TETSUSENCHI = BLOCKS.registerBlock("tetsusenchi", TetsusenchiBlock::new, properties -> properties.mapColor(MapColor.WOOD).strength(2.0F).sound(SoundType.WOOD).noOcclusion());
