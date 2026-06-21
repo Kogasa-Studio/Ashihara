@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.item;
 
 import kogasastudio.ashihara.registry.Blocks;
+import kogasastudio.ashihara.registry.Items;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -15,6 +16,7 @@ import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 // vanilla Blocks used via fully-qualified name
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -86,6 +88,7 @@ public class WideHoeItem extends HoeItem
             level.setBlock(pos, goWide ? net.minecraft.world.level.block.Blocks.FARMLAND.defaultBlockState() : Blocks.DIRT_DEPRESSION.get().defaultBlockState(), 11);
             return true;
         }
+        if (goWide) Block.popResourceFromFace(level, pos, Direction.UP, Items.DIRT_BALL.toStack(2));
         // sand -> salt field (only in normal mode with air above)
         if (!goWide && state.is(BlockTags.SAND) && level.getBlockState(pos.above()).isAir())
         {
