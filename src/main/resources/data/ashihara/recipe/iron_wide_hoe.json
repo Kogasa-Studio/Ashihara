@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MMB",
+    "  I",
+    "  I"
+  ],
+  "key": {
+    "M": "minecraft:iron_ingot",
+    "B": "ashihara:bamboo_strips",
+    "I": "#c:rods"
+  },
+  "result": {
+    "id": "ashihara:iron_wide_hoe",
+    "count": 1
+  }
+}

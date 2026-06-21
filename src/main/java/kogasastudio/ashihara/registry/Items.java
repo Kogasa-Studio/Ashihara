@@ -92,6 +92,7 @@ public class Items
     public static final DeferredItem<? extends Item> WOOD_OTSUCHI = ITEMS.registerItem("wood_otsuchi", properties -> new Otsuchi(ToolMaterial.WOOD, 16, -3.4d, properties));
     public static final DeferredItem<? extends Item> IRON_OTSUCHI = ITEMS.registerItem("iron_otsuchi", properties -> new Otsuchi(ToolMaterial.IRON, 16, -3.5d, properties));
     public static final DeferredItem<? extends Item> DIAMOND_OTSUCHI = ITEMS.registerItem("diamond_otsuchi", properties -> new Otsuchi(ToolMaterial.DIAMOND, 16, -3.55d, properties));
+    public static final DeferredItem<? extends Item> IRON_WIDE_HOE = ITEMS.registerItem("iron_wide_hoe", properties -> new WideHoeItem(ToolMaterial.IRON, -0.5F, -1.0F, properties.durability(375)));
     public static final DeferredItem<? extends Item> WOODEN_HAMMER = ITEMS.registerItem("wooden_hammer", AshiharaItem::new);
     public static final DeferredItem<? extends Item> CHISEL = ITEMS.registerItem("chisel", AshiharaItem::new);
 

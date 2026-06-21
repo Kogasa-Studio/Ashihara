@@ -1,0 +1,6 @@
+{
+  "parent": "ashihara:item/wide_hoe",
+  "textures": {
+    "material": "ashihara:item/wide_hoe_iron"
+  }
+}
