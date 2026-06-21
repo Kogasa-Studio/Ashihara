@@ -7,7 +7,6 @@ import kogasastudio.ashihara.block.blockentity.CuttingBoardBE;
 import kogasastudio.ashihara.interaction.recipes.base.BERecipeInput;
 import kogasastudio.ashihara.interaction.recipes.base.WrappedRecipe;
 import kogasastudio.ashihara.registry.RecipeTypes;
-import kogasastudio.ashihara.utils.CuttingBoardToolType;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -27,13 +26,15 @@ public class CuttingBoardRecipe extends WrappedRecipe<CuttingBoardRecipe, Cuttin
 {
     private final Ingredient ingredient;
     private final List<ItemStackTemplate> result;
-    private final CuttingBoardToolType tool;
+    private final Ingredient tool;
+    private final boolean consume;
 
-    public CuttingBoardRecipe(Identifier idIn, Ingredient inputIn, List<ItemStackTemplate> outputIn, String typeIn) {
+    public CuttingBoardRecipe(Identifier idIn, Ingredient inputIn, List<ItemStackTemplate> outputIn, Ingredient toolIn, boolean consumeIn) {
         super(idIn);
         this.ingredient = inputIn;
         this.result = outputIn;
-        this.tool = CuttingBoardToolType.nameMatches(typeIn);
+        this.tool = toolIn;
+        this.consume = consumeIn;
     }
 
     @Override
@@ -52,8 +53,12 @@ public class CuttingBoardRecipe extends WrappedRecipe<CuttingBoardRecipe, Cuttin
         return ingredient;
     }
 
-    public CuttingBoardToolType getTool() {
+    public Ingredient getTool() {
         return this.tool;
+    }
+
+    public boolean shouldConsume() {
+        return this.consume;
     }
 
     public List<ItemStackTemplate> getOutputTemplates() {
@@ -75,7 +80,8 @@ public class CuttingBoardRecipe extends WrappedRecipe<CuttingBoardRecipe, Cuttin
             Identifier.CODEC.fieldOf("id").forGetter(CuttingBoardRecipe::getId),
             Ingredient.CODEC.fieldOf("ingredient").forGetter(CuttingBoardRecipe::getInput),
             ItemStackTemplate.CODEC.listOf().fieldOf("output").forGetter(CuttingBoardRecipe::getOutputTemplates),
-            Codec.STRING.fieldOf("tool").forGetter(recipe -> recipe.getTool().getName())
+            Ingredient.CODEC.fieldOf("tool").forGetter(CuttingBoardRecipe::getTool),
+            Codec.BOOL.optionalFieldOf("consume", false).forGetter(CuttingBoardRecipe::shouldConsume)
         ).apply(instance, CuttingBoardRecipe::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, CuttingBoardRecipe> STREAM_CODEC =
@@ -91,17 +97,19 @@ public class CuttingBoardRecipe extends WrappedRecipe<CuttingBoardRecipe, Cuttin
     private static CuttingBoardRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
         Identifier id = Identifier.STREAM_CODEC.decode(buffer);
         Ingredient ingredientN = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
-        String toolTypeN = buffer.readUtf();
+        Ingredient toolN = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
+        boolean consumeN = buffer.readBoolean();
         List<ItemStack> stacks = ItemStack.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buffer);
         List<ItemStackTemplate> outputN = new ArrayList<>(stacks.size());
         for (ItemStack s : stacks) outputN.add(ItemStackTemplate.fromNonEmptyStack(s));
-        return new CuttingBoardRecipe(id, ingredientN, outputN, toolTypeN);
+        return new CuttingBoardRecipe(id, ingredientN, outputN, toolN, consumeN);
     }
 
     private static void toNetwork(RegistryFriendlyByteBuf buffer, CuttingBoardRecipe recipe) {
         Identifier.STREAM_CODEC.encode(buffer, recipe.id);
         Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.ingredient);
-        buffer.writeUtf(recipe.tool.getName());
+        Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.tool);
+        buffer.writeBoolean(recipe.consume);
         ItemStack.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buffer, recipe.getOutput());
     }
 }

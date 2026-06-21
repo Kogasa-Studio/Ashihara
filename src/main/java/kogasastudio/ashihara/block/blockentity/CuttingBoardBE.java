@@ -6,7 +6,6 @@ import kogasastudio.ashihara.interaction.recipes.CuttingBoardRecipe;
 import kogasastudio.ashihara.registry.BlockEntities;
 import kogasastudio.ashihara.registry.RecipeTypes;
 import net.minecraft.core.BlockPos;
-import kogasastudio.ashihara.utils.CuttingBoardToolType;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -50,13 +49,10 @@ public class CuttingBoardBE extends AshiharaCommonBE
                 .findFirst();
     }
 
-    public void cut(CuttingBoardRecipe recipe)
+    public void cut(CuttingBoardRecipe recipe, ItemStack toolStack)
     {
         if (this.level == null) return;
-        SoundEvent event = recipe.getTool() == CuttingBoardToolType.KNIFE
-                ? kogasastudio.ashihara.registry.SoundEvents.CUT.get()
-                : SoundEvents.AXE_STRIP;
-        this.level.playSound(null, this.worldPosition, event, SoundSource.BLOCKS, 1.0f, 1.0f);
+        this.level.playSound(null, this.worldPosition, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0f, 1.0f);
         if (this.level.isClientSide())
         {
             ParticleHelper.spawnItemStackDestruction(this.level, this.content, new Vec3(this.worldPosition.getX() + 0.5d, this.worldPosition.getY() + 0.7d, this.worldPosition.getZ() + 0.5d), 10);
@@ -87,10 +83,15 @@ public class CuttingBoardBE extends AshiharaCommonBE
             } else
             {
                 Optional<RecipeHolder<CuttingBoardRecipe>> recipe = tryMatchRecipe(this.content);
-                if (recipe.isPresent() && recipe.get().value().getTool().toolMatches(stack))
+                if (recipe.isPresent() && recipe.get().value().getTool().test(stack))
                 {
-                    this.cut(recipe.get().value());
-                    if (!playerIn.isCreative()) stack.hurtAndBreak(1, playerIn, stack.getEquipmentSlot());
+                    CuttingBoardRecipe r = recipe.get().value();
+                    this.cut(r, stack);
+                    if (r.shouldConsume() && !playerIn.isCreative())
+                    {
+                        if (stack.isDamageableItem()) stack.hurtAndBreak(1, playerIn, stack.getEquipmentSlot());
+                        else stack.shrink(1);
+                    }
                     return true;
                 }
             }

@@ -2,7 +2,7 @@
   "type": "ashihara:cutting",
   "id": "ashihara:cut_bamboo_materials",
   "ingredient": "ashihara:dried_bamboo",
-  "tool": "axe",
+  "tool": "#c:axe",
   "output": [
     {
       "id": "ashihara:bamboo_material",
