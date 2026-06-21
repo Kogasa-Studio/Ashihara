@@ -340,6 +340,8 @@
   "block.ashihara.wooden_basin": "Wooden Basin",
   "block.ashihara.fermentation_vat": "Fermentation Vat",
   "block.ashihara.large_fermentation_vat": "Large Fermentation Vat",
+  "jei.ashihara.category.cutting_board": "Cutting Board",
+  "jei.ashihara.cutting_board.consume_durability": "Consume Durability",
   "jei.ashihara.category.pot": "Pot",
   "jei.ashihara.category.mortar": "Mortar",
   "jei.ashihara.mortar.sequence_label": "Right-click in sequence: ",

@@ -334,6 +334,8 @@
   "block.ashihara.wooden_basin": "木盥",
   "block.ashihara.fermentation_vat": "仕込桶",
   "block.ashihara.large_fermentation_vat": "大仕込桶",
+  "jei.ashihara.category.cutting_board": "俎板",
+  "jei.ashihara.cutting_board.consume_durability": "耐久消費",
   "jei.ashihara.category.pot": "土鍋",
   "jei.ashihara.category.mortar": "臼",
   "jei.ashihara.mortar.sequence_label": "順序通り右押し：",

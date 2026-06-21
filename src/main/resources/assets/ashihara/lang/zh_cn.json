@@ -334,6 +334,8 @@
   "block.ashihara.wooden_basin": "木盆",
   "block.ashihara.fermentation_vat": "发酵桶",
   "block.ashihara.large_fermentation_vat": "大型发酵桶",
+  "jei.ashihara.category.cutting_board": "砧板",
+  "jei.ashihara.cutting_board.consume_durability": "消耗耐久",
   "jei.ashihara.category.pot": "土锅",
   "jei.ashihara.category.mortar": "舂",
   "jei.ashihara.mortar.sequence_label": "按序列右击：",

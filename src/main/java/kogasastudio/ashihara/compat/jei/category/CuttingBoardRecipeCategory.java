@@ -6,48 +6,63 @@ import kogasastudio.ashihara.interaction.recipes.CuttingBoardRecipe;
 import kogasastudio.ashihara.registry.Items;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.types.IRecipeType;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 
 public class CuttingBoardRecipeCategory extends BaseRecipeCategory<CuttingBoardRecipe>
 {
-    protected static final Identifier BACKGROUND = Identifier.fromNamespaceAndPath(Ashihara.MODID, "textures/gui/jei/cutting_board.png");
+    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Ashihara.MODID, "textures/gui/jei/cutting_board.png");
+    private static final int TEX_W = 128;
+    private static final int TEX_H = 128;
+    private static final int BG_W = 82;
+    private static final int BG_H = 61;
+
     protected static final IRecipeType<CuttingBoardRecipe> CUTTING_BOARD = IRecipeType.create(Ashihara.MODID, "cutting_board", CuttingBoardRecipe.class);
 
     public CuttingBoardRecipeCategory(IGuiHelper helper)
     {
         super(JeiPlugin.CUTTING_BOARD,
                 helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(Items.CUTTING_BOARD.get())),
-                helper.createDrawable(BACKGROUND, 0, 0, 176, 166 - 90));
+                helper.drawableBuilder(TEXTURE, 0, 0, BG_W, BG_H).setTextureSize(TEX_W, TEX_H).build());
+        this.translateKey = "jei.ashihara.category.cutting_board";
     }
 
     @Override
-    public int getWidth()
-    {
-        return 60;
-    }
+    public int getWidth() { return BG_W; }
 
     @Override
-    public int getHeight()
+    public int getHeight() { return BG_H; }
+
+    @Override
+    public void draw(CuttingBoardRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY)
     {
-        return 34;
+        this.background.draw(guiGraphics);
+        if (recipe.shouldConsume())
+        {
+            Font font = Minecraft.getInstance().font;
+            guiGraphics.text(font, Component.translatable("jei.ashihara.cutting_board.consume_durability"), 54, 17, 0xFFFFFFFF);
+        }
     }
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, CuttingBoardRecipe recipe, IFocusGroup focuses)
     {
-        builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).add(recipe.getInput());
-        builder.addSlot(RecipeIngredientRole.INPUT, 30, 1).add(recipe.getTool());
+        builder.addSlot(RecipeIngredientRole.INPUT, 9, 36).add(recipe.getInput());
+        builder.addSlot(RecipeIngredientRole.INPUT, 32, 8).add(recipe.getTool());
 
         var output = recipe.getOutput();
-
-        for (int i = 0; i < output.size(); i++)
+        for (int i = 0; i < output.size() && i < 4; i++)
         {
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 20, 1 + i * 20).add(output.get(i));
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 57 + (i % 2) * 18, 36 + (i / 2) * 18).add(output.get(i));
         }
     }
 
