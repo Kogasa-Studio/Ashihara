@@ -58,7 +58,7 @@
                   "function": "minecraft:explosion_decay"
                 }
               ],
-              "name": "ashihara:salt"
+              "name": "ashihara:coarse_salt"
             }
           ]
         },
@@ -85,7 +85,7 @@
                   "function": "minecraft:explosion_decay"
                 }
               ],
-              "name": "ashihara:salt"
+              "name": "ashihara:coarse_salt"
             }
           ]
         },
@@ -112,7 +112,7 @@
                   "function": "minecraft:explosion_decay"
                 }
               ],
-              "name": "ashihara:salt"
+              "name": "ashihara:coarse_salt"
             }
           ]
         },
@@ -139,7 +139,7 @@
                   "function": "minecraft:explosion_decay"
                 }
               ],
-              "name": "ashihara:salt"
+              "name": "ashihara:coarse_salt"
             }
           ]
         }

@@ -75,7 +75,7 @@ public class SaltFieldBlock extends PaddyFieldBlock
         if (itemStack.getItem() instanceof ShovelItem && state.getValue(SALT_COUNT) > 0)
         {
             level.playSound(null, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1.0F, 1.0F);
-            popResourceFromFace(level, pos, Direction.UP, Items.SALT.toStack(state.getValue(SALT_COUNT)));
+            popResourceFromFace(level, pos, Direction.UP, Items.COARSE_SALT.toStack(state.getValue(SALT_COUNT)));
             level.setBlockAndUpdate(pos, state.setValue(SALT_COUNT, 0));
             return InteractionResult.SUCCESS;
         }
