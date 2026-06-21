@@ -3,8 +3,8 @@ package kogasastudio.ashihara.block.blockentity;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import kogasastudio.ashihara.Ashihara;
-import kogasastudio.ashihara.block.blockentity.util.ToolTipController;
-import kogasastudio.ashihara.client.models.geo.UIPanelModel;
+import kogasastudio.ashihara.client.gui3d.util.BoneTracer;
+import kogasastudio.ashihara.client.models.geo.FermentationDisplayModel;
 import kogasastudio.ashihara.helper.ParticleHelper;
 import kogasastudio.ashihara.helper.RecipeHelper;
 import kogasastudio.ashihara.interaction.recipes.MortarRecipe;
@@ -27,11 +27,12 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -47,33 +48,9 @@ import java.util.function.Predicate;
 import static net.minecraft.world.level.block.Block.UPDATE_ALL;
 import static net.minecraft.world.level.block.Block.popResource;
 
-public class MortarBE extends AshiharaCommonBE implements IRenderInWorldToolTip, IItemHandler<MortarBE>, IFluidHandler
+public class MortarBE extends AshiharaCommonBE implements IItemHandler<MortarBE>, IFluidHandler
 {
-    /*public final RenderSwitch switchFluid = new RenderAutoSwitch
-    (
-        p ->
-        {
-            if (this.fluid_display_position == null) this.init(p);
-            this.fluid_display_position.triggerInternal
-            (
-                p, this.fluid_display_position.hashCode(),
-                new InternalControlGeoModel.InternalAnimationBuilder("sync_liquid_level", LoopType.HOLD_ON_LAST_FRAME)
-                .startBone("main")
-                .lerpY(InternalControlGeoModel.InternalAnimationBuilder.VarType.POSITION, 10, this.lastLiquidLevel, this.getLiquidLevel(), EasingType.EASE_IN_OUT_QUAD)
-                .endBone().build()
-            );
-            this.setNeedBlockUpdate();
-        },
-        p -> this.setNeedBlockUpdate(),
-        this::stillTransiting,
-        () -> !this.stillTransiting()
-    );*/
     public BEFluidStackHandler<MortarBE> fluidTank = new BEFluidStackHandler<>(16000, this);
-
-    public UIPanelModel ui_panel_model;
-    public ToolTipController<MortarBE> toolTipController;
-
-    private float lastLiquidLevel = 0;
 
     public int progress = 0;
     public float productionMultiplier = 1.0f;
@@ -82,29 +59,20 @@ public class MortarBE extends AshiharaCommonBE implements IRenderInWorldToolTip,
     private Queue<MortarToolType> queue = new ConcurrentLinkedDeque<>();
     public BEItemStackHandler<MortarBE> inventory = new BEItemStackHandler<>(4, this);
 
+    public float prevFluidLevel = 0f;
+    public float fluidLevel = 0f;
+    public boolean fluidLevelChanged = false;
+    public boolean inited = false;
+    private FermentationDisplayModel model;
+    public Map<String, BoneTracer> boneTracers = new LinkedHashMap<>();
+
     public MortarBE(BlockPos pos, BlockState state)
     {
         super(BlockEntities.MORTAR_BE.get(), pos, state);
     }
 
-    @Override
-    public void init(Player player)
-    {
-        this.ui_panel_model = new UIPanelModel(player).showHemmingEdge(true);
-        this.toolTipController = new ToolTipController<>(this, this.ui_panel_model);
-    }
-
     public void pushLastLiquidLevel()
     {
-        this.lastLiquidLevel = (float) getLiquidLevel();
-    }
-
-    /**
-     * Gets the height in pixels where liquid quad should be rendered.
-     */
-    public double getLiquidLevel()
-    {
-        return ((double) this.fluidTank.getFluidAmount() / this.fluidTank.getCapacity()) * 6d + 2d;
     }
 
     public int getMaxParallel()
@@ -219,7 +187,7 @@ public class MortarBE extends AshiharaCommonBE implements IRenderInWorldToolTip,
     {
         if (this.level instanceof ServerLevel serverLevel)
         {
-            RecipeManager recipeManager = (RecipeManager) serverLevel.recipeAccess();
+            RecipeManager recipeManager = serverLevel.recipeAccess();
             input.getString("currentRecipe").ifPresent(id ->
             {
                 if (!id.isEmpty())
@@ -263,10 +231,79 @@ public class MortarBE extends AshiharaCommonBE implements IRenderInWorldToolTip,
         super.saveAdditional(output);
     }
 
-    @Override
-    public ToolTipController<?> getToolTipController()
+    public FermentationDisplayModel getModel()
     {
-        return this.toolTipController;
+        if (this.level == null || !this.level.isClientSide()) return null;
+        if (this.model == null)
+        {
+            this.model = new FermentationDisplayModel("assistance/mortar_display", "textures/geo/empty.png", "block/mortar_display");
+            for (int i = 0; i < 8; i++)
+            {
+                String id = "level" + i;
+                createTracer(id);
+            }
+            createTracer("fluid_display");
+            createTracer("item_display");
+        }
+        return this.model;
+    }
+
+    private void createTracer(String name)
+    {
+        BoneTracer tracer = new BoneTracer(b -> b.name().equals(name));
+        boneTracers.put(name, tracer);
+        this.model.getRendererPoseSync().ashihara_1_21$addTracer(tracer);
+    }
+
+    public BoneTracer getBoneTracer(String id)
+    {
+        return this.boneTracers.get(id);
+    }
+
+    public void dropContents(Level level, BlockPos pos)
+    {
+        for (int i = 0; i < this.inventory.size(); i++)
+        {
+            ItemStack stack = this.inventory.getStackInSlot(i);
+            if (!stack.isEmpty())
+            {
+                Block.popResource(level, pos, stack);
+            }
+        }
+    }
+
+    @Override
+    public void setChanged()
+    {
+        super.setChanged();
+        float t = (float) this.fluidTank.getFluidAmount() / (float) this.fluidTank.getCapacity();
+        if (this.fluidLevel != t)
+        {
+            this.prevFluidLevel = this.fluidLevel;
+            this.fluidLevel = t;
+            this.fluidLevelChanged = true;
+        }
+        if (this.level != null && !this.level.isClientSide())
+        {
+            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
+        }
+    }
+
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state)
+    {
+        if (this.level != null && !this.level.isClientSide())
+        {
+            dropContents(this.level, this.getBlockPos());
+        }
+        super.preRemoveSideEffects(pos, state);
+    }
+
+    @Override
+    public void onLoad()
+    {
+        super.onLoad();
+        this.setChanged();
     }
 
     public enum MortarToolType

@@ -14,11 +14,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 @EventBusSubscriber(modid = Ashihara.MODID)
 public class BasicEventHandler
 {
+    @SubscribeEvent
+    public static void onFarmlandTrample(BlockEvent.FarmlandTrampleEvent event)
+    {
+        event.setCanceled(true);
+    }
+
     @SubscribeEvent
     public static void onRightClick(PlayerInteractEvent.RightClickBlock event)
     {
