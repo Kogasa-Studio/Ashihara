@@ -87,9 +87,9 @@ public class PotRecipeCategory extends BaseRecipeCategory<PotRecipe>
 
         // Fluid amount labels
         FluidStack fIn = recipe.getFluidCost();
-        if (!fIn.isEmpty()) drawFluidAmount(guiGraphics, font, fIn.getAmount(), 55+8, 33+8);
+        if (!fIn.isEmpty()) drawFluidAmount(guiGraphics, font, fIn.getAmount(), 55, 37);
         FluidStack fOut = recipe.getFluidProduction();
-        if (!fOut.isEmpty()) drawFluidAmount(guiGraphics, font, fOut.getAmount(), 120+8, 33+8);
+        if (!fOut.isEmpty()) drawFluidAmount(guiGraphics, font, fOut.getAmount(), 120, 37);
         if (recipe.getMaxFluidAmount() != null) guiGraphics.text(font, Component.translatable("tooltip.ashihara.jei.max", recipe.getMaxFluidAmount()), 55-8, 33+24, 0xFFFFFFFF);
     }
 
@@ -144,7 +144,11 @@ public class PotRecipeCategory extends BaseRecipeCategory<PotRecipe>
     {
         String label = amount >= 1000 ? (amount / 1000) + "B" : amount + "mB";
         int textWidth = font.width(label);
-        gfx.text(font, Component.literal(label), slotX + 16 - textWidth, slotY + 8, 0xFFFFFFFF);
+        gfx.pose().pushMatrix();
+        gfx.pose().translate(slotX + 16 - textWidth / 2f, slotY + 8);
+        gfx.pose().scale(0.5f);
+        gfx.text(font, Component.literal(label), 0, 0, 0xFFFFFFFF);
+        gfx.pose().popMatrix();
     }
 
     private static final IRecipeType<PotRecipe> POT = IRecipeType.create(Ashihara.MODID, "pot", PotRecipe.class);
