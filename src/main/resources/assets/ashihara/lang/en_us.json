@@ -341,6 +341,13 @@
   "block.ashihara.fermentation_vat": "Fermentation Vat",
   "block.ashihara.large_fermentation_vat": "Large Fermentation Vat",
   "jei.ashihara.category.pot": "Pot",
+  "jei.ashihara.category.fermentation": "Fermentation Or Soaking",
+  "jei.ashihara.fermentation.size.basin": "Basin",
+  "jei.ashihara.fermentation.size.vat": "Vat",
+  "jei.ashihara.fermentation.size.large_vat": "Large Vat",
+  "jei.ashihara.fermentation.fluid_range_hint_1": "The fluid amount in the container must be within this range.",
+  "jei.ashihara.fermentation.fluid_range_hint_2": "This is not the amount of fluid consumed.",
+  "jei.ashihara.fermentation.need_size": "Required container: ",
   "jei.ashihara.pot.heat_required": "Heat required: %s",
   "block.ashihara.rice_porridge": "Rice Porridge",
   "item.ashihara.rice_porridge_bucket": "Bucket of Rice Porridge"

@@ -41,3 +41,4 @@ repo/
 /resource/
 /libs/
 /.claude/
+/.codemoss/prompt.json

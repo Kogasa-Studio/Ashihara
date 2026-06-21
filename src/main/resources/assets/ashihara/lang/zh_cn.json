@@ -335,6 +335,13 @@
   "block.ashihara.fermentation_vat": "发酵桶",
   "block.ashihara.large_fermentation_vat": "大型发酵桶",
   "jei.ashihara.category.pot": "土锅",
+  "jei.ashihara.category.fermentation": "发酵或浸洗",
+  "jei.ashihara.fermentation.size.basin": "木盆",
+  "jei.ashihara.fermentation.size.vat": "发酵桶",
+  "jei.ashihara.fermentation.size.large_vat": "大发酵桶",
+  "jei.ashihara.fermentation.fluid_range_hint_1": "容器内的流体数量需要满足这个范围。",
+  "jei.ashihara.fermentation.fluid_range_hint_2": "这不是消耗流体的数量。",
+  "jei.ashihara.fermentation.need_size": "需求容器：",
   "jei.ashihara.pot.heat_required": "需要火力：%s",
   "block.ashihara.rice_porridge": "白米粥",
   "item.ashihara.rice_porridge_bucket": "白米粥桶"
