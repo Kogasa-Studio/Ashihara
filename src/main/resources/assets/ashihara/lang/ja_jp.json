@@ -335,6 +335,8 @@
   "block.ashihara.fermentation_vat": "仕込桶",
   "block.ashihara.large_fermentation_vat": "大仕込桶",
   "jei.ashihara.category.pot": "土鍋",
+  "jei.ashihara.category.mortar": "臼",
+  "jei.ashihara.mortar.sequence_label": "順序通り右押し：",
   "jei.ashihara.category.fermentation": "発酵/漬け込み",
   "jei.ashihara.fermentation.size.basin": "木盆",
   "jei.ashihara.fermentation.size.vat": "仕込桶",

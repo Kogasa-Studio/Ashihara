@@ -3,6 +3,7 @@ package kogasastudio.ashihara.compat.jei;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.compat.jei.category.CuttingBoardRecipeCategory;
 import kogasastudio.ashihara.compat.jei.category.FermentationRecipeCategory;
+import kogasastudio.ashihara.compat.jei.category.MortarRecipeCategory;
 import kogasastudio.ashihara.compat.jei.category.PotRecipeCategory;
 import kogasastudio.ashihara.interaction.recipes.CuttingBoardRecipe;
 import kogasastudio.ashihara.interaction.recipes.FermentationRecipe;
@@ -43,8 +44,7 @@ public class JeiPlugin implements IModPlugin
         registry.addRecipeCategories(new CuttingBoardRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(new PotRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
         registry.addRecipeCategories(new FermentationRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
-        //registry.addRecipeCategories(new MillRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
-        //registry.addRecipeCategories(new MortarRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
+        registry.addRecipeCategories(new MortarRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
@@ -61,9 +61,10 @@ public class JeiPlugin implements IModPlugin
 
             List<FermentationRecipe> fermentRecipes = RecipeHelper.getRecipesByType(level, RecipeTypes.FERMENTATION.get()).stream().map(RecipeHolder::value).toList();
             registration.addRecipes(FERMENTATION, fermentRecipes);
+
+            List<MortarRecipe> mortarRecipes = RecipeHelper.getRecipesByType(level, RecipeTypes.MORTAR.get()).stream().map(RecipeHolder::value).toList();
+            registration.addRecipes(MORTAR, mortarRecipes);
         }
-        //registration.addRecipes(MILL, getRecipe(RecipeTypes.MILL.get()));
-        //registration.addRecipes(MORTAR, getRecipe(RecipeTypes.MORTAR.get()));
     }
 
     @Override
