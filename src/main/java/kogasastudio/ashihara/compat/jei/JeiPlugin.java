@@ -28,7 +28,7 @@ import java.util.List;
 @mezz.jei.api.JeiPlugin
 public class JeiPlugin implements IModPlugin
 {
-    public static final IRecipeType<CuttingBoardRecipe> CUTTING_BOARD = IRecipeType.create(Identifier.fromNamespaceAndPath(Ashihara.MODID, "cutting_board"), CuttingBoardRecipe.class);
+    public static final IRecipeType<CuttingBoardRecipe> CUTTING_BOARD = IRecipeType.create(Identifier.fromNamespaceAndPath(Ashihara.MODID, "cutting"), CuttingBoardRecipe.class);
 
     //public static final IRecipeType<MillRecipe> MILL = IRecipeType.create(Identifier.fromNamespaceAndPath(Ashihara.MODID, "mill"), MillRecipe.class);
 
