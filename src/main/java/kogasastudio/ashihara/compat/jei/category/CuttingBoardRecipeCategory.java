@@ -26,14 +26,14 @@ public class CuttingBoardRecipeCategory extends BaseRecipeCategory<CuttingBoardR
     private static final int BG_W = 82;
     private static final int BG_H = 61;
 
-    protected static final IRecipeType<CuttingBoardRecipe> CUTTING_BOARD = IRecipeType.create(Ashihara.MODID, "cutting_board", CuttingBoardRecipe.class);
+    protected static final IRecipeType<CuttingBoardRecipe> CUTTING_BOARD = IRecipeType.create(Ashihara.MODID, "cutting", CuttingBoardRecipe.class);
 
     public CuttingBoardRecipeCategory(IGuiHelper helper)
     {
         super(JeiPlugin.CUTTING_BOARD,
                 helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(Items.CUTTING_BOARD.get())),
                 helper.drawableBuilder(TEXTURE, 0, 0, BG_W, BG_H).setTextureSize(TEX_W, TEX_H).build());
-        this.translateKey = "jei.ashihara.category.cutting_board";
+        this.translateKey = "jei.ashihara.category.cutting";
     }
 
     @Override
