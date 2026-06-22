@@ -8,6 +8,7 @@
     "MixinPlayer"
   ],
   "client": [
+    "MixinWaterFluid",
     "MixinAbstractContainerScreen",
     "MixinLocalPlayer",
     "MixinPlayerModel",
