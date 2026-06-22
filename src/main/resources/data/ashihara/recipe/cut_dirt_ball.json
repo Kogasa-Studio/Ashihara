@@ -1,0 +1,13 @@
+{
+  "type": "ashihara:cutting",
+  "id": "ashihara:cut_dirt_ball",
+  "ingredient": "minecraft:dirt",
+  "tool": "#minecraft:shovels",
+  "custom_sound": "minecraft:item.shovel.flatten",
+  "output": [
+    {
+      "id": "ashihara:dirt_ball",
+      "count": 4
+    }
+  ]
+}d

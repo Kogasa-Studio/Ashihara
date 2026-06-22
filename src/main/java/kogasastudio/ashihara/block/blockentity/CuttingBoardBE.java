@@ -52,7 +52,8 @@ public class CuttingBoardBE extends AshiharaCommonBE
     public void cut(CuttingBoardRecipe recipe, ItemStack toolStack)
     {
         if (this.level == null) return;
-        this.level.playSound(null, this.worldPosition, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0f, 1.0f);
+        SoundEvent event = recipe.getCustomSound() != null ? recipe.getCustomSound() : kogasastudio.ashihara.registry.SoundEvents.CUT.get();
+        this.level.playSound(null, this.worldPosition, event, SoundSource.BLOCKS, 1.0f, 1.0f);
         if (this.level.isClientSide())
         {
             ParticleHelper.spawnItemStackDestruction(this.level, this.content, new Vec3(this.worldPosition.getX() + 0.5d, this.worldPosition.getY() + 0.7d, this.worldPosition.getZ() + 0.5d), 10);

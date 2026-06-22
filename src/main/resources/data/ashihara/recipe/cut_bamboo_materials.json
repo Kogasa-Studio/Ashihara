@@ -2,7 +2,8 @@
   "type": "ashihara:cutting",
   "id": "ashihara:cut_bamboo_materials",
   "ingredient": "ashihara:dried_bamboo",
-  "tool": "#c:axe",
+  "tool": "#minecraft:axes",
+  "custom_sound": "minecraft:item.axe.strip",
   "output": [
     {
       "id": "ashihara:bamboo_material",
