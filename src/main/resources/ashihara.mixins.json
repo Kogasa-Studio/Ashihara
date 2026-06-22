@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_25",
   "refmap": "ashihara.refmap.json",
   "mixins": [
+    "MixinBlockTransformExtent",
     "MixinPlayer"
   ],
   "client": [

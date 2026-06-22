@@ -75,6 +75,7 @@ public record ComponentStateDefinition(
         float rotationY = input.getFloatOr("rotationY", 0);
         float rotationZ = input.getFloatOr("rotationZ", 0);
         VoxelShape shape = ShapeHelper.readNBT(input);
+        if (component.getBaseShape() != null) shape = component.rebuildShape(inBlockPos, rotationX, rotationY, rotationZ);
         List<Occupation> occupations = new ArrayList<>();
         Object customObj = null;
         ValueInput.ValueInputList occList = input.childrenListOrEmpty("occupation");

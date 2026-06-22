@@ -52,10 +52,21 @@ public class RoundTile extends AdditionalComponent
         this.setSound(SoundType.DEEPSLATE_TILES);
     }
 
-    @Override
-    public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)
-    {
-        Direction direction = context.getHorizontalDirection();
+   @Override
+   public VoxelShape getBaseShape() { return SHAPE; }
+
+   @Override
+   public VoxelShape rebuildShape(Vec3 inBlockPos, float rotationX, float rotationY, float rotationZ)
+   {
+       // rotationY = r - yRotation, so -r = -(rotationY + yRotation)
+       VoxelShape s = ShapeHelper.rotateShape(SHAPE, -(rotationY + yRotation));
+       return ShapeHelper.offsetShape(s, inBlockPos.x, inBlockPos.y, inBlockPos.z);
+   }
+
+   @Override
+   public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)
+   {
+       Direction direction = context.getHorizontalDirection();
         direction = direction;
         Vec3 inBlockPos = beIn.inBlockVec(context.getClickLocation());
 

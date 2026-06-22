@@ -2,9 +2,14 @@ package kogasastudio.ashihara.block.building.component;
 
 import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
+import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.BuildingComponents;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.item.context.UseOnContext;
+import org.jspecify.annotations.Nullable;
 import net.minecraft.world.level.block.SoundType;
 import java.util.List;
 import java.util.function.Supplier;
@@ -45,11 +50,24 @@ public abstract class BuildingComponent
 
     public Supplier<BaseMultiBuiltBlock> getMaterial() {return material;}
 
-    public SoundType getSoundType() {return this.sound;}
+   public SoundType getSoundType() {return this.sound;}
 
-    public BuildingComponent setSound(SoundType soundIn)
-    {
-        this.sound = soundIn;
-        return this;
-    }
+   public BuildingComponent setSound(SoundType soundIn)
+   {
+       this.sound = soundIn;
+       return this;
+   }
+
+   @Nullable
+   public VoxelShape getBaseShape() { return null; }
+
+   /**
+    * Rebuild shape from stored fields. Override in subclasses whose shape
+    * follows rotate(base, angle) + offset(inBlockPos) pattern.
+    */
+   public VoxelShape rebuildShape(Vec3 inBlockPos, float rotationX, float rotationY, float rotationZ)
+   {
+       VoxelShape base = getBaseShape();
+       return base != null ? ShapeHelper.offsetShape(base, inBlockPos.x, inBlockPos.y, inBlockPos.z) : Shapes.empty();
+   }
 }
