@@ -86,9 +86,9 @@ public class WideHoeItem extends HoeItem
         if (tilled != null)
         {
             level.setBlock(pos, goWide ? net.minecraft.world.level.block.Blocks.FARMLAND.defaultBlockState() : Blocks.DIRT_DEPRESSION.get().defaultBlockState(), 11);
+            if (!goWide) Block.popResourceFromFace(level, pos, Direction.UP, Items.DIRT_BALL.toStack(2));
             return true;
         }
-        if (goWide) Block.popResourceFromFace(level, pos, Direction.UP, Items.DIRT_BALL.toStack(2));
         // sand -> salt field (only in normal mode with air above)
         if (!goWide && state.is(BlockTags.SAND) && level.getBlockState(pos.above()).isAir())
         {

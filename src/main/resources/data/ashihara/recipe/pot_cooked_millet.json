@@ -1,0 +1,20 @@
+{
+  "type": "ashihara:pot",
+  "id": "ashihara:pot_cooked_millet",
+  "ingredients": [
+    {
+      "ingredient": "ashihara:millet",
+      "count": 1
+    }
+  ],
+  "output": {
+    "id": "ashihara:cooked_millet"
+  },
+  "fluid_cost": {
+    "id": "minecraft:water",
+    "amount": 100
+  },
+  "max_fluid_amount": 150,
+  "heat_level_required": "high",
+  "cook_time": 600
+}

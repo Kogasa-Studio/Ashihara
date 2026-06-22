@@ -113,6 +113,9 @@ public class Items
     public static final DeferredItem<? extends Item> RICE_POWDER = ITEMS.registerItem("rice_powder", AshiharaItem::new);
     public static final DeferredItem<? extends Item> BEAN_POWDER = ITEMS.registerItem("bean_powder", AshiharaItem::new);
     public static final DeferredItem<? extends Item> SOY_BEAN = ITEMS.registerItem("soy_bean", properties -> new BlockItem(Blocks.SOY_BEANS.get(), properties.useItemDescriptionPrefix()));
+    public static final DeferredItem<? extends Item> MILLET = ITEMS.registerItem("millet", properties -> new BlockItem(Blocks.MILLETS.get(), properties.useItemDescriptionPrefix()));
+    public static final DeferredItem<? extends Item> COOKED_MILLET = ITEMS.registerSimpleItem("cooked_millet", properties -> properties.food(new FoodProperties.Builder().nutrition(5).saturationModifier(1f).build(), Consumables.DEFAULT_FOOD));
+    public static final DeferredItem<? extends Item> WHITE_RADISH = ITEMS.registerItem("white_radish", properties -> new BlockItem(Blocks.WHITE_RADISHES.get(), properties.food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.5f).build(), Consumables.DEFAULT_FOOD)));
     public static final DeferredItem<? extends Item> SOAKED_SOY_BEAN = ITEMS.registerItem("soaked_soy_bean", properties -> new EasyFood(1, properties));
     public static final DeferredItem<? extends Item> BOILED_SOY_BEAN = ITEMS.registerItem("boiled_soy_bean", properties -> new EasyFood(2, properties));
     public static final DeferredItem<? extends Item> COTTON = ITEMS.registerItem("cotton", AshiharaItem::new);

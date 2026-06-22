@@ -346,6 +346,25 @@ public class Blocks
             return Items.SWEET_POTATO.get();
         }
     }, properties -> properties.mapColor(MapColor.PLANT).noCollision().noOcclusion().randomTicks().instabreak().lightLevel(i -> 1).sound(SoundType.CROP));
+
+    public static final DeferredBlock<Block> MILLETS = BLOCKS.registerBlock("millets", properties -> new AbstractCropAge7(properties)
+    {
+        @Override
+        protected ItemLike getBaseSeedId()
+        {
+            return Items.MILLET.get();
+        }
+    }, properties -> properties.mapColor(MapColor.PLANT).noCollision().noOcclusion().randomTicks().instabreak().lightLevel(i -> 1).sound(SoundType.CROP));
+
+    public static final DeferredBlock<Block> WHITE_RADISHES = BLOCKS.registerBlock("white_radishes", properties -> new AbstractCropAge7(properties)
+    {
+        @Override
+        protected ItemLike getBaseSeedId()
+        {
+            return Items.WHITE_RADISH.get();
+        }
+    }, properties -> properties.mapColor(MapColor.PLANT).noCollision().noOcclusion().randomTicks().instabreak().lightLevel(i -> 1).sound(SoundType.CROP));
+
     public static final DeferredBlock<Block> CUCUMBERS = BLOCKS.registerBlock("cucumbers", properties -> new CucumberCropBlock(properties)
     {
         @Override
