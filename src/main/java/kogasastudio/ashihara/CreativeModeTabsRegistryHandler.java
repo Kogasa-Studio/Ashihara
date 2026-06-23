@@ -308,6 +308,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.IRON_OTSUCHI.get());
                                         output.accept(Items.DIAMOND_OTSUCHI.get());
                                         output.accept(Items.IRON_WIDE_HOE.get());
+                                        output.accept(Items.CHOPSTICKS.get());
                                         output.accept(Items.WOODEN_HAMMER.get());
                                         output.accept(Items.CHISEL.get());
                                         output.accept(Items.TACHI.get());

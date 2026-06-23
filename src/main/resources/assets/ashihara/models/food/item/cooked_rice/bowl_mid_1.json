@@ -1,0 +1,51 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"texture_size": [8, 8],
+	"textures": {
+		"1": "ashihara:food/cooked_rice"
+	},
+	"elements": [
+		{
+			"from": [6, 2.15, 6],
+			"to": [10, 2.15, 10],
+			"rotation": {"angle": 0, "axis": "z", "origin": [8, 1.25, 8]},
+			"faces": {
+				"up": {"uv": [12, 12, 4, 4], "texture": "#1"}
+			}
+		},
+		{
+			"from": [8.28492, 1.92441, 6.1],
+			"to": [9.78492, 1.92441, 9.9],
+			"rotation": {"angle": 22.5, "axis": "z", "origin": [8, 3, 8]},
+			"faces": {
+				"up": {"uv": [3, 4.2, 6, 11.8], "rotation": 180, "texture": "#1"}
+			}
+		},
+		{
+			"from": [6.1, 1.92441, 8.28492],
+			"to": [9.9, 1.92441, 9.78492],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 3, 8]},
+			"faces": {
+				"up": {"uv": [4.2, 3, 11.8, 6], "rotation": 180, "texture": "#1"}
+			}
+		},
+		{
+			"from": [6.21508, 1.92441, 6.1],
+			"to": [7.71508, 1.92441, 9.9],
+			"rotation": {"angle": -22.5, "axis": "z", "origin": [8, 3, 8]},
+			"faces": {
+				"up": {"uv": [10, 4.2, 13, 11.8], "rotation": 180, "texture": "#1"}
+			}
+		},
+		{
+			"from": [6.1, 1.92441, 6.21508],
+			"to": [9.9, 1.92441, 7.71508],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [8, 3, 8]},
+			"faces": {
+				"up": {"uv": [4.2, 9, 11.8, 12], "rotation": 180, "texture": "#1"}
+			}
+		}
+	]
+}

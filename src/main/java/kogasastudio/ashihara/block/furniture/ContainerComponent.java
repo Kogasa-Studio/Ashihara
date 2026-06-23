@@ -4,13 +4,17 @@ import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.building.component.ComponentStateDefinition;
 import kogasastudio.ashihara.block.building.component.Interactable;
 import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
+import kogasastudio.ashihara.datacomponent.ChopsticksFood;
+import kogasastudio.ashihara.item.IContainerItem;
 import kogasastudio.ashihara.helper.BowlFoodHelper;
 import kogasastudio.ashihara.registry.BuildingComponents;
 import kogasastudio.ashihara.registry.DataComponentTypes;
+import kogasastudio.ashihara.registry.Items;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -118,6 +122,7 @@ public abstract class ContainerComponent extends FurnitureComponent
         if (!(customData instanceof ContainerContent cc) || cc.isEmpty()) return;
         output.putString("type", cc.type().name());
         cc.handler().serialize(output.child("handler"));
+        if (cc.chopLeft() > 0) output.putInt("chop_left", cc.chopLeft());
     }
 
     @Override public Object deserializeCustom(ValueInput input)
@@ -127,7 +132,8 @@ public abstract class ContainerComponent extends FurnitureComponent
         if (type == ContainerState.ContentType.EMPTY) return null;
         StacksResourceHandler<?, ?> h = type == ContainerState.ContentType.FLUID ? createFluidHandler() : createContentHandler();
         h.deserialize(input.childOrEmpty("handler"));
-        return new ContainerContent(type, h);
+        int cl = input.getIntOr("chop_left", 0);
+        return new ContainerContent(type, h, cl);
     }
 
     // --------------------------------------------------
@@ -147,6 +153,11 @@ public abstract class ContainerComponent extends FurnitureComponent
         if (held.isEmpty() && player.isShiftKeyDown())
         {
             ItemStack bowl = getDropItem();
+            if (cc.chopLeft() > 0)
+            {
+               bowl.set(DataComponentTypes.CHOP_LEFT.get(), cc.chopLeft());
+               bowl.set(DataComponentTypes.MAX_BITES.get(), maxBites());
+            }
             if (cc.handler() != null)
             {
                 switch (cc.handler())
@@ -194,6 +205,8 @@ public abstract class ContainerComponent extends FurnitureComponent
 
                 if (held.has(DataComponents.FOOD))
                 {
+                    if (held.has(DataComponents.USE_REMAINDER)) return definition;
+                    if (held.getItem() instanceof IContainerItem) return definition;
                     var ih = (ItemStacksResourceHandler) createContentHandler();
                     try (Transaction tx = Transaction.openRoot())
                     {
@@ -241,8 +254,30 @@ public abstract class ContainerComponent extends FurnitureComponent
             // ---- ITEM bowl ----
             case ItemStacksResourceHandler ih ->
             {
+                // Chopsticks: set/consume chopLeft
+                if (!held.isEmpty() && held.is(Items.CHOPSTICKS.get()))
+                {
+                    if (held.has(DataComponentTypes.CHOPSTICKS_FOOD.get())) return definition; // already carrying food
+                    if (cc.chopLeft() == 0) cc = new ContainerContent(cc.type(), cc.handler(), maxBites());
+                    int cl = cc.chopLeft() - 1;
+                    var foodRes = ih.getResource(0);
+                    int bitesPerItem = Math.max(1, maxBites() / containerStorage());
+                    var foodStack = foodRes.toStack(1);
+                    held.set(DataComponentTypes.CHOPSTICKS_FOOD.get(), new ChopsticksFood(foodStack.copy(), bitesPerItem));
+                    BowlFoodHelper.applyFoodChopsticks(held, foodStack, bitesPerItem);
+                    if (cl <= 0)
+                    {
+                        try (Transaction tx = Transaction.openRoot())
+                        { ih.extract(0, foodRes, (int) ih.getAmountAsLong(0), tx); tx.commit(); }
+                        player.playSound(SoundEvents.ITEM_PICKUP, 0.8f, 1.0f);
+                        return withContent(definition, ContainerState.ContentType.EMPTY, null);
+                    }
+                    player.playSound(SoundEvents.ITEM_PICKUP, 0.8f, 1.0f);
+                    return withContentAndChop(definition, ContainerState.ContentType.ITEM, ih, cl);
+                }
                 if (ih.getAmountAsLong(0) > 0)
                 {
+                    if (cc.chopLeft() > 0) return definition;
                     var res = ih.getResource(0);
                     int amount = (int) ih.getAmountAsLong(0);
                     try (Transaction tx = Transaction.openRoot())
@@ -254,6 +289,8 @@ public abstract class ContainerComponent extends FurnitureComponent
                 }
                 if (!held.isEmpty() && held.has(DataComponents.FOOD))
                 {
+                    if (held.has(DataComponents.USE_REMAINDER)) return definition;
+                    if (held.getItem() instanceof IContainerItem) return definition;
                     var res = ItemResource.of(held.getItem(), DataComponentPatch.EMPTY);
                     try (Transaction tx = Transaction.openRoot())
                     { if (ih.insert(0, res, 1, tx) > 0) { tx.commit(); held.shrink(1); } }
@@ -293,6 +330,11 @@ public abstract class ContainerComponent extends FurnitureComponent
             new ContainerContent(type, handler));
     }
 
+    private static ComponentStateDefinition withContentAndChop(ComponentStateDefinition def, ContainerState.ContentType type, StacksResourceHandler<?, ?> handler, int chopLeft)
+    {
+        return new ComponentStateDefinition(def.component(), def.inBlockPos(), def.rotationX(), def.rotationY(), def.rotationZ(), def.shape(), def.model(), def.occupation(), new ContainerContent(type, handler, chopLeft));
+    }
+
     protected static void popItem(Player p, ItemStack s)
     {
         if (!p.getInventory().add(s)) p.level().addFreshEntity(new ItemEntity(p.level(), p.getX(), p.getY(), p.getZ(), s));
@@ -300,6 +342,8 @@ public abstract class ContainerComponent extends FurnitureComponent
 
     protected ItemStack getDropItem() { return this.drops.getFirst().copy(); }
 
-    protected abstract ContainerState.ContainerType containerType();
-    protected abstract ContainerState.ContainerSize size();
+    public abstract ContainerState.ContainerType containerType();
+    public abstract ContainerState.ContainerSize size();
+    public abstract int maxBites();
+    public abstract int containerStorage();
 }

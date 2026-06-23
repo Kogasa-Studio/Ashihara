@@ -6,6 +6,11 @@
       "prefix": "icons/"
     },
     {
+      "type": "directory",
+      "source": "food",
+      "prefix": "food/"
+    },
+    {
       "type": "minecraft:single",
       "resource": "ashihara:fluid/porridge"
     },

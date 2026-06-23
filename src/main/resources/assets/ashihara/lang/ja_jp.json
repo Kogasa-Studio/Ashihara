@@ -352,5 +352,8 @@
   "jei.ashihara.fermentation.need_size": "必要容器：",
   "jei.ashihara.pot.heat_required": "必要火力：%s",
   "block.ashihara.rice_porridge": "白粥",
-  "item.ashihara.rice_porridge_bucket": "白粥入り桶"
+  "item.ashihara.rice_porridge_bucket": "白粥入り桶",
+  "tooltip.ashihara.chops_left": "あと %s 回つまめる",
+  "tooltip.ashihara.container_food": "%s * %s",
+  "item.ashihara.bamboo_chopsticks": "竹箸"
 }

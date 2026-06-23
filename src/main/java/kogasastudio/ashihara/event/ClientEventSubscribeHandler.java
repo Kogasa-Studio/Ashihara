@@ -4,13 +4,15 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.client.gui3d.FermentationScreen;
+import kogasastudio.ashihara.registry.FoodModelRegistry;
 import kogasastudio.ashihara.network.EatingModePayload;
 import kogasastudio.ashihara.registry.*;
 import kogasastudio.ashihara.utils.EatingModeHelper;
 import kogasastudio.ashihara.client.gui.overlay.GridSnapHudOverlay;
+import kogasastudio.ashihara.client.gui.overlay.ContainerFoodHudOverlay;
 import kogasastudio.ashihara.client.gui3d.PotScreen;
 import kogasastudio.ashihara.client.render.item.BowlContentSpecialRenderer;
-import kogasastudio.ashihara.client.render.preview.PlacementPreviewRenderer;
+import kogasastudio.ashihara.client.render.hud.PlacementPreviewRenderer;
 import kogasastudio.ashihara.client.render.state.Screen3DPiPRenderState;
 import kogasastudio.ashihara.network.GridSnapPayload;
 import kogasastudio.ashihara.client.particles.MapleLeafParticle;
@@ -67,6 +69,7 @@ public class ClientEventSubscribeHandler
         AdditionalModels.getModels().forEach(location ->
             event.register(getOrCreateKey(location.id()), SimpleUnbakedStandaloneModel.blockStateModel(location.id()))
         );
+        FoodModelRegistry.registerStandalones(event);
     }
 
     @SubscribeEvent
@@ -214,6 +217,7 @@ public class ClientEventSubscribeHandler
     public static void registerGuiLayers(RegisterGuiLayersEvent event)
     {
         event.registerAboveAll(GridSnapHudOverlay.LAYER_ID, new GridSnapHudOverlay());
+        event.registerAboveAll(ContainerFoodHudOverlay.LAYER_ID, new ContainerFoodHudOverlay());
     }
 
     @SubscribeEvent

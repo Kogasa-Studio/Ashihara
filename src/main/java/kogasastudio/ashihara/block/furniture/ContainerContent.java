@@ -9,12 +9,11 @@ import org.jspecify.annotations.Nullable;
  * <p>
  * Stored in {@link kogasastudio.ashihara.block.building.component.ComponentStateDefinition#customData()}.
  */
-public record ContainerContent(
-    ContainerState.ContentType type,
-    @Nullable StacksResourceHandler<?, ?> handler
-)
+public record ContainerContent(ContainerState.ContentType type, @Nullable StacksResourceHandler<?, ?> handler, int chopLeft)
 {
-    public static final ContainerContent EMPTY = new ContainerContent(ContainerState.ContentType.EMPTY, null);
+    public ContainerContent(ContainerState.ContentType type, @Nullable StacksResourceHandler<?, ?> handler) { this(type, handler, 0); }
+
+    public static final ContainerContent EMPTY = new ContainerContent(ContainerState.ContentType.EMPTY, null, 0);
 
     /** True if the handler is null or all its slots are empty. */
     public boolean isEmpty()

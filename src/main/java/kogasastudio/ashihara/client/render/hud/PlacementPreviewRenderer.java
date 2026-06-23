@@ -1,4 +1,4 @@
-package kogasastudio.ashihara.client.render.preview;
+package kogasastudio.ashihara.client.render.hud;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

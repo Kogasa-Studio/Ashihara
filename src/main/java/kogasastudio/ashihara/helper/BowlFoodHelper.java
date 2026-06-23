@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.helper;
 
 import kogasastudio.ashihara.registry.ConsumeEffectTypes;
+import kogasastudio.ashihara.registry.DataComponentTypes;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.sounds.SoundEvents;
@@ -34,9 +35,14 @@ public final class BowlFoodHelper
         FoodProperties src = food.get(DataComponents.FOOD);
         if (src == null) return;
 
+        // Scale by remaining bites if partially eaten
+        int cl = bowl.getOrDefault(DataComponentTypes.CHOP_LEFT.get(), 0);
+        int mb = bowl.getOrDefault(DataComponentTypes.MAX_BITES.get(), 0);
+        float fraction = (cl > 0 && mb > 0) ? (float) cl / mb : 1.0f;
+
         FoodProperties boosted = new FoodProperties(
-            Math.round(src.nutrition() * BOOST),
-            src.saturation() * BOOST,
+            Math.max(1, Math.round(src.nutrition() * BOOST * fraction)),
+            src.saturation() * BOOST * fraction,
             true);
 
         Consumable srcConsumable = food.get(DataComponents.CONSUMABLE);
@@ -74,6 +80,29 @@ public final class BowlFoodHelper
         bowl.remove(DataComponents.FOOD);
         bowl.remove(DataComponents.CONSUMABLE);
         bowl.remove(DataComponents.USE_REMAINDER);
+    }
+
+    /** Apply food to chopsticks: nutrition scaled by 1/bpi. No CHOP_LEFT/MAX_BITES lookup. */
+    public static void applyFoodChopsticks(ItemStack chopsticks, ItemStack food, int bitesPerItem)
+    {
+        FoodProperties src = food.get(DataComponents.FOOD);
+        if (src == null) return;
+        float fraction = 1.0f / Math.max(1, bitesPerItem);
+        FoodProperties boosted = new FoodProperties(Math.max(1, Math.round(src.nutrition() * BOOST * fraction)), src.saturation() * BOOST * fraction, true);
+        Consumable srcConsumable = food.get(DataComponents.CONSUMABLE);
+        List<ConsumeEffect> effects = new ArrayList<>();
+        if (srcConsumable != null)
+            for (ConsumeEffect e : srcConsumable.onConsumeEffects())
+                effects.add(boostEffect(e));
+        Consumable.Builder cb = Consumable.builder()
+            .consumeSeconds(1.2f)
+            .animation(ItemUseAnimation.EAT)
+            .sound(SoundEvents.GENERIC_EAT)
+            .hasConsumeParticles(true);
+        for (ConsumeEffect e : effects) cb = cb.onConsume(e);
+        chopsticks.set(DataComponents.FOOD, boosted);
+        chopsticks.set(DataComponents.CONSUMABLE, cb.build());
+        chopsticks.set(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStackTemplate(chopsticks.getItem())));
     }
 
     /** Boost a ConsumeEffect duration by BOOST. Only handles ApplyStatusEffectsConsumeEffect; others pass through. */
@@ -171,6 +200,13 @@ public final class BowlFoodHelper
 
         String id = BuiltInRegistries.FLUID.getKey(fluid.getFluid()).getPath();
         List<ConsumeEffect> effects = new ArrayList<>();
+        if (isFoodFluid(id))
+        {
+            if (id.contains("soup") || id.contains("heal"))
+                effects.add(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 2)));
+            if (id.contains("milk"))
+                effects.add(new ClearAllStatusEffectsConsumeEffect());
+        }
         if (!isFoodFluid(id))
         {
             if ((id.contains("molten") || id.contains("lava") || id.contains("magma") || id.contains("plasma") || id.contains("superheat") || id.contains("melt")) && !id.contains("chocolate"))

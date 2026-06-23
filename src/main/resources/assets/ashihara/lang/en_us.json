@@ -283,12 +283,12 @@
   "gui.ashihara.toast.iwt.info.pre": "Press ",
   "gui.ashihara.toast.iwt.info.post": " to check out information.",
 
-  "item.ashihara.dirt_ball_don.projectile": "§d§l§oA strong and weird felling grows inside your heart while you are looking at it",
-  "item.ashihara.dirt_ball_don.projectile_1": "§9§l§oI don't know why something like this exists",
+  "item.ashihara.dirt_ball_don.projectile": "搂d搂l搂oA strong and weird felling grows inside your heart while you are looking at it",
+  "item.ashihara.dirt_ball_don.projectile_1": "搂9搂l搂oI don't know why something like this exists",
 
-  "tooltip.ashihara.pail_display": "§e§lPail: §n",
-  "tooltip.ashihara.pail_empty_message": "    §7The pail is empty now",
-  "tooltip.ashihara.pail_fluid_existence": "    §7Fluid: ",
+  "tooltip.ashihara.pail_display": "搂e搂lPail: 搂n",
+  "tooltip.ashihara.pail_empty_message": "    搂7The pail is empty now",
+  "tooltip.ashihara.pail_fluid_existence": "    搂7Fluid: ",
   "tooltip.ashihara.mortar.next_tool": "Next tool: ",
   "tooltip.ashihara.mortar.hand": "Hand",
   "tooltip.ashihara.mortar.pestle": "Pestle",
@@ -339,7 +339,7 @@
   "key.categories.ashihara.main": "Ashihara",
   "tooltip.ashihara.eating_mode_on": "activate",
   "tooltip.ashihara.eating_mode_off": "inactivate",
-  "tooltip.ashihara.eating_mode_toggle": "§ePress %s to %s eating mode",
+  "tooltip.ashihara.eating_mode_toggle": "搂ePress %s to %s eating mode",
 
   "block.ashihara.wooden_basin": "Wooden Basin",
   "block.ashihara.fermentation_vat": "Fermentation Vat",
@@ -358,5 +358,8 @@
   "jei.ashihara.fermentation.need_size": "Required container: ",
   "jei.ashihara.pot.heat_required": "Heat required: %s",
   "block.ashihara.rice_porridge": "Rice Porridge",
-  "item.ashihara.rice_porridge_bucket": "Bucket of Rice Porridge"
+  "item.ashihara.rice_porridge_bucket": "Bucket of Rice Porridge",
+  "tooltip.ashihara.chops_left": "Chopsticks bites left: %s",
+  "tooltip.ashihara.container_food": "%s * %s",
+  "item.ashihara.bamboo_chopsticks": "Bamboo Chopsticks"
 }

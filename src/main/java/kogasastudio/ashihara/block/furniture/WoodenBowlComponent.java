@@ -3,6 +3,7 @@ package kogasastudio.ashihara.block.furniture;
 import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.building.component.ComponentStateDefinition;
 import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
+import kogasastudio.ashihara.registry.DataComponentTypes;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.BuildingComponents;
 import kogasastudio.ashihara.registry.FurnitureComponents;
@@ -44,8 +45,10 @@ public class WoodenBowlComponent extends ContainerComponent
 
     @Override protected FluidStacksResourceHandler createFluidHandler() { return new FluidStacksResourceHandler(1, 100); }
 
-    @Override protected ContainerState.ContainerType containerType() { return ContainerState.ContainerType.BOWL; }
-    @Override protected ContainerState.ContainerSize size() { return ContainerState.ContainerSize.MID; }
+    @Override public ContainerState.ContainerType containerType() { return ContainerState.ContainerType.BOWL; }
+    @Override public ContainerState.ContainerSize size() { return ContainerState.ContainerSize.MID; }
+    @Override public int maxBites() { return 3; }
+    @Override public int containerStorage() { return 1; }
 
     @Override
     public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)
@@ -73,14 +76,13 @@ public class WoodenBowlComponent extends ContainerComponent
                         fh.insert(0, res, (int) fluidCap.getAmountAsLong(0), tx);
                         tx.commit();
                     }
-                    return new ComponentStateDefinition(FurnitureComponents.get(this.id),
-                                                        new Vec3(x, y, z), 0, 0, 0, shape, MODEL, List.of(),
-                                                        new ContainerContent(ContainerState.ContentType.FLUID, fh));
+                    return new ComponentStateDefinition(FurnitureComponents.get(this.id), new Vec3(x, y, z), 0, 0, 0, shape, MODEL, List.of(), new ContainerContent(ContainerState.ContentType.FLUID, fh));
                 }
             }
 
             // Fallback: item content
-            var cc = new ContainerContent(ContainerState.ContentType.ITEM, createContentHandler());
+            int cl = held.getOrDefault(DataComponentTypes.CHOP_LEFT.get(), 0);
+            var cc = new ContainerContent(ContainerState.ContentType.ITEM, createContentHandler(), cl);
             ItemStack stack = getContent(context.getItemInHand());
             if (cc.handler() instanceof ItemStacksResourceHandler is && !stack.isEmpty())
             {
@@ -89,6 +91,8 @@ public class WoodenBowlComponent extends ContainerComponent
                     is.insert(ItemResource.of(stack), stack.count(), tx);
                     tx.commit();
                 }
+                held.remove(DataComponentTypes.CHOP_LEFT.get());
+                held.remove(DataComponentTypes.MAX_BITES.get());
                 return new ComponentStateDefinition(FurnitureComponents.get(this.id), new Vec3(x, y, z), 0, 0, 0, shape, MODEL, List.of(), cc);
             }
         }

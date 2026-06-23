@@ -20,17 +20,19 @@ public record ContainerState(
     /** Size categories for container rendering. */
     public enum ContainerSize
     {
-        SMALL, MID, LARGE,
+        SMALL("small"), MID("mid"), LARGE("large"),
         ;
+        public final String id;
+        ContainerSize(String id) { this.id = id; }
     }
 
     /** Enum of container form factors. */
     public enum ContainerType
     {
-        BOWL,
-        PLATE,
-        CUP,
+        BOWL, PLATE, CUP,
         ;
+
+        public String contextKey(ContainerSize size) { return name().toLowerCase() + "_" + size.id; }
     }
 
     /** Content type enum for ContainerState. */

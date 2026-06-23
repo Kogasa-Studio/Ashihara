@@ -3,6 +3,7 @@ package kogasastudio.ashihara.item.block;
 import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.block.furniture.ContainerComponent;
+import kogasastudio.ashihara.item.IContainerItem;
 import kogasastudio.ashihara.block.furniture.FurnitureComponent;
 import kogasastudio.ashihara.block.furniture.SnappedUseOnContext;
 import kogasastudio.ashihara.helper.BowlFoodHelper;
@@ -44,7 +45,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class FurnitureComponentItem extends BlockItem
+public class FurnitureComponentItem extends BlockItem implements IContainerItem
 {
     private final Supplier<? extends FurnitureComponent> component;
 
@@ -79,6 +80,7 @@ public class FurnitureComponentItem extends BlockItem
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand)
     {
+        if (hand.equals(InteractionHand.OFF_HAND) && !player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) return InteractionResult.FAIL;
         ItemStack stack = player.getItemInHand(hand);
         Consumable consumable = stack.get(DataComponents.CONSUMABLE);
         boolean hasContent = consumable != null && consumable.canConsume(player, stack);
@@ -92,8 +94,7 @@ public class FurnitureComponentItem extends BlockItem
         if (pContext.getLevel().getBlockState(pContext.getClickedPos()).is(this.getBlock()))
         {
             BlockEntity blockEntity = pContext.getLevel().getBlockEntity(pContext.getClickedPos());
-            if (blockEntity instanceof MultiBuiltBlockEntity be && be.tryPlaceFurniture(pContext, this.getComponent()))
-                return false;
+            if (blockEntity instanceof MultiBuiltBlockEntity be && be.tryPlaceFurniture(pContext, this.getComponent())) return false;
         }
         return super.canPlace(pContext, pState);
     }
@@ -103,6 +104,8 @@ public class FurnitureComponentItem extends BlockItem
     {
         ItemStack stack = pContext.getItemInHand();
         Player player = pContext.getPlayer();
+        InteractionHand hand = pContext.getHand();
+        if (hand.equals(InteractionHand.OFF_HAND) && player != null && !player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) return InteractionResult.FAIL;
         Consumable consumable = stack.get(DataComponents.CONSUMABLE);
         boolean hasContent = consumable != null && consumable.canConsume(player, stack);
         if (hasContent && EatingModeHelper.isEnabled(player)) return InteractionResult.PASS;
@@ -138,9 +141,11 @@ public class FurnitureComponentItem extends BlockItem
         if (!(self.getItem() instanceof FurnitureComponentItem fci && fci.getComponent() instanceof ContainerComponent cc)) return false;
         if (!ContainerComponent.getFluidContent(self).isEmpty()) return false;
 
-        if (clickAction == ClickAction.SECONDARY && slot.hasItem()
-            && slot.getItem().has(DataComponents.FOOD))
+        if (clickAction == ClickAction.SECONDARY && slot.hasItem() && slot.getItem().has(DataComponents.FOOD))
         {
+            if (slot.getItem().has(DataComponents.USE_REMAINDER)) return false;
+            if (slot.getItem().getItem() instanceof IContainerItem) return false;
+            if (self.has(DataComponentTypes.CHOP_LEFT.get())) return false;
             ItemStack food = slot.getItem();
             ItemStack current = ContainerComponent.getContent(self);
             if (current.isEmpty())
@@ -153,6 +158,7 @@ public class FurnitureComponentItem extends BlockItem
         }
         if (clickAction == ClickAction.SECONDARY && !slot.hasItem())
         {
+            if (self.has(DataComponentTypes.CHOP_LEFT.get())) return false;
             ItemStack food = ContainerComponent.getContent(self);
             if (!food.isEmpty())
             {
@@ -166,16 +172,17 @@ public class FurnitureComponentItem extends BlockItem
     }
 
     @Override
-    public boolean overrideOtherStackedOnMe(ItemStack self, ItemStack other, Slot slot,
-        ClickAction clickAction, Player player, SlotAccess carriedItem)
+    public boolean overrideOtherStackedOnMe(ItemStack self, ItemStack other, Slot slot, ClickAction clickAction, Player player, SlotAccess carriedItem)
     {
         if (self.getCount() != 1) return false;
         if (!(self.getItem() instanceof FurnitureComponentItem fci && fci.getComponent() instanceof ContainerComponent cc)) return false;
         if (!ContainerComponent.getFluidContent(self).isEmpty()) return false;
 
-        if (clickAction == ClickAction.PRIMARY && !other.isEmpty()
-            && other.has(DataComponents.FOOD))
+        if (clickAction == ClickAction.PRIMARY && !other.isEmpty() && other.has(DataComponents.FOOD))
         {
+            if (other.has(DataComponents.USE_REMAINDER)) return false;
+            if (other.getItem() instanceof IContainerItem) return false;
+            if (self.has(DataComponentTypes.CHOP_LEFT.get())) return false;
             ItemStack current = ContainerComponent.getContent(self);
             if (current.isEmpty())
             {
@@ -191,9 +198,7 @@ public class FurnitureComponentItem extends BlockItem
     @Override
     public Optional<TooltipComponent> getTooltipImage(ItemStack stack)
     {
-        if (!(stack.getItem() instanceof FurnitureComponentItem fci
-            && fci.getComponent() instanceof ContainerComponent cc))
-            return Optional.empty();
+        if (!(stack.getItem() instanceof FurnitureComponentItem fci && fci.getComponent() instanceof ContainerComponent cc)) return Optional.empty();
         ItemStack food = ContainerComponent.getContent(stack);
         if (food.isEmpty()) return Optional.empty();
         BundleContents.Mutable mut = new BundleContents.Mutable(BundleContents.EMPTY);
@@ -206,7 +211,13 @@ public class FurnitureComponentItem extends BlockItem
     {
         if (!(stack.getItem() instanceof FurnitureComponentItem fci && fci.getComponent() instanceof ContainerComponent cc)) return;
         ItemStack food = ContainerComponent.getContent(stack);
-        if (!food.isEmpty()) builder.accept(Component.translatable("tooltip.ashihara.bowl_content", food.getHoverName()));
+        if (!food.isEmpty())
+        {
+            builder.accept(Component.translatable("tooltip.ashihara.bowl_content", food.getHoverName()));
+            int cl = stack.getOrDefault(DataComponentTypes.CHOP_LEFT.get(), 0);
+            int mb = stack.getOrDefault(DataComponentTypes.MAX_BITES.get(), 0);
+            if (cl > 0 && mb > 0) builder.accept(Component.translatable("tooltip.ashihara.chops_left", cl));
+        }
         else
         {
             FluidStack fluidStack = ContainerComponent.getFluidContent(stack);

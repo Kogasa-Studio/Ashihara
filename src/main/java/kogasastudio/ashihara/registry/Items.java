@@ -27,11 +27,11 @@ public class Items
 {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Ashihara.MODID);
 
-    //閻楄鐣╅悧鈺佹惂
+    //闁绘顫夐悾鈺呮偋閳轰焦鎯?
     public static final DeferredItem<? extends Item> ASHIHARA_ICON = ITEMS.registerSimpleItem("ashihara_icon");
     public static final DeferredItem<? extends Item> GUIDEBOOK = ITEMS.registerItem("guidebook", GuideBook::new);
 
-    //娴犮儰绗呮稉铏瑰⒖閸?
+    //濞寸姰鍎扮粭鍛▔閾忕懓鈷栭柛?
     public static final DeferredItem<? extends Item> KOISHI = ITEMS.registerItem("koishi", Koishi::new);
     public static final DeferredItem<? extends Item> MINATO_AQUA = ITEMS.registerItem("aqua", MinatoAqua::new);
     public static final DeferredItem<? extends Item> RICE_SEEDLING = ITEMS.registerItem("rice_seedling", RiceSeedling::new);
@@ -46,7 +46,7 @@ public class Items
     public static final DeferredItem<? extends Item> POT_LID = ITEMS.registerItem("pot_lid", AshiharaItem::new);
     public static final DeferredItem<? extends Item> SUJIKABUTO = ITEMS.registerItem("sujikabuto", AshiharaItem::new);
 
-    //妞嬬喓澧?
+    //濡炲鍠撴晶?
     public static final DeferredItem<? extends Item> SAKURAMOCHI = ITEMS.registerSimpleItem("sakuramochi", properties -> properties.food(new FoodProperties.Builder().nutrition(4).saturationModifier(1).build(), Consumables.defaultFood().onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.INSTANT_HEALTH, 1, 2), 1.0F)).build()));
     public static final DeferredItem<? extends Item> COOKED_RICE = ITEMS.registerItem("cooked_rice", properties -> new EasyFood(5, properties));
     public static final DeferredItem<? extends Item> COOKED_BROWN_RICE = ITEMS.registerItem("cooked_brown_rice", properties -> new EasyFood(5, properties));
@@ -86,7 +86,7 @@ public class Items
     public static final DeferredItem<? extends Item> DANGO_BEAN = ITEMS.registerItem("dango_bean", properties -> new EasyFood(6, properties));
     public static final DeferredItem<? extends Item> DANGO_MITARASHI = ITEMS.registerItem("dango_mitarashi", properties -> new EasyFood(6, properties));
 
-    //瀹搞儱鍙?
+    //鐎规悶鍎遍崣?
     public static final DeferredItem<? extends Item> TACHI = ITEMS.registerSimpleItem("tachi", properties -> properties.sword(ToolMaterial.DIAMOND, 15, 4));
 
     public static final DeferredItem<? extends Item> WOOD_OTSUCHI = ITEMS.registerItem("wood_otsuchi", properties -> new Otsuchi(ToolMaterial.WOOD, 16, -3.4d, properties));
@@ -95,8 +95,9 @@ public class Items
     public static final DeferredItem<? extends Item> IRON_WIDE_HOE = ITEMS.registerItem("iron_wide_hoe", properties -> new WideHoeItem(ToolMaterial.IRON, -0.5F, -1.0F, properties.durability(375)));
     public static final DeferredItem<? extends Item> WOODEN_HAMMER = ITEMS.registerItem("wooden_hammer", AshiharaItem::new);
     public static final DeferredItem<? extends Item> CHISEL = ITEMS.registerItem("chisel", AshiharaItem::new);
+   public static final DeferredItem<? extends Item> CHOPSTICKS = ITEMS.registerItem("bamboo_chopsticks", properties -> new ChopsticksItem(properties.stacksTo(1)));
 
-    //閺夋劖鏋?
+    //闁哄鍔栭弸?
     public static final DeferredItem<? extends Item> SAKURA = ITEMS.registerSimpleItem("sakura", properties -> properties.food(new FoodProperties.Builder().nutrition(1).build(), Consumables.defaultFood().onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.INSTANT_HEALTH, 1, 1), 1.0F)).build()));
     public static final DeferredItem<? extends Item> SAKURA_PETAL = ITEMS.registerItem("sakura_petal", AshiharaItem::new);
     public static final DeferredItem<? extends Item> DIRT_BALL = ITEMS.registerSimpleItem("dirt_ball", properties -> properties.food(new FoodProperties.Builder().nutrition(2).build(), Consumables.defaultFood().onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.NAUSEA, 400, 2), 1.0F)).build()));
@@ -131,7 +132,7 @@ public class Items
     public static final DeferredItem<? extends Item> RAMMED_SOIL = ITEMS.registerItem("rammed_soil", AshiharaItem::new);
     public static final DeferredItem<? extends Item> LIME_POWDER = ITEMS.registerItem("lime_powder", AshiharaItem::new);
 
-    //娴犮儰绗呮稉鐑樻煙閸?
+    //濞寸姰鍎扮粭鍛▔閻戞ɑ鐓欓柛?
     //TODO: public static final DeferredItem<? extends Item>  = ITEMS.register("", () -> new BlockItem(Blocks. .get(), new Item.Properties().group(ASHIHARA)));
     public static final DeferredItem<? extends Item> DIRT_DEPRESSION = ITEMS.registerSimpleBlockItem("dirt_depression", Blocks.DIRT_DEPRESSION);
     public static final DeferredItem<? extends Item> WATER_FIELD = ITEMS.registerSimpleBlockItem("water_field", Blocks.WATER_FIELD);
@@ -154,7 +155,7 @@ public class Items
     public static final DeferredItem<? extends Item> CUTTING_BOARD = ITEMS.registerSimpleBlockItem("cutting_board", Blocks.CUTTING_BOARD);
     public static final DeferredItem<? extends Item> CHARLOTTE = ITEMS.registerSimpleBlockItem("charlotte", Blocks.CHARLOTTE);
 
-    //瀵よ櫣鐡氶弬鐟版健
+    //鐎点倛娅ｉ悺姘跺棘閻熺増鍋?
     public static final DeferredItem<? extends Item> CHERRY_BLOSSOM = ITEMS.registerSimpleBlockItem("cherry_blossom", Blocks.CHERRY_BLOSSOM);
     public static final DeferredItem<? extends Item> MAPLE_LEAVES_RED = ITEMS.registerSimpleBlockItem("maple_leaves_red", Blocks.MAPLE_LEAVES_RED);
     public static final DeferredItem<? extends Item> CHERRY_VINES = ITEMS.registerSimpleBlockItem("cherry_vines", Blocks.CHERRY_VINES);
@@ -271,15 +272,15 @@ public class Items
     public static final DeferredItem<? extends Item> ONI_TILE_1_OBLIQUE = ITEMS.registerItem("oni_tile_1_oblique", properties -> new BuildingComponentItem(() -> BuildingComponents.ONI_TILE_1_OBLIQUE, Blocks.TERRACOTTA_TILE_COMPONENT, properties), properties -> properties.useItemDescriptionPrefix());
     public static final DeferredItem<? extends Item> GOLD_PIN_FIN = ITEMS.registerItem("gold_pin_fin", properties -> new BuildingComponentItem(() -> BuildingComponents.GOLD_PIN_FIN, Blocks.GOLD_DECO_COMPONENT, properties), properties -> properties.useItemDescriptionPrefix());
 
-    //家具
-    // 发酵容器
+    //瀹跺叿
+    // 鍙戦叺瀹瑰櫒
     public static final DeferredItem<? extends BlockItem> WOODEN_BASIN = ITEMS.registerSimpleBlockItem("wooden_basin", Blocks.WOODEN_BASIN);
     public static final DeferredItem<? extends BlockItem> FERMENTATION_VAT = ITEMS.registerSimpleBlockItem("fermentation_vat", Blocks.FERMENTATION_VAT);
     public static final DeferredItem<? extends BlockItem> LARGE_FERMENTATION_VAT = ITEMS.registerSimpleBlockItem("large_fermentation_vat", Blocks.LARGE_FERMENTATION_VAT);
 
     public static final DeferredItem<? extends Item> WOODEN_BOWL_MID = ITEMS.registerItem("wooden_bowl_mid", properties -> new FurnitureComponentItem(() -> FurnitureComponents.WOODEN_BOWL_MID, Blocks.MULTI_BUILT_BLOCK, properties), properties -> properties.useItemDescriptionPrefix().component(kogasastudio.ashihara.registry.DataComponentTypes.FLUID_CONTENT.get(), net.neoforged.neoforge.fluids.SimpleFluidContent.EMPTY));
 
-    //閻忣垰鍙?
+    //闁诲浚鍨伴崣?
     public static final DeferredItem<? extends Item> LANTERN_LONG_WHITE = ITEMS.registerSimpleBlockItem("lantern_long_white", Blocks.LANTERN_LONG_WHITE);
     public static final DeferredItem<? extends Item> LANTERN_LONG_RED = ITEMS.registerSimpleBlockItem("lantern_long_red", Blocks.LANTERN_LONG_RED);
     public static final DeferredItem<? extends Item> HOUSE_LIKE_HANGING_LANTERN = ITEMS.registerSimpleBlockItem("house_like_hanging_lantern", Blocks.HOUSE_LIKE_HANGING_LANTERN);
@@ -291,7 +292,7 @@ public class Items
     public static final DeferredItem<? extends Item> OIL_PLATE_STICK = ITEMS.registerItem("oil_plate_stick", properties -> new DoubleBlockItem(Blocks.OIL_PLATE_STICK.get(), properties), properties -> properties.useBlockDescriptionPrefix());
     public static final DeferredItem<? extends Item> CANDLE = ITEMS.registerItem("candle", CandleBlockItem::new, properties -> properties.useBlockDescriptionPrefix());
 
-    //閺堛劌鍩楅崫?
+    //闁哄牄鍔岄崺妤呭传?
     public static final DeferredItem<? extends Item> CHERRY_LOG = ITEMS.registerSimpleBlockItem("cherry_log", Blocks.CHERRY_LOG);
     public static final DeferredItem<? extends Item> STRIPPED_CHERRY_LOG = ITEMS.registerSimpleBlockItem("stripped_cherry_log", Blocks.STRIPPED_CHERRY_LOG);
     public static final DeferredItem<? extends Item> STRIPPED_CHERRY_WOOD = ITEMS.registerSimpleBlockItem("stripped_cherry_wood", Blocks.STRIPPED_CHERRY_WOOD);
@@ -326,7 +327,7 @@ public class Items
     public static final DeferredItem<? extends Item> CYPRESS_SKIN_STAIRS = ITEMS.registerSimpleBlockItem("cypress_skin_stairs", Blocks.CYPRESS_SKIN_STAIRS);
 
 
-    //濡?
+    //婵?
     public static final DeferredItem<? extends Item> SOY_MILK_BUCKET = ITEMS.registerItem("soy_milk_bucket", properties -> new BucketItem(FluidRegistryHandler.SOY_MILK.get(), properties));
     public static final DeferredItem<? extends Item> OIL_BUCKET = ITEMS.registerItem("oil_bucket", properties -> new BucketItem(FluidRegistryHandler.OIL.get(), properties));
     public static final DeferredItem<? extends Item> RICE_PORRIDGE_BUCKET = ITEMS.registerItem("rice_porridge_bucket", properties -> new BucketItem(FluidRegistryHandler.RICE_PORRIDGE.get(), properties.food(new FoodProperties.Builder().nutrition(5).saturationModifier(1.0f).build(), Consumables.defaultDrink().sound(SoundEvents.HONEY_DRINK).onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.INSTANT_HEALTH, 1, 1), 1.0F)).build())));
@@ -344,4 +345,5 @@ public class Items
         }
     }
 }
+
 

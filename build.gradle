@@ -152,6 +152,7 @@ dependencies {
     implementation "maven.modrinth:jade:mRb9OwnE"
 
     localRuntime files("libs/worldedit-mod-7.4.3.jar")
+    localRuntime files("libs/appleskin-neoforge-mc26.1-3.0.9.jar")
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
