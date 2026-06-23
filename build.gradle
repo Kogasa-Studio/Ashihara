@@ -80,7 +80,7 @@ neoForge {
             devLogin = true
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-            systemProperty 'anvillib.rendering.debugMode', 'true'
+            //systemProperty 'anvillib.rendering.debugMode', 'true'
             systemProperty('neoforge.rendernurse.renderdoc.library', file("libs/renderdoc.dll").absolutePath)
             programArgument("--renderDebugLabels")
             jvmArgument("-javaagent:" + file("libs/renderdoc-loader.jar").absolutePath)
@@ -145,12 +145,13 @@ dependencies {
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     // We add the full version to localRuntime, not runtimeOnly, so that we do not publish a dependency on it
     localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    compileOnly "maven.modrinth:worldedit:gjsLvJfW"
     implementation "maven.modrinth:sodium:QZUUceyk"
     implementation "maven.modrinth:iris:YEGDGnJM"
     implementation "maven.modrinth:geckolib:VukyYOGN"
     implementation "maven.modrinth:jade:mRb9OwnE"
 
-    implementation files("libs/worldedit-mod-7.4.3.jar")
+    localRuntime files("libs/worldedit-mod-7.4.3.jar")
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
