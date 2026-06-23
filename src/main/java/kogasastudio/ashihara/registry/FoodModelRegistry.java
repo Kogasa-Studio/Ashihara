@@ -19,6 +19,7 @@ public final class FoodModelRegistry
 {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Map<Identifier, Map<String, List<Entry>>> LOOKUP = new HashMap<>();
+    private static final Map<Identifier, Map<String, StandaloneModelKey<BlockStateModel>>> EXACT_LOOKUP = new HashMap<>();
     private static final Map<Identifier, StandaloneModelKey<BlockStateModel>> KEYS = new LinkedHashMap<>();
 
     private FoodModelRegistry() {}
@@ -39,6 +40,7 @@ public final class FoodModelRegistry
             event.register(e.getValue(), SimpleUnbakedStandaloneModel.blockStateModel(e.getKey()));
     }
 
+    
     private static void scanResources(ResourceManager rm)
     {
         String base = "models/food/item";
@@ -51,19 +53,34 @@ public final class FoodModelRegistry
             // Path relative to base: "cooked_rice/bowl_mid_3.json"
             String path = fullId.getPath();
             if (!path.startsWith(base + "/")) continue;
-            String rel = path.substring(base.length() + 1); // "cooked_rice/bowl_mid_3.json"
+            String rel = path.substring(base.length() + 1);
             String[] segs = rel.split("/");
-            if (segs.length != 2) continue;
+
             String itemName = segs[0];
-            String fileName = segs[1];
-            if (!fileName.endsWith(".json")) continue;
-            String name = fileName.substring(0, fileName.length() - 5); // "bowl_mid_3"
             Identifier itemId = Identifier.fromNamespaceAndPath(Ashihara.MODID, itemName);
             if (!BuiltInRegistries.ITEM.containsKey(itemId))
             {
                 LOGGER.error("FoodModelRegistry: item with id {} not found in registry, skipping {}", itemId, fullId);
                 continue;
             }
+
+            if (segs.length == 3 && "exact".equals(segs[1]))
+            {
+                String exactCtx = segs[2];
+                if (!exactCtx.endsWith(".json")) continue;
+                exactCtx = exactCtx.substring(0, exactCtx.length() - 5);
+                Identifier modelId = Identifier.fromNamespaceAndPath(Ashihara.MODID, "food/item/" + itemName + "/exact/" + exactCtx);
+                StandaloneModelKey<BlockStateModel> key = new StandaloneModelKey<>(modelId::toDebugFileName);
+                KEYS.put(modelId, key);
+                EXACT_LOOKUP.computeIfAbsent(itemId, k -> new HashMap<>()).put(exactCtx, key);
+                LOGGER.debug("Registered exact food model: {} -> {}", modelId, exactCtx);
+                continue;
+            }
+
+            if (segs.length != 2) continue;
+            String fileName = segs[1];
+            if (!fileName.endsWith(".json")) continue;
+            String name = fileName.substring(0, fileName.length() - 5);
             String[] parts = name.split("_");
             if (parts.length < 3) { LOGGER.warn("Skipping malformed food model: {}", fullId); continue; }
             String ctx = parts[0] + "_" + parts[1];
@@ -85,23 +102,29 @@ public final class FoodModelRegistry
             LOGGER.debug("Registered food model: {} -> {} bites [{},{}]", modelId, ctx, bitesMin, bitesMax);
         }
     }
+   @Nullable
+   public static StandaloneModelKey<BlockStateModel> lookup(Identifier itemId, String containerCtx, int chopLeft)
+   {
+       var ctxMap = LOOKUP.get(itemId);
+       if (ctxMap == null) return null;
+       var entries = ctxMap.get(containerCtx);
+       if (entries == null) return null;
+       Entry best = null;
+       for (Entry e : entries)
+       {
+           if (!e.matches(chopLeft)) continue;
+           if (best == null || (!best.isExact() && e.isExact()) || (best.isExact() == e.isExact() && e.rangeWidth() < best.rangeWidth()))
+           {
+               best = e;
+           }
+       }
+       return best != null ? best.key() : null;
+   }
 
-    @Nullable
-    public static StandaloneModelKey<BlockStateModel> lookup(Identifier itemId, String containerCtx, int chopLeft)
-    {
-        var ctxMap = LOOKUP.get(itemId);
-        if (ctxMap == null) return null;
-        var entries = ctxMap.get(containerCtx);
-        if (entries == null) return null;
-        Entry best = null;
-        for (Entry e : entries)
-        {
-            if (!e.matches(chopLeft)) continue;
-            if (best == null || (!best.isExact() && e.isExact()) || (best.isExact() == e.isExact() && e.rangeWidth() < best.rangeWidth()))
-            {
-                best = e;
-            }
-        }
-        return best != null ? best.key() : null;
-    }
+   @Nullable
+   public static StandaloneModelKey<BlockStateModel> lookupExact(Identifier itemId, String ctx)
+   {
+       var ctxMap = EXACT_LOOKUP.get(itemId);
+       return ctxMap != null ? ctxMap.get(ctx) : null;
+   }
 }

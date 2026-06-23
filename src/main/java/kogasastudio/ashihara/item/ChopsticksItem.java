@@ -37,8 +37,8 @@ public class ChopsticksItem extends Item implements IContainerItem
             {
                 if (!level.isClientSide())
                 {
-                    ItemStack drop = food.food().copy();
-                    if (!player.getInventory().add(drop)) player.drop(drop, false);
+                    /*ItemStack drop = food.food().copy();
+                    if (!player.getInventory().add(drop)) player.drop(drop, false);*/
                     chopsticks.remove(DataComponentTypes.CHOPSTICKS_FOOD.get());
                     BowlFoodHelper.clear(chopsticks);
                 }
@@ -109,7 +109,7 @@ public class ChopsticksItem extends Item implements IContainerItem
        // Let vanilla apply FOOD nutrition + CONSUMABLE effects + USE_REMAINDER
        if (entity instanceof Player player)
        {
-           //player.playSound(SoundEvents.PLAYER_BURP, 0.8f, 1.0f);
+           player.playSound(SoundEvents.PLAYER_BURP, 0.8f, 1.0f);
            player.getCooldowns().addCooldown(stack, 8);
        }
        return super.finishUsingItem(stack, level, entity);

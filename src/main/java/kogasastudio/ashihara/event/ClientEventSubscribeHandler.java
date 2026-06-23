@@ -12,6 +12,7 @@ import kogasastudio.ashihara.client.gui.overlay.GridSnapHudOverlay;
 import kogasastudio.ashihara.client.gui.overlay.ContainerFoodHudOverlay;
 import kogasastudio.ashihara.client.gui3d.PotScreen;
 import kogasastudio.ashihara.client.render.item.BowlContentSpecialRenderer;
+import kogasastudio.ashihara.client.render.item.ChopsticksSpecialRenderer;
 import kogasastudio.ashihara.client.render.hud.PlacementPreviewRenderer;
 import kogasastudio.ashihara.client.render.state.Screen3DPiPRenderState;
 import kogasastudio.ashihara.network.GridSnapPayload;
@@ -79,6 +80,11 @@ public class ClientEventSubscribeHandler
         (
             Identifier.fromNamespaceAndPath(Ashihara.MODID, "bowl_content"),
             BowlContentSpecialRenderer.Unbaked.MAP_CODEC
+        );
+        event.register
+        (
+            Identifier.fromNamespaceAndPath(Ashihara.MODID, "chopsticks_food"),
+            ChopsticksSpecialRenderer.Unbaked.MAP_CODEC
         );
     }
 

@@ -1,1 +1,27 @@
-{"model":{"type":"minecraft:model","model":"ashihara:item/bamboo_chopsticks"}}
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "minecraft:has_component",
+    "component": "ashihara:chopsticks_food",
+    "on_true": {
+      "type": "minecraft:composite",
+      "models": [
+        {
+          "type": "minecraft:model",
+          "model": "ashihara:item/bamboo_chopsticks_open"
+        },
+        {
+          "type": "minecraft:special",
+          "base": "ashihara:item/bamboo_chopsticks_open",
+          "model": {
+            "type": "ashihara:chopsticks_food"
+          }
+        }
+      ]
+    },
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "ashihara:item/bamboo_chopsticks"
+    }
+  }
+}
