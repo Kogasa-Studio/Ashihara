@@ -63,9 +63,9 @@ public class SimpleContainerComponent extends ContainerComponent
     public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)
     {
         Vec3 inBlock = beIn.inBlockVec(context.getClickLocation());
-        double x = inBlock.x() - 8f / 16;
-        double y = inBlock.y();
-        double z = inBlock.z() - 8f / 16;
+        double x = clampInBlock(inBlock.x() - 8f / 16, -0.5, 0.5);
+        double y = clampInBlock(inBlock.y(), 0.0, 1.0);
+        double z = clampInBlock(inBlock.z() - 8f / 16, -0.5, 0.5);
         VoxelShape shape = ShapeHelper.offsetShape(this.SHAPE, x, y, z);
         ItemStack held = context.getItemInHand();
 

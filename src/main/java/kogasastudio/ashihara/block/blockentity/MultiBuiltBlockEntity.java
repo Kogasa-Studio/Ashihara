@@ -88,6 +88,8 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
         ComponentStateDefinition definition = component.definite(this, context);
         if (definition != null)
         {
+            definition = FurnitureComponent.tryNudge(this.FURNITURE, definition);
+            if (definition == null) return false;
             this.FURNITURE.add(definition);
             refresh();
             SoundEvent event = definition.component().getSoundType().getPlaceSound();

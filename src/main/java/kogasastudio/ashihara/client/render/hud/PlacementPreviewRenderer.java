@@ -83,10 +83,14 @@ public class PlacementPreviewRenderer
             UseOnContext context = new UseOnContext(level, player, InteractionHand.MAIN_HAND, held, blockHit);
             context = maybeWrapSnap(context, player);
             def = component.definite(mbe, context);
-            if (def != null && canPlace(component, def, mbe))
+            if (def != null)
             {
-                renderPreview(event, mc, level, pos, mbe.getBlockState(), def, hitState);
-                return;
+                def = tryCanPlace(component, def, mbe);
+                if (def != null)
+                {
+                    renderPreview(event, mc, level, pos, mbe.getBlockState(), def, hitState);
+                    return;
+                }
             }
         }
 
@@ -96,7 +100,11 @@ public class PlacementPreviewRenderer
             UseOnContext context = new UseOnContext(level, player, InteractionHand.MAIN_HAND, held, blockHit);
             context = maybeWrapSnap(context, player);
             def = component.definite(mbe, context);
-            if (def != null && canPlace(component, def, mbe)) renderPreview(event, mc, level, placePos, mbe.getBlockState(), def, hitState);
+            if (def != null)
+            {
+                def = tryCanPlace(component, def, mbe);
+                if (def != null) renderPreview(event, mc, level, placePos, mbe.getBlockState(), def, hitState);
+            }
         }
         // Fallback: preview as new MBB placement.  BlockItem.place() creates
         // the block at clickedPos.relative(clickedFace), not at clickedPos.
@@ -126,20 +134,21 @@ public class PlacementPreviewRenderer
             hit.getDirection(), hit.getLocation().z - be.getBlockPos().getZ(), 0, 1);
     }
 
-    private static boolean canPlace(BuildingComponent component, ComponentStateDefinition def, MultiBuiltBlockEntity be)
+    @Nullable
+    private static ComponentStateDefinition tryCanPlace(BuildingComponent component, ComponentStateDefinition def, MultiBuiltBlockEntity be)
     {
         if (component instanceof FurnitureComponent)
-            return true;
+            return FurnitureComponent.tryNudge(be.FURNITURE, def);
         if (component instanceof AdditionalComponent)
         {
             for (ComponentStateDefinition existing : be.ADDITIONAL_COMPONENTS)
             {
                 if (existing.occupation().hashCode() == def.occupation().hashCode() && existing.equals(def))
-                    return false;
+                    return null;
             }
-            return true;
+            return def;
         }
-        return Occupation.join(def.occupation(), be.occupationCache);
+        return Occupation.join(def.occupation(), be.occupationCache) ? def : null;
     }
 
     private static void renderPreview(RenderLevelStageEvent.AfterLevel event, Minecraft mc, Level level,
