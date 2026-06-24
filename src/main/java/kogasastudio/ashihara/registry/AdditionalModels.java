@@ -161,6 +161,10 @@ public class AdditionalModels
 
     // Furniture
     public static final BuildingComponentModelResourceLocation WOODEN_BOWL_MID = register("block/furnitures/bowl_mid");
+    public static final BuildingComponentModelResourceLocation WOODEN_BOWL_BIG = register("block/furnitures/bowl_big");
+    public static final BuildingComponentModelResourceLocation WOODEN_DISH_SMALL = register("block/furnitures/dish_small");
+    public static final BuildingComponentModelResourceLocation WOODEN_DISH_MID = register("block/furnitures/dish_mid");
+    public static final BuildingComponentModelResourceLocation WOODEN_DISH_BIG = register("block/furnitures/dish_big");
 
     private static BuildingComponentModelResourceLocation register(String path)
     {

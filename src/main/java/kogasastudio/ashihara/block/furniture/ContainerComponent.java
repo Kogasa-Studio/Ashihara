@@ -14,7 +14,6 @@ import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -47,10 +46,17 @@ import java.util.function.Supplier;
 public abstract class ContainerComponent extends FurnitureComponent
     implements ICustomRender, ICustomData, Interactable
 {
+    protected final int maxBites;
+    protected final int containerStorage;
+
     public ContainerComponent(String idIn, BuildingComponents.Type typeIn,
         Supplier<BaseMultiBuiltBlock> materialIn, List<ItemStack> dropsIn,
-        FurnitureRenderPass rendererPassIn)
-    { super(idIn, typeIn, materialIn, dropsIn, rendererPassIn); }
+        FurnitureRenderPass rendererPassIn, int containerStorageIn, int maxBitesIn)
+    {
+        super(idIn, typeIn, materialIn, dropsIn, rendererPassIn);
+        this.containerStorage = containerStorageIn;
+        this.maxBites = maxBitesIn;
+    }
 
     // --------------------------------------------------
     // ItemStack content
@@ -205,16 +211,13 @@ public abstract class ContainerComponent extends FurnitureComponent
 
                 if (held.has(DataComponents.FOOD))
                 {
-                    if (held.has(DataComponents.USE_REMAINDER)) return definition;
-                    if (held.getItem() instanceof IContainerItem) return definition;
                     var ih = (ItemStacksResourceHandler) createContentHandler();
-                    try (Transaction tx = Transaction.openRoot())
+                    if (canAcceptFood(held, ih, containerStorage()))
                     {
-                        if (ih.insert(0, ItemResource.of(held.getItem(), DataComponentPatch.EMPTY), 1, tx) > 0)
-                        { tx.commit(); held.shrink(1); }
+                        insertOne(ih, held, player);
+                        return withContent(definition, ContainerState.ContentType.ITEM, ih);
                     }
-                    playInsertSound(player);
-                    return withContent(definition, ContainerState.ContentType.ITEM, ih);
+                    return definition;
                 }
                 return definition;
             }
@@ -258,7 +261,12 @@ public abstract class ContainerComponent extends FurnitureComponent
                 if (!held.isEmpty() && held.is(Items.CHOPSTICKS.get()))
                 {
                     if (held.has(DataComponentTypes.CHOPSTICKS_FOOD.get())) return definition; // already carrying food
-                    if (cc.chopLeft() == 0) cc = new ContainerContent(cc.type(), cc.handler(), maxBites());
+                    if (cc.chopLeft() == 0)
+                    {
+                        int itemCount = (int) ih.getAmountAsLong(0);
+                        int actual = (int) Math.ceil((double) itemCount * maxBites() / containerStorage());
+                        cc = new ContainerContent(cc.type(), cc.handler(), actual);
+                    }
                     int cl = cc.chopLeft() - 1;
                     var foodRes = ih.getResource(0);
                     int bitesPerItem = Math.max(1, maxBites() / containerStorage());
@@ -275,26 +283,18 @@ public abstract class ContainerComponent extends FurnitureComponent
                     player.playSound(SoundEvents.ITEM_PICKUP, 0.8f, 1.0f);
                     return withContentAndChop(definition, ContainerState.ContentType.ITEM, ih, cl);
                 }
-                if (ih.getAmountAsLong(0) > 0)
+                if (held.isEmpty() && ih.getAmountAsLong(0) > 0)
                 {
                     if (cc.chopLeft() > 0) return definition;
                     var res = ih.getResource(0);
-                    int amount = (int) ih.getAmountAsLong(0);
                     try (Transaction tx = Transaction.openRoot())
-                    { ih.extract(0, res, amount, tx); tx.commit(); popItem(player, res.toStack(amount)); }
+                    { ih.extract(0, res, 1, tx); tx.commit(); popItem(player, res.toStack(1)); }
                     playRemoveOneSound(player);
-                    ContainerState.ContentType ct = ih.getResource(0).isEmpty() ? ContainerState.ContentType.EMPTY : ContainerState.ContentType.ITEM;
-                    ih = ih.getResource(0).isEmpty() ? null : ih;
-                    return withContent(definition, ct, ih);
+                    return withContentOrEmpty(definition, ih);
                 }
-                if (!held.isEmpty() && held.has(DataComponents.FOOD))
+                if (canAcceptFood(held, ih, containerStorage()))
                 {
-                    if (held.has(DataComponents.USE_REMAINDER)) return definition;
-                    if (held.getItem() instanceof IContainerItem) return definition;
-                    var res = ItemResource.of(held.getItem(), DataComponentPatch.EMPTY);
-                    try (Transaction tx = Transaction.openRoot())
-                    { if (ih.insert(0, res, 1, tx) > 0) { tx.commit(); held.shrink(1); } }
-                    playInsertSound(player);
+                    insertOne(ih, held, player);
                     return withContent(definition, ContainerState.ContentType.ITEM, ih);
                 }
             }
@@ -340,10 +340,36 @@ public abstract class ContainerComponent extends FurnitureComponent
         if (!p.getInventory().add(s)) p.level().addFreshEntity(new ItemEntity(p.level(), p.getX(), p.getY(), p.getZ(), s));
     }
 
+    // Shared food guard + insert
+    private static boolean canAcceptFood(ItemStack held, ItemStacksResourceHandler ih, int maxCapacity)
+    {
+        return !held.isEmpty() && held.has(DataComponents.FOOD)
+            && !held.has(DataComponents.USE_REMAINDER)
+            && !(held.getItem() instanceof IContainerItem)
+            && ih.getAmountAsLong(0) < maxCapacity;
+    }
+
+    private static void insertOne(ItemStacksResourceHandler ih, ItemStack held, Player player)
+    {
+        try (Transaction tx = Transaction.openRoot())
+        {
+            if (ih.insert(0, ItemResource.of(held.getItem(), DataComponentPatch.EMPTY), 1, tx) > 0)
+            { tx.commit(); held.shrink(1); }
+        }
+        playInsertSound(player);
+    }
+
+    private static ComponentStateDefinition withContentOrEmpty(ComponentStateDefinition def,
+        ItemStacksResourceHandler ih)
+    {
+        boolean empty = ih.getResource(0).isEmpty();
+        return withContent(def, empty ? ContainerState.ContentType.EMPTY : ContainerState.ContentType.ITEM, empty ? null : ih);
+    }
+
     protected ItemStack getDropItem() { return this.drops.getFirst().copy(); }
 
     public abstract ContainerState.ContainerType containerType();
     public abstract ContainerState.ContainerSize size();
-    public abstract int maxBites();
-    public abstract int containerStorage();
+    public int maxBites() { return maxBites; }
+    public int containerStorage() { return containerStorage; }
 }

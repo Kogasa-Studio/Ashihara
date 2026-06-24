@@ -44,7 +44,7 @@ public final class ContainerFoodHudOverlay implements GuiLayer
 
         var food = ih.getResource(0).toStack(1);
         int count = (int) ih.getAmountAsLong(0);
-        int cl = content.chopLeft() > 0 ? content.chopLeft() : cc.maxBites();
+        int cl = content.chopLeft() > 0 ? content.chopLeft() : (int) Math.ceil((double) count * cc.maxBites() / cc.containerStorage());
 
         int screenW = mc.getWindow().getGuiScaledWidth();
         int screenH = mc.getWindow().getGuiScaledHeight();

@@ -34,7 +34,6 @@ import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -151,6 +150,7 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
             else if
             (
                 pStack.getItem() instanceof FurnitureComponentItem furnitureItem
+                && furnitureItem.canPlace(new BlockPlaceContext(context), pState)
                 && (coordsInRangeFixedX(context.getClickedFace(), vec.x(), 0, 1) && coordsInRangeFixedY(context.getClickedFace(), vec.y(), 0, 1) && coordsInRangeFixedZ(context.getClickedFace(), vec.z(), 0, 1))
                 && be.tryPlaceFurniture
                 (

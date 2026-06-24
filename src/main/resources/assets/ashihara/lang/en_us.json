@@ -361,5 +361,9 @@
   "item.ashihara.rice_porridge_bucket": "Bucket of Rice Porridge",
   "tooltip.ashihara.chops_left": "Chopsticks bites left: %s",
   "tooltip.ashihara.container_food": "%s * %s",
-  "item.ashihara.bamboo_chopsticks": "Bamboo Chopsticks"
+  "item.ashihara.bamboo_chopsticks": "Bamboo Chopsticks",
+  "item.ashihara.wooden_bowl_big": "Large Wooden Bowl",
+  "item.ashihara.wooden_dish_small": "Small Wooden Plate",
+  "item.ashihara.wooden_dish_mid": "Medium Wooden Plate",
+  "item.ashihara.wooden_dish_big": "Large Wooden Plate"
 }

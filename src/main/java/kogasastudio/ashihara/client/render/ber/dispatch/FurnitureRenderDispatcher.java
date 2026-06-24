@@ -80,7 +80,8 @@ public final class FurnitureRenderDispatcher
             var itemStack = handler.getResource(0).toStack(1);
             int chopLeft = content.chopLeft();
             int maxBites = component.maxBites();
-            var foodKey = FoodModelRegistry.lookup(BuiltInRegistries.ITEM.getKey(itemStack.getItem()), component.containerType().contextKey(component.size()), chopLeft > 0 ? chopLeft : maxBites);
+            int lookupBites = chopLeft > 0 ? chopLeft : (int) Math.ceil((double) handler.getAmountAsLong(0) * maxBites / component.containerStorage());
+            var foodKey = FoodModelRegistry.lookup(BuiltInRegistries.ITEM.getKey(itemStack.getItem()), component.containerType().contextKey(component.size()), lookupBites);
 
             pose.pushPose();
             Vec3 pos = def.inBlockPos();
@@ -120,5 +121,5 @@ public final class FurnitureRenderDispatcher
         });
     }
 
-    public static final IFurnitureRenderer<WoodenBowlComponent> BOWL = register(WoodenBowlComponent.class, containerDefault());
+    public static final IFurnitureRenderer<SimpleContainerComponent> COMMON = register(SimpleContainerComponent.class, containerDefault());
 }

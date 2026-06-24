@@ -89,8 +89,11 @@ public class FurnitureComponentItem extends BlockItem implements IContainerItem
     }
 
     @Override
-    protected boolean canPlace(BlockPlaceContext pContext, BlockState pState)
+    public boolean canPlace(BlockPlaceContext pContext, BlockState pState)
     {
+        InteractionHand hand = pContext.getHand();
+        Player player = pContext.getPlayer();
+        if (hand.equals(InteractionHand.OFF_HAND) && player != null && !player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) return false;
         if (pContext.getLevel().getBlockState(pContext.getClickedPos()).is(this.getBlock()))
         {
             BlockEntity blockEntity = pContext.getLevel().getBlockEntity(pContext.getClickedPos());
@@ -148,7 +151,7 @@ public class FurnitureComponentItem extends BlockItem implements IContainerItem
             if (self.has(DataComponentTypes.CHOP_LEFT.get())) return false;
             ItemStack food = slot.getItem();
             ItemStack current = ContainerComponent.getContent(self);
-            if (current.isEmpty())
+            if (current.isEmpty() || (current.getItem() == food.getItem() && current.getCount() < cc.containerStorage()))
             {
                 ContainerComponent.setContent(self, food.copyWithCount(1));
                 ContainerComponent.playInsertSound(player);
@@ -162,9 +165,11 @@ public class FurnitureComponentItem extends BlockItem implements IContainerItem
             ItemStack food = ContainerComponent.getContent(self);
             if (!food.isEmpty())
             {
-                ContainerComponent.setContent(self, ItemStack.EMPTY);
+                ItemStack toExtract = food.copyWithCount(1);
+                ItemStack remaining = food.copyWithCount(food.getCount() - 1);
+                ContainerComponent.setContent(self, remaining.getCount() > 0 ? remaining : ItemStack.EMPTY);
                 ContainerComponent.playRemoveOneSound(player);
-                slot.safeInsert(food);
+                slot.safeInsert(toExtract);
                 return true;
             }
         }
@@ -184,11 +189,14 @@ public class FurnitureComponentItem extends BlockItem implements IContainerItem
             if (other.getItem() instanceof IContainerItem) return false;
             if (self.has(DataComponentTypes.CHOP_LEFT.get())) return false;
             ItemStack current = ContainerComponent.getContent(self);
-            if (current.isEmpty())
+            int capacity = cc.containerStorage();
+            int currentCount = current.isEmpty() ? 0 : current.getCount();
+            if (currentCount < capacity && (current.isEmpty() || current.getItem() == other.getItem()))
             {
-                ContainerComponent.setContent(self, other.copyWithCount(1));
+                int toInsert = Math.min(other.getCount(), capacity - currentCount);
+                ContainerComponent.setContent(self, other.copyWithCount(currentCount + toInsert));
                 ContainerComponent.playInsertSound(player);
-                other.shrink(1);
+                other.shrink(toInsert);
                 return true;
             }
         }
@@ -213,7 +221,7 @@ public class FurnitureComponentItem extends BlockItem implements IContainerItem
         ItemStack food = ContainerComponent.getContent(stack);
         if (!food.isEmpty())
         {
-            builder.accept(Component.translatable("tooltip.ashihara.bowl_content", food.getHoverName()));
+            builder.accept(Component.translatable("tooltip.ashihara.container_food", food.getHoverName(), food.count()));
             int cl = stack.getOrDefault(DataComponentTypes.CHOP_LEFT.get(), 0);
             int mb = stack.getOrDefault(DataComponentTypes.MAX_BITES.get(), 0);
             if (cl > 0 && mb > 0) builder.accept(Component.translatable("tooltip.ashihara.chops_left", cl));

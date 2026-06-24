@@ -65,8 +65,16 @@ public class ChopsticksItem extends Item implements IContainerItem
                 if (offhand.getCount() > 1) { offhand.shrink(1); target = offhand.copy(); target.setCount(1); }
 
                 int cl = target.getOrDefault(DataComponentTypes.CHOP_LEFT.get(), 0);
-                int maxBites = target.getOrDefault(DataComponentTypes.MAX_BITES.get(), 3);
-                if (cl == 0) cl = maxBites;
+                int compMaxBites = target.getItem() instanceof FurnitureComponentItem fci && fci.getComponent() instanceof ContainerComponent cc ? cc.maxBites() : 3;
+                int maxBites = target.getOrDefault(DataComponentTypes.MAX_BITES.get(), compMaxBites);
+                if (cl == 0)
+                {
+                    int storage = target.getItem() instanceof FurnitureComponentItem fci && fci.getComponent() instanceof ContainerComponent cc ? cc.containerStorage() : 1;
+                    int itemCount = offContent.getCount();
+                    int cMax = target.getOrDefault(DataComponentTypes.MAX_BITES.get(), maxBites);
+                    cl = (int) Math.ceil((double) itemCount * cMax / storage);
+                }
+                int actualMax = cl;
                 int newCl = cl - 1;
                 if (newCl <= 0)
                 {
@@ -80,8 +88,8 @@ public class ChopsticksItem extends Item implements IContainerItem
                     if (!target.has(DataComponentTypes.MAX_BITES.get())) target.set(DataComponentTypes.MAX_BITES.get(), maxBites);
                     BowlFoodHelper.applyFood(target, offContent);
                 }
-                int storage = target.getItem() instanceof FurnitureComponentItem fci && fci.getComponent() instanceof ContainerComponent cc ? cc.containerStorage() : 1;
-                int bites = Math.max(1, maxBites / storage);
+                    int storage = target.getItem() instanceof FurnitureComponentItem fci && fci.getComponent() instanceof ContainerComponent cc ? cc.containerStorage() : 1;
+                    int bites = Math.max(1, actualMax / storage);
                 chopsticks.set(DataComponentTypes.CHOPSTICKS_FOOD.get(), new ChopsticksFood(offContent.copy(), bites));
                 BowlFoodHelper.applyFoodChopsticks(chopsticks, offContent, bites);
 

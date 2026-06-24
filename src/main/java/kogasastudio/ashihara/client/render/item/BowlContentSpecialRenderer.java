@@ -33,7 +33,7 @@ public class BowlContentSpecialRenderer implements SpecialModelRenderer<BowlCont
 {
     public static final BowlContentSpecialRenderer INSTANCE = new BowlContentSpecialRenderer();
 
-    public record OverlayArg(@Nullable ItemStack item, @Nullable FluidStack fluid, boolean hasFluid, @Nullable String containerCtx, int chopLeft, int maxBites) {}
+    public record OverlayArg(@Nullable ItemStack item, @Nullable FluidStack fluid, boolean hasFluid, @Nullable String containerCtx, int chopLeft, int maxBites, int containerStorage) {}
 
     @Override
     @Nullable
@@ -41,17 +41,19 @@ public class BowlContentSpecialRenderer implements SpecialModelRenderer<BowlCont
     {
         String ctx = null;
         int cl = 0, mb = 0;
+        int cs = 1;
         if (stack.getItem() instanceof FurnitureComponentItem fci && fci.getComponent() instanceof ContainerComponent cc)
         {
             ctx = cc.containerType().contextKey(cc.size());
             mb = cc.maxBites();
+            cs = cc.containerStorage();
         }
         cl = stack.getOrDefault(DataComponentTypes.CHOP_LEFT.get(), 0);
         mb = stack.getOrDefault(DataComponentTypes.MAX_BITES.get(), mb);
         FluidStack fluid = ContainerComponent.getFluidContent(stack);
         if (!fluid.isEmpty())
         {
-            return new OverlayArg(null, fluid, true, ctx, cl, mb);
+            return new OverlayArg(null, fluid, true, ctx, cl, mb, cs);
         }
 
         ItemStack content = ContainerComponent.getContent(stack);
@@ -62,7 +64,7 @@ public class BowlContentSpecialRenderer implements SpecialModelRenderer<BowlCont
             Identifier modelId = Identifier.fromNamespaceAndPath(BuiltInRegistries.ITEM.getKey(content.getItem()).getNamespace(), BuiltInRegistries.ITEM.getKey(content.getItem()).getPath());
             content.set(DataComponents.ITEM_MODEL, modelId);
         }
-        return new OverlayArg(content, null, false, ctx, cl, mb);
+        return new OverlayArg(content, null, false, ctx, cl, mb, cs);
     }
 
     @Override
@@ -84,7 +86,8 @@ public class BowlContentSpecialRenderer implements SpecialModelRenderer<BowlCont
 
         if (arg.item != null && !arg.item.isEmpty())
         {
-            var foodKey = arg.containerCtx != null ? FoodModelRegistry.lookup(BuiltInRegistries.ITEM.getKey(arg.item.getItem()), arg.containerCtx, arg.chopLeft > 0 ? arg.chopLeft : arg.maxBites) : null;
+            int lookupBites = arg.chopLeft > 0 ? arg.chopLeft : (int) Math.ceil((double) arg.item.getCount() * arg.maxBites / arg.containerStorage);
+            var foodKey = arg.containerCtx != null ? FoodModelRegistry.lookup(BuiltInRegistries.ITEM.getKey(arg.item.getItem()), arg.containerCtx, lookupBites) : null;
             if (foodKey != null)
             {
                 poseStack.pushPose();
@@ -104,9 +107,7 @@ public class BowlContentSpecialRenderer implements SpecialModelRenderer<BowlCont
             float yDown = arg.chopLeft > 0 ? ((float) (arg.maxBites / arg.chopLeft)) * 0.1f : 0f;
             poseStack.translate(0, -yDown, 0);
             poseStack.scale(scaling, scaling, scaling);
-            RenderHelper.renderItem(poseStack, collector, arg.item,
-                ItemDisplayContext.GUI, null, null, 42,
-                lightCoords, overlayCoords, outlineColor);
+            RenderHelper.renderItem(poseStack, collector, arg.item, ItemDisplayContext.GUI, null, null, 42, lightCoords, overlayCoords, outlineColor);
             poseStack.popPose();
         }
     }

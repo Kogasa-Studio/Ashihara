@@ -355,5 +355,9 @@
   "item.ashihara.rice_porridge_bucket": "白粥入り桶",
   "tooltip.ashihara.chops_left": "あと %s 回つまめる",
   "tooltip.ashihara.container_food": "%s * %s",
-  "item.ashihara.bamboo_chopsticks": "竹箸"
+  "item.ashihara.bamboo_chopsticks": "竹箸",
+  "item.ashihara.wooden_bowl_big": "大きい木椀",
+  "item.ashihara.wooden_dish_small": "小さい木皿",
+  "item.ashihara.wooden_dish_mid": "中くらい木皿",
+  "item.ashihara.wooden_dish_big": "大きい木皿"
 }

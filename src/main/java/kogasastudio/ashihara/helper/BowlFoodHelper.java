@@ -19,6 +19,8 @@ import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jspecify.annotations.Nullable;
 import net.neoforged.neoforge.transfer.item.ItemResource;
+import kogasastudio.ashihara.block.furniture.ContainerComponent;
+import kogasastudio.ashihara.item.block.FurnitureComponentItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +40,8 @@ public final class BowlFoodHelper
         // Scale by remaining bites if partially eaten
         int cl = bowl.getOrDefault(DataComponentTypes.CHOP_LEFT.get(), 0);
         int mb = bowl.getOrDefault(DataComponentTypes.MAX_BITES.get(), 0);
-        float fraction = (cl > 0 && mb > 0) ? (float) cl / mb : 1.0f;
+        int storage = bowl.getItem() instanceof FurnitureComponentItem fci && fci.getComponent() instanceof ContainerComponent cc ? cc.containerStorage() : 1;
+        float fraction = (cl > 0 && mb > 0) ? (float) (storage * cl) / mb : (float) food.getCount();
 
         FoodProperties boosted = new FoodProperties(
             Math.max(1, Math.round(src.nutrition() * BOOST * fraction)),

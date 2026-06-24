@@ -15,7 +15,7 @@
 | 4.1 | 渲染查找 FoodModelRegistry | ✅ 已完成 |
 | 4.1 | standalone BER 渲染 | ✅ 已完成 |
 | 4.1 | BowlContentSpecialRenderer standalone | ✅ 已完成 |
-| 4.2 | 筷子模型 open 变种 | ❌ 未实现 |
+| 4.2 | 筷子模型 open 变种 | ✅ 已完成 |
 | 5 | FoodModelRegistry 自动扫描 | ✅ 已完成 |
 | 6.1 | HUD 文本 | ✅ 已完成 |
 | 6.2 | 碗 Tooltip chopLeft | ✅ 已完成 |
@@ -24,6 +24,10 @@
 | - | BowlFoodHelper 按 fraction 缩放 | ✅ 已完成 |
 | - | FurnitureComponentItem 阻止 chopLeft 存取 | ✅ 已完成 |
 | - | 中日英语言文件 | ✅ 已完成 |
-| - | 筷子 SpecialRenderer | ❌ 未实现 |
-| - | 创建模式物品栏注册 | ❌ 遗漏 |
-| - | 大碗等新容器注册 | ❌ 未实现 |
+| - | 筷子 SpecialRenderer | ✅ 已完成 |
+| - | 创建模式物品栏注册 | ✅ 已完成 |
+| - | 大碗等新容器注册 | ✅ 已完成 |
+| - | 多物品 fallback 渲染（圆环排列） | ❌ 未实现 |
+| - | BowlFoodHelper.applyFood itemCount 缩放 | ✅ 已完成 |
+| - | WoodenBowlComponent 迁移至 SimpleContainerComponent | ✅ 已完成 |
+| - | 多物品容器插入/取出逻辑修复 | ✅ 已完成 |

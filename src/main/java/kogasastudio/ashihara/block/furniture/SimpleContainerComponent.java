@@ -1,54 +1,63 @@
 package kogasastudio.ashihara.block.furniture;
 
+import net.neoforged.neoforge.transfer.StacksResourceHandler;
 import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.building.component.ComponentStateDefinition;
 import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
-import kogasastudio.ashihara.registry.DataComponentTypes;
-import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.BuildingComponents;
+import kogasastudio.ashihara.registry.DataComponentTypes;
 import kogasastudio.ashihara.registry.FurnitureComponents;
+import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.utils.BuildingComponentModelResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.transfer.ResourceHandler;
-import net.neoforged.neoforge.transfer.StacksResourceHandler;
-import net.neoforged.neoforge.transfer.access.ItemAccess;
-import net.neoforged.neoforge.transfer.fluid.FluidResource;
-import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 
 import java.util.List;
 import java.util.function.Supplier;
 
-public class WoodenBowlComponent extends ContainerComponent
+/**
+ * Fully parameterized container component for any ContainerType/ContainerSize combination.
+ */
+public class SimpleContainerComponent extends ContainerComponent
 {
     private final BuildingComponentModelResourceLocation MODEL;
     private final VoxelShape SHAPE;
+    private final ContainerState.ContainerType containerType;
+    private final ContainerState.ContainerSize containerSize;
 
-    public WoodenBowlComponent(String idIn, BuildingComponents.Type typeIn,
+    public SimpleContainerComponent
+    (
+        String idIn, BuildingComponents.Type typeIn,
         BuildingComponentModelResourceLocation model, VoxelShape shape,
-        Supplier<BaseMultiBuiltBlock> materialIn,
-        List<ItemStack> dropsIn, FurnitureRenderPass rendererTypeIn)
+        Supplier<BaseMultiBuiltBlock> materialIn, List<ItemStack> dropsIn,
+        FurnitureRenderPass rendererPassIn,
+        ContainerState.ContainerType containerType, ContainerState.ContainerSize containerSize,
+        int containerStorage, int maxBites
+    )
     {
-        super(idIn, typeIn, materialIn, dropsIn, rendererTypeIn);
+        super(idIn, typeIn, materialIn, dropsIn, rendererPassIn, containerStorage, maxBites);
         this.MODEL = model;
-        this.SHAPE = shape != null ? shape
-            : Shapes.box(5.5f / 16, 0, 5.5f / 16, 10.5f / 16, 3.5f / 16, 10.5f / 16);
+        this.SHAPE = shape;
+        this.containerType = containerType;
+        this.containerSize = containerSize;
     }
 
-    @Override protected StacksResourceHandler<?, ?> createContentHandler() { return new ItemStacksResourceHandler(1); }
-
+    @Override protected StacksResourceHandler<?, ?> createContentHandler()
+    {
+        return new ItemStacksResourceHandler(1);
+    }
     @Override protected FluidStacksResourceHandler createFluidHandler() { return new FluidStacksResourceHandler(1, 100); }
-
-    @Override public ContainerState.ContainerType containerType() { return ContainerState.ContainerType.BOWL; }
-    @Override public ContainerState.ContainerSize size() { return ContainerState.ContainerSize.MID; }
-    @Override public int maxBites() { return 3; }
-    @Override public int containerStorage() { return 1; }
+    @Override public ContainerState.ContainerType containerType() { return containerType; }
+    @Override public ContainerState.ContainerSize size() { return containerSize; }
 
     @Override
     public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)
