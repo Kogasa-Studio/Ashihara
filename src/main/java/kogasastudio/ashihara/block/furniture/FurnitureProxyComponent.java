@@ -16,11 +16,15 @@ import java.util.List;
 
 /**
  * Sentinel component for multi-block furniture sub-blocks.
- * Material, sound, and drops are resolved at call sites via {@link ProxyData}.
+ * Stores a relative offset to the main BE so that clone/move operations
+ * do not invalidate the link.
  */
 public class FurnitureProxyComponent extends FurnitureComponent implements ICustomData
 {
-    public record ProxyData(BlockPos mainPos, Vec3 mainInBlockPos) {}
+    public record ProxyData(int dx, int dy, int dz, Vec3 mainInBlockPos)
+    {
+        public BlockPos resolveMain(BlockPos proxyPos) { return proxyPos.offset(dx, dy, dz); }
+    }
 
     public FurnitureProxyComponent()
     {
@@ -44,7 +48,7 @@ public class FurnitureProxyComponent extends FurnitureComponent implements ICust
         var pd = getData(def);
         if (pd != null && mbe.getLevel() != null)
         {
-            var mainBe = mbe.getLevel().getBlockEntity(pd.mainPos());
+            var mainBe = mbe.getLevel().getBlockEntity(pd.resolveMain(mbe.getBlockPos()));
             if (mainBe instanceof MultiBuiltBlockEntity mb)
                 for (var d : mb.FURNITURE)
                     if (d.inBlockPos().equals(pd.mainInBlockPos()))
@@ -58,7 +62,7 @@ public class FurnitureProxyComponent extends FurnitureComponent implements ICust
     {
         if (data instanceof ProxyData pd)
         {
-            output.putLong("mainPos", pd.mainPos().asLong());
+            output.putInt("dx", pd.dx()); output.putInt("dy", pd.dy()); output.putInt("dz", pd.dz());
             ValueOutput p = output.child("mainInBlock");
             p.putDouble("x", pd.mainInBlockPos().x());
             p.putDouble("y", pd.mainInBlockPos().y());
@@ -69,10 +73,12 @@ public class FurnitureProxyComponent extends FurnitureComponent implements ICust
     @Override
     public Object deserializeCustom(ValueInput input)
     {
-        BlockPos mp = BlockPos.of(input.getLongOr("mainPos", 0));
+        int dx = input.getIntOr("dx", 0);
+        int dy = input.getIntOr("dy", 0);
+        int dz = input.getIntOr("dz", 0);
         ValueInput p = input.childOrEmpty("mainInBlock");
         Vec3 ib = new Vec3(p.getDoubleOr("x", 0), p.getDoubleOr("y", 0), p.getDoubleOr("z", 0));
-        return new ProxyData(mp, ib);
+        return new ProxyData(dx, dy, dz, ib);
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.sk89q.worldedit.world.block.BlockState;
 import com.sk89q.worldedit.world.block.BlockStateHolder;
 import org.enginehub.linbus.tree.LinCompoundTag;
 import org.enginehub.linbus.tree.LinFloatTag;
+import org.enginehub.linbus.tree.LinIntTag;
 import org.enginehub.linbus.tree.LinListTag;
 import org.enginehub.linbus.tree.LinTagType;
 import org.spongepowered.asm.mixin.Mixin;
@@ -76,13 +77,14 @@ public class MixinBlockTransformExtent
     private static LinCompoundTag tChild(LinCompoundTag ct, double a,double b,double c,double d,boolean flip)
     {
        var out = LinCompoundTag.builder();
-       // Determine flip type: z-flip (a≈1,d≈-1) vs x-flip (a≈-1,d≈1)
        boolean zFlip = flip && a > 0.5 && d < -0.5;
        for (var e : ct.value().entrySet())
        {
            String k = e.getKey(); var v = e.getValue();
            if (k.equals("inBlockPos") && v instanceof LinCompoundTag pt)
                out.put(k, rPos(pt, a, b, c, d));
+           else if (k.equals("custom") && v instanceof LinCompoundTag cc && cc.findTag("dx", LinTagType.intTag()) != null)
+               out.put(k, rProxyCustom(cc, a, b, c, d));
            else if (k.equals("rotationY") && v instanceof LinFloatTag ft)
            {
                float rv = ft.value();
@@ -100,6 +102,25 @@ public class MixinBlockTransformExtent
        }
         return out.build();
     }
+
+    private static LinCompoundTag rProxyCustom(LinCompoundTag ct, double a,double b,double c,double d)
+    {
+        int dx = (int) Math.round(iv(ct, "dx") * a + iv(ct, "dz") * b);
+        int dz = (int) Math.round(iv(ct, "dx") * c + iv(ct, "dz") * d);
+        var cb = LinCompoundTag.builder();
+        cb.putInt("dx", dx); cb.putInt("dy", iv(ct, "dy")); cb.putInt("dz", dz);
+        for (var e : ct.value().entrySet())
+        {
+            String k = e.getKey(); var v = e.getValue();
+            if (k.equals("mainInBlock") && v instanceof LinCompoundTag ib)
+                cb.put(k, rPos(ib, a, b, c, d));
+            else if (!k.equals("dx") && !k.equals("dy") && !k.equals("dz"))
+                cb.put(k, v);
+        }
+        return cb.build();
+    }
+
+    private static int iv(LinCompoundTag t, String k) { var v = t.findTag(k, LinTagType.intTag()); return v != null ? v.value() : 0; }
 
     private static LinCompoundTag rPos(LinCompoundTag pt, double a,double b,double c,double d)
     {

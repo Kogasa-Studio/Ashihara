@@ -138,7 +138,6 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
             // Place proxy components only where slice is non-empty
             if (isMultiBlock)
             {
-                var proxyData = new FurnitureProxyComponent.ProxyData(this.worldPosition, definition.inBlockPos());
                 var bb = fullShape.bounds();
                 int x0 = (int) Math.floor(bb.minX), x1 = (int) Math.ceil(bb.maxX) - 1;
                 int y0 = (int) Math.floor(bb.minY), y1 = (int) Math.ceil(bb.maxY) - 1;
@@ -151,6 +150,7 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
                             VoxelShape slice = ShapeHelper.sliceShape(fullShape, 1, new net.minecraft.core.Vec3i(x, y, z));
                             if (slice.isEmpty()) continue;
                             BlockPos target = this.worldPosition.offset(x, y, z);
+                            var proxyData = new FurnitureProxyComponent.ProxyData(-x, -y, -z, definition.inBlockPos());
                             var proxy = new ComponentStateDefinition(FurnitureComponents.FURNITURE_PROXY, new Vec3(0, 0, 0), 0, 0, 0, slice, definition.model(), List.of(), proxyData);
                             if (this.level.getBlockEntity(target) instanceof MultiBuiltBlockEntity subBe)
                             {
@@ -193,7 +193,7 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
         if (FurnitureProxyComponent.isProxy(definition))
         {
             var data = FurnitureProxyComponent.getData(definition);
-            if (data != null && this.level.getBlockEntity(data.mainPos()) instanceof MultiBuiltBlockEntity mainBe)
+            if (data != null && this.level.getBlockEntity(data.resolveMain(this.worldPosition)) instanceof MultiBuiltBlockEntity mainBe)
             {
                 for (var def : mainBe.FURNITURE)
                     if (def.inBlockPos().equals(data.mainInBlockPos()))
@@ -378,7 +378,7 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
             if (FurnitureProxyComponent.isProxy(definition))
             {
                 var pd = FurnitureProxyComponent.getData(definition);
-                if (pd != null && this.level.getBlockEntity(pd.mainPos()) instanceof MultiBuiltBlockEntity mbe)
+                if (pd != null && this.level.getBlockEntity(pd.resolveMain(this.worldPosition)) instanceof MultiBuiltBlockEntity mbe)
                 {
                     for (var d : mbe.FURNITURE)
                         if (d.inBlockPos().equals(pd.mainInBlockPos()))
@@ -584,7 +584,7 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
                         subBe.FURNITURE.removeIf(d ->
                         {
                             var pd = FurnitureProxyComponent.getData(d);
-                            return pd != null && pd.mainPos().equals(this.worldPosition)
+                            return pd != null && pd.resolveMain(subBe.worldPosition).equals(this.worldPosition)
                                 && pd.mainInBlockPos().equals(mainDef.inBlockPos());
                         });
                         subBe.refresh();
@@ -604,7 +604,7 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
             {
                 var pd = FurnitureProxyComponent.getData(def);
                 if (pd != null && this.level != null
-                    && this.level.getBlockEntity(pd.mainPos()) instanceof MultiBuiltBlockEntity mainBe)
+                    && this.level.getBlockEntity(pd.resolveMain(this.worldPosition)) instanceof MultiBuiltBlockEntity mainBe)
                 {
                     for (var mainDef : new ArrayList<>(mainBe.FURNITURE))
                         if (mainDef.inBlockPos().equals(pd.mainInBlockPos()))

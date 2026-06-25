@@ -39,6 +39,14 @@ public class CurtainTableComponent extends FurnitureComponent implements MultiBl
     @Override public VoxelShape getBaseShape() { return this.SHAPE; }
 
     @Override
+    public VoxelShape rebuildShape(Vec3 inBlockPos, float rotX, float rotY, float rotZ)
+    {
+        VoxelShape full = rotY != 0 ? ShapeHelper.rotateShape(this.SHAPE, -rotY) : this.SHAPE;
+        full = ShapeHelper.offsetShape(full, inBlockPos.x(), inBlockPos.y(), inBlockPos.z());
+        return ShapeHelper.sliceShape(full, 1, net.minecraft.core.Vec3i.ZERO);
+    }
+
+    @Override
     public BlockBox getExtent(Direction facing)
     {
         return switch (facing)
