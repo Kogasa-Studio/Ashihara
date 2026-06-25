@@ -30,14 +30,15 @@ public class QuadBaker
      * is computed on the final transformed geometry.
      */
     public static void renderModel(
-        BlockStateModel model,
-        BlockAndTintGetter level,
-        BlockPos pos,
-        BlockState state,
-        Matrix4f quadTransform,
-        PoseStack poseStack,
-        Function<ChunkSectionLayer, VertexConsumer> chunkBuffer
-    )
+        BlockStateModel model, BlockAndTintGetter level, BlockPos pos,
+        BlockState state, Matrix4f quadTransform, PoseStack poseStack,
+        Function<ChunkSectionLayer, VertexConsumer> chunkBuffer)
+    { renderModel(model, level, pos, state, quadTransform, quadTransform, poseStack, chunkBuffer); }
+
+    public static void renderModel(
+        BlockStateModel model, BlockAndTintGetter level, BlockPos pos,
+        BlockState state, Matrix4f aoTransform, Matrix4f finalTransform,
+        PoseStack poseStack, Function<ChunkSectionLayer, VertexConsumer> chunkBuffer)
     {
         EnhancedBlockModelLighter lighter = new EnhancedBlockModelLighter();
         lighter.reset();
@@ -51,40 +52,46 @@ public class QuadBaker
                 List<BakedQuad> quads = part.getQuads(face);
                 if (quads.isEmpty()) continue;
                 for (BakedQuad quad : quads)
-                {
-                    renderQuad(quad, quadTransform, pos, state, level, lighter, poseStack, chunkBuffer);
-                }
+                    renderQuad(quad, aoTransform, finalTransform, pos, state, level, lighter, poseStack, chunkBuffer);
             }
             List<BakedQuad> unculled = part.getQuads(null);
             for (BakedQuad quad : unculled)
-            {
-                renderQuad(quad, quadTransform, pos, state, level, lighter, poseStack, chunkBuffer);
-            }
+                renderQuad(quad, aoTransform, finalTransform, pos, state, level, lighter, poseStack, chunkBuffer);
         }
     }
 
     private static void renderQuad(
-        BakedQuad quad, Matrix4f transform, BlockPos pos,
-        BlockState state, BlockAndTintGetter level, EnhancedBlockModelLighter lighter,
-        PoseStack poseStack, Function<ChunkSectionLayer, VertexConsumer> chunkBuffer
-    )
+        BakedQuad quad, Matrix4f aoTransform, Matrix4f finalTransform,
+        BlockPos pos, BlockState state, BlockAndTintGetter level,
+        EnhancedBlockModelLighter lighter, PoseStack poseStack,
+        Function<ChunkSectionLayer, VertexConsumer> chunkBuffer)
     {
         MutableQuad mq = new MutableQuad();
         mq.setFrom(quad);
-        mq.transform(transform);
-        BakedQuad transformed = mq.toBakedQuad();
+        mq.transform(aoTransform);
+        BakedQuad aoQuad = mq.toBakedQuad();
 
         QuadInstance instance = new QuadInstance();
-        if (transformed.materialInfo().ambientOcclusion())
-        {
-            lighter.prepareQuadAmbientOcclusion(level, state, pos, transformed, instance);
-        }
+        if (aoQuad.materialInfo().ambientOcclusion())
+            lighter.prepareQuadAmbientOcclusion(level, state, pos, aoQuad, instance);
         else
         {
             int light = LevelRenderer.getLightCoords(level, pos);
-            lighter.prepareQuadFlat(level, state, pos, light, transformed, instance);
+            lighter.prepareQuadFlat(level, state, pos, light, aoQuad, instance);
         }
+
+        BakedQuad finalQuad;
+        if (aoTransform.equals(finalTransform))
+            finalQuad = aoQuad;
+        else
+        {
+            MutableQuad mq2 = new MutableQuad();
+            mq2.setFrom(quad);
+            mq2.transform(finalTransform);
+            finalQuad = mq2.toBakedQuad();
+        }
+
         VertexConsumer consumer = chunkBuffer.apply(ChunkSectionLayer.CUTOUT);
-        consumer.putBakedQuad(poseStack.last(), transformed, instance);
+        consumer.putBakedQuad(poseStack.last(), finalQuad, instance);
     }
 }

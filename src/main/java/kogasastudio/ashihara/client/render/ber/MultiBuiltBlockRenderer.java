@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import org.joml.Matrix4f;
 import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.block.furniture.FurnitureComponent;
+import kogasastudio.ashihara.block.furniture.FurnitureProxyComponent;
 import kogasastudio.ashihara.block.furniture.ICustomRender;
 import kogasastudio.ashihara.client.render.SectionRenderContext;
 import kogasastudio.ashihara.client.render.WithLevelRenderer;
@@ -25,9 +26,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MultiBuiltBlockRenderer implements
     BlockEntityRenderer<MultiBuiltBlockEntity, MultiBuiltBlockRenderer.MultiBuiltBlockRenderState>,
     WithLevelRenderer<MultiBuiltBlockEntity>
@@ -45,17 +43,20 @@ public class MultiBuiltBlockRenderer implements
 
         for (ComponentStateDefinition model : tileEntityIn.getComponents(MultiBuiltBlockEntity.OPCODE_READALL))
         {
-            if (model.component().type.equals(BuildingComponents.Type.BAKED_MODEL))
+            if (model.component().type.equals(BuildingComponents.Type.BAKED_MODEL) && !(model.component() instanceof FurnitureProxyComponent))
             {
                 resetToBlock000(be, matrixStackIn);
-                Matrix4f transform = buildQuadTransform(model);
+                float scale = model.component() instanceof FurnitureComponent fc ? fc.modelScale() : 1f;
+                Matrix4f aoTransform = buildQuadTransform(model, 1f);
+                Matrix4f finalTransform = scale != 1f ? buildQuadTransform(model, scale) : aoTransform;
                 BlockStateModel bakedModel = Minecraft.getInstance().getModelManager().getStandaloneModel(ClientEventSubscribeHandler.getOrCreateKey(model.model().id()));
-                QuadBaker.renderModel(bakedModel, context.level(), context.pos(), tileEntityIn.getBlockState(), transform, matrixStackIn, context.consumerFunction());
+                QuadBaker.renderModel(bakedModel, context.level(), context.pos(), tileEntityIn.getBlockState(), aoTransform, finalTransform, matrixStackIn, context.consumerFunction());
             }
         }
     }
 
-    private static Matrix4f buildQuadTransform(ComponentStateDefinition def)
+    /** Full transform with optional scale baked in. */
+    private static Matrix4f buildQuadTransform(ComponentStateDefinition def, float scale)
     {
         return new Matrix4f()
             .translate((float) def.inBlockPos().x, (float) def.inBlockPos().y, (float) def.inBlockPos().z)
@@ -63,6 +64,7 @@ public class MultiBuiltBlockRenderer implements
             .rotateY((float) Math.toRadians(def.rotationY()))
             .rotateX((float) Math.toRadians(def.rotationX()))
             .rotateZ((float) Math.toRadians(def.rotationZ()))
+            .scale(scale)
             .translate(-0.5f, 0, -0.5f);
     }
 

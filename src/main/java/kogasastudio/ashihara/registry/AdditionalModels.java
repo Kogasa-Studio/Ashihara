@@ -165,6 +165,7 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation WOODEN_DISH_SMALL = register("block/furnitures/dish_small");
     public static final BuildingComponentModelResourceLocation WOODEN_DISH_MID = register("block/furnitures/dish_mid");
     public static final BuildingComponentModelResourceLocation WOODEN_DISH_BIG = register("block/furnitures/dish_big");
+    public static final BuildingComponentModelResourceLocation CURTAIN_TABLE = register("block/furnitures/kicho");
 
     private static BuildingComponentModelResourceLocation register(String path)
     {

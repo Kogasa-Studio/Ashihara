@@ -2,6 +2,8 @@ package kogasastudio.ashihara.registry;
 
 import kogasastudio.ashihara.block.furniture.FurnitureComponent;
 import kogasastudio.ashihara.block.furniture.FurnitureRenderPass;
+import kogasastudio.ashihara.block.furniture.CurtainTableComponent;
+import kogasastudio.ashihara.block.furniture.FurnitureProxyComponent;
 import kogasastudio.ashihara.block.furniture.SimpleContainerComponent;
 import kogasastudio.ashihara.block.furniture.ContainerState;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -91,6 +93,21 @@ public class FurnitureComponents
             FurnitureRenderPass.CHUNK_BUFFER,
             ContainerState.ContainerType.PLATE, ContainerState.ContainerSize.LARGE,
             4, 12
+        )
+    );
+
+    public static final FurnitureComponent FURNITURE_PROXY = register(new FurnitureProxyComponent());
+
+    public static final FurnitureComponent CURTAIN_TABLE = register
+    (
+        new CurtainTableComponent
+        (
+            "curtain_table",
+            BuildingComponents.Type.BAKED_MODEL,
+            AdditionalModels.CURTAIN_TABLE,
+            Blocks.SPRUCE_WOOD_COMPONENT,
+            List.of(Items.CURTAIN_TABLE.toStack()),
+            FurnitureRenderPass.CHUNK_BUFFER
         )
     );
 

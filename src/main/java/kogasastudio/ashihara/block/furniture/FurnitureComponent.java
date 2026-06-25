@@ -50,6 +50,9 @@ public abstract class FurnitureComponent extends BuildingComponent
     @Override
     public abstract ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context);
 
+    /** Scale factor applied when rendering this component's model into chunk buffer. */
+    public float modelScale() { return 1.0f; }
+
     /** Clamp in-block coordinate to [min, max] range. */
     protected static double clampInBlock(double v, double min, double max) { return Math.clamp(v, min, max); }
 

@@ -170,6 +170,8 @@ public class PlacementPreviewRenderer
         poseStack.mulPose(Axis.YP.rotationDegrees(def.rotationY()));
         poseStack.mulPose(Axis.XP.rotationDegrees(def.rotationX()));
         poseStack.mulPose(Axis.ZP.rotationDegrees(def.rotationZ()));
+        float scale = def.component() instanceof FurnitureComponent fc ? fc.modelScale() : 1f;
+        poseStack.scale(scale, scale, scale);
         poseStack.translate(-0.5, 0, -0.5);
 
         MultiBufferSource.BufferSource bufferSource = mc.renderBuffers().bufferSource();

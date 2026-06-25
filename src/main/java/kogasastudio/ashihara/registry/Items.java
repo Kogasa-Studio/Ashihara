@@ -5,6 +5,7 @@ import kogasastudio.ashihara.fluid.FluidRegistryHandler;
 import kogasastudio.ashihara.helper.PlayerAnimationHelper;
 import kogasastudio.ashihara.item.*;
 import kogasastudio.ashihara.item.block.FurnitureComponentItem;
+import kogasastudio.ashihara.item.block.ContainerComponentItem;
 import kogasastudio.ashihara.item.block.*;
 import kogasastudio.ashihara.item.food.EasyFood;
 import kogasastudio.ashihara.item.food.DirtBallDon;
@@ -278,11 +279,12 @@ public class Items
     public static final DeferredItem<? extends BlockItem> FERMENTATION_VAT = ITEMS.registerSimpleBlockItem("fermentation_vat", Blocks.FERMENTATION_VAT);
     public static final DeferredItem<? extends BlockItem> LARGE_FERMENTATION_VAT = ITEMS.registerSimpleBlockItem("large_fermentation_vat", Blocks.LARGE_FERMENTATION_VAT);
 
-    public static final DeferredItem<? extends Item> WOODEN_BOWL_MID = ITEMS.registerItem("wooden_bowl_mid", properties -> new FurnitureComponentItem(() -> FurnitureComponents.WOODEN_BOWL_MID, Blocks.MULTI_BUILT_BLOCK, properties), properties -> properties.useItemDescriptionPrefix().component(kogasastudio.ashihara.registry.DataComponentTypes.FLUID_CONTENT.get(), net.neoforged.neoforge.fluids.SimpleFluidContent.EMPTY));
-    public static final DeferredItem<? extends Item> WOODEN_BOWL_BIG = ITEMS.registerItem("wooden_bowl_big", properties -> new FurnitureComponentItem(() -> FurnitureComponents.WOODEN_BOWL_BIG, Blocks.MULTI_BUILT_BLOCK, properties), properties -> properties.useItemDescriptionPrefix());
-    public static final DeferredItem<? extends Item> WOODEN_DISH_SMALL = ITEMS.registerItem("wooden_dish_small", properties -> new FurnitureComponentItem(() -> FurnitureComponents.WOODEN_DISH_SMALL, Blocks.MULTI_BUILT_BLOCK, properties), properties -> properties.useItemDescriptionPrefix());
-    public static final DeferredItem<? extends Item> WOODEN_DISH_MID = ITEMS.registerItem("wooden_dish_mid", properties -> new FurnitureComponentItem(() -> FurnitureComponents.WOODEN_DISH_MID, Blocks.MULTI_BUILT_BLOCK, properties), properties -> properties.useItemDescriptionPrefix());
-    public static final DeferredItem<? extends Item> WOODEN_DISH_BIG = ITEMS.registerItem("wooden_dish_big", properties -> new FurnitureComponentItem(() -> FurnitureComponents.WOODEN_DISH_BIG, Blocks.MULTI_BUILT_BLOCK, properties), properties -> properties.useItemDescriptionPrefix());
+    public static final DeferredItem<? extends Item> WOODEN_BOWL_MID = ITEMS.registerItem("wooden_bowl_mid", properties -> new ContainerComponentItem(() -> FurnitureComponents.WOODEN_BOWL_MID, Blocks.MULTI_BUILT_BLOCK, properties), properties -> properties.useItemDescriptionPrefix().component(kogasastudio.ashihara.registry.DataComponentTypes.FLUID_CONTENT.get(), net.neoforged.neoforge.fluids.SimpleFluidContent.EMPTY));
+    public static final DeferredItem<? extends Item> WOODEN_BOWL_BIG = ITEMS.registerItem("wooden_bowl_big", properties -> new ContainerComponentItem(() -> FurnitureComponents.WOODEN_BOWL_BIG, Blocks.MULTI_BUILT_BLOCK, properties), properties -> properties.useItemDescriptionPrefix());
+    public static final DeferredItem<? extends Item> CURTAIN_TABLE = ITEMS.registerItem("curtain_table", properties -> new FurnitureComponentItem(() -> FurnitureComponents.CURTAIN_TABLE, Blocks.MULTI_BUILT_BLOCK, properties), properties -> properties.useItemDescriptionPrefix());
+    public static final DeferredItem<? extends Item> WOODEN_DISH_SMALL = ITEMS.registerItem("wooden_dish_small", properties -> new ContainerComponentItem(() -> FurnitureComponents.WOODEN_DISH_SMALL, Blocks.MULTI_BUILT_BLOCK, properties), properties -> properties.useItemDescriptionPrefix());
+    public static final DeferredItem<? extends Item> WOODEN_DISH_MID = ITEMS.registerItem("wooden_dish_mid", properties -> new ContainerComponentItem(() -> FurnitureComponents.WOODEN_DISH_MID, Blocks.MULTI_BUILT_BLOCK, properties), properties -> properties.useItemDescriptionPrefix());
+    public static final DeferredItem<? extends Item> WOODEN_DISH_BIG = ITEMS.registerItem("wooden_dish_big", properties -> new ContainerComponentItem(() -> FurnitureComponents.WOODEN_DISH_BIG, Blocks.MULTI_BUILT_BLOCK, properties), properties -> properties.useItemDescriptionPrefix());
 
     //闁诲浚鍨伴崣?
     public static final DeferredItem<? extends Item> LANTERN_LONG_WHITE = ITEMS.registerSimpleBlockItem("lantern_long_white", Blocks.LANTERN_LONG_WHITE);

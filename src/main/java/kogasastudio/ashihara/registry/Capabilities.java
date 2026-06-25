@@ -2,6 +2,7 @@ package kogasastudio.ashihara.registry;
 
 import kogasastudio.ashihara.Ashihara;
 import kogasastudio.ashihara.block.blockentity.*;
+import kogasastudio.ashihara.item.block.ContainerComponentItem;
 import kogasastudio.ashihara.item.block.FurnitureComponentItem;
 import kogasastudio.ashihara.interaction.HeatLevel;
 import net.minecraft.core.Direction;
@@ -31,6 +32,6 @@ public class Capabilities
         event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.Item.BLOCK, BlockEntities.FERMENTATION_SUB_BE.get(), FermentationSubBlockEntity::getItemHandler);
         event.registerBlockEntity(net.neoforged.neoforge.capabilities.Capabilities.Fluid.BLOCK, BlockEntities.FERMENTATION_SUB_BE.get(), FermentationSubBlockEntity::getFluidHandler);
 
-        event.registerItem(net.neoforged.neoforge.capabilities.Capabilities.Fluid.ITEM, FurnitureComponentItem::getFluidHandler, Items.WOODEN_BOWL_MID.get());
+        event.registerItem(net.neoforged.neoforge.capabilities.Capabilities.Fluid.ITEM, ContainerComponentItem::getFluidHandler, Items.WOODEN_BOWL_MID.get());
     }
 }

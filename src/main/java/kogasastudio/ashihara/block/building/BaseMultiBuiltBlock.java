@@ -93,7 +93,7 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
                 if (definition != null)
                 {
                     List<ItemStack> itemList = definition.component().getDrops(definition, mbe);
-                    if (itemList != null && !itemList.getFirst().isEmpty()) return itemList.getFirst();
+                    if (itemList != null && !itemList.isEmpty() && !itemList.getFirst().isEmpty()) return itemList.getFirst();
                 }
             }
         }

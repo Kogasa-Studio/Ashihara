@@ -3,9 +3,15 @@ package kogasastudio.ashihara.block.blockentity;
 import kogasastudio.ashihara.block.building.*;
 import kogasastudio.ashihara.block.building.component.*;
 import kogasastudio.ashihara.block.furniture.FurnitureComponent;
+import kogasastudio.ashihara.block.furniture.FurnitureProxyComponent;
+import kogasastudio.ashihara.block.furniture.MultiBlockFurniture;
 import kogasastudio.ashihara.helper.ShapeHelper;
+import kogasastudio.ashihara.registry.Blocks;
+import kogasastudio.ashihara.registry.FurnitureComponents;
 import kogasastudio.ashihara.registry.Items;
 import kogasastudio.ashihara.registry.BlockEntities;
+import net.minecraft.core.BlockBox;
+import net.minecraft.core.Direction;
 import kogasastudio.ashihara.utils.shape.VoxelShapeSerializer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ItemParticleOption;
@@ -90,8 +96,78 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
         {
             definition = FurnitureComponent.tryNudge(this.FURNITURE, definition);
             if (definition == null) return false;
+
+            // Multi-block: dynamic extent from shape bounds, filter empty slices
+            VoxelShape fullShape = definition.shape();
+            boolean isMultiBlock = component instanceof MultiBlockFurniture;
+            if (isMultiBlock)
+            {
+                var bb = fullShape.bounds();
+                int x0 = (int) Math.floor(bb.minX), x1 = (int) Math.ceil(bb.maxX) - 1;
+                int y0 = (int) Math.floor(bb.minY), y1 = (int) Math.ceil(bb.maxY) - 1;
+                int z0 = (int) Math.floor(bb.minZ), z1 = (int) Math.ceil(bb.maxZ) - 1;
+
+                // Placement check: only blocks with non-empty slices
+                for (int x = x0; x <= x1; x++)
+                    for (int y = y0; y <= y1; y++)
+                        for (int z = z0; z <= z1; z++)
+                        {
+                            if (x == 0 && y == 0 && z == 0) continue;
+                            if (ShapeHelper.sliceShape(fullShape, 1, new net.minecraft.core.Vec3i(x, y, z)).isEmpty())
+                                continue;
+                            BlockPos target = this.worldPosition.offset(x, y, z);
+                            if (this.level.getBlockEntity(target) instanceof MultiBuiltBlockEntity)
+                                continue;
+                            if (!this.level.getBlockState(target).canBeReplaced())
+                                return false;
+                        }
+            }
+
+            // Slice origin
+            if (isMultiBlock)
+            {
+                VoxelShape originSlice = ShapeHelper.sliceShape(fullShape, 1, net.minecraft.core.Vec3i.ZERO);
+                definition = new ComponentStateDefinition(definition.component(), definition.inBlockPos(),
+                    definition.rotationX(), definition.rotationY(), definition.rotationZ(),
+                    originSlice, definition.model(), definition.occupation(), definition.customData());
+            }
+
             this.FURNITURE.add(definition);
             refresh();
+
+            // Place proxy components only where slice is non-empty
+            if (isMultiBlock)
+            {
+                var proxyData = new FurnitureProxyComponent.ProxyData(this.worldPosition, definition.inBlockPos());
+                var bb = fullShape.bounds();
+                int x0 = (int) Math.floor(bb.minX), x1 = (int) Math.ceil(bb.maxX) - 1;
+                int y0 = (int) Math.floor(bb.minY), y1 = (int) Math.ceil(bb.maxY) - 1;
+                int z0 = (int) Math.floor(bb.minZ), z1 = (int) Math.ceil(bb.maxZ) - 1;
+                for (int x = x0; x <= x1; x++)
+                    for (int y = y0; y <= y1; y++)
+                        for (int z = z0; z <= z1; z++)
+                        {
+                            if (x == 0 && y == 0 && z == 0) continue;
+                            VoxelShape slice = ShapeHelper.sliceShape(fullShape, 1, new net.minecraft.core.Vec3i(x, y, z));
+                            if (slice.isEmpty()) continue;
+                            BlockPos target = this.worldPosition.offset(x, y, z);
+                            var proxy = new ComponentStateDefinition(FurnitureComponents.FURNITURE_PROXY, new Vec3(0, 0, 0), 0, 0, 0, slice, definition.model(), List.of(), proxyData);
+                            if (this.level.getBlockEntity(target) instanceof MultiBuiltBlockEntity subBe)
+                            {
+                                subBe.FURNITURE.add(proxy);
+                                subBe.refresh();
+                                continue;
+                            }
+                            this.level.setBlock(target, Blocks.MULTI_BUILT_BLOCK.get().defaultBlockState(), 3);
+                            var subBe = (MultiBuiltBlockEntity) this.level.getBlockEntity(target);
+                            if (subBe != null)
+                            {
+                                subBe.FURNITURE.add(proxy);
+                                subBe.refresh();
+                            }
+                        }
+            }
+
             SoundEvent event = definition.component().getSoundType().getPlaceSound();
             this.level.playSound(null, this.worldPosition, event, SoundSource.BLOCKS, 1.0f, 1.0f);
             return true;
@@ -101,25 +177,45 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
 
     public boolean tryBreak(UseOnContext context)
     {
-        ItemStack stack = context.getItemInHand();
         Vec3 vec = context.getClickLocation();
         Vec3 inBlockVec = inBlockVec(vec);
-        int opcode = stack.is(Items.WOODEN_HAMMER) ? OPCODE_COMPONENT : stack.is(Items.CHISEL) ? OPCODE_ADDITIONAL : -1;
-        if (opcode == OPCODE_COMPONENT || opcode == OPCODE_ADDITIONAL)
+        ComponentStateDefinition definition = getComponentByPosition(inBlockVec, OPCODE_READALL);
+        if (definition != null)
         {
-            ComponentStateDefinition definition = getComponentByPosition(inBlockVec, opcode);
-            if (definition != null)
-            {
-                return breakComponent(definition, context.getPlayer(), opcode);
-            }
+            return breakComponent(definition, context.getPlayer(), OPCODE_READALL);
         }
         return false;
     }
 
     public boolean breakComponent(ComponentStateDefinition definition, @Nullable Player player, int opcode)
     {
-        if (this.getComponents(opcode).contains(definition))
+        // Forward proxy breaks to the main BE
+        if (FurnitureProxyComponent.isProxy(definition))
         {
+            var data = FurnitureProxyComponent.getData(definition);
+            if (data != null && this.level.getBlockEntity(data.mainPos()) instanceof MultiBuiltBlockEntity mainBe)
+            {
+                for (var def : mainBe.FURNITURE)
+                    if (def.inBlockPos().equals(data.mainInBlockPos()))
+                        return mainBe.breakComponent(def, player, MultiBuiltBlockEntity.OPCODE_FURNITURE);
+            }
+            return false;
+        }
+
+        // Resolve actual list (READALL returns a copy — must locate the real source)
+        int actualOpcode = opcode == OPCODE_READALL ? -1 : opcode;
+        if (actualOpcode < 0)
+        {
+            if (FURNITURE.contains(definition)) actualOpcode = OPCODE_FURNITURE;
+            else if (ADDITIONAL_COMPONENTS.contains(definition)) actualOpcode = OPCODE_ADDITIONAL;
+            else if (COMPONENTS.contains(definition)) actualOpcode = OPCODE_COMPONENT;
+            else return false;
+        }
+        if (this.getComponents(actualOpcode).contains(definition))
+        {
+            if (extentFromDef(definition) != null && actualOpcode == OPCODE_FURNITURE)
+                removeMultiBlockProxies(definition, extentFromDef(definition));
+
             SoundEvent event = definition.component().getSoundType().getBreakSound();
             List<ItemStack> drops = definition.component().getDrops(definition, this);
             Vec3 vec = definition.inBlockPos();
@@ -151,7 +247,7 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
                     this.level.addFreshEntity(entity);
                 }
             }
-            this.getComponents(opcode).remove(definition);
+            this.getComponents(actualOpcode).remove(definition);
             refresh();
             return true;
         }
@@ -278,7 +374,20 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
         BaseMultiBuiltBlock newMaterial = (BaseMultiBuiltBlock) this.getBlockState().getBlock();
         for (ComponentStateDefinition definition : this.getComponents(OPCODE_READALL))
         {
-            if (definition.component().getMaterial().get().material.getPriority() > newMaterial.material.getPriority()) newMaterial = definition.component().getMaterial().get();
+            BaseMultiBuiltBlock mat = null;
+            if (FurnitureProxyComponent.isProxy(definition))
+            {
+                var pd = FurnitureProxyComponent.getData(definition);
+                if (pd != null && this.level.getBlockEntity(pd.mainPos()) instanceof MultiBuiltBlockEntity mbe)
+                {
+                    for (var d : mbe.FURNITURE)
+                        if (d.inBlockPos().equals(pd.mainInBlockPos()))
+                            mat = d.component().getMaterial().get();
+                }
+            }
+            else mat = definition.component().getMaterial().get();
+            if (mat != null && mat.material.getPriority() > newMaterial.material.getPriority())
+                newMaterial = mat;
         }
         if (newMaterial != this.getBlockState().getBlock())
         {
@@ -291,7 +400,7 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
     {
         for (ComponentStateDefinition m : this.getComponents(opcode))
         {
-            if (m.shape().bounds().distanceToSqr(vec3) <= 0.00001) return m;
+            if (!m.shape().isEmpty() && m.shape().bounds().distanceToSqr(vec3) <= 0.00001) return m;
         }
         return null;
     }
@@ -443,4 +552,69 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
     }
 
     // </editor-fold>
+
+    // -- Multi-block helpers -----------------------------------------
+
+    private BlockBox extentFromDef(ComponentStateDefinition def)
+    {
+        if (!(def.component() instanceof MultiBlockFurniture)) return null;
+        var base = def.component().getBaseShape();
+        if (base == null)
+            return ((MultiBlockFurniture) def.component()).getExtent(Direction.fromYRot(def.rotationY()));
+        int r = (int) def.rotationY();
+        VoxelShape full = r != 0 ? ShapeHelper.rotateShape(base, -r) : base;
+        full = ShapeHelper.offsetShape(full, def.inBlockPos().x(), def.inBlockPos().y(), def.inBlockPos().z());
+        var bb = full.bounds();
+        return new BlockBox(
+            new BlockPos((int) Math.floor(bb.minX), (int) Math.floor(bb.minY), (int) Math.floor(bb.minZ)),
+            new BlockPos((int) Math.ceil(bb.maxX) - 1, (int) Math.ceil(bb.maxY) - 1, (int) Math.ceil(bb.maxZ) - 1));
+    }
+
+    private void removeMultiBlockProxies(ComponentStateDefinition mainDef, BlockBox extent)
+    {
+        if (extent == null) return;
+        for (int x = extent.min().getX(); x <= extent.max().getX(); x++)
+            for (int y = extent.min().getY(); y <= extent.max().getY(); y++)
+                for (int z = extent.min().getZ(); z <= extent.max().getZ(); z++)
+                {
+                    if (x == 0 && y == 0 && z == 0) continue;
+                    BlockPos target = this.worldPosition.offset(x, y, z);
+                    if (this.level.getBlockEntity(target) instanceof MultiBuiltBlockEntity subBe)
+                    {
+                        subBe.FURNITURE.removeIf(d ->
+                        {
+                            var pd = FurnitureProxyComponent.getData(d);
+                            return pd != null && pd.mainPos().equals(this.worldPosition)
+                                && pd.mainInBlockPos().equals(mainDef.inBlockPos());
+                        });
+                        subBe.refresh();
+                    }
+                }
+    }
+
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state)
+    {
+        super.preRemoveSideEffects(pos, state);
+        if (this.level != null && this.level.getBlockState(pos).getBlock() instanceof BaseMultiBuiltBlock) return;
+        for (var def : new ArrayList<>(this.FURNITURE))
+        {
+            // Forward proxy destruction to main BE
+            if (FurnitureProxyComponent.isProxy(def))
+            {
+                var pd = FurnitureProxyComponent.getData(def);
+                if (pd != null && this.level != null
+                    && this.level.getBlockEntity(pd.mainPos()) instanceof MultiBuiltBlockEntity mainBe)
+                {
+                    for (var mainDef : new ArrayList<>(mainBe.FURNITURE))
+                        if (mainDef.inBlockPos().equals(pd.mainInBlockPos()))
+                            mainBe.breakComponent(mainDef, null, OPCODE_FURNITURE);
+                }
+                continue;
+            }
+            // Clean up sub-blocks of multi-block main components
+            var extent = extentFromDef(def);
+            if (extent != null) removeMultiBlockProxies(def, extent);
+        }
+    }
 }

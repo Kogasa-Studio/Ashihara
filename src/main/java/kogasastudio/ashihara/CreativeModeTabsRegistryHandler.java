@@ -188,6 +188,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.DIRT_DEPRESSION.get());
                                         output.accept(Items.WATER_FIELD.get());
                                         output.accept(Items.SALT_FIELD.get());
+                                        output.accept(Items.CURTAIN_TABLE.get());
                                     })).build()
                     );
     public static final Supplier<CreativeModeTab> MATERIALS =
@@ -260,6 +261,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.WOODEN_BOWL_BIG.get());
                                         output.accept(Items.WOODEN_DISH_SMALL.get());
                                         output.accept(Items.WOODEN_DISH_MID.get());
+                                        output.accept(Items.CURTAIN_TABLE.get());
                                         output.accept(Items.WOODEN_DISH_BIG.get());
                                         output.accept(Items.SAKURAMOCHI.get());
                                         output.accept(Items.CHRYSANTHEMUM.get());

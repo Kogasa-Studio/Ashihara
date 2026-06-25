@@ -92,6 +92,7 @@ public record ComponentStateDefinition(
         if (!(obj instanceof ComponentStateDefinition definition)) return false;
         boolean componentEqual = component().equals(definition.component());
         boolean rotationEqual = rotationY() == definition.rotationY();
+        if (definition.shape().isEmpty() != shape().isEmpty()) return false;
         boolean shapeEqual = definition.shape().bounds().equals(shape().bounds());
         boolean occupationEqual = occupation().hashCode() == definition.occupation().hashCode();
         return componentEqual && rotationEqual && shapeEqual && occupationEqual;
