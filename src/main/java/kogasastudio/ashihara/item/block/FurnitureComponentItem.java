@@ -3,7 +3,9 @@ package kogasastudio.ashihara.item.block;
 import kogasastudio.ashihara.block.building.BaseMultiBuiltBlock;
 import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.block.furniture.FurnitureComponent;
+import kogasastudio.ashihara.block.furniture.MultiBlockFurniture;
 import kogasastudio.ashihara.block.furniture.SnappedUseOnContext;
+import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.utils.GridSnapHelper;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -53,6 +55,29 @@ public class FurnitureComponentItem extends BlockItem
             BlockEntity blockEntity = pContext.getLevel().getBlockEntity(pContext.getClickedPos());
             if (blockEntity instanceof MultiBuiltBlockEntity be && be.tryPlaceFurniture(pContext, this.getComponent()))
                 return false;
+        }
+        else if (this.getComponent() instanceof MultiBlockFurniture)
+        {
+            var phantom = MultiBuiltBlockEntity.makePhantom(pContext.getClickedPos());
+            var ctx = new SnappedUseOnContext(pContext, GridSnapHelper.getGridStep(player), false);
+            var def = this.getComponent().definite(phantom, ctx);
+            if (def != null)
+            {
+                var bb = def.shape().bounds();
+                for (int x = (int) Math.floor(bb.minX); x <= (int) Math.ceil(bb.maxX) - 1; x++)
+                    for (int y = (int) Math.floor(bb.minY); y <= (int) Math.ceil(bb.maxY) - 1; y++)
+                        for (int z = (int) Math.floor(bb.minZ); z <= (int) Math.ceil(bb.maxZ) - 1; z++)
+                        {
+                            if (x == 0 && y == 0 && z == 0) continue;
+                            if (ShapeHelper.sliceShape(def.shape(), 1, new net.minecraft.core.Vec3i(x, y, z)).isEmpty())
+                                continue;
+                            var target = pContext.getClickedPos().offset(x, y, z);
+                            if (pContext.getLevel().getBlockEntity(target) instanceof MultiBuiltBlockEntity)
+                                continue;
+                            if (!pContext.getLevel().getBlockState(target).canBeReplaced())
+                                return false;
+                        }
+            }
         }
         return super.canPlace(pContext, pState);
     }

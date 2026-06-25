@@ -54,6 +54,12 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
         super(BlockEntities.MULTI_BUILT_BLOCKENTITY.get(), pPos, pBlockState);
     }
 
+    /** Create a lightweight phantom MBE for preview / pre-check purposes. */
+    public static MultiBuiltBlockEntity makePhantom(BlockPos pos)
+    {
+        return new MultiBuiltBlockEntity(pos, Blocks.MULTI_BUILT_BLOCK.get().defaultBlockState());
+    }
+
     public boolean tryPlace(UseOnContext context, BuildingComponent component)
     {
         boolean flag = false;
@@ -238,6 +244,7 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
                     );
                 }
             }
+            //TODO: 这里玩家为null也通过检测会导致WE移除等也掉落物品。之后靠重写那个啥总之是方块破坏方法也可能是别的破坏方法来完成，现在暂时保留这个bug
             if (player != null && !player.isCreative())
             {
                 for (ItemStack item : drops)
