@@ -53,6 +53,9 @@ public abstract class FurnitureComponent extends BuildingComponent
     /** Scale factor applied when rendering this component's model into chunk buffer. */
     public float modelScale() { return 1.0f; }
 
+    public void onPlaced(MultiBuiltBlockEntity be, ComponentStateDefinition def) {}
+    public void onRemoved(MultiBuiltBlockEntity be, ComponentStateDefinition def) {}
+
     /** Clamp in-block coordinate to [min, max] range. */
     protected static double clampInBlock(double v, double min, double max) { return Math.clamp(v, min, max); }
 
@@ -86,6 +89,7 @@ public abstract class FurnitureComponent extends BuildingComponent
         Vec3 pos = def.inBlockPos();
         for (ComponentStateDefinition e : existing)
         {
+            if (FurnitureProxyComponent.isProxy(e)) continue;
             Vec3 ep = e.inBlockPos();
             if (!tooClose(pos, ep, tx, ty, tz)) continue;
             double dx = pos.x() - ep.x(), dy = pos.y() - ep.y(), dz = pos.z() - ep.z();
@@ -95,7 +99,7 @@ public abstract class FurnitureComponent extends BuildingComponent
         }
         pos = new Vec3(Math.clamp(pos.x(), -0.5, 0.5), Math.clamp(pos.y(), 0.0, 1.0), Math.clamp(pos.z(), -0.5, 0.5));
         for (ComponentStateDefinition e : existing)
-            if (tooClose(e.inBlockPos(), pos, tx, ty, tz))
+            if (!FurnitureProxyComponent.isProxy(e) && tooClose(e.inBlockPos(), pos, tx, ty, tz))
                 return null;
         Vec3 delta = pos.subtract(def.inBlockPos());
         return new ComponentStateDefinition(def.component(), pos,

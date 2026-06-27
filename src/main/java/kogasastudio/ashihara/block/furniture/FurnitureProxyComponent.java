@@ -1,6 +1,7 @@
 package kogasastudio.ashihara.block.furniture;
 
 import kogasastudio.ashihara.block.building.component.ComponentStateDefinition;
+import kogasastudio.ashihara.block.building.component.Interactable;
 import kogasastudio.ashihara.block.blockentity.MultiBuiltBlockEntity;
 import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.registry.BuildingComponents;
@@ -10,16 +11,12 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
-/**
- * Sentinel component for multi-block furniture sub-blocks.
- * Stores a relative offset to the main BE so that clone/move operations
- * do not invalidate the link.
- */
-public class FurnitureProxyComponent extends FurnitureComponent implements ICustomData
+public class FurnitureProxyComponent extends FurnitureComponent implements ICustomData, Interactable
 {
     public record ProxyData(int dx, int dy, int dz, Vec3 mainInBlockPos)
     {
@@ -32,15 +29,8 @@ public class FurnitureProxyComponent extends FurnitureComponent implements ICust
               () -> Blocks.SPRUCE_WOOD_COMPONENT.get(), SoundType.BAMBOO, FurnitureRenderPass.CHUNK_BUFFER);
     }
 
-    public static boolean isProxy(ComponentStateDefinition def)
-    {
-        return def.component() instanceof FurnitureProxyComponent;
-    }
-
-    public static ProxyData getData(ComponentStateDefinition def)
-    {
-        return def.customData() instanceof ProxyData pd ? pd : null;
-    }
+    public static boolean isProxy(ComponentStateDefinition def) { return def.component() instanceof FurnitureProxyComponent; }
+    public static ProxyData getData(ComponentStateDefinition def) { return def.customData() instanceof ProxyData pd ? pd : null; }
 
     @Override
     public List<ItemStack> getDrops(ComponentStateDefinition def, MultiBuiltBlockEntity mbe)
@@ -51,10 +41,16 @@ public class FurnitureProxyComponent extends FurnitureComponent implements ICust
             var mainBe = mbe.getLevel().getBlockEntity(pd.resolveMain(mbe.getBlockPos()));
             if (mainBe instanceof MultiBuiltBlockEntity mb)
                 for (var d : mb.FURNITURE)
-                    if (d.inBlockPos().equals(pd.mainInBlockPos()))
+                    if (d.inBlockPos().distanceToSqr(pd.mainInBlockPos()) < 0.0001)
                         return d.component().getDrops(d, mb);
         }
         return List.of();
+    }
+
+    @Override
+    public ComponentStateDefinition handleInteraction(UseOnContext context, ComponentStateDefinition proxyDef)
+    {
+        return proxyDef;
     }
 
     @Override
@@ -73,9 +69,9 @@ public class FurnitureProxyComponent extends FurnitureComponent implements ICust
     @Override
     public Object deserializeCustom(ValueInput input)
     {
-        int dx = input.getIntOr("dx", 0);
-        int dy = input.getIntOr("dy", 0);
-        int dz = input.getIntOr("dz", 0);
+        int dx = 0, dy = 0, dz = 0;
+        if (input.getLong("mainPos").isPresent()) { /* old format */ }
+        else { dx = input.getIntOr("dx", 0); dy = input.getIntOr("dy", 0); dz = input.getIntOr("dz", 0); }
         ValueInput p = input.childOrEmpty("mainInBlock");
         Vec3 ib = new Vec3(p.getDoubleOr("x", 0), p.getDoubleOr("y", 0), p.getDoubleOr("z", 0));
         return new ProxyData(dx, dy, dz, ib);

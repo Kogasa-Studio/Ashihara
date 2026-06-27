@@ -2,7 +2,9 @@ package kogasastudio.ashihara.block.blockentity;
 
 import kogasastudio.ashihara.block.building.*;
 import kogasastudio.ashihara.block.building.component.*;
+import kogasastudio.ashihara.block.furniture.BambooCurtainComponent;
 import kogasastudio.ashihara.block.furniture.FurnitureComponent;
+import kogasastudio.ashihara.block.furniture.FurnitureProxyComponent;
 import kogasastudio.ashihara.block.furniture.FurnitureProxyComponent;
 import kogasastudio.ashihara.block.furniture.MultiBlockFurniture;
 import kogasastudio.ashihara.helper.ShapeHelper;
@@ -28,6 +30,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -100,7 +103,8 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
         ComponentStateDefinition definition = component.definite(this, context);
         if (definition != null)
         {
-            definition = FurnitureComponent.tryNudge(this.FURNITURE, definition);
+            if (!(component instanceof BambooCurtainComponent))
+                definition = FurnitureComponent.tryNudge(this.FURNITURE, definition);
             if (definition == null) return false;
 
             // Multi-block: dynamic extent from shape bounds, filter empty slices
@@ -202,7 +206,7 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
             if (data != null && this.level.getBlockEntity(data.resolveMain(this.worldPosition)) instanceof MultiBuiltBlockEntity mainBe)
             {
                 for (var def : mainBe.FURNITURE)
-                    if (def.inBlockPos().equals(data.mainInBlockPos()))
+                    if (def.inBlockPos().distanceToSqr(data.mainInBlockPos()) < 0.0001)
                         return mainBe.breakComponent(def, player, MultiBuiltBlockEntity.OPCODE_FURNITURE);
             }
             return false;
@@ -221,6 +225,9 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
         {
             if (extentFromDef(definition) != null && actualOpcode == OPCODE_FURNITURE)
                 removeMultiBlockProxies(definition, extentFromDef(definition));
+
+            if (definition.component() instanceof BambooCurtainComponent)
+                BambooCurtainComponent.onChainBreak(this, definition);
 
             SoundEvent event = definition.component().getSoundType().getBreakSound();
             List<ItemStack> drops = definition.component().getDrops(definition, this);
@@ -254,6 +261,7 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
                     this.level.addFreshEntity(entity);
                 }
             }
+            if (definition.component() instanceof FurnitureComponent fc) fc.onRemoved(this, definition);
             this.getComponents(actualOpcode).remove(definition);
             refresh();
             return true;
@@ -329,47 +337,71 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
             definition = getComponentByPosition(inBlockPos, opcode);
         }
         if (definition == null) return false;
-        for (int i = 0; i < this.getComponents(opcode).size(); i++)
+        return interactWith(definition, context, opcode);
+    }
+
+    public boolean interactWith(ComponentStateDefinition definition, UseOnContext context, int opcode)
+    {
+        // Proxy: forward to main BE without touching proxy BE's FURNITURE
+        if (FurnitureProxyComponent.isProxy(definition))
         {
-            ComponentStateDefinition def = this.getComponents(opcode).get(i);
-            if (def == definition && definition.component() instanceof Interactable comp)
+            var pd = FurnitureProxyComponent.getData(definition);
+            if (pd != null && this.level != null)
             {
-                ComponentStateDefinition interacted = comp.handleInteraction(context, def);
+                var mainPos = pd.resolveMain(this.worldPosition);
+                if (this.level.getBlockEntity(mainPos) instanceof MultiBuiltBlockEntity mainBe)
+                {
+                    for (var mainDef : mainBe.FURNITURE)
+                    {
+                        if (mainDef.inBlockPos().distanceToSqr(pd.mainInBlockPos()) < 0.0001)
+                        {
+                            var mainCtx = new UseOnContext(context.getLevel(), context.getPlayer(), context.getHand(),
+                                context.getItemInHand(), new BlockHitResult(Vec3.atCenterOf(mainPos), context.getClickedFace(), mainPos, false));
+                            return mainBe.interactWith(mainDef, mainCtx, OPCODE_FURNITURE);
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+        if (definition.component() instanceof Interactable comp)
+        {
+            var list = getComponents(opcode);
+            for (int i = 0; i < list.size(); i++)
+            {
+                if (list.get(i) != definition) continue;
+                ComponentStateDefinition interacted = comp.handleInteraction(context, definition);
                 if (interacted == null)
                 {
-                    this.getComponents(opcode).remove(i);
-                    if (opcode == OPCODE_FURNITURE)
-                        refresh();
-                    else
-                    {
-                        refresh();
-                        SoundEvent event = definition.component().getSoundType().getBreakSound();
-                        this.level.playSound(null, this.worldPosition, event, SoundSource.BLOCKS, 1.0f, 1.0f);
-                    }
+                    if (definition.component() instanceof FurnitureComponent fc) fc.onRemoved(this, definition);
+                    list.remove(i);
+                    if (opcode == OPCODE_FURNITURE) refresh();
+                    else { refresh(); SoundEvent event = definition.component().getSoundType().getBreakSound(); this.level.playSound(null, this.worldPosition, event, SoundSource.BLOCKS, 1.0f, 1.0f); }
                     return true;
                 }
-                if (interacted == def) return false;
-                this.getComponents(opcode).set(i, interacted);
-                SoundType interactSound = comp.getInteractSound();
-                if (interactSound != SoundType.EMPTY) this.level.playSound(null, this.worldPosition, comp.getInteractSound().getPlaceSound(), SoundSource.BLOCKS, 1.0f, 1.0f);
+                if (interacted == definition) return false;
+                list.set(i, interacted);
+                if (interacted.component() instanceof FurnitureComponent fc) fc.onPlaced(this, interacted);
+                SoundType s = comp.getInteractSound();
+                if (s != SoundType.EMPTY) this.level.playSound(null, this.worldPosition, s.getPlaceSound(), SoundSource.BLOCKS, 1.0f, 1.0f);
                 refresh();
                 return true;
             }
-            else if (def == definition && definition.component() instanceof Decoratable comp)
+        }
+        else if (definition.component() instanceof Decoratable comp)
+        {
+            ComponentStateDefinition decoration = comp.decorate(this, context, definition);
+            boolean canAppend = true;
+            for (ComponentStateDefinition d : ADDITIONAL_COMPONENTS)
             {
-                ComponentStateDefinition decoration = comp.decorate(this, context, def);
-                boolean canAppend = true;
-                for (ComponentStateDefinition d : ADDITIONAL_COMPONENTS)
-                {
-                    if (d.occupation().hashCode() == decoration.occupation().hashCode() && d.equals(decoration)) canAppend = false;
-                }
-                if (canAppend)
-                {
-                    this.ADDITIONAL_COMPONENTS.add(definition);
-                    this.level.playSound(null, this.worldPosition, decoration.component().getSoundType().getPlaceSound(), SoundSource.BLOCKS, 1.0f, 1.0f);
-                    refresh();
-                    return true;
-                }
+                if (d.occupation().hashCode() == decoration.occupation().hashCode() && d.equals(decoration)) canAppend = false;
+            }
+            if (canAppend)
+            {
+                ADDITIONAL_COMPONENTS.add(definition);
+                this.level.playSound(null, this.worldPosition, decoration.component().getSoundType().getPlaceSound(), SoundSource.BLOCKS, 1.0f, 1.0f);
+                refresh();
+                return true;
             }
         }
         return false;
@@ -388,7 +420,7 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
                 if (pd != null && this.level.getBlockEntity(pd.resolveMain(this.worldPosition)) instanceof MultiBuiltBlockEntity mbe)
                 {
                     for (var d : mbe.FURNITURE)
-                        if (d.inBlockPos().equals(pd.mainInBlockPos()))
+                        if (d.inBlockPos().distanceToSqr(pd.mainInBlockPos()) < 0.0001)
                             mat = d.component().getMaterial().get();
                 }
             }
@@ -599,13 +631,18 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
                 }
     }
 
-    @Override
-    public void preRemoveSideEffects(BlockPos pos, BlockState state)
-    {
-        super.preRemoveSideEffects(pos, state);
-        if (this.level != null && this.level.getBlockState(pos).getBlock() instanceof BaseMultiBuiltBlock) return;
-        for (var def : new ArrayList<>(this.FURNITURE))
+   @Override
+   public void preRemoveSideEffects(BlockPos pos, BlockState state)
+   {
+       super.preRemoveSideEffects(pos, state);
+       for (var def : new ArrayList<>(this.FURNITURE))
         {
+            if (def.component() instanceof BambooCurtainComponent)
+            {
+                BambooCurtainComponent.onChainBreak(this, def);
+                ((BambooCurtainComponent) def.component()).onRemoved(this, def);
+                continue;
+            }
             // Forward proxy destruction to main BE
             if (FurnitureProxyComponent.isProxy(def))
             {
@@ -622,6 +659,6 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
             // Clean up sub-blocks of multi-block main components
             var extent = extentFromDef(def);
             if (extent != null) removeMultiBlockProxies(def, extent);
-        }
-    }
-}
+           }
+       }
+   }

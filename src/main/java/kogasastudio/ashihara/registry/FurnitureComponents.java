@@ -2,6 +2,7 @@ package kogasastudio.ashihara.registry;
 
 import kogasastudio.ashihara.block.furniture.FurnitureComponent;
 import kogasastudio.ashihara.block.furniture.FurnitureRenderPass;
+import kogasastudio.ashihara.block.furniture.BambooCurtainComponent;
 import kogasastudio.ashihara.block.furniture.CurtainTableComponent;
 import kogasastudio.ashihara.block.furniture.FurnitureProxyComponent;
 import kogasastudio.ashihara.block.furniture.SimpleContainerComponent;
@@ -93,6 +94,18 @@ public class FurnitureComponents
             FurnitureRenderPass.CHUNK_BUFFER,
             ContainerState.ContainerType.PLATE, ContainerState.ContainerSize.LARGE,
             4, 12
+        )
+    );
+
+    public static final FurnitureComponent BAMBOO_CURTAIN = register
+    (
+        new BambooCurtainComponent
+        (
+            "bamboo_curtain",
+            BuildingComponents.Type.BAKED_MODEL,
+            Blocks.MULTI_BUILT_BLOCK,
+            List.of(Items.BAMBOO_CURTAIN.toStack()),
+            FurnitureRenderPass.CHUNK_BUFFER
         )
     );
 
