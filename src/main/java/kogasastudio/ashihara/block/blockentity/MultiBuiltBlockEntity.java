@@ -103,8 +103,7 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
         ComponentStateDefinition definition = component.definite(this, context);
         if (definition != null)
         {
-            if (!(component instanceof BambooCurtainComponent))
-                definition = FurnitureComponent.tryNudge(this.FURNITURE, definition);
+            definition = FurnitureComponent.tryNudge(this.FURNITURE, definition);
             if (definition == null) return false;
 
             // Multi-block: dynamic extent from shape bounds, filter empty slices
@@ -430,8 +429,10 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
         }
         if (newMaterial != this.getBlockState().getBlock())
         {
+            this.inMaterialChange = true;
             this.level.setBlock(this.getBlockPos(), newMaterial.applyMaterial(this.getBlockState()), 3);
             this.level.setBlockEntity(this);
+            this.inMaterialChange = false;
         }
     }
 
@@ -631,10 +632,13 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
                 }
     }
 
+   private transient boolean inMaterialChange = false;
+
    @Override
    public void preRemoveSideEffects(BlockPos pos, BlockState state)
    {
        super.preRemoveSideEffects(pos, state);
+       if (this.inMaterialChange) return;
        for (var def : new ArrayList<>(this.FURNITURE))
         {
             if (def.component() instanceof BambooCurtainComponent)

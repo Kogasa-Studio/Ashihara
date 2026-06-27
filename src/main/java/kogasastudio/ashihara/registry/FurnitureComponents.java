@@ -103,7 +103,7 @@ public class FurnitureComponents
         (
             "bamboo_curtain",
             BuildingComponents.Type.BAKED_MODEL,
-            Blocks.MULTI_BUILT_BLOCK,
+            Blocks.BAMBOO_BONES_COMPONENT,
             List.of(Items.BAMBOO_CURTAIN.toStack()),
             FurnitureRenderPass.CHUNK_BUFFER
         )

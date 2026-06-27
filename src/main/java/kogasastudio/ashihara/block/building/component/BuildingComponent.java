@@ -23,6 +23,17 @@ public abstract class BuildingComponent
     public final Supplier<BaseMultiBuiltBlock> material;
     public SoundType sound;
 
+    public float getxMaxRange() {return xMaxRange;}
+    public float getxMinRange() {return xMinRange;}
+    public float getyMaxRange() {return yMaxRange;}
+    public float getyMinRange() {return yMinRange;}
+    public float getzMaxRange() {return zMaxRange;}
+    public float getzMinRange() {return zMinRange;}
+
+    protected float xMinRange = -0.5f, xMaxRange = 0.5f;
+    protected float yMinRange = 0f, yMaxRange = 1f;
+    protected float zMinRange = -0.5f, zMaxRange = 0.5f;
+
     public BuildingComponent(String idIn, BuildingComponents.Type typeIn, List<ItemStack> dropsIn, Supplier<BaseMultiBuiltBlock> materialIn, SoundType soundIn)
     {
         this.id = idIn;

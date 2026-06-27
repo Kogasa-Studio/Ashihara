@@ -40,6 +40,8 @@ public class BambooCurtainComponent extends FurnitureComponent implements Intera
         headOrBody = Shapes.join(Shapes.empty(), Shapes.box(0, 0, 0.46875, 1, 1, 0.53125), BooleanOp.OR);
         tail       = Shapes.join(Shapes.empty(), Shapes.box(0, 0.1875, 0.46875, 1, 1, 0.53125), BooleanOp.OR);
         rolled     = Shapes.or(Shapes.box(0, -0.0625, 0.40625, 1, 0.3125, 0.78125), Shapes.box(0, 0.3125, 0.46875, 1, 1, 0.53125));
+        this.yMinRange = -1.0f;
+        this.yMaxRange = 0.0f;
     }
 
     // ���� ICustomData ������������������������������������������������������������������������������������
@@ -123,7 +125,8 @@ public class BambooCurtainComponent extends FurnitureComponent implements Intera
         }
         return switch (s)
         {
-            case HEAD, BODY  -> shrink(be, def);
+            case HEAD         -> shrinkHead(be, def);
+            case BODY         -> shrinkBody(be, def);
             case TAIL        -> extend(be, def, State.BODY);
             case HEAD_ROLLED -> extend(be, def, State.HEAD);
             default          -> def;
@@ -230,24 +233,50 @@ public class BambooCurtainComponent extends FurnitureComponent implements Intera
         return setState(def, ns, ns == State.HEAD ? AdditionalModels.BAMBOO_CURTAIN_HEAD : AdditionalModels.BAMBOO_CURTAIN_BODY, this.headOrBody);
     }
 
-    private ComponentStateDefinition shrink(MultiBuiltBlockEntity be, ComponentStateDefinition def)
+    private ComponentStateDefinition shrinkHead(MultiBuiltBlockEntity be, ComponentStateDefinition def)
     {
-        var tr = findTail(be);
-        if (tr == null) return def;
-        if (tr.tailBe == be) return setState(def, State.HEAD_ROLLED, AdditionalModels.BAMBOO_CURTAIN_HEAD_ROLLED, this.rolled);
-        removeCurtain(tr.tailBe, tr.tailDef);
-        BlockPos ab = tr.tailBe.getBlockPos().above();
-        boolean abIsBe = false;
-        if (tr.tailBe.getLevel().getBlockEntity(ab) instanceof MultiBuiltBlockEntity abe)
+        Level lv = be.getLevel();
+        BlockPos c = be.getBlockPos().below();
+        while (lv.getBlockEntity(c) instanceof MultiBuiltBlockEntity mb)
         {
-            var ad = findCurtain(abe);
-            if (ad != null)
-            {
-                if (abe == be) abIsBe = true;
-                else replaceCurtain(abe, ad, setState(ad, State.TAIL, AdditionalModels.BAMBOO_CURTAIN_TAIL, this.tail));
-            }
+            var cr = findCurtain(mb);
+            if (cr == null) break;
+            removeCurtain(mb, cr);
+            c = c.below();
         }
-        return setState(def, abIsBe ? State.TAIL : State.HEAD_ROLLED, abIsBe ? AdditionalModels.BAMBOO_CURTAIN_TAIL : AdditionalModels.BAMBOO_CURTAIN_HEAD_ROLLED, abIsBe ? this.tail : this.rolled);
+        return setState(def, State.HEAD_ROLLED, AdditionalModels.BAMBOO_CURTAIN_HEAD_ROLLED, this.rolled);
+    }
+
+    private ComponentStateDefinition shrinkBody(MultiBuiltBlockEntity be, ComponentStateDefinition def)
+    {
+        Level lv = be.getLevel();
+        BlockPos c = be.getBlockPos();
+        ComponentStateDefinition lastDef = def;
+        MultiBuiltBlockEntity lastBe = be;
+        int steps = 0;
+        while (steps < 16)
+        {
+            c = c.below();
+            steps++;
+            if (!(lv.getBlockEntity(c) instanceof MultiBuiltBlockEntity mb)) break;
+            var nx = findCurtain(mb);
+            if (nx == null) break;
+            State ns = stateOf(nx);
+            if (ns == State.TAIL_ROLLED) return def;
+            if (ns == State.TAIL)
+            {
+                removeCurtain(mb, nx);
+                if (lastBe == be)
+                {
+                    return setState(def, State.TAIL, AdditionalModels.BAMBOO_CURTAIN_TAIL, this.tail);
+                }
+                replaceCurtain(lastBe, lastDef, setState(lastDef, State.TAIL, AdditionalModels.BAMBOO_CURTAIN_TAIL, this.tail));
+                return setState(def, State.BODY, def.model(), this.headOrBody);
+            }
+            lastDef = nx;
+            lastBe = mb;
+        }
+        return def;
     }
 
     // ���� Curtain helpers ����������������������������������������������������������������������������
@@ -274,7 +303,7 @@ public class BambooCurtainComponent extends FurnitureComponent implements Intera
         be.refresh();
     }
 
-    @Nullable private static TailResult findTail(MultiBuiltBlockEntity be)
+    private static TailResult findTail(MultiBuiltBlockEntity be)
     {
         var l = be.getLevel();
         BlockPos c = be.getBlockPos();

@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.SoundType;
 
 import java.util.List;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 public abstract class FurnitureComponent extends BuildingComponent
@@ -97,7 +96,8 @@ public abstract class FurnitureComponent extends BuildingComponent
             if (Math.abs(dy) < ty) pos = new Vec3(pos.x(), ep.y() + Math.signum(dy) * ty, pos.z());
             if (Math.abs(dz) < tz) pos = new Vec3(pos.x(), pos.y(), ep.z() + Math.signum(dz) * tz);
         }
-        pos = new Vec3(Math.clamp(pos.x(), -0.5, 0.5), Math.clamp(pos.y(), 0.0, 1.0), Math.clamp(pos.z(), -0.5, 0.5));
+        BuildingComponent c = def.component();
+        pos = new Vec3(Math.clamp(pos.x(), c.getxMinRange(), c.getxMaxRange()), Math.clamp(pos.y(), c.getyMinRange(), c.getyMaxRange()), Math.clamp(pos.z(), c.getzMinRange(), c.getzMaxRange()));
         for (ComponentStateDefinition e : existing)
             if (!FurnitureProxyComponent.isProxy(e) && tooClose(e.inBlockPos(), pos, tx, ty, tz))
                 return null;
