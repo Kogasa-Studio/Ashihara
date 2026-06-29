@@ -61,24 +61,26 @@ public abstract class BuildingComponent
 
     public Supplier<BaseMultiBuiltBlock> getMaterial() {return material;}
 
-   public SoundType getSoundType() {return this.sound;}
+    public SoundType getSoundType() {return this.sound;}
 
-   public BuildingComponent setSound(SoundType soundIn)
-   {
-       this.sound = soundIn;
-       return this;
-   }
+    public BuildingComponent setSound(SoundType soundIn)
+    {
+        this.sound = soundIn;
+        return this;
+    }
 
-   @Nullable
-   public VoxelShape getBaseShape() { return null; }
+    @Nullable
+    public VoxelShape getBaseShape() { return null; }
 
-   /**
-    * Rebuild shape from stored fields. Override in subclasses whose shape
-    * follows rotate(base, angle) + offset(inBlockPos) pattern.
-    */
-   public VoxelShape rebuildShape(Vec3 inBlockPos, float rotationX, float rotationY, float rotationZ)
-   {
-       VoxelShape base = getBaseShape();
-       return base != null ? ShapeHelper.offsetShape(base, inBlockPos.x, inBlockPos.y, inBlockPos.z) : Shapes.empty();
-   }
+    public boolean isComplexShape() {return false;}
+
+    /**
+     * Rebuild shape from stored fields. Override in subclasses whose shape
+     * follows rotate(base, angle) + offset(inBlockPos) pattern.
+     */
+    public VoxelShape rebuildShape(Vec3 inBlockPos, float rotationX, float rotationY, float rotationZ)
+    {
+        VoxelShape base = getBaseShape();
+        return base != null ? ShapeHelper.offsetShape(base, inBlockPos.x, inBlockPos.y, inBlockPos.z) : Shapes.empty();
+    }
 }

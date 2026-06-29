@@ -37,6 +37,7 @@ public class CurtainTableComponent extends FurnitureComponent implements MultiBl
 
     @Override public float modelScale() { return 2.0f; }
     @Override public VoxelShape getBaseShape() { return this.SHAPE; }
+    @Override public boolean isComplexShape() {return true;}
 
     @Override
     public VoxelShape rebuildShape(Vec3 inBlockPos, float rotX, float rotY, float rotZ)

@@ -7,6 +7,7 @@ import kogasastudio.ashihara.block.furniture.FurnitureComponent;
 import kogasastudio.ashihara.block.furniture.FurnitureProxyComponent;
 import kogasastudio.ashihara.block.furniture.FurnitureProxyComponent;
 import kogasastudio.ashihara.block.furniture.MultiBlockFurniture;
+import kogasastudio.ashihara.helper.MathHelper;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.registry.FurnitureComponents;
@@ -447,7 +448,36 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
     {
         for (ComponentStateDefinition m : this.getComponents(opcode))
         {
-            if (!m.shape().isEmpty() && m.shape().bounds().distanceToSqr(vec3) <= 0.00001) return m;
+            if (m.shape().isEmpty()) continue;
+            boolean complex = m.component().isComplexShape();
+            if (FurnitureProxyComponent.isProxy(m))
+            {
+                var pd = FurnitureProxyComponent.getData(m);
+                if (pd != null && this.level != null)
+                {
+                    var mp = pd.resolveMain(this.worldPosition);
+                    if (this.level.getBlockEntity(mp) instanceof MultiBuiltBlockEntity mainBe)
+                        for (var d : mainBe.FURNITURE)
+                            if (d.inBlockPos().distanceToSqr(pd.mainInBlockPos()) < 0.0001)
+                            { complex = d.component().isComplexShape(); break; }
+                }
+            }
+            boolean hit;
+            if (complex)
+            {
+                boolean[] found = {false};
+                m.shape().forAllBoxes((x1, y1, z1, x2, y2, z2) ->
+                {
+                    double sx = MathHelper.simplifyDouble(vec3.x, 5), sy = MathHelper.simplifyDouble(vec3.y, 5), sz = MathHelper.simplifyDouble(vec3.z, 5);
+                    if (sx >= MathHelper.simplifyDouble(x1, 5) && sx <= MathHelper.simplifyDouble(x2, 5)
+                        && sy >= MathHelper.simplifyDouble(y1, 5) && sy <= MathHelper.simplifyDouble(y2, 5)
+                        && sz >= MathHelper.simplifyDouble(z1, 5) && sz <= MathHelper.simplifyDouble(z2, 5))
+                        found[0] = true;
+                });
+                hit = found[0];
+            }
+            else hit = m.shape().bounds().distanceToSqr(vec3) <= 0.00001;
+            if (hit) return m;
         }
         return null;
     }
