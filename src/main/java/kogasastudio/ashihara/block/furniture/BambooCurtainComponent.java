@@ -217,10 +217,10 @@ public class BambooCurtainComponent extends FurnitureComponent implements Intera
 
     private ComponentStateDefinition extend(MultiBuiltBlockEntity be, ComponentStateDefinition def, State ns)
     {
-        var tr = findTail(be);
+        var tr = findTail(be, def);
         if (tr == null) return def;
         BlockPos bw = tr.tailBe.getBlockPos().below();
-        if (!canExtendTo(tr.tailBe, bw)) return def;
+        if (!canExtendTo(tr.tailBe, bw, tr.tailDef.inBlockPos())) return def;
         var nt = makeTail(tr.tailDef);
         var sb = getOrCreateBE(tr.tailBe, bw);
         if (sb == null) return def;
@@ -239,7 +239,7 @@ public class BambooCurtainComponent extends FurnitureComponent implements Intera
         BlockPos c = be.getBlockPos().below();
         while (lv.getBlockEntity(c) instanceof MultiBuiltBlockEntity mb)
         {
-            var cr = findCurtain(mb);
+            var cr = findCurtain(mb, def.inBlockPos());
             if (cr == null) break;
             removeCurtain(mb, cr);
             c = c.below();
@@ -259,7 +259,7 @@ public class BambooCurtainComponent extends FurnitureComponent implements Intera
             c = c.below();
             steps++;
             if (!(lv.getBlockEntity(c) instanceof MultiBuiltBlockEntity mb)) break;
-            var nx = findCurtain(mb);
+            var nx = findCurtain(mb, def.inBlockPos());
             if (nx == null) break;
             State ns = stateOf(nx);
             if (ns == State.TAIL_ROLLED) return def;
@@ -303,17 +303,17 @@ public class BambooCurtainComponent extends FurnitureComponent implements Intera
         be.refresh();
     }
 
-    private static TailResult findTail(MultiBuiltBlockEntity be)
+    private static TailResult findTail(MultiBuiltBlockEntity be, ComponentStateDefinition startDef)
     {
         var l = be.getLevel();
         BlockPos c = be.getBlockPos();
-        var last = findCurtain(be);
+        var last = startDef;
         var lb = be;
         while (true)
         {
             c = c.below();
             if (!(l.getBlockEntity(c) instanceof MultiBuiltBlockEntity mb)) break;
-            var nx = findCurtain(mb);
+            var nx = findCurtain(mb, startDef.inBlockPos());
             if (nx == null) break;
             State ns = stateOf(nx);
             if (ns == State.TAIL || ns == State.TAIL_ROLLED) { last = nx; lb = mb; break; }
@@ -330,7 +330,7 @@ public class BambooCurtainComponent extends FurnitureComponent implements Intera
         BlockPos c = be.getBlockPos().below();
         while (l.getBlockEntity(c) instanceof MultiBuiltBlockEntity mb)
         {
-            var cr = findCurtain(mb);
+            var cr = findCurtain(mb, def.inBlockPos());
             if (cr == null) break;
             removeCurtain(mb, cr);
             c = c.below();
@@ -338,7 +338,7 @@ public class BambooCurtainComponent extends FurnitureComponent implements Intera
         BlockPos a = be.getBlockPos().above();
         if (l.getBlockEntity(a) instanceof MultiBuiltBlockEntity mb)
         {
-            var ad = findCurtain(mb);
+            var ad = findCurtain(mb, def.inBlockPos());
             if (ad != null)
             {
                 State as = stateOf(ad);
@@ -348,17 +348,35 @@ public class BambooCurtainComponent extends FurnitureComponent implements Intera
         }
     }
 
-    private boolean canExtendTo(MultiBuiltBlockEntity be, BlockPos t)
+    private boolean canExtendTo(MultiBuiltBlockEntity be, BlockPos t, Vec3 chainIb)
     {
         var l = be.getLevel();
         if (l == null) return false;
-        if (l.getBlockEntity(t) instanceof MultiBuiltBlockEntity mb) return findCurtain(mb) == null && !hasFloor(mb);
+        if (l.getBlockEntity(t) instanceof MultiBuiltBlockEntity mb)
+        {
+            var existing = findCurtain(mb, chainIb);
+            if (existing != null) return false;
+            return !hasFloor(mb);
+        }
         return l.getBlockState(t).canBeReplaced();
+    }
+
+    private boolean canExtendTo(MultiBuiltBlockEntity be, BlockPos t)
+    {
+        return canExtendTo(be, t, Vec3.ZERO);
     }
 
     @Nullable private static ComponentStateDefinition findCurtain(MultiBuiltBlockEntity be)
     {
         for (var d : be.FURNITURE) if (d.component() instanceof BambooCurtainComponent) return d;
+        return null;
+    }
+
+    @Nullable private static ComponentStateDefinition findCurtain(MultiBuiltBlockEntity be, Vec3 inBlockPos)
+    {
+        for (var d : be.FURNITURE)
+            if (d.component() instanceof BambooCurtainComponent && d.inBlockPos().distanceToSqr(inBlockPos) < 0.0001)
+                return d;
         return null;
     }
 
