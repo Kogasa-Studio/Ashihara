@@ -69,7 +69,7 @@ public class RafterPlanks extends AdditionalComponent
         double z;
 
         int floor = (int) Math.clamp(Math.floor(y * 4), 0, 3);
-        if (context.getClickedFace() == Direction.DOWN) floor = Math.clamp(floor - 1, 0, 3);
+        if (inBlockPos.y != 1 && context.getClickedFace() == Direction.DOWN) floor = Math.clamp(floor - 1, 0, 3);
 
         y = XTP((float) (floor * 4));
         if (direction.getAxis().equals(Direction.Axis.Z))
