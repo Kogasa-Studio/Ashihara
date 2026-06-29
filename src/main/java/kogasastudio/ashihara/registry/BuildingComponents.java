@@ -735,12 +735,13 @@ public class BuildingComponents
     );
     public static final BuildingComponent CYPRESS_ROOF_1_4 = register
     (
-        new OrientedFloor
+        new SlopedRoof
         (
         "cypress_roof_1_4",
         Type.BAKED_MODEL,
         AdditionalModels.CYPRESS_ROOF_1_4,
         Shapes.or(Shapes.box(-0.0625, 0, 0, 1.0625, 0.125, 0.5), Shapes.box(-0.0625, 0.125, 0.5, 1.0625, 0.25, 1)),
+        SlopedRoof.Width.FULL,
         Blocks.CYPRESS_SKIN_COMPONENT,
         List.of(Items.CYPRESS_ROOF_1_4.toStack())
         )
@@ -793,24 +794,26 @@ public class BuildingComponents
     );
     public static final BuildingComponent CYPRESS_ROOF_HALF_1_2 = register
     (
-        new OrientedHalfFloor
+        new SlopedRoof
         (
         "cypress_roof_1_2",
         Type.BAKED_MODEL,
         AdditionalModels.CYPRESS_ROOF_HALF_1_2,
         Shapes.or(Shapes.box(0, 0, 0.25, 1, 0.125, 0.5), Shapes.box(0, 0.125, 0.5, 1, 0.25, 0.75)),
+        SlopedRoof.Width.HALF,
         Blocks.CYPRESS_SKIN_COMPONENT,
         List.of(Items.CYPRESS_ROOF_HALF_1_2.toStack())
         )
     );
     public static final BuildingComponent CYPRESS_ROOF_HALF_1_1 = register
     (
-        new OrientedHalfFloor
+        new SlopedRoof
         (
         "cypress_roof_1_1",
         Type.BAKED_MODEL,
         AdditionalModels.CYPRESS_ROOF_HALF_1_1,
         Shapes.or(Shapes.box(0, 0, 0.25, 1, 0.25, 0.5), Shapes.box(0, 0.25, 0.5, 1, 0.5, 0.75)),
+        SlopedRoof.Width.HALF,
         Blocks.CYPRESS_SKIN_COMPONENT,
         List.of(Items.CYPRESS_ROOF_HALF_1_1.toStack())
         )
@@ -828,24 +831,26 @@ public class BuildingComponents
     );
     public static final BuildingComponent CYPRESS_ROOF_QUARTER_1_2 = register
     (
-        new QuarterOrientedFloor
+        new SlopedRoof
         (
         "cypress_roof_quarter_1_2",
         Type.BAKED_MODEL,
         AdditionalModels.CYPRESS_ROOF_QUARTER_1_2,
         Shapes.or(Shapes.box(0.25, 0, 0.25, 0.75, 0.125, 0.5), Shapes.box(0.25, 0.125, 0.5, 0.75, 0.25, 0.75)),
+        SlopedRoof.Width.QUARTER,
         Blocks.CYPRESS_SKIN_COMPONENT,
         List.of(Items.CYPRESS_ROOF_QUARTER_1_2.toStack())
         )
     );
     public static final BuildingComponent CYPRESS_ROOF_QUARTER_1_1 = register
     (
-        new QuarterOrientedFloor
+        new SlopedRoof
         (
         "cypress_roof_quarter_1_1",
         Type.BAKED_MODEL,
         AdditionalModels.CYPRESS_ROOF_QUARTER_1_1,
         Shapes.or(Shapes.box(0.25, 0, 0.25, 0.75, 0.25, 0.5), Shapes.box(0.25, 0.25, 0.5, 0.75, 0.5, 0.75)),
+        SlopedRoof.Width.QUARTER,
         Blocks.CYPRESS_SKIN_COMPONENT,
         List.of(Items.CYPRESS_ROOF_QUARTER_1_1.toStack())
         )
