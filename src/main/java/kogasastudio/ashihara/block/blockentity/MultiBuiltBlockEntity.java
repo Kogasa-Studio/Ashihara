@@ -100,6 +100,11 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
 
     public boolean tryPlaceFurniture(UseOnContext context, FurnitureComponent component)
     {
+        return tryPlaceFurniture(context, component, false);
+    }
+
+    public boolean tryPlaceFurniture(UseOnContext context, FurnitureComponent component, boolean simulate)
+    {
         ComponentStateDefinition definition = component.definite(this, context);
         if (definition != null)
         {
@@ -131,6 +136,8 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
                                 return false;
                         }
             }
+
+            if (simulate) return true;
 
             // Slice origin
             if (isMultiBlock)

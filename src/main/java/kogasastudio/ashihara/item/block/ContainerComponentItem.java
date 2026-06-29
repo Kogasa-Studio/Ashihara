@@ -91,7 +91,7 @@ public class ContainerComponentItem extends FurnitureComponentItem implements IC
         if (pContext.getLevel().getBlockState(pContext.getClickedPos()).is(this.getBlock()))
         {
             BlockEntity blockEntity = pContext.getLevel().getBlockEntity(pContext.getClickedPos());
-            if (blockEntity instanceof MultiBuiltBlockEntity be && be.tryPlaceFurniture(pContext, this.getComponent())) return false;
+            if (blockEntity instanceof MultiBuiltBlockEntity be && be.tryPlaceFurniture(pContext, this.getComponent(), true)) return false;
         }
         return super.canPlace(pContext, pState);
     }

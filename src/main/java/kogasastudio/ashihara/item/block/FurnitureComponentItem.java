@@ -53,7 +53,7 @@ public class FurnitureComponentItem extends BlockItem
         if (pContext.getLevel().getBlockState(pContext.getClickedPos()).is(this.getBlock()))
         {
             BlockEntity blockEntity = pContext.getLevel().getBlockEntity(pContext.getClickedPos());
-            if (blockEntity instanceof MultiBuiltBlockEntity be && be.tryPlaceFurniture(pContext, this.getComponent()))
+            if (blockEntity instanceof MultiBuiltBlockEntity be && be.tryPlaceFurniture(pContext, this.getComponent(), true))
                 return false;
         }
         else if (this.getComponent() instanceof MultiBlockFurniture)
