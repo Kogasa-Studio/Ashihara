@@ -136,6 +136,11 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.RED_THIN_RAFTER.get());
                                         output.accept(Items.RED_THIN_RAFTER_1_1.get());
                                         output.accept(Items.RED_THIN_RAFTER_1_2.get());
+                                        output.accept(Items.RED_DOUBLE_RAFTER.get());
+                                        output.accept(Items.RED_DOUBLE_RAFTER_1_1.get());
+                                        output.accept(Items.RED_DOUBLE_RAFTER_1_2.get());
+                                        output.accept(Items.RED_LONG_DOUBLE_RAFTER.get());
+                                        output.accept(Items.RED_LONG_DOUBLE_RAFTER_1_4.get());
                                         output.accept(Items.RED_THIN_RAFTER_CONNECTOR.get());
                                         output.accept(Items.SPRUCE_RAFTER_PLANKS.get());
                                         output.accept(Items.SPRUCE_RAFTER_PLANKS_QUARTER.get());

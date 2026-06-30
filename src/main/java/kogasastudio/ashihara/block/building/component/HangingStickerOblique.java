@@ -57,7 +57,6 @@ public class HangingStickerOblique extends AdditionalComponent implements Intera
         Vec3 inBlockPos = beIn.inBlockVec(context.getClickLocation());
 
         Direction direction = context.getHorizontalDirection();
-        direction = direction;
         float r = switch (direction)
         {
             case WEST -> 270;
@@ -74,6 +73,7 @@ public class HangingStickerOblique extends AdditionalComponent implements Intera
 
         VoxelShape shape = SHAPE;
         shape = ShapeHelper.rotateShape(shape, r - 45);
+        if (direction == Direction.WEST || direction == Direction.EAST) shape = ShapeHelper.rotateShape(shape, 180);
         shape = ShapeHelper.offsetShape(shape, 0, y, 0);
 
         return new ComponentStateDefinition

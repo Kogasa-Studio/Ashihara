@@ -100,6 +100,11 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation RED_STEEP_RAFTER = register("block/components/red_steep_rafter");
     public static final BuildingComponentModelResourceLocation RED_SMOOTH_RAFTER = register("block/components/red_smooth_rafter");
     public static final BuildingComponentModelResourceLocation RED_RAFTER_END = register("block/components/red_rafter_end");
+    public static final BuildingComponentModelResourceLocation RED_DOUBLE_RAFTER = register("block/components/red_thin_rafter_doubled");
+    public static final BuildingComponentModelResourceLocation RED_DOUBLE_RAFTER_1_1 = register("block/components/red_thin_rafter_doubled_1_1");
+    public static final BuildingComponentModelResourceLocation RED_DOUBLE_RAFTER_1_2 = register("block/components/red_thin_rafter_doubled_1_2");
+    public static final BuildingComponentModelResourceLocation RED_LONG_DOUBLE_RAFTER = register("block/components/red_thin_rafter_long_doubled");
+    public static final BuildingComponentModelResourceLocation RED_LONG_DOUBLE_RAFTER_1_4 = register("block/components/red_thin_rafter_long_doubled_1_4");
     public static final BuildingComponentModelResourceLocation RED_RAFTER_CONNECTOR = register("block/components/red_rafter_connector");
 
     public static final BuildingComponentModelResourceLocation RED_THIN_RAFTER = register("block/components/red_thin_rafter");
