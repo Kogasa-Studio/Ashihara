@@ -1,0 +1,6 @@
+{
+	"parent": "ashihara:block/components/templates/wide_rafter_planks",
+	"textures": {
+		"planks": "ashihara:block/components/white_soil"
+	}
+}

@@ -666,6 +666,28 @@ public class BuildingComponents
         List.of(Items.RED_THIN_RAFTER.toStack())
         )
     );
+    public static final BuildingComponent RED_THIN_RAFTER_1_1 = register
+    (
+        new ThinRafter
+        (
+        "red_thin_rafter_1_1",
+        Type.BAKED_MODEL,
+        AdditionalModels.RED_THIN_RAFTER_1_1,
+        Blocks.RED_WOOD_COMPONENT,
+        List.of(Items.RED_THIN_RAFTER_1_1.toStack())
+        )
+    );
+    public static final BuildingComponent RED_THIN_RAFTER_1_2 = register
+    (
+        new ThinRafter
+        (
+        "red_thin_rafter_1_2",
+        Type.BAKED_MODEL,
+        AdditionalModels.RED_THIN_RAFTER_1_2,
+        Blocks.RED_WOOD_COMPONENT,
+        List.of(Items.RED_THIN_RAFTER_1_2.toStack())
+        )
+    );
     public static final BuildingComponent RED_THIN_RAFTER_CONNECTOR = register
     (
         new QuarterOrientedFloor
@@ -722,6 +744,18 @@ public class BuildingComponents
         List.of(Items.WHITE_RAFTER_PLANKS_QUARTER.toStack())
         )
     );
+    public static final BuildingComponent SPRUCE_RAFTER_PLANKS_1_1 = register(new OrientedHalfFloor("spruce_rafter_planks_1_1", Type.BAKED_MODEL, AdditionalModels.SPRUCE_RAFTER_PLANKS_1_1, Shapes.or(Shapes.box(0, 0, 0.5, 1, 0.25, 0.75), Shapes.box(0, 0.25, 0.25, 1, 0.5, 0.5)), Blocks.SPRUCE_WOOD_COMPONENT, List.of(Items.SPRUCE_RAFTER_PLANKS_1_1.toStack())));
+    public static final BuildingComponent SPRUCE_RAFTER_PLANKS_1_2 = register(new OrientedHalfFloor("spruce_rafter_planks_1_2", Type.BAKED_MODEL, AdditionalModels.SPRUCE_RAFTER_PLANKS_1_2, Shapes.or(Shapes.box(0, 0, 0.5, 1, 0.125, 0.75), Shapes.box(0, 0.125, 0.25, 1, 0.25, 0.5)), Blocks.SPRUCE_WOOD_COMPONENT, List.of(Items.SPRUCE_RAFTER_PLANKS_1_2.toStack())));
+    public static final BuildingComponent SPRUCE_RAFTER_PLANKS_WIDE = register(new OrientedFloor("spruce_rafter_planks_wide", Type.BAKED_MODEL, AdditionalModels.SPRUCE_RAFTER_PLANKS_WIDE, Blocks.SPRUCE_WOOD_COMPONENT, List.of(Items.SPRUCE_RAFTER_PLANKS_WIDE.toStack())));
+    public static final BuildingComponent SPRUCE_RAFTER_PLANKS_WIDE_1_4 = register(new OrientedFloor("spruce_rafter_planks_wide_1_4", Type.BAKED_MODEL, AdditionalModels.SPRUCE_RAFTER_PLANKS_WIDE_1_4, Shapes.or(Shapes.box(0, 0, 0.5, 1, 0.125, 1), Shapes.box(0, 0.125, 0, 1, 0.25, 0.5)), Blocks.SPRUCE_WOOD_COMPONENT, List.of(Items.SPRUCE_RAFTER_PLANKS_WIDE_1_4.toStack())));
+    public static final BuildingComponent SPRUCE_RAFTER_PLANKS_QUARTER_1_2 = register(new QuarterOrientedFloor("spruce_rafter_planks_quarter_1_2", Type.BAKED_MODEL, AdditionalModels.SPRUCE_RAFTER_PLANKS_QUARTER_1_2, Shapes.or(Shapes.box(0.25, 0, 0.5, 0.75, 0.125, 0.75), Shapes.box(0.25, 0.125, 0.25, 0.75, 0.25, 0.5)), Blocks.SPRUCE_WOOD_COMPONENT, List.of(Items.SPRUCE_RAFTER_PLANKS_QUARTER_1_2.toStack())));
+    public static final BuildingComponent SPRUCE_RAFTER_PLANKS_QUARTER_1_1 = register(new QuarterOrientedFloor("spruce_rafter_planks_quarter_1_1", Type.BAKED_MODEL, AdditionalModels.SPRUCE_RAFTER_PLANKS_QUARTER_1_1, Shapes.or(Shapes.box(0.25, 0, 0.5, 0.75, 0.25, 0.75), Shapes.box(0.25, 0.25, 0.25, 0.75, 0.5, 0.5)), Blocks.SPRUCE_WOOD_COMPONENT, List.of(Items.SPRUCE_RAFTER_PLANKS_QUARTER_1_1.toStack())));
+    public static final BuildingComponent WHITE_RAFTER_PLANKS_1_1 = register(new OrientedHalfFloor("white_rafter_planks_1_1", Type.BAKED_MODEL, AdditionalModels.WHITE_RAFTER_PLANKS_1_1, Shapes.or(Shapes.box(0, 0, 0.5, 1, 0.25, 0.75), Shapes.box(0, 0.25, 0.25, 1, 0.5, 0.5)), Blocks.WHITE_WOOD_COMPONENT, List.of(Items.WHITE_RAFTER_PLANKS_1_1.toStack())));
+    public static final BuildingComponent WHITE_RAFTER_PLANKS_1_2 = register(new OrientedHalfFloor("white_rafter_planks_1_2", Type.BAKED_MODEL, AdditionalModels.WHITE_RAFTER_PLANKS_1_2, Shapes.or(Shapes.box(0, 0, 0.5, 1, 0.125, 0.75), Shapes.box(0, 0.125, 0.25, 1, 0.25, 0.5)), Blocks.WHITE_WOOD_COMPONENT, List.of(Items.WHITE_RAFTER_PLANKS_1_2.toStack())));
+    public static final BuildingComponent WHITE_RAFTER_PLANKS_WIDE = register(new OrientedFloor("white_rafter_planks_wide", Type.BAKED_MODEL, AdditionalModels.WHITE_RAFTER_PLANKS_WIDE, Blocks.WHITE_WOOD_COMPONENT, List.of(Items.WHITE_RAFTER_PLANKS_WIDE.toStack())));
+    public static final BuildingComponent WHITE_RAFTER_PLANKS_WIDE_1_4 = register(new OrientedFloor("white_rafter_planks_wide_1_4", Type.BAKED_MODEL, AdditionalModels.WHITE_RAFTER_PLANKS_WIDE_1_4, Shapes.or(Shapes.box(0, 0, 0.5, 1, 0.125, 1), Shapes.box(0, 0.125, 0, 1, 0.25, 0.5)), Blocks.WHITE_WOOD_COMPONENT, List.of(Items.WHITE_RAFTER_PLANKS_WIDE_1_4.toStack())));
+    public static final BuildingComponent WHITE_RAFTER_PLANKS_QUARTER_1_2 = register(new QuarterOrientedFloor("white_rafter_planks_quarter_1_2", Type.BAKED_MODEL, AdditionalModels.WHITE_RAFTER_PLANKS_QUARTER_1_2, Shapes.or(Shapes.box(0.25, 0, 0.5, 0.75, 0.125, 0.75), Shapes.box(0.25, 0.125, 0.25, 0.75, 0.25, 0.5)), Blocks.WHITE_WOOD_COMPONENT, List.of(Items.WHITE_RAFTER_PLANKS_QUARTER_1_2.toStack())));
+    public static final BuildingComponent WHITE_RAFTER_PLANKS_QUARTER_1_1 = register(new QuarterOrientedFloor("white_rafter_planks_quarter_1_1", Type.BAKED_MODEL, AdditionalModels.WHITE_RAFTER_PLANKS_QUARTER_1_1, Shapes.or(Shapes.box(0.25, 0, 0.5, 0.75, 0.25, 0.75), Shapes.box(0.25, 0.25, 0.25, 0.75, 0.5, 0.5)), Blocks.WHITE_WOOD_COMPONENT, List.of(Items.WHITE_RAFTER_PLANKS_QUARTER_1_1.toStack())));
     public static final BuildingComponent CYPRESS_ROOF = register
     (
         new OrientedFloor
