@@ -76,17 +76,17 @@ public class MixinBlockTransformExtent
 
     private static LinCompoundTag tChild(LinCompoundTag ct, double a,double b,double c,double d,boolean flip)
     {
-       var out = LinCompoundTag.builder();
-       boolean zFlip = flip && a > 0.5 && d < -0.5;
-       for (var e : ct.value().entrySet())
-       {
-           String k = e.getKey(); var v = e.getValue();
-           if (k.equals("inBlockPos") && v instanceof LinCompoundTag pt)
+        var out = LinCompoundTag.builder();
+        boolean zFlip = flip && a > 0.5 && d < -0.5;
+        for (var e : ct.value().entrySet())
+        {
+            String k = e.getKey(); var v = e.getValue();
+            if (k.equals("inBlockPos") && v instanceof LinCompoundTag pt)
                out.put(k, rPos(pt, a, b, c, d));
-           else if (k.equals("custom") && v instanceof LinCompoundTag cc && cc.findTag("dx", LinTagType.intTag()) != null)
+            else if (k.equals("custom") && v instanceof LinCompoundTag cc && cc.findTag("dx", LinTagType.intTag()) != null)
                out.put(k, rProxyCustom(cc, a, b, c, d));
-           else if (k.equals("rotationY") && v instanceof LinFloatTag ft)
-           {
+            else if (k.equals("rotationY") && v instanceof LinFloatTag ft)
+            {
                float rv = ft.value();
                if (flip) {
                    if (zFlip) rv = (float)((180.0 - rv + 360.0) % 360.0);
@@ -95,11 +95,11 @@ public class MixinBlockTransformExtent
                    rv = (float)((rv + Math.toDegrees(Math.atan2(b, a)) + 360) % 360);
                }
                out.putFloat(k, rv);
-           }
+            }
           else if (k.equals("shape") && v instanceof LinListTag<?> sl)
               out.put(k, rShape(sl, a, b, c, d));
           else out.put(k, v);
-       }
+        }
         return out.build();
     }
 
@@ -143,28 +143,30 @@ public class MixinBlockTransformExtent
             double[] xs=new double[4],zs=new double[4];
             rotCorner(x0, z0, a, b, c, d, xs, zs, 0); rotCorner(x0, z1, a, b, c, d, xs, zs, 1);
             rotCorner(x1, z0, a, b, c, d, xs, zs, 2); rotCorner(x1, z1, a, b, c, d, xs, zs, 3);
-           var sb = LinCompoundTag.builder();
-           sb.putDouble("y0", dv(bt, "y0"));
-           double[] xr = fixNeg(min4(xs), max4(xs));
-           double[] zr = fixNeg(min4(zs), max4(zs));
-           sb.putDouble("x0", xr[0]); sb.putDouble("z0", zr[0]);
-           sb.putDouble("y1", dv(bt, "y1"));
-           sb.putDouble("x1", xr[1]); sb.putDouble("z1", zr[1]);
-           nl.add(sb.build());
+            var sb = LinCompoundTag.builder();
+            sb.putDouble("y0", dv(bt, "y0"));
+            double[] xr = fixNeg(min4(xs), max4(xs));
+            double[] zr = fixNeg(min4(zs), max4(zs));
+            sb.putDouble("x0", xr[0]); sb.putDouble("z0", zr[0]);
+            sb.putDouble("y1", dv(bt, "y1"));
+            sb.putDouble("x1", xr[1]); sb.putDouble("z1", zr[1]);
+            nl.add(sb.build());
         }
         return nl.build();
     }
 
-   private static void rotCorner(double x,double z,double a,double b,double c,double d,double[] xs,double[] zs,int i)
-   {
-       xs[i]=x*a+z*b; zs[i]=x*c+z*d;
-   }
+    private static void rotCorner(double x,double z,double a,double b,double c,double d,double[] xs,double[] zs,int i)
+    {
+        xs[i]=x*a+z*b; zs[i]=x*c+z*d;
+    }
 
-   private static double[] fixNeg(double min, double max)
-   {
-       if (max <= 0.0) { min += 1.0; max += 1.0; }
-       return new double[]{min, max};
-   }
+    private static double[] fixNeg(double min, double max)
+    {
+        double mid = (min + max) / 2.0;
+        if (mid < 0.0) { min += 1.0; max += 1.0; }
+        else if (mid > 1.0) { min -= 1.0; max -= 1.0; }
+        return new double[]{min, max};
+    }
 
     private static double dv(LinCompoundTag t,String k) {
         var v=t.findTag(k,LinTagType.doubleTag()); return v!=null?v.value():0.0;
