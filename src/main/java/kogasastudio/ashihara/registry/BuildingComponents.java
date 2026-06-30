@@ -690,7 +690,7 @@ public class BuildingComponents
     );
     public static final BuildingComponent RED_DOUBLE_RAFTER = register
     (
-        new RafterPlanks
+        new OrientedHalfFloor
         (
         "red_double_rafter",
         Type.BAKED_MODEL,
@@ -701,7 +701,7 @@ public class BuildingComponents
     );
     public static final BuildingComponent RED_DOUBLE_RAFTER_1_1 = register
     (
-        new RafterPlanks
+        new OrientedHalfFloor
         (
         "red_double_rafter_1_1",
         Type.BAKED_MODEL,
@@ -713,7 +713,7 @@ public class BuildingComponents
     );
     public static final BuildingComponent RED_DOUBLE_RAFTER_1_2 = register
     (
-        new RafterPlanks
+        new OrientedHalfFloor
         (
         "red_double_rafter_1_2",
         Type.BAKED_MODEL,
