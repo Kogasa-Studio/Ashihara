@@ -1,0 +1,60 @@
+{
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"1": "ashihara:block/components/cypress_skin",
+		"2": "ashihara:block/components/cypress_side",
+		"particle": "ashihara:block/components/cypress_skin"
+	},
+	"elements": [
+		{
+			"from": [2.86984, 3.12492, 7.01],
+			"to": [12.17411, 4.12492, 12],
+			"rotation": {"angle": 26.56505, "axis": "z", "origin": [11.99411, 4.12492, 9]},
+			"faces": {
+				"north": {"uv": [3, 0, 12, 1], "texture": "#2"},
+				"east": {"uv": [0, 3, 5, 4], "texture": "#1"},
+				"south": {"uv": [3, 0, 12, 1], "texture": "#2"},
+				"west": {"uv": [0, 12, 5, 13], "texture": "#1"},
+				"up": {"uv": [0, 3, 5, 13], "rotation": 90, "texture": "#1"},
+				"down": {"uv": [13, 1, 3, 2], "texture": "#2"}
+			}
+		},
+		{
+			"from": [2.70984, 2.12492, 7.51],
+			"to": [12.33411, 3.12492, 12],
+			"rotation": {"angle": 26.56505, "axis": "z", "origin": [11.99411, 4.12492, 9]},
+			"faces": {
+				"north": {"uv": [3, 1, 13, 2], "texture": "#2"},
+				"east": {"uv": [13, 1, 8.5, 2], "texture": "#2"},
+				"south": {"uv": [3, 1, 13, 2], "texture": "#2"},
+				"west": {"uv": [13, 1, 8.5, 2], "texture": "#2"},
+				"up": {"uv": [13, 1, 3, 2], "texture": "#2"},
+				"down": {"uv": [13, 1, 3, 2], "texture": "#2"}
+			}
+		},
+		{
+			"from": [2.36984, 0.02492, 8.01],
+			"to": [12.67411, 2.12492, 12],
+			"rotation": {"angle": 26.56505, "axis": "z", "origin": [11.99411, 4.12492, 9]},
+			"faces": {
+				"north": {"uv": [3, 2, 13, 4], "texture": "#2"},
+				"east": {"uv": [9, 2, 13, 4], "texture": "#2"},
+				"south": {"uv": [3, 2, 13, 4], "texture": "#2"},
+				"west": {"uv": [9, 2, 13, 4], "texture": "#2"},
+				"up": {"uv": [13, 1, 3, 2], "texture": "#2"},
+				"down": {"uv": [13, 1, 3, 2], "texture": "#2"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "group",
+			"origin": [11.99411, 12.12492, 8],
+			"scope": 0,
+			"color": 0,
+			"children": [0, 1, 2]
+		}
+	]
+}

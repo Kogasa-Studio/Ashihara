@@ -991,6 +991,102 @@ public class BuildingComponents
         List.of(Items.CYPRESS_ROOF_EDGE.toStack())
         )
     );
+    public static final BuildingComponent CYPRESS_ROOF_EDGE_RIGHT = register
+    (
+        new QuarterOrientedFloor
+        (
+        "cypress_roof_edge_right",
+        Type.BAKED_MODEL,
+        AdditionalModels.CYPRESS_ROOF_EDGE_RIGHT,
+        Shapes.box(0.25, 0, 0.5, 0.75, 0.25, 0.75),
+        Blocks.CYPRESS_SKIN_COMPONENT,
+        List.of(Items.CYPRESS_ROOF_EDGE_RIGHT.toStack())
+        )
+    );
+    public static final BuildingComponent CYPRESS_ROOF_EDGE_LEFT = register
+    (
+        new QuarterOrientedFloor
+        (
+        "cypress_roof_edge_left",
+        Type.BAKED_MODEL,
+        AdditionalModels.CYPRESS_ROOF_EDGE_LEFT,
+        Shapes.box(0.25, 0, 0.5, 0.75, 0.25, 0.75),
+        Blocks.CYPRESS_SKIN_COMPONENT,
+        List.of(Items.CYPRESS_ROOF_EDGE_LEFT.toStack())
+        )
+    );
+    public static final BuildingComponent CYPRESS_ROOF_EDGE_RIGHT_1_4 = register
+    (
+        new OrientedHalfFloor
+        (
+        "cypress_roof_edge_right_1_4",
+        Type.BAKED_MODEL,
+        AdditionalModels.CYPRESS_ROOF_EDGE_RIGHT_1_4,
+        Shapes.or(Shapes.box(0, 0, 0.5, 0.5, 0.125, 0.75), Shapes.box(0.5, 0.125, 0.5, 1, 0.25, 0.75)),
+        Blocks.CYPRESS_SKIN_COMPONENT,
+        List.of(Items.CYPRESS_ROOF_EDGE_RIGHT_1_4.toStack())
+        )
+    );
+    public static final BuildingComponent CYPRESS_ROOF_EDGE_LEFT_1_4 = register
+    (
+        new OrientedHalfFloor
+        (
+        "cypress_roof_edge_left_1_4",
+        Type.BAKED_MODEL,
+        AdditionalModels.CYPRESS_ROOF_EDGE_LEFT_1_4,
+        Shapes.or(Shapes.box(0.5, 0, 0.5, 1, 0.125, 0.75), Shapes.box(0, 0.125, 0.5, 0.5, 0.25, 0.75)),
+        Blocks.CYPRESS_SKIN_COMPONENT,
+        List.of(Items.CYPRESS_ROOF_EDGE_LEFT_1_4.toStack())
+        )
+    );
+    public static final BuildingComponent CYPRESS_ROOF_EDGE_RIGHT_1_2 = register
+    (
+        new QuarterOrientedFloor
+        (
+        "cypress_roof_edge_right_1_2",
+        Type.BAKED_MODEL,
+        AdditionalModels.CYPRESS_ROOF_EDGE_RIGHT_1_2,
+        Shapes.or(Shapes.box(0.25, 0, 0.5, 0.5, 0.125, 0.75), Shapes.box(0.5, 0.125, 0.5, 0.75, 0.25, 0.75)),
+        Blocks.CYPRESS_SKIN_COMPONENT,
+        List.of(Items.CYPRESS_ROOF_EDGE_RIGHT_1_2.toStack())
+        )
+    );
+    public static final BuildingComponent CYPRESS_ROOF_EDGE_LEFT_1_2 = register
+    (
+        new QuarterOrientedFloor
+        (
+        "cypress_roof_edge_left_1_2",
+        Type.BAKED_MODEL,
+        AdditionalModels.CYPRESS_ROOF_EDGE_LEFT_1_2,
+        Shapes.or(Shapes.box(0.5, 0, 0.5, 0.75, 0.125, 0.75), Shapes.box(0.25, 0.125, 0.5, 0.5, 0.25, 0.75)),
+        Blocks.CYPRESS_SKIN_COMPONENT,
+        List.of(Items.CYPRESS_ROOF_EDGE_LEFT_1_2.toStack())
+        )
+    );
+    public static final BuildingComponent CYPRESS_ROOF_EDGE_RIGHT_1_1 = register
+    (
+        new QuarterOrientedFloor
+        (
+        "cypress_roof_edge_right_1_1",
+        Type.BAKED_MODEL,
+        AdditionalModels.CYPRESS_ROOF_EDGE_RIGHT_1_1,
+        Shapes.or(Shapes.box(0.25, 0, 0.5, 0.5, 0.25, 0.75), Shapes.box(0.5, 0.25, 0.5, 0.75, 0.5, 0.75)),
+        Blocks.CYPRESS_SKIN_COMPONENT,
+        List.of(Items.CYPRESS_ROOF_EDGE_RIGHT_1_1.toStack())
+        )
+    );
+    public static final BuildingComponent CYPRESS_ROOF_EDGE_LEFT_1_1 = register
+    (
+        new QuarterOrientedFloor
+        (
+        "cypress_roof_edge_left_1_1",
+        Type.BAKED_MODEL,
+        AdditionalModels.CYPRESS_ROOF_EDGE_LEFT_1_1,
+        Shapes.or(Shapes.box(0.5, 0, 0.5, 0.75, 0.25, 0.75), Shapes.box(0.25, 0.25, 0.5, 0.5, 0.5, 0.75)),
+        Blocks.CYPRESS_SKIN_COMPONENT,
+        List.of(Items.CYPRESS_ROOF_EDGE_LEFT_1_1.toStack())
+        )
+    );
     public static final BuildingComponent CYPRESS_ROOF_EDGE_CORNER = register
     (
         new OrientedFloor

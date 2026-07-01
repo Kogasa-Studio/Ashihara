@@ -135,6 +135,14 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_1_4 = register("block/components/cypress_roof_1_4");
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_CORNER = register("block/components/cypress_roof_corner");
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_EDGE = register("block/components/cypress_roof_edge");
+    public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_EDGE_RIGHT = register("block/components/cypress_roof_edge_right");
+    public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_EDGE_LEFT = register("block/components/cypress_roof_edge_left");
+    public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_EDGE_RIGHT_1_4 = register("block/components/cypress_roof_edge_right_1_4");
+    public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_EDGE_LEFT_1_4 = register("block/components/cypress_roof_edge_left_1_4");
+    public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_EDGE_RIGHT_1_2 = register("block/components/cypress_roof_edge_right_1_2");
+    public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_EDGE_LEFT_1_2 = register("block/components/cypress_roof_edge_left_1_2");
+    public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_EDGE_RIGHT_1_1 = register("block/components/cypress_roof_edge_right_1_1");
+    public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_EDGE_LEFT_1_1 = register("block/components/cypress_roof_edge_left_1_1");
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_EDGE_CORNER = register("block/components/cypress_roof_edge_corner");
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_EDGE_LAYER_BOTTOM = register("block/components/cypress_roof_edge_layer_bottom");
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_EDGE_LAYER_TOP = register("block/components/cypress_roof_edge_layer_top");

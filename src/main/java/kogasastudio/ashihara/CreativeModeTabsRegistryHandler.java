@@ -166,6 +166,15 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.CYPRESS_ROOF_QUARTER_1_1.get());
                                         output.accept(Items.CYPRESS_ROOF_QUARTER_CORNER.get());
                                         output.accept(Items.CYPRESS_ROOF_EDGE.get());
+                                        output.accept(Items.CYPRESS_ROOF_EDGE_RIGHT.get());
+                                        output.accept(Items.CYPRESS_ROOF_EDGE_LEFT.get());
+                                        output.accept(Items.CYPRESS_ROOF_EDGE_RIGHT_1_4.get());
+                                        output.accept(Items.CYPRESS_ROOF_EDGE_LEFT_1_4.get());
+                                        output.accept(Items.CYPRESS_ROOF_EDGE_RIGHT_1_2.get());
+                                        output.accept(Items.CYPRESS_ROOF_EDGE_LEFT_1_2.get());
+                                        output.accept(Items.CYPRESS_ROOF_EDGE_RIGHT_1_1.get());
+                                        output.accept(Items.CYPRESS_ROOF_EDGE_LEFT_1_1.get());
+                                        output.accept(Items.CYPRESS_ROOF_EDGE_LEFT.get());
                                         output.accept(Items.CYPRESS_ROOF_EDGE_CORNER.get());
                                         output.accept(Items.CYPRESS_ROOF_EDGE_LAYER_BOTTOM.get());
                                         output.accept(Items.CYPRESS_ROOF_EDGE_LAYER_TOP.get());
