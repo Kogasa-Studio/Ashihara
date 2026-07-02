@@ -1,0 +1,12 @@
+{
+  "type": "ashihara:cutting",
+  "id": "ashihara:cut_cucumber",
+  "ingredient": "ashihara:cucumber",
+  "tool": "#c:knife",
+  "output": [
+    {
+      "id": "ashihara:cucumber_slice",
+      "count": 3
+    }
+  ]
+}

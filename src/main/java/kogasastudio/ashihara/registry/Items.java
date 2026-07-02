@@ -9,6 +9,7 @@ import kogasastudio.ashihara.item.block.ContainerComponentItem;
 import kogasastudio.ashihara.item.block.*;
 import kogasastudio.ashihara.item.food.EasyFood;
 import kogasastudio.ashihara.item.food.DirtBallDon;
+import kogasastudio.ashihara.item.food.PickledFoodItem;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -71,6 +72,8 @@ public class Items
             return super.use(level, player, usedHand);
         }
     });
+    public static final DeferredItem<? extends Item> CUCUMBER_SLICE = ITEMS.registerSimpleItem("cucumber_slice", properties -> properties.food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.4f).build()));
+    public static final DeferredItem<? extends Item> PICKLED_CUCUMBER_SLICE = ITEMS.registerItem("pickled_cucumber_slice", properties -> new PickledFoodItem(properties.food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.8f).build(), Consumables.DEFAULT_FOOD)));
     public static final DeferredItem<? extends Item> TOMATO = ITEMS.registerItem("tomato", properties -> new EasyFood(2, properties));
     public static final DeferredItem<? extends Item> SWEET_POTATO = ITEMS.registerItem("sweet_potato", properties -> new BlockItem(Blocks.SWEET_POTATOES.get(), properties.food(new FoodProperties.Builder().nutrition(2).build()).useItemDescriptionPrefix()));
     public static final DeferredItem<? extends Item> SCALLION = ITEMS.registerItem("scallion", properties -> new BlockItem(Blocks.SCALLION_CROP.get(), properties.food(new FoodProperties.Builder().nutrition(2).build()).useItemDescriptionPrefix()));

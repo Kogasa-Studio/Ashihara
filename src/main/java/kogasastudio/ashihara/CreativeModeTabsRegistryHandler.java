@@ -309,6 +309,8 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.CHERRY_SAPLING.get());
                                         output.accept(Items.RED_MAPLE_SAPLING.get());
                                         output.accept(Items.CUCUMBER.get());
+                                        output.accept(Items.CUCUMBER_SLICE.get());
+                                        output.accept(Items.PICKLED_CUCUMBER_SLICE.get());
                                         output.accept(Items.TOMATO.get());
                                         output.accept(Items.SOY_BEAN.get());
                                         output.accept(Items.MILLET.get());

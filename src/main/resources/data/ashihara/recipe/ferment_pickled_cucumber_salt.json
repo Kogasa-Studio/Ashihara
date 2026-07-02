@@ -1,0 +1,37 @@
+{
+  "type": "ashihara:fermentation",
+  "id": "ashihara:ferment_pickled_cucumber_salt",
+  "input_items": [
+    {
+      "ingredient": "ashihara:salt",
+      "count": 1
+    },
+    {
+      "ingredient": "ashihara:cucumber_slice",
+      "count": 4
+    }
+  ],
+  "input_fluids": [
+    {
+      "id": "minecraft:water",
+      "amount": 100
+    }
+  ],
+  "min_fluid_amount": 100,
+  "max_fluid_amount": 200,
+  "need_size": [
+    "basin",
+    "vat"
+  ],
+  "need_air": true,
+  "output": [
+    {
+      "id": "ashihara:pickled_cucumber_slice",
+      "count": 4,
+      "components": {
+        "ashihara:pickle_type": "salt"
+      }
+    }
+  ],
+  "time": 7200
+}
