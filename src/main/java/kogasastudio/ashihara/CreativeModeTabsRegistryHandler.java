@@ -126,6 +126,9 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.BAMBOO_WALL_BONES_QUARTER.get());
                                         output.accept(Items.RED_PLANKS_WALL_QUARTER.get());
                                         output.accept(Items.RED_ROOF_EDGE_PLANKS.get());
+                                        output.accept(Items.RED_ROOF_EDGE_PLANKS_1_4.get());
+                                        output.accept(Items.RED_ROOF_EDGE_PLANKS_1_2.get());
+                                        output.accept(Items.RED_ROOF_EDGE_PLANKS_1_1.get());
                                         output.accept(Items.GOLD_ROOF_EDGE_PLANKS_DECORATION.get());
                                         output.accept(Items.RED_HANGING_FISH_PIG_EYE.get());
                                         output.accept(Items.GREEN_STRAIGHT_BAR_WINDOW.get());
@@ -145,6 +148,10 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.RED_THIN_RAFTER.get());
                                         output.accept(Items.RED_THIN_RAFTER_1_1.get());
                                         output.accept(Items.RED_THIN_RAFTER_1_2.get());
+                                        output.accept(Items.RED_THIN_RAFTER_1_4.get());
+                                        output.accept(Items.SPRUCE_RAFTER_PLANKS_1_4.get());
+                                        output.accept(Items.WHITE_RAFTER_PLANKS_1_4.get());
+                                        output.accept(Items.CYPRESS_ROOF_HALF_1_4.get());
                                         output.accept(Items.RED_DOUBLE_RAFTER.get());
                                         output.accept(Items.RED_DOUBLE_RAFTER_1_1.get());
                                         output.accept(Items.RED_DOUBLE_RAFTER_1_2.get());

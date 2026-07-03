@@ -210,6 +210,9 @@
   "item.ashihara.gold_pin_fin": "Gold Pin Fin",
   "item.ashihara.gold_roof_edge_planks_decoration": "Gold Roof Edge Planks Decoration",
   "item.ashihara.red_roof_edge_planks": "Red Roof Edge Planks",
+  "item.ashihara.red_roof_edge_planks_1_4": "Red Roof Edge Planks Slope 1:4",
+  "item.ashihara.red_roof_edge_planks_1_2": "Red Roof Edge Planks Slope 1:2",
+  "item.ashihara.red_roof_edge_planks_1_1": "Red Roof Edge Planks Slope 1:1",
   "item.ashihara.pot_lid": "Pot Lid",
   "block.ashihara.salt_field": "Salt Field",
   "block.ashihara.water_field": "Water Field",
@@ -400,5 +403,9 @@
   "item.ashihara.wooden_dish_mid": "Medium Wooden Plate",
   "item.ashihara.wooden_dish_big": "Large Wooden Plate",
   "item.ashihara.curtain_table": "Curtain Table",
-  "item.ashihara.bamboo_curtain": "Green Bamboo Curtain (White Diamond-Arabesque Pattern)"
+  "item.ashihara.bamboo_curtain": "Green Bamboo Curtain (White Diamond-Arabesque Pattern)",
+  "item.ashihara.red_thin_rafter_1_4": "Red Thin Rafter Slope 1:4",
+  "item.ashihara.spruce_rafter_planks_1_4": "Spruce Rafter Planks (1:4)",
+  "item.ashihara.white_rafter_planks_1_4": "White Rafter Planks (1:4)",
+  "item.ashihara.cypress_roof_half_1_4": "Half Cypress Skin Roof Slope 1:4"
 }

@@ -210,6 +210,9 @@
   "item.ashihara.gold_pin_fin": "金钉隐",
   "item.ashihara.gold_roof_edge_planks_decoration": "金破风板钉隐",
   "item.ashihara.red_roof_edge_planks": "朱木破风板",
+  "item.ashihara.red_roof_edge_planks_1_4": "朱木破风板 （斜度：1:4）",
+  "item.ashihara.red_roof_edge_planks_1_2": "朱木破风板 （斜度：1:2）",
+  "item.ashihara.red_roof_edge_planks_1_1": "朱木破风板 （斜度：1:1）",
   "item.ashihara.pot_lid": "土锅锅盖",
   "block.ashihara.salt_field": "盐田",
   "block.ashihara.water_field": "水田",
@@ -393,5 +396,9 @@
   "item.ashihara.wooden_dish_mid": "中号木盘",
   "item.ashihara.wooden_dish_big": "大号木盘",
   "item.ashihara.curtain_table": "几帐",
-  "item.ashihara.bamboo_curtain": "绿底白菱唐草纹御簾"
+  "item.ashihara.bamboo_curtain": "绿底白菱唐草纹御簾",
+  "item.ashihara.red_thin_rafter_1_4": "细朱木椽（斜度：1:4）",
+  "item.ashihara.spruce_rafter_planks_1_4": "素木屋顶栈板（斜度：1:4）",
+  "item.ashihara.white_rafter_planks_1_4": "涂白屋顶栈板（斜度：1:4）",
+  "item.ashihara.cypress_roof_half_1_4": "半桧皮葺屋顶（斜度：1:4）"
 }

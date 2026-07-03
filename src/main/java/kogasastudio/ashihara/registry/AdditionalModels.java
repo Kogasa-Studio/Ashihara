@@ -71,6 +71,9 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation GOLD_PIN_FIN = register("block/components/gold_pin_fin");
     public static final BuildingComponentModelResourceLocation GOLD_ROOF_EDGE_PLANKS_DECORATION = register("block/components/gold_roof_edge_planks_decoration");
     public static final BuildingComponentModelResourceLocation RED_ROOF_EDGE_PLANKS = register("block/components/red_roof_edge_planks");
+    public static final BuildingComponentModelResourceLocation RED_ROOF_EDGE_PLANKS_1_4 = register("block/components/red_roof_edge_planks_1_4");
+    public static final BuildingComponentModelResourceLocation RED_ROOF_EDGE_PLANKS_1_2 = register("block/components/red_roof_edge_planks_1_2");
+    public static final BuildingComponentModelResourceLocation RED_ROOF_EDGE_PLANKS_1_1 = register("block/components/red_roof_edge_planks_1_1");
 
     public static final BuildingComponentModelResourceLocation GREEN_STRAIGHT_BAR_WINDOW = register("block/components/green_straight_bar_window");
     public static final BuildingComponentModelResourceLocation GREEN_STRAIGHT_BAR_WINDOW_QUARTER = register("block/components/green_straight_bar_window_quarter");
@@ -110,6 +113,7 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation RED_THIN_RAFTER = register("block/components/red_thin_rafter");
     public static final BuildingComponentModelResourceLocation RED_THIN_RAFTER_1_1 = register("block/components/red_thin_rafter_1_1");
     public static final BuildingComponentModelResourceLocation RED_THIN_RAFTER_1_2 = register("block/components/red_thin_rafter_1_2");
+    public static final BuildingComponentModelResourceLocation RED_THIN_RAFTER_1_4 = register("block/components/red_thin_rafter_long_1_4");
     public static final BuildingComponentModelResourceLocation RED_THIN_RAFTER_PAINTED_YELLOW = register("block/components/red_thin_rafter_painted_yellow");
     public static final BuildingComponentModelResourceLocation RED_THIN_RAFTER_CONNECTOR = register("block/components/red_thin_rafter_connector");
 
@@ -120,12 +124,14 @@ public class AdditionalModels
 
     public static final BuildingComponentModelResourceLocation SPRUCE_RAFTER_PLANKS_1_1 = register("block/components/spruce_rafter_planks_1_1");
     public static final BuildingComponentModelResourceLocation SPRUCE_RAFTER_PLANKS_1_2 = register("block/components/spruce_rafter_planks_1_2");
+    public static final BuildingComponentModelResourceLocation SPRUCE_RAFTER_PLANKS_1_4 = register("block/components/spruce_rafter_planks_1_4");
     public static final BuildingComponentModelResourceLocation SPRUCE_RAFTER_PLANKS_WIDE = register("block/components/spruce_rafter_planks_wide");
     public static final BuildingComponentModelResourceLocation SPRUCE_RAFTER_PLANKS_WIDE_1_4 = register("block/components/spruce_rafter_planks_wide_1_4");
     public static final BuildingComponentModelResourceLocation SPRUCE_RAFTER_PLANKS_QUARTER_1_2 = register("block/components/spruce_rafter_planks_quarter_1_2");
     public static final BuildingComponentModelResourceLocation SPRUCE_RAFTER_PLANKS_QUARTER_1_1 = register("block/components/spruce_rafter_planks_quarter_1_1");
     public static final BuildingComponentModelResourceLocation WHITE_RAFTER_PLANKS_1_1 = register("block/components/white_rafter_planks_1_1");
     public static final BuildingComponentModelResourceLocation WHITE_RAFTER_PLANKS_1_2 = register("block/components/white_rafter_planks_1_2");
+    public static final BuildingComponentModelResourceLocation WHITE_RAFTER_PLANKS_1_4 = register("block/components/white_rafter_planks_1_4");
     public static final BuildingComponentModelResourceLocation WHITE_RAFTER_PLANKS_WIDE = register("block/components/white_rafter_planks_wide");
     public static final BuildingComponentModelResourceLocation WHITE_RAFTER_PLANKS_WIDE_1_4 = register("block/components/white_rafter_planks_wide_1_4");
     public static final BuildingComponentModelResourceLocation WHITE_RAFTER_PLANKS_QUARTER_1_2 = register("block/components/white_rafter_planks_quarter_1_2");
@@ -147,6 +153,7 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_EDGE_LAYER_BOTTOM = register("block/components/cypress_roof_edge_layer_bottom");
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_EDGE_LAYER_TOP = register("block/components/cypress_roof_edge_layer_top");
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_HALF = register("block/components/cypress_roof_half");
+    public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_HALF_1_4 = register("block/components/cypress_roof_half_1_4");
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_HALF_1_2 = register("block/components/cypress_roof_half_1_2");
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_HALF_1_1 = register("block/components/cypress_roof_half_1_1");
     public static final BuildingComponentModelResourceLocation CYPRESS_ROOF_QUARTER = register("block/components/cypress_roof_quarter");

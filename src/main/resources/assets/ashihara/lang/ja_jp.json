@@ -393,5 +393,9 @@
   "item.ashihara.wooden_dish_mid": "中くらい木皿",
   "item.ashihara.wooden_dish_big": "大きい木皿",
   "item.ashihara.curtain_table": "几帳",
-  "item.ashihara.bamboo_curtain": "緑地白菱唐草紋御簾"
+  "item.ashihara.bamboo_curtain": "緑地白菱唐草紋御簾",
+  "item.ashihara.red_thin_rafter_1_4": "細朱木垂木（傾斜度：1:4）",
+  "item.ashihara.spruce_rafter_planks_1_4": "素木地板（傾斜度：1:4）",
+  "item.ashihara.white_rafter_planks_1_4": "白粉地板（傾斜度：1:4）",
+  "item.ashihara.cypress_roof_half_1_4": "半期の桧皮葺屋根（傾斜度：1:4）"
 }
