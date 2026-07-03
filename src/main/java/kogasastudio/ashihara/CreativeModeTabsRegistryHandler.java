@@ -7,6 +7,14 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
+import kogasastudio.ashihara.datacomponent.PickleType;
+import kogasastudio.ashihara.registry.DataComponentTypes;
 
 import java.util.function.Supplier;
 
@@ -15,6 +23,7 @@ public class CreativeModeTabsRegistryHandler
 {
     public static final String BUILDING_BLOCKS_TAB_NAME = "group_ash_building_blocks";
     public static final String MATERIALS_TAB_NAME = "group_ash_materials";
+    public static final String FOOD_TAB_NAME = "group_ashihara_food";
     public static final String ASHIHARA_MAIN_TAB_NAME = "group_ashihara";
 
     public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Ashihara.MODID);
@@ -266,7 +275,8 @@ public class CreativeModeTabsRegistryHandler
                             () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.group_ashihara"))
                                     .icon(() -> Items.ASHIHARA_ICON.get().getDefaultInstance())
                                     .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
-                                    .withTabsAfter(Identifier.fromNamespaceAndPath(Ashihara.MODID, MATERIALS_TAB_NAME), Identifier.fromNamespaceAndPath(Ashihara.MODID, BUILDING_BLOCKS_TAB_NAME))
+                                    .withTabsAfter(Identifier.fromNamespaceAndPath(Ashihara.MODID, FOOD_TAB_NAME),
+                                    Identifier.fromNamespaceAndPath(Ashihara.MODID, MATERIALS_TAB_NAME), Identifier.fromNamespaceAndPath(Ashihara.MODID, BUILDING_BLOCKS_TAB_NAME))
                                     .displayItems(((itemDisplayParameters, output) ->
                                     {
                                         output.accept(Items.GUIDEBOOK.get());
@@ -279,52 +289,23 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.PADDY_PILE.get());
                                         output.accept(Items.BROWN_RICE.get());
                                         output.accept(Items.RICE.get());
-                                        output.accept(Items.COOKED_RICE.get());
-                                        output.accept(Items.COOKED_BROWN_RICE.get());
-                                        output.accept(Items.ONIGIRI.get());
-                                        output.accept(Items.DIRT_BALL_DON.get());
                                         output.accept(Items.WOODEN_BASIN.get());
                                         output.accept(Items.FERMENTATION_VAT.get());
                                         output.accept(Items.LARGE_FERMENTATION_VAT.get());
-                                        output.accept(Items.WOODEN_BOWL_MID.get());
-                                        output.accept(Items.WOODEN_BOWL_BIG.get());
-                                        output.accept(Items.WOODEN_DISH_SMALL.get());
-                                        output.accept(Items.WOODEN_DISH_MID.get());
-                                        output.accept(Items.WOODEN_DISH_BIG.get());
-                                        output.accept(Items.SAKURAMOCHI.get());
                                         output.accept(Items.CHRYSANTHEMUM.get());
                                         output.accept(Items.CHRYSANTHEMUM_FLOWER.get());
-                                        output.accept(Items.MOCHI.get());
-                                        output.accept(Items.DAIFUKU.get());
-                                        output.accept(Items.DAIFUKU_KUSA.get());
-                                        output.accept(Items.DAIFUKU_SAKURA.get());
-                                        output.accept(Items.DANGO.get());
-                                        output.accept(Items.DANGO_BEAN.get());
-                                        output.accept(Items.DANGO_HANAMIE.get());
-                                        output.accept(Items.DANGO_MITARASHI.get());
-                                        output.accept(Items.SUSHI_BASIC.get());
-                                        output.accept(Items.SUSHI_SAKURA.get());
-                                        output.accept(Items.SUSHI_RAW_FISH.get());
-                                        output.accept(Items.SUSHI_TAMAGO.get());
                                         output.accept(Items.CHERRY_SAPLING.get());
                                         output.accept(Items.RED_MAPLE_SAPLING.get());
                                         output.accept(Items.CUCUMBER.get());
-                                        output.accept(Items.CUCUMBER_SLICE.get());
-                                        output.accept(Items.PICKLED_CUCUMBER_SLICE.get());
                                         output.accept(Items.TOMATO.get());
                                         output.accept(Items.SOY_BEAN.get());
                                         output.accept(Items.MILLET.get());
-                                        output.accept(Items.COOKED_MILLET.get());
                                         output.accept(Items.WHITE_RADISH.get());
-                                        output.accept(Items.SOAKED_SOY_BEAN.get());
-                                        output.accept(Items.BOILED_SOY_BEAN.get());
-                                        output.accept(Items.TOFU.get());
                                         output.accept(Items.COTTON.get());
                                         output.accept(Items.SWEET_POTATO.get());
                                         output.accept(Items.SCALLION.get());
                                         output.accept(Items.WASABI.get());
                                         output.accept(Items.TARE_SEED.get());
-                                        output.accept(Items.ROASTED_SWEET_POTATO.get());
                                         output.accept(Items.REED.get());
                                         output.accept(Items.SHORTER_REED.get());
                                         output.accept(Items.TEA_SEED.get());
@@ -344,11 +325,70 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.IRON_OTSUCHI.get());
                                         output.accept(Items.DIAMOND_OTSUCHI.get());
                                         output.accept(Items.IRON_WIDE_HOE.get());
-                                        output.accept(Items.CHOPSTICKS.get());
                                         output.accept(Items.WOODEN_HAMMER.get());
                                         output.accept(Items.CHISEL.get());
                                         output.accept(Items.TACHI.get());
                                         output.accept(Items.SUJIKABUTO.get());
+                                    })).build()
+                    );
+    public static final Supplier<CreativeModeTab> FOOD =
+            TABS.register
+                    (
+                            FOOD_TAB_NAME,
+                            () -> CreativeModeTab.builder()
+                                    .icon(() -> Items.COOKED_RICE.get().getDefaultInstance())
+                                    .title(Component.translatable("itemGroup.group_ashihara_food"))
+                                    .withTabsBefore(Identifier.fromNamespaceAndPath(Ashihara.MODID, ASHIHARA_MAIN_TAB_NAME))
+                                    .displayItems(((itemDisplayParameters, output) ->
+                                    {
+                                        output.accept(Items.BROWN_RICE.get());
+                                        output.accept(Items.RICE.get());
+                                        output.accept(Items.CUCUMBER.get());
+                                        output.accept(Items.TOMATO.get());
+                                        output.accept(Items.SOY_BEAN.get());
+                                        output.accept(Items.MILLET.get());
+                                        output.accept(Items.WHITE_RADISH.get());
+                                        output.accept(Items.SWEET_POTATO.get());
+                                        output.accept(Items.SCALLION.get());
+                                        output.accept(Items.WASABI.get());
+                                        output.accept(Items.TARE_SEED.get());
+                                        output.accept(Items.COOKED_RICE.get());
+                                        output.accept(Items.COOKED_BROWN_RICE.get());
+                                        output.accept(Items.ONIGIRI.get());
+                                        output.accept(Items.DIRT_BALL_DON.get());
+                                        output.accept(Items.WOODEN_BOWL_MID.get());
+                                        output.accept(Items.WOODEN_BOWL_BIG.get());
+                                        output.accept(Items.WOODEN_DISH_SMALL.get());
+                                        output.accept(Items.WOODEN_DISH_MID.get());
+                                        output.accept(Items.WOODEN_DISH_BIG.get());
+                                        output.accept(Items.SAKURAMOCHI.get());
+                                        output.accept(Items.MOCHI.get());
+                                        output.accept(Items.DAIFUKU.get());
+                                        output.accept(Items.DAIFUKU_KUSA.get());
+                                        output.accept(Items.DAIFUKU_SAKURA.get());
+                                        output.accept(Items.DANGO.get());
+                                        output.accept(Items.DANGO_BEAN.get());
+                                        output.accept(Items.DANGO_HANAMIE.get());
+                                        output.accept(Items.DANGO_MITARASHI.get());
+                                        output.accept(Items.SUSHI_BASIC.get());
+                                        output.accept(Items.SUSHI_SAKURA.get());
+                                        output.accept(Items.SUSHI_RAW_FISH.get());
+                                        output.accept(Items.SUSHI_TAMAGO.get());
+                                        output.accept(Items.CUCUMBER_SLICE.get());
+                                        output.accept(Items.COOKED_MILLET.get());
+                                        output.accept(Items.SOAKED_SOY_BEAN.get());
+                                        output.accept(Items.BOILED_SOY_BEAN.get());
+                                        output.accept(Items.TOFU.get());
+                                        output.accept(Items.ROASTED_SWEET_POTATO.get());
+                                        output.accept(Items.CHOPSTICKS.get());
+                                        ItemStack saltPickle = new ItemStack(Items.PICKLED_CUCUMBER_SLICE.get());
+                                        saltPickle.set(DataComponentTypes.PICKLE_TYPE.get(), PickleType.SALT);
+                                        saltPickle.set(DataComponents.CONSUMABLE, Consumables.defaultFood().onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 2400, 0))).build());
+                                        output.accept(saltPickle);
+                                        ItemStack branPickle = new ItemStack(Items.PICKLED_CUCUMBER_SLICE.get());
+                                        branPickle.set(DataComponentTypes.PICKLE_TYPE.get(), PickleType.BRAN);
+                                        branPickle.set(DataComponents.CONSUMABLE, Consumables.defaultFood().onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 2400, 0))).build());
+                                        output.accept(branPickle);
                                     })).build()
                     );
 }

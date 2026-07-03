@@ -16,7 +16,7 @@ MCP broken? Run clean_mcp_zombies.ps1 from desktop.
 
 
 
-## PowerShell Escaping Rules (2026-06-30 verified)
+## PowerShell Escaping Rules (2026-06-30  (2026-07-03 verified)
 
 ### Core Rules
 PowerShell escape character is BACKTICK, not backslash.
@@ -25,7 +25,14 @@ No Linux-style \ or cmd-style ^ escaping exists in PowerShell.
 ### Passing Text Blocks to Shell
 Use single-quoted here-string: @' ... '@ (each delimiter must be on its own line).
 Content between delimiters is completely literal ? no escaping needed for quotes, angle brackets, parens, dollar signs, or backticks.
-Pipe to the target program:
+!! PIPE STRIPS DOUBLE-QUOTES -- use Set-Content instead !!
+Use chr(34) for double-quote chars in Python code written to disk:
+
+     = @'...'
+     | Set-Content -Path file.py -Encoding UTF8
+    python file.py
+
+Old (broken) approach:
 
     $script = @'
     ...arbitrary code with "quotes", <brackets>, (parens)...

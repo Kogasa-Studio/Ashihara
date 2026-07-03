@@ -36,9 +36,9 @@
               "type": "minecraft:apply_effects",
               "effects": [
                 {
-                  "effect": "minecraft:water_breathing",
                   "duration": 2400,
-                  "amplifier": 0
+                  "amplifier": 0,
+                  "id": "minecraft:water_breathing"
                 }
               ]
             }
