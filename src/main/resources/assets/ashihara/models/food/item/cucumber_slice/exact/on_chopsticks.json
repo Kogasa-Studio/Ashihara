@@ -1,0 +1,37 @@
+{
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"parent": "ashihara:block/furnitures/display",
+	"textures": {
+		"1": "ashihara:food/cucumber_slice",
+		"particle": "ashihara:food/cucumber_slice"
+	},
+	"elements": [
+		{
+			"from": [8.85, 0.2, 7.15],
+			"to": [7.15, 0.65, 8.85],
+			"rotation": {"angle": 0, "axis": "z", "origin": [8.85, 0.3, 8]},
+			"faces": {
+				"north": {"uv": [6, 3, 3, 4], "texture": "#1"},
+				"east": {"uv": [3, 3, 6, 4], "texture": "#1"},
+				"south": {"uv": [6, 3, 3, 4], "texture": "#1"},
+				"west": {"uv": [3, 3, 6, 4], "texture": "#1"},
+				"up": {"uv": [6, 3, 3, 0], "texture": "#1"},
+				"down": {"uv": [6, 3, 3, 0], "texture": "#1"}
+			}
+		},
+		{
+			"from": [7.25, 0.3, 7.25],
+			"to": [8.75, 0.55, 8.75],
+			"rotation": {"angle": 0, "axis": "z", "origin": [7.25, 0.3, 8]},
+			"faces": {
+				"north": {"uv": [3, 3, 0, 4], "texture": "#1"},
+				"east": {"uv": [0, 3, 3, 4], "texture": "#1"},
+				"south": {"uv": [3, 3, 0, 4], "texture": "#1"},
+				"west": {"uv": [0, 3, 3, 4], "texture": "#1"},
+				"up": {"uv": [3, 7, 0, 4], "texture": "#1"},
+				"down": {"uv": [3, 7, 0, 4], "texture": "#1"}
+			}
+		}
+	]
+}
