@@ -1126,19 +1126,19 @@ public class BuildingComponents
         "red_roof_edge_planks",
         Type.BAKED_MODEL,
         AdditionalModels.RED_ROOF_EDGE_PLANKS,
-        Shapes.box(0.25, 0, 0.5, 0.75, 0.25, 0.75),
+        Shapes.box(0.4375, -0.25, 0.1875, 0.5625, 0.25, 0.75),
         Blocks.RED_WOOD_COMPONENT,
         List.of(Items.RED_ROOF_EDGE_PLANKS.toStack())
         )
     );
     public static final AdditionalComponent RED_ROOF_EDGE_PLANKS_1_4 = (AdditionalComponent) register
     (
-        new QuarterOrientedFloor
+        new SideHalfOrientedFloor
         (
         "red_roof_edge_planks_1_4",
         Type.BAKED_MODEL,
         AdditionalModels.RED_ROOF_EDGE_PLANKS_1_4,
-        Shapes.or(Shapes.box(0.25, 0.125, 0, 0.75, 0.25, 0.5), Shapes.box(0.25, 0, 0.5, 0.75, 0.125, 1)),
+        Shapes.or(Shapes.box(0.40625, -0.375, 0.5, 0.59375, 0.125, 1), Shapes.box(0.40625, -0.25, 0, 0.59375, 0.25, 0.5)),
         Blocks.RED_WOOD_COMPONENT,
         List.of(Items.RED_ROOF_EDGE_PLANKS_1_4.toStack())
         )
@@ -1150,7 +1150,7 @@ public class BuildingComponents
         "red_roof_edge_planks_1_2",
         Type.BAKED_MODEL,
         AdditionalModels.RED_ROOF_EDGE_PLANKS_1_2,
-        Shapes.or(Shapes.box(0.25, 0, 0.5, 0.5, 0.125, 0.75), Shapes.box(0.5, 0.125, 0.5, 0.75, 0.25, 0.75)),
+        Shapes.or(Shapes.box(0.40625, -0.3125, 0.5, 0.59375, 0.125, 0.75), Shapes.box(0.40625, -0.1875, 0.25, 0.59375, 0.25, 0.5)),
         Blocks.RED_WOOD_COMPONENT,
         List.of(Items.RED_ROOF_EDGE_PLANKS_1_2.toStack())
         )
@@ -1162,7 +1162,7 @@ public class BuildingComponents
         "red_roof_edge_planks_1_1",
         Type.BAKED_MODEL,
         AdditionalModels.RED_ROOF_EDGE_PLANKS_1_1,
-        Shapes.or(Shapes.box(0.25, 0, 0.5, 0.5, 0.25, 0.75), Shapes.box(0.5, 0.25, 0.5, 0.75, 0.5, 0.75)),
+        Shapes.or(Shapes.box(0.40625, -0.1875, 0.4375, 0.59375, 0.3125, 0.75), Shapes.box(0.40625, -0.1875, 0.125, 0.59375, 0.5, 0.4375)),
         Blocks.RED_WOOD_COMPONENT,
         List.of(Items.RED_ROOF_EDGE_PLANKS_1_1.toStack())
         )
@@ -1181,7 +1181,7 @@ public class BuildingComponents
 
     public static final BuildingComponent CYPRESS_ROOF_HALF_1_4 = register
     (
-        new QuarterOrientedFloor
+        new SideHalfOrientedFloor
         (
         "cypress_roof_half_1_4",
         Type.BAKED_MODEL,
