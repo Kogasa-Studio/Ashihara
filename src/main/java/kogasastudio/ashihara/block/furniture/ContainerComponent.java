@@ -353,7 +353,7 @@ public abstract class ContainerComponent extends FurnitureComponent
     {
         try (Transaction tx = Transaction.openRoot())
         {
-            if (ih.insert(0, ItemResource.of(held.getItem(), DataComponentPatch.EMPTY), 1, tx) > 0)
+            if (ih.insert(0, ItemResource.of(held), 1, tx) > 0)
             { tx.commit(); held.shrink(1); }
         }
         playInsertSound(player);

@@ -10,6 +10,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 import java.util.function.Consumer;
 
 public class PickledFoodItem extends Item
@@ -49,5 +51,14 @@ public class PickledFoodItem extends Item
             builder.accept(name.append(Component.literal(minSec)).withStyle(ChatFormatting.GRAY));
         }
         super.appendHoverText(stack, context, display, builder, flag);
+    }
+
+    @Override
+    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity)
+    {
+        PickleType type = stack.get(DataComponentTypes.PICKLE_TYPE.get());
+        if (type != null)
+            entity.addEffect(new MobEffectInstance(type.getEffect()));
+        return super.finishUsingItem(stack, level, entity);
     }
 }

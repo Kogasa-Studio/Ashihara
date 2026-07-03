@@ -29,7 +29,21 @@
       "id": "ashihara:pickled_cucumber_slice",
       "count": 4,
       "components": {
-        "ashihara:pickle_type": "salt"
+        "ashihara:pickle_type": "salt",
+        "minecraft:consumable": {
+          "on_consume_effects": [
+            {
+              "type": "minecraft:apply_effects",
+              "effects": [
+                {
+                  "effect": "minecraft:water_breathing",
+                  "duration": 2400,
+                  "amplifier": 0
+                }
+              ]
+            }
+          ]
+        }
       }
     }
   ],
