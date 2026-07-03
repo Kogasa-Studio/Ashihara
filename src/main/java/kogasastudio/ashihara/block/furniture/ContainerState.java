@@ -29,7 +29,7 @@ public record ContainerState(
     /** Enum of container form factors. */
     public enum ContainerType
     {
-        BOWL, PLATE, CUP,
+        BOWL, DISH, CUP,
         ;
 
         public String contextKey(ContainerSize size) { return name().toLowerCase() + "_" + size.id; }

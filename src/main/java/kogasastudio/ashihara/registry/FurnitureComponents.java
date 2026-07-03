@@ -53,15 +53,15 @@ public class FurnitureComponents
     (
         new SimpleContainerComponent
         (
-            "wooden_dish_small",
-            BuildingComponents.Type.BAKED_MODEL,
-            AdditionalModels.WOODEN_DISH_SMALL,
-            Shapes.box(0.3125, 0, 0.3125, 0.6875, 0.078125, 0.6875),
-            Blocks.MULTI_BUILT_BLOCK,
-            List.of(Items.WOODEN_DISH_SMALL.toStack()),
-            FurnitureRenderPass.CHUNK_BUFFER,
-            ContainerState.ContainerType.PLATE, ContainerState.ContainerSize.SMALL,
-            1, 2
+        "wooden_dish_small",
+        BuildingComponents.Type.BAKED_MODEL,
+        AdditionalModels.WOODEN_DISH_SMALL,
+        Shapes.box(0.3125, 0, 0.3125, 0.6875, 0.078125, 0.6875),
+        Blocks.MULTI_BUILT_BLOCK,
+        List.of(Items.WOODEN_DISH_SMALL.toStack()),
+        FurnitureRenderPass.CHUNK_BUFFER,
+        ContainerState.ContainerType.DISH, ContainerState.ContainerSize.SMALL,
+        1, 2
         )
     );
 
@@ -69,15 +69,15 @@ public class FurnitureComponents
     (
         new SimpleContainerComponent
         (
-            "wooden_dish_mid",
-            BuildingComponents.Type.BAKED_MODEL,
-            AdditionalModels.WOODEN_DISH_MID,
-            Shapes.box(0.28125, 0, 0.28125, 0.71875, 0.09375, 0.71875),
-            Blocks.MULTI_BUILT_BLOCK,
-            List.of(Items.WOODEN_DISH_MID.toStack()),
-            FurnitureRenderPass.CHUNK_BUFFER,
-            ContainerState.ContainerType.PLATE, ContainerState.ContainerSize.MID,
-            2, 5
+        "wooden_dish_mid",
+        BuildingComponents.Type.BAKED_MODEL,
+        AdditionalModels.WOODEN_DISH_MID,
+        Shapes.box(0.28125, 0, 0.28125, 0.71875, 0.09375, 0.71875),
+        Blocks.MULTI_BUILT_BLOCK,
+        List.of(Items.WOODEN_DISH_MID.toStack()),
+        FurnitureRenderPass.CHUNK_BUFFER,
+        ContainerState.ContainerType.DISH, ContainerState.ContainerSize.MID,
+        2, 5
         )
     );
 
@@ -85,15 +85,15 @@ public class FurnitureComponents
     (
         new SimpleContainerComponent
         (
-            "wooden_dish_big",
-            BuildingComponents.Type.BAKED_MODEL,
-            AdditionalModels.WOODEN_DISH_BIG,
-            Shapes.box(0.21875, 0, 0.21875, 0.78125, 0.125, 0.78125),
-            Blocks.MULTI_BUILT_BLOCK,
-            List.of(Items.WOODEN_DISH_BIG.toStack()),
-            FurnitureRenderPass.CHUNK_BUFFER,
-            ContainerState.ContainerType.PLATE, ContainerState.ContainerSize.LARGE,
-            4, 12
+        "wooden_dish_big",
+        BuildingComponents.Type.BAKED_MODEL,
+        AdditionalModels.WOODEN_DISH_BIG,
+        Shapes.box(0.21875, 0, 0.21875, 0.78125, 0.125, 0.78125),
+        Blocks.MULTI_BUILT_BLOCK,
+        List.of(Items.WOODEN_DISH_BIG.toStack()),
+        FurnitureRenderPass.CHUNK_BUFFER,
+        ContainerState.ContainerType.DISH, ContainerState.ContainerSize.LARGE,
+        4, 12
         )
     );
 
