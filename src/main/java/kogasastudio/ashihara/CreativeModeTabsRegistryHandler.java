@@ -135,6 +135,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.RED_ROOF_EDGE_PLANKS_1_1_RIGHT.get());
                                         output.accept(Items.GOLD_ROOF_EDGE_PLANKS_DECORATION.get());
                                         output.accept(Items.RED_HANGING_FISH_PIG_EYE.get());
+                                        output.accept(Items.RED_HANGING_FISH_TURNIP.get());
                                         output.accept(Items.GREEN_STRAIGHT_BAR_WINDOW.get());
                                         output.accept(Items.GREEN_STRAIGHT_BAR_WINDOW_QUARTER.get());
                                         output.accept(Items.RED_LATTICED_WINDOW.get());

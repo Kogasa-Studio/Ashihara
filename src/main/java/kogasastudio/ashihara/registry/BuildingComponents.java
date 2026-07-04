@@ -431,6 +431,18 @@ public class BuildingComponents
         SoundType.WOOD
         )
     );
+    public static final BuildingComponent RED_HANGING_FISH_TURNIP = register
+    (
+        new OrientedHalfFloor
+        (
+        "red_hanging_fish_turnip",
+        Type.BAKED_MODEL,
+        AdditionalModels.RED_HANGING_FISH_TURNIP,
+        Shapes.box(0, -0.8125, 0.686875, 1, 0.75, 0.813125),
+        Blocks.RED_WOOD_COMPONENT,
+        List.of(Items.RED_HANGING_FISH_TURNIP.toStack())
+        )
+    );
     public static final BuildingComponent GREEN_STRAIGHT_BAR_WINDOW = register
     (
         new StraightBarWindow

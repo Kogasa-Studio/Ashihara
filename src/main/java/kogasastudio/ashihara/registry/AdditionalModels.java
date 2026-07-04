@@ -68,6 +68,7 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation RED_PLANKS_WALL_QUARTER = register("block/components/red_planks_wall_quarter");
 
     public static final BuildingComponentModelResourceLocation RED_HANGING_FISH_PIG_EYE = register("block/components/red_hanging_fish_pig_eye");
+    public static final BuildingComponentModelResourceLocation RED_HANGING_FISH_TURNIP = register("block/components/red_hanging_fish_turnip");
     public static final BuildingComponentModelResourceLocation GOLD_PIN_FIN = register("block/components/gold_pin_fin");
     public static final BuildingComponentModelResourceLocation GOLD_ROOF_EDGE_PLANKS_DECORATION = register("block/components/gold_roof_edge_planks_decoration");
     public static final BuildingComponentModelResourceLocation RED_ROOF_EDGE_PLANKS_LEFT = register("block/components/red_roof_edge_planks_left");
