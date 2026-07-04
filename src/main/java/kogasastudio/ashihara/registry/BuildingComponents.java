@@ -1119,52 +1119,100 @@ public class BuildingComponents
         List.of(Items.CYPRESS_ROOF_EDGE_CORNER.toStack())
         )
     );
-    public static final AdditionalComponent RED_ROOF_EDGE_PLANKS = (AdditionalComponent) register
+    public static final AdditionalComponent RED_ROOF_EDGE_PLANKS_LEFT = (AdditionalComponent) register
     (
         new QuarterOrientedFloor
         (
-        "red_roof_edge_planks",
+        "red_roof_edge_planksbase_left",
         Type.BAKED_MODEL,
-        AdditionalModels.RED_ROOF_EDGE_PLANKS,
-        Shapes.box(0.4375, -0.25, 0.1875, 0.5625, 0.25, 0.75),
+        AdditionalModels.RED_ROOF_EDGE_PLANKS_LEFT,
+        Shapes.box(0.1875, -0.25, 0.625, 0.75, 0.25, 0.75),
         Blocks.RED_WOOD_COMPONENT,
-        List.of(Items.RED_ROOF_EDGE_PLANKS.toStack())
+        List.of(Items.RED_ROOF_EDGE_PLANKS_LEFT.toStack())
         )
     );
-    public static final AdditionalComponent RED_ROOF_EDGE_PLANKS_1_4 = (AdditionalComponent) register
+    public static final AdditionalComponent RED_ROOF_EDGE_PLANKS_1_4_LEFT = (AdditionalComponent) register
     (
-        new SideHalfOrientedFloor
+        new OrientedHalfFloor
         (
-        "red_roof_edge_planks_1_4",
+        "red_roof_edge_planks_1_4_left",
         Type.BAKED_MODEL,
-        AdditionalModels.RED_ROOF_EDGE_PLANKS_1_4,
-        Shapes.or(Shapes.box(0.40625, -0.375, 0.5, 0.59375, 0.125, 1), Shapes.box(0.40625, -0.25, 0, 0.59375, 0.25, 0.5)),
+        AdditionalModels.RED_ROOF_EDGE_PLANKS_1_4_LEFT,
+        Shapes.or(Shapes.box(0.5, -0.375, 0.5625, 1, 0.125, 0.75), Shapes.box(0, -0.25, 0.5625, 0.5, 0.25, 0.75)),
         Blocks.RED_WOOD_COMPONENT,
-        List.of(Items.RED_ROOF_EDGE_PLANKS_1_4.toStack())
+        List.of(Items.RED_ROOF_EDGE_PLANKS_1_4_LEFT.toStack())
         )
     );
-    public static final AdditionalComponent RED_ROOF_EDGE_PLANKS_1_2 = (AdditionalComponent) register
-    (
-        new QuarterOrientedFloor
-        (
-        "red_roof_edge_planks_1_2",
-        Type.BAKED_MODEL,
-        AdditionalModels.RED_ROOF_EDGE_PLANKS_1_2,
-        Shapes.or(Shapes.box(0.40625, -0.3125, 0.5, 0.59375, 0.125, 0.75), Shapes.box(0.40625, -0.1875, 0.25, 0.59375, 0.25, 0.5)),
-        Blocks.RED_WOOD_COMPONENT,
-        List.of(Items.RED_ROOF_EDGE_PLANKS_1_2.toStack())
-        )
-    );
-    public static final AdditionalComponent RED_ROOF_EDGE_PLANKS_1_1 = (AdditionalComponent) register
+    public static final AdditionalComponent RED_ROOF_EDGE_PLANKS_1_2_LEFT = (AdditionalComponent) register
     (
         new QuarterOrientedFloor
         (
-        "red_roof_edge_planks_1_1",
+        "red_roof_edge_planks_1_2_left",
         Type.BAKED_MODEL,
-        AdditionalModels.RED_ROOF_EDGE_PLANKS_1_1,
-        Shapes.or(Shapes.box(0.40625, -0.1875, 0.4375, 0.59375, 0.3125, 0.75), Shapes.box(0.40625, -0.1875, 0.125, 0.59375, 0.5, 0.4375)),
+        AdditionalModels.RED_ROOF_EDGE_PLANKS_1_2_LEFT,
+        Shapes.or(Shapes.box(0.5, -0.3125, 0.5625, 0.75, 0.125, 0.75), Shapes.box(0.25, -0.3125, 0.5625, 0.5, 0.25, 0.75), Shapes.box(0, -0.1875, 0.5625, 0.25, 0.25, 0.75)),
         Blocks.RED_WOOD_COMPONENT,
-        List.of(Items.RED_ROOF_EDGE_PLANKS_1_1.toStack())
+        List.of(Items.RED_ROOF_EDGE_PLANKS_1_2_LEFT.toStack())
+        )
+    );
+    public static final AdditionalComponent RED_ROOF_EDGE_PLANKS_1_1_LEFT = (AdditionalComponent) register
+    (
+        new QuarterOrientedFloor
+        (
+        "red_roof_edge_planks_1_1_left",
+        Type.BAKED_MODEL,
+        AdditionalModels.RED_ROOF_EDGE_PLANKS_1_1_LEFT,
+        Shapes.or(Shapes.box(0.5, -0.1875, 0.5625, 0.75, 0.25, 0.75), Shapes.box(0.25, -0.1875, 0.5625, 0.5, 0.5, 0.75), Shapes.box(0, 0.0625, 0.5625, 0.25, 0.5, 0.75)),
+        Blocks.RED_WOOD_COMPONENT,
+        List.of(Items.RED_ROOF_EDGE_PLANKS_1_1_LEFT.toStack())
+        )
+    );
+    public static final AdditionalComponent RED_ROOF_EDGE_PLANKS_RIGHT = (AdditionalComponent) register
+    (
+        new QuarterOrientedFloor
+        (
+        "red_roof_edge_planksbase_right",
+        Type.BAKED_MODEL,
+        AdditionalModels.RED_ROOF_EDGE_PLANKS_RIGHT,
+        Shapes.box(0.25, -0.25, 0.625, 0.8125, 0.25, 0.75),
+        Blocks.RED_WOOD_COMPONENT,
+        List.of(Items.RED_ROOF_EDGE_PLANKS_RIGHT.toStack())
+        )
+    );
+    public static final AdditionalComponent RED_ROOF_EDGE_PLANKS_1_4_RIGHT = (AdditionalComponent) register
+    (
+        new OrientedHalfFloor
+        (
+        "red_roof_edge_planks_1_4_right",
+        Type.BAKED_MODEL,
+        AdditionalModels.RED_ROOF_EDGE_PLANKS_1_4_RIGHT,
+        Shapes.or(Shapes.box(0, -0.375, 0.5625, 0.5, 0.125, 0.75), Shapes.box(0.5, -0.25, 0.5625, 1, 0.25, 0.75)),
+        Blocks.RED_WOOD_COMPONENT,
+        List.of(Items.RED_ROOF_EDGE_PLANKS_1_4_RIGHT.toStack())
+        )
+    );
+    public static final AdditionalComponent RED_ROOF_EDGE_PLANKS_1_2_RIGHT = (AdditionalComponent) register
+    (
+        new QuarterOrientedFloor
+        (
+        "red_roof_edge_planks_1_2_right",
+        Type.BAKED_MODEL,
+        AdditionalModels.RED_ROOF_EDGE_PLANKS_1_2_RIGHT,
+        Shapes.or(Shapes.box(0.25, -0.3125, 0.5625, 0.5, 0.125, 0.75), Shapes.box(0.5, -0.3125, 0.5625, 0.75, 0.25, 0.75), Shapes.box(0.75, -0.1875, 0.5625, 1, 0.25, 0.75)),
+        Blocks.RED_WOOD_COMPONENT,
+        List.of(Items.RED_ROOF_EDGE_PLANKS_1_2_RIGHT.toStack())
+        )
+    );
+    public static final AdditionalComponent RED_ROOF_EDGE_PLANKS_1_1_RIGHT = (AdditionalComponent) register
+    (
+        new QuarterOrientedFloor
+        (
+        "red_roof_edge_planks_1_1_right",
+        Type.BAKED_MODEL,
+        AdditionalModels.RED_ROOF_EDGE_PLANKS_1_1_RIGHT,
+        Shapes.or(Shapes.box(0.25, -0.1875, 0.5625, 0.5, 0.25, 0.75), Shapes.box(0.5, -0.1875, 0.5625, 0.75, 0.5, 0.75), Shapes.box(0.75, 0.0625, 0.5625, 1, 0.5, 0.75)),
+        Blocks.RED_WOOD_COMPONENT,
+        List.of(Items.RED_ROOF_EDGE_PLANKS_1_1_RIGHT.toStack())
         )
     );
     public static final BuildingComponent CYPRESS_ROOF_HALF = register

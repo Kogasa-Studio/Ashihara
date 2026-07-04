@@ -70,10 +70,14 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation RED_HANGING_FISH_PIG_EYE = register("block/components/red_hanging_fish_pig_eye");
     public static final BuildingComponentModelResourceLocation GOLD_PIN_FIN = register("block/components/gold_pin_fin");
     public static final BuildingComponentModelResourceLocation GOLD_ROOF_EDGE_PLANKS_DECORATION = register("block/components/gold_roof_edge_planks_decoration");
-    public static final BuildingComponentModelResourceLocation RED_ROOF_EDGE_PLANKS = register("block/components/red_roof_edge_planks");
-    public static final BuildingComponentModelResourceLocation RED_ROOF_EDGE_PLANKS_1_4 = register("block/components/red_roof_edge_planks_1_4");
-    public static final BuildingComponentModelResourceLocation RED_ROOF_EDGE_PLANKS_1_2 = register("block/components/red_roof_edge_planks_1_2");
-    public static final BuildingComponentModelResourceLocation RED_ROOF_EDGE_PLANKS_1_1 = register("block/components/red_roof_edge_planks_1_1");
+    public static final BuildingComponentModelResourceLocation RED_ROOF_EDGE_PLANKS_LEFT = register("block/components/red_roof_edge_planks_left");
+    public static final BuildingComponentModelResourceLocation RED_ROOF_EDGE_PLANKS_1_1_LEFT = register("block/components/red_roof_edge_planks_1_1_left");
+    public static final BuildingComponentModelResourceLocation RED_ROOF_EDGE_PLANKS_1_2_LEFT = register("block/components/red_roof_edge_planks_1_2_left");
+    public static final BuildingComponentModelResourceLocation RED_ROOF_EDGE_PLANKS_1_4_LEFT = register("block/components/red_roof_edge_planks_1_4_left");
+    public static final BuildingComponentModelResourceLocation RED_ROOF_EDGE_PLANKS_RIGHT = register("block/components/red_roof_edge_planks_right");
+    public static final BuildingComponentModelResourceLocation RED_ROOF_EDGE_PLANKS_1_1_RIGHT = register("block/components/red_roof_edge_planks_1_1_right");
+    public static final BuildingComponentModelResourceLocation RED_ROOF_EDGE_PLANKS_1_2_RIGHT = register("block/components/red_roof_edge_planks_1_2_right");
+    public static final BuildingComponentModelResourceLocation RED_ROOF_EDGE_PLANKS_1_4_RIGHT = register("block/components/red_roof_edge_planks_1_4_right");
 
     public static final BuildingComponentModelResourceLocation GREEN_STRAIGHT_BAR_WINDOW = register("block/components/green_straight_bar_window");
     public static final BuildingComponentModelResourceLocation GREEN_STRAIGHT_BAR_WINDOW_QUARTER = register("block/components/green_straight_bar_window_quarter");
