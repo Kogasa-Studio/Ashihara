@@ -1359,6 +1359,78 @@ public class BuildingComponents
         List.of(Items.CYPRESS_ROOF_TOP.toStack())
         )
     );
+    public static final BuildingComponent SPRUCE_SACRED_FENCE = register
+    (
+        new OrientedFloor
+        (
+        "spruce_sacred_fence",
+        Type.BAKED_MODEL,
+        AdditionalModels.SPRUCE_SACRED_FENCE,
+        Shapes.or(Shapes.box(0, 0, 0.40625, 1, 0.125, 0.59375), Shapes.box(0, 0.125, 0.4375, 1, 1, 0.5625)),
+        Blocks.SPRUCE_WOOD_COMPONENT,
+        List.of(Items.SPRUCE_SACRED_FENCE.toStack())
+        )
+    );
+    public static final BuildingComponent SPRUCE_SACRED_FENCE_HALF = register
+    (
+        new SideHalfOrientedFloor
+        (
+        "spruce_sacred_fence_half",
+        Type.BAKED_MODEL,
+        AdditionalModels.SPRUCE_SACRED_FENCE_HALF,
+        Shapes.or(Shapes.box(0.25, 0, 0.40625, 0.75, 0.125, 0.59375), Shapes.box(0.25, 0.125, 0.4375, 0.75, 1, 0.5625)),
+        Blocks.SPRUCE_WOOD_COMPONENT,
+        List.of(Items.SPRUCE_SACRED_FENCE_HALF.toStack())
+        )
+    );
+    public static final BuildingComponent SPRUCE_SACRED_FENCE_PILLAR = register
+    (
+        new OrientedFloor
+        (
+        "spruce_sacred_fence_pillar",
+        Type.BAKED_MODEL,
+        AdditionalModels.SPRUCE_SACRED_FENCE_PILLAR,
+        Shapes.or(Shapes.box(0.4, 0, 0.4, 0.6, 0.13125, 0.6), Shapes.box(0.40625, 0.125, 0.40625, 0.59375, 1, 0.59375)),
+        Blocks.SPRUCE_WOOD_COMPONENT,
+        List.of(Items.SPRUCE_SACRED_FENCE_PILLAR.toStack())
+        )
+    );
+    public static final BuildingComponent RED_SACRED_FENCE = register
+    (
+        new OrientedFloor
+        (
+        "red_sacred_fence",
+        Type.BAKED_MODEL,
+        AdditionalModels.RED_SACRED_FENCE,
+        Shapes.or(Shapes.box(0, 0, 0.40625, 1, 0.125, 0.59375), Shapes.box(0, 0.125, 0.4375, 1, 1.125, 0.5625)),
+        Blocks.RED_WOOD_COMPONENT,
+        List.of(Items.RED_SACRED_FENCE.toStack())
+        )
+    );
+    public static final BuildingComponent RED_SACRED_FENCE_HALF = register
+    (
+        new SideHalfOrientedFloor
+        (
+        "red_sacred_fence_half",
+        Type.BAKED_MODEL,
+        AdditionalModels.RED_SACRED_FENCE_HALF,
+        Shapes.or(Shapes.box(0.25, 0, 0.40625, 0.75, 0.125, 0.59375), Shapes.box(0.25, 0.125, 0.4375, 0.75, 1, 0.5625)),
+        Blocks.RED_WOOD_COMPONENT,
+        List.of(Items.RED_SACRED_FENCE_HALF.toStack())
+        )
+    );
+    public static final BuildingComponent RED_SACRED_FENCE_PILLAR = register
+    (
+        new OrientedFloor
+        (
+        "red_sacred_fence_pillar",
+        Type.BAKED_MODEL,
+        AdditionalModels.RED_SACRED_FENCE_PILLAR,
+        Shapes.or(Shapes.box(0.4, 0, 0.4, 0.6, 0.13125, 0.6), Shapes.box(0.40625, 0.125, 0.40625, 0.59375, 1, 0.59375)),
+        Blocks.RED_WOOD_COMPONENT,
+        List.of(Items.RED_SACRED_FENCE_PILLAR.toStack())
+        )
+    );
     public static final BuildingComponent FLAT_TERRACOTTA_TILE_ROOF = register
     (
         new OrientedFloor

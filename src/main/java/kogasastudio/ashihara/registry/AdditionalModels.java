@@ -80,6 +80,12 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation RED_ROOF_EDGE_PLANKS_1_2_RIGHT = register("block/components/red_roof_edge_planks_1_2_right");
     public static final BuildingComponentModelResourceLocation RED_ROOF_EDGE_PLANKS_1_4_RIGHT = register("block/components/red_roof_edge_planks_1_4_right");
 
+    public static final BuildingComponentModelResourceLocation RED_SACRED_FENCE_PILLAR = register("block/components/red_sacred_fence_pillar");
+    public static final BuildingComponentModelResourceLocation RED_SACRED_FENCE_HALF = register("block/components/red_sacred_fence_half");
+    public static final BuildingComponentModelResourceLocation RED_SACRED_FENCE = register("block/components/red_sacred_fence");
+    public static final BuildingComponentModelResourceLocation SPRUCE_SACRED_FENCE_PILLAR = register("block/components/spruce_sacred_fence_pillar");
+    public static final BuildingComponentModelResourceLocation SPRUCE_SACRED_FENCE_HALF = register("block/components/spruce_sacred_fence_half");
+    public static final BuildingComponentModelResourceLocation SPRUCE_SACRED_FENCE = register("block/components/spruce_sacred_fence");
     public static final BuildingComponentModelResourceLocation GREEN_STRAIGHT_BAR_WINDOW = register("block/components/green_straight_bar_window");
     public static final BuildingComponentModelResourceLocation GREEN_STRAIGHT_BAR_WINDOW_QUARTER = register("block/components/green_straight_bar_window_quarter");
     public static final BuildingComponentModelResourceLocation GREEN_STRAIGHT_BAR_WINDOW_ALL = register("block/components/green_straight_bar_window_all");
