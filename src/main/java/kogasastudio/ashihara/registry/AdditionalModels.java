@@ -85,6 +85,9 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation RED_SACRED_FENCE = register("block/components/red_sacred_fence");
     public static final BuildingComponentModelResourceLocation SPRUCE_SACRED_FENCE_PILLAR = register("block/components/spruce_sacred_fence_pillar");
     public static final BuildingComponentModelResourceLocation SPRUCE_SACRED_FENCE_HALF = register("block/components/spruce_sacred_fence_half");
+    public static final BuildingComponentModelResourceLocation STONE_SACRED_FENCE = register("block/components/stone_sacred_fence");
+    public static final BuildingComponentModelResourceLocation STONE_SACRED_FENCE_HALF = register("block/components/stone_sacred_fence_half");
+    public static final BuildingComponentModelResourceLocation STONE_SACRED_FENCE_PILLAR = register("block/components/stone_sacred_fence_pillar");
     public static final BuildingComponentModelResourceLocation SPRUCE_SACRED_FENCE = register("block/components/spruce_sacred_fence");
     public static final BuildingComponentModelResourceLocation GREEN_STRAIGHT_BAR_WINDOW = register("block/components/green_straight_bar_window");
     public static final BuildingComponentModelResourceLocation GREEN_STRAIGHT_BAR_WINDOW_QUARTER = register("block/components/green_straight_bar_window_quarter");

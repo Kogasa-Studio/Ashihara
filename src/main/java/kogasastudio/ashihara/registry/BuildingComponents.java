@@ -1431,6 +1431,42 @@ public class BuildingComponents
         List.of(Items.RED_SACRED_FENCE_PILLAR.toStack())
         )
     );
+    public static final BuildingComponent STONE_SACRED_FENCE = register
+    (
+        new OrientedFloor
+        (
+        "stone_sacred_fence",
+        Type.BAKED_MODEL,
+        AdditionalModels.STONE_SACRED_FENCE,
+        Shapes.or(Shapes.box(0, 0.625, 0.375, 1, 0.8125, 0.625), Shapes.box(0, 0, 0.375, 1, 0.1875, 0.625), Shapes.box(0, 0.1875, 0.421875, 1, 0.625, 0.578125)),
+        Blocks.STONE_COMPONENT,
+        List.of(Items.STONE_SACRED_FENCE.toStack())
+        )
+    );
+    public static final BuildingComponent STONE_SACRED_FENCE_HALF = register
+    (
+        new SideHalfOrientedFloor
+        (
+        "stone_sacred_fence_half",
+        Type.BAKED_MODEL,
+        AdditionalModels.STONE_SACRED_FENCE_HALF,
+        Shapes.or(Shapes.box(0.25, 0.625, 0.375, 0.75, 0.8125, 0.625), Shapes.box(0.25, 0, 0.375, 0.75, 0.1875, 0.625), Shapes.box(0.25, 0.1875, 0.421875, 0.75, 0.625, 0.578125)),
+        Blocks.STONE_COMPONENT,
+        List.of(Items.STONE_SACRED_FENCE_HALF.toStack())
+        )
+    );
+    public static final BuildingComponent STONE_SACRED_FENCE_PILLAR = register
+    (
+        new OrientedFloor
+        (
+        "stone_sacred_fence_pillar",
+        Type.BAKED_MODEL,
+        AdditionalModels.STONE_SACRED_FENCE_PILLAR,
+        Shapes.box(0.375, 0, 0.375, 0.625, 0.875, 0.625),
+        Blocks.STONE_COMPONENT,
+        List.of(Items.STONE_SACRED_FENCE_PILLAR.toStack())
+        )
+    );
     public static final BuildingComponent FLAT_TERRACOTTA_TILE_ROOF = register
     (
         new OrientedFloor

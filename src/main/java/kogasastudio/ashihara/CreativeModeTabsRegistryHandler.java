@@ -201,6 +201,9 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.RED_SACRED_FENCE.get());
                                         output.accept(Items.SPRUCE_SACRED_FENCE_PILLAR.get());
                                         output.accept(Items.SPRUCE_SACRED_FENCE_HALF.get());
+                                        output.accept(Items.STONE_SACRED_FENCE.get());
+                                        output.accept(Items.STONE_SACRED_FENCE_HALF.get());
+                                        output.accept(Items.STONE_SACRED_FENCE_PILLAR.get());
                                         output.accept(Items.SPRUCE_SACRED_FENCE.get());
                                         output.accept(Items.CYPRESS_ROOF_EDGE_CORNER.get());
                                         output.accept(Items.CYPRESS_ROOF_EDGE_LAYER_BOTTOM.get());

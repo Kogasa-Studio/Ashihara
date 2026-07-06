@@ -1,0 +1,6 @@
+{
+  "parent": "ashihara:block/components/templates/stone_sacred_fence",
+  "textures": {
+    "wood": "ashihara:block/components/stone_sacred_fence"
+  }
+}
