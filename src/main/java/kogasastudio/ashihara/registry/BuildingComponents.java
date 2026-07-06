@@ -1441,7 +1441,7 @@ public class BuildingComponents
         Shapes.or(Shapes.box(0, 0.625, 0.375, 1, 0.8125, 0.625), Shapes.box(0, 0, 0.375, 1, 0.1875, 0.625), Shapes.box(0, 0.1875, 0.421875, 1, 0.625, 0.578125)),
         Blocks.STONE_COMPONENT,
         List.of(Items.STONE_SACRED_FENCE.toStack())
-        )
+        ).setSound(SoundType.STONE)
     );
     public static final BuildingComponent STONE_SACRED_FENCE_HALF = register
     (
@@ -1453,7 +1453,7 @@ public class BuildingComponents
         Shapes.or(Shapes.box(0.25, 0.625, 0.375, 0.75, 0.8125, 0.625), Shapes.box(0.25, 0, 0.375, 0.75, 0.1875, 0.625), Shapes.box(0.25, 0.1875, 0.421875, 0.75, 0.625, 0.578125)),
         Blocks.STONE_COMPONENT,
         List.of(Items.STONE_SACRED_FENCE_HALF.toStack())
-        )
+        ).setSound(SoundType.STONE)
     );
     public static final BuildingComponent STONE_SACRED_FENCE_PILLAR = register
     (
@@ -1465,7 +1465,7 @@ public class BuildingComponents
         Shapes.box(0.375, 0, 0.375, 0.625, 0.875, 0.625),
         Blocks.STONE_COMPONENT,
         List.of(Items.STONE_SACRED_FENCE_PILLAR.toStack())
-        )
+        ).setSound(SoundType.STONE)
     );
     public static final BuildingComponent FLAT_TERRACOTTA_TILE_ROOF = register
     (
