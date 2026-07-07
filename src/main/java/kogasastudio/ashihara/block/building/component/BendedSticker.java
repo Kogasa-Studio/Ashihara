@@ -75,12 +75,20 @@ public class BendedSticker extends AdditionalComponent
         double z;
         if (direction.getAxis().equals(Direction.Axis.Z))
         {
-            z = inBlockPos.z() <= XTP(8) ? 0 : XTP(8);
+            if (inBlockPos.z() <= 0.5)
+            {
+                z = direction == Direction.NORTH ? -0.5 : 0;
+            }
+            else z = direction == Direction.NORTH ? 0 : 0.5;
             x = 0;
         }
         else
         {
-            x = inBlockPos.x() <= XTP(8) ? XTP(0) : XTP(8);
+            if (inBlockPos.x() <= 0.5)
+            {
+                x = direction == Direction.WEST ? -0.5 : 0;
+            }
+            else x = direction == Direction.WEST ? 0 : 0.5;
             z = 0;
         }
 

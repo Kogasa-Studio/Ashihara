@@ -163,8 +163,8 @@ public class MixinBlockTransformExtent
     private static double[] fixNeg(double min, double max)
     {
         double mid = (min + max) / 2.0;
-        if (mid < 0.0) { min += 1.0; max += 1.0; }
-        else if (mid > 1.0) { min -= 1.0; max -= 1.0; }
+        if (min < 0.0 || max < 0.0) { min += 1.0; max += 1.0; }
+        else if (min > 1.0 || max > 1.0) { min -= 1.0; max -= 1.0; }
         return new double[]{min, max};
     }
 
