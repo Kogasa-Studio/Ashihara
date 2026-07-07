@@ -63,6 +63,7 @@ public class MixinBlockTransformExtent
         return out.build();
     }
     private static final String[] L = {"models","additional_models","furniture"};
+    // rotationY is always computed from the transform; never reset for any component type.
 
     @SuppressWarnings({"unchecked","rawtypes"})
     private static LinListTag<?> tList(Object t, double a,double b,double c,double d,boolean flip)
@@ -145,8 +146,8 @@ public class MixinBlockTransformExtent
             rotCorner(x1, z0, a, b, c, d, xs, zs, 2); rotCorner(x1, z1, a, b, c, d, xs, zs, 3);
             var sb = LinCompoundTag.builder();
             sb.putDouble("y0", dv(bt, "y0"));
-            double[] xr = fixNeg(min4(xs), max4(xs));
-            double[] zr = fixNeg(min4(zs), max4(zs));
+            double[] xr = shiftAxis(min4(xs), max4(xs), a, b);
+            double[] zr = shiftAxis(min4(zs), max4(zs), c, d);
             sb.putDouble("x0", xr[0]); sb.putDouble("z0", zr[0]);
             sb.putDouble("y1", dv(bt, "y1"));
             sb.putDouble("x1", xr[1]); sb.putDouble("z1", zr[1]);
@@ -160,12 +161,17 @@ public class MixinBlockTransformExtent
         xs[i]=x*a+z*b; zs[i]=x*c+z*d;
     }
 
-    private static double[] fixNeg(double min, double max)
+    /**
+     * After rotating shape corners around (0,0), apply a shift to recenter them.
+     * Most base shapes are centered at (0.5, 0.5), so rotating around (0,0) moves
+     * the center. This shift puts it back.
+     * shift = 0.5*(1 - a - b) for x axis (a,b from rotation matrix).
+     * For 90\u00b0 CW (a=0,b=-1): shift_x = 0.5*(1-0-(-1)) = 1.0
+     */
+    private static double[] shiftAxis(double min, double max, double a, double b)
     {
-        double mid = (min + max) / 2.0;
-        if (min < 0.0 || max < 0.0) { min += 1.0; max += 1.0; }
-        else if (min > 1.0 || max > 1.0) { min -= 1.0; max -= 1.0; }
-        return new double[]{min, max};
+        double shift = 0.5 * (1.0 - a - b);
+        return new double[]{min + shift, max + shift};
     }
 
     private static double dv(LinCompoundTag t,String k) {
