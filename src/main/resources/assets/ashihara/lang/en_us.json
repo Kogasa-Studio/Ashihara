@@ -421,5 +421,14 @@
   "item.ashihara.red_thin_rafter_1_4": "Red Thin Rafter Slope 1:4",
   "item.ashihara.spruce_rafter_planks_1_4": "Spruce Rafter Planks (1:4)",
   "item.ashihara.white_rafter_planks_1_4": "White Rafter Planks (1:4)",
-  "item.ashihara.cypress_roof_half_1_4": "Half Cypress Skin Roof Slope 1:4"
+  "item.ashihara.cypress_roof_half_1_4": "Half Cypress Skin Roof Slope 1:4",
+  "item.ashihara.red_advanced_fence_full": "Red Advanced Fence",
+  "item.ashihara.red_advanced_fence_1_1": "Red Sloped Fence (1:1)",
+  "item.ashihara.red_advanced_fence_1_2": "Red Sloped Fence (1:2)",
+  "item.ashihara.red_advanced_fence_1_4": "Red Sloped Fence (1:4)",
+  "item.ashihara.red_advanced_fence_half": "Red Half Advanced Fence",
+  "item.ashihara.red_advanced_fence_tail": "Red Advanced Fence Tail",
+  "item.ashihara.red_advanced_fence_pillar": "Red Advanced Fence Pillar",
+  "item.ashihara.red_advanced_fence_pillar_short": "Red Short Fence Pillar",
+  "item.ashihara.red_advanced_fence_pillar_thick": "Red Thick Fence Pillar"
 }

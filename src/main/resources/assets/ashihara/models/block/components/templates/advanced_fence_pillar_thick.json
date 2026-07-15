@@ -1,0 +1,34 @@
+﻿{
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"2": "#wood",
+		"1": "#top",
+		"particle": "ashihara:block/components/red_beam"
+	},
+	"elements": [
+		{
+			"from": [4, 0, 4],
+			"to": [12, 16, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, -6, 0]},
+			"faces": {
+				"north": {"uv": [4, 0, 12, 16], "texture": "#particle"},
+				"east": {"uv": [4, 0, 12, 16], "texture": "#particle"},
+				"south": {"uv": [4, 0, 12, 16], "texture": "#particle"},
+				"west": {"uv": [4, 0, 12, 16], "texture": "#particle"},
+				"up": {"uv": [4, 4, 12, 12], "rotation": 90, "texture": "#1"},
+				"down": {"uv": [4, 4, 12, 12], "rotation": 90, "texture": "#1"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "group",
+			"origin": [8, 8, 8],
+			"scope": 0,
+			"color": 0,
+			"children": [0]
+		}
+	]
+}

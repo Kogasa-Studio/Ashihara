@@ -1,0 +1,7 @@
+{
+  "parent": "ashihara:block/components/templates/advanced_fence_1_1",
+  "textures": {
+    "wood": "ashihara:block/components/red_advanced_fence",
+    "particle": "ashihara:block/components/red_beam"
+  }
+}

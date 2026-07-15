@@ -208,6 +208,17 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation ONI_TILE_1 = register("block/components/oni_tile_1");
     public static final BuildingComponentModelResourceLocation ONI_TILE_1_OBLIQUE = register("block/components/oni_tile_1_oblique");
 
+    // Advanced Fence
+    public static final BuildingComponentModelResourceLocation RED_ADVANCED_FENCE_1_1 = register("block/components/red_advanced_fence_1_1");
+    public static final BuildingComponentModelResourceLocation RED_ADVANCED_FENCE_1_2 = register("block/components/red_advanced_fence_1_2");
+    public static final BuildingComponentModelResourceLocation RED_ADVANCED_FENCE_1_4 = register("block/components/red_advanced_fence_1_4");
+    public static final BuildingComponentModelResourceLocation RED_ADVANCED_FENCE_FULL = register("block/components/red_advanced_fence_full");
+    public static final BuildingComponentModelResourceLocation RED_ADVANCED_FENCE_HALF = register("block/components/red_advanced_fence_half");
+    public static final BuildingComponentModelResourceLocation RED_ADVANCED_FENCE_TAIL = register("block/components/red_advanced_fence_tail");
+    public static final BuildingComponentModelResourceLocation RED_ADVANCED_FENCE_PILLAR = register("block/components/red_advanced_fence_pillar");
+    public static final BuildingComponentModelResourceLocation RED_ADVANCED_FENCE_PILLAR_SHORT = register("block/components/red_advanced_fence_pillar_short");
+    public static final BuildingComponentModelResourceLocation RED_ADVANCED_FENCE_PILLAR_THICK = register("block/components/red_advanced_fence_pillar_thick");
+
     // Furniture
     public static final BuildingComponentModelResourceLocation WOODEN_BOWL_MID = register("block/furnitures/bowl_mid");
     public static final BuildingComponentModelResourceLocation WOODEN_BOWL_BIG = register("block/furnitures/bowl_big");

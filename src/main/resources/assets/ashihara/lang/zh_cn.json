@@ -415,5 +415,14 @@
   "item.ashihara.red_thin_rafter_1_4": "细朱木椽（斜度：1:4）",
   "item.ashihara.spruce_rafter_planks_1_4": "素木屋顶栈板（斜度：1:4）",
   "item.ashihara.white_rafter_planks_1_4": "涂白屋顶栈板（斜度：1:4）",
-  "item.ashihara.cypress_roof_half_1_4": "半桧皮葺屋顶（斜度：1:4）"
+  "item.ashihara.cypress_roof_half_1_4": "半桧皮葺屋顶（斜度：1:4）",
+  "item.ashihara.red_advanced_fence_full": "朱木勾栏",
+  "item.ashihara.red_advanced_fence_1_1": "倾斜朱木勾栏（斜度：1:1）",
+  "item.ashihara.red_advanced_fence_1_2": "倾斜朱木勾栏（斜度：1:2）",
+  "item.ashihara.red_advanced_fence_1_4": "倾斜朱木勾栏（斜度：1:4）",
+  "item.ashihara.red_advanced_fence_half": "半朱木勾栏",
+  "item.ashihara.red_advanced_fence_tail": "朱木勾栏出头",
+  "item.ashihara.red_advanced_fence_pillar": "朱木勾栏柱",
+  "item.ashihara.red_advanced_fence_pillar_short": "短朱木勾栏柱",
+  "item.ashihara.red_advanced_fence_pillar_thick": "粗朱木勾栏柱"
 }

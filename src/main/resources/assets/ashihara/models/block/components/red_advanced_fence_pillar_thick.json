@@ -1,0 +1,8 @@
+{
+  "parent": "ashihara:block/components/templates/advanced_fence_pillar_thick",
+  "textures": {
+    "wood": "ashihara:block/components/red_advanced_fence",
+    "top": "ashihara:block/components/column_thick_red_top",
+    "particle": "ashihara:block/components/red_beam"
+  }
+}

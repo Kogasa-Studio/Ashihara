@@ -1942,6 +1942,115 @@ public class BuildingComponents
         ).setSound(SoundType.LANTERN)
     );
 
+    // Advanced Fence
+    public static final BuildingComponent RED_ADVANCED_FENCE_1_1 = register
+    (
+        new OrientedHalfFloor
+        (
+        "red_advanced_fence_1_1",
+        Type.BAKED_MODEL,
+        AdditionalModels.RED_ADVANCED_FENCE_1_1,
+        Shapes.or(Shapes.box(0.3125, 0, 0.125, 0.6875, 1.125, 0.4375), Shapes.box(0.3125, 0.25, 0.4375, 0.6875, 1.375, 0.75)),
+        Blocks.RED_WOOD_COMPONENT,
+        List.of(Items.RED_ADVANCED_FENCE_1_1.toStack())
+        )
+    );
+    public static final BuildingComponent RED_ADVANCED_FENCE_1_2 = register
+    (
+        new OrientedHalfFloor
+        (
+        "red_advanced_fence_1_2",
+        Type.BAKED_MODEL,
+        AdditionalModels.RED_ADVANCED_FENCE_1_2,
+        Shapes.or(Shapes.box(0.3125, 0, 0.125, 0.4375, 0.25, 0.5625), Shapes.box(0.3125, 0.1875, 0.3125, 0.4375, 0.4375, 0.75), Shapes.box(0.3125, 0.375, 0.125, 0.4375, 0.625, 0.5625), Shapes.box(0.3125, 0.5625, 0.3125, 0.4375, 0.8125, 0.75), Shapes.box(0.3125, 0.9375, 0.3125, 0.4375, 1.1875, 0.75), Shapes.box(0.3125, 0.75, 0.125, 0.4375, 1, 0.5625)),
+        Blocks.RED_WOOD_COMPONENT,
+        List.of(Items.RED_ADVANCED_FENCE_1_2.toStack())
+        )
+    );
+    public static final BuildingComponent RED_ADVANCED_FENCE_1_4 = register
+    (
+        new OrientedFloor
+        (
+        "red_advanced_fence_1_4",
+        Type.BAKED_MODEL,
+        AdditionalModels.RED_ADVANCED_FENCE_1_4,
+        Shapes.or(Shapes.box(0.3125, 0, 0, 0.6875, 0.3125, 0.5), Shapes.box(0.3125, 0.125, 0.5, 0.6875, 0.4375, 1), Shapes.box(0.3125, 0.5, 0.5, 0.6875, 0.8125, 1), Shapes.box(0.3125, 0.375, 0, 0.6875, 0.6875, 0.5), Shapes.box(0.40625, 0.75, 0, 0.59375, 1.0625, 0.5), Shapes.box(0.40625, 0.875, 0.5, 0.59375, 1.1875, 1)),
+        Blocks.RED_WOOD_COMPONENT,
+        List.of(Items.RED_ADVANCED_FENCE_1_4.toStack())
+        )
+    );
+    public static final BuildingComponent RED_ADVANCED_FENCE_FULL = register
+    (
+        new OrientedFloor
+        (
+        "red_advanced_fence_full",
+        Type.BAKED_MODEL,
+        AdditionalModels.RED_ADVANCED_FENCE_FULL,
+        Shapes.or(Shapes.box(0.40625, 0.75, 0, 0.59375, 0.9375, 1), Shapes.box(0.3125, 0.375, 0, 0.6875, 0.5625, 1), Shapes.box(0.3125, 0, 0, 0.6875, 0.1875, 1)),
+        Blocks.RED_WOOD_COMPONENT,
+        List.of(Items.RED_ADVANCED_FENCE_FULL.toStack())
+        )
+    );
+    public static final BuildingComponent RED_ADVANCED_FENCE_HALF = register
+    (
+        new OrientedHalfFloor
+        (
+        "red_advanced_fence_half",
+        Type.BAKED_MODEL,
+        AdditionalModels.RED_ADVANCED_FENCE_HALF,
+        Shapes.or(Shapes.box(0.40625, 0.75, 0.25, 0.59375, 0.9375, 0.75), Shapes.box(0.3125, 0.375, 0.25, 0.6875, 0.5625, 0.75), Shapes.box(0.3125, 0, 0.25, 0.6875, 0.1875, 0.75)),
+        Blocks.RED_WOOD_COMPONENT,
+        List.of(Items.RED_ADVANCED_FENCE_HALF.toStack())
+        )
+    );
+    public static final BuildingComponent RED_ADVANCED_FENCE_TAIL = register
+    (
+        new OrientedHalfFloor
+        (
+        "red_advanced_fence_tail",
+        Type.BAKED_MODEL,
+        AdditionalModels.RED_ADVANCED_FENCE_TAIL,
+        Shapes.or(Shapes.box(0.40625, 0.75, -0.0625, 0.59375, 1, 0.75), Shapes.box(0.3125, 0.375, -0.0625, 0.6875, 0.625, 0.75), Shapes.box(0.3125, 0, -0.0625, 0.6875, 0.1875, 0.75)),
+        Blocks.RED_WOOD_COMPONENT,
+        List.of(Items.RED_ADVANCED_FENCE_TAIL.toStack())
+        )
+    );
+    public static final BuildingComponent RED_ADVANCED_FENCE_PILLAR = register
+    (
+        new AdvancedFencePillar
+        (
+        "red_advanced_fence_pillar",
+        Type.BAKED_MODEL,
+        AdditionalModels.RED_ADVANCED_FENCE_PILLAR,
+        Shapes.box(0.375, 0, 0.375, 0.625, 0.71875, 0.625),
+        Blocks.RED_WOOD_COMPONENT,
+        List.of(Items.RED_ADVANCED_FENCE_PILLAR.toStack())
+        )
+    );
+    public static final BuildingComponent RED_ADVANCED_FENCE_PILLAR_SHORT = register
+    (
+        new AdvancedFencePillar
+        (
+        "red_advanced_fence_pillar_short",
+        Type.BAKED_MODEL,
+        AdditionalModels.RED_ADVANCED_FENCE_PILLAR_SHORT,
+        Shapes.box(0.375, 0, 0.375, 0.625, 0.3125, 0.625),
+        Blocks.RED_WOOD_COMPONENT,
+        List.of(Items.RED_ADVANCED_FENCE_PILLAR_SHORT.toStack())
+        )
+    );
+    public static final BuildingComponent RED_ADVANCED_FENCE_PILLAR_THICK = register
+    (
+        new AdvancedFencePillar
+        (
+        "red_advanced_fence_pillar_thick",
+        Type.BAKED_MODEL,
+        AdditionalModels.RED_ADVANCED_FENCE_PILLAR_THICK,
+        Shapes.box(0.25, 0, 0.25, 0.75, 1, 0.75),
+        Blocks.RED_WOOD_COMPONENT,
+        List.of(Items.RED_ADVANCED_FENCE_PILLAR_THICK.toStack())
+        )
+    );
     static
     {
         for (Type type : Type.values())
