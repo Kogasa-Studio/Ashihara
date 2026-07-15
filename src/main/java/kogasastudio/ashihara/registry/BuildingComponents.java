@@ -1962,7 +1962,7 @@ public class BuildingComponents
         "red_advanced_fence_1_2",
         Type.BAKED_MODEL,
         AdditionalModels.RED_ADVANCED_FENCE_1_2,
-        Shapes.or(Shapes.box(0.3125, 0, 0.125, 0.4375, 0.25, 0.5625), Shapes.box(0.3125, 0.1875, 0.3125, 0.4375, 0.4375, 0.75), Shapes.box(0.3125, 0.375, 0.125, 0.4375, 0.625, 0.5625), Shapes.box(0.3125, 0.5625, 0.3125, 0.4375, 0.8125, 0.75), Shapes.box(0.3125, 0.9375, 0.3125, 0.4375, 1.1875, 0.75), Shapes.box(0.3125, 0.75, 0.125, 0.4375, 1, 0.5625)),
+        Shapes.or(Shapes.box(0.3125, 0, 0.125, 0.6875, 0.3125, 0.5), Shapes.box(0.3125, 0.125, 0.4375, 0.6875, 0.4375, 0.8125), Shapes.box(0.3125, 0.375, 0.125, 0.6875, 0.6875, 0.5), Shapes.box(0.3125, 0.5, 0.4375, 0.6875, 0.8125, 0.8125), Shapes.box(0.40625, 0.75, 0.125, 0.59375, 1.0625, 0.5), Shapes.box(0.40625, 0.875, 0.4375, 0.59375, 1.1875, 0.8125)),
         Blocks.RED_WOOD_COMPONENT,
         List.of(Items.RED_ADVANCED_FENCE_1_2.toStack())
         )
