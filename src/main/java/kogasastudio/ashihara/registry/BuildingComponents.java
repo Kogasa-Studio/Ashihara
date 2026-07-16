@@ -24,7 +24,7 @@ public class BuildingComponents
         Type.BAKED_MODEL,
         AdditionalModels.RED_THICK_COLUMN,
         Blocks.RED_WOOD_COMPONENT,
-        List.of(Items.RED_THICK_COLUMN.toStack())
+            List.of(Items.MULTI_RED_THICK_COLUMN.toStack())
         )
     );
     public static final BuildingComponent RED_THICK_COLUMN_SHORT = register
@@ -179,7 +179,7 @@ public class BuildingComponents
         Items.RED_HIJIKI_CORNER_NORMAL::toStack,
         Blocks.RED_WOOD_COMPONENT,
         List.of(Items.RED_HIJIKI_CORNER_NORMAL.toStack())//
-        )
+        ).setComplexShape(true)
     );
     public static final BuildingComponent RED_HIJIKI_CORNER_LONG = register
     (
@@ -200,7 +200,7 @@ public class BuildingComponents
         Items.RED_HIJIKI_CORNER_LONG::toStack,
         Blocks.RED_WOOD_COMPONENT,
         List.of(Items.RED_HIJIKI_CORNER_LONG.toStack())//
-        )
+        ).setComplexShape(true)
     );
     public static final BuildingComponent RED_TOU = register
     (
@@ -529,7 +529,7 @@ public class BuildingComponents
         RED_HANGING_STICKER_END_CORNER,
         Blocks.RED_WOOD_COMPONENT,
         List.of(Items.RED_HANGING_STICKER_CORNER.toStack())
-        )
+        ).setComplexShape(true)
     );
     public static final BuildingComponent RED_PLANKS_FLOOR = register
         (

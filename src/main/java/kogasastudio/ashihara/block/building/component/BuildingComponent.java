@@ -22,6 +22,7 @@ public abstract class BuildingComponent
 
     public final Supplier<BaseMultiBuiltBlock> material;
     public SoundType sound;
+    public boolean complexShape = false;
 
     public float getxMaxRange() {return xMaxRange;}
     public float getxMinRange() {return xMinRange;}
@@ -72,7 +73,13 @@ public abstract class BuildingComponent
     @Nullable
     public VoxelShape getBaseShape() { return null; }
 
-    public boolean isComplexShape() {return false;}
+    public boolean isComplexShape() {return complexShape;}
+
+    public BuildingComponent setComplexShape(boolean complexShapeIn)
+    {
+        this.complexShape = complexShapeIn;
+        return this;
+    }
 
     /**
      * Rebuild shape from stored fields. Override in subclasses whose shape
