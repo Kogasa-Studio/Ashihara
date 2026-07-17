@@ -37,6 +37,16 @@ public class OrientedHalfFloor extends AdditionalComponent
         this.MODEL = model;
         this.SHAPE = shape;
     }
+    @Override
+    public VoxelShape getBaseShape() { return SHAPE; }
+
+    @Override
+    public VoxelShape rebuildShape(Vec3 ibp, float rx, float ry, float rz) {
+        VoxelShape s = ShapeHelper.rotateShape(getBaseShape(), -ry);
+        return ShapeHelper.offsetShape(s, ibp.x, ibp.y, ibp.z);
+    }
+
+
 
     public OrientedHalfFloor
     (

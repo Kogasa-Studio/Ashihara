@@ -55,6 +55,17 @@ public class QuarterWall extends AdditionalComponent implements Interactable
         this.newModel = newModelIn;
         this.soundType = soundType;
     }
+    @Override
+    public VoxelShape getBaseShape() { return SHAPE; }
+
+    @Override
+    public VoxelShape rebuildShape(Vec3 ibp, float rx, float ry, float rz) {
+        double deg = ry == 90.0 ? 90.0 : 0.0;
+        VoxelShape s = ShapeHelper.rotateShape(getBaseShape(), deg);
+        return ShapeHelper.offsetShape(s, ibp.x, ibp.y, ibp.z);
+    }
+
+
 
     public QuarterWall
     (

@@ -28,6 +28,10 @@ public class ShortColumn extends BuildingComponent
         this.MODEL = modelIn;
         this.SHAPE = Block.box(3d, 0d, 3d, 13d, 8d, 13d);
     }
+    @Override
+    public VoxelShape getBaseShape() { return SHAPE; }
+
+
 
     public ShortColumn(String idIn, BuildingComponents.Type typeIn, BuildingComponentModelResourceLocation modelIn, VoxelShape shapeIn, Supplier<BaseMultiBuiltBlock> materialIn, List<ItemStack> dropsIn)
     {

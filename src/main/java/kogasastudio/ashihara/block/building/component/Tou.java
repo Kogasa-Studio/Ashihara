@@ -30,6 +30,8 @@ public class Tou extends BuildingComponent
     {
         this.SHAPE = Shapes.box(0.3125, 0, 0.3125, 0.6875, 0.3125, 0.6875);
     }
+    @Override
+    public VoxelShape getBaseShape() { return SHAPE; }
 
     @Override
     public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)

@@ -24,6 +24,15 @@ public class Column extends BuildingComponent
         this.MODEL = modelIn;
         this.SHAPE = Block.box(3d, 0d, 3d, 13d, 16d, 13d);
     }
+    @Override
+    public VoxelShape getBaseShape() { return SHAPE; }
+
+    @Override
+    public VoxelShape rebuildShape(Vec3 ibp, float rx, float ry, float rz) {
+        return getBaseShape();
+    }
+
+
 
     public Column(String idIn, BuildingComponents.Type typeIn, BuildingComponentModelResourceLocation modelIn, VoxelShape shapeIn, Supplier<BaseMultiBuiltBlock> materialIn, List<ItemStack> dropsIn)
     {

@@ -279,17 +279,38 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
     public void reloadShape()
     {
         VoxelShape shape = Shapes.empty();
-        for (ComponentStateDefinition definition : this.COMPONENTS)
+        for (ComponentStateDefinition def : this.COMPONENTS)
         {
-            shape = Shapes.or(shape, definition.shape());
+            if (def.component().getBaseShape() != null)
+            {
+                shape = Shapes.or(shape, def.component().rebuildShape(def.inBlockPos(), def.rotationX(), def.rotationY(), def.rotationZ()));
+            }
+            else
+            {
+                shape = Shapes.or(shape, def.shape());
+            }
         }
-        for (ComponentStateDefinition definition : this.ADDITIONAL_COMPONENTS)
+        for (ComponentStateDefinition def : this.ADDITIONAL_COMPONENTS)
         {
-            shape = Shapes.or(shape, definition.shape());
+            if (def.component().getBaseShape() != null)
+            {
+                shape = Shapes.or(shape, def.component().rebuildShape(def.inBlockPos(), def.rotationX(), def.rotationY(), def.rotationZ()));
+            }
+            else
+            {
+                shape = Shapes.or(shape, def.shape());
+            }
         }
-        for (ComponentStateDefinition definition : this.FURNITURE)
+        for (ComponentStateDefinition def : this.FURNITURE)
         {
-            shape = Shapes.or(shape, definition.shape());
+            if (def.component().getBaseShape() != null)
+            {
+                shape = Shapes.or(shape, def.component().rebuildShape(def.inBlockPos(), def.rotationX(), def.rotationY(), def.rotationZ()));
+            }
+            else
+            {
+                shape = Shapes.or(shape, def.shape());
+            }
         }
         setShape(shape);
     }
@@ -555,8 +576,7 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
             this.FURNITURE.add(ComponentStateDefinition.deserializeNBT(child));
         }
 
-        boolean shapeLoaded = loadShape(input);
-        refresh(!shapeLoaded);
+        refresh(true);
     }
 
     @Override
@@ -580,7 +600,6 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
             ValueOutput o = furnitureListTag.addChild();
             definition.serialize(o);
         }
-        saveShape(output);
         super.saveAdditional(output);
     }
 

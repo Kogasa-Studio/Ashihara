@@ -40,6 +40,16 @@ public class SlopedRoof extends AdditionalComponent
         this.SHAPE = shape;
         this.WIDTH = widthIn;
     }
+    @Override
+    public VoxelShape getBaseShape() { return SHAPE; }
+
+    @Override
+    public VoxelShape rebuildShape(Vec3 ibp, float rx, float ry, float rz) {
+        VoxelShape s = ShapeHelper.rotateShape(getBaseShape(), -ry);
+        return ShapeHelper.offsetShape(s, ibp.x, ibp.y, ibp.z);
+    }
+
+
 
     @Override
     public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)

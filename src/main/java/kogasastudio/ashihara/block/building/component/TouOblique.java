@@ -20,6 +20,8 @@ public class TouOblique extends Tou
     {
         super(idIn, typeIn, modelIn, materialIn, dropsIn);
     }
+    @Override
+    public VoxelShape getBaseShape() { return SHAPE; }
 
     @Override
     protected void initShape()

@@ -37,6 +37,10 @@ public class QuarterFloor extends AdditionalComponent
         this.MODEL = model;
         this.SHAPE = shape;
     }
+    @Override
+    public VoxelShape getBaseShape() { return SHAPE; }
+
+
 
     public QuarterFloor
     (

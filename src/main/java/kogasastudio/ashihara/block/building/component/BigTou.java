@@ -31,6 +31,10 @@ public class BigTou extends BuildingComponent
     {
         this.SHAPE = Shapes.box(0.1875, 0, 0.1875, 0.8125, 0.40625, 0.8125);
     }
+    @Override
+    public VoxelShape getBaseShape() { return SHAPE; }
+
+
 
     @Override
     public ComponentStateDefinition definite(MultiBuiltBlockEntity beIn, UseOnContext context)

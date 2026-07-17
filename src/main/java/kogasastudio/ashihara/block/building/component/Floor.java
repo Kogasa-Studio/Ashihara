@@ -36,6 +36,10 @@ public class Floor extends AdditionalComponent
         this.MODEL = model;
         this.SHAPE = shape;
     }
+    @Override
+    public VoxelShape getBaseShape() { return SHAPE; }
+
+
 
     public Floor
     (

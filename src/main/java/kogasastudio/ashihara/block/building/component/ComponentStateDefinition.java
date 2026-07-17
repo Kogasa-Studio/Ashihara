@@ -44,7 +44,10 @@ public record ComponentStateDefinition(
         output.putFloat("rotationX", rotationX());
         output.putFloat("rotationY", rotationY());
         output.putFloat("rotationZ", rotationZ());
-        ShapeHelper.saveNBT(output, shape());
+        // Skip shape serialization when component can self-reconstruct
+        if (component().getBaseShape() == null) {
+            ShapeHelper.saveNBT(output, shape());
+        }
         ValueOutput.ValueOutputList occupationTag = output.childrenList("occupation");
         for (Occupation occupation : occupation())
         {
