@@ -60,8 +60,7 @@ public class QuarterWall extends AdditionalComponent implements Interactable
 
     @Override
     public VoxelShape rebuildShape(Vec3 ibp, float rx, float ry, float rz) {
-        double deg = ry == 90.0 ? 90.0 : 0.0;
-        VoxelShape s = ShapeHelper.rotateShape(getBaseShape(), deg);
+        VoxelShape s = ShapeHelper.rotateShape(getBaseShape(), (double) ry);
         return ShapeHelper.offsetShape(s, ibp.x, ibp.y, ibp.z);
     }
 
