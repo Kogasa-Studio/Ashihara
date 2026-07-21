@@ -68,6 +68,21 @@ public record ComponentStateDefinition(
     {
         String componentId = input.getStringOr("component", "");
         BuildingComponent component = BuildingComponents.COMPONENTS.get(componentId);
+
+        // BEGIN TEMP COMPAT - cypress_roof <=> cypress_roof_half ID migration
+        // TODO: remove once all worlds/servers have saved once with new IDs
+        if (componentId.equals("cypress_roof"))
+        {
+            ValueInput modelCheck = input.childOrEmpty("model");
+            String modelId = modelCheck.getStringOr("id", "");
+            if (modelId.contains("cypress_roof_half"))
+            {
+                component = BuildingComponents.COMPONENTS.get("cypress_roof_half");
+                if (component == null)
+                    throw new RuntimeException("Compat error: cypress_roof_half component does not exist!");
+            }
+        }
+        // END TEMP COMPAT
         if (component == null) component = FurnitureComponents.COMPONENTS.get(componentId);
         if (component == null)
             throw new RuntimeException("Error loading component: Component \"" + componentId + "\" does not exist!");
