@@ -580,6 +580,9 @@ public class FermentationBlockEntity extends AshiharaCommonBE implements MenuPro
         super.loadAdditional(input);
         input.readChild("inventory", this.inventory);
         input.readChild("fluid", this.fluid);
+        this.prevFluidLevel = this.fluidLevel;
+        this.fluidLevel = (float) this.fluid.getFluidAmount() / (float) this.fluid.getCapacity();
+        this.fluidLevelChanged = true;
         this.fermentTime    = input.getIntOr("fermentTime", 0);
         this.maxFermentTime = input.getIntOr("maxFermentTime", 0);
         this.parallel       = input.getIntOr("parallel", 1);
@@ -641,6 +644,7 @@ public class FermentationBlockEntity extends AshiharaCommonBE implements MenuPro
             this.prevFluidLevel = this.fluidLevel;
             this.fluidLevel = t;
             this.fluidLevelChanged = true;
+            if (this.level != null && !this.level.isClientSide()) this.sync();
         }
         if (this.level != null && !this.level.isClientSide())
         {

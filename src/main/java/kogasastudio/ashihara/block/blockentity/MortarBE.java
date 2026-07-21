@@ -204,6 +204,9 @@ public class MortarBE extends AshiharaCommonBE implements IItemHandler<MortarBE>
         });
         input.readChild("contents", this.inventory);
         input.readChild("fluid",    this.fluidTank);
+        this.prevFluidLevel = this.fluidLevel;
+        this.fluidLevel = (float) this.fluidTank.getFluidAmount() / (float) this.fluidTank.getCapacity();
+        this.fluidLevelChanged = true;
         this.queue = new ConcurrentLinkedDeque<>();
         for (MortarToolType type : input.listOrEmpty("queue", MortarToolType.CODEC))
         {
@@ -282,6 +285,7 @@ public class MortarBE extends AshiharaCommonBE implements IItemHandler<MortarBE>
             this.prevFluidLevel = this.fluidLevel;
             this.fluidLevel = t;
             this.fluidLevelChanged = true;
+            if (this.level != null && !this.level.isClientSide()) this.sync();
         }
         if (this.level != null && !this.level.isClientSide())
         {
