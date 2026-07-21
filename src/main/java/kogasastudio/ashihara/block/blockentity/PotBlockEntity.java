@@ -498,6 +498,9 @@ public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider, II
         input.readChild("inventory", this.inventory);
         input.readChild("output",    this.output);
         input.readChild("fluid",     this.fluidTank);
+        this.prevFluidLevel = this.fluidLevel;
+        this.fluidLevel = (float) this.fluidTank.getFluidAmount() / (float) this.fluidTank.getCapacity();
+        this.fluidLevelChanged = true;
         this.cookTime    = input.getIntOr   ("cookTime",    0);
         this.maxCookTime = input.getIntOr   ("maxCookTime", 0);
         this.parallel    = input.getIntOr   ("parallel",    1);
@@ -554,6 +557,7 @@ public class PotBlockEntity extends AshiharaCommonBE implements MenuProvider, II
             this.prevFluidLevel = this.fluidLevel;
             this.fluidLevel = t;
             this.fluidLevelChanged = true;
+            if (this.level != null && !this.level.isClientSide()) this.sync();
         }
         if (this.level != null && !this.level.isClientSide())
         {
