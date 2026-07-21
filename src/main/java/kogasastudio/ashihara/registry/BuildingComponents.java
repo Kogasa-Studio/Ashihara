@@ -1231,7 +1231,7 @@ public class BuildingComponents
     (
         new RafterPlanks
         (
-        "cypress_roof",
+        "cypress_roof_half",
         Type.BAKED_MODEL,
         AdditionalModels.CYPRESS_ROOF_HALF,
         Blocks.CYPRESS_SKIN_COMPONENT,
