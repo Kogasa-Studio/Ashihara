@@ -29,6 +29,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.BlockHitResult;
@@ -39,6 +40,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import net.neoforged.neoforge.common.util.BlockSnapshot;
+import net.neoforged.neoforge.event.EventHooks;
+
 
 @SuppressWarnings("NullableProblems")
 public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBuiltBlock
@@ -70,6 +74,16 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
         ComponentStateDefinition definition = component.definite(this, context);
         if (definition != null)
         {
+            // Server-side permission check for component placement
+            if (this.level instanceof ServerLevel sl && context.getPlayer() != null)
+            {
+                BlockSnapshot snapshot = BlockSnapshot.create(this.level.dimension(), this.level, this.worldPosition);
+                if (EventHooks.onBlockPlace(context.getPlayer(), snapshot, context.getClickedFace()))
+                {
+                    if (!this.level.isClientSide()) this.sync();
+                    return false;
+                }
+            }
             if (component instanceof AdditionalComponent)
             {
                 boolean canAppend = true;
@@ -139,6 +153,17 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
             }
 
             if (simulate) return true;
+
+            // Server-side permission check for furniture placement
+            if (this.level instanceof ServerLevel sl && context.getPlayer() != null)
+            {
+                BlockSnapshot snapshot = BlockSnapshot.create(this.level.dimension(), this.level, this.worldPosition);
+                if (EventHooks.onBlockPlace(context.getPlayer(), snapshot, context.getClickedFace()))
+                {
+                    if (!this.level.isClientSide()) this.sync();
+                    return false;
+                }
+            }
 
             // Slice origin
             if (isMultiBlock)

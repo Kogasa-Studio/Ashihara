@@ -42,7 +42,7 @@ public abstract class AshiharaCommonBE extends BlockEntity
     /**
      * Send update tag to client.
      */
-    protected final void sync() {
+    public final void sync() {
         if (this.level == null
                 || this.level.isClientSide()
                 || !(this.level instanceof ServerLevel serverLevel)) {

@@ -12,6 +12,8 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import kogasastudio.ashihara.block.blockentity.AshiharaCommonBE;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -20,6 +22,16 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 @EventBusSubscriber(modid = Ashihara.MODID)
 public class BasicEventHandler
 {
+    @SubscribeEvent(priority = EventPriority.LOW, receiveCanceled = true)
+    public static void onRightClickBlockDenied(PlayerInteractEvent.RightClickBlock event)
+    {
+        if (event.getLevel().isClientSide()) return;
+        if (!event.isCanceled()) return;
+        if (event.getLevel().getBlockEntity(event.getPos()) instanceof AshiharaCommonBE be)
+            be.sync();
+    }
+
+
     @SubscribeEvent
     public static void onFarmlandTrample(BlockEvent.FarmlandTrampleEvent event)
     {
