@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import static kogasastudio.ashihara.helper.PositionHelper.XTP;
+import static kogasastudio.ashihara.helper.PositionHelper.coordsInRangeFixedY;
 
 public class BendedSticker extends AdditionalComponent
 {
@@ -82,7 +83,12 @@ public class BendedSticker extends AdditionalComponent
         };
 
         double x;
+        double y = inBlockPos.y();
         double z;
+
+        y = coordsInRangeFixedY(context.getClickedFace(), y, 0, XTP(8)) ? 0 : XTP(8);
+        int floor = y == 0 ? 0 : 2;
+
         if (direction.getAxis().equals(Direction.Axis.Z))
         {
             if (inBlockPos.z() <= 0.5)
@@ -104,12 +110,12 @@ public class BendedSticker extends AdditionalComponent
 
         VoxelShape shape = SHAPE;
         shape = ShapeHelper.rotateShape(shape, -r);
-        shape = ShapeHelper.offsetShape(shape, x, 0, z);
+        shape = ShapeHelper.offsetShape(shape, x, y, z);
 
         return new ComponentStateDefinition
         (
             BuildingComponents.get(this.id),
-            new Vec3(x, 0, z),
+            new Vec3(x, y, z),
             0, r, 0,
             shape,
             MODEL,
