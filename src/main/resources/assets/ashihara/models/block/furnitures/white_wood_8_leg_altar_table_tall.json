@@ -1,0 +1,7 @@
+{
+  "parent": "ashihara:block/furnitures/templates/8_leg_altar_table_tall",
+  "textures": {
+    "wood": "ashihara:block/8_legged_altar_table_white_wood",
+    "particle": "ashihara:block/white_wood_beam"
+  }
+}

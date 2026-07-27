@@ -423,5 +423,11 @@
   "item.ashihara.red_advanced_fence_tail": "朱木勾欄出頭",
   "item.ashihara.red_advanced_fence_pillar": "朱木勾欄柱",
   "item.ashihara.red_advanced_fence_pillar_short": "短朱木勾欄柱",
-  "item.ashihara.red_advanced_fence_pillar_thick": "太朱木勾欄柱"
+  "item.ashihara.red_advanced_fence_pillar_thick": "太朱木勾欄柱",
+  "item.ashihara.white_wood_8_leg_altar_table": "白木八足案",
+  "item.ashihara.white_wood_8_leg_altar_table_mini_short": "小型白木八足案",
+  "item.ashihara.white_wood_8_leg_altar_table_tall": "高白木八足案",
+  "item.ashihara.white_wood_8_leg_altar_table_thin": "狭天板白木八足案",
+  "item.ashihara.white_wood_8_leg_altar_table_thin_short": "狭天板白木低八足案",
+  "item.ashihara.white_wood_8_leg_altar_table_thin_tall": "狭天板白木高八足案"
 }

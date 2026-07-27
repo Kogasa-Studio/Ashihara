@@ -6,6 +6,7 @@ import kogasastudio.ashihara.block.furniture.BambooCurtainComponent;
 import kogasastudio.ashihara.block.furniture.CurtainTableComponent;
 import kogasastudio.ashihara.block.furniture.FurnitureProxyComponent;
 import kogasastudio.ashihara.block.furniture.SimpleContainerComponent;
+import kogasastudio.ashihara.block.furniture.EightLegAltarTableComponent;
 import kogasastudio.ashihara.block.furniture.ContainerState;
 import net.minecraft.world.phys.shapes.Shapes;
 
@@ -16,6 +17,92 @@ import java.util.Map;
 public class FurnitureComponents
 {
     public static final Map<String, FurnitureComponent> COMPONENTS = new HashMap<>();
+
+    // Eight Leg Altar Table
+    public static final FurnitureComponent WHITE_WOOD_8_LEG_ALTAR_TABLE = register
+    (
+        new EightLegAltarTableComponent
+        (
+        "white_wood_8_leg_altar_table",
+        BuildingComponents.Type.BAKED_MODEL,
+        AdditionalModels.WHITE_WOOD_8_LEG_ALTAR_TABLE,
+        EightLegAltarTableComponent.EIGHT_LEG_ALTAR_TABLE_SHAPE,
+        false,
+        Blocks.WHITE_WOOD_COMPONENT,
+        List.of(Items.WHITE_WOOD_8_LEG_ALTAR_TABLE.toStack()),
+        FurnitureRenderPass.CHUNK_BUFFER
+        )
+    );
+    public static final FurnitureComponent WHITE_WOOD_8_LEG_ALTAR_TABLE_MINI_SHORT = register
+    (
+        new EightLegAltarTableComponent
+        (
+        "white_wood_8_leg_altar_table_mini_short",
+        BuildingComponents.Type.BAKED_MODEL,
+        AdditionalModels.WHITE_WOOD_8_LEG_ALTAR_TABLE_MINI_SHORT,
+        EightLegAltarTableComponent.EIGHT_LEG_ALTAR_TABLE_MINI_SHORT_SHAPE,
+        false,
+        Blocks.WHITE_WOOD_COMPONENT,
+        List.of(Items.WHITE_WOOD_8_LEG_ALTAR_TABLE_MINI_SHORT.toStack()),
+        FurnitureRenderPass.CHUNK_BUFFER
+        )
+    );
+    public static final FurnitureComponent WHITE_WOOD_8_LEG_ALTAR_TABLE_TALL = register
+    (
+        new EightLegAltarTableComponent
+        (
+        "white_wood_8_leg_altar_table_tall",
+        BuildingComponents.Type.BAKED_MODEL,
+        AdditionalModels.WHITE_WOOD_8_LEG_ALTAR_TABLE_TALL,
+        EightLegAltarTableComponent.EIGHT_LEG_ALTAR_TABLE_TALL_SHAPE,
+        false,
+        Blocks.WHITE_WOOD_COMPONENT,
+        List.of(Items.WHITE_WOOD_8_LEG_ALTAR_TABLE_TALL.toStack()),
+        FurnitureRenderPass.CHUNK_BUFFER
+        )
+    );
+    public static final FurnitureComponent WHITE_WOOD_8_LEG_ALTAR_TABLE_THIN = register
+    (
+        new EightLegAltarTableComponent
+        (
+        "white_wood_8_leg_altar_table_thin",
+        BuildingComponents.Type.BAKED_MODEL,
+        AdditionalModels.WHITE_WOOD_8_LEG_ALTAR_TABLE_THIN,
+        EightLegAltarTableComponent.EIGHT_LEG_ALTAR_TABLE_THIN_SHAPE,
+        true,
+        Blocks.WHITE_WOOD_COMPONENT,
+        List.of(Items.WHITE_WOOD_8_LEG_ALTAR_TABLE_THIN.toStack()),
+        FurnitureRenderPass.CHUNK_BUFFER
+        )
+    );
+    public static final FurnitureComponent WHITE_WOOD_8_LEG_ALTAR_TABLE_THIN_SHORT = register
+    (
+        new EightLegAltarTableComponent
+        (
+        "white_wood_8_leg_altar_table_thin_short",
+        BuildingComponents.Type.BAKED_MODEL,
+        AdditionalModels.WHITE_WOOD_8_LEG_ALTAR_TABLE_THIN_SHORT,
+        EightLegAltarTableComponent.EIGHT_LEG_ALTAR_TABLE_THIN_SHORT_SHAPE,
+        true,
+        Blocks.WHITE_WOOD_COMPONENT,
+        List.of(Items.WHITE_WOOD_8_LEG_ALTAR_TABLE_THIN_SHORT.toStack()),
+        FurnitureRenderPass.CHUNK_BUFFER
+        )
+    );
+    public static final FurnitureComponent WHITE_WOOD_8_LEG_ALTAR_TABLE_THIN_TALL = register
+    (
+        new EightLegAltarTableComponent
+        (
+        "white_wood_8_leg_altar_table_thin_tall",
+        BuildingComponents.Type.BAKED_MODEL,
+        AdditionalModels.WHITE_WOOD_8_LEG_ALTAR_TABLE_THIN_TALL,
+        EightLegAltarTableComponent.EIGHT_LEG_ALTAR_TABLE_THIN_TALL_SHAPE,
+        true,
+        Blocks.WHITE_WOOD_COMPONENT,
+        List.of(Items.WHITE_WOOD_8_LEG_ALTAR_TABLE_THIN_TALL.toStack()),
+        FurnitureRenderPass.CHUNK_BUFFER
+        )
+    );
 
     public static final FurnitureComponent WOODEN_BOWL_MID = register
     (

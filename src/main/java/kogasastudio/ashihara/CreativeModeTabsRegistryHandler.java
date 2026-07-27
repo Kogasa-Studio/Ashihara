@@ -257,6 +257,12 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.SALT_FIELD.get());
                                         output.accept(Items.BAMBOO_CURTAIN.get());
                                         output.accept(Items.CURTAIN_TABLE.get());
+                                        output.accept(Items.WHITE_WOOD_8_LEG_ALTAR_TABLE.get());
+                                        output.accept(Items.WHITE_WOOD_8_LEG_ALTAR_TABLE_MINI_SHORT.get());
+                                        output.accept(Items.WHITE_WOOD_8_LEG_ALTAR_TABLE_TALL.get());
+                                        output.accept(Items.WHITE_WOOD_8_LEG_ALTAR_TABLE_THIN.get());
+                                        output.accept(Items.WHITE_WOOD_8_LEG_ALTAR_TABLE_THIN_SHORT.get());
+                                        output.accept(Items.WHITE_WOOD_8_LEG_ALTAR_TABLE_THIN_TALL.get());
                                     })).build()
                     );
     public static final Supplier<CreativeModeTab> MATERIALS =
