@@ -257,6 +257,8 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.SALT_FIELD.get());
                                         output.accept(Items.BAMBOO_CURTAIN.get());
                                         output.accept(Items.CURTAIN_TABLE.get());
+                                        output.accept(Items.BLACK_MEAL_TRAY.get());
+                                        output.accept(Items.BLACK_CAT_FEET_MEAL_TABLE.get());
                                         output.accept(Items.WHITE_WOOD_8_LEG_ALTAR_TABLE.get());
                                         output.accept(Items.WHITE_WOOD_8_LEG_ALTAR_TABLE_MINI_SHORT.get());
                                         output.accept(Items.WHITE_WOOD_8_LEG_ALTAR_TABLE_TALL.get());

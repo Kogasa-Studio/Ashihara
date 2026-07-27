@@ -7,6 +7,7 @@ import kogasastudio.ashihara.block.furniture.CurtainTableComponent;
 import kogasastudio.ashihara.block.furniture.FurnitureProxyComponent;
 import kogasastudio.ashihara.block.furniture.SimpleContainerComponent;
 import kogasastudio.ashihara.block.furniture.EightLegAltarTableComponent;
+import kogasastudio.ashihara.block.furniture.SimpleFurnitureComponent;
 import kogasastudio.ashihara.block.furniture.ContainerState;
 import net.minecraft.world.phys.shapes.Shapes;
 
@@ -18,6 +19,46 @@ public class FurnitureComponents
 {
     public static final Map<String, FurnitureComponent> COMPONENTS = new HashMap<>();
 
+
+    // Simple furniture
+    public static final FurnitureComponent BLACK_MEAL_TRAY = register
+    (
+        new SimpleFurnitureComponent
+        (
+        "black_meal_tray",
+        BuildingComponents.Type.BAKED_MODEL,
+        AdditionalModels.BLACK_MEAL_TRAY,
+        Shapes.or(
+            Shapes.box(0.078125, 0, 0.078125, 0.921875, 0.125, 0.921875),
+            Shapes.box(0.015625, 0, 0.921875, 0.984375, 0.1875, 0.984375),
+            Shapes.box(0.015625, 0, 0.015625, 0.984375, 0.1875, 0.078125),
+            Shapes.box(0.921875, 0, 0.078125, 0.984375, 0.1875, 0.921875),
+            Shapes.box(0.015625, 0, 0.078125, 0.078125, 0.1875, 0.921875)
+        ),
+        Blocks.MULTI_BUILT_BLOCK,
+        List.of(Items.BLACK_MEAL_TRAY.toStack()),
+        FurnitureRenderPass.CHUNK_BUFFER
+        )
+    );
+    public static final FurnitureComponent BLACK_CAT_FEET_MEAL_TABLE = register
+    (
+        new SimpleFurnitureComponent
+        (
+        "black_cat_feet_meal_table",
+        BuildingComponents.Type.BAKED_MODEL,
+        AdditionalModels.BLACK_CAT_FEET_MEAL_TABLE,
+        Shapes.or(
+            Shapes.box(0.078125, 0, 0.078125, 0.921875, 0.5, 0.921875),
+            Shapes.box(0.015625, 0, 0.015625, 0.984375, 0.5625, 0.078125),
+            Shapes.box(0.015625, 0, 0.921875, 0.984375, 0.5625, 0.984375),
+            Shapes.box(0.015625, 0, 0.078125, 0.078125, 0.5625, 0.921875),
+            Shapes.box(0.921875, 0, 0.078125, 0.984375, 0.5625, 0.921875)
+        ),
+        Blocks.MULTI_BUILT_BLOCK,
+        List.of(Items.BLACK_CAT_FEET_MEAL_TABLE.toStack()),
+        FurnitureRenderPass.CHUNK_BUFFER
+        )
+    );
     // Eight Leg Altar Table
     public static final FurnitureComponent WHITE_WOOD_8_LEG_ALTAR_TABLE = register
     (

@@ -219,6 +219,9 @@ public class AdditionalModels
     public static final BuildingComponentModelResourceLocation RED_ADVANCED_FENCE_PILLAR_SHORT = register("block/components/red_advanced_fence_pillar_short");
     public static final BuildingComponentModelResourceLocation RED_ADVANCED_FENCE_PILLAR_THICK = register("block/components/red_advanced_fence_pillar_thick");
 
+    public static final BuildingComponentModelResourceLocation BLACK_MEAL_TRAY = register("block/furnitures/black_meal_tray");
+    public static final BuildingComponentModelResourceLocation BLACK_CAT_FEET_MEAL_TABLE = register("block/furnitures/black_cat_feet_meal_table");
+
     public static final BuildingComponentModelResourceLocation WHITE_WOOD_8_LEG_ALTAR_TABLE = register("block/furnitures/white_wood_8_leg_altar_table");
     public static final BuildingComponentModelResourceLocation WHITE_WOOD_8_LEG_ALTAR_TABLE_MINI_SHORT = register("block/furnitures/white_wood_8_leg_altar_table_mini_short");
     public static final BuildingComponentModelResourceLocation WHITE_WOOD_8_LEG_ALTAR_TABLE_TALL = register("block/furnitures/white_wood_8_leg_altar_table_tall");
