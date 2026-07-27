@@ -165,16 +165,70 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
                 }
             }
 
-            // Slice origin
+            // Slice origin ? find main block with non-empty slice
+            int mainX = 0, mainY = 0, mainZ = 0;
             if (isMultiBlock)
             {
                 VoxelShape originSlice = ShapeHelper.sliceShape(fullShape, 1, net.minecraft.core.Vec3i.ZERO);
-                definition = new ComponentStateDefinition(definition.component(), definition.inBlockPos(),
-                    definition.rotationX(), definition.rotationY(), definition.rotationZ(),
-                    originSlice, definition.model(), definition.occupation(), definition.customData());
+                if (!originSlice.isEmpty())
+                {
+                    definition = new ComponentStateDefinition(definition.component(), definition.inBlockPos(),
+                        definition.rotationX(), definition.rotationY(), definition.rotationZ(),
+                        originSlice, definition.model(), definition.occupation(), definition.customData());
+                }
+                else
+                {
+                    // Origin slice is empty ? find the first non-empty slice to host the main component
+                    var bb = fullShape.bounds();
+                    int x0 = (int) Math.floor(bb.minX), x1 = (int) Math.ceil(bb.maxX) - 1;
+                    int y0 = (int) Math.floor(bb.minY), y1 = (int) Math.ceil(bb.maxY) - 1;
+                    int z0 = (int) Math.floor(bb.minZ), z1 = (int) Math.ceil(bb.maxZ) - 1;
+                    boolean found = false;
+                    for (mainX = x0; mainX <= x1 && !found; mainX++)
+                        for (mainY = y0; mainY <= y1 && !found; mainY++)
+                            for (mainZ = z0; mainZ <= z1 && !found; mainZ++)
+                            {
+                                if (mainX == 0 && mainY == 0 && mainZ == 0) continue;
+                                if (!ShapeHelper.sliceShape(fullShape, 1, new net.minecraft.core.Vec3i(mainX, mainY, mainZ)).isEmpty())
+                                    found = true;
+                            }
+                    if (!found) return false;
+                    mainX--; mainY--; mainZ--;
+                    VoxelShape mainSlice = ShapeHelper.sliceShape(fullShape, 1, new net.minecraft.core.Vec3i(mainX, mainY, mainZ));
+                    Vec3 newInBlock = new Vec3(
+                        definition.inBlockPos().x() - mainX,
+                        definition.inBlockPos().y() - mainY,
+                        definition.inBlockPos().z() - mainZ);
+                    definition = new ComponentStateDefinition(definition.component(), newInBlock,
+                        definition.rotationX(), definition.rotationY(), definition.rotationZ(),
+                        mainSlice, definition.model(), definition.occupation(), definition.customData());
+                }
             }
 
-            this.FURNITURE.add(definition);
+            // Place main component at its target block (origin or relocated)
+            BlockPos mainPos = this.worldPosition.offset(mainX, mainY, mainZ);
+            if (mainPos.equals(this.worldPosition))
+            {
+                this.FURNITURE.add(definition);
+            }
+            else
+            {
+                if (this.level.getBlockEntity(mainPos) instanceof MultiBuiltBlockEntity mainBe)
+                {
+                    mainBe.FURNITURE.add(definition);
+                    mainBe.refresh();
+                }
+                else
+                {
+                    this.level.setBlock(mainPos, Blocks.MULTI_BUILT_BLOCK.get().defaultBlockState(), 3);
+                    var mainBe = (MultiBuiltBlockEntity) this.level.getBlockEntity(mainPos);
+                    if (mainBe != null)
+                    {
+                        mainBe.FURNITURE.add(definition);
+                        mainBe.refresh();
+                    }
+                }
+            }
             refresh();
 
             // Place proxy components only where slice is non-empty
@@ -188,11 +242,12 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
                     for (int y = y0; y <= y1; y++)
                         for (int z = z0; z <= z1; z++)
                         {
-                            if (x == 0 && y == 0 && z == 0) continue;
+                            if (x == mainX && y == mainY && z == mainZ) continue;
                             VoxelShape slice = ShapeHelper.sliceShape(fullShape, 1, new net.minecraft.core.Vec3i(x, y, z));
                             if (slice.isEmpty()) continue;
                             BlockPos target = this.worldPosition.offset(x, y, z);
-                            var proxyData = new FurnitureProxyComponent.ProxyData(-x, -y, -z, definition.inBlockPos());
+                            int dx = mainX - x, dy = mainY - y, dz = mainZ - z;
+                            var proxyData = new FurnitureProxyComponent.ProxyData(dx, dy, dz, definition.inBlockPos());
                             var proxy = new ComponentStateDefinition(FurnitureComponents.FURNITURE_PROXY, new Vec3(0, 0, 0), 0, 0, 0, slice, definition.model(), List.of(), proxyData);
                             if (this.level.getBlockEntity(target) instanceof MultiBuiltBlockEntity subBe)
                             {
