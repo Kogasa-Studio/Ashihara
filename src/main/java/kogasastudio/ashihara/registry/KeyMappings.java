@@ -19,7 +19,7 @@ public class KeyMappings
     public static final KeyMapping SHOW_IN_WORLD_TOOLTIP = new KeyMapping("key.show_in_world_tooltip", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_P, IN_WORLD_TOOLTIP);
     public static final KeyMapping.Category ASHIHARA_COMMON = new KeyMapping.Category(Identifier.fromNamespaceAndPath(Ashihara.MODID, "main"));
     public static final KeyMapping EATING_MODE_KEY = new KeyMapping(
-    "key.ashihara.eating_mode", KeyConflictContext.UNIVERSAL, KeyModifier.ALT, InputConstants.Type.KEYSYM, InputConstants.KEY_C, ASHIHARA_COMMON);
+    "key.ashihara.eating_mode", KeyConflictContext.UNIVERSAL, KeyModifier.ALT, InputConstants.Type.KEYSYM, InputConstants.KEY_E, ASHIHARA_COMMON);
 
     @SubscribeEvent
     public static void registerKeyMappings(RegisterKeyMappingsEvent event)
