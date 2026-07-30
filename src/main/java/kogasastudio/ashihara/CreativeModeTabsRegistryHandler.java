@@ -367,6 +367,7 @@ public class CreativeModeTabsRegistryHandler
                                         output.accept(Items.CHISEL.get());
                                         output.accept(Items.TACHI.get());
                                         output.accept(Items.SUJIKABUTO.get());
+                                        output.accept(Items.HAGOROMO.get());
                                     })).build()
                     );
     public static final Supplier<CreativeModeTab> FOOD =
