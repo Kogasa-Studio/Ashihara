@@ -432,5 +432,9 @@
   "item.ashihara.white_wood_8_leg_altar_table_thin_tall": "狭天板白木高八足案",
   "item.ashihara.black_meal_tray": "黒漆折敷",
   "item.ashihara.black_cat_feet_meal_table": "黒漆猫足膳",
-  "item.ashihara.hagoromo": "天之羽衣"
+  "item.ashihara.hagoromo": "天之羽衣",
+  "tooltip.ashihara.hagoromo_flight_speed": "羽衣の飛行速度：%s",
+  "tooltip.ashihara.hagoromo.1": "重み皆無にして、絢爛無垢、さらに不壊なる羽衣。",
+  "tooltip.ashihara.hagoromo.2": "誰かの祈りが込められており、纏う者に永遠の若返りと空へ飛翔する力を授ける。",
+  "tooltip.ashihara.hagoromo.3": "サバイバルモードにて5秒間の飛行が可能。しゃがみ＋マウスホイール操作にて飛行速度を調整する。"
 }

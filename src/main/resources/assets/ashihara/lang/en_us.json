@@ -439,5 +439,9 @@
   "item.ashihara.white_wood_8_leg_altar_table_thin_tall": "Extra Tall White Wood 8 Leg Altar Table With Narrow Top Board",
   "item.ashihara.black_meal_tray": "Black Meal Tray",
   "item.ashihara.black_cat_feet_meal_table": "Black Cat Feet-Liked Meal Table",
-  "item.ashihara.hagoromo": "Celestial Hagoromo"
+  "item.ashihara.hagoromo": "Celestial Hagoromo",
+  "tooltip.ashihara.hagoromo_flight_speed": "Hagoromo Fly Speed is now: %s",
+  "tooltip.ashihara.hagoromo.1": "A flawless, weightless, and completely impenetrable feathered robe of supreme splendor.",
+  "tooltip.ashihara.hagoromo.2": "Imbued with a heartfelt wish, it grants the wearer eternal youth and the power to soar through the skies.",
+  "tooltip.ashihara.hagoromo.3": "Allows flight for 5 seconds in Survival mode. Control flight speed using CTRL + Mouse Wheel."
 }

@@ -433,5 +433,9 @@
   "item.ashihara.white_wood_8_leg_altar_table_thin_tall": "窄天板白木高八足案",
   "item.ashihara.black_meal_tray": "黑漆折敷",
   "item.ashihara.black_cat_feet_meal_table": "黑漆猫足膳",
-  "item.ashihara.hagoromo": "天之羽衣"
+  "item.ashihara.hagoromo": "天之羽衣",
+  "tooltip.ashihara.hagoromo_flight_speed": "羽衣飞行速度：%s",
+  "tooltip.ashihara.hagoromo.1": "完全没有重量，华丽无暇又坚不可摧的羽衣。",
+  "tooltip.ashihara.hagoromo.2": "寄托着某人的祈愿，能够让穿戴者青春永驻，腾空翱翔。",
+  "tooltip.ashihara.hagoromo.3": "生存模式下可以飞行5秒，通过CTRL+鼠标滚轮控制飞行速度。"
 }

@@ -7,6 +7,8 @@ import kogasastudio.ashihara.network.GuidebookProgressPacket;
 import kogasastudio.ashihara.network.OpenGuidebookPacket;
 import kogasastudio.ashihara.network.GridSnapPayload;
 import kogasastudio.ashihara.network.EatingModePayload;
+import kogasastudio.ashihara.network.HagoromoFlightSpeedPacket;
+import kogasastudio.ashihara.network.HagoromoFlightSyncPacket;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -34,5 +36,7 @@ public class PacketPayloads
         registrar.playToServer(FluidSlotClickPayload.TYPE, FluidSlotClickPayload.STREAM_CODEC, FluidSlotClickPayload.ServerHandler::handle);
         registrar.playToServer(GridSnapPayload.TYPE, GridSnapPayload.STREAM_CODEC, GridSnapPayload.ServerHandler::handle);
         registrar.playToServer(EatingModePayload.TYPE, EatingModePayload.STREAM_CODEC, EatingModePayload.ServerHandler::handle);
+        registrar.playToServer(HagoromoFlightSpeedPacket.TYPE, HagoromoFlightSpeedPacket.STREAM_CODEC, HagoromoFlightSpeedPacket.ServerHandler::handle);
+        registrar.playToClient(HagoromoFlightSyncPacket.TYPE, HagoromoFlightSyncPacket.STREAM_CODEC, HagoromoFlightSyncPacket.ClientHandler::handle);
     }
 }

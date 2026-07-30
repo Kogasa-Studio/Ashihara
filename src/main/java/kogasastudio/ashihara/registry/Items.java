@@ -15,12 +15,14 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
+import net.minecraft.world.item.equipment.ArmorMaterials;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -353,7 +355,7 @@ public class Items
     public static final DeferredItem<? extends Item> WHITE_WOOD_8_LEG_ALTAR_TABLE_THIN_TALL = ITEMS.registerItem("white_wood_8_leg_altar_table_thin_tall", properties -> new FurnitureComponentItem(() -> FurnitureComponents.WHITE_WOOD_8_LEG_ALTAR_TABLE_THIN_TALL, Blocks.MULTI_BUILT_BLOCK, properties), properties -> properties.useItemDescriptionPrefix());
     public static final DeferredItem<? extends Item> BLACK_MEAL_TRAY = ITEMS.registerItem("black_meal_tray", properties -> new FurnitureComponentItem(() -> FurnitureComponents.BLACK_MEAL_TRAY, Blocks.MULTI_BUILT_BLOCK, properties), properties -> properties.useItemDescriptionPrefix());
     public static final DeferredItem<? extends Item> BLACK_CAT_FEET_MEAL_TABLE = ITEMS.registerItem("black_cat_feet_meal_table", properties -> new FurnitureComponentItem(() -> FurnitureComponents.BLACK_CAT_FEET_MEAL_TABLE, Blocks.MULTI_BUILT_BLOCK, properties), properties -> properties.useItemDescriptionPrefix());
-    public static final DeferredItem<? extends Item> HAGOROMO = ITEMS.registerItem("hagoromo", properties -> new HagoromoItem(net.minecraft.world.item.equipment.ArmorMaterials.LEATHER, net.minecraft.world.entity.EquipmentSlot.CHEST, properties.stacksTo(1).rarity(Rarity.EPIC)));
+    public static final DeferredItem<? extends Item> HAGOROMO = ITEMS.registerItem("hagoromo", properties -> new HagoromoItem(ArmorMaterials.LEATHER, EquipmentSlot.CHEST, properties.stacksTo(1).rarity(Rarity.EPIC)));
 
     public static final DeferredItem<? extends Item> BAMBOO_CURTAIN = ITEMS.registerItem("bamboo_curtain", properties -> new FurnitureComponentItem(() -> FurnitureComponents.BAMBOO_CURTAIN, Blocks.MULTI_BUILT_BLOCK, properties), properties -> properties.useItemDescriptionPrefix());
     public static final DeferredItem<? extends Item> CURTAIN_TABLE = ITEMS.registerItem("curtain_table", properties -> new FurnitureComponentItem(() -> FurnitureComponents.CURTAIN_TABLE, Blocks.MULTI_BUILT_BLOCK, properties), properties -> properties.useItemDescriptionPrefix());
