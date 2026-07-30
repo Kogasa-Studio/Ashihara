@@ -38,7 +38,7 @@ public record HagoromoFlightSpeedPacket(double delta) implements CustomPacketPay
                 float newSpeed = Mth.clamp(current + delta, 0.005f, 0.5f);
                 player.getAbilities().setFlyingSpeed(newSpeed);
                 player.onUpdateAbilities();
-                player.sendOverlayMessage(Component.translatable("tooltip.ashihara.hagoromo_flight_speed", String.format("%.2f", newSpeed)));
+                player.sendOverlayMessage(Component.translatable("tooltip.ashihara.hagoromo_flight_speed", String.format("%.3f", newSpeed)));
             });
         }
     }

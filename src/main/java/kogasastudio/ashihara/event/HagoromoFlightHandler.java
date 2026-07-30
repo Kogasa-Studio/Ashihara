@@ -17,6 +17,7 @@ import net.minecraft.world.level.GameType;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -27,6 +28,19 @@ public class HagoromoFlightHandler
     private static final int THRESHOLD = 100;
     private static final int SLOW_FALL_DURATION = 200;
     private static final int SYNC_INTERVAL = 5;
+
+    @SubscribeEvent
+    public static void onPlayerJoin(EntityJoinLevelEvent event)
+    {
+        if (!(event.getEntity() instanceof net.minecraft.server.level.ServerPlayer sp)) return;
+        if (event.getLevel().isClientSide()) return;
+        ItemStack chest = sp.getItemBySlot(EquipmentSlot.CHEST);
+        if (!chest.is(Items.HAGOROMO)) return;
+        GameType mode = sp.gameMode.getGameModeForPlayer();
+        if (mode != GameType.SURVIVAL && mode != GameType.ADVENTURE) return;
+        addFlight(sp);
+        sp.setData(DataAttachmentTypes.HAGOROMO_FLIGHT, new HagoromoFlightData(true, true, 0, 0));
+    }
 
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Pre event)
