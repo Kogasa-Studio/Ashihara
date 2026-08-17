@@ -37,6 +37,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
@@ -192,6 +193,17 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
             if (!be.getShape().isEmpty()) return be.getShape();
         }
         return debug;
+    }
+
+    /**
+     * The LARGE placeholder must never leak into face culling: if it did, every
+     * neighbor's touching face would be occluded by a full-block shape and culled.
+     * Building components are not full cubes, so this block never occludes neighbors.
+     */
+    @Override
+    protected VoxelShape getOcclusionShape(BlockState state)
+    {
+        return Shapes.empty();
     }
 
     @Override
