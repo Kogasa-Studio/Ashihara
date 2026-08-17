@@ -48,10 +48,15 @@ public class LanternBlock extends Block implements SimpleWaterloggedBlock
         this.flameZ = ZIn;
     }
 
+    public boolean showFlameParticle()
+    {
+        return true;
+    }
+
     @Override
-    
     public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand)
     {
+        if (!this.showFlameParticle()) return;
         if (stateIn.getValue(LIT))
         {
             double x = (double) pos.getX() + this.flameX;

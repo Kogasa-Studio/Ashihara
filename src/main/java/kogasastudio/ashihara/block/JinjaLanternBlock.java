@@ -50,4 +50,10 @@ public class JinjaLanternBlock extends DoubleLanternBlock.AxisAlignedVariant
             return state.getValue(AXIS) == Direction.Axis.X ? UPPER_Z : UPPER_X;
         }
     }
+
+    @Override
+    public boolean showFlameParticle()
+    {
+        return false;
+    }
 }

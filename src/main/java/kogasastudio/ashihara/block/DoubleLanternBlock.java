@@ -85,7 +85,6 @@ public class DoubleLanternBlock extends LanternBlock implements SimpleWaterlogge
     }
 
     @Override
-    
     public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand)
     {
         if (!stateIn.getValue(HALF).equals(DoubleBlockHalf.LOWER)) {super.animateTick(stateIn, worldIn, pos, rand);}
