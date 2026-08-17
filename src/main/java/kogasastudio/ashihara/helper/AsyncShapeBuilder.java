@@ -75,7 +75,7 @@ public final class AsyncShapeBuilder
             }
             current = next;
         }
-        return current.get(0);
+        return current.getFirst();
     }
 
     /**

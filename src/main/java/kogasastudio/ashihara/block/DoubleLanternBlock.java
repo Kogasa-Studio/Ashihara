@@ -23,8 +23,6 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.jspecify.annotations.Nullable;
 
 public class DoubleLanternBlock extends LanternBlock implements SimpleWaterloggedBlock

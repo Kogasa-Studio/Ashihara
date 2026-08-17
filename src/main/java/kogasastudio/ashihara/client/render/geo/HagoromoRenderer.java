@@ -1,9 +1,6 @@
 package kogasastudio.ashihara.client.render.geo;
 
 import com.geckolib.renderer.GeoArmorRenderer;
-import com.geckolib.renderer.GeoArmorRenderer.ArmorSegment;
-import com.geckolib.renderer.GeoArmorRenderer;
-import com.geckolib.renderer.GeoArmorRenderer.ArmorSegment;
 import kogasastudio.ashihara.client.models.geo.HagoromoModel;
 import kogasastudio.ashihara.item.armor.HagoromoItem;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;

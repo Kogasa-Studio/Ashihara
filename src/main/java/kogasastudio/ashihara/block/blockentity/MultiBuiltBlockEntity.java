@@ -5,7 +5,6 @@ import kogasastudio.ashihara.block.building.component.*;
 import kogasastudio.ashihara.block.furniture.BambooCurtainComponent;
 import kogasastudio.ashihara.block.furniture.FurnitureComponent;
 import kogasastudio.ashihara.block.furniture.FurnitureProxyComponent;
-import kogasastudio.ashihara.block.furniture.FurnitureProxyComponent;
 import kogasastudio.ashihara.block.furniture.MultiBlockFurniture;
 import kogasastudio.ashihara.block.furniture.ICustomRender;
 import kogasastudio.ashihara.helper.AsyncShapeBuilder;
@@ -13,7 +12,6 @@ import kogasastudio.ashihara.helper.MathHelper;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.Blocks;
 import kogasastudio.ashihara.registry.FurnitureComponents;
-import kogasastudio.ashihara.registry.Items;
 import kogasastudio.ashihara.registry.BlockEntities;
 import net.minecraft.core.BlockBox;
 import net.minecraft.core.Direction;
@@ -46,7 +44,7 @@ import net.neoforged.neoforge.common.util.BlockSnapshot;
 import net.neoforged.neoforge.event.EventHooks;
 
 
-@SuppressWarnings("NullableProblems")
+@SuppressWarnings("DataFlowIssue")
 public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBuiltBlock
 {
     public static final int OPCODE_COMPONENT = 0;
