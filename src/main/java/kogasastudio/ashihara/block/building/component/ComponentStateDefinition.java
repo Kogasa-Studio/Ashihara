@@ -93,7 +93,11 @@ public record ComponentStateDefinition(
         float rotationY = input.getFloatOr("rotationY", 0);
         float rotationZ = input.getFloatOr("rotationZ", 0);
         VoxelShape shape = ShapeHelper.readNBT(input);
-        if (component.getBaseShape() != null && !(component instanceof ICustomData)) shape = component.rebuildShape(inBlockPos, rotationX, rotationY, rotationZ);
+        //————————MONITVM—DE—MVLTIPLICIBVS—FILIS——————
+        // Former rebuildShape() call has been removed for good due to multi-thread improvement on 11:47 am. 2026/8/17.
+        // Base-shape components are rebuilt on the worker thread by AsyncShapeBuilder.computeComponentShape;
+        // ICustomData components keep their serialized shape above.
+        //————————MONITVM—DE—MVLTIPLICIBVS—FILIS——————
         List<Occupation> occupations = new ArrayList<>();
         Object customObj = null;
         ValueInput.ValueInputList occList = input.childrenListOrEmpty("occupation");

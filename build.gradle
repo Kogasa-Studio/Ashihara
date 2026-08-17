@@ -157,6 +157,7 @@ dependencies {
     localRuntime files("libs/Mekanism-26.1-SNAPSHOT-additions.jar")
     localRuntime files("libs/Mekanism-26.1-SNAPSHOT-generators.jar")
     localRuntime files("libs/Mekanism-26.1-SNAPSHOT-tools.jar")
+    localRuntime files("libs/spark-1.10.172-neoforge.jar")
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar

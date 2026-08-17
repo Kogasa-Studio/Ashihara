@@ -7,6 +7,7 @@ import kogasastudio.ashihara.block.furniture.FurnitureComponent;
 import kogasastudio.ashihara.block.furniture.FurnitureProxyComponent;
 import kogasastudio.ashihara.block.furniture.FurnitureProxyComponent;
 import kogasastudio.ashihara.block.furniture.MultiBlockFurniture;
+import kogasastudio.ashihara.helper.AsyncShapeBuilder;
 import kogasastudio.ashihara.helper.MathHelper;
 import kogasastudio.ashihara.helper.ShapeHelper;
 import kogasastudio.ashihara.registry.Blocks;
@@ -605,7 +606,13 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
 
     public void refresh(boolean reloadShape)
     {
-        if (reloadShape) reloadShape();
+        if (reloadShape)
+        {
+            //————————MONITVM—DE—MVLTIPLICIBVS—FILIS——————
+            this.shapeEpoch++;
+            //————————MONITVM—DE—MVLTIPLICIBVS—FILIS——————
+            reloadShape();
+        }
         reloadOccupation();
         sync();
         setChanged();
@@ -656,8 +663,65 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
             this.FURNITURE.add(ComponentStateDefinition.deserializeNBT(child));
         }
 
-        refresh(true);
+        //————————MONITVM—DE—MVLTIPLICIBVS—FILIS——————
+        long epoch = ++this.shapeEpoch;
+        List<ComponentStateDefinition> compSnap = List.copyOf(this.COMPONENTS);
+        List<ComponentStateDefinition> addSnap = List.copyOf(this.ADDITIONAL_COMPONENTS);
+        List<ComponentStateDefinition> furnSnap = List.copyOf(this.FURNITURE);
+
+        refresh(false);
+
+        AsyncShapeBuilder.buildAsync(this, epoch, compSnap, addSnap, furnSnap);
+        //————————MONITVM—DE—MVLTIPLICIBVS—FILIS——————
     }
+
+    //————————MONITVM—DE—MVLTIPLICIBVS—FILIS——————
+    /**
+     * Main-thread callback from {@link AsyncShapeBuilder}. Writes the worker-computed
+     * per-component shapes and the aggregate shape back into this BE, but only if this
+     * load is still the current one (epoch unchanged) and the BE is still alive.
+     */
+    public void commitLoadedShapes
+    (
+        long epoch,
+        List<VoxelShape> compShapes,
+        List<VoxelShape> addShapes,
+        List<VoxelShape> furnShapes,
+        VoxelShape aggregate
+    )
+    {
+        if (this.isRemoved() || this.level == null) return;
+        if (epoch != this.shapeEpoch) return;
+
+        applyShapes(this.COMPONENTS, compShapes);
+        applyShapes(this.ADDITIONAL_COMPONENTS, addShapes);
+        applyShapes(this.FURNITURE, furnShapes);
+        this.shape = aggregate;
+        this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+    }
+
+    /** Main-thread fallback used when the async build fails; runs the old sync path. */
+    public void fallbackReloadShape(long epoch)
+    {
+        if (this.isRemoved() || this.level == null) return;
+        if (epoch != this.shapeEpoch) return;
+        reloadShape();
+    }
+
+    private static void applyShapes(List<ComponentStateDefinition> list, List<VoxelShape> shapes)
+    {
+        int limit = Math.min(list.size(), shapes.size());
+        for (int i = 0; i < limit; i++)
+        {
+            ComponentStateDefinition d = list.get(i);
+            VoxelShape s = shapes.get(i);
+            if (d.shape() != s)
+            {
+                list.set(i, new ComponentStateDefinition(d.component(), d.inBlockPos(), d.rotationX(), d.rotationY(), d.rotationZ(), s, d.model(), d.occupation(), d.customData()));
+            }
+        }
+    }
+    //————————MONITVM—DE—MVLTIPLICIBVS—FILIS——————
 
     @Override
     protected void saveAdditional(ValueOutput output)
@@ -705,7 +769,10 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
 
     // <editor-fold desc="VoxelShape Persistent Storage">
 
-    private VoxelShape shape = Shapes.empty();
+    //————————MONITVM—DE—MVLTIPLICIBVS—FILIS——————
+    private volatile VoxelShape shape = Shapes.empty();
+    private volatile long shapeEpoch = 0;
+    //————————MONITVM—DE—MVLTIPLICIBVS—FILIS——————
 
     private void setShape(VoxelShape shape) {this.shape = shape;}
 
