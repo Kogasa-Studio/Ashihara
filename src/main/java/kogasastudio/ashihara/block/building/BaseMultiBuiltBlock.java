@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -49,6 +50,13 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public final ComponentMaterial material;
     VoxelShape debug = Block.box(5.0D, 0.0D, 5.0D, 11.0D, 2.0D, 11.0D);
+    /**
+     * Placeholder used only during the static BlockState cache computation
+     * (which passes an {@link EmptyBlockGetter}). Its extent beyond [0,1] makes
+     * {@code hasLargeCollisionShape()} return true, so {@link net.minecraft.world.level.BlockCollisions}
+     * includes this block's dynamic (often multi-cell) shape in the expanded face layer.
+     */
+    private static final VoxelShape LARGE_CACHE_SHAPE = Block.box(-1.0D, 0.0D, 0.0D, 17.0D, 16.0D, 16.0D);
 
     public BaseMultiBuiltBlock(Properties properties, ComponentMaterial materialIn)
     {
@@ -177,6 +185,7 @@ public class BaseMultiBuiltBlock extends Block implements EntityBlock, SimpleWat
     @Override
     protected VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext)
     {
+        if (pLevel instanceof EmptyBlockGetter) return LARGE_CACHE_SHAPE;
         BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
         if (blockEntity instanceof MultiBuiltBlockEntity be)
         {
