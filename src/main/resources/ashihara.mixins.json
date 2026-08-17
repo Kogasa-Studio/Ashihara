@@ -12,6 +12,8 @@
     "MixinWaterFluid",
     "MixinAbstractContainerScreen",
     "MixinLocalPlayer",
+    "MixinBlockEntityRenderDispatcher",
+    "MixinLevelRenderer",
     "MixinPlayerModel",
     "MixinRemotePlayer",
     "geckolib.MixinEasingType",

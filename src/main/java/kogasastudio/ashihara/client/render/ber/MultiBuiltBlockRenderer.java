@@ -82,6 +82,20 @@ public class MultiBuiltBlockRenderer implements
         return false;
     }
 
+    /**
+     * Gate the per-frame BER path. Pure building blocks are rendered entirely into the
+     * chunk buffer via {@link #renderStatic}; only MBEs with animated (ICustomRender)
+     * furniture need the per-frame extract/submit pipeline. Returning false here makes
+     * {@code BlockEntityRenderDispatcher.tryExtractRenderState} skip this BE entirely,
+     * so {@code extractRenderState()} (and its per-frame getBlockState call) never runs
+     * and no render state is appended to {@code LevelRenderState.blockEntityRenderStates}.
+     */
+    @Override
+    public boolean shouldRender(MultiBuiltBlockEntity blockEntity, Vec3 cameraPosition)
+    {
+        return blockEntity.hasDynamicRender();
+    }
+
     // ── BER submit ──
 
     @Override public MultiBuiltBlockRenderState createRenderState() { return new MultiBuiltBlockRenderState(); }

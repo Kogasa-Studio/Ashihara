@@ -7,6 +7,7 @@ import kogasastudio.ashihara.block.furniture.FurnitureComponent;
 import kogasastudio.ashihara.block.furniture.FurnitureProxyComponent;
 import kogasastudio.ashihara.block.furniture.FurnitureProxyComponent;
 import kogasastudio.ashihara.block.furniture.MultiBlockFurniture;
+import kogasastudio.ashihara.block.furniture.ICustomRender;
 import kogasastudio.ashihara.helper.AsyncShapeBuilder;
 import kogasastudio.ashihara.helper.MathHelper;
 import kogasastudio.ashihara.helper.ShapeHelper;
@@ -606,6 +607,7 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
 
     public void refresh(boolean reloadShape)
     {
+        this.dynamicRenderDirty = true;
         if (reloadShape)
         {
             //————————MONITVM—DE—MVLTIPLICIBVS—FILIS——————
@@ -772,7 +774,35 @@ public class MultiBuiltBlockEntity extends AshiharaCommonBE implements IMultiBui
     //————————MONITVM—DE—MVLTIPLICIBVS—FILIS——————
     private volatile VoxelShape shape = Shapes.empty();
     private volatile long shapeEpoch = 0;
+    private volatile boolean dynamicRender;
+    private transient volatile boolean dynamicRenderDirty = true;
     //————————MONITVM—DE—MVLTIPLICIBVS—FILIS——————
+
+    /**
+     * Cheap per-frame gate used by the render pipeline. Cached on first use and
+     * invalidated by {@link #refresh(boolean)}; true whenever this BE holds any
+     * {@link ICustomRender} furniture component (i.e. it actually needs the per-frame
+     * BER path instead of pure chunk-buffer rendering).
+     */
+    public boolean hasDynamicRender()
+    {
+        boolean d = this.dynamicRender;
+        if (this.dynamicRenderDirty)
+        {
+            d = false;
+            for (ComponentStateDefinition def : this.FURNITURE)
+            {
+                if (def.component() instanceof ICustomRender)
+                {
+                    d = true;
+                    break;
+                }
+            }
+            this.dynamicRender = d;
+            this.dynamicRenderDirty = false;
+        }
+        return d;
+    }
 
     private void setShape(VoxelShape shape) {this.shape = shape;}
 
