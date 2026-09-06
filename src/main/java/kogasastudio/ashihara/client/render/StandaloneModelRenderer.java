@@ -31,6 +31,7 @@ public final class StandaloneModelRenderer
    /** Render the model at identity transform (positioning handled via PoseStack). */
    public static void render(BlockStateModel model, BlockAndTintGetter level, BlockPos pos, BlockState state, PoseStack pose, MultiBufferSource.BufferSource buf, int packedLight)
    {
+       if (model == null) return;
        var lighter = new EnhancedBlockModelLighter();
        lighter.reset();
        List<BlockStateModelPart> parts = new ArrayList<>();
@@ -63,6 +64,7 @@ public final class StandaloneModelRenderer
    /** Render with explicit packedLight — suitable for ISTER where pos-based AO is invalid. */
    public static void renderItem(BlockStateModel model, BlockAndTintGetter level, BlockPos pos, BlockState state, PoseStack pose, MultiBufferSource.BufferSource buf, int packedLight)
    {
+       if (model == null) return;
        List<BlockStateModelPart> parts = new ArrayList<>();
        model.collectParts(level, pos, state, RANDOM, parts);
        for (var part : parts)

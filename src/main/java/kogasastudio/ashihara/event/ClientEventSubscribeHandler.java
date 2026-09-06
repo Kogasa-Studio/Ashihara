@@ -100,7 +100,6 @@ public class ClientEventSubscribeHandler
     @SubscribeEvent
     public static void onTERBind(EntityRenderersEvent.RegisterRenderers event)
     {
-        event.registerBlockEntityRenderer(BlockEntities.MARKABLE_LANTERN_BE.get(), MarkableLanternBER::new);
         event.registerBlockEntityRenderer(BlockEntities.PAIL_BE.get(), PailBER::new);
         event.registerBlockEntityRenderer(BlockEntities.CANDLE_BE.get(), CandleBER::new);
         event.registerBlockEntityRenderer(BlockEntities.MULTI_BUILT_BLOCKENTITY.get(), MultiBuiltBlockRenderer::new);
